@@ -1,59 +1,55 @@
+<style>
+  /* Contenedor del video */
+  .video-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J-Tenshi Music</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-image: url('horizontal.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
+  /* Ajuste del video */
+  iframe {
+    max-width: 100%;
+    width: 560px;
+    height: 315px;
+  }
 
-        @media (max-width: 768px) {
-            body {
-                background-image: url('vertical.png');
-            }
-        }
+  /* Contenedor de los botones */
+  .botones {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+  }
 
-        .container {
-            text-align: center;
-            padding: 50px;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
+  /* Estilos de los botones */
+  .botones a {
+    padding: 10px 15px;
+    background-color: #ff0000;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+  }
 
-        .links {
-            margin-top: 20px;
-        }
+  /* Diseño responsivo para móviles */
+  @media (max-width: 768px) {
+    .botones {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+</style>
 
-        .links a {
-            display: inline-block;
-            margin: 10px;
-            padding: 10px 20px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            text-decoration: none;
-            border-radius: 10px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Bienvenido a J-Tenshi Music</h1>
-        <p>Escucha mi última canción y mira mi último video aquí.</p>
+<!-- Contenedor del video centrado -->
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/0_QHL7cDYno" 
+          title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+</div>
 
-        <div class="links">
-            <a href="https://www.youtube.com/@j-tenshimus1c" target="_blank">Canal de YouTube</a>
-            <a href="https://open.spotify.com/artist/0ZkxChUDjvBph9f7TitfMR?si=WxsQF2meTdiaOibANyQNSg" target="_blank">Spotify</a>
-        </div>
-    </div>
-</body>
-</html>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/0_QHL7cDYno" 
-title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+<!-- Botones alineados -->
+<div class="botones">
+  <a href="https://www.youtube.com/@j-tenshimus1c">YouTube</a>
+  <a href="https://open.spotify.com/artist/0ZkxChUDjvBph9f7TitfMR?si=WxsQF2meTdiaOibANyQNSg">Spotify</a>
+</div>
+
+
