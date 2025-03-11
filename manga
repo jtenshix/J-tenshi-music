@@ -6,30 +6,16 @@
     <title>Manga</title>
     <style>
         body {
+            background-color: #121212;
+            color: white;
             text-align: center;
             font-family: Arial, sans-serif;
-            background: url('vertical.png') no-repeat center center fixed;
-            background-size: cover;
-        }
-        .container {
-            margin-top: 50px;
-        }
-        a {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            text-decoration: none;
-            background: white;
-            color: black;
-            border-radius: 5px;
+            padding: 50px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Manga</h1>
-        <p>Aquí podrás encontrar información sobre manga.</p>
-        <a href="index.html">Volver al inicio</a>
-    </div>
+    <h1>Sección de Manga</h1>
+    <p>Próximamente subiré contenido aquí.</p>
 </body>
 </html>
