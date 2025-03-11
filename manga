@@ -34,7 +34,9 @@
     <div class="container">
         <h1>Sección de Manga</h1>
         <p>Próximamente contenido de manga aquí.</p>
-        <a href="index.html" class="back-link">Volver al inicio</a>
+<a href="../index.html" class="back-link">Volver al inicio</a>
+
+
     </div>
 </body>
 </html>
