@@ -1,55 +1,67 @@
-<style>
-  /* Contenedor del video */
-  .video-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-  }
-
-  /* Ajuste del video */
-  iframe {
-    max-width: 100%;
-    width: 560px;
-    height: 315px;
-  }
-
-  /* Contenedor de los botones */
-  .botones {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
-  }
-
-  /* Estilos de los botones */
-  .botones a {
-    padding: 10px 15px;
-    background-color: #ff0000;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-  }
-
-  /* Diseño responsivo para móviles */
-  @media (max-width: 768px) {
-    .botones {
-      flex-direction: column;
-      align-items: center;
-    }
-  }
-</style>
-
-<!-- Contenedor del video centrado -->
-<div class="video-container">
-  <iframe src="https://www.youtube.com/embed/0_QHL7cDYno" 
-          title="YouTube video player" frameborder="0" allowfullscreen></iframe>
-</div>
-
-<!-- Botones alineados -->
-<div class="botones">
-  <a href="https://www.youtube.com/@j-tenshimus1c">YouTube</a>
-  <a href="https://open.spotify.com/artist/0ZkxChUDjvBph9f7TitfMR?si=WxsQF2meTdiaOibANyQNSg">Spotify</a>
-</div>
-
-
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J-Tenshi Music</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('horizontal.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            body {
+                background: url('vertical.png') no-repeat center center fixed;
+                background-size: cover;
+            }
+        }
+        h1 {
+            color: white;
+            margin-bottom: 20px;
+        }
+        iframe {
+            width: 80%;
+            max-width: 560px;
+            height: 315px;
+            margin-bottom: 20px;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+        @media (max-width: 768px) {
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        .btn {
+            padding: 10px 20px;
+            color: white;
+            background-color: black;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background-color: gray;
+        }
+    </style>
+</head>
+<body>
+    <h1>J-Tenshi Music</h1>
+    <iframe src="https://www.youtube.com/embed/0_QHL7cDYno" frameborder="0" allowfullscreen></iframe>
+    <div class="buttons">
+        <a href="https://www.youtube.com/@j-tenshimus1c" class="btn">YouTube</a>
+        <a href="https://open.spotify.com/artist/0ZkxChUDjvBph9f7TitfMR?si=WxsQF2meTdiaOibANyQNSg" class="btn">Spotify</a>
+    </div>
+</body>
+</html>
