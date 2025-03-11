@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallpapers</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background: url('vertical.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            text-decoration: none;
+            background: white;
+            color: black;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Wallpapers</h1>
+        <p>Aquí podrás descargar wallpapers exclusivos.</p>
+        <a href="index.html">Volver al inicio</a>
+    </div>
+</body>
+</html>
