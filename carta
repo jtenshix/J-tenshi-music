@@ -4,49 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carta 3D</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
-        body { margin: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: black; }
-        canvas { display: block; }
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #1a1a2e; /* Azul oscuro */
+            color: white;
+            font-family: Arial, sans-serif;
+        }
     </style>
 </head>
 <body>
-    <script>
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
-
-        const geometry = new THREE.BoxGeometry(2, 3, 0.1);
-        const textureFront = new THREE.TextureLoader().load('carta_frente.png'); 
-        const textureBack = new THREE.TextureLoader().load('carta_dorso.png');
-        
-        const materials = [
-            new THREE.MeshBasicMaterial({ color: 0x000000 }),
-            new THREE.MeshBasicMaterial({ color: 0x000000 }),
-            new THREE.MeshBasicMaterial({ color: 0x000000 }),
-            new THREE.MeshBasicMaterial({ color: 0x000000 }),
-            new THREE.MeshBasicMaterial({ map: textureFront }), 
-            new THREE.MeshBasicMaterial({ map: textureBack }) 
-        ];
-
-        const card = new THREE.Mesh(geometry, materials);
-        scene.add(card);
-        camera.position.z = 5;
-
-        function animate() {
-            requestAnimationFrame(animate);
-            card.rotation.y += 0.01;
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        window.addEventListener('resize', () => {
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-        });
-    </script>
+    <h1>¡Aquí irá la carta 3D!</h1>
 </body>
 </html>
