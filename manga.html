@@ -8,20 +8,28 @@
         body { text-align: center; background-color: #1a1a1a; color: white; }
         .gallery img { width: 200px; cursor: pointer; transition: transform 0.3s; }
         .gallery img:hover { transform: scale(1.1); }
+        
         .overlay { 
             display: none; 
             position: fixed; 
             top: 0; left: 0; 
             width: 100%; height: 100%; 
-            background: rgba(0, 0, 0, 0.8); 
+            background: rgba(0, 0, 0, 0.9); 
             overflow-y: auto; 
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             padding: 20px; 
         }
-        .overlay img { max-width: 90%; display: block; margin: 10px auto; }
+
+        .overlay img { 
+            width: 70%; /* Ajuste de tamaño para que no sea gigante */
+            max-width: 900px; /* Máximo tamaño */
+            display: block; 
+            margin: 10px auto; 
+        }
+
         .close { 
             position: fixed; 
             top: 10px; right: 20px; 
@@ -48,24 +56,26 @@
                 "1IgH4gzuCttxlsPK7DoJkF0cZGxTV4E4-",  // Portada
                 "1UdE3To_EIoWvGzjOP4J-MnStoY99vS2G",
                 "1P04Xw8o2l9V9hlhroOM4nrGeBtmeb8at",
-                "1D8e7nD3Xe2IsGwbuJ0QAgfG4Dwf5bRId",
+                "1D8e7dD3Xe2IsGwbuJ0QAgfG4Dwf5bRId",
                 "1oO3vYMSWvWMwupmU92uU9qBc-8z0xFKz"
             ];
+
             let container = document.getElementById("mangaPages");
-            container.innerHTML = "";
+            container.innerHTML = ""; // Limpia para evitar imágenes duplicadas
+
             pages.forEach((id, index) => {
                 let img = document.createElement("img");
-                img.src = `https://lh3.googleusercontent.com/d/${id}=w1920`;
-
-                // Si es la portada, agrégale un margen más grande
-                if (index === 0) {
-                    img.style.marginBottom = "30px";
-                }
+                img.src = `https://lh3.googleusercontent.com/d/${id}=w900`; // Ajusta el tamaño
+                img.loading = "lazy"; // Optimización para carga más rápida
+                
+                if (index === 0) img.style.marginBottom = "30px"; // Espacio extra en la portada
                 
                 container.appendChild(img);
             });
+
             document.getElementById("overlay").style.display = "flex";
         }
+
         function hideManga() {
             document.getElementById("overlay").style.display = "none";
         }
