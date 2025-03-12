@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Especial</title>
+    <title>Wallpapers</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,51 +11,104 @@
             background-color: #121212;
             color: white;
         }
-
-        .card-container {
-            perspective: 1000px;
+        .gallery {
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 80vh;
+            gap: 15px;
+            margin-top: 50px;
         }
-
-        .card {
-            width: 250px;
-            height: 350px;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s;
+        .gallery img {
+            width: 150px;
+            height: auto;
             cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+            border-radius: 10px;
         }
-
-        .card:hover {
-            transform: rotateY(180deg);
+        .gallery img:hover {
+            transform: scale(1.1);
         }
-
-        .card-side {
-            position: absolute;
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
             width: 100%;
             height: 100%;
-            backface-visibility: hidden;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal img {
+            max-width: 80%;
+            max-height: 80vh;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
-
-        .card-front {
-            background: url('carta-frente.png') no-repeat center/cover;
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
         }
-
-        .card-back {
-            background: url('carta-reverso.png') no-repeat center/cover;
-            transform: rotateY(180deg);
+        .download {
+            margin-top: 15px;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            background-color: #00c3ff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .download:hover {
+            background-color: #0094cc;
         }
     </style>
 </head>
 <body>
 
-<h2>Carta Especial</h2>
-<p>Haz clic en la carta para verla por ambos lados.</p>
+<h2>Wallpapers</h2>
+<p>Haz clic en una imagen para verla en grande y descargarla.</p>
 
-<div class="card-container">
-    <div
+<div class="gallery">
+    <img src="https://lh3.googleusercontent.com/d/1XlGH77rbbzWFzskhwamlzjUh7avhVDQ-" onclick="openModal('1XlGH77rbbzWFzskhwamlzjUh7avhVDQ-', 'Wallpaper 1')">
+    <img src="https://lh3.googleusercontent.com/d/1eDkiw4NlFx_FNxFphyfUss04FBWdS0np" onclick="openModal('1eDkiw4NlFx_FNxFphyfUss04FBWdS0np', 'Wallpaper 2')">
+    <img src="https://lh3.googleusercontent.com/d/1JjuJt3dNs-lc-WXBuAsveUMSrhlYL3Dk" onclick="openModal('1JjuJt3dNs-lc-WXBuAsveUMSrhlYL3Dk', 'Wallpaper 3')">
+</div>
+
+<div id="myModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img id="modalImg">
+    <a id="downloadBtn" class="download" target="_blank">Descargar</a>
+</div>
+
+<script>
+    function openModal(imgId, imgName) {
+        let imageUrl = "https://lh3.googleusercontent.com/d/" + imgId;
+        document.getElementById("modalImg").src = imageUrl;
+        document.getElementById("downloadBtn").href = "https://drive.google.com/uc?export=download&id=" + imgId;
+        document.getElementById("downloadBtn").innerText = "Descargar " + imgName;
+
+        let modal = document.getElementById("myModal");
+        modal.style.display = "flex";
+        setTimeout(() => {
+            modal.style.opacity = "1";
+        }, 10);
+    }
+
+    function closeModal() {
+        let modal = document.getElementById("myModal");
+        modal.style.opacity = "0";
+        setTimeout(() => {
+            modal.style.display = "none";
+        }, 300);
+    }
+</script>
+
+</body>
+</html>
