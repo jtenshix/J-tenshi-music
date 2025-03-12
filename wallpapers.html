@@ -59,6 +59,10 @@
             color: #00c3ff;
             text-decoration: none;
             font-size: 18px;
+            background-color: #222;
+            padding: 8px 15px;
+            border-radius: 5px;
+            display: inline-block;
         }
     </style>
 </head>
@@ -68,9 +72,9 @@
 <p>Haz clic en una imagen para verla en grande y descargarla.</p>
 
 <div class="gallery">
-    <img src="https://drive.google.com/uc?export=view&id=1XlGH77rbbzWFzskhwamlzjUh7avhVDQ-" onclick="openModal('1XlGH77rbbzWFzskhwamlzjUh7avhVDQ-', 'Wallpaper 1')">
-    <img src="https://drive.google.com/uc?export=view&id=1eDkiw4NlFx_FNxFphyfUss04FBWdS0np" onclick="openModal('1eDkiw4NlFx_FNxFphyfUss04FBWdS0np', 'Wallpaper 2')">
-    <img src="https://drive.google.com/uc?export=view&id=1JjuJt3dNs-lc-WXBuAsveUMSrhlYL3Dk" onclick="openModal('1JjuJt3dNs-lc-WXBuAsveUMSrhlYL3Dk', 'Wallpaper 3')">
+    <img src="https://lh3.googleusercontent.com/d/1XlGH77rbbzWFzskhwamlzjUh7avhVDQ-" onclick="openModal('1XlGH77rbbzWFzskhwamlzjUh7avhVDQ-', 'Wallpaper 1')">
+    <img src="https://lh3.googleusercontent.com/d/1eDkiw4NlFx_FNxFphyfUss04FBWdS0np" onclick="openModal('1eDkiw4NlFx_FNxFphyfUss04FBWdS0np', 'Wallpaper 2')">
+    <img src="https://lh3.googleusercontent.com/d/1JjuJt3dNs-lc-WXBuAsveUMSrhlYL3Dk" onclick="openModal('1JjuJt3dNs-lc-WXBuAsveUMSrhlYL3Dk', 'Wallpaper 3')">
 </div>
 
 <div id="myModal" class="modal">
@@ -81,7 +85,8 @@
 
 <script>
     function openModal(imgId, imgName) {
-        document.getElementById("modalImg").src = "https://drive.google.com/uc?export=view&id=" + imgId;
+        let imageUrl = "https://lh3.googleusercontent.com/d/" + imgId;
+        document.getElementById("modalImg").src = imageUrl;
         document.getElementById("downloadBtn").href = "https://drive.google.com/uc?export=download&id=" + imgId;
         document.getElementById("downloadBtn").innerText = "Descargar " + imgName;
         document.getElementById("myModal").style.display = "flex";
@@ -94,4 +99,3 @@
 
 </body>
 </html>
-
