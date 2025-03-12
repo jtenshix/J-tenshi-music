@@ -27,7 +27,6 @@
         .gallery img:hover {
             transform: scale(1.1);
         }
-        /* Estilos para el modal */
         .modal {
             display: none;
             position: fixed;
@@ -37,8 +36,10 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
         }
         .modal img {
             max-width: 80%;
@@ -54,15 +55,17 @@
             cursor: pointer;
         }
         .download {
-            display: block;
-            margin-top: 10px;
-            color: #00c3ff;
+            margin-top: 15px;
+            color: white;
             text-decoration: none;
             font-size: 18px;
-            background-color: #222;
-            padding: 8px 15px;
+            background-color: #00c3ff;
+            padding: 10px 20px;
             border-radius: 5px;
-            display: inline-block;
+            transition: background 0.3s;
+        }
+        .download:hover {
+            background-color: #0094cc;
         }
     </style>
 </head>
