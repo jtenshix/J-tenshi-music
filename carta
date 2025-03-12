@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta 3D</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #111;
+        }
+        canvas {
+            display: block;
+        }
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: white;
+            color: black;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button">Volver</a>
+    <script>
+        // Crear la escena
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Crear la carta (un plano 3D)
+        const geometry = new THREE.BoxGeometry(2, 3, 0.1);
+        const textureFront = new THREE.TextureLoader().load('carta_frente.png'); 
+        const textureBack = new THREE.TextureLoader().load('carta_dorso.png');
+
+        const materials = [
+            new THREE.MeshBasicMaterial({ map: textureBack }), // Cara trasera
+            new THREE.MeshBasicMaterial({ map: textureBack }), // Lado derecho
+            new THREE.MeshBasicMaterial({ map: textureBack }), // Lado izquierdo
+            new THREE.MeshBasicMaterial({ map: textureBack }), // Lado superior
+            new THREE.MeshBasicMaterial({ map: textureBack }), // Lado inferior
+            new THREE.MeshBasicMaterial({ map: textureFront })  // Cara frontal
+        ];
+
+        const card = new THREE.Mesh(geometry, materials);
+        scene.add(card);
+
+        // Posicionar la cámara
+        camera.position.z = 5;
+
+        // Animación
+        function animate() {
+            requestAnimationFrame(animate);
+            card.rotation.y += 0.005;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Ajustar tamaño al cambiar la pantalla
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+
+       
