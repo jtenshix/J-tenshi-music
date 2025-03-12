@@ -16,7 +16,7 @@
 <body>
     <h1>Visor de Manga</h1>
     <div class="gallery">
-        <img src="https://drive.google.com/uc?id=1IgH4gzuCttxlsPK7DoJkF0cZGxTV4E4-" onclick="showManga()">
+        <img src="https://lh3.googleusercontent.com/d/1IgH4gzuCttxlsPK7DoJkF0cZGxTV4E4-=w200" onclick="showManga()">
     </div>
     <div class="overlay" id="overlay">
         <span class="close" onclick="hideManga()">&times;</span>
@@ -34,7 +34,7 @@
             container.innerHTML = "";
             pages.forEach(id => {
                 let img = document.createElement("img");
-                img.src = `https://drive.google.com/uc?id=${id}`;
+                img.src = `https://lh3.googleusercontent.com/d/${id}=w1920`;
                 container.appendChild(img);
             });
             document.getElementById("overlay").style.display = "block";
