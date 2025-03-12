@@ -3,42 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sección de Manga</title>
+    <title>Visor de Manga</title>
     <style>
-        body {
-            background-color: #ffdde1;
-            text-align: center;
-            font-family: Arial, sans-serif;
-            color: black;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: auto;
-            padding: 20px;
-        }
-
-        .back-link {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: black;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-
-        .back-link:hover {
-            background-color: gray;
-        }
+        body { text-align: center; background-color: #1a1a1a; color: white; }
+        .gallery { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .gallery img { width: 80%; max-width: 600px; cursor: pointer; transition: transform 0.3s; }
+        .gallery img:hover { transform: scale(1.05); }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); align-items: center; justify-content: center; }
+        .overlay img { max-width: 90%; max-height: 90%; }
+        .close { position: absolute; top: 10px; right: 20px; font-size: 30px; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Sección de Manga</h1>
-        <p>Próximamente contenido de manga aquí.</p>
-        <a href="index.html" class="back-link">Volver al inicio</a>
+    <h1>Visor de Manga</h1>
+    <div class="gallery">
+        <img src="https://drive.google.com/uc?id=1IgH4gzuCttxlsPK7DoJkF0cZGxTV4E4-" onclick="showImage(this)">
+        <img src="https://drive.google.com/uc?id=1UdE3To_EIoWvGzjOP4J-MnStoY99vS2G" onclick="showImage(this)">
+        <img src="https://drive.google.com/uc?id=1P04Xw8o2l9V9hlhroOM4nrGeBtmeb8at" onclick="showImage(this)">
+        <img src="https://drive.google.com/uc?id=1D8e7nD3Xe2IsGwbuJ0QAgfG4Dwf5bRId" onclick="showImage(this)">
+        <img src="https://drive.google.com/uc?id=1oO3vYMSWvWMwupmU92uU9qBc-8z0xFKz" onclick="showImage(this)">
     </div>
+    <div class="overlay" id="overlay" onclick="hideImage()">
+        <span class="close">&times;</span>
+        <img id="expandedImg">
+    </div>
+    <script>
+        function showImage(img) {
+            document.getElementById("expandedImg").src = img.src;
+            document.getElementById("overlay").style.display = "flex";
+        }
+        function hideImage() {
+            document.getElementById("overlay").style.display = "none";
+        }
+    </script>
 </body>
 </html>
-
