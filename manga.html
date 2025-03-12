@@ -8,9 +8,29 @@
         body { text-align: center; background-color: #1a1a1a; color: white; }
         .gallery img { width: 200px; cursor: pointer; transition: transform 0.3s; }
         .gallery img:hover { transform: scale(1.1); }
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); overflow-y: auto; padding: 20px; }
+        .overlay { 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(0, 0, 0, 0.8); 
+            overflow-y: auto; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px; 
+        }
         .overlay img { max-width: 90%; display: block; margin: 10px auto; }
-        .close { position: fixed; top: 10px; right: 20px; font-size: 30px; cursor: pointer; color: white; }
+        .close { 
+            position: fixed; 
+            top: 10px; right: 20px; 
+            font-size: 30px; cursor: pointer; 
+            color: white; 
+            background: rgba(0,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -25,6 +45,7 @@
     <script>
         function showManga() {
             const pages = [
+                "1IgH4gzuCttxlsPK7DoJkF0cZGxTV4E4-",  // Portada
                 "1UdE3To_EIoWvGzjOP4J-MnStoY99vS2G",
                 "1P04Xw8o2l9V9hlhroOM4nrGeBtmeb8at",
                 "1D8e7nD3Xe2IsGwbuJ0QAgfG4Dwf5bRId",
@@ -32,12 +53,18 @@
             ];
             let container = document.getElementById("mangaPages");
             container.innerHTML = "";
-            pages.forEach(id => {
+            pages.forEach((id, index) => {
                 let img = document.createElement("img");
                 img.src = `https://lh3.googleusercontent.com/d/${id}=w1920`;
+
+                // Si es la portada, agrégale un margen más grande
+                if (index === 0) {
+                    img.style.marginBottom = "30px";
+                }
+                
                 container.appendChild(img);
             });
-            document.getElementById("overlay").style.display = "block";
+            document.getElementById("overlay").style.display = "flex";
         }
         function hideManga() {
             document.getElementById("overlay").style.display = "none";
