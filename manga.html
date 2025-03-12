@@ -49,13 +49,13 @@
 </head>
 <body>
 
-<h2>Manga</h2>
-<p>Haz clic en una portada para verla en grande.</p>
+<h2>Mangas</h2>
+<p>Haz clic en una miniatura para ver la portada en grande.</p>
 
 <div class="gallery">
-    <img src="https://tuimagen1.com/miniatura.jpg" onclick="openModal('https://tuimagen1.com/portada.jpg')">
-    <img src="https://tuimagen2.com/miniatura.jpg" onclick="openModal('https://tuimagen2.com/portada.jpg')">
-    <img src="https://tuimagen3.com/miniatura.jpg" onclick="openModal('https://tuimagen3.com/portada.jpg')">
+    <img src="miniatura1.jpg" onclick="openModal('portada1.jpg')">
+    <img src="miniatura2.jpg" onclick="openModal('portada2.jpg')">
+    <img src="miniatura3.jpg" onclick="openModal('portada3.jpg')">
 </div>
 
 <div id="myModal" class="modal" onclick="closeModal()">
@@ -63,10 +63,11 @@
 </div>
 
 <script>
-    function openModal(imgUrl) {
-        document.getElementById("modalImg").src = imgUrl;
+    function openModal(imgSrc) {
+        document.getElementById("modalImg").src = imgSrc;
         document.getElementById("myModal").style.display = "flex";
     }
+
     function closeModal() {
         document.getElementById("myModal").style.display = "none";
     }
