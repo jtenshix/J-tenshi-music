@@ -63,6 +63,7 @@
             let container = document.getElementById("mangaPages");
             container.innerHTML = ""; // Limpia para evitar imágenes duplicadas
 
+            // Agregar cada imagen al visor
             pages.forEach((id, index) => {
                 let img = document.createElement("img");
                 img.src = `https://lh3.googleusercontent.com/d/${id}=w900`; // Ajusta el tamaño
@@ -70,6 +71,11 @@
                 
                 if (index === 0) img.style.marginBottom = "30px"; // Espacio extra en la portada
                 
+                img.onerror = function() {
+                    console.warn(`Error al cargar la imagen: ${id}`);
+                    img.style.display = "none"; // Si hay error, oculta la imagen para evitar huecos vacíos
+                };
+
                 container.appendChild(img);
             });
 
