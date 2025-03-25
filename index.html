@@ -77,7 +77,7 @@
 </head>
 <body>
   <div class="card-container">
-    <div class="card" id="card" onclick="this.classList.toggle('flipped')">
+    <div class="card" id="card" onclick="toggleFlip()">
       <div class="card-side card-front"></div>
       <div class="card-side card-back">
         <div class="buttons">
@@ -89,11 +89,28 @@
   </div>
 
   <script>
-    // Función para voltear la carta después de unos segundos al cargar
+    // Función para voltear la carta y guardar el estado
+    function toggleFlip() {
+      const card = document.getElementById('card');
+      card.classList.toggle('flipped');
+      // Guardar el estado en el almacenamiento local
+      localStorage.setItem('cardFlipped', card.classList.contains('flipped'));
+    }
+
+    // Función para restaurar el estado de la carta
     window.onload = function() {
-      setTimeout(function() {
-        document.getElementById('card').classList.add('flipped');
-      }, 3000);  // La carta se voltea después de 3 segundos
+      const card = document.getElementById('card');
+      // Verificar si la carta está volteada en el almacenamiento local
+      const isFlipped = localStorage.getItem('cardFlipped') === 'true';
+      if (isFlipped) {
+        card.classList.add('flipped');
+      } else {
+        // Esperar unos segundos antes de voltear automáticamente
+        setTimeout(function() {
+          card.classList.add('flipped');
+          localStorage.setItem('cardFlipped', 'true'); // Guardar el estado de la carta como volteada
+        }, 3000);  // 3 segundos
+      }
     };
   </script>
 </body>
