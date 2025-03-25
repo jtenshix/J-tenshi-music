@@ -15,7 +15,7 @@
       perspective: 1000px;
       display: flex;
       justify-content: center;
-      align-items: flex-start; /* Cambié align-items de 'center' a 'flex-start' para mover la carta hacia arriba */
+      align-items: flex-start; /* Mueve la carta hacia arriba */
       height: 100vh;
       width: 100vw;
     }
@@ -29,7 +29,7 @@
       cursor: pointer;
       border: 4px solid #fff;
       border-radius: 10px;
-      margin-top: 20px; /* Agregué un margen superior pequeño para moverla hacia arriba */
+      margin-top: 20px; /* Espacio hacia arriba */
       will-change: transform;
     }
     .card-side {
@@ -78,8 +78,8 @@
       <div class="card-side card-front"></div>
       <div class="card-side card-back">
         <div class="buttons">
-          <a href="https://www.youtube.com/@j-tenshimus1c" target="_blank">YouTube</a>
-          <a href="https://open.spotify.com/artist/0ZkxChUDjvBph9f7TitfMR?si=WxsQF2meTdiaOibANyQNSg" target="_blank">Spotify</a>
+          <a href="https://www.youtube.com/@j-tenshimus1c" target="_blank" id="youtubeLink">YouTube</a>
+          <a href="https://open.spotify.com/artist/0ZkxChUDjvBph9f7TitfMR?si=WxsQF2meTdiaOibANyQNSg" target="_blank" id="spotifyLink">Spotify</a>
         </div>
       </div>
     </div>
@@ -95,6 +95,26 @@
     // Ajustamos la sensibilidad de la carta para que se mueva más suavemente
     const sensitivity = 3;  // Este valor determina cuán rápido o suave se mueve la carta
 
+    // Variable para saber si la carta está mostrando el reverso
+    let isCardFlipped = false;
+
+    // Al hacer clic en los enlaces, la carta debe volverse para mostrar la parte frontal
+    document.getElementById('youtubeLink').addEventListener('click', flipCard);
+    document.getElementById('spotifyLink').addEventListener('click', flipCard);
+
+    function flipCard(e) {
+      e.preventDefault();
+      
+      // Si la carta ya está volteada, no hacemos nada
+      if (isCardFlipped) return;
+
+      // Volteamos la carta
+      card.style.transition = 'transform 0.6s ease-out';  // Transición más suave para voltear la carta
+      card.style.transform = 'rotateY(180deg)';  // Volteamos la carta
+      isCardFlipped = true;  // Indicamos que la carta está volteada
+    }
+
+    // Manejadores de movimiento 3D
     card.addEventListener('touchstart', (e) => {
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
@@ -117,6 +137,16 @@
       // Restablecemos la carta a su posición original de manera suave
       card.style.transition = 'transform 0.4s ease-out';  // Transición más suave al volver a la posición original
       card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    });
+
+    // Volver la carta al frente cuando se termine de hacer clic en el enlace
+    card.addEventListener('transitionend', () => {
+      if (isCardFlipped) {
+        // Después de la rotación, volvemos al frente
+        card.style.transition = 'transform 0.6s ease-out';
+        card.style.transform = 'rotateY(0deg)';
+        isCardFlipped = false;
+      }
     });
   </script>
 </body>
