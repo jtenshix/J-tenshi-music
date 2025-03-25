@@ -1,117 +1,106 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carta Especial</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #121212;
-      overflow: hidden;
-    }
-    .card-container {
-      perspective: 1000px;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      height: 100vh;
-      width: 100vw;
-    }
-    .card {
-      width: 80%;
-      max-width: 600px;
-      height: 80%;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.6s ease-in-out;
-      cursor: pointer;
-      border: 4px solid #fff;
-      border-radius: 10px;
-      margin-top: 5vh;
-    }
-    .card.flipped {
-      transform: rotateY(180deg);
-    }
-    .card-side {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
-      transition: box-shadow 0.3s ease-in-out;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .card-front {
-      background: url('carta_frente.png.jpg') no-repeat center/cover;
-      background-size: cover;
-    }
-    .card-back {
-      background: url('carta_dorso.png.png') no-repeat center/cover;
-      transform: rotateY(180deg);
-      background-size: cover;
-    }
-    .buttons {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .buttons a {
-      text-decoration: none;
-      background-color: #fff;
-      color: #121212;
-      padding: 10px 20px;
-      border-radius: 5px;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
-    .buttons a:hover {
-      background-color: #ddd;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta 3D Interactiva</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card-container {
+            perspective: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            width: 250px;
+            height: 350px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+            cursor: pointer;
+            will-change: transform;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
+        }
+
+        .card-side {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+        }
+
+        .card-front {
+            background: url('carta_frente.png.jpg') no-repeat center/cover;
+            background-size: cover;
+        }
+
+        .card-back {
+            background: url('carta_dorso.png.jpg') no-repeat center/cover;
+            background-size: cover;
+            transform: rotateY(180deg);
+        }
+
+        /* Efecto 3D */
+        .card-tilt {
+            transition: transform 0.1s ease-out;
+        }
+
+    </style>
 </head>
 <body>
-  <div class="card-container">
-    <div class="card" id="card" onclick="toggleFlip()">
-      <div class="card-side card-front"></div>
-      <div class="card-side card-back">
-        <div class="buttons">
-          <a href="https://www.youtube.com/@j-tenshimus1c" target="_blank">YouTube</a>
-          <a href="https://open.spotify.com/artist/0ZkxChUDjvBph9f7TitfMR?si=WxsQF2meTdiaOibANyQNSg" target="_blank">Spotify</a>
+
+    <div class="card-container">
+        <div class="card" id="card">
+            <div class="card-side card-front"></div>
+            <div class="card-side card-back">
+                <!-- Aquí van los botones de Spotify y YouTube -->
+                <button onclick="window.location.href='https://www.youtube.com'">YouTube</button>
+                <button onclick="window.location.href='https://www.spotify.com'">Spotify</button>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <script>
-    // Función para voltear la carta y guardar el estado
-    function toggleFlip() {
-      const card = document.getElementById('card');
-      card.classList.toggle('flipped');
-      // Guardar el estado en el almacenamiento de sesión
-      sessionStorage.setItem('cardFlipped', card.classList.contains('flipped'));
-    }
+    <script>
+        const card = document.getElementById('card');
 
-    // Función para restaurar el estado de la carta
-    window.onload = function() {
-      const card = document.getElementById('card');
-      // Verificar si la carta está volteada en el almacenamiento de sesión
-      const isFlipped = sessionStorage.getItem('cardFlipped') === 'true';
-      if (isFlipped) {
-        card.classList.add('flipped');
-      } else {
-        // Volteamos la carta automáticamente solo una vez al cargar la página
-        setTimeout(function() {
-          card.classList.add('flipped');
-          sessionStorage.setItem('cardFlipped', 'true'); // Guardar el estado de la carta como volteada
-        }, 3000);  // 3 segundos para mostrar la cara inicial
-      }
-    };
-  </script>
+        // Función para el efecto de movimiento 3D con el dedo
+        card.addEventListener('touchmove', (e) => {
+            const { width, height, left, top } = card.getBoundingClientRect();
+            const centerX = left + width / 2;
+            const centerY = top + height / 2;
+            const touchX = e.touches[0].clientX;
+            const touchY = e.touches[0].clientY;
+            
+            const deltaX = touchX - centerX;
+            const deltaY = touchY - centerY;
+
+            const rotateX = (deltaY / height) * 20;  // Ajusta el movimiento vertical
+            const rotateY = -(deltaX / width) * 20;  // Ajusta el movimiento horizontal
+
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        // Para restablecer la carta cuando el dedo se levanta
+        card.addEventListener('touchend', () => {
+            card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        });
+    </script>
+
 </body>
 </html>
