@@ -15,9 +15,10 @@
       perspective: 1000px;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
+      align-items: flex-start; /* Para mover la carta hacia arriba */
       height: 100vh;
       width: 100vw;
+      position: relative;
     }
     .card {
       width: 80%;
@@ -70,6 +71,22 @@
     .buttons a:hover {
       background-color: #ddd;
     }
+    .rotate-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      transition: background 0.3s ease;
+    }
+    .rotate-button:hover {
+      background-color: rgba(255, 255, 255, 1);
+    }
   </style>
 </head>
 <body>
@@ -83,15 +100,33 @@
         </div>
       </div>
     </div>
+    <button class="rotate-button" id="rotate-btn">Flip</button>
   </div>
 
   <script>
     // Variables para control del movimiento
     const card = document.getElementById('card');
+    const rotateBtn = document.getElementById('rotate-btn');
     let startX = 0, startY = 0;
     let rotationX = 0, rotationY = 0;
-    const maxTilt = 50;
-    const sensitivity = 3;
+    let isFlipped = false;  // Estado de la carta (flipada o no)
+    const maxTilt = 50;  // Aumentamos aún más la inclinación máxima para hacerlo más notorio
+
+    // Ajustamos la sensibilidad de la carta para que se mueva más suavemente
+    const sensitivity = 3;  // Este valor determina cuán rápido o suave se mueve la carta
+
+    // Función para voltear la carta
+    function flipCard() {
+      if (isFlipped) {
+        card.style.transform = 'rotateY(0deg)';  // Regresa a la posición original
+      } else {
+        card.style.transform = 'rotateY(180deg)';  // Gira la carta 180 grados
+      }
+      isFlipped = !isFlipped;  // Cambia el estado de la carta
+    }
+
+    // Event listener para el botón de rotación
+    rotateBtn.addEventListener('click', flipCard);
 
     card.addEventListener('touchstart', (e) => {
       startX = e.touches[0].clientX;
@@ -102,24 +137,19 @@
       const moveX = e.touches[0].clientX - startX;
       const moveY = e.touches[0].clientY - startY;
 
+      // Calculamos el ángulo de rotación en los ejes X e Y
       rotationX = ((moveY / window.innerHeight) * maxTilt) * sensitivity;
       rotationY = ((moveX / window.innerWidth) * maxTilt) * sensitivity;
 
-      card.style.transition = 'transform 0.05s ease-out';
+      // Suavizamos aún más la transición para que el movimiento se vea extremadamente fluido
+      card.style.transition = 'transform 0.05s ease-out';  // Transición más rápida
       card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
     });
 
     card.addEventListener('touchend', () => {
-      card.style.transition = 'transform 0.4s ease-out';
+      // Restablecemos la carta a su posición original de manera suave
+      card.style.transition = 'transform 0.4s ease-out';  // Transición más suave al volver a la posición original
       card.style.transform = 'rotateX(0deg) rotateY(0deg)';
-    });
-
-    // Hacer que la carta se voltee después de 5 segundos al cargar la página
-    document.addEventListener("DOMContentLoaded", () => {
-      setTimeout(() => {
-        card.style.transition = "transform 1s ease";
-        card.style.transform = "rotateY(180deg)";
-      }, 5000);
     });
   </script>
 </body>
