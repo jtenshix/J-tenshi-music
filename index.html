@@ -103,13 +103,16 @@
   </div>
 
   <script>
-    // Al cargar la página, se mantiene el estado guardado en localStorage.
     window.onload = function() {
       const carta = document.getElementById("carta");
-      if (localStorage.getItem("cardFlipped") === "true") {
+      let flipped = localStorage.getItem("cardFlipped");
+      // Si no hay estado guardado, establecemos por defecto que esté sin voltear (lado frontal)
+      if (flipped === null) {
+        localStorage.setItem("cardFlipped", "false");
+      } else if (flipped === "true") {
         carta.classList.add("flipped");
       }
-      // Evitar que el clic en los enlaces haga girar la carta.
+      // Evitar que al hacer clic en los enlaces se propague el evento y gire la carta.
       const links = document.querySelectorAll(".buttons a");
       links.forEach(link => {
         link.addEventListener("click", function(e) {
@@ -118,7 +121,6 @@
       });
     };
 
-    // Listener para girar la carta manualmente.
     document.getElementById("carta").addEventListener("click", function() {
       this.classList.toggle("flipped");
       if (this.classList.contains("flipped")) {
