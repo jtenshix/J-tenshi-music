@@ -108,11 +108,9 @@
     const card = document.getElementById('card');
     const rotateBtn = document.getElementById('rotate-btn');
     let startX = 0, startY = 0;
-    let rotationX = 0, rotationY = 0;
+    let rotationY = 0;
     let isFlipped = false;  // Estado de la carta (flipada o no)
     const maxTilt = 50;  // Aumentamos aún más la inclinación máxima para hacerlo más notorio
-
-    // Ajustamos la sensibilidad de la carta para que se mueva más suavemente
     const sensitivity = 3;  // Este valor determina cuán rápido o suave se mueve la carta
 
     // Función para voltear la carta
@@ -128,6 +126,9 @@
     // Event listener para el botón de rotación
     rotateBtn.addEventListener('click', flipCard);
 
+    // Voltea la carta automáticamente después de 7 segundos
+    setTimeout(flipCard, 7000);  // 7000 milisegundos = 7 segundos
+
     card.addEventListener('touchstart', (e) => {
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
@@ -135,21 +136,19 @@
 
     card.addEventListener('touchmove', (e) => {
       const moveX = e.touches[0].clientX - startX;
-      const moveY = e.touches[0].clientY - startY;
 
-      // Calculamos el ángulo de rotación en los ejes X e Y
-      rotationX = ((moveY / window.innerHeight) * maxTilt) * sensitivity;
+      // Calculamos el ángulo de rotación en el eje Y (horizontal)
       rotationY = ((moveX / window.innerWidth) * maxTilt) * sensitivity;
 
       // Suavizamos aún más la transición para que el movimiento se vea extremadamente fluido
       card.style.transition = 'transform 0.05s ease-out';  // Transición más rápida
-      card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+      card.style.transform = `rotateY(${rotationY}deg)`;  // Solo rotación en el eje Y (horizontal)
     });
 
     card.addEventListener('touchend', () => {
       // Restablecemos la carta a su posición original de manera suave
       card.style.transition = 'transform 0.4s ease-out';  // Transición más suave al volver a la posición original
-      card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      card.style.transform = 'rotateY(0deg)';
     });
   </script>
 </body>
