@@ -26,7 +26,7 @@
       height: 80%;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.1s ease-out;
+      transition: transform 0.5s ease-out;
       cursor: pointer;
       border: 4px solid #fff;
       border-radius: 10px;
@@ -100,15 +100,11 @@
         </div>
       </div>
     </div>
-    <button class="rotate-button" id="rotate-btn">Flip</button>
   </div>
 
   <script>
     // Variables para control del movimiento
     const card = document.getElementById('card');
-    const rotateBtn = document.getElementById('rotate-btn');
-    let startX = 0, startY = 0;
-    let rotationY = 0;
     let isFlipped = false;  // Estado de la carta (flipada o no)
     const maxTilt = 50;  // Aumentamos aún más la inclinación máxima para hacerlo más notorio
     const sensitivity = 3;  // Este valor determina cuán rápido o suave se mueve la carta
@@ -123,11 +119,12 @@
       isFlipped = !isFlipped;  // Cambia el estado de la carta
     }
 
-    // Event listener para el botón de rotación
-    rotateBtn.addEventListener('click', flipCard);
-
     // Voltea la carta automáticamente después de 7 segundos
     setTimeout(flipCard, 7000);  // 7000 milisegundos = 7 segundos
+
+    // Para voltear la carta con el gesto de deslizar
+    let startX = 0, startY = 0;
+    let rotationY = 0;
 
     card.addEventListener('touchstart', (e) => {
       startX = e.touches[0].clientX;
@@ -140,14 +137,13 @@
       // Calculamos el ángulo de rotación en el eje Y (horizontal)
       rotationY = ((moveX / window.innerWidth) * maxTilt) * sensitivity;
 
-      // Suavizamos aún más la transición para que el movimiento se vea extremadamente fluido
-      card.style.transition = 'transform 0.05s ease-out';  // Transición más rápida
+      // Aplicamos la rotación en el eje Y
       card.style.transform = `rotateY(${rotationY}deg)`;  // Solo rotación en el eje Y (horizontal)
     });
 
     card.addEventListener('touchend', () => {
-      // Restablecemos la carta a su posición original de manera suave
-      card.style.transition = 'transform 0.4s ease-out';  // Transición más suave al volver a la posición original
+      // Cuando terminamos de deslizar, restauramos la carta
+      card.style.transition = 'transform 0.5s ease-out';  // Transición suave
       card.style.transform = 'rotateY(0deg)';
     });
   </script>
