@@ -90,7 +90,7 @@
     const card = document.getElementById('card');
     let startX = 0, startY = 0;
     let rotationX = 0, rotationY = 0;
-    const maxTilt = 20;  // Máxima inclinación permitida
+    const maxTilt = 30;  // Aumentamos la inclinación máxima para hacerlo más notorio
 
     card.addEventListener('touchstart', (e) => {
       startX = e.touches[0].clientX;
@@ -105,12 +105,14 @@
       rotationX = (moveY / window.innerHeight) * maxTilt;
       rotationY = (moveX / window.innerWidth) * maxTilt;
 
-      // Aplicamos el transform 3D a la carta
+      // Suavizamos la transición para que el movimiento se vea fluido
+      card.style.transition = 'transform 0.1s ease-out';
       card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
     });
 
     card.addEventListener('touchend', () => {
-      // Restablecemos la carta a su posición inicial de manera suave
+      // Restablecemos la carta a su posición original de manera suave
+      card.style.transition = 'transform 0.4s ease-out';  // Transición más suave al volver a la posición original
       card.style.transform = 'rotateX(0deg) rotateY(0deg)';
     });
   </script>
