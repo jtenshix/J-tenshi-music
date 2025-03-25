@@ -25,15 +25,12 @@
       height: 80%;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.6s ease-in-out;
+      transition: transform 0.1s ease-out;
       cursor: pointer;
       border: 4px solid #fff;
       border-radius: 10px;
       margin-top: 5vh;
       will-change: transform;
-    }
-    .card.flipped {
-      transform: rotateY(180deg);
     }
     .card-side {
       position: absolute;
@@ -42,7 +39,6 @@
       backface-visibility: hidden;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
-      transition: box-shadow 0.3s ease-in-out;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -78,7 +74,7 @@
 </head>
 <body>
   <div class="card-container">
-    <div class="card" id="card" onclick="toggleFlip()">
+    <div class="card" id="card">
       <div class="card-side card-front"></div>
       <div class="card-side card-back">
         <div class="buttons">
@@ -90,36 +86,11 @@
   </div>
 
   <script>
-    // Función para voltear la carta y guardar el estado
-    function toggleFlip() {
-      const card = document.getElementById('card');
-      card.classList.toggle('flipped');
-      // Guardar el estado en el almacenamiento de sesión
-      sessionStorage.setItem('cardFlipped', card.classList.contains('flipped'));
-    }
-
-    // Función para restaurar el estado de la carta
-    window.onload = function() {
-      const card = document.getElementById('card');
-      // Verificar si la carta está volteada en el almacenamiento de sesión
-      const isFlipped = sessionStorage.getItem('cardFlipped') === 'true';
-      if (isFlipped) {
-        card.classList.add('flipped');
-      } else {
-        // Volteamos la carta automáticamente solo una vez al cargar la página
-        setTimeout(function() {
-          card.classList.add('flipped');
-          sessionStorage.setItem('cardFlipped', 'true'); // Guardar el estado de la carta como volteada
-        }, 3000);  // 3 segundos para mostrar la cara inicial
-      }
-    };
-
-    // Hacer la carta interactiva con el movimiento del dedo en dispositivos móviles
+    // Variables para control del movimiento
     const card = document.getElementById('card');
-    let startX = 0;
-    let startY = 0;
-    let rotationX = 0;
-    let rotationY = 0;
+    let startX = 0, startY = 0;
+    let rotationX = 0, rotationY = 0;
+    const maxTilt = 20;  // Máxima inclinación permitida
 
     card.addEventListener('touchstart', (e) => {
       startX = e.touches[0].clientX;
@@ -130,14 +101,17 @@
       const moveX = e.touches[0].clientX - startX;
       const moveY = e.touches[0].clientY - startY;
 
-      rotationX += moveY / 10;
-      rotationY -= moveX / 10;
+      // Calculamos el ángulo de rotación en los ejes X e Y
+      rotationX = (moveY / window.innerHeight) * maxTilt;
+      rotationY = (moveX / window.innerWidth) * maxTilt;
 
-      card.style.transform = `rotateY(${rotationY}deg) rotateX(${rotationX}deg)`;
+      // Aplicamos el transform 3D a la carta
+      card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
     });
 
     card.addEventListener('touchend', () => {
-      card.style.transform = 'none'; // Restablecer la carta después de dejar de moverla
+      // Restablecemos la carta a su posición inicial de manera suave
+      card.style.transform = 'rotateX(0deg) rotateY(0deg)';
     });
   </script>
 </body>
