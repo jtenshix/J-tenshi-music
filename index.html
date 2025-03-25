@@ -25,11 +25,12 @@
       height: 80%;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.1s ease-out; /* Aceleración más suave */
+      transition: transform 0.1s ease-out;
       cursor: pointer;
       border: 4px solid #fff;
       border-radius: 10px;
       margin-top: 5vh;
+      will-change: transform;
     }
     .card-side {
       position: absolute;
@@ -38,17 +39,16 @@
       backface-visibility: hidden;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
-      transition: box-shadow 0.3s ease-in-out;
       display: flex;
       justify-content: center;
       align-items: center;
     }
     .card-front {
-      background: url('carta_frente.png') no-repeat center/cover;
+      background: url('carta_frente.png.jpg') no-repeat center/cover;
       background-size: cover;
     }
     .card-back {
-      background: url('carta_dorso.png') no-repeat center/cover;
+      background: url('carta_dorso.png.png') no-repeat center/cover;
       transform: rotateY(180deg);
       background-size: cover;
     }
@@ -74,7 +74,7 @@
 </head>
 <body>
   <div class="card-container">
-    <div class="card" id="card" onmousedown="startMove(event)" onmouseup="stopMove()" onmousemove="moveCard(event)">
+    <div class="card" id="card">
       <div class="card-side card-front"></div>
       <div class="card-side card-back">
         <div class="buttons">
@@ -86,35 +86,35 @@
   </div>
 
   <script>
-    let isMoving = false;
-    let lastX = 0, lastY = 0;
+    // Variables para control del movimiento
+    const card = document.getElementById('card');
+    let startX = 0, startY = 0;
+    let rotationX = 0, rotationY = 0;
+    const maxTilt = 35;  // Aumentamos la inclinación máxima para hacerlo más notorio
 
-    function startMove(event) {
-      isMoving = true;
-      lastX = event.clientX;
-      lastY = event.clientY;
-    }
+    card.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    });
 
-    function stopMove() {
-      isMoving = false;
-    }
+    card.addEventListener('touchmove', (e) => {
+      const moveX = e.touches[0].clientX - startX;
+      const moveY = e.touches[0].clientY - startY;
 
-    function moveCard(event) {
-      if (isMoving) {
-        const card = document.getElementById('card');
-        const deltaX = event.clientX - lastX;
-        const deltaY = event.clientY - lastY;
+      // Calculamos el ángulo de rotación en los ejes X e Y
+      rotationX = (moveY / window.innerHeight) * maxTilt;
+      rotationY = (moveX / window.innerWidth) * maxTilt;
 
-        // Mover la carta suavemente basado en el movimiento del mouse/touch
-        let rotationX = deltaY * 0.1; // Ajustar para suavizar la rotación en el eje X
-        let rotationY = -deltaX * 0.1; // Ajustar para suavizar la rotación en el eje Y
+      // Suavizamos la transición para que el movimiento se vea fluido
+      card.style.transition = 'transform 0.1s ease-out';
+      card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+    });
 
-        card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-
-        lastX = event.clientX;
-        lastY = event.clientY;
-      }
-    }
+    card.addEventListener('touchend', () => {
+      // Restablecemos la carta a su posición original de manera suave
+      card.style.transition = 'transform 0.4s ease-out';  // Transición más suave al volver a la posición original
+      card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    });
   </script>
 </body>
 </html>
