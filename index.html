@@ -15,7 +15,7 @@
       perspective: 1000px;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       height: 100vh;
       width: 100vw;
     }
@@ -30,7 +30,6 @@
       border: 4px solid #fff;
       border-radius: 10px;
       margin-top: 5vh;
-      will-change: transform;
     }
     .card-side {
       position: absolute;
@@ -86,34 +85,17 @@
   </div>
 
   <script>
-    // Variables para control del movimiento
-    const card = document.getElementById('card');
-    let startX = 0, startY = 0;
-    let rotationX = 0, rotationY = 0;
-    const maxTilt = 30;  // Aumentamos la inclinación máxima para hacerlo más notorio
+    // Movimiento con el giroscopio
+    window.addEventListener("deviceorientation", (event) => {
+      const card = document.getElementById("card");
+      let x = event.beta; // Inclinación adelante/atrás
+      let y = event.gamma; // Inclinación izquierda/derecha
 
-    card.addEventListener('touchstart', (e) => {
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-    });
+      // Limitar los valores para evitar movimientos extremos
+      x = Math.max(-30, Math.min(30, x));
+      y = Math.max(-30, Math.min(30, y));
 
-    card.addEventListener('touchmove', (e) => {
-      const moveX = e.touches[0].clientX - startX;
-      const moveY = e.touches[0].clientY - startY;
-
-      // Calculamos el ángulo de rotación en los ejes X e Y
-      rotationX = (moveY / window.innerHeight) * maxTilt;
-      rotationY = (moveX / window.innerWidth) * maxTilt;
-
-      // Suavizamos la transición para que el movimiento se vea fluido
-      card.style.transition = 'transform 0.1s ease-out';
-      card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-    });
-
-    card.addEventListener('touchend', () => {
-      // Restablecemos la carta a su posición original de manera suave
-      card.style.transition = 'transform 0.4s ease-out';  // Transición más suave al volver a la posición original
-      card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      card.style.transform = `rotateX(${x}deg) rotateY(${y}deg)`;
     });
   </script>
 </body>
