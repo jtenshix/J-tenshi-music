@@ -1,139 +1,133 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Especial</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #121212;
-            overflow: hidden;
-        }
-
-        .card-container {
-            perspective: 1000px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Alineamos hacia arriba */
-            height: 100vh;
-            width: 100vw;
-        }
-
-        .card {
-            width: 80%;
-            max-width: 600px;
-            height: 80%; /* Manteniendo la altura anterior */
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s ease-in-out;
-            cursor: pointer;
-            border: 4px solid #fff;
-            border-radius: 10px;
-            margin-top: 5vh; /* Ajustamos el espacio arriba para mover la carta más arriba */
-        }
-
-        .card.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .card-side {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
-            transition: box-shadow 0.3s ease-in-out;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .card-front {
-            background: url('carta_frente.png.jpg') no-repeat center/cover;
-            background-size: cover;
-        }
-
-        .card-back {
-            background: url('carta_dorso.png.png') no-repeat center/cover;
-            transform: rotateY(180deg);
-            background-size: cover;
-        }
-
-        .buttons {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-        }
-
-        .buttons a {
-            text-decoration: none;
-            background-color: white;
-            color: black;
-            padding: 10px 15px;
-            margin: 10px;
-            border-radius: 5px;
-            font-weight: bold;
-            display: inline-block;
-        }
-
-        /* Estilo para pantallas grandes */
-        @media (min-width: 768px) {
-            .card {
-                max-width: 700px;
-                height: 500px; /* Ajuste para pantallas grandes */
-            }
-        }
-
-        /* Estilo para pantallas pequeñas (móviles) */
-        @media (max-width: 768px) {
-            .card {
-                width: 90vw;
-                height: 75vh; /* Ajusté la altura para móviles */
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carta Especial</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #121212;
+      overflow: hidden;
+    }
+    .card-container {
+      perspective: 1000px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      height: 100vh;
+      width: 100vw;
+    }
+    .card {
+      width: 80%;
+      max-width: 600px;
+      height: 80%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s ease-in-out;
+      cursor: pointer;
+      border: 4px solid #fff;
+      border-radius: 10px;
+      margin-top: 5vh;
+    }
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+    .card-side {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
+      transition: box-shadow 0.3s ease-in-out;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .card-front {
+      background: url('carta_frente.png.jpg') no-repeat center/cover;
+      background-size: cover;
+    }
+    .card-back {
+      background: url('carta_dorso.png.png') no-repeat center/cover;
+      transform: rotateY(180deg);
+      background-size: cover;
+    }
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+    .buttons a {
+      text-decoration: none;
+      background-color: white;
+      color: black;
+      padding: 10px 15px;
+      margin: 10px;
+      border-radius: 5px;
+      font-weight: bold;
+      display: inline-block;
+    }
+    /* Estilos para pantallas grandes */
+    @media (min-width: 768px) {
+      .card {
+        max-width: 700px;
+        height: 500px;
+      }
+    }
+    /* Estilos para pantallas pequeñas (móviles) */
+    @media (max-width: 768px) {
+      .card {
+        width: 90vw;
+        height: 75vh;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div class="card-container">
+  <div class="card-container">
     <div class="card" id="carta">
-        <div class="card-side card-front"></div>
-        <div class="card-side card-back">
-            <div class="buttons">
-                <a href="https://www.youtube.com/@j-tenshimus1c" target="_blank">YouTube</a>
-                <a href="https://open.spotify.com/artist/0ZkxChUDjvBph9f7TitfMR" target="_blank">Spotify</a>
-            </div>
+      <div class="card-side card-front"></div>
+      <div class="card-side card-back">
+        <div class="buttons">
+          <a href="https://www.youtube.com/@j-tenshimus1c" target="_blank">YouTube</a>
+          <a href="https://open.spotify.com/artist/0ZkxChUDjvBph9f7TitfMR" target="_blank">Spotify</a>
         </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<script>
-    // Al cargar la página, verifica si la carta está girada en el almacenamiento local
+  <script>
+    // Al cargar la página, se mantiene el estado guardado en localStorage.
     window.onload = function() {
-        const carta = document.getElementById("carta");
-        // Si la carta está girada, mantener el estado
-        if (localStorage.getItem("cardFlipped") === "true") {
-            carta.classList.add("flipped");
-        }
+      const carta = document.getElementById("carta");
+      if (localStorage.getItem("cardFlipped") === "true") {
+        carta.classList.add("flipped");
+      }
+      // Evitar que el clic en los enlaces haga girar la carta.
+      const links = document.querySelectorAll(".buttons a");
+      links.forEach(link => {
+        link.addEventListener("click", function(e) {
+          e.stopPropagation();
+        });
+      });
     };
 
-    // Permite girar la carta manualmente
+    // Listener para girar la carta manualmente.
     document.getElementById("carta").addEventListener("click", function() {
-        this.classList.toggle("flipped");
-
-        // Guarda el estado de la carta (girada o no) en localStorage
-        if (this.classList.contains("flipped")) {
-            localStorage.setItem("cardFlipped", "true");
-        } else {
-            localStorage.setItem("cardFlipped", "false");
-        }
+      this.classList.toggle("flipped");
+      if (this.classList.contains("flipped")) {
+        localStorage.setItem("cardFlipped", "true");
+      } else {
+        localStorage.setItem("cardFlipped", "false");
+      }
     });
-</script>
+  </script>
 
 </body>
 </html>
