@@ -71,22 +71,6 @@
     .buttons a:hover {
       background-color: #ddd;
     }
-    .rotate-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: rgba(255, 255, 255, 0.8);
-      padding: 10px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 18px;
-      font-weight: bold;
-      border: none;
-      transition: background 0.3s ease;
-    }
-    .rotate-button:hover {
-      background-color: rgba(255, 255, 255, 1);
-    }
   </style>
 </head>
 <body>
@@ -105,60 +89,37 @@
   <script>
     const card = document.getElementById('card');
     let isFlipped = false;
-    let isTouching = false;
-    let initialX = 0;
-    let currentX = 0;
-    let deltaX = 0;
-    let rotationY = 0;
+    let startX = 0;
+    let endX = 0;
 
     // Voltear la carta automáticamente después de 7 segundos
     setTimeout(() => {
       flipCard();
     }, 7000);
 
-    // Función para voltear la carta
-    function flipCard() {
-      if (isFlipped) {
-        card.style.transform = 'rotateY(0deg)';  // Regresa a la posición original
-      } else {
-        card.style.transform = 'rotateY(180deg)';  // Gira la carta 180 grados
+    function flipCard(direction) {
+      if (direction === 'right') {
+        card.style.transform = isFlipped ? 'rotateY(0deg)' : 'rotateY(180deg)';
+      } else if (direction === 'left') {
+        card.style.transform = isFlipped ? 'rotateY(0deg)' : 'rotateY(-180deg)';
       }
-      isFlipped = !isFlipped;  // Cambia el estado de la carta
+      isFlipped = !isFlipped;
     }
 
-    // Detectar el gesto de deslizar en horizontal
     card.addEventListener('touchstart', (e) => {
-      isTouching = true;
-      initialX = e.touches[0].clientX;  // Guardamos la posición inicial del toque
-      deltaX = 0;  // Resetear el desplazamiento al inicio
+      startX = e.touches[0].clientX;
     });
 
-    card.addEventListener('touchmove', (e) => {
-      if (!isTouching) return;
-      currentX = e.touches[0].clientX;
-      deltaX = currentX - initialX;  // Calcular el desplazamiento
-
-      // Actualizar la rotación de la carta según el movimiento
-      rotationY = (deltaX / window.innerWidth) * 180;  // Calculamos el giro basado en el desplazamiento
-
-      // Aplicamos la rotación a la carta
-      card.style.transform = `rotateY(${rotationY}deg)`;
-    });
-
-    card.addEventListener('touchend', () => {
-      isTouching = false;
-
-      // Al terminar el movimiento, suavizamos el giro y lo restablecemos a 0
-      card.style.transition = 'transform 0.5s ease-out';
-      card.style.transform = `rotateY(${rotationY}deg)`;  // Finaliza en el ángulo calculado
-
-      // Si el desplazamiento fue mayor que cierto umbral, voltea la carta
-      if (Math.abs(deltaX) > window.innerWidth / 4) {
-        flipCard();
-      } else {
-        card.style.transform = 'rotateY(0deg)';
+    card.addEventListener('touchend', (e) => {
+      endX = e.changedTouches[0].clientX;
+      let diff = endX - startX;
+      if (diff > 50) {
+        flipCard('right');
+      } else if (diff < -50) {
+        flipCard('left');
       }
     });
   </script>
 </body>
 </html>
+
