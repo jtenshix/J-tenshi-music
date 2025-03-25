@@ -12,10 +12,10 @@
       overflow: hidden;
     }
     .card-container {
-      perspective: 1500px;
+      perspective: 1000px;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: center; 
       height: 100vh;
       width: 100vw;
       position: relative;
@@ -26,8 +26,11 @@
       height: 80%;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.2s ease-out;
+      transition: transform 0.3s ease-out;
       cursor: pointer;
+      border: 4px solid #fff;
+      border-radius: 10px;
+      margin-top: 20px;
       will-change: transform;
     }
     .card-side {
@@ -66,46 +69,33 @@
     let initialX = 0;
     let currentX = 0;
     let deltaX = 0;
-    let initialY = 0;
-    let currentY = 0;
-    let deltaY = 0;
-    let rotationX = 0;
     let rotationY = 0;
 
     // Detectar el gesto de deslizar en horizontal
     card.addEventListener('touchstart', (e) => {
       isTouching = true;
       initialX = e.touches[0].clientX;  // Guardamos la posición inicial del toque
-      initialY = e.touches[0].clientY;
+      deltaX = 0;  // Resetear el desplazamiento al inicio
     });
 
     card.addEventListener('touchmove', (e) => {
       if (!isTouching) return;
       currentX = e.touches[0].clientX;
-      currentY = e.touches[0].clientY;
-      deltaX = currentX - initialX;  // Calcular el desplazamiento horizontal
-      deltaY = currentY - initialY;  // Calcular el desplazamiento vertical
+      deltaX = currentX - initialX;  // Calcular el desplazamiento
 
-      // Aplicamos el desplazamiento para el giro 3D de la carta
-      rotationY += deltaX / window.innerWidth * 180;  // Rotación horizontal
-      rotationX -= deltaY / window.innerHeight * 180;  // Rotación vertical
+      // Actualizar la rotación de la carta según el movimiento
+      rotationY = (deltaX / window.innerWidth) * 360;  // Permitimos un rango más amplio de rotación (360 grados)
 
-      // Restringir los valores para evitar que gire demasiado
-      rotationX = Math.max(Math.min(rotationX, 45), -45);  // Limitar el giro vertical
-      rotationY = Math.max(Math.min(rotationY, 180), -180);  // Limitar el giro horizontal
-
-      // Aplicar el giro 3D a la carta y sus dos lados
-      card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-
-      // Actualizar la posición inicial para el siguiente movimiento
-      initialX = currentX;
-      initialY = currentY;
+      // Aplicamos la rotación a la carta de manera continua
+      card.style.transform = `rotateY(${rotationY}deg)`;
     });
 
     card.addEventListener('touchend', () => {
       isTouching = false;
-      // Suavizar la transición cuando se termina el movimiento
+
+      // Al terminar el movimiento, suavizamos el giro y lo restablecemos a la posición de la carta final
       card.style.transition = 'transform 0.3s ease-out';
+      card.style.transform = `rotateY(${rotationY}deg)`;  // Mantiene la carta girada según el toque final
     });
   </script>
 </body>
