@@ -15,7 +15,7 @@
       perspective: 1000px;
       display: flex;
       justify-content: center;
-      align-items: flex-start; /* Para mover la carta hacia arriba */
+      align-items: center; 
       height: 100vh;
       width: 100vw;
       position: relative;
@@ -103,11 +103,18 @@
   </div>
 
   <script>
-    // Variables para control del movimiento
     const card = document.getElementById('card');
-    let isFlipped = false;  // Estado de la carta (flipada o no)
-    const maxTilt = 50;  // Aumentamos aún más la inclinación máxima para hacerlo más notorio
-    const sensitivity = 3;  // Este valor determina cuán rápido o suave se mueve la carta
+    let isFlipped = false;
+    let isTouching = false;
+    let initialX = 0;
+    let currentX = 0;
+    let deltaX = 0;
+    let rotationY = 0;
+
+    // Voltear la carta automáticamente después de 7 segundos
+    setTimeout(() => {
+      flipCard();
+    }, 7000);
 
     // Función para voltear la carta
     function flipCard() {
@@ -119,32 +126,38 @@
       isFlipped = !isFlipped;  // Cambia el estado de la carta
     }
 
-    // Voltea la carta automáticamente después de 7 segundos
-    setTimeout(flipCard, 7000);  // 7000 milisegundos = 7 segundos
-
-    // Para voltear la carta con el gesto de deslizar
-    let startX = 0, startY = 0;
-    let rotationY = 0;
-
+    // Detectar el gesto de deslizar en horizontal
     card.addEventListener('touchstart', (e) => {
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
+      isTouching = true;
+      initialX = e.touches[0].clientX;  // Guardamos la posición inicial del toque
+      deltaX = 0;  // Resetear el desplazamiento al inicio
     });
 
     card.addEventListener('touchmove', (e) => {
-      const moveX = e.touches[0].clientX - startX;
+      if (!isTouching) return;
+      currentX = e.touches[0].clientX;
+      deltaX = currentX - initialX;  // Calcular el desplazamiento
 
-      // Calculamos el ángulo de rotación en el eje Y (horizontal)
-      rotationY = ((moveX / window.innerWidth) * maxTilt) * sensitivity;
+      // Actualizar la rotación de la carta según el movimiento
+      rotationY = (deltaX / window.innerWidth) * 180;  // Calculamos el giro basado en el desplazamiento
 
-      // Aplicamos la rotación en el eje Y
-      card.style.transform = `rotateY(${rotationY}deg)`;  // Solo rotación en el eje Y (horizontal)
+      // Aplicamos la rotación a la carta
+      card.style.transform = `rotateY(${rotationY}deg)`;
     });
 
     card.addEventListener('touchend', () => {
-      // Cuando terminamos de deslizar, restauramos la carta
-      card.style.transition = 'transform 0.5s ease-out';  // Transición suave
-      card.style.transform = 'rotateY(0deg)';
+      isTouching = false;
+
+      // Al terminar el movimiento, suavizamos el giro y lo restablecemos a 0
+      card.style.transition = 'transform 0.5s ease-out';
+      card.style.transform = `rotateY(${rotationY}deg)`;  // Finaliza en el ángulo calculado
+
+      // Si el desplazamiento fue mayor que cierto umbral, voltea la carta
+      if (Math.abs(deltaX) > window.innerWidth / 4) {
+        flipCard();
+      } else {
+        card.style.transform = 'rotateY(0deg)';
+      }
     });
   </script>
 </body>
