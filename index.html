@@ -12,7 +12,7 @@
       overflow: hidden;
     }
     .card-container {
-      perspective: 1000px;
+      perspective: 1200px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -53,60 +53,61 @@
       transform: rotateY(180deg);
       background-size: cover;
     }
-    .buttons {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .buttons a {
-      text-decoration: none;
-      background-color: #fff;
-      color: #121212;
-      padding: 10px 20px;
-      border-radius: 5px;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
-    .buttons a:hover {
-      background-color: #ddd;
-    }
   </style>
 </head>
 <body>
   <div class="card-container">
     <div class="card" id="card">
       <div class="card-side card-front"></div>
-      <div class="card-side card-back">
-        <div class="buttons">
-          <a href="https://www.youtube.com/@j-tenshimus1c" target="_blank">YouTube</a>
-          <a href="https://open.spotify.com/artist/0ZkxChUDjvBph9f7TitfMR?si=WxsQF2meTdiaOibANyQNSg" target="_blank">Spotify</a>
-        </div>
-      </div>
+      <div class="card-side card-back"></div>
     </div>
   </div>
-
+  
   <script>
     const card = document.getElementById('card');
     let isTouching = false;
-    let initialX = 0;
+    let startX = 0;
     let currentRotation = 0;
+    let velocity = 0;
+    let animationFrame;
+
+    function updateRotation() {
+      card.style.transform = `rotateY(${currentRotation}deg) rotateX(10deg)`;
+      animationFrame = requestAnimationFrame(updateRotation);
+    }
 
     card.addEventListener('touchstart', (e) => {
+      cancelAnimationFrame(animationFrame);
       isTouching = true;
-      initialX = e.touches[0].clientX;
+      startX = e.touches[0].clientX;
+      velocity = 0;
     });
 
     card.addEventListener('touchmove', (e) => {
       if (!isTouching) return;
-      let deltaX = e.touches[0].clientX - initialX;
+      let deltaX = e.touches[0].clientX - startX;
       currentRotation += deltaX * 0.5;
-      card.style.transform = `rotateY(${currentRotation}deg)`;
-      initialX = e.touches[0].clientX;
+      if (currentRotation > 360 || currentRotation < -360) {
+        currentRotation %= 360;
+      }
+      velocity = deltaX;
+      startX = e.touches[0].clientX;
+      card.style.transform = `rotateY(${currentRotation}deg) rotateX(10deg)`;
     });
 
     card.addEventListener('touchend', () => {
       isTouching = false;
+      function inertia() {
+        if (Math.abs(velocity) < 0.5) return;
+        currentRotation += velocity * 0.3;
+        velocity *= 0.95;
+        if (currentRotation > 360 || currentRotation < -360) {
+          currentRotation %= 360;
+        }
+        card.style.transform = `rotateY(${currentRotation}deg) rotateX(10deg)`;
+        requestAnimationFrame(inertia);
+      }
+      inertia();
     });
   </script>
 </body>
