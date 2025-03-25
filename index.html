@@ -105,11 +105,11 @@
       if (isFlipped) {
         card.classList.add('flipped');
       } else {
-        // Esperar unos segundos antes de voltear automáticamente
+        // Volteamos la carta automáticamente solo una vez al cargar la página
         setTimeout(function() {
           card.classList.add('flipped');
           localStorage.setItem('cardFlipped', 'true'); // Guardar el estado de la carta como volteada
-        }, 3000);  // 3 segundos
+        }, 3000);  // 3 segundos para mostrar la cara inicial
       }
     };
   </script>
