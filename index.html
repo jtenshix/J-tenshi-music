@@ -12,7 +12,7 @@
       overflow: hidden;
     }
     .card-container {
-      perspective: 1000px;
+      perspective: 1500px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -28,9 +28,6 @@
       transform-style: preserve-3d;
       transition: transform 0.2s ease-out;
       cursor: pointer;
-      border: 4px solid #fff;
-      border-radius: 10px;
-      margin-top: 20px;
       will-change: transform;
     }
     .card-side {
@@ -45,47 +42,13 @@
       align-items: center;
     }
     .card-front {
-      background: url('carta_frente.png.jpg') no-repeat center/cover;
+      background: url('carta_frente.png') no-repeat center/cover;
       background-size: cover;
     }
     .card-back {
-      background: url('carta_dorso.png.png') no-repeat center/cover;
+      background: url('carta_dorso.png') no-repeat center/cover;
       transform: rotateY(180deg);
       background-size: cover;
-    }
-    .buttons {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .buttons a {
-      text-decoration: none;
-      background-color: #fff;
-      color: #121212;
-      padding: 10px 20px;
-      border-radius: 5px;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
-    .buttons a:hover {
-      background-color: #ddd;
-    }
-    .rotate-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: rgba(255, 255, 255, 0.8);
-      padding: 10px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 18px;
-      font-weight: bold;
-      border: none;
-      transition: background 0.3s ease;
-    }
-    .rotate-button:hover {
-      background-color: rgba(255, 255, 255, 1);
     }
   </style>
 </head>
@@ -93,75 +56,56 @@
   <div class="card-container">
     <div class="card" id="card">
       <div class="card-side card-front"></div>
-      <div class="card-side card-back">
-        <div class="buttons">
-          <a href="https://www.youtube.com/@j-tenshimus1c" target="_blank">YouTube</a>
-          <a href="https://open.spotify.com/artist/0ZkxChUDjvBph9f7TitfMR?si=WxsQF2meTdiaOibANyQNSg" target="_blank">Spotify</a>
-        </div>
-      </div>
+      <div class="card-side card-back"></div>
     </div>
   </div>
 
   <script>
     const card = document.getElementById('card');
-    let isFlipped = false;
     let isTouching = false;
     let initialX = 0;
     let currentX = 0;
     let deltaX = 0;
+    let initialY = 0;
+    let currentY = 0;
+    let deltaY = 0;
+    let rotationX = 0;
     let rotationY = 0;
-
-    // Voltear la carta automáticamente después de 7 segundos
-    setTimeout(() => {
-      flipCard();
-    }, 7000);
-
-    // Función para voltear la carta
-    function flipCard() {
-      if (isFlipped) {
-        card.style.transform = 'rotateY(0deg)';  // Regresa a la posición original
-      } else {
-        card.style.transform = 'rotateY(180deg)';  // Gira la carta 180 grados
-      }
-      isFlipped = !isFlipped;  // Cambia el estado de la carta
-    }
 
     // Detectar el gesto de deslizar en horizontal
     card.addEventListener('touchstart', (e) => {
       isTouching = true;
       initialX = e.touches[0].clientX;  // Guardamos la posición inicial del toque
+      initialY = e.touches[0].clientY;
     });
 
     card.addEventListener('touchmove', (e) => {
       if (!isTouching) return;
       currentX = e.touches[0].clientX;
-      deltaX = currentX - initialX;  // Calcular el desplazamiento
+      currentY = e.touches[0].clientY;
+      deltaX = currentX - initialX;  // Calcular el desplazamiento horizontal
+      deltaY = currentY - initialY;  // Calcular el desplazamiento vertical
 
-      // Aplicamos el desplazamiento sin quedarse pegado al medio
+      // Aplicamos el desplazamiento para el giro 3D de la carta
       rotationY += deltaX / window.innerWidth * 180;
+      rotationX -= deltaY / window.innerHeight * 180;
 
-      // Restringir el giro para que no se quede en el medio
-      rotationY = Math.max(Math.min(rotationY, 180), -180);  // Evita que la carta pase de 180 o -180 grados
+      // Restringir los valores para evitar que gire demasiado
+      rotationX = Math.max(Math.min(rotationX, 45), -45);  // Limitar el giro vertical
+      rotationY = Math.max(Math.min(rotationY, 180), -180);  // Limitar el giro horizontal
 
-      // Aplicar el giro
-      card.style.transform = `rotateY(${rotationY}deg)`;
+      // Aplicar el giro 3D
+      card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
 
       // Actualizar la posición inicial para el siguiente movimiento
       initialX = currentX;
+      initialY = currentY;
     });
 
     card.addEventListener('touchend', () => {
       isTouching = false;
-
-      // Al terminar el movimiento, suavizamos el giro y lo restablecemos
-      card.style.transition = 'transform 0.5s ease-out';
-      
-      // Volteamos la carta si el movimiento es lo suficientemente grande
-      if (Math.abs(rotationY) > 90) {
-        flipCard();
-      } else {
-        card.style.transform = 'rotateY(0deg)';
-      }
+      // Suavizar la transición cuando se termina el movimiento
+      card.style.transition = 'transform 0.3s ease-out';
     });
   </script>
 </body>
