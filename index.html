@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva</title>
+    <title>Carta 3D Móvil</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: white;
             margin: 0;
             padding: 0;
+            background-color: #121212;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            overflow: hidden;
         }
 
         .card-container {
@@ -22,7 +21,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
         }
 
         .card {
@@ -30,37 +30,34 @@
             height: 350px;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.1s ease-out;
+            transition: transform 0.6s ease-in-out;
             cursor: pointer;
-            will-change: transform;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
         }
 
+        /* Efecto 3D */
         .card-side {
             position: absolute;
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 15px;
+            border-radius: 10px;
+            transition: box-shadow 0.3s ease-in-out;
         }
 
         .card-front {
-            background: url('carta_frente.png.jpg') no-repeat center/cover;
-            background-size: cover;
+            background: url('carta_frente.png') no-repeat center/cover;
         }
 
         .card-back {
-            background: url('carta_dorso.png.jpg') no-repeat center/cover;
-            background-size: cover;
+            background: url('carta_dorso.png') no-repeat center/cover;
             transform: rotateY(180deg);
         }
 
-        /* Efecto 3D */
-        .card-tilt {
-            transition: transform 0.1s ease-out;
+        /* Opcional: Fondo de la carta */
+        .card:hover .card-side {
+            box-shadow: 0 6px 12px rgba(255, 255, 255, 0.3);
         }
-
     </style>
 </head>
 <body>
@@ -68,35 +65,38 @@
     <div class="card-container">
         <div class="card" id="card">
             <div class="card-side card-front"></div>
-            <div class="card-side card-back">
-                <!-- Aquí van los botones de Spotify y YouTube -->
-                <button onclick="window.location.href='https://www.youtube.com'">YouTube</button>
-                <button onclick="window.location.href='https://www.spotify.com'">Spotify</button>
-            </div>
+            <div class="card-side card-back"></div>
         </div>
     </div>
 
     <script>
         const card = document.getElementById('card');
+        
+        // Variables para controlar el movimiento
+        let touchStartX = 0;
+        let touchStartY = 0;
 
-        // Función para el efecto de movimiento 3D con el dedo
+        // Función para detectar el movimiento del dedo
+        card.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        });
+
+        // Función para mover la carta con el dedo
         card.addEventListener('touchmove', (e) => {
-            const { width, height, left, top } = card.getBoundingClientRect();
-            const centerX = left + width / 2;
-            const centerY = top + height / 2;
-            const touchX = e.touches[0].clientX;
-            const touchY = e.touches[0].clientY;
+            const touchMoveX = e.touches[0].clientX;
+            const touchMoveY = e.touches[0].clientY;
             
-            const deltaX = touchX - centerX;
-            const deltaY = touchY - centerY;
+            const deltaX = touchMoveX - touchStartX;
+            const deltaY = touchMoveY - touchStartY;
 
-            const rotateX = (deltaY / height) * 20;  // Ajusta el movimiento vertical
-            const rotateY = -(deltaX / width) * 20;  // Ajusta el movimiento horizontal
-
+            const rotateX = (deltaY / window.innerHeight) * 20;  // Ajuste para el movimiento vertical
+            const rotateY = -(deltaX / window.innerWidth) * 20;  // Ajuste para el movimiento horizontal
+            
             card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
         });
 
-        // Para restablecer la carta cuando el dedo se levanta
+        // Función para resetear la carta cuando se deja de mover el dedo
         card.addEventListener('touchend', () => {
             card.style.transform = 'rotateX(0deg) rotateY(0deg)';
         });
