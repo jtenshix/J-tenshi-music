@@ -93,22 +93,22 @@
     function toggleFlip() {
       const card = document.getElementById('card');
       card.classList.toggle('flipped');
-      // Guardar el estado en el almacenamiento local
-      localStorage.setItem('cardFlipped', card.classList.contains('flipped'));
+      // Guardar el estado en el almacenamiento de sesión
+      sessionStorage.setItem('cardFlipped', card.classList.contains('flipped'));
     }
 
     // Función para restaurar el estado de la carta
     window.onload = function() {
       const card = document.getElementById('card');
-      // Verificar si la carta está volteada en el almacenamiento local
-      const isFlipped = localStorage.getItem('cardFlipped') === 'true';
+      // Verificar si la carta está volteada en el almacenamiento de sesión
+      const isFlipped = sessionStorage.getItem('cardFlipped') === 'true';
       if (isFlipped) {
         card.classList.add('flipped');
       } else {
         // Volteamos la carta automáticamente solo una vez al cargar la página
         setTimeout(function() {
           card.classList.add('flipped');
-          localStorage.setItem('cardFlipped', 'true'); // Guardar el estado de la carta como volteada
+          sessionStorage.setItem('cardFlipped', 'true'); // Guardar el estado de la carta como volteada
         }, 3000);  // 3 segundos para mostrar la cara inicial
       }
     };
