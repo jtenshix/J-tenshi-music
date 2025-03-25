@@ -15,7 +15,7 @@
       perspective: 1000px;
       display: flex;
       justify-content: center;
-      align-items: center; 
+      align-items: center;
       height: 100vh;
       width: 100vw;
       position: relative;
@@ -26,7 +26,7 @@
       height: 80%;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.5s ease-out;
+      transition: transform 0.3s ease-out;
       cursor: pointer;
       border: 4px solid #fff;
       border-radius: 10px;
@@ -88,38 +88,26 @@
 
   <script>
     const card = document.getElementById('card');
-    let isFlipped = false;
-    let startX = 0;
-    let endX = 0;
-
-    // Voltear la carta automáticamente después de 7 segundos
-    setTimeout(() => {
-      flipCard();
-    }, 7000);
-
-    function flipCard(direction) {
-      if (direction === 'right') {
-        card.style.transform = isFlipped ? 'rotateY(0deg)' : 'rotateY(180deg)';
-      } else if (direction === 'left') {
-        card.style.transform = isFlipped ? 'rotateY(0deg)' : 'rotateY(-180deg)';
-      }
-      isFlipped = !isFlipped;
-    }
+    let isTouching = false;
+    let initialX = 0;
+    let currentRotation = 0;
 
     card.addEventListener('touchstart', (e) => {
-      startX = e.touches[0].clientX;
+      isTouching = true;
+      initialX = e.touches[0].clientX;
     });
 
-    card.addEventListener('touchend', (e) => {
-      endX = e.changedTouches[0].clientX;
-      let diff = endX - startX;
-      if (diff > 50) {
-        flipCard('right');
-      } else if (diff < -50) {
-        flipCard('left');
-      }
+    card.addEventListener('touchmove', (e) => {
+      if (!isTouching) return;
+      let deltaX = e.touches[0].clientX - initialX;
+      currentRotation += deltaX * 0.5;
+      card.style.transform = `rotateY(${currentRotation}deg)`;
+      initialX = e.touches[0].clientX;
+    });
+
+    card.addEventListener('touchend', () => {
+      isTouching = false;
     });
   </script>
 </body>
 </html>
-
