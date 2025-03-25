@@ -57,79 +57,44 @@
     }
     .buttons {
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      width: 100%;
+      flex-direction: column;
+      gap: 10px;
     }
     .buttons a {
       text-decoration: none;
-      background-color: white;
-      color: black;
-      padding: 10px 15px;
-      margin: 10px;
+      background-color: #fff;
+      color: #121212;
+      padding: 10px 20px;
       border-radius: 5px;
       font-weight: bold;
-      display: inline-block;
+      transition: background 0.3s;
     }
-    /* Estilos para pantallas grandes */
-    @media (min-width: 768px) {
-      .card {
-        max-width: 700px;
-        height: 500px;
-      }
-    }
-    /* Estilos para pantallas pequeñas (móviles) */
-    @media (max-width: 768px) {
-      .card {
-        width: 90vw;
-        height: 75vh;
-      }
+    .buttons a:hover {
+      background-color: #ddd;
     }
   </style>
 </head>
 <body>
-
   <div class="card-container">
-    <div class="card" id="carta">
+    <div class="card" id="card" onclick="this.classList.toggle('flipped')">
       <div class="card-side card-front"></div>
       <div class="card-side card-back">
         <div class="buttons">
           <a href="https://www.youtube.com/@j-tenshimus1c" target="_blank">YouTube</a>
-          <a href="https://open.spotify.com/artist/0ZkxChUDjvBph9f7TitfMR" target="_blank">Spotify</a>
+          <a href="https://open.spotify.com/artist/0ZkxChUDjvBph9f7TitfMR?si=WxsQF2meTdiaOibANyQNSg" target="_blank">Spotify</a>
         </div>
       </div>
     </div>
   </div>
 
   <script>
+    // Función para voltear la carta después de unos segundos al cargar
     window.onload = function() {
-      const carta = document.getElementById("carta");
-      let flipped = localStorage.getItem("cardFlipped");
-      // Si no hay estado guardado, establecemos por defecto que esté sin voltear (lado frontal)
-      if (flipped === null) {
-        localStorage.setItem("cardFlipped", "false");
-      } else if (flipped === "true") {
-        carta.classList.add("flipped");
-      }
-      // Evitar que al hacer clic en los enlaces se propague el evento y gire la carta.
-      const links = document.querySelectorAll(".buttons a");
-      links.forEach(link => {
-        link.addEventListener("click", function(e) {
-          e.stopPropagation();
-        });
-      });
+      setTimeout(function() {
+        document.getElementById('card').classList.add('flipped');
+      }, 3000);  // La carta se voltea después de 3 segundos
     };
-
-    document.getElementById("carta").addEventListener("click", function() {
-      this.classList.toggle("flipped");
-      if (this.classList.contains("flipped")) {
-        localStorage.setItem("cardFlipped", "true");
-      } else {
-        localStorage.setItem("cardFlipped", "false");
-      }
-    });
   </script>
-
 </body>
 </html>
