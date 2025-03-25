@@ -15,7 +15,7 @@
       perspective: 1000px;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;
       height: 100vh;
       width: 100vw;
     }
@@ -118,6 +118,8 @@
     const card = document.getElementById('card');
     let startX = 0;
     let startY = 0;
+    let rotationX = 0;
+    let rotationY = 0;
 
     card.addEventListener('touchstart', (e) => {
       startX = e.touches[0].clientX;
@@ -128,7 +130,10 @@
       const moveX = e.touches[0].clientX - startX;
       const moveY = e.touches[0].clientY - startY;
 
-      card.style.transform = `rotateY(${moveX / 10}deg) rotateX(${-moveY / 10}deg)`;
+      rotationX += moveY / 10;
+      rotationY -= moveX / 10;
+
+      card.style.transform = `rotateY(${rotationY}deg) rotateX(${rotationX}deg)`;
     });
 
     card.addEventListener('touchend', () => {
