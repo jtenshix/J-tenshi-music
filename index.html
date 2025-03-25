@@ -48,11 +48,11 @@
         }
 
         .card-front {
-            background: url('carta_frente.png') no-repeat center/cover;
+            background: url('carta_frente.png.jpg') no-repeat center/cover;
         }
 
         .card-back {
-            background: url('carta_dorso.png') no-repeat center/cover;
+            background: url('carta_dorso.png.png') no-repeat center/cover;
             transform: rotateY(180deg);
         }
 
@@ -90,16 +90,23 @@
 </div>
 
 <script>
-    // Hace que la carta gire automáticamente al cargar
+    // Verifica si la carta está volteada antes de cargarla, para mantener su estado
     window.onload = function() {
-        setTimeout(() => {
-            document.getElementById("carta").classList.add("flipped");
-        }, 500); // Gira después de medio segundo
+        const carta = document.getElementById("carta");
+        if (localStorage.getItem("flipped") === "true") {
+            carta.classList.add("flipped");
+        } else {
+            setTimeout(() => {
+                carta.classList.add("flipped");
+                localStorage.setItem("flipped", "true");  // Guarda el estado
+            }, 500); // Gira después de medio segundo
+        }
     };
 
     // Permite girar la carta manualmente después
     document.getElementById("carta").addEventListener("click", function() {
         this.classList.toggle("flipped");
+        localStorage.setItem("flipped", this.classList.contains("flipped"));  // Guarda el nuevo estado
     });
 </script>
 
