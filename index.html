@@ -35,26 +35,24 @@
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
         }
 
-        /* Efecto 3D */
         .card-side {
             position: absolute;
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
             border-radius: 10px;
-            transition: box-shadow 0.3s ease-in-out;
         }
 
         .card-front {
-            background: url('carta_frente.png') no-repeat center/cover;
+            background: url('https://via.placeholder.com/250x350?text=Frente') no-repeat center/cover;
+            background-size: cover;
         }
 
         .card-back {
-            background: url('carta_dorso.png') no-repeat center/cover;
+            background: url('https://via.placeholder.com/250x350?text=Reverso') no-repeat center/cover;
             transform: rotateY(180deg);
         }
 
-        /* Opcional: Fondo de la carta */
         .card:hover .card-side {
             box-shadow: 0 6px 12px rgba(255, 255, 255, 0.3);
         }
