@@ -3,103 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J-Tenshi Music</title>
+    <title>Carta Especial</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: start;
-            min-height: 100vh;
-            background-image: url('horizontal.png');
-            background-size: cover;
-            background-position: center;
+            font-family: Arial, sans-serif;
             text-align: center;
+            background-color: #121212;
             color: white;
         }
-        
-        @media (max-width: 768px) {
-            body {
-                background-image: url('vertical.png');
-            }
+
+        .card-container {
+            perspective: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
         }
 
-        .container {
-            width: 90%;
-            max-width: 800px;
-            margin-top: 20px;
+        .card {
+            width: 250px;
+            height: 350px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease-in-out;
+            cursor: pointer;
         }
 
-        iframe {
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-side {
+            position: absolute;
             width: 100%;
-            height: 315px;
+            height: 100%;
+            backface-visibility: hidden;
             border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
+            transition: box-shadow 0.3s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .card-front {
+            background: url('carta_frente.png') no-repeat center/cover;
+        }
+
+        .card-back {
+            background: url('carta_dorso.png') no-repeat center/cover;
+            transform: rotateY(180deg);
         }
 
         .buttons {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         .buttons a {
             text-decoration: none;
             background-color: white;
             color: black;
-            padding: 10px 20px;
+            padding: 10px 15px;
             margin: 5px;
             border-radius: 5px;
             font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .buttons a:hover {
-            background-color: #ddd;
-        }
-
-        .button-container {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .button {
-            text-decoration: none;
-            background-color: white;
-            color: black;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .button:hover {
-            background-color: #ddd;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>J-Tenshi Music</h1>
-        <h2>Último Video</h2>
-        <iframe src="https://www.youtube.com/embed/0_QHL7cDYno" allowfullscreen></iframe>
-        
-        <div class="buttons">
-            <a href="https://www.youtube.com/@j-tenshimus1c" target="_blank">YouTube</a>
-            <a href="https://open.spotify.com/artist/0ZkxChUDjvBph9f7TitfMR?si=WxsQF2meTdiaOibANyQNSg" target="_blank">Spotify</a>
+
+<h2>Carta Especial</h2>
+<p>Haz clic en la carta para voltearla.</p>
+
+<div class="card-container">
+    <div class="card" id="carta">
+        <div class="card-side card-front"></div>
+        <div class="card-side card-back">
+            <div class="buttons">
+                <a href="https://www.youtube.com/@j-tenshimus1c" target="_blank">YouTube</a>
+                <a href="https://open.spotify.com/artist/0ZkxChUDjvBph9f7TitfMR" target="_blank">Spotify</a>
+            </div>
         </div>
     </div>
+</div>
 
-    <!-- Botones de navegación -->
-    <div class="button-container">
-        <a href="wallpapers.html" class="button">Wallpapers</a>
-        <a href="manga.html" class="button">Manga</a>
-        <a href="carta.html" class="button">Ver Carta 3D</a> <!-- Nuevo botón agregado -->
-    </div>
+<script>
+    // Hace que la carta gire automáticamente al cargar
+    window.onload = function() {
+        setTimeout(() => {
+            document.getElementById("carta").classList.add("flipped");
+        }, 500); // Gira después de medio segundo
+    };
+
+    // Permite girar la carta manualmente después
+    document.getElementById("carta").addEventListener("click", function() {
+        this.classList.toggle("flipped");
+    });
+</script>
+
 </body>
 </html>
