@@ -87,14 +87,14 @@
       deltaY = currentY - initialY;  // Calcular el desplazamiento vertical
 
       // Aplicamos el desplazamiento para el giro 3D de la carta
-      rotationY += deltaX / window.innerWidth * 180;
-      rotationX -= deltaY / window.innerHeight * 180;
+      rotationY += deltaX / window.innerWidth * 180;  // Rotación horizontal
+      rotationX -= deltaY / window.innerHeight * 180;  // Rotación vertical
 
       // Restringir los valores para evitar que gire demasiado
       rotationX = Math.max(Math.min(rotationX, 45), -45);  // Limitar el giro vertical
       rotationY = Math.max(Math.min(rotationY, 180), -180);  // Limitar el giro horizontal
 
-      // Aplicar el giro 3D
+      // Aplicar el giro 3D a la carta y sus dos lados
       card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
 
       // Actualizar la posición inicial para el siguiente movimiento
