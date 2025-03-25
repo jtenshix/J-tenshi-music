@@ -78,21 +78,21 @@
       <div class="card-side card-front"></div>
       <div class="card-side card-back">
         <div class="buttons">
-          <a href="https://www.youtube.com/@j-tenshimus1c" target="_blank" class="flip-link">YouTube</a>
-          <a href="https://open.spotify.com/artist/0ZkxChUDjvBph9f7TitfMR?si=WxsQF2meTdiaOibANyQNSg" target="_blank" class="flip-link">Spotify</a>
+          <a href="https://www.youtube.com/@j-tenshimus1c" target="_blank">YouTube</a>
+          <a href="https://open.spotify.com/artist/0ZkxChUDjvBph9f7TitfMR?si=WxsQF2meTdiaOibANyQNSg" target="_blank">Spotify</a>
         </div>
       </div>
     </div>
   </div>
 
   <script>
+    // Variables para control del movimiento
     const card = document.getElementById('card');
     let startX = 0, startY = 0;
     let rotationX = 0, rotationY = 0;
-    const maxTilt = 40; // Aumento del movimiento al tocar
-    let isFlipped = false;
+    const maxTilt = 50;
+    const sensitivity = 3;
 
-    // Movimiento con el dedo
     card.addEventListener('touchstart', (e) => {
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
@@ -102,33 +102,24 @@
       const moveX = e.touches[0].clientX - startX;
       const moveY = e.touches[0].clientY - startY;
 
-      rotationX = (moveY / window.innerHeight) * maxTilt;
-      rotationY = (moveX / window.innerWidth) * maxTilt;
+      rotationX = ((moveY / window.innerHeight) * maxTilt) * sensitivity;
+      rotationY = ((moveX / window.innerWidth) * maxTilt) * sensitivity;
 
       card.style.transition = 'transform 0.05s ease-out';
-      card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) ${isFlipped ? 'rotateY(180deg)' : ''}`;
+      card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
     });
 
     card.addEventListener('touchend', () => {
       card.style.transition = 'transform 0.4s ease-out';
-      card.style.transform = `rotateX(0deg) rotateY(0deg) ${isFlipped ? 'rotateY(180deg)' : ''}`;
+      card.style.transform = 'rotateX(0deg) rotateY(0deg)';
     });
 
-    // Volteo al tocar el enlace y abrirlo después
-    document.querySelectorAll('.flip-link').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (isFlipped) {
-          window.open(link.href, '_blank');
-        } else {
-          card.style.transition = 'transform 0.6s ease-out';
-          card.style.transform = 'rotateY(180deg)';
-          isFlipped = true;
-          setTimeout(() => {
-            window.open(link.href, '_blank');
-          }, 600);
-        }
-      });
+    // Hacer que la carta se voltee después de 5 segundos al cargar la página
+    document.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => {
+        card.style.transition = "transform 1s ease";
+        card.style.transform = "rotateY(180deg)";
+      }, 5000);
     });
   </script>
 </body>
