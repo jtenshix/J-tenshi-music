@@ -1,253 +1,70 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carta Especial</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #121212;
-      overflow: hidden;
-    }
-    .card-container {
-      perspective: 1500px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      width: 100vw;
-      position: relative;
-    }
-    .card {
-      width: 80%;
-      max-width: 600px;
-      height: 80%;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.6s ease-out;
-      cursor: pointer;
-      border: 4px solid #fff;
-      border-radius: 10px;
-      margin-top: 20px;
-      will-change: transform;
-    }
-    .card-side {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    /* Uso de clases con los nombres que deseas */
-    .carta-frente {
-      background: url('carta_frente.png.jpg') no-repeat center/cover;
-      background-size: cover;
-    }
-    .carta-dorso {
-      background: url('carta_dorso.png.png') no-repeat center/cover;
-      transform: rotateY(180deg);
-      background-size: cover;
-    }
-    .buttons {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .buttons a {
-      text-decoration: none;
-      background-color: #fff;
-      color: #121212;
-      padding: 10px 20px;
-      border-radius: 5px;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
-    .buttons a:hover {
-      background-color: #ddd;
-    }
-  </style>
-</head>
-<body>
-  <div class="card-container">
-    <div class="card" id="card">
-      <div class="card-side carta-frente"></div>
-      <div class="card-side carta-dorso">
-        <div class="buttons">
-          <a href="https://www.youtube.com/@j-tenshimus1c" target="_blank">YouTube</a>
-          <a href="https://open.spotify.com/artist/0ZkxChUDjvBph9f7TitfMR?si=WxsQF2meTdiaOibANyQNSg" target="_blank">Spotify</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const card = document.getElementById('card');
-    let isFlipped = false;
-    let initialX = 0;
-    const swipeThreshold = 50; // Umbral en píxeles para considerar un swipe
-
-    // Volteo automático 7 segundos después de cargar la página
-    window.addEventListener("DOMContentLoaded", () => {
-      setTimeout(() => {
-        card.style.transition = "transform 0.6s ease-out";
-        card.style.transform = "rotateY(180deg)";
-        isFlipped = true;
-      }, 7000);
-    });
-
-    // Detectar el gesto de swipe horizontal
-    card.addEventListener('touchstart', (e) => {
-      initialX = e.touches[0].clientX;
-    });
-
-    card.addEventListener('touchend', (e) => {
-      const finalX = e.changedTouches[0].clientX;
-      const deltaX = finalX - initialX;
-      
-      if (deltaX > swipeThreshold) {
-        // Swipe a la derecha: Voltear hacia 180º (si no está volteada) o regresar a 0º (si ya está volteada)
-        card.style.transition = "transform 0.6s ease-out";
-        if (!isFlipped) {
-          card.style.transform = "rotateY(180deg)";
-          isFlipped = true;
-        } else {
-          card.style.transform = "rotateY(0deg)";
-          isFlipped = false;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta Interactiva</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #222;
         }
-      } else if (deltaX < -swipeThreshold) {
-        // Swipe a la izquierda: Similar lógica, pero el giro se invierte\n        card.style.transition = "transform 0.6s ease-out";\n        if (!isFlipped) {\n          card.style.transform = "rotateY(-180deg)";\n          isFlipped = true;\n        } else {\n          card.style.transform = "rotateY(0deg)";\n          isFlipped = false;\n        }\n      } else {\n        // Si el swipe no supera el umbral, no se activa el flip\n        // Se puede dejar sin acción o restaurar la posición actual\n      }\n    });\n  </script>\n</body>\n</html>\n"}]}
-
-Aquí tienes el código completo modificado para lograr lo siguiente:
-
-- La carta se voltea automáticamente 7 segundos después de cargar la página.  
-- Al realizar un gesto de swipe horizontal (rápido) con el dedo, se detecta si el swipe es a la derecha o a la izquierda y, si supera un umbral (50 píxeles), la carta se voltea automáticamente de forma suave en esa dirección.  
-- Se usa el mismo efecto 3D en ambos lados para que el flip se sienta realista.
-
-Copia y pega este código en tu archivo HTML:
-
-```html
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carta Especial</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #121212;
-      overflow: hidden;
-    }
-    .card-container {
-      perspective: 1500px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      width: 100vw;
-      position: relative;
-    }
-    .card {
-      width: 80%;
-      max-width: 600px;
-      height: 80%;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.6s ease-out;
-      cursor: pointer;
-      border: 4px solid #fff;
-      border-radius: 10px;
-      margin-top: 20px;
-      will-change: transform;
-    }
-    .card-side {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .carta-frente {
-      background: url('carta_frente.png.jpg') no-repeat center/cover;
-      background-size: cover;
-    }
-    .carta-dorso {
-      background: url('carta_dorso.png.png') no-repeat center/cover;
-      transform: rotateY(180deg);
-      background-size: cover;
-    }
-    .buttons {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .buttons a {
-      text-decoration: none;
-      background-color: #fff;
-      color: #121212;
-      padding: 10px 20px;
-      border-radius: 5px;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
-    .buttons a:hover {
-      background-color: #ddd;
-    }
-  </style>
+        .container {
+            position: relative;
+            width: 200px;
+            height: 300px;
+            perspective: 1000px;
+        }
+        .card {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+        }
+        .front {
+            background: url('carta_frente.jpg') no-repeat center/cover;
+        }
+        .back {
+            background: url('carta_dorso.jpg') no-repeat center/cover;
+            transform: rotateY(180deg);
+        }
+        .flip-button {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
-  <div class="card-container">
-    <div class="card" id="card">
-      <div class="card-side carta-frente"></div>
-      <div class="card-side carta-dorso">
-        <div class="buttons">
-          <a href="https://www.youtube.com/@j-tenshimus1c" target="_blank">YouTube</a>
-          <a href="https://open.spotify.com/artist/0ZkxChUDjvBph9f7TitfMR?si=WxsQF2meTdiaOibANyQNSg" target="_blank">Spotify</a>
+    <div class="container">
+        <div class="card" id="card">
+            <div class="card-face front"></div>
+            <div class="card-face back"></div>
         </div>
-      </div>
+        <button class="flip-button" onclick="flipCard()">Voltear</button>
     </div>
-  </div>
-
-  <script>
-    const card = document.getElementById('card');
-    let isFlipped = false;
-    let initialX = 0;
-    const swipeThreshold = 50; // Umbral en píxeles
-
-    // Volteo automático 7 segundos después de cargar la página
-    window.addEventListener("DOMContentLoaded", () => {
-      setTimeout(() => {
-        card.style.transition = "transform 0.6s ease-out";
-        card.style.transform = "rotateY(180deg)";
-        isFlipped = true;
-      }, 7000);
-    });
-
-    // Detectar el gesto de swipe horizontal
-    card.addEventListener('touchstart', (e) => {
-      initialX = e.touches[0].clientX;
-    });
-
-    card.addEventListener('touchend', (e) => {
-      const finalX = e.changedTouches[0].clientX;
-      const deltaX = finalX - initialX;
-      if (deltaX > swipeThreshold) {
-        // Swipe a la derecha: girar a 180° de forma suave
-        card.style.transition = "transform 0.6s ease-out";
-        card.style.transform = "rotateY(180deg)";
-        isFlipped = true;
-      } else if (deltaX < -swipeThreshold) {
-        // Swipe a la izquierda: girar a -180° de forma suave\n        card.style.transition = \"transform 0.6s ease-out\";\n        card.style.transform = \"rotateY(-180deg)\";\n        isFlipped = true;\n      } else {\n        // Si el swipe no supera el umbral, no se activa el flip\n        // O bien se puede restaurar a la posición original\n      }\n    });\n  </script>\n</body>\n</html>\n"}]}
+    <script>
+        function flipCard() {
+            document.getElementById('card').classList.toggle('flipped');
+        }
+    </script>
+</body>
+</html>
