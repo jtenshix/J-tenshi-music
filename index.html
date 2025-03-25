@@ -6,10 +6,10 @@
     <title>Carta Especial</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
+            margin: 0;
+            padding: 0;
             background-color: #121212;
-            color: white;
+            overflow: hidden; /* Evita que haya barras de desplazamiento */
         }
 
         .card-container {
@@ -17,12 +17,15 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 80vh;
+            height: 100vh; /* Hace que la carta ocupe toda la altura de la pantalla */
+            width: 100vw; /* Hace que la carta ocupe toda la anchura de la pantalla */
         }
 
         .card {
-            width: 250px;
-            height: 350px;
+            width: 100%;
+            height: 100%;
+            max-width: 600px; /* Limita el tamaño máximo de la carta para pantallas más grandes */
+            max-height: 800px; /* Limita la altura máxima */
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.6s ease-in-out;
@@ -42,22 +45,27 @@
             box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
             transition: box-shadow 0.3s ease-in-out;
             display: flex;
-            align-items: center;
             justify-content: center;
-            flex-direction: column;
+            align-items: center;
         }
 
         .card-front {
             background: url('carta_frente.png.jpg') no-repeat center/cover;
+            background-size: cover;
         }
 
         .card-back {
             background: url('carta_dorso.png.png') no-repeat center/cover;
             transform: rotateY(180deg);
+            background-size: cover;
         }
 
         .buttons {
-            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
         }
 
         .buttons a {
@@ -65,17 +73,30 @@
             background-color: white;
             color: black;
             padding: 10px 15px;
-            margin: 5px;
+            margin: 10px;
             border-radius: 5px;
             font-weight: bold;
             display: inline-block;
         }
+
+        /* Estilo para pantallas grandes */
+        @media (min-width: 768px) {
+            .card {
+                max-width: 800px;
+                max-height: 600px;
+            }
+        }
+
+        /* Estilo para pantallas pequeñas (móviles) */
+        @media (max-width: 768px) {
+            .card {
+                max-width: 100vw;
+                max-height: 100vh;
+            }
+        }
     </style>
 </head>
 <body>
-
-<h2>Carta Especial</h2>
-<p>Haz clic en la carta para voltearla.</p>
 
 <div class="card-container">
     <div class="card" id="carta">
@@ -90,23 +111,15 @@
 </div>
 
 <script>
-    // Verifica si la carta está volteada antes de cargarla, para mantener su estado
+    // Al cargar la página, siempre se asegura de que la carta esté volteada hacia el reverso (con los botones)
     window.onload = function() {
         const carta = document.getElementById("carta");
-        if (localStorage.getItem("flipped") === "true") {
-            carta.classList.add("flipped");
-        } else {
-            setTimeout(() => {
-                carta.classList.add("flipped");
-                localStorage.setItem("flipped", "true");  // Guarda el estado
-            }, 500); // Gira después de medio segundo
-        }
+        carta.classList.add("flipped");  // Forzar que la carta siempre esté volteada al reverso
     };
 
     // Permite girar la carta manualmente después
     document.getElementById("carta").addEventListener("click", function() {
         this.classList.toggle("flipped");
-        localStorage.setItem("flipped", this.classList.contains("flipped"));  // Guarda el nuevo estado
     });
 </script>
 
