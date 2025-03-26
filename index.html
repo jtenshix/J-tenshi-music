@@ -11,20 +11,21 @@
       background-color: #121212;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       height: 100vh;
       overflow: hidden;
+      padding-top: 50px;
     }
     .card-container {
-      perspective: 1000px;
+      perspective: 1200px;
       position: relative;
     }
     .card {
-      width: 300px;
-      height: 450px;
+      width: 360px;
+      height: 540px;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.1s ease-out;
+      transition: transform 0.08s ease-out;
       cursor: pointer;
       will-change: transform;
     }
@@ -48,22 +49,21 @@
     }
     .flip-button {
       position: absolute;
-      bottom: 10px;
-      right: 10px;
+      bottom: -60px;
+      right: 50%;
+      transform: translateX(50%);
       background-color: rgba(255, 255, 255, 0.8);
       color: #121212;
       border: none;
-      padding: 8px 12px;
+      padding: 10px 16px;
       font-weight: bold;
       cursor: pointer;
       border-radius: 5px;
       transition: background 0.3s;
+      font-size: 18px;
     }
     .flip-button:hover {
       background-color: rgba(255, 255, 255, 1);
-    }
-    .card-back .flip-button {
-      transform: rotateY(180deg);
     }
   </style>
 </head>
@@ -96,31 +96,28 @@
       card.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
     });
 
-    // Efecto 3D con touch
-    let startX = 0, startY = 0;
+    // Movimiento 3D mejorado
     let rotationX = 0, rotationY = 0;
-    const maxTilt = 20; 
+    let mouseX = 0, mouseY = 0;
+    const maxTilt = 25; 
 
-    card.addEventListener('touchstart', (e) => {
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-    });
+    function updateTilt() {
+      const newRotationX = (mouseY / window.innerHeight - 0.5) * -maxTilt;
+      const newRotationY = (mouseX / window.innerWidth - 0.5) * maxTilt;
 
-    card.addEventListener('touchmove', (e) => {
-      const moveX = e.touches[0].clientX - startX;
-      const moveY = e.touches[0].clientY - startY;
+      rotationX += (newRotationX - rotationX) * 0.1;
+      rotationY += (newRotationY - rotationY) * 0.1;
 
-      rotationX = ((moveY / window.innerHeight) * maxTilt) * 2;
-      rotationY = ((moveX / window.innerWidth) * maxTilt) * 2;
-
-      card.style.transition = 'transform 0.05s ease-out';  
       card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) ${flipped ? 'rotateY(180deg)' : ''}`;
+      requestAnimationFrame(updateTilt);
+    }
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
     });
 
-    card.addEventListener('touchend', () => {
-      card.style.transition = 'transform 0.4s ease-out';
-      card.style.transform = `${flipped ? 'rotateY(180deg)' : ''}`;
-    });
+    updateTilt();
   </script>
 
 </body>
