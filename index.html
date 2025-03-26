@@ -149,37 +149,7 @@
     document.addEventListener('touchmove', dragMove);
     document.addEventListener('touchend', stopDrag);
 
-    let rotationY = 0; // Para controlar la rotación de la carta
-let cardFlipped = false; // Para verificar si la carta está volteada
-
-// Función para actualizar la rotación de la carta
-function updateCardRotation() {
-  card.style.transform = `rotateY(${rotationY}deg)`;
-}
-
-// Función para voltear la carta con un toque en la esquina derecha
-function flipCardOnClick(e) {
-  const rect = card.getBoundingClientRect();
-  const cornerThreshold = 50; // Área de activación en la esquina
-
-  // Verifica si el toque fue en la esquina derecha de la carta
-  if (
-    e.clientX > rect.right - cornerThreshold && e.clientY > rect.top && e.clientY < rect.bottom
-  ) {
-    // Si la carta está volteada, vuelve a la posición original (0 grados)
-    if (cardFlipped) {
-      rotationY = 0;  // Vuelve a la posición inicial
-    } else {
-      rotationY = 180;  // Voltea la carta completamente
-    }
-    cardFlipped = !cardFlipped;  // Cambia el estado de la carta
-    updateCardRotation();
-  }
-}
-
-// Evento para voltear la carta al hacer clic en la esquina derecha
-document.addEventListener('click', flipCardOnClick);
-
+    
   </script>
 
 </body>
