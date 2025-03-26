@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Moneda Mario Bros</title>
+  <title>Moneda Mario Bros 3D</title>
   <style>
     body {
       margin: 0;
@@ -26,7 +26,6 @@
       background-color: #f9c11c; /* Color dorado de la moneda */
       border-radius: 50%;
       position: relative;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -35,6 +34,8 @@
       color: white;
       text-align: center;
       transform-style: preserve-3d;
+      transform: rotateX(0deg) rotateY(0deg);
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3), 0 8px 16px rgba(0, 0, 0, 0.4);
       animation: rotate 3s infinite linear; /* Gira constantemente */
     }
 
@@ -44,7 +45,19 @@
       font-size: 70px;
       font-weight: bold;
       color: #fff;
-      transform: translateZ(25px); /* Eleva el símbolo hacia adelante */
+      transform: translateZ(30px); /* Eleva el símbolo hacia adelante */
+    }
+
+    .coin::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, #f9c11c 30%, #e5b000);
+      border-radius: 50%;
+      transform: rotateX(90deg);
+      transform-origin: center;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
     }
 
     @keyframes rotate {
