@@ -21,39 +21,39 @@
       position: relative;
     }
 
-    .card {
-      width: 360px;
-      height: 540px;
-      background-color: #fff; /* Blanco para simular la ficha */
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); /* Efecto de transición elástica */
-      cursor: grab;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra para resaltar el 3D */
-      transform: rotateX(0deg) rotateY(0deg); /* Poner la carta inicialmente centrada */
-    }
+  .card {
+  width: 360px;
+  height: 540px;
+  background-color: #fff; /* Blanco para simular la ficha */
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); /* Efecto de transición elástica */
+  cursor: grab;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra para resaltar el 3D */
+}
 
-    .card-side {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+.card-side {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;  /* Importante para ocultar el lado opuesto al voltear */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-   .card-front {
+.card-front {
   background-image: url('carta_frente.png.jpg');
-  background-size: cover; /* Asegura que la imagen cubra toda la cara de la carta */
-  background-position: center; /* Centra la imagen */
+  background-size: cover;
+  background-position: center;
+  transform: rotateY(0deg); /* Asegúrate de que el frente esté correctamente posicionado */
 }
 
 .card-back {
   background-image: url('carta_dorso.png.png');
-  background-size: cover; /* Asegura que la imagen cubra toda la cara de la carta */
-  background-position: center; /* Centra la imagen */
+  background-size: cover;
+  background-position: center;
+  transform: rotateY(180deg); /* Voltea el dorso de la carta */
 }
 
 
