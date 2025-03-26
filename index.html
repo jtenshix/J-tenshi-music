@@ -31,6 +31,9 @@
   transform: rotateX(0deg) rotateY(0deg);
   transform-origin: center;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+  border: 4px solid #ccc; /* Este es el borde que rodea toda la carta, puedes cambiar el color aquí */
+  border-radius: 10px; /* Borde redondeado, si lo prefieres puedes quitarlo */
+  background-color: #fff; /* Fondo blanco para la carta */
 }
 
 .card-side {
@@ -38,13 +41,14 @@
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateZ(1.5cm); /* Aumenta el grosor, este valor lo puedes modificar */
-  background-color: white; /* Fondo sólido para que se vea claro */
-  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.3), 0 0 15px rgba(0, 0, 0, 0.2); /* Sombra para resaltar el grosor */
+  transform: translateZ(1.5cm); /* Grosor de la carta, ajustable */
+  background-color: white; /* Fondo sólido para las caras */
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.4), 0 0 15px rgba(0, 0, 0, 0.3); /* Sombras para dar efecto de profundidad */
+  border-radius: 10px; /* Bordes redondeados de las caras de la carta */
+  border: 2px solid #999; /* El borde de la cara de la carta, puedes cambiar el color */
 }
 
 .card-front {
@@ -56,8 +60,11 @@
 .card-back {
   background: url('carta_dorso.png') no-repeat center/cover;
   background-size: cover;
-  transform: rotateY(180deg) translateZ(1.5cm); /* Ajustar para dar grosor */
+  transform: rotateY(180deg) translateZ(1.5cm); /* Asegúrate de que tenga el grosor también */
   border-radius: 10px;
+  border: 2px solid #999; /* Borde similar al de la cara frontal */
+}
+
 }
 
     }
