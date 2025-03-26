@@ -91,15 +91,17 @@
     <script>
         const card = document.getElementById('card');
 
-        // Movimiento 3D con el mouse
+        // Variables para rotación 3D
         let rotationX = 0, rotationY = 0;
         let isDragging = false;
         let startX = 0, startY = 0;
 
+        // Función para actualizar la rotación de la carta
         function updateCardRotation() {
             card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
         }
 
+        // Iniciar arrastre para rotación
         function startDrag(e) {
             isDragging = true;
             startX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -107,6 +109,7 @@
             card.style.transition = "none"; // Elimina la transición mientras arrastras
         }
 
+        // Mover la carta para rotación
         function dragMove(e) {
             if (!isDragging) return;
             let x = e.touches ? e.touches[0].clientX : e.clientX;
@@ -124,6 +127,7 @@
             startY = y;
         }
 
+        // Detener arrastre para rotación
         function stopDrag() {
             isDragging = false;
 
