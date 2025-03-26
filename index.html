@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carta Especial - Ficha Sólida</title>
+  <title>Carta 3D - Ficha Blanca</title>
   <style>
     body {
       margin: 0;
@@ -15,11 +15,11 @@
       height: 100vh;
       overflow: hidden;
     }
-    /* Ficha más gruesa */
+    /* Ficha gruesa */
     .card {
       width: 360px;
       height: 540px;
-      background-color: #fff;
+      background-color: white;
       padding: 30px;
       border-radius: 15px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.3);
@@ -28,7 +28,7 @@
       justify-content: center;
       align-items: center;
     }
-    /* Contenedor de la imagen con giro 3D */
+    /* Contenedor que tiene el efecto 3D */
     .card-inner {
       width: 100%;
       height: 100%;
@@ -36,25 +36,22 @@
       transform-style: preserve-3d;
       transition: transform 0.6s ease-out;
     }
-    /* Las caras de la ficha (front y back) */
+    /* Las caras de la ficha (frontal y trasera) */
     .face {
       position: absolute;
       width: 100%;
       height: 100%;
+      background-color: white;
       backface-visibility: hidden;
       border-radius: 10px;
     }
     .face.front {
-      background: url('https://via.placeholder.com/360x540/ff6347/ffffff?text=Frente') no-repeat center/cover;
-      background-size: cover;
       transform: rotateY(0deg);
     }
     .face.back {
-      background: url('https://via.placeholder.com/360x540/4682b4/ffffff?text=Reverso') no-repeat center/cover;
-      background-size: cover;
       transform: rotateY(180deg);
     }
-    /* Botón para voltear */
+    /* Botón para voltear la ficha */
     .flip-button {
       position: absolute;
       top: 10px;
@@ -77,7 +74,7 @@
 <body>
 
   <div class="card">
-    <!-- Contenedor que rota con las imágenes -->
+    <!-- Contenedor que rota con las caras de la ficha -->
     <div class="card-inner" id="cardInner">
       <div class="face front">
         <button class="flip-button" id="flipButton">Voltear</button>
