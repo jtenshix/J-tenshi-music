@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carta Especial</title>
+  <title>Carta Especial - Ficha Sólida</title>
   <style>
     body {
       margin: 0;
@@ -11,60 +11,47 @@
       background-color: #121212;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;
       height: 100vh;
       overflow: hidden;
-      padding-top: 50px;
     }
-    .card-container {
-      perspective: 1200px;
-      position: relative;
-    }
+    /* Contenedor de la ficha (marco blanco) */
     .card {
       width: 360px;
       height: 540px;
+      background-color: white;  /* Marco blanco (ficha) */
+      padding: 40px;            /* Grosor del marco; ajusta para que se note más o menos */
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      position: relative;
+    }
+    /* Contenedor interno que se rotará (las imágenes, como stickers) */
+    .card-inner {
+      width: 100%;
+      height: 100%;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.05s ease-out;
-      cursor: grab;
-      will-change: transform;
-      /* El transform-origin se deja en el centro para rotar naturalmente */
-      transform-origin: center;
+      transition: transform 0.1s ease-out;
     }
-    /* La capa de la ficha (edge) simula el grosor de la carta */
-    .card-edge {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 75px;  /* Aproximadamente 2 cm (ajusta según tu gusto) */
-      height: 100%;
-      background-color: white;
-      /* La transformación la rota 90° y la mueve para simular el borde */
-      transform: rotateY(90deg) translateZ(37.5px);
-      transform-origin: left center;
-      z-index: 1;
-    }
-    .card-side {
+    /* Las caras de la ficha (front y back) */
+    .face {
       position: absolute;
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 2;
+      border-radius: 5px;
     }
-    .card-front {
+    .face.front {
       background: url('carta_frente.png.jpg') no-repeat center/cover;
       background-size: cover;
+      transform: rotateY(0deg);
     }
-    .card-back {
+    .face.back {
       background: url('carta_dorso.png.png') no-repeat center/cover;
       background-size: cover;
       transform: rotateY(180deg);
     }
+    /* Botón para voltear, ubicado en la esquina superior derecha de la ficha interna */
     .flip-button {
       position: absolute;
       top: 10px;
@@ -72,13 +59,13 @@
       background-color: rgba(255,255,255,0.8);
       color: #121212;
       border: none;
-      padding: 10px 16px;
+      padding: 8px 12px;
       font-weight: bold;
       cursor: pointer;
       border-radius: 5px;
       transition: background 0.3s;
-      font-size: 18px;
-      z-index: 3;
+      font-size: 16px;
+      z-index: 10;
     }
     .flip-button:hover {
       background-color: rgba(255,255,255,1);
@@ -87,81 +74,71 @@
 </head>
 <body>
 
-  <div class="card-container">
-    <div class="card" id="card">
-      <!-- Capa para simular el grosor (edge) -->
-      <div class="card-edge"></div>
-      <!-- Cara frontal -->
-      <div class="card-side card-front">
+  <div class="card">
+    <!-- Contenedor interno que gira -->
+    <div class="card-inner" id="cardInner">
+      <div class="face front">
         <button class="flip-button" id="flipButton">Voltear</button>
       </div>
-      <!-- Cara trasera -->
-      <div class="card-side card-back">
+      <div class="face back">
         <button class="flip-button" id="flipButtonBack">Voltear</button>
       </div>
     </div>
   </div>
 
   <script>
-    const card = document.getElementById('card');
+    const cardInner = document.getElementById('cardInner');
     const flipButton = document.getElementById('flipButton');
     const flipButtonBack = document.getElementById('flipButtonBack');
     let flipped = false;
-    let rotationX = 0, rotationY = 0;
-    let isDragging = false;
-    let startX = 0, startY = 0;
-    let currentX = 0, currentY = 0;
-
-    function updateCardRotation() {
-      // La transformación principal: primero aplica la rotación 3D libre,
-      // y luego, si la carta está volteada, añade rotateY(180deg) para el flip.
-      card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) ${flipped ? 'rotateY(180deg)' : ''}`;
-    }
-
+    
+    // Función para voltear la ficha interna
     function toggleFlip() {
       flipped = !flipped;
-      card.style.transition = 'transform 0.6s ease-out';
-      // Restablece las rotaciones 3D libres al flip para que se vea limpio.
-      rotationX = 0;
-      rotationY = 0;
-      updateCardRotation();
+      cardInner.style.transition = 'transform 0.6s ease-out';
+      cardInner.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
     }
-
     flipButton.addEventListener('click', toggleFlip);
     flipButtonBack.addEventListener('click', toggleFlip);
 
+    // Movimiento 3D libre con el toque/mouse sobre el contenedor interno
+    let rotationX = 0, rotationY = 0;
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    
+    function updateInnerRotation() {
+      // Se aplica la rotación de la ficha interna (sin afectar el marco blanco)
+      cardInner.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) ${flipped ? 'rotateY(180deg)' : ''}`;
+    }
+    
     function startDrag(e) {
       isDragging = true;
       startX = e.touches ? e.touches[0].clientX : e.clientX;
       startY = e.touches ? e.touches[0].clientY : e.clientY;
     }
-
+    
     function dragMove(e) {
       if (!isDragging) return;
       let x = e.touches ? e.touches[0].clientX : e.clientX;
       let y = e.touches ? e.touches[0].clientY : e.clientY;
       let deltaX = x - startX;
       let deltaY = y - startY;
-
-      rotationY += deltaX * 0.2; // Ajusta la sensibilidad horizontal
-      rotationX -= deltaY * 0.2; // Ajusta la sensibilidad vertical
-
-      updateCardRotation();
-
+      
+      rotationY += deltaX * 0.3; // Mayor sensibilidad horizontal para movimiento libre
+      rotationX -= deltaY * 0.3; // Mayor sensibilidad vertical
+      updateInnerRotation();
       startX = x;
       startY = y;
     }
-
+    
     function stopDrag() {
       isDragging = false;
-      card.style.transition = 'transform 0.4s ease-out';
-      updateCardRotation();
     }
-
+    
     document.addEventListener('mousedown', startDrag);
     document.addEventListener('mousemove', dragMove);
     document.addEventListener('mouseup', stopDrag);
-
+    
     document.addEventListener('touchstart', startDrag);
     document.addEventListener('touchmove', dragMove);
     document.addEventListener('touchend', stopDrag);
