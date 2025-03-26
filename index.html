@@ -87,25 +87,26 @@
       let deltaX = x - startX; // Diferencia en el movimiento horizontal
       let deltaY = y - startY; // Diferencia en el movimiento vertical
 
+        // Aplica la rotación en función del movimiento del dedo
+  rotationY += deltaX * 0.5;  // Suaviza el movimiento horizontal
+  rotationX -= deltaY * 0.5;  // Suaviza el movimiento vertical
+
+  // Límite para la rotación X e Y (puedes ajustar estos valores según tus necesidades)
+  rotationY = Math.max(-180, Math.min(180, rotationY)); // Limita el giro horizontal
+  rotationX = Math.max(-90, Math.min(90, rotationX));   // Limita el giro vertical
+
+  updateCardRotation();  // Actualiza la rotación de la carta con los nuevos valores
+}
+
       // Aplica la rotación en función del movimiento del dedo
-      rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
-      rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
+      rotationY += deltaX * 0.5;  // Suaviza el movimiento horizontal
+      rotationX -= deltaY * 0.5;  // Suaviza el movimiento vertical
 
       let isFlipped = false; // Nueva variable para saber si la carta está volteada
 
-// Mueve la carta según el desplazamiento del dedo
-function dragMove(e) {
-  if (!isDragging) return;
-  
-  let x = e.touches[0].clientX;
-  let y = e.touches[0].clientY;
-
-  let deltaX = x - startX; // Diferencia en el movimiento horizontal
-  let deltaY = y - startY; // Diferencia en el movimiento vertical
-
   // Aplica la rotación en función del movimiento del dedo
-  rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
-  rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
+  rotationY += deltaX * 0.5;  // Suaviza el movimiento horizontal
+  rotationX -= deltaY * 0.5;  // Suaviza el movimiento vertical
 
   updateCardRotation(); // Actualiza la rotación de la carta
 
