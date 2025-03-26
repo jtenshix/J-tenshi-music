@@ -100,56 +100,47 @@
       card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
     }
 
-    function startDrag(e) {
-      isDragging = true;
-      startX = e.touches ? e.touches[0].clientX : e.clientX;
-      startY = e.touches ? e.touches[0].clientY : e.clientY;
-      card.style.transition = "none"; // Elimina la transición mientras arrastras
-    }
+   function startDrag(e) {
+  isDragging = true;
+  startX = e.touches ? e.touches[0].clientX : e.clientX;
+  startY = e.touches ? e.touches[0].clientY : e.clientY;
+  card.style.transition = "none"; // Elimina la transición mientras arrastras
+}
 
-    function dragMove(e) {
-      if (!isDragging) return;
-      let x = e.touches ? e.touches[0].clientX : e.clientX;
-      let y = e.touches ? e.touches[0].clientY : e.clientY;
- let deltaX = x - startX;
+function dragMove(e) {
+  if (!isDragging) return;
+  let x = e.touches ? e.touches[0].clientX : e.clientX;
+  let y = e.touches ? e.touches[0].clientY : e.clientY;
+
+  let deltaX = x - startX;
   let deltaY = y - startY;
 
-  rotationY += deltaX * 0.3;
-  rotationX -= deltaY * 0.3;
+  rotationY += deltaX * 0.4;  // Suaviza el movimiento horizontal
+  rotationX -= deltaY * 0.4;  // Suaviza el movimiento vertical
 
-  // Mantener la rotación 3D con límites para evitar valores extremos
-  rotationY = Math.max(-180, Math.min(180, rotationY));
+  // Limitar la rotación a los umbrales establecidos
+  rotationY = Math.max(-180, Math.min(180, rotationY)); 
   rotationX = Math.max(-90, Math.min(90, rotationX));
 
-  // Lógica del umbral de 90 grados para voltear
-  if (rotationY > 90) {
-    rotationY = 180;
-  } else if (rotationY < -90) {
-    rotationY = -180;
-  }
+  updateCardRotation();  // Actualiza la rotación de la carta
 
-  updateCardRotation();
+  startX = x;
+  startY = y;
+}
 
-      startX = x;
-      startY = y;
-    }
+function stopDrag() {
+  isDragging = false;
 
-    function stopDrag() {
-      isDragging = false;
+  // Suaviza el regreso de la carta a la posición donde quedó al soltarla
+  card.style.transition = "transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)"; 
+  updateCardRotation();  // Mantiene la rotación final después de soltar
 
-      // Suaviza el regreso de la carta a su posición inicial
-      rotationX = 0;
-      rotationY = 0;
+  // Esta línea asegura que no hay rebote ni retorno a la posición inicial
+  setTimeout(() => {
+    card.style.transition = "transform 0.1s ease-out";  // Transición más rápida para el siguiente movimiento
+  }, 400); // Duración de la transición de suavizado
+}
 
-      // Actualiza la rotación de la carta de manera suave
-      card.style.transition = "transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)";
-      updateCardRotation();
-
-      // Después de la animación, eliminamos la transición para evitar interferencias con el siguiente movimiento
-      setTimeout(() => {
-        card.style.transition = "transform 0.1s ease-out";
-      }, 400);  // Duración del regreso
-    }
 
     document.addEventListener('mousedown', startDrag);
     document.addEventListener('mousemove', dragMove);
