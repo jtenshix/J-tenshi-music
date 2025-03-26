@@ -88,14 +88,14 @@
       let deltaY = y - startY; // Diferencia en el movimiento vertical
 
       // Aplica la rotación en función del movimiento del dedo
-      rotationY += deltaX * 0.5;  // Suaviza el movimiento horizontal
-      rotationX -= deltaY * 0.5;  // Suaviza el movimiento vertical
+      rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
+      rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
 
       let isFlipped = false; // Nueva variable para saber si la carta está volteada
 
   // Aplica la rotación en función del movimiento del dedo
-  rotationY += deltaX * 0.5;  // Suaviza el movimiento horizontal
-  rotationX -= deltaY * 0.5;  // Suaviza el movimiento vertical
+  rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
+  rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
 
   updateCardRotation(); // Actualiza la rotación de la carta
 
