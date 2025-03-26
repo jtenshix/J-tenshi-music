@@ -28,6 +28,8 @@
       transition: transform 0.05s ease-out;
       cursor: grab;
       will-change: transform;
+      background-color: white;
+      border-radius: 10px;
     }
     .card-side {
       position: absolute;
@@ -39,25 +41,14 @@
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-    .card-front, .card-back {
-      background-size: cover;
-      background-position: center;
+      background-color: white; /* Fondo blanco */
     }
     .card-front {
-      background: url('carta_frente.png.jpg') no-repeat center/cover;
+      /* Se podría agregar algo aquí más adelante, como una imagen o texto */
     }
     .card-back {
-      background: url('carta_dorso.png.png') no-repeat center/cover;
       transform: rotateY(180deg);
-    }
-    /* Ficha blanca sólida en el medio */
-    .card-middle {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background-color: #fff;
-      z-index: -1;
+      /* Se podría agregar algo aquí más adelante, como una imagen o texto */
     }
     .flip-button {
       position: absolute;
@@ -82,12 +73,12 @@
 
   <div class="card-container">
     <div class="card" id="card">
-      <!-- Ficha blanca sólida -->
-      <div class="card-middle"></div>
       <div class="card-side card-front">
+        <!-- Botón de voltear para la carta delantera -->
         <button class="flip-button" id="flipButton">Voltear</button>
       </div>
       <div class="card-side card-back">
+        <!-- Botón de voltear para la carta trasera -->
         <button class="flip-button" id="flipButtonBack">Voltear</button>
       </div>
     </div>
