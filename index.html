@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carta 3D Gruesa</title>
+  <title>Carta Especial</title>
   <style>
     body {
       margin: 0;
@@ -24,13 +24,11 @@
     .card {
       width: 360px;
       height: 540px;
-      background-color: #fff; /* Blanco para simular la ficha */
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.1s ease-out;
+      transition: transform 0.5s;
       cursor: grab;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra para resaltar el 3D */
-      transform: rotateX(10deg) rotateY(10deg); /* Sombra leve para resaltar el grosor */
+      will-change: transform;
     }
 
     .card-side {
@@ -39,105 +37,47 @@
       height: 100%;
       backface-visibility: hidden;
       border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
     .card-front {
-      background-color: #fff;
+      background-color: white;
+      transform: translateZ(60px);
     }
 
-    .card-thickness {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background-color: #fff;
-      top: 0;
-      left: 0;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
-      transform: translateZ(-5px); /* Levele de grosor visual */
+    .card-back {
+      background-color: white;
+      transform: rotateY(180deg) translateZ(60px);
     }
 
-    /* Efectos de movimiento 3D */
-    .flip-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: rgba(255, 255, 255, 0.8);
-      color: #121212;
-      border: none;
-      padding: 10px 16px;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: background 0.3s;
-      font-size: 18px;
+    /* Sombra para el efecto 3D */
+    .card-container {
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
     }
 
-    .flip-button:hover {
-      background-color: rgba(255, 255, 255, 1);
+    /* Efecto de giro para la carta */
+    .card:hover {
+      transform: rotateY(180deg);
     }
   </style>
 </head>
 <body>
 
   <div class="card-container">
-    <div class="card" id="card">
+    <div class="card">
       <div class="card-side card-front">
-        <div class="card-thickness"></div>
+        <!-- Aquí iría el contenido frontal -->
+        <span style="color: black; font-size: 24px;">Frente de la Carta</span>
+      </div>
+      <div class="card-side card-back">
+        <!-- Aquí iría el contenido trasero -->
+        <span style="color: black; font-size: 24px;">Parte Trasera</span>
       </div>
     </div>
   </div>
-
-  <script>
-    const card = document.getElementById('card');
-
-    // Movimiento 3D con el mouse
-    let rotationX = 0, rotationY = 0;
-    let isDragging = false;
-    let startX = 0, startY = 0;
-    let currentX = 0, currentY = 0;
-
-    function updateCardRotation() {
-      card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-    }
-
-    function startDrag(e) {
-      isDragging = true;
-      startX = e.touches ? e.touches[0].clientX : e.clientX;
-      startY = e.touches ? e.touches[0].clientY : e.clientY;
-    }
-
-    function dragMove(e) {
-      if (!isDragging) return;
-      let x = e.touches ? e.touches[0].clientX : e.clientX;
-      let y = e.touches ? e.touches[0].clientY : e.clientY;
-
-      let deltaX = x - startX;
-      let deltaY = y - startY;
-
-      rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
-      rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
-
-      updateCardRotation();
-
-      startX = x;
-      startY = y;
-    }
-
-    function stopDrag() {
-      isDragging = false;
-    }
-
-    document.addEventListener('mousedown', startDrag);
-    document.addEventListener('mousemove', dragMove);
-    document.addEventListener('mouseup', stopDrag);
-
-    document.addEventListener('touchstart', startDrag);
-    document.addEventListener('touchmove', dragMove);
-    document.addEventListener('touchend', stopDrag);
-  </script>
 
 </body>
 </html>
