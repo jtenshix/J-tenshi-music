@@ -24,8 +24,9 @@
       height: 450px;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.6s ease-out;
+      transition: transform 0.1s ease-out;
       cursor: pointer;
+      will-change: transform;
     }
     .card-side {
       position: absolute;
@@ -61,26 +62,64 @@
     .flip-button:hover {
       background-color: rgba(255, 255, 255, 1);
     }
+    .card-back .flip-button {
+      transform: rotateY(180deg);
+    }
   </style>
 </head>
 <body>
 
   <div class="card-container">
     <div class="card" id="card">
-      <div class="card-side card-front"></div>
-      <div class="card-side card-back"></div>
-      <button class="flip-button" id="flipButton">Voltear</button>
+      <div class="card-side card-front">
+        <button class="flip-button" id="flipButton">Voltear</button>
+      </div>
+      <div class="card-side card-back">
+        <button class="flip-button" id="flipButtonBack">Voltear</button>
+      </div>
     </div>
   </div>
 
   <script>
     const card = document.getElementById('card');
     const flipButton = document.getElementById('flipButton');
+    const flipButtonBack = document.getElementById('flipButtonBack');
     let flipped = false;
 
     flipButton.addEventListener('click', () => {
       flipped = !flipped;
       card.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+    });
+
+    flipButtonBack.addEventListener('click', () => {
+      flipped = !flipped;
+      card.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+    });
+
+    // Efecto 3D con touch
+    let startX = 0, startY = 0;
+    let rotationX = 0, rotationY = 0;
+    const maxTilt = 20; 
+
+    card.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    });
+
+    card.addEventListener('touchmove', (e) => {
+      const moveX = e.touches[0].clientX - startX;
+      const moveY = e.touches[0].clientY - startY;
+
+      rotationX = ((moveY / window.innerHeight) * maxTilt) * 2;
+      rotationY = ((moveX / window.innerWidth) * maxTilt) * 2;
+
+      card.style.transition = 'transform 0.05s ease-out';  
+      card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) ${flipped ? 'rotateY(180deg)' : ''}`;
+    });
+
+    card.addEventListener('touchend', () => {
+      card.style.transition = 'transform 0.4s ease-out';
+      card.style.transform = `${flipped ? 'rotateY(180deg)' : ''}`;
     });
   </script>
 
