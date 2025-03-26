@@ -25,8 +25,8 @@
       height: 540px;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.08s ease-out;
-      cursor: pointer;
+      transition: transform 0.05s ease-out;
+      cursor: grab;
       will-change: transform;
     }
     .card-side {
@@ -49,9 +49,8 @@
     }
     .flip-button {
       position: absolute;
-      bottom: -60px;
-      right: 50%;
-      transform: translateX(50%);
+      top: 10px;
+      right: 10px;
       background-color: rgba(255, 255, 255, 0.8);
       color: #121212;
       border: none;
@@ -86,38 +85,58 @@
     const flipButtonBack = document.getElementById('flipButtonBack');
     let flipped = false;
 
-    flipButton.addEventListener('click', () => {
+    // Girar la carta al presionar el botón
+    function toggleFlip() {
       flipped = !flipped;
-      card.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
-    });
+      card.style.transform = `${flipped ? 'rotateY(180deg)' : 'rotateY(0deg)'} rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+    }
+    flipButton.addEventListener('click', toggleFlip);
+    flipButtonBack.addEventListener('click', toggleFlip);
 
-    flipButtonBack.addEventListener('click', () => {
-      flipped = !flipped;
-      card.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
-    });
-
-    // Movimiento 3D mejorado
+    // Movimiento 3D libre al deslizar con el dedo o mouse
     let rotationX = 0, rotationY = 0;
-    let mouseX = 0, mouseY = 0;
-    const maxTilt = 25; 
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let currentX = 0, currentY = 0;
 
-    function updateTilt() {
-      const newRotationX = (mouseY / window.innerHeight - 0.5) * -maxTilt;
-      const newRotationY = (mouseX / window.innerWidth - 0.5) * maxTilt;
-
-      rotationX += (newRotationX - rotationX) * 0.1;
-      rotationY += (newRotationY - rotationY) * 0.1;
-
+    function updateCardRotation() {
       card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) ${flipped ? 'rotateY(180deg)' : ''}`;
-      requestAnimationFrame(updateTilt);
     }
 
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    });
+    function startDrag(e) {
+      isDragging = true;
+      startX = e.touches ? e.touches[0].clientX : e.clientX;
+      startY = e.touches ? e.touches[0].clientY : e.clientY;
+    }
 
-    updateTilt();
+    function dragMove(e) {
+      if (!isDragging) return;
+      let x = e.touches ? e.touches[0].clientX : e.clientX;
+      let y = e.touches ? e.touches[0].clientY : e.clientY;
+
+      let deltaX = x - startX;
+      let deltaY = y - startY;
+
+      rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
+      rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
+
+      updateCardRotation();
+
+      startX = x;
+      startY = y;
+    }
+
+    function stopDrag() {
+      isDragging = false;
+    }
+
+    document.addEventListener('mousedown', startDrag);
+    document.addEventListener('mousemove', dragMove);
+    document.addEventListener('mouseup', stopDrag);
+
+    document.addEventListener('touchstart', startDrag);
+    document.addEventListener('touchmove', dragMove);
+    document.addEventListener('touchend', stopDrag);
   </script>
 
 </body>
