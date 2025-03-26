@@ -28,19 +28,21 @@
       transition: transform 0.05s ease-out;
       cursor: grab;
       will-change: transform;
-      background-color: white;  /* Esto hace que la carta tenga un fondo blanco sólido */
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
     }
     .card-side {
       position: absolute;
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
       display: flex;
       justify-content: center;
       align-items: center;
-      border-radius: 10px;
+    }
+    .card-front, .card-back {
+      background-size: cover;
+      background-position: center;
     }
     .card-front {
       background: url('carta_frente.png.jpg') no-repeat center/cover;
@@ -48,6 +50,14 @@
     .card-back {
       background: url('carta_dorso.png.png') no-repeat center/cover;
       transform: rotateY(180deg);
+    }
+    /* Ficha blanca sólida en el medio */
+    .card-middle {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      z-index: -1;
     }
     .flip-button {
       position: absolute;
@@ -72,6 +82,8 @@
 
   <div class="card-container">
     <div class="card" id="card">
+      <!-- Ficha blanca sólida -->
+      <div class="card-middle"></div>
       <div class="card-side card-front">
         <button class="flip-button" id="flipButton">Voltear</button>
       </div>
@@ -90,7 +102,7 @@
     // Girar la carta al presionar el botón
     function toggleFlip() {
       flipped = !flipped;
-      card.style.transform = `${flipped ? 'rotateY(180deg)' : 'rotateY(0deg)'}`;
+      card.style.transform = `${flipped ? 'rotateY(180deg)' : 'rotateY(0deg)'} rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
     }
     flipButton.addEventListener('click', toggleFlip);
     flipButtonBack.addEventListener('click', toggleFlip);
