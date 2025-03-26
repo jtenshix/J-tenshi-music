@@ -91,17 +91,69 @@
     <script>
         const card = document.getElementById('card');
 
+        // Movimiento 3D con el mouse
+        let rotationX = 0, rotationY = 0;
+        let isDragging = false;
+        let startX = 0, startY = 0;
+
+        function updateCardRotation() {
+            card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+        }
+
+        function startDrag(e) {
+            isDragging = true;
+            startX = e.touches ? e.touches[0].clientX : e.clientX;
+            startY = e.touches ? e.touches[0].clientY : e.clientY;
+            card.style.transition = "none"; // Elimina la transición mientras arrastras
+        }
+
+        function dragMove(e) {
+            if (!isDragging) return;
+            let x = e.touches ? e.touches[0].clientX : e.clientX;
+            let y = e.touches ? e.touches[0].clientY : e.clientY;
+
+            let deltaX = x - startX;
+            let deltaY = y - startY;
+
+            rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
+            rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
+
+            updateCardRotation();
+
+            startX = x;
+            startY = y;
+        }
+
+        function stopDrag() {
+            isDragging = false;
+
+            // Suaviza el regreso de la carta a su posición inicial
+            rotationX = 0;
+            rotationY = 0;
+
+            // Actualiza la rotación de la carta de manera suave
+            card.style.transition = "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)";
+            updateCardRotation();
+
+            // Después de la animación, eliminamos la transición para evitar interferencias con el siguiente movimiento
+            setTimeout(() => {
+                card.style.transition = "transform 0.1s ease-out";
+            }, 600);  // Duración del regreso
+        }
+
+        // Agregar eventos de arrastre
+        document.addEventListener('mousedown', startDrag);
+        document.addEventListener('mousemove', dragMove);
+        document.addEventListener('mouseup', stopDrag);
+
+        document.addEventListener('touchstart', startDrag);
+        document.addEventListener('touchmove', dragMove);
+        document.addEventListener('touchend', stopDrag);
+
         // Función para voltear la carta al hacer clic en el botón
         function flipCard() {
             card.classList.toggle('flipped');
         }
-
-        // Función para manejar el efecto de rebote suave cuando la carta no está volteada
-        card.addEventListener('transitionend', () => {
-            if (!card.classList.contains('flipped')) {
-                card.style.transition = 'transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)'; // Aplicamos el rebote
-            }
-        });
 
     </script>
 
