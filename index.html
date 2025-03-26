@@ -15,23 +15,26 @@
       height: 100vh;
       overflow: hidden;
     }
-    /* Contenedor de la ficha (marco blanco) */
+    /* Contenedor de la ficha (más gruesa) */
     .card {
       width: 360px;
       height: 540px;
-      background-color: white;  /* Marco blanco (ficha) */
-      padding: 40px;            /* Grosor del marco; ajusta para que se note más o menos */
-      border-radius: 10px;
+      background-color: #fff;  /* Fondo blanco */
+      padding: 30px;
+      border-radius: 15px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.3);
       position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-    /* Contenedor interno que se rotará (las imágenes, como stickers) */
+    /* Contenedor interno con las imágenes */
     .card-inner {
       width: 100%;
       height: 100%;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.1s ease-out;
+      transition: transform 0.3s ease-out;
     }
     /* Las caras de la ficha (front y back) */
     .face {
@@ -39,19 +42,19 @@
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
-      border-radius: 5px;
+      border-radius: 10px;
     }
     .face.front {
-      background: url('carta_frente.png.jpg') no-repeat center/cover;
+      background: url('carta_frente.png') no-repeat center/cover;
       background-size: cover;
       transform: rotateY(0deg);
     }
     .face.back {
-      background: url('carta_dorso.png.png') no-repeat center/cover;
+      background: url('carta_dorso.png') no-repeat center/cover;
       background-size: cover;
       transform: rotateY(180deg);
     }
-    /* Botón para voltear, ubicado en la esquina superior derecha de la ficha interna */
+    /* Botón para voltear, ubicado en la esquina superior derecha */
     .flip-button {
       position: absolute;
       top: 10px;
@@ -65,7 +68,6 @@
       border-radius: 5px;
       transition: background 0.3s;
       font-size: 16px;
-      z-index: 10;
     }
     .flip-button:hover {
       background-color: rgba(255,255,255,1);
@@ -75,7 +77,7 @@
 <body>
 
   <div class="card">
-    <!-- Contenedor interno que gira -->
+    <!-- Contenedor interno que se gira -->
     <div class="card-inner" id="cardInner">
       <div class="face front">
         <button class="flip-button" id="flipButton">Voltear</button>
@@ -100,48 +102,6 @@
     }
     flipButton.addEventListener('click', toggleFlip);
     flipButtonBack.addEventListener('click', toggleFlip);
-
-    // Movimiento 3D libre con el toque/mouse sobre el contenedor interno
-    let rotationX = 0, rotationY = 0;
-    let isDragging = false;
-    let startX = 0, startY = 0;
-    
-    function updateInnerRotation() {
-      // Se aplica la rotación de la ficha interna (sin afectar el marco blanco)
-      cardInner.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) ${flipped ? 'rotateY(180deg)' : ''}`;
-    }
-    
-    function startDrag(e) {
-      isDragging = true;
-      startX = e.touches ? e.touches[0].clientX : e.clientX;
-      startY = e.touches ? e.touches[0].clientY : e.clientY;
-    }
-    
-    function dragMove(e) {
-      if (!isDragging) return;
-      let x = e.touches ? e.touches[0].clientX : e.clientX;
-      let y = e.touches ? e.touches[0].clientY : e.clientY;
-      let deltaX = x - startX;
-      let deltaY = y - startY;
-      
-      rotationY += deltaX * 0.3; // Mayor sensibilidad horizontal para movimiento libre
-      rotationX -= deltaY * 0.3; // Mayor sensibilidad vertical
-      updateInnerRotation();
-      startX = x;
-      startY = y;
-    }
-    
-    function stopDrag() {
-      isDragging = false;
-    }
-    
-    document.addEventListener('mousedown', startDrag);
-    document.addEventListener('mousemove', dragMove);
-    document.addEventListener('mouseup', stopDrag);
-    
-    document.addEventListener('touchstart', startDrag);
-    document.addEventListener('touchmove', dragMove);
-    document.addEventListener('touchend', stopDrag);
   </script>
 
 </body>
