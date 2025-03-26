@@ -30,6 +30,7 @@
       transition: transform 0.1s ease-out;
       cursor: grab;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra para resaltar el 3D */
+      transform: rotateX(10deg) rotateY(10deg); /* Sombra leve para resaltar el grosor */
     }
 
     .card-side {
@@ -45,6 +46,17 @@
 
     .card-front {
       background-color: #fff;
+    }
+
+    .card-thickness {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      top: 0;
+      left: 0;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+      transform: translateZ(-5px); /* Levele de grosor visual */
     }
 
     /* Efectos de movimiento 3D */
@@ -73,7 +85,7 @@
   <div class="card-container">
     <div class="card" id="card">
       <div class="card-side card-front">
-        <!-- Aquí se puede poner el contenido de la carta si es necesario -->
+        <div class="card-thickness"></div>
       </div>
     </div>
   </div>
