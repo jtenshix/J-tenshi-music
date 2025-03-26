@@ -22,15 +22,15 @@
     }
 
     .card {
-  width: 360px;
-  height: 540px;
-  background-color: #fff; /* Blanco para simular la ficha */
-  position: relative;
-  transform-style: preserve-3d; /* Asegúrate de que este estilo esté aquí */
-  transition: transform 0.1s ease-out;
-  cursor: grab;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra para resaltar el 3D */
-  transform: rotateX(10deg) rotateY(10deg); /* Sombra leve para resaltar el grosor */
+      width: 360px;
+      height: 540px;
+      background-color: #fff; /* Blanco para simular la ficha */
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); /* Efecto de transición elástica */
+      cursor: grab;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra para resaltar el 3D */
+      transform: rotateX(0deg) rotateY(0deg); /* Poner la carta inicialmente centrada */
     }
 
     .card-side {
@@ -47,15 +47,6 @@
     .card-front {
       background-color: #fff;
     }
-.card-thickness {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: #aaa; /* Color del borde, puedes cambiarlo */
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
-  transform: translateZ(25px); /* Asegúrate de que sea positivo para agregar grosor */
-}
-
 
     /* Efectos de movimiento 3D */
     .flip-button {
@@ -82,9 +73,8 @@
 
   <div class="card-container">
     <div class="card" id="card">
-      <div class="card-side card-front">
-        <div class="card-thickness"></div>
-      </div>
+      <div class="card-side card-front"></div>
+      <div class="card-side card-back"></div>
     </div>
   </div>
 
@@ -126,6 +116,19 @@
 
     function stopDrag() {
       isDragging = false;
+
+      // Suaviza el regreso de la carta a su posición inicial
+      rotationX = 0;
+      rotationY = 0;
+
+      // Actualiza la rotación de la carta de manera suave
+      card.style.transition = "transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)";
+      updateCardRotation();
+
+      // Después de la animación, eliminamos la transición para evitar interferencias con el siguiente movimiento
+      setTimeout(() => {
+        card.style.transition = "transform 0.1s ease-out";
+      }, 400);  // Duración del regreso
     }
 
     document.addEventListener('mousedown', startDrag);
