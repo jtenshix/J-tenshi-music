@@ -1,1 +1,39 @@
+.card {
+  width: 360px;
+  height: 540px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.05s ease-out;
+  cursor: grab;
+  will-change: transform;
+  transform: rotateX(0deg) rotateY(0deg);
+  transform-origin: center;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+}
 
+.card-side {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateZ(1.5cm); /* Aumenta el grosor, este valor lo puedes modificar */
+  background-color: white; /* Fondo sólido para que se vea claro */
+  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.3), 0 0 15px rgba(0, 0, 0, 0.2); /* Sombra para resaltar el grosor */
+}
+
+.card-front {
+  background: url('carta_frente.png') no-repeat center/cover;
+  background-size: cover;
+  border-radius: 10px;
+}
+
+.card-back {
+  background: url('carta_dorso.png') no-repeat center/cover;
+  background-size: cover;
+  transform: rotateY(180deg) translateZ(1.5cm); /* Ajustar para dar grosor */
+  border-radius: 10px;
+}
