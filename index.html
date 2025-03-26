@@ -29,6 +29,8 @@
       cursor: grab;
       will-change: transform;
       transform: rotateX(0deg) rotateY(0deg);
+      transform-origin: center;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
     }
     .card-side {
       position: absolute;
@@ -36,17 +38,21 @@
       height: 100%;
       backface-visibility: hidden;
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
       display: flex;
       justify-content: center;
       align-items: center;
+      transform: translateZ(1.5cm); /* Aquí le damos el grosor */
     }
     .card-front {
       background: url('carta_frente.png.jpg') no-repeat center/cover;
+      border-radius: 10px;
+      box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.3);
     }
     .card-back {
       background: url('carta_dorso.png.png') no-repeat center/cover;
-      transform: rotateY(180deg);
+      transform: rotateY(180deg) translateZ(1.5cm); /* También en la parte de atrás */
+      border-radius: 10px;
+      box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.3);
     }
     .flip-button {
       position: absolute;
@@ -118,8 +124,8 @@
       let deltaX = x - startX;
       let deltaY = y - startY;
 
-      rotationY += deltaX * 0.1;  // Suaviza el movimiento horizontal
-      rotationX -= deltaY * 0.1;  // Suaviza el movimiento vertical
+      rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
+      rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
 
       updateCardRotation();
 
