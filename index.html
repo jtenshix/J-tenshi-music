@@ -113,30 +113,6 @@
       card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
     }
 
-    // Movimiento 3D con el mouse
-    let rotationX = 0, rotationY = 0;
-    let isDragging = false;
-    let startX = 0, startY = 0;
-    let currentX = 0, currentY = 0;
-
-    function updateCardRotation() {
-      card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-    }
-
-    function startDrag(e) {
-      isDragging = true;
-      startX = e.touches ? e.touches[0].clientX : e.clientX;
-      startY = e.touches ? e.touches[0].clientY : e.clientY;
-      card.style.transition = "none"; // Elimina la transición mientras arrastras
-    }
-
-    function dragMove(e) {
-      if (!isDragging) return;
-      let x = e.touches ? e.touches[0].clientX : e.clientX;
-      let y = e.touches ? e.touches[0].clientY : e.clientY;
-
-      let deltaX = x - startX;
-      let deltaY = y - startY;
 
       rotationY += deltaX * 0.4;  // Suaviza el movimiento horizontal
       rotationX -= deltaY * 0.4;  // Suaviza el movimiento vertical
