@@ -97,7 +97,7 @@
     // Girar la carta al presionar el botón
     function toggleFlip() {
       flipped = !flipped;
-      card.style.transform = ${flipped ? 'rotateY(180deg)' : 'rotateY(0deg)'} rotateX(${rotationX}deg) rotateY(${rotationY}deg);
+      card.style.transform = `${flipped ? 'rotateY(180deg)' : 'rotateY(0deg)'} rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
     }
     flipButton.addEventListener('click', toggleFlip);
     flipButtonBack.addEventListener('click', toggleFlip);
@@ -109,7 +109,7 @@
     let currentX = 0, currentY = 0;
 
     function updateCardRotation() {
-      card.style.transform = rotateX(${rotationX}deg) rotateY(${rotationY}deg) ${flipped ? 'rotateY(180deg)' : ''};
+      card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) ${flipped ? 'rotateY(180deg)' : ''}`;
     }
 
     function startDrag(e) {
