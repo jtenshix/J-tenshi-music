@@ -31,6 +31,7 @@
 
         .card.flipped {
             transform: rotateY(180deg);
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Efecto de rebote suave */
         }
 
         .card-side {
@@ -56,88 +57,52 @@
             transform: rotateY(180deg);
         }
 
-        /* Estilos para el movimiento 3D */
-        .card-container {
-            perspective: 1500px;
-        }
-
-        .card {
-            width: 250px;
-            height: 350px;
-            position: relative;
-            transform-style: preserve-3d;
-            cursor: pointer;
-        }
-
-        .card-side {
+        /* Estilo para el botón de voltear */
+        .flip-button {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
         }
+
+        .flip-button:hover {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
     </style>
 </head>
 <body>
 
     <div class="card-container">
-        <div class="card" onclick="this.classList.toggle('flipped')">
+        <div class="card" id="card">
             <div class="card-side card-front"></div>
             <div class="card-side card-back"></div>
+            <button class="flip-button" onclick="flipCard()">🔄</button> <!-- Botón de voltear -->
         </div>
     </div>
 
     <script>
-        const card = document.querySelector('.card');
+        const card = document.getElementById('card');
 
-        let rotationX = 0, rotationY = 0;
-        let isDragging = false;
-        let startX = 0, startY = 0;
-        let currentX = 0, currentY = 0;
-
-        function updateCardRotation() {
-            card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+        // Función para voltear la carta al hacer clic en el botón
+        function flipCard() {
+            card.classList.toggle('flipped');
         }
 
-        function startDrag(e) {
-            isDragging = true;
-            startX = e.touches ? e.touches[0].clientX : e.clientX;
-            startY = e.touches ? e.touches[0].clientY : e.clientY;
-            card.style.transition = "none"; // Elimina la transición mientras arrastras
-        }
+        // Función para manejar el efecto de rebote suave cuando la carta no está volteada
+        card.addEventListener('transitionend', () => {
+            if (!card.classList.contains('flipped')) {
+                card.style.transition = 'transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)'; // Aplicamos el rebote
+            }
+        });
 
-        function dragMove(e) {
-            if (!isDragging) return;
-            let x = e.touches ? e.touches[0].clientX : e.clientX;
-            let y = e.touches ? e.touches[0].clientY : e.clientY;
-
-            let deltaX = x - startX;
-            let deltaY = y - startY;
-
-            rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
-            rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
-
-            updateCardRotation();
-
-            startX = x;
-            startY = y;
-        }
-
-        function stopDrag() {
-            isDragging = false;
-            card.style.transition = "transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)";
-            updateCardRotation();
-            setTimeout(() => {
-                card.style.transition = "transform 0.1s ease-out";
-            }, 400); 
-        }
-
-        document.addEventListener('mousedown', startDrag);
-        document.addEventListener('mousemove', dragMove);
-        document.addEventListener('mouseup', stopDrag);
-
-        document.addEventListener('touchstart', startDrag);
-        document.addEventListener('touchmove', dragMove);
-        document.addEventListener('touchend', stopDrag);
     </script>
 
 </body>
