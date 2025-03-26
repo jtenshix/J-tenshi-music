@@ -41,18 +41,20 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      transform: translateZ(1.5cm); /* Aquí le damos el grosor */
+      transform: translateZ(0.8cm); /* Grosor más sutil */
+      background-color: white; /* Fondo sólido para que se vea claro */
+      box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.3);
     }
     .card-front {
       background: url('carta_frente.png.jpg') no-repeat center/cover;
+      background-size: cover;
       border-radius: 10px;
-      box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.3);
     }
     .card-back {
       background: url('carta_dorso.png.png') no-repeat center/cover;
-      transform: rotateY(180deg) translateZ(1.5cm); /* También en la parte de atrás */
+      background-size: cover;
+      transform: rotateY(180deg) translateZ(0.8cm); /* Lo mismo para la parte trasera */
       border-radius: 10px;
-      box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.3);
     }
     .flip-button {
       position: absolute;
