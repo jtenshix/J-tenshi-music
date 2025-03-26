@@ -3,36 +3,129 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carta Gruesa</title>
+  <title>Carta 3D Gruesa</title>
   <style>
     body {
       margin: 0;
       padding: 0;
+      background-color: #121212;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: #121212; /* Fondo oscuro */
+      overflow: hidden;
+    }
+
+    .card-container {
+      perspective: 1200px;
+      position: relative;
     }
 
     .card {
-      width: 300px;
-      height: 450px;
-      background-color: white; /* Carta blanca */
-      border-radius: 15px; /* Bordes redondeados */
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3); /* Sombra sutil */
-      transform: perspective(1000px) rotateX(0deg); /* Efecto 3D */
-      transform-style: preserve-3d;
+      width: 360px;
+      height: 540px;
+      background-color: #fff; /* Blanco para simular la ficha */
       position: relative;
-      z-index: 1;
-      /* Grosor de la carta (como una ficha) */
-      padding: 30px; /* Esto hace que la carta sea gruesa */
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out;
+      cursor: grab;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra para resaltar el 3D */
+    }
+
+    .card-side {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card-front {
+      background-color: #fff;
+    }
+
+    /* Efectos de movimiento 3D */
+    .flip-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      color: #121212;
+      border: none;
+      padding: 10px 16px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background 0.3s;
+      font-size: 18px;
+    }
+
+    .flip-button:hover {
+      background-color: rgba(255, 255, 255, 1);
     }
   </style>
 </head>
 <body>
 
-  <div class="card"></div>
+  <div class="card-container">
+    <div class="card" id="card">
+      <div class="card-side card-front">
+        <!-- Aquí se puede poner el contenido de la carta si es necesario -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const card = document.getElementById('card');
+
+    // Movimiento 3D con el mouse
+    let rotationX = 0, rotationY = 0;
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let currentX = 0, currentY = 0;
+
+    function updateCardRotation() {
+      card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+    }
+
+    function startDrag(e) {
+      isDragging = true;
+      startX = e.touches ? e.touches[0].clientX : e.clientX;
+      startY = e.touches ? e.touches[0].clientY : e.clientY;
+    }
+
+    function dragMove(e) {
+      if (!isDragging) return;
+      let x = e.touches ? e.touches[0].clientX : e.clientX;
+      let y = e.touches ? e.touches[0].clientY : e.clientY;
+
+      let deltaX = x - startX;
+      let deltaY = y - startY;
+
+      rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
+      rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
+
+      updateCardRotation();
+
+      startX = x;
+      startY = y;
+    }
+
+    function stopDrag() {
+      isDragging = false;
+    }
+
+    document.addEventListener('mousedown', startDrag);
+    document.addEventListener('mousemove', dragMove);
+    document.addEventListener('mouseup', stopDrag);
+
+    document.addEventListener('touchstart', startDrag);
+    document.addEventListener('touchmove', dragMove);
+    document.addEventListener('touchend', stopDrag);
+  </script>
 
 </body>
 </html>
