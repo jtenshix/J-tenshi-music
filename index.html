@@ -57,7 +57,7 @@
 }
 
 
-    /* Efectos de movimiento 3D */
+     /* Efectos de movimiento 3D */
     .flip-button {
       position: absolute;
       top: 10px;
@@ -90,78 +90,64 @@
   <script>
     const card = document.getElementById('card');
 
-let rotationX = 0, rotationY = 0;
-let isDragging = false;
-let startX = 0, startY = 0;
-let currentX = 0, currentY = 0;
-let lastRotationX = 0, lastRotationY = 0;  // Para guardar el último valor de rotación
+    // Movimiento 3D con el mouse
+    let rotationX = 0, rotationY = 0;
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let currentX = 0, currentY = 0;
 
-function updateCardRotation() {
-  card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-}
-
-function startDrag(e) {
-  isDragging = true;
-  startX = e.touches ? e.touches[0].clientX : e.clientX;
-  startY = e.touches ? e.touches[0].clientY : e.clientY;
-  card.style.transition = "none"; // Elimina la transición mientras arrastras
-}
-
-function dragMove(e) {
-  if (!isDragging) return;
-  let x = e.touches ? e.touches[0].clientX : e.clientX;
-  let y = e.touches ? e.touches[0].clientY : e.clientY;
-
-  let deltaX = x - startX;
-  let deltaY = y - startY;
-
-  // Actualizar rotación mientras se mueve
-  rotationY = lastRotationY + deltaX * 0.4;  // Suaviza el movimiento horizontal
-  rotationX = lastRotationX - deltaY * 0.4;  // Suaviza el movimiento vertical
-
-  updateCardRotation();  // Actualiza la rotación de la carta
-
-  startX = x;
-  startY = y;
-}
-
-function stopDrag() {
-  isDragging = false;
-
-  // Si la rotación supera el umbral de 90 grados, voltea la carta
-  if (Math.abs(rotationY) >= 90) {
-    if (rotationY > 0) {
-      rotationY = 180;  // Gira completamente hacia un lado
-    } else {
-      rotationY = -180;  // Gira completamente hacia el otro lado
+    function updateCardRotation() {
+      card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
     }
-  } else {
-    // Si no, vuelve a su posición original
-    rotationX = 0;
-    rotationY = 0;
-  }
 
-  lastRotationX = rotationX;  // Guarda la última rotación
-  lastRotationY = rotationY;  // Guarda la última rotación
+    function startDrag(e) {
+      isDragging = true;
+      startX = e.touches ? e.touches[0].clientX : e.clientX;
+      startY = e.touches ? e.touches[0].clientY : e.clientY;
+      card.style.transition = "none"; // Elimina la transición mientras arrastras
+    }
 
-  // Aplica la transición suave cuando la carta se queda en su posición final
-  card.style.transition = "transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)";
-  updateCardRotation();
+    function dragMove(e) {
+      if (!isDragging) return;
+      let x = e.touches ? e.touches[0].clientX : e.clientX;
+      let y = e.touches ? e.touches[0].clientY : e.clientY;
 
-  // Después de la animación, eliminamos la transición para evitar interferencias con el siguiente movimiento
-  setTimeout(() => {
-    card.style.transition = "none";  // Elimina la transición después de la animación
-  }, 400);
-}
+      let deltaX = x - startX;
+      let deltaY = y - startY;
 
-document.addEventListener('mousedown', startDrag);
-document.addEventListener('mousemove', dragMove);
-document.addEventListener('mouseup', stopDrag);
+      rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
+      rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
 
-document.addEventListener('touchstart', startDrag);
-document.addEventListener('touchmove', dragMove);
-document.addEventListener('touchend', stopDrag);
+      updateCardRotation();
 
+      startX = x;
+      startY = y;
+    }
+
+    function stopDrag() {
+      isDragging = false;
+
+      // Suaviza el regreso de la carta a su posición inicial
+      rotationX = 0;
+      rotationY = 0;
+
+      // Actualiza la rotación de la carta de manera suave
+      card.style.transition = "transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)";
+      updateCardRotation();
+
+      // Después de la animación, eliminamos la transición para evitar interferencias con el siguiente movimiento
+      setTimeout(() => {
+        card.style.transition = "transform 0.1s ease-out";
+      }, 400);  // Duración del regreso
+    }
+
+    document.addEventListener('mousedown', startDrag);
+    document.addEventListener('mousemove', dragMove);
+    document.addEventListener('mouseup', stopDrag);
+
+    document.addEventListener('touchstart', startDrag);
+    document.addEventListener('touchmove', dragMove);
+    document.addEventListener('touchend', stopDrag);
   </script>
 
 </body>
