@@ -15,11 +15,11 @@
       height: 100vh;
       overflow: hidden;
     }
-    /* Contenedor de la ficha (más gruesa) */
+    /* Ficha más gruesa */
     .card {
       width: 360px;
       height: 540px;
-      background-color: #fff;  /* Fondo blanco */
+      background-color: #fff;
       padding: 30px;
       border-radius: 15px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.3);
@@ -28,13 +28,13 @@
       justify-content: center;
       align-items: center;
     }
-    /* Contenedor interno con las imágenes */
+    /* Contenedor de la imagen con giro 3D */
     .card-inner {
       width: 100%;
       height: 100%;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.3s ease-out;
+      transition: transform 0.6s ease-out;
     }
     /* Las caras de la ficha (front y back) */
     .face {
@@ -45,16 +45,16 @@
       border-radius: 10px;
     }
     .face.front {
-      background: url('carta_frente.png') no-repeat center/cover;
+      background: url('https://via.placeholder.com/360x540/ff6347/ffffff?text=Frente') no-repeat center/cover;
       background-size: cover;
       transform: rotateY(0deg);
     }
     .face.back {
-      background: url('carta_dorso.png') no-repeat center/cover;
+      background: url('https://via.placeholder.com/360x540/4682b4/ffffff?text=Reverso') no-repeat center/cover;
       background-size: cover;
       transform: rotateY(180deg);
     }
-    /* Botón para voltear, ubicado en la esquina superior derecha */
+    /* Botón para voltear */
     .flip-button {
       position: absolute;
       top: 10px;
@@ -77,7 +77,7 @@
 <body>
 
   <div class="card">
-    <!-- Contenedor interno que se gira -->
+    <!-- Contenedor que rota con las imágenes -->
     <div class="card-inner" id="cardInner">
       <div class="face front">
         <button class="flip-button" id="flipButton">Voltear</button>
@@ -94,7 +94,7 @@
     const flipButtonBack = document.getElementById('flipButtonBack');
     let flipped = false;
     
-    // Función para voltear la ficha interna
+    // Función para voltear la ficha
     function toggleFlip() {
       flipped = !flipped;
       cardInner.style.transition = 'transform 0.6s ease-out';
