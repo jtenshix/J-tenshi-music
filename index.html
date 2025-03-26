@@ -11,10 +11,9 @@
       background-color: #121212;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;
       height: 100vh;
       overflow: hidden;
-      padding-top: 50px;
     }
     .card-container {
       perspective: 1200px;
@@ -25,7 +24,7 @@
       height: 540px;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.05s ease-out;
+      transition: transform 0.5s ease-out;
       cursor: grab;
       will-change: transform;
       transform-origin: center;
@@ -50,106 +49,10 @@
     }
     .card-inner {
       position: absolute;
-      top: 5px;
-      left: 5px;
-      right: 5px;
-      bottom: 5px;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
       background-color: white;
       border-radius: 10px;
-      z-index: -1;
-    }
-    .flip-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: rgba(255, 255, 255, 0.8);
-      color: #121212;
-      border: none;
-      padding: 10px 16px;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: background 0.3s;
-      font-size: 18px;
-    }
-    .flip-button:hover {
-      background-color: rgba(255, 255, 255, 1);
-    }
-  </style>
-</head>
-<body>
-
-  <div class="card-container">
-    <div class="card" id="card">
-      <div class="card-side card-front">
-        <button class="flip-button" id="flipButton">Voltear</button>
-      </div>
-      <div class="card-side card-back">
-        <button class="flip-button" id="flipButtonBack">Voltear</button>
-      </div>
-      <div class="card-inner"></div> <!-- Ficha interior blanca -->
-    </div>
-  </div>
-
-  <script>
-    const card = document.getElementById('card');
-    const flipButton = document.getElementById('flipButton');
-    const flipButtonBack = document.getElementById('flipButtonBack');
-    let flipped = false;
-
-    // Girar la carta al presionar el botón
-    function toggleFlip() {
-      flipped = !flipped;
-      card.style.transform = `${flipped ? 'rotateY(180deg)' : 'rotateY(0deg)'} rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-    }
-    flipButton.addEventListener('click', toggleFlip);
-    flipButtonBack.addEventListener('click', toggleFlip);
-
-    // Movimiento 3D libre al deslizar con el dedo o mouse
-    let rotationX = 0, rotationY = 0;
-    let isDragging = false;
-    let startX = 0, startY = 0;
-    let currentX = 0, currentY = 0;
-
-    function updateCardRotation() {
-      card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) ${flipped ? 'rotateY(180deg)' : ''}`;
-    }
-
-    function startDrag(e) {
-      isDragging = true;
-      startX = e.touches ? e.touches[0].clientX : e.clientX;
-      startY = e.touches ? e.touches[0].clientY : e.clientY;
-    }
-
-    function dragMove(e) {
-      if (!isDragging) return;
-      let x = e.touches ? e.touches[0].clientX : e.clientX;
-      let y = e.touches ? e.touches[0].clientY : e.clientY;
-
-      let deltaX = x - startX;
-      let deltaY = y - startY;
-
-      rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
-      rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
-
-      updateCardRotation();
-
-      startX = x;
-      startY = y;
-    }
-
-    function stopDrag() {
-      isDragging = false;
-    }
-
-    document.addEventListener('mousedown', startDrag);
-    document.addEventListener('mousemove', dragMove);
-    document.addEventListener('mouseup', stopDrag);
-
-    document.addEventListener('touchstart', startDrag);
-    document.addEventListener('touchmove', dragMove);
-    document.addEventListener('touchend', stopDrag);
-  </script>
-
-</body>
-</html>
+      z-index: -1; /*
