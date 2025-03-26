@@ -91,6 +91,45 @@
       rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
       rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
 
+      let isFlipped = false; // Nueva variable para saber si la carta está volteada
+
+// Mueve la carta según el desplazamiento del dedo
+function dragMove(e) {
+  if (!isDragging) return;
+  
+  let x = e.touches[0].clientX;
+  let y = e.touches[0].clientY;
+
+  let deltaX = x - startX; // Diferencia en el movimiento horizontal
+  let deltaY = y - startY; // Diferencia en el movimiento vertical
+
+  // Aplica la rotación en función del movimiento del dedo
+  rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
+  rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
+
+  updateCardRotation(); // Actualiza la rotación de la carta
+
+  startX = x;
+  startY = y;
+
+  // Detectar si la rotación ha pasado los 90 grados para hacer el volteo
+  if (rotationY >= 90 || rotationY <= -90) {
+    if (!isFlipped) {
+      isFlipped = true; // Marca que la carta está volteada
+      rotationY = 180;  // Voltea la carta a la parte trasera
+      card.style.transition = "transform 0.3s ease-in-out"; // Transición suave para el volteo
+      updateCardRotation(); // Actualiza la rotación
+    }
+  } else if (rotationY <= 0 && rotationY >= -90) {
+    if (isFlipped) {
+      isFlipped = false; // Marca que la carta volvió a la parte frontal
+      rotationY = 0;  // Vuelve la carta a la parte delantera
+      card.style.transition = "transform 0.3s ease-in-out"; // Transición suave
+      updateCardRotation(); // Actualiza la rotación
+    }
+  }
+}
+
       updateCardRotation();
 
       // Guarda la posición actual para el siguiente movimiento
