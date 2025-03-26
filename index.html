@@ -81,25 +81,23 @@
   <script>
     const card = document.getElementById('card');
 
-    // Variables de rotación
+    // Movimiento 3D con el mouse
     let rotationX = 0, rotationY = 0;
     let isDragging = false;
     let startX = 0, startY = 0;
     let currentX = 0, currentY = 0;
 
-    // Límite para la rotación
-    const MAX_ROTATION_X = 90; // Límite de 90 grados para el eje X
-    const MAX_ROTATION_Y = 180; // Límite de 180 grados para el eje Y
+    function updateCardRotation() {
+      card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+    }
 
-    // Inicia el arrastre
     function startDrag(e) {
       isDragging = true;
       startX = e.touches ? e.touches[0].clientX : e.clientX;
       startY = e.touches ? e.touches[0].clientY : e.clientY;
       card.style.transition = "none"; // Elimina la transición mientras arrastras
+    }
 
-      
-    // Mueve la carta según el desplazamiento del dedo
     function dragMove(e) {
       if (!isDragging) return;
       let x = e.touches ? e.touches[0].clientX : e.clientX;
@@ -108,23 +106,10 @@
       let deltaX = x - startX;
       let deltaY = y - startY;
 
-     // Actualiza la rotación de la carta
-    function updateCardRotation() {
-      card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-    }
+      rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
+      rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
 
-
-      rotationY += deltaX * 0.4;  // Suaviza el movimiento horizontal
-      rotationX -= deltaY * 0.4;  // Suaviza el movimiento vertical
-
-      // Limita el giro horizontal (de -180 a 180 grados)
-      rotationY = Math.max(-MAX_ROTATION_Y, Math.min(MAX_ROTATION_Y, rotationY));
-
-      // Limita el giro vertical (de -90 a 90 grados)
-      rotationX = Math.max(-MAX_ROTATION_X, Math.min(MAX_ROTATION_X, rotationX));
-
-      updateCardRotation(); // Actualiza la rotación de la carta
-
+      updateCardRotation();
 
       startX = x;
       startY = y;
