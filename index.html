@@ -102,14 +102,24 @@
       if (!isDragging) return;
       let x = e.touches ? e.touches[0].clientX : e.clientX;
       let y = e.touches ? e.touches[0].clientY : e.clientY;
+ let deltaX = x - startX;
+  let deltaY = y - startY;
 
-      let deltaX = x - startX;
-      let deltaY = y - startY;
+  rotationY += deltaX * 0.4;
+  rotationX -= deltaY * 0.4;
 
-      rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
-      rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
+  // Mantener la rotación 3D con límites para evitar valores extremos
+  rotationY = Math.max(-180, Math.min(180, rotationY));
+  rotationX = Math.max(-90, Math.min(90, rotationX));
 
-      updateCardRotation();
+  // Lógica del umbral de 90 grados para voltear
+  if (rotationY > 90) {
+    rotationY = 180;
+  } else if (rotationY < -90) {
+    rotationY = -180;
+  }
+
+  updateCardRotation();
 
       startX = x;
       startY = y;
