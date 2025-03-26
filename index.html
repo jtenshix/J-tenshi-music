@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carta 3D Gruesa Blanca</title>
+  <title>Carta 3D Gruesa con Imágenes</title>
   <style>
     body {
       margin: 0;
@@ -13,23 +13,26 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      overflow: hidden;
     }
-    /* Ficha sólida blanca */
+
+    /* Contenedor de la carta con perspectiva 3D */
     .card-container {
       perspective: 1000px;
     }
+
+    /* Carta gruesa con efectos 3D */
     .card {
-      width: 360px;
-      height: 540px;
+      width: 300px;
+      height: 450px;
       background-color: white;
-      padding: 20px;
       border-radius: 20px;
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
-      position: relative;
       transform-style: preserve-3d;
       transition: transform 0.6s ease-out;
+      position: relative;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
     }
+
+    /* Lados de la carta */
     .card-side {
       position: absolute;
       width: 100%;
@@ -39,16 +42,32 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      background-color: #fff;
     }
+
+    /* Imagen frontal */
     .card-front {
-      background-color: white;
       transform: rotateY(0deg);
     }
+
+    /* Imagen trasera */
     .card-back {
-      background-color: white;
       transform: rotateY(180deg);
     }
-    /* Botones para voltear */
+
+    /* Efecto de volumen 3D (grosor de la carta) */
+    .card::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: white;
+      transform: translateZ(-150px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+
+    /* Botón de voltear */
     .flip-button {
       position: absolute;
       top: 10px;
@@ -63,9 +82,11 @@
       transition: background 0.3s;
       font-size: 18px;
     }
+
     .flip-button:hover {
       background-color: rgba(255, 255, 255, 1);
     }
+
   </style>
 </head>
 <body>
@@ -73,9 +94,11 @@
   <div class="card-container">
     <div class="card" id="card">
       <div class="card-side card-front">
+        <img src="https://via.placeholder.com/300x450.png?text=Imagen+Frontal" alt="Frontal" style="width:100%; height:100%; object-fit:cover;">
         <button class="flip-button" id="flipButton">Voltear</button>
       </div>
       <div class="card-side card-back">
+        <img src="https://via.placeholder.com/300x450.png?text=Imagen+Trasera" alt="Trasera" style="width:100%; height:100%; object-fit:cover;">
         <button class="flip-button" id="flipButtonBack">Voltear</button>
       </div>
     </div>
