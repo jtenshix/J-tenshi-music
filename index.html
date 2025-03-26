@@ -47,6 +47,26 @@
     .card-front {
       background-color: #fff;
     }
+
+    /* Efectos de movimiento 3D */
+    .flip-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      color: #121212;
+      border: none;
+      padding: 10px 16px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background 0.3s;
+      font-size: 18px;
+    }
+
+    .flip-button:hover {
+      background-color: rgba(255, 255, 255, 1);
+    }
   </style>
 </head>
 <body>
@@ -59,46 +79,42 @@
   </div>
 
   <script>
-    // Variables para manejar el arrastre y movimiento con el dedo
+    const card = document.getElementById('card');
+
+    // Movimiento 3D con el mouse
     let rotationX = 0, rotationY = 0;
     let isDragging = false;
     let startX = 0, startY = 0;
+    let currentX = 0, currentY = 0;
 
-    // Actualiza la rotación de la carta
     function updateCardRotation() {
       card.style.transform = rotateX(${rotationX}deg) rotateY(${rotationY}deg);
     }
 
-    // Empieza el arrastre cuando tocas la pantalla
     function startDrag(e) {
       isDragging = true;
-      startX = e.touches[0].clientX; // Coordenada X del primer toque
-      startY = e.touches[0].clientY; // Coordenada Y del primer toque
+      startX = e.touches ? e.touches[0].clientX : e.clientX;
+      startY = e.touches ? e.touches[0].clientY : e.clientY;
       card.style.transition = "none"; // Elimina la transición mientras arrastras
     }
 
-    // Mueve la carta según el desplazamiento del dedo
     function dragMove(e) {
       if (!isDragging) return;
-      
-      let x = e.touches[0].clientX;
-      let y = e.touches[0].clientY;
+      let x = e.touches ? e.touches[0].clientX : e.clientX;
+      let y = e.touches ? e.touches[0].clientY : e.clientY;
 
-      let deltaX = x - startX; // Diferencia en el movimiento horizontal
-      let deltaY = y - startY; // Diferencia en el movimiento vertical
+      let deltaX = x - startX;
+      let deltaY = y - startY;
 
-      // Aplica la rotación en función del movimiento del dedo
       rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
       rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
 
       updateCardRotation();
 
-      // Guarda la posición actual para el siguiente movimiento
       startX = x;
       startY = y;
     }
 
-    // Detiene el arrastre y suaviza la carta
     function stopDrag() {
       isDragging = false;
 
@@ -116,7 +132,10 @@
       }, 400);  // Duración del regreso
     }
 
-    // Eventos para arrastrar con el dedo
+    document.addEventListener('mousedown', startDrag);
+    document.addEventListener('mousemove', dragMove);
+    document.addEventListener('mouseup', stopDrag);
+
     document.addEventListener('touchstart', startDrag);
     document.addEventListener('touchmove', dragMove);
     document.addEventListener('touchend', stopDrag);
