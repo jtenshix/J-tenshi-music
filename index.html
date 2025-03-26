@@ -95,6 +95,7 @@
       isDragging = true;
       startX = e.touches ? e.touches[0].clientX : e.clientX;
       startY = e.touches ? e.touches[0].clientY : e.clientY;
+      card.style.transition = "none"; // Elimina la transición mientras arrastras
     }
 
     function dragMove(e) {
