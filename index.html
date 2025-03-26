@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carta Especial</title>
+  <title>Carta 3D</title>
   <style>
     body {
       margin: 0;
@@ -26,7 +26,7 @@
       height: 540px;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.5s;
+      transition: transform 0.5s ease;
       cursor: grab;
       will-change: transform;
     }
@@ -38,29 +38,20 @@
       backface-visibility: hidden;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background-color: white;
     }
 
-    .card-front {
-      background-color: white;
-      transform: translateZ(60px);
+    .card-front, .card-back {
+      background-color: #fff;
+      transform: translateZ(50px); /* Grosor de la carta */
     }
 
     .card-back {
-      background-color: white;
-      transform: rotateY(180deg) translateZ(60px);
+      transform: rotateY(180deg) translateZ(50px);
     }
 
-    /* Sombra para el efecto 3D */
-    .card-container {
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
-    }
-
-    /* Efecto de giro para la carta */
-    .card:hover {
-      transform: rotateY(180deg);
+    .card-container:hover .card {
+      transform: rotateY(180deg); /* Girar la carta al pasar el mouse */
     }
   </style>
 </head>
@@ -68,14 +59,8 @@
 
   <div class="card-container">
     <div class="card">
-      <div class="card-side card-front">
-        <!-- Aquí iría el contenido frontal -->
-        <span style="color: black; font-size: 24px;">Frente de la Carta</span>
-      </div>
-      <div class="card-side card-back">
-        <!-- Aquí iría el contenido trasero -->
-        <span style="color: black; font-size: 24px;">Parte Trasera</span>
-      </div>
+      <div class="card-side card-front"></div>
+      <div class="card-side card-back"></div>
     </div>
   </div>
 
