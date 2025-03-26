@@ -28,6 +28,7 @@
       transition: transform 0.05s ease-out;
       cursor: grab;
       will-change: transform;
+      transform-origin: center;
     }
     .card-side {
       position: absolute;
@@ -49,11 +50,12 @@
     }
     .card-inner {
       position: absolute;
-      width: 100%;
-      height: 100%;
+      top: 5px;
+      left: 5px;
+      right: 5px;
+      bottom: 5px;
       background-color: white;
       border-radius: 10px;
-      transform: translateZ(-2px);
       z-index: -1;
     }
     .flip-button {
@@ -85,7 +87,7 @@
       <div class="card-side card-back">
         <button class="flip-button" id="flipButtonBack">Voltear</button>
       </div>
-      <div class="card-inner"></div> <!-- Parte central blanca, como una ficha -->
+      <div class="card-inner"></div> <!-- Ficha interior blanca -->
     </div>
   </div>
 
@@ -98,7 +100,7 @@
     // Girar la carta al presionar el botón
     function toggleFlip() {
       flipped = !flipped;
-      card.style.transform = `${flipped ? 'rotateY(180deg)' : 'rotateY(0deg)'}`;
+      card.style.transform = `${flipped ? 'rotateY(180deg)' : 'rotateY(0deg)'} rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
     }
     flipButton.addEventListener('click', toggleFlip);
     flipButtonBack.addEventListener('click', toggleFlip);
