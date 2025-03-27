@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Especial</title>
+    <title>Carta 3D con Volteo</title>
     <style>
         body {
             margin: 0;
@@ -32,6 +32,7 @@
             cursor: pointer;
         }
 
+        /* Volteo con efecto rebote */
         .card.flipped {
             transform: rotateY(180deg);
             transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
@@ -86,17 +87,29 @@
             <div class="card-side card-front"></div>
             <div class="card-side card-back"></div>
         </div>
-        <button class="flip-button" id="flipBtn">🔄</button> <!-- Arreglado -->
+        <button class="flip-button" id="flipBtn">🔄</button> <!-- Botón -->
     </div>
 
     <script>
         const card = document.getElementById('card');
         const flipBtn = document.getElementById('flipBtn');
 
-        // Asegurar que el botón tenga el event listener correctamente
+        // Volteo con botón
         flipBtn.addEventListener('click', () => {
-            console.log("Botón presionado, voltea la carta.");
             card.classList.toggle('flipped');
+        });
+
+        // Rotación 3D con el mouse
+        const cardContainer = document.querySelector('.card-container');
+
+        cardContainer.addEventListener('mousemove', (e) => {
+            let xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+
+        cardContainer.addEventListener('mouseleave', () => {
+            card.style.transform = 'rotateY(0deg) rotateX(0deg)';
         });
 
     </script>
