@@ -7,7 +7,7 @@
   <style>
     body {
       margin: 0;
-      padding: 0;
+      padding: 0;  
       background-color: #121212;
       display: flex;
       justify-content: center;
@@ -30,17 +30,11 @@
       transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
       cursor: grab;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-      transform: rotateX(0deg) rotateY(0deg);
- }     
-     .card.flipped .card-front {
-  transform: rotateY(180deg); /* Voltea la cara frontal */
-}
+    }
 
-.card.flipped .card-back {
-  transform: rotateY(0deg); /* Vuelve a mostrar la parte trasera */
-}
-
-
+    .card.flipped {
+      transform: rotateY(180deg); /* Rota la carta para mostrar la parte trasera */
+    }
 
     .card-side {
       position: absolute;
@@ -54,14 +48,14 @@
     }
 
     .card-front {
-      background-image: url('carta_frente.png.jpg');  /* Imagen del frente de la carta */
+      background-image: url('carta_frente.png.jpg');
       background-size: cover;
     }
 
     .card-back {
-      background-image: url('carta_dorso.png.png');  /* Imagen del dorso de la carta */
+      background-image: url('carta_dorso.png.png');
       background-size: cover;
-      transform: rotateY(180deg);  /* Girar el dorso para que esté detrás */
+      transform: rotateY(180deg); /* Girar el dorso para que esté detrás */
     }
 
     .flip-button {
@@ -92,15 +86,15 @@
       <div class="card-side card-back"></div>
     </div>
   </div>
-  <button class="flip-button" id="flipBtn">Voltear</button> <!-- Botón para voltear la carta -->
+  <button class="flip-button" id="flipBtn">Voltear</button>
 
   <script>
     const card = document.getElementById('card');
     const flipBtn = document.getElementById('flipBtn');
-    // Funcionalidad del botón para voltear la carta
-flipBtn.addEventListener('click', () => {
-  card.classList.toggle('flipped'); // Alterna la clase 'flipped' al hacer clic
-});
+
+    flipBtn.addEventListener('click', () => {
+      card.classList.toggle('flipped'); // Alterna la clase 'flipped' al hacer clic
+    });
 
     // Movimiento 3D con el mouse
     let rotationX = 0, rotationY = 0;
@@ -156,11 +150,6 @@ flipBtn.addEventListener('click', () => {
     document.addEventListener('touchstart', startDrag);
     document.addEventListener('touchmove', dragMove);
     document.addEventListener('touchend', stopDrag);
-
-    // Funcionalidad del botón para voltear la carta
-    flipBtn.addEventListener('click', () => {
-      card.classList.toggle('flipped');
-    });
   </script>
 
 </body>
