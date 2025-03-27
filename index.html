@@ -34,7 +34,7 @@
 
         .card.flipped {
             transform: rotateY(180deg);
-            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Rebote suave */
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         }
 
         .card-side {
@@ -44,19 +44,14 @@
             backface-visibility: hidden;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
-            transition: box-shadow 0.3s ease-in-out;
-        }
-
-        .card:hover .card-side {
-            box-shadow: 0 6px 12px rgba(255, 255, 255, 0.5);
         }
 
         .card-front {
-            background: url('carta_frente.png.jpg') no-repeat center/cover;
+            background: url('carta_frente.png') no-repeat center/cover;
         }
 
         .card-back {
-            background: url('carta_dorso.png.png') no-repeat center/cover;
+            background: url('carta_dorso.png') no-repeat center/cover;
             transform: rotateY(180deg);
         }
 
@@ -73,7 +68,7 @@
             cursor: pointer;
             font-size: 18px;
             transition: background-color 0.3s, transform 0.2s;
-            z-index: 10; /* Asegura que esté por encima de la carta */
+            z-index: 100;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
 
@@ -91,79 +86,18 @@
             <div class="card-side card-front"></div>
             <div class="card-side card-back"></div>
         </div>
-        <button class="flip-button" onclick="flipCard()">🔄</button> <!-- Botón de voltear ahora está FUERA de la carta -->
+        <button class="flip-button" id="flipBtn">🔄</button> <!-- Arreglado -->
     </div>
 
     <script>
         const card = document.getElementById('card');
+        const flipBtn = document.getElementById('flipBtn');
 
-        // Variables para rotación 3D
-        let rotationX = 0, rotationY = 0;
-        let isDragging = false;
-        let startX = 0, startY = 0;
-
-        // Función para actualizar la rotación de la carta
-        function updateCardRotation() {
-            card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-        }
-
-        // Iniciar arrastre para rotación
-        function startDrag(e) {
-            isDragging = true;
-            startX = e.touches ? e.touches[0].clientX : e.clientX;
-            startY = e.touches ? e.touches[0].clientY : e.clientY;
-            card.style.transition = "none"; // Elimina la transición mientras arrastras
-        }
-
-        // Mover la carta para rotación
-        function dragMove(e) {
-            if (!isDragging) return;
-            let x = e.touches ? e.touches[0].clientX : e.clientX;
-            let y = e.touches ? e.touches[0].clientY : e.clientY;
-
-            let deltaX = x - startX;
-            let deltaY = y - startY;
-
-            rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
-            rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
-
-            updateCardRotation();
-
-            startX = x;
-            startY = y;
-        }
-
-        // Detener arrastre para rotación
-        function stopDrag() {
-            isDragging = false;
-
-            // Suaviza el regreso de la carta a su posición inicial
-            rotationX = 0;
-            rotationY = 0;
-
-            // Actualiza la rotación de la carta de manera suave
-            card.style.transition = "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)";
-            updateCardRotation();
-
-            // Después de la animación, eliminamos la transición para evitar interferencias con el siguiente movimiento
-            setTimeout(() => {
-                card.style.transition = "transform 0.1s ease-out";
-            }, 600);  // Duración del regreso
-        }
-
-        // Agregar eventos de arrastre
-        document.addEventListener('mousedown', startDrag);
-        document.addEventListener('mousemove', dragMove);
-        document.addEventListener('mouseup', stopDrag);
-
-        document.addEventListener('touchstart', startDrag);
-        document.addEventListener('touchmove', dragMove);
-        document.addEventListener('touchend', stopDrag);
-
-        // Función para voltear la carta al hacer clic en el botón
-        function flipCard() {
+        // Asegurar que el botón tenga el event listener correctamente
+        flipBtn.addEventListener('click', () => {
+            console.log("Botón presionado, voltea la carta.");
             card.classList.toggle('flipped');
-        }
+        });
 
     </script>
 
