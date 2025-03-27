@@ -31,11 +31,16 @@
       cursor: grab;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
       transform: rotateX(0deg) rotateY(0deg);
-    }
-
-.card.flipped {
-  transform: rotateY(180deg); /* Rota la carta 180 grados en el eje Y */
+ }     
+     .card.flipped .card-front {
+  transform: rotateY(180deg); /* Voltea la cara frontal */
 }
+
+.card.flipped .card-back {
+  transform: rotateY(0deg); /* Vuelve a mostrar la parte trasera */
+}
+
+
 
     .card-side {
       position: absolute;
