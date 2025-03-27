@@ -33,6 +33,10 @@
       transform: rotateX(0deg) rotateY(0deg);
     }
 
+.card.flipped {
+  transform: rotateY(180deg); /* Rota la carta 180 grados en el eje Y */
+}
+
     .card-side {
       position: absolute;
       width: 100%;
@@ -86,10 +90,15 @@
       <div class="card-side card-back"></div>
     </div>
   </div>
+  <button class="flip-button" id="flipBtn">Voltear</button> <!-- Botón para voltear la carta -->
 
   <script>
     const card = document.getElementById('card');
     const flipBtn = document.getElementById('flipBtn');
+    // Funcionalidad del botón para voltear la carta
+flipBtn.addEventListener('click', () => {
+  card.classList.toggle('flipped'); // Alterna la clase 'flipped' al hacer clic
+});
 
     // Movimiento 3D con el mouse
     let rotationX = 0, rotationY = 0;
@@ -141,10 +150,6 @@
         card.style.transition = "transform 0.1s ease-out";
       }, 400);  // Duración del regreso
     }
-
-    document.addEventListener('mousedown', startDrag);
-    document.addEventListener('mousemove', dragMove);
-    document.addEventListener('mouseup', stopDrag);
 
     document.addEventListener('touchstart', startDrag);
     document.addEventListener('touchmove', dragMove);
