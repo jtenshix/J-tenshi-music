@@ -30,7 +30,8 @@
       transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
       cursor: grab;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    }
+      transform: rotateX(0deg) rotateY(0deg);
+    } 
 
     .card.flipped {
       transform: rotateY(180deg); /* Rota la carta para mostrar la parte trasera */
@@ -48,14 +49,14 @@
     }
 
     .card-front {
-      background-image: url('carta_frente.png.jpg');
+      background-image: url('carta_frente.png.jpg'); 
       background-size: cover;
     }
 
     .card-back {
       background-image: url('carta_dorso.png.png');
       background-size: cover;
-      transform: rotateY(180deg); /* Girar el dorso para que esté detrás */
+      transform: rotateY(180deg); 
     }
 
     .flip-button {
@@ -76,6 +77,30 @@
     .flip-button:hover {
       background-color: rgba(255, 255, 255, 1);
     }
+
+    /* Solo para pantallas grandes (PC) */
+    @media (min-width: 768px) {
+      .flip-button {
+        display: block;
+      }
+
+      /* Se puede dejar el clic para voltear solo en pantallas grandes */
+      .card-container {
+        cursor: pointer;
+      }
+    }
+
+    /* Solo para dispositivos móviles */
+    @media (max-width: 767px) {
+      .flip-button {
+        display: none; /* Oculta el botón en móviles */
+      }
+
+      /* La carta rota con el gesto del dedo */
+      .card-container {
+        cursor: grab;
+      }
+    }
   </style>
 </head>
 <body>
@@ -92,11 +117,14 @@
     const card = document.getElementById('card');
     const flipBtn = document.getElementById('flipBtn');
 
-    flipBtn.addEventListener('click', () => {
-      card.classList.toggle('flipped'); // Alterna la clase 'flipped' al hacer clic
-    });
+    // Funcionalidad del botón para voltear la carta en PC
+    if (window.innerWidth >= 768) {
+      flipBtn.addEventListener('click', () => {
+        card.classList.toggle('flipped');
+      });
+    }
 
-    // Movimiento 3D con el mouse
+    // Movimiento 3D con el dedo en móvil
     let rotationX = 0, rotationY = 0;
     let isDragging = false;
     let startX = 0, startY = 0;
@@ -107,44 +135,48 @@
     }
 
     function startDrag(e) {
-      isDragging = true;
-      startX = e.touches ? e.touches[0].clientX : e.clientX;
-      startY = e.touches ? e.touches[0].clientY : e.clientY;
-      card.style.transition = "none"; // Elimina la transición mientras arrastras
+      if (window.innerWidth < 768) { // Solo para móviles
+        isDragging = true;
+        startX = e.touches ? e.touches[0].clientX : e.clientX;
+        startY = e.touches ? e.touches[0].clientY : e.clientY;
+        card.style.transition = "none"; // Elimina la transición mientras arrastras
+      }
     }
 
     function dragMove(e) {
-      if (!isDragging) return;
-      let x = e.touches ? e.touches[0].clientX : e.clientX;
-      let y = e.touches ? e.touches[0].clientY : e.clientY;
+      if (isDragging && window.innerWidth < 768) { // Solo para móviles
+        let x = e.touches ? e.touches[0].clientX : e.clientX;
+        let y = e.touches ? e.touches[0].clientY : e.clientY;
 
-      let deltaX = x - startX;
-      let deltaY = y - startY;
+        let deltaX = x - startX;
+        let deltaY = y - startY;
 
-      rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
-      rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
+        rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
+        rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
 
-      updateCardRotation();
+        updateCardRotation();
 
-      startX = x;
-      startY = y;
+        startX = x;
+        startY = y;
+      }
     }
 
     function stopDrag() {
-      isDragging = false;
+      if (window.innerWidth < 768) { // Solo para móviles
+        isDragging = false;
 
-      // Suaviza el regreso de la carta a su posición inicial
-      rotationX = 0;
-      rotationY = 0;
+        // Suaviza el regreso de la carta a su posición inicial
+        rotationX = 0;
+        rotationY = 0;
 
-      // Actualiza la rotación de la carta de manera suave
-      card.style.transition = "transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)";
-      updateCardRotation();
+        // Actualiza la rotación de la carta de manera suave
+        card.style.transition = "transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)";
+        updateCardRotation();
 
-      // Después de la animación, eliminamos la transición para evitar interferencias con el siguiente movimiento
-      setTimeout(() => {
-        card.style.transition = "transform 0.1s ease-out";
-      }, 400);  // Duración del regreso
+        setTimeout(() => {
+          card.style.transition = "transform 0.1s ease-out";
+        }, 400);  // Duración del regreso
+      }
     }
 
     document.addEventListener('touchstart', startDrag);
