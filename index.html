@@ -24,13 +24,12 @@
     .card {
       width: 360px;
       height: 540px;
-      background-color: #fff; /* Blanco para simular la ficha */
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); /* Efecto de transición elástica */
+      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
       cursor: grab;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra para resaltar el 3D */
-      transform: rotateX(0deg) rotateY(0deg); /* Poner la carta inicialmente centrada */
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      transform: rotateX(0deg) rotateY(0deg);
     }
 
     .card-side {
@@ -42,31 +41,19 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      background-size: cover;
+      background-position: center;
     }
 
     .card-front {
-      background-color: #fff;
+      background-image: url('carta_frente.png'); /* Imagen del frente */
     }
 
-    /* Efectos de movimiento 3D */
-    .flip-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: rgba(255, 255, 255, 0.8);
-      color: #121212;
-      border: none;
-      padding: 10px 16px;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: background 0.3s;
-      font-size: 18px;
+    .card-back {
+      background-image: url('carta_dorso.png'); /* Imagen del dorso */
+      transform: rotateY(180deg);
     }
 
-    .flip-button:hover {
-      background-color: rgba(255, 255, 255, 1);
-    }
   </style>
 </head>
 <body>
@@ -81,11 +68,9 @@
   <script>
     const card = document.getElementById('card');
 
-    // Movimiento 3D con el mouse
     let rotationX = 0, rotationY = 0;
     let isDragging = false;
     let startX = 0, startY = 0;
-    let currentX = 0, currentY = 0;
 
     function updateCardRotation() {
       card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
@@ -95,7 +80,7 @@
       isDragging = true;
       startX = e.touches ? e.touches[0].clientX : e.clientX;
       startY = e.touches ? e.touches[0].clientY : e.clientY;
-      card.style.transition = "none"; // Elimina la transición mientras arrastras
+      card.style.transition = "none";
     }
 
     function dragMove(e) {
@@ -106,8 +91,8 @@
       let deltaX = x - startX;
       let deltaY = y - startY;
 
-      rotationY += deltaX * 0.2;  // Suaviza el movimiento horizontal
-      rotationX -= deltaY * 0.2;  // Suaviza el movimiento vertical
+      rotationY += deltaX * 0.2;
+      rotationX -= deltaY * 0.2;
 
       updateCardRotation();
 
@@ -117,19 +102,14 @@
 
     function stopDrag() {
       isDragging = false;
-
-      // Suaviza el regreso de la carta a su posición inicial
       rotationX = 0;
       rotationY = 0;
-
-      // Actualiza la rotación de la carta de manera suave
       card.style.transition = "transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)";
       updateCardRotation();
 
-      // Después de la animación, eliminamos la transición para evitar interferencias con el siguiente movimiento
       setTimeout(() => {
         card.style.transition = "transform 0.1s ease-out";
-      }, 400);  // Duración del regreso
+      }, 400);
     }
 
     document.addEventListener('mousedown', startDrag);
