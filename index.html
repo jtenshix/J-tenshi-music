@@ -98,13 +98,12 @@
         let canRotate = true;
 
         flipBtn.addEventListener('click', () => {
-            canRotate = false; // Desactivamos la rotación al iniciar el volteo
-            isFlipped = !isFlipped;
-            card.classList.toggle('flipped');
-            // Re-activamos la rotación después de un tiempo igual a la duración de la transición del volteo
+            canRotate = false; // Desactivamos la rotación al iniciar el intento de volteo
             setTimeout(() => {
-                canRotate = true;
-            }, 600); // 600ms coincide con la duración de la transición en .card.flipped
+                isFlipped = !isFlipped;
+                card.classList.toggle('flipped');
+                canRotate = true; // Reactivamos la rotación después de la transición (intentativamente)
+            }, 50); // Un pequeño retraso antes de cambiar la clase
         });
 
         let rotationX = 0, rotationY = 0;
