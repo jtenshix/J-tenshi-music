@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación Manual)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación Manual + Reset)</title>
     <style>
         body {
             margin: 0;
@@ -29,7 +29,7 @@
             transform-style: preserve-3d;
             transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Transición para el volteo */
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            transform: rotateY(0deg);
+            transform: rotateX(0deg) rotateY(0deg);
         }
 
         .card.flipped {
@@ -97,6 +97,9 @@
         flipBtn.addEventListener('click', () => {
             isFlipped = !isFlipped;
             card.classList.toggle('flipped');
+            rotationX = 0; // Reseteamos la rotación en X
+            rotationY = 0; // Reseteamos la rotación en Y
+            updateCardRotation(); // Aplicamos el reset visualmente
         });
 
         let rotationX = 0, rotationY = 0;
