@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Abajo - Contenedor Volteado)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Abajo - Contenedor Escala X)</title>
     <style>
         body {
             margin: 0;
@@ -23,12 +23,12 @@
             position: relative;
             cursor: grab;
             margin-bottom: 40px;
-            transform-style: preserve-3d; /* Asegura que la rotación del contenedor sea en 3D */
-            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Transición para la rotación del contenedor */
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         }
 
         .flipped-container {
-            transform: rotateY(180deg);
+            transform: scaleX(-1);
         }
 
         .card {
@@ -111,7 +111,7 @@
         flipBtn.addEventListener('click', () => {
             isFlipped = !isFlipped;
             card.classList.toggle('flipped');
-            cardContainer.classList.toggle('flipped-container', isFlipped); // Añadimos/removemos clase al contenedor
+            cardContainer.classList.toggle('flipped-container', isFlipped);
             rotationX = 0;
             rotationY = 0;
             updateCardRotation();
@@ -146,7 +146,7 @@
                 let deltaX = x - startX;
 
                 rotationX -= deltaY * 0.2;
-                rotationY += deltaX * 0.2; // Rotación en Y sin inversión aquí
+                rotationY += deltaX * 0.2; // Rotación en Y sin inversión
 
                 updateCardRotation();
 
@@ -168,7 +168,7 @@
 
                 const inertiaMultiplier = 0.2;
                 rotationX -= velocityY * inertiaMultiplier;
-                rotationY += velocityX * inertiaMultiplier; // Inercia en Y sin inversión aquí
+                rotationY += velocityX * inertiaMultiplier; // Inercia en Y sin inversión
 
                 rotationX = Math.round(rotationX / 360) * 360; // Encaje en X
                 rotationY = Math.round(rotationY / 360) * 360; // Encaje en Y
