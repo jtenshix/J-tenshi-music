@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Abajo Derecha - Rotación Igual en Ambas Caras)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Abajo Derecha - Visible)</title>
     <style>
         body {
             margin: 0;
-            padding: 0; /* Eliminamos el padding del body para el centrado vertical */
+            padding: 0;
+            padding-bottom: 60px; /* Añadimos un espacio en la parte inferior */
             background-color: #121212;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Centra verticalmente */
+            justify-content: flex-start; /* Alinea los elementos al inicio (arriba) */
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
@@ -23,7 +24,8 @@
             perspective: 1200px;
             position: relative;
             cursor: grab;
-            margin-bottom: 0; /* Eliminamos el margen inferior de la carta */
+            margin-top: 40px; /* Añadimos un pequeño margen superior si es necesario */
+            margin-bottom: 0;
             transform-style: preserve-3d;
         }
 
