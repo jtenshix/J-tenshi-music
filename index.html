@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Efecto Giro Botón Intensificado)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Efecto Giro Real en Contenedores)</title>
     <style>
         body {
             margin: 0;
@@ -47,21 +47,25 @@
             height: 100%;
             transform-style: preserve-3d;
             backface-visibility: hidden;
+            transition: transform 0.15s ease-in-out, opacity 0.15s ease-in-out; /* Añadimos transición a transform y opacity */
         }
 
         .card-back-container {
             opacity: 0;
             pointer-events: none;
+            transform: rotateY(180deg) scaleX(-1);
         }
 
         .card.flipped .card-front-container {
             opacity: 0;
             pointer-events: none;
+            transform: rotateY(180deg);
         }
 
         .card.flipped .card-back-container {
             opacity: 1;
             pointer-events: auto;
+            transform: rotateY(0deg) scaleX(-1);
         }
 
         .card-side {
@@ -82,7 +86,6 @@
         .card-back {
             background-image: url('carta_dorso.png.png');
             background-size: cover;
-            transform: rotateY(180deg) scaleX(-1);
         }
 
         .flip-button {
@@ -108,11 +111,6 @@
 
         .flip-button:hover {
             background-color: rgba(255, 255, 255, 0.8);
-        }
-
-        .card.button-flip-animation {
-            transform: rotateY(40deg); /* Aumentamos el ángulo de rotación */
-            transition: transform 0.15s ease-in-out;
         }
     </style>
 </head>
@@ -201,15 +199,18 @@
         }
 
         flipBtn.addEventListener('click', () => {
-            card.classList.add('button-flip-animation'); // Añadimos la clase de animación
+            frontContainer.style.transform = 'rotateY(15deg)';
+            backContainer.style.transform = 'rotateY(165deg) scaleX(-1)';
+
             setTimeout(() => {
-                card.classList.remove('button-flip-animation'); // Removemos la clase después de un breve tiempo
                 isFlipped = !isFlipped;
                 card.classList.toggle('flipped');
+                frontContainer.style.transform = '';
+                backContainer.style.transform = 'rotateY(180deg) scaleX(-1)';
                 rotationX = 0;
                 rotationY = 0;
                 updateCardRotation();
-            }, 150); // La duración de la animación en CSS
+            }, 150); // Ajustamos el tiempo para que coincida con la transición en CSS
         });
 
         document.addEventListener('touchstart', startDrag);
