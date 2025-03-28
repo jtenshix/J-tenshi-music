@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Abajo Derecha - Centrado iPhone 12)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Abajo Derecha - Navegadores Móviles)</title>
     <style>
         body {
             margin: 0;
@@ -16,6 +16,7 @@
             overflow: hidden;
             user-select: none;
             position: relative; /* Necesario para posicionar el botón */
+            padding-bottom: 80px; /* Espacio para las barras del navegador */
         }
 
         .card-container {
@@ -23,8 +24,8 @@
             position: relative;
             cursor: grab;
             transform-style: preserve-3d;
-            margin-top: 50%; /* Empuja el contenedor al centro vertical */
-            transform: translateY(-50%); /* Ajusta para centrar precisamente */
+            margin-top: calc(50% - 40px); /* Ajuste para centrar verticalmente */
+            transform: translateY(-50%); /* Centrado fino */
         }
 
         .card {
@@ -101,8 +102,8 @@
             overflow: hidden;
             z-index: 10;
             position: absolute;
-            bottom: 40px; /* Ajuste desde la parte inferior */
-            right: 40px; /* Ajuste desde la derecha */
+            bottom: 60px; /* Ajuste para estar por encima de las barras */
+            right: 40px;
         }
 
         .flip-button:hover {
