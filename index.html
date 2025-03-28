@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo CSS + Rotación X/Y con Rebote - Botón Fijo - Prueba Dorso)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Abajo)</title>
     <style>
         body {
             margin: 0;
-            padding: 0;
+            padding: 20px; /* Añadimos un poco de padding general */
             background-color: #121212;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            flex-direction: column; /* Alineamos los items en columna */
+            justify-content: flex-start; /* Alineamos los items al inicio (arriba) */
+            align-items: center; /* Centramos horizontalmente */
+            min-height: 100vh; /* Asegura que el body ocupe toda la altura */
             overflow: hidden;
             user-select: none;
         }
@@ -21,6 +22,7 @@
             perspective: 1200px;
             position: relative;
             cursor: grab;
+            margin-bottom: 40px; /* Espacio entre la carta y el botón */
         }
 
         .card {
@@ -29,7 +31,7 @@
             background-color: #fff;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.1s ease-out; /* Transición más rápida para el arrastre */
+            transition: transform 0.1s ease-out;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             transform: rotateX(0deg) rotateY(0deg);
         }
@@ -62,19 +64,21 @@
         }
 
         .flip-button {
-            position: absolute; /* Ahora es absoluto dentro de .card-container */
-            top: 10px;
-            right: 10px;
             background-color: rgba(255, 255, 255, 0.8);
             color: #121212;
             border: none;
-            padding: 10px 16px;
+            width: 50px; /* Aumentamos un poco el tamaño */
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             font-weight: bold;
             cursor: pointer;
-            border-radius: 5px;
             transition: background 0.3s;
-            font-size: 18px;
-            z-index: 10; /* Asegura que esté por encima de la carta */
+            font-size: 0; /* Sin texto */
+            overflow: hidden;
+            z-index: 10;
         }
 
         .flip-button:hover {
@@ -89,8 +93,8 @@
             <div class="card-side card-front"></div>
             <div class="card-side card-back"></div>
         </div>
-        <button class="flip-button" id="flipBtn">Voltear</button>
     </div>
+    <button class="flip-button" id="flipBtn"></button>
 
     <script>
         const card = document.getElementById('card');
