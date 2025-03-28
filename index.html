@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Efecto Giro Real Corregido)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Efecto Giro Real Corregido Intento 2)</title>
     <style>
         body {
             margin: 0;
@@ -47,25 +47,28 @@
             height: 100%;
             transform-style: preserve-3d;
             backface-visibility: hidden;
-            transition: transform 0.15s ease-in-out, opacity 0.15s ease-in-out; /* Añadimos transición a transform y opacity */
+            transition: transform 0.15s ease-in-out, opacity 0.15s ease-in-out; /* Aseguramos la misma duración */
         }
 
         .card-back-container {
             opacity: 0;
             pointer-events: none;
             transform: rotateY(180deg) scaleX(-1);
+            transition-delay: 0s, 0.15s; /* Añadimos un delay a la opacidad para que la rotación inicie primero */
         }
 
         .card.flipped .card-front-container {
             opacity: 0;
             pointer-events: none;
             transform: rotateY(180deg);
+            transition-delay: 0.15s, 0s; /* Añadimos un delay a la transformación para que la opacidad cambie primero */
         }
 
         .card.flipped .card-back-container {
             opacity: 1;
             pointer-events: auto;
             transform: rotateY(0deg) scaleX(-1);
+            transition-delay: 0s, 0.15s; /* Añadimos un delay a la opacidad para que la rotación finalice después */
         }
 
         .card-side {
@@ -218,4 +221,4 @@
     </script>
 
 </body>
-</html>
+</html><
