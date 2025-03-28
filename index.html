@@ -98,6 +98,10 @@
             isFlipped = !isFlipped;
             card.classList.toggle('flipped');
         });
+
+        document.addEventListener('touchstart', startDrag);
+        document.addEventListener('touchmove', dragMove);
+        document.addEventListener('touchend', stopDrag);
     </script>
 
 </body>
