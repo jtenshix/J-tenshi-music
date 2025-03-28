@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Bordes Curvos y Efecto Giro Mejorado)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Bordes Curvos y Efecto Giro)</title>
     <style>
         body {
             margin: 0;
@@ -209,7 +209,7 @@
                 rotationX = 0;
                 rotationY = 0;
                 updateCardRotation();
-            }, 200); // Esperamos un poco más para la transición
+            }, 250); // Aumentamos el tiempo de espera a 250ms
         });
 
         document.addEventListener('touchstart', startDrag);
