@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Rotación + Volteo Secuenciado con Fantasma)</title>
+    <title>Carta 3D Interactiva (Rotación + Volteo Secuenciado con Fantasma - Corrección Final)</title>
     <style>
         body {
             margin: 0;
@@ -246,11 +246,7 @@
             if (isAnimatingFlip) return;
             isAnimatingFlip = true;
 
-            const isCurrentlyFlipped = isFlipped;
-
             // 1. Desvanecer la carta actual
-            const currentFrontOpacity = cardFrontContainer.style.opacity;
-            const currentBackOpacity = cardBackContainer.style.opacity;
             cardFrontContainer.style.opacity = 0;
             cardBackContainer.style.opacity = 0;
 
@@ -267,10 +263,12 @@
                     cardAnimation.style.pointerEvents = 'none';
                     isFlipped = !isFlipped;
                     if (isFlipped) {
+                        cardFrontContainer.style.display = 'none';
                         cardBackContainer.style.display = 'flex';
                         setTimeout(() => cardBackContainer.style.opacity = 1, fadeDuration);
                     } else {
                         cardFrontContainer.style.display = 'flex';
+                        cardBackContainer.style.display = 'none';
                         setTimeout(() => cardFrontContainer.style.opacity = 1, fadeDuration);
                     }
                     isAnimatingFlip = false;
