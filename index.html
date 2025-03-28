@@ -99,11 +99,6 @@
         flipBtn.addEventListener('click', () => {
             isFlipped = !isFlipped;
             card.classList.toggle('flipped');
-            // Forzamos una pequeña pausa para que el navegador procese el cambio de clase
-            setTimeout(() => {
-                rotationY = isFlipped ? 180 : 0;
-                updateCardRotation();
-            }, 50);
         });
 
         let rotationX = 0, rotationY = 0;
@@ -137,6 +132,11 @@
                 rotationY += deltaX * 0.2;
                 rotationX -= deltaY * 0.2;
 
+                // Si la carta está volteada, forzamos la rotationY cerca de 180 o -180
+                if (isFlipped) {
+                    rotationY = rotationY > 90 && rotationY < 270 ? 180 : 0;
+                }
+
                 updateCardRotation();
 
                 startX = x;
@@ -159,8 +159,8 @@
                 rotationY += velocityX * inertiaMultiplier;
                 rotationX -= velocityY * inertiaMultiplier;
 
-                const targetRotationY = isFlipped ? Math.round(rotationY / 180) * 180 + 180 : Math.round(rotationY / 180) * 180;
-                rotationY = targetRotationY;
+                // Al detener, aseguramos que la rotación en Y esté cerca de 0 o 180
+                rotationY = isFlipped ? Math.round(rotationY / 180) * 180 : Math.round(rotationY / 360) * 360;
                 rotationX = Math.round(rotationX / 360) * 360;
 
                 updateCardRotation();
