@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Rotación + Volteo con Desvanecimiento)</title>
+    <title>Carta 3D Interactiva (Rotación + Volteo Secuenciado con Fantasma)</title>
     <style>
         body {
             margin: 0;
@@ -36,39 +36,89 @@
             transform: rotateX(0deg) rotateY(0deg);
         }
 
-        .card-face {
+        .card-front-container,
+        .card-back-container,
+        .card-animation-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            border-radius: 15px;
+        }
+
+        .card-front-container {
+            display: flex;
+            pointer-events: auto;
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .card-back-container {
+            display: none;
+            pointer-events: none;
+            transform: rotateY(180deg) scaleX(-1);
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .card.flipped .card-front-container {
+            opacity: 0;
+        }
+
+        .card.flipped .card-back-container {
+            opacity: 1;
+        }
+
+        .card-side {
             position: absolute;
             width: 100%;
             height: 100%;
-            backface-visibility: hidden;
             border-radius: 15px;
             display: flex;
             justify-content: center;
             align-items: center;
             background-size: cover;
-            opacity: 1;
-            transition: opacity 0.3s ease-in-out, transform 0.5s ease-in-out;
         }
 
         .card-front {
             background-image: url('carta_frente.png.jpg');
-            transform: rotateY(0deg);
         }
 
         .card-back {
             background-image: url('carta_dorso.png.png');
+        }
+
+        .card-animation-container {
+            opacity: 0;
+            pointer-events: none;
+            transform-style: preserve-3d;
+            transition: opacity 0.3s ease-in-out, transform 0.5s ease-in-out;
+        }
+
+        .card-animation-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            background-size: cover;
+        }
+
+        .card-animation-front {
+            background-image: url('carta_frente.png.jpg');
+            transform: rotateY(0deg);
+        }
+
+        .card-animation-back {
+            background-image: url('carta_dorso.png.png');
             transform: rotateY(180deg);
-            opacity: 0;
         }
 
-        .card.flipped .card-front {
-            opacity: 0;
-            transform: rotateY(0deg) scale(0.8); /* Pequeño efecto al voltear */
-        }
-
-        .card.flipped .card-back {
-            opacity: 1;
-            transform: rotateY(180deg) scale(1);
+        .card-animation-container.animate-flip {
+            transform: rotateY(180deg);
         }
 
         .flip-button {
@@ -101,8 +151,16 @@
 
     <div class="card-container" id="cardContainer">
         <div class="card-wrapper" id="cardWrapper">
-            <div class="card-face card-front"></div>
-            <div class="card-face card-back"></div>
+            <div class="card-front-container">
+                <div class="card-side card-front"></div>
+            </div>
+            <div class="card-back-container">
+                <div class="card-side card-back"></div>
+            </div>
+            <div class="card-animation-container" id="cardAnimation">
+                <div class="card-animation-face card-animation-front"></div>
+                <div class="card-animation-face card-animation-back"></div>
+            </div>
         </div>
     </div>
     <button class="flip-button" id="flipBtn"></button>
@@ -110,16 +168,22 @@
     <script>
         const cardContainer = document.getElementById('cardContainer');
         const cardWrapper = document.getElementById('cardWrapper');
+        const cardFrontContainer = document.querySelector('.card-front-container');
+        const cardBackContainer = document.querySelector('.card-back-container');
+        const cardAnimation = document.getElementById('cardAnimation');
+        const cardAnimationFront = document.querySelector('.card-animation-front');
+        const cardAnimationBack = document.querySelector('.card-animation-back');
         const flipBtn = document.getElementById('flipBtn');
-        const card = cardWrapper; // Usamos el wrapper para la clase 'flipped'
-        const cardFront = document.querySelector('.card-front');
-        const cardBack = document.querySelector('.card-back');
         let isFlipped = false;
         let rotationX = 0, rotationY = 0;
         let isDragging = false;
         let startX = 0, startY = 0;
         let currentX = 0, currentY = 0;
         let dragStartTime;
+        let isAnimatingFlip = false;
+        const fadeDuration = 300;
+        const animationDelay = 500;
+        const flipDuration = 700;
 
         function updateCardRotation() {
             cardWrapper.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
@@ -179,8 +243,39 @@
         }
 
         flipBtn.addEventListener('click', () => {
-            card.classList.toggle('flipped');
-            isFlipped = !isFlipped;
+            if (isAnimatingFlip) return;
+            isAnimatingFlip = true;
+
+            const isCurrentlyFlipped = isFlipped;
+
+            // 1. Desvanecer la carta actual
+            const currentFrontOpacity = cardFrontContainer.style.opacity;
+            const currentBackOpacity = cardBackContainer.style.opacity;
+            cardFrontContainer.style.opacity = 0;
+            cardBackContainer.style.opacity = 0;
+
+            // 2. Aparecer la carta fantasma después de un retardo
+            setTimeout(() => {
+                cardAnimation.style.opacity = 1;
+                cardAnimation.style.pointerEvents = 'auto';
+                cardAnimation.classList.add('animate-flip');
+
+                // 3. Desvanecer la carta fantasma y aparecer la carta final
+                setTimeout(() => {
+                    cardAnimation.classList.remove('animate-flip');
+                    cardAnimation.style.opacity = 0;
+                    cardAnimation.style.pointerEvents = 'none';
+                    isFlipped = !isFlipped;
+                    if (isFlipped) {
+                        cardBackContainer.style.display = 'flex';
+                        setTimeout(() => cardBackContainer.style.opacity = 1, fadeDuration);
+                    } else {
+                        cardFrontContainer.style.display = 'flex';
+                        setTimeout(() => cardFrontContainer.style.opacity = 1, fadeDuration);
+                    }
+                    isAnimatingFlip = false;
+                }, flipDuration);
+            }, animationDelay);
         });
 
         cardContainer.addEventListener('touchstart', startDrag);
