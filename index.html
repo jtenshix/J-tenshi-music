@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo CSS + Rotación X/Y con Rebote - Corrección Dorso)</title>
+    <title>Carta 3D Interactiva (Volteo CSS + Rotación X/Y con Rebote - Botón Fijo - Prueba Dorso)</title>
     <style>
         body {
             margin: 0;
@@ -62,7 +62,7 @@
         }
 
         .flip-button {
-            position: absolute;
+            position: absolute; /* Ahora es absoluto dentro de .card-container */
             top: 10px;
             right: 10px;
             background-color: rgba(255, 255, 255, 0.8);
@@ -74,7 +74,7 @@
             border-radius: 5px;
             transition: background 0.3s;
             font-size: 18px;
-            z-index: 10;
+            z-index: 10; /* Asegura que esté por encima de la carta */
         }
 
         .flip-button:hover {
@@ -88,8 +88,8 @@
         <div class="card" id="card">
             <div class="card-side card-front"></div>
             <div class="card-side card-back"></div>
-            <button class="flip-button" id="flipBtn">Voltear</button>
         </div>
+        <button class="flip-button" id="flipBtn">Voltear</button>
     </div>
 
     <script>
@@ -134,7 +134,7 @@
                 let deltaX = x - startX;
 
                 rotationX -= deltaY * 0.2;
-                rotationY += deltaX * 0.2 * (isFlipped ? -1 : 1); // Invertimos la rotación en Y si está volteada
+                rotationY += deltaX * 0.2; // Rotación en Y sin inversión
 
                 updateCardRotation();
 
@@ -156,7 +156,7 @@
 
                 const inertiaMultiplier = 0.2;
                 rotationX -= velocityY * inertiaMultiplier;
-                rotationY += velocityX * inertiaMultiplier * (isFlipped ? -1 : 1); // También invertimos la inercia
+                rotationY += velocityX * inertiaMultiplier; // Inercia en Y sin inversión
 
                 rotationX = Math.round(rotationX / 360) * 360; // Encaje en X
                 rotationY = Math.round(rotationY / 360) * 360; // Encaje en Y
