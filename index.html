@@ -3,86 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Volteable con Rotación y Rebote</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Bordes Curvos y Efecto Giro Mejorado)</title>
     <style>
         body {
             margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            padding: 0;
+            background-color: #121212;
             min-height: 100vh;
-            background-color: #f0f0f0;
-            user-select: none; /* Evita la selección de texto al arrastrar */
+            overflow: hidden;
+            user-select: none;
+            position: relative;
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-top: env(safe-area-inset-top);
         }
 
         .card-container {
-            perspective: 600px;
-            cursor: grab; /* Indica que se puede arrastrar */
+            perspective: 1200px;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: grab;
+            transform-style: preserve-3d;
         }
 
         .card {
-            width: 200px;
-            height: 300px;
+            width: 360px;
+            height: 540px;
+            background-color: transparent; /* Hacemos el fondo del contenedor transparente */
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.5s ease-in-out cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Transición con rebote */
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             transform: rotateX(0deg) rotateY(0deg);
+            border-radius: 15px; /* Añadimos el border-radius al contenedor también */
         }
 
-        .card-face {
+        .card-front-container,
+        .card-back-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+        }
+
+        .card-back-container {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .card.flipped .card-front-container {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .card.flipped .card-back-container {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .card-side {
             position: absolute;
             width: 100%;
             height: 100%;
-            backface-visibility: hidden;
+            border-radius: 15px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 24px;
-            border-radius: 10px;
         }
 
         .card-front {
-            background-color: lightblue;
-            color: white;
+            background-image: url('carta_frente.png.jpg');
+            background-size: cover;
         }
 
         .card-back {
-            background-color: lightcoral;
-            color: white;
-            transform: rotateY(180deg);
-        }
-
-        .card.flipped {
-            transform: rotateY(180deg) rotateX(0deg); /* Aseguramos que la rotación manual no interfiera */
+            background-image: url('carta_dorso.png.png');
+            background-size: cover;
+            transform: rotateY(180deg) scaleX(-1);
         }
 
         .flip-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.5);
+            color: #121212;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
             cursor: pointer;
+            transition: background 0.3s;
+            font-size: 0;
+            overflow: hidden;
+            z-index: 10;
+            position: absolute;
+            bottom: calc(env(safe-area-inset-bottom) + 90px);
+            right: 20px;
+        }
+
+        .flip-button:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .card.will-flip {
+            transform: rotateY(30deg); /* Aumentamos la rotación del efecto */
+            transition: transform 0.2s ease-in-out; /* Aumentamos la duración de la transición */
         }
     </style>
 </head>
 <body>
 
-    <div class="card-container" id="cardContainer">
+    <div class="card-container">
         <div class="card" id="card">
-            <div class="card-face card-front">Frente</div>
-            <div class="card-face card-back">Dorso</div>
+            <div class="card-front-container">
+                <div class="card-side card-front"></div>
+            </div>
+            <div class="card-back-container">
+                <div class="card-side card-back"></div>
+            </div>
         </div>
     </div>
-
-    <button class="flip-button" id="flipBtn">Voltear</button>
+    <button class="flip-button" id="flipBtn"></button>
 
     <script>
-        const cardContainer = document.getElementById('cardContainer');
         const card = document.getElementById('card');
         const flipBtn = document.getElementById('flipBtn');
+        const frontContainer = document.querySelector('.card-front-container');
+        const backContainer = document.querySelector('.card-back-container');
         let isFlipped = false;
-        let isDragging = false;
-        let startX, startY, currentX, currentY;
         let rotationX = 0, rotationY = 0;
+        let isDragging = false;
+        let startX = 0, startY = 0;
+        let currentX = 0, currentY = 0;
         let dragStartTime;
 
         function updateCardRotation() {
@@ -93,67 +150,70 @@
             isDragging = true;
             startX = e.touches ? e.touches[0].clientX : e.clientX;
             startY = e.touches ? e.touches[0].clientY : e.clientY;
+            dragStartTime = Date.now();
+            card.style.transition = "transform 0.1s ease-out";
             currentX = startX;
             currentY = startY;
-            dragStartTime = Date.now();
-            cardContainer.style.cursor = 'grabbing';
-            card.style.transition = 'transform 0.1s ease-out'; // Menos transición al arrastrar
         }
 
         function dragMove(e) {
             if (isDragging) {
-                const x = e.touches ? e.touches[0].clientX : e.clientX;
-                const y = e.touches ? e.touches[0].clientY : e.clientY;
-                const deltaX = x - currentX;
-                const deltaY = y - currentY;
+                let x = e.touches ? e.touches[0].clientX : e.clientX;
+                let y = e.touches ? e.touches[0].clientY : e.clientY;
 
-                rotationY += deltaX * 0.2;
-                rotationX -= deltaY * 0.2;
+                let deltaY = y - startY;
+                let deltaX = x - startX;
+
+                rotationX -= deltaY * 0.2; // Rotación vertical sin inversión
+                rotationY += deltaX * 0.2; // Rotación horizontal sin inversión
 
                 updateCardRotation();
 
-                currentX = x;
+                startY = y;
+                startX = x;
                 currentY = y;
+                currentX = x;
             }
         }
 
-        function stopDrag(e) {
+        function stopDrag() {
             if (isDragging) {
                 isDragging = false;
-                cardContainer.style.cursor = 'grab';
-                card.style.transition = 'transform 0.5s ease-in-out cubic-bezier(0.68, -0.55, 0.27, 1.55)'; // Volvemos a la transición con rebote
+                card.style.transition = "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)";
 
-                const elapsed = Date.now() - dragStartTime;
-                const velocityX = (currentX - startX) / elapsed || 0;
-                const velocityY = (currentY - startY) / elapsed || 0;
-                const inertiaMultiplier = 10; // Ajusta la fuerza del rebote
+                const animationDuration = 300;
+                let velocityY = (currentY - startY) / (Date.now() - dragStartTime);
+                let velocityX = (currentX - startX) / (Date.now() - dragStartTime);
 
-                rotationY += velocityX * inertiaMultiplier;
-                rotationX -= velocityY * inertiaMultiplier;
+                const inertiaMultiplier = 0.2;
+                rotationX -= velocityY * inertiaMultiplier; // Inercia vertical sin inversión
+                rotationY += velocityX * inertiaMultiplier; // Inercia horizontal sin inversión
 
-                // Limitar las rotaciones para evitar giros excesivos (opcional)
-                // rotationX = Math.max(-180, Math.min(180, rotationX));
-                // rotationY = Math.max(-180, Math.min(180, rotationY));
+                rotationX = Math.round(rotationX / 360) * 360;
+                rotationY = Math.round(rotationY / 360) * 360;
 
                 updateCardRotation();
+
+                setTimeout(() => {
+                    card.style.transition = "transform 0.3s ease-out";
+                }, animationDuration);
             }
         }
 
         flipBtn.addEventListener('click', () => {
-            isFlipped = !isFlipped;
-            card.classList.toggle('flipped');
-            // Reseteamos la rotación manual al voltear con el botón (opcional)
-            rotationX = 0;
-            rotationY = 0;
-            updateCardRotation();
+            card.classList.add('will-flip'); // Añadimos la clase de giro
+            setTimeout(() => {
+                isFlipped = !isFlipped;
+                card.classList.toggle('flipped');
+                card.classList.remove('will-flip'); // Removemos la clase después de un breve tiempo
+                rotationX = 0;
+                rotationY = 0;
+                updateCardRotation();
+            }, 200); // Esperamos un poco más para la transición
         });
 
-        cardContainer.addEventListener('mousedown', startDrag);
-        cardContainer.addEventListener('mousemove', dragMove);
-        document.addEventListener('mouseup', stopDrag); // Escuchamos en document para que funcione fuera del contenedor
-
-        cardContainer.addEventListener('touchstart', startDrag);
-        cardContainer.addEventListener('touchmove', dragMove);
+        document.addEventListener('touchstart', startDrag);
+        document.addEventListener('touchmove', dragMove);
         document.addEventListener('touchend', stopDrag);
     </script>
 
