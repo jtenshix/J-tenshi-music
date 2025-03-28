@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Ajuste Posición)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Ajuste Fino Posición)</title>
     <style>
         body {
             margin: 0;
@@ -13,21 +13,18 @@
             overflow: hidden;
             user-select: none;
             position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start; /* Cambiamos a flex-start para alinear al inicio */
             padding-bottom: env(safe-area-inset-bottom);
-            padding-top: calc(env(safe-area-inset-top) + 5vh); /* Añadimos un poco de espacio superior */
+            padding-top: env(safe-area-inset-top);
         }
 
         .card-container {
             perspective: 1200px;
-            position: relative;
+            position: absolute;
+            top: 40%; /* Subimos la carta ajustando el top */
+            left: 50%;
+            transform: translate(-50%, -50%);
             cursor: grab;
             transform-style: preserve-3d;
-            /* Ya no necesitamos ajustes de top o transform para el centrado vertical aquí */
-            margin-top: 10vh; /* Empujamos la carta hacia abajo desde el inicio */
         }
 
         .card {
@@ -104,7 +101,7 @@
             overflow: hidden;
             z-index: 10;
             position: absolute;
-            bottom: calc(env(safe-area-inset-bottom) + 60px); /* Subimos el botón más */
+            bottom: calc(env(safe-area-inset-bottom) + 90px); /* Subimos el botón aún más */
             right: 20px;
         }
 
