@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación Manual + Reset X Primero)</title>
+    <title>Carta 3D Interactiva (Volteo CSS + Rotación X JS)</title>
     <style>
         body {
             margin: 0;
@@ -29,11 +29,11 @@
             transform-style: preserve-3d;
             transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Transición para el volteo */
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            transform: rotateX(0deg) rotateY(0deg);
+            transform: rotateX(0deg) rotateY(0deg); /* Inicialmente sin rotación en Y */
         }
 
         .card.flipped {
-            transform: rotateY(180deg);
+            transform: rotateY(180deg) rotateX(0deg); /* El volteo ahora también asegura X en 0 */
         }
 
         .card-side {
@@ -95,23 +95,20 @@
         let isFlipped = false;
 
         flipBtn.addEventListener('click', () => {
-            rotationX = 0; // Reseteamos la rotación en X inmediatamente
+            isFlipped = !isFlipped;
+            card.classList.toggle('flipped');
+            rotationX = 0; // Reseteamos solo la rotación en X
             updateCardRotation();
-            // Retrasamos un poco la aplicación de la clase flipped
-            setTimeout(() => {
-                isFlipped = !isFlipped;
-                card.classList.toggle('flipped');
-            }, 50); // Un pequeño retraso (ajusta si es necesario)
         });
 
-        let rotationX = 0, rotationY = 0;
+        let rotationX = 0; // Solo mantenemos la rotación en X
         let isDragging = false;
         let startX = 0, startY = 0;
         let currentX = 0, currentY = 0;
         let dragStartTime;
 
         function updateCardRotation() {
-            card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+            card.style.transform = `rotateX(${rotationX}deg) rotateY(0deg)`; // Fijamos la rotación en Y en 0 desde JS
         }
 
         function startDrag(e) {
@@ -128,17 +125,13 @@
                 let x = e.touches ? e.touches[0].clientX : e.clientX;
                 let y = e.touches ? e.touches[0].clientY : e.clientY;
 
-                let deltaX = x - startX;
-                let deltaY = y - startY;
+                let deltaY = y - startY; // Solo usamos el movimiento vertical para la rotación en X
 
-                rotationY += deltaX * 0.2;
                 rotationX -= deltaY * 0.2;
 
                 updateCardRotation();
 
-                startX = x;
-                startY = y;
-                currentX = x;
+                startY = y; // Actualizamos solo la posición Y inicial
                 currentY = y;
             }
         }
