@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo CSS + Rotación X con Encaje)</title>
+    <title>Carta 3D Interactiva (Volteo CSS + Rotación X con Encaje + Rotación Y)</title>
     <style>
         body {
             margin: 0;
@@ -14,6 +14,7 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
+            user-select: none; /* Evita la selección de texto al arrastrar */
         }
 
         .card-container {
@@ -100,17 +101,18 @@
             isFlipped = !isFlipped;
             card.classList.toggle('flipped');
             rotationX = 0; // Reseteamos solo la rotación en X al voltear
+            rotationY = 0; // También reseteamos la rotación en Y al voltear
             updateCardRotation();
         });
 
-        let rotationX = 0; // Solo mantenemos la rotación en X
+        let rotationX = 0, rotationY = 0; // Ahora mantenemos ambas rotaciones
         let isDragging = false;
         let startX = 0, startY = 0;
         let currentX = 0, currentY = 0;
         let dragStartTime;
 
         function updateCardRotation() {
-            card.style.transform = `rotateX(${rotationX}deg) rotateY(0deg)`; // Fijamos la rotación en Y en 0 desde JS
+            card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
         }
 
         function startDrag(e) {
@@ -128,14 +130,18 @@
                 let x = e.touches ? e.touches[0].clientX : e.clientX;
                 let y = e.touches ? e.touches[0].clientY : e.clientY;
 
-                let deltaY = y - startY; // Solo usamos el movimiento vertical para la rotación en X
+                let deltaY = y - startY; // Movimiento vertical para rotación en X
+                let deltaX = x - startX; // Movimiento horizontal para rotación en Y
 
                 rotationX -= deltaY * 0.2;
+                rotationY += deltaX * 0.2;
 
                 updateCardRotation();
 
-                startY = y; // Actualizamos solo la posición Y inicial
+                startY = y;
+                startX = x;
                 currentY = y;
+                currentX = x;
             }
         }
 
@@ -150,8 +156,7 @@
                 const inertiaMultiplier = 0.2;
                 rotationX -= velocityY * inertiaMultiplier;
 
-                // Aseguramos que la rotación en X termine cerca de 0
-                rotationX = Math.round(rotationX / 360) * 360; // Esto podría necesitar ajuste
+                rotationX = Math.round(rotationX / 360) * 360; // Encaje en X
 
                 updateCardRotation();
 
