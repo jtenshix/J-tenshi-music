@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo CSS + Rotación X JS)</title>
+    <title>Carta 3D Interactiva (Volteo CSS + Rotación X con Encaje)</title>
     <style>
         body {
             margin: 0;
@@ -19,6 +19,7 @@
         .card-container {
             perspective: 1200px;
             position: relative;
+            cursor: grab;
         }
 
         .card {
@@ -27,7 +28,7 @@
             background-color: #fff;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Transición para el volteo */
+            transition: transform 0.3s ease-out; /* Transición para la rotación 3D */
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             transform: rotateX(0deg) rotateY(0deg); /* Inicialmente sin rotación en Y */
         }
@@ -98,7 +99,7 @@
         flipBtn.addEventListener('click', () => {
             isFlipped = !isFlipped;
             card.classList.toggle('flipped');
-            rotationX = 0; // Reseteamos solo la rotación en X
+            rotationX = 0; // Reseteamos solo la rotación en X al voltear
             updateCardRotation();
         });
 
@@ -117,6 +118,7 @@
             startX = e.touches ? e.touches[0].clientX : e.clientX;
             startY = e.touches ? e.touches[0].clientY : e.clientY;
             dragStartTime = Date.now();
+            card.style.transition = "transform 0.1s ease-out";
             currentX = startX;
             currentY = startY;
         }
@@ -140,6 +142,22 @@
         function stopDrag() {
             if (isDragging) {
                 isDragging = false;
+                card.style.transition = "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)";
+
+                const animationDuration = 300;
+                let velocityY = (currentY - startY) / (Date.now() - dragStartTime);
+
+                const inertiaMultiplier = 0.2;
+                rotationX -= velocityY * inertiaMultiplier;
+
+                // Aseguramos que la rotación en X termine cerca de 0
+                rotationX = Math.round(rotationX / 360) * 360; // Esto podría necesitar ajuste
+
+                updateCardRotation();
+
+                setTimeout(() => {
+                    card.style.transition = "transform 0.3s ease-out";
+                }, animationDuration);
             }
         }
 
