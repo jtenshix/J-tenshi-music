@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Abajo Derecha - Visible)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Abajo Derecha - Posición Ajustada)</title>
     <style>
         body {
             margin: 0;
             padding: 0;
-            padding-bottom: 60px; /* Añadimos un espacio en la parte inferior */
             background-color: #121212;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start; /* Alinea los elementos al inicio (arriba) */
+            justify-content: center; /* Centra verticalmente */
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
@@ -24,8 +23,6 @@
             perspective: 1200px;
             position: relative;
             cursor: grab;
-            margin-top: 40px; /* Añadimos un pequeño margen superior si es necesario */
-            margin-bottom: 0;
             transform-style: preserve-3d;
         }
 
@@ -103,8 +100,8 @@
             overflow: hidden;
             z-index: 10;
             position: absolute; /* Posicionamiento absoluto */
-            bottom: 20px; /* Espacio desde la parte inferior */
-            right: 20px; /* Espacio desde la derecha */
+            bottom: 30px; /* Ajustamos la distancia desde la parte inferior */
+            right: 30px; /* Ajustamos la distancia desde la derecha */
         }
 
         .flip-button:hover {
