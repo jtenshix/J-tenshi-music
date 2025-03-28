@@ -133,4 +133,20 @@
                 updateCardRotation();
 
                 startY = y; // Actualizamos solo la posición Y inicial
-                currentY
+                currentY = y;
+            }
+        }
+
+        function stopDrag() {
+            if (isDragging) {
+                isDragging = false;
+            }
+        }
+
+        document.addEventListener('touchstart', startDrag);
+        document.addEventListener('touchmove', dragMove);
+        document.addEventListener('touchend', stopDrag);
+    </script>
+
+</body>
+</html>
