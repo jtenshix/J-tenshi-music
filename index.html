@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Animación con requestAnimationFrame)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Animación Refinada)</title>
     <style>
         body {
             margin: 0;
@@ -142,11 +142,12 @@
         let currentX = 0, currentY = 0;
         let dragStartTime;
         let animationStartTime;
-        const animationDuration = 150; // Duración de la animación en milisegundos
+        const animationDuration = 200; // Ligero aumento de la duración
         let startFrontRotation;
         let targetFrontRotation;
         let startBackRotation;
         let targetBackRotation;
+        let isAnimating = false; // Bandera para controlar si la animación está en curso
 
         function updateCardRotation() {
             card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
@@ -225,11 +226,13 @@
             } else {
                 card.classList.toggle('flipped');
                 animationStartTime = null;
+                isAnimating = false; // La animación ha terminado
             }
         }
 
         flipBtn.addEventListener('click', () => {
-            if (animationStartTime) return; // Evitar iniciar múltiples animaciones
+            if (isAnimating) return; // No iniciar si ya está animando
+            isAnimating = true;
 
             isFlipped = !isFlipped;
             startFrontRotation = parseFloat(frontContainer.style.transform.replace('rotateY(', '').replace('deg)', '') || 0);
@@ -237,6 +240,12 @@
             startBackRotation = parseFloat(backContainer.style.transform.replace('rotateY(', '').replace('deg)', '').replace(' scaleX(-1)', '') || 180);
             targetBackRotation = isFlipped ? 180 : 150;
 
+            // Reseteamos la rotación general de la carta al iniciar la animación del botón
+            rotationX = 0;
+            rotationY = 0;
+            updateCardRotation();
+
+            animationStartTime = null;
             requestAnimationFrame(animateFlip);
         });
 
