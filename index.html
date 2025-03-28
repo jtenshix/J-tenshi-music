@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo CSS + Rotación X con Encaje + Rotación Y)</title>
+    <title>Carta 3D Interactiva (Volteo CSS + Rotación X/Y con Rebote - Corrección Dorso)</title>
     <style>
         body {
             margin: 0;
@@ -14,7 +14,7 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
-            user-select: none; /* Evita la selección de texto al arrastrar */
+            user-select: none;
         }
 
         .card-container {
@@ -29,14 +29,14 @@
             background-color: #fff;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.3s ease-out; /* Transición para la rotación 3D */
+            transition: transform 0.1s ease-out; /* Transición más rápida para el arrastre */
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            transform: rotateX(0deg) rotateY(0deg); /* Inicialmente sin rotación en Y */
+            transform: rotateX(0deg) rotateY(0deg);
         }
 
         .card.flipped {
-            transform: rotateY(180deg) rotateX(0deg) !important; /* Volteo y reset de X con !important */
-            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Transición para el volteo */
+            transform: rotateY(180deg) rotateX(0deg) !important;
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         }
 
         .card-side {
@@ -100,12 +100,12 @@
         flipBtn.addEventListener('click', () => {
             isFlipped = !isFlipped;
             card.classList.toggle('flipped');
-            rotationX = 0; // Reseteamos solo la rotación en X al voltear
-            rotationY = 0; // También reseteamos la rotación en Y al voltear
+            rotationX = 0;
+            rotationY = 0;
             updateCardRotation();
         });
 
-        let rotationX = 0, rotationY = 0; // Ahora mantenemos ambas rotaciones
+        let rotationX = 0, rotationY = 0;
         let isDragging = false;
         let startX = 0, startY = 0;
         let currentX = 0, currentY = 0;
@@ -130,11 +130,11 @@
                 let x = e.touches ? e.touches[0].clientX : e.clientX;
                 let y = e.touches ? e.touches[0].clientY : e.clientY;
 
-                let deltaY = y - startY; // Movimiento vertical para rotación en X
-                let deltaX = x - startX; // Movimiento horizontal para rotación en Y
+                let deltaY = y - startY;
+                let deltaX = x - startX;
 
                 rotationX -= deltaY * 0.2;
-                rotationY += deltaX * 0.2;
+                rotationY += deltaX * 0.2 * (isFlipped ? -1 : 1); // Invertimos la rotación en Y si está volteada
 
                 updateCardRotation();
 
@@ -152,11 +152,14 @@
 
                 const animationDuration = 300;
                 let velocityY = (currentY - startY) / (Date.now() - dragStartTime);
+                let velocityX = (currentX - startX) / (Date.now() - dragStartTime);
 
                 const inertiaMultiplier = 0.2;
                 rotationX -= velocityY * inertiaMultiplier;
+                rotationY += velocityX * inertiaMultiplier * (isFlipped ? -1 : 1); // También invertimos la inercia
 
                 rotationX = Math.round(rotationX / 360) * 360; // Encaje en X
+                rotationY = Math.round(rotationY / 360) * 360; // Encaje en Y
 
                 updateCardRotation();
 
