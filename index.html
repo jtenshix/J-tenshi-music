@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Bordes Curvos y Efecto Giro)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Bordes Curvos y Efecto Giro Mejorado)</title>
     <style>
         body {
             margin: 0;
@@ -30,11 +30,12 @@
         .card {
             width: 360px;
             height: 540px;
-            background-color: #fff;
+            background-color: transparent; /* Hacemos el fondo del contenedor transparente */
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             transform: rotateX(0deg) rotateY(0deg);
+            border-radius: 15px; /* Añadimos el border-radius al contenedor también */
         }
 
         .card-front-container,
@@ -67,7 +68,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            border-radius: 15px; /* Añadimos bordes curvos */
+            border-radius: 15px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -110,8 +111,8 @@
         }
 
         .card.will-flip {
-            transform: rotateY(20deg); /* Pequeña rotación antes del volteo */
-            transition: transform 0.15s ease-in-out;
+            transform: rotateY(30deg); /* Aumentamos la rotación del efecto */
+            transition: transform 0.2s ease-in-out; /* Aumentamos la duración de la transición */
         }
     </style>
 </head>
@@ -208,7 +209,7 @@
                 rotationX = 0;
                 rotationY = 0;
                 updateCardRotation();
-            }, 150); // Esperamos un poco antes de completar el volteo
+            }, 200); // Esperamos un poco más para la transición
         });
 
         document.addEventListener('touchstart', startDrag);
