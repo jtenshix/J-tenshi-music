@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Preparación Rotación)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación Manual)</title>
     <style>
         body {
             margin: 0;
@@ -105,6 +105,10 @@
         let currentX = 0, currentY = 0;
         let dragStartTime;
 
+        function updateCardRotation() {
+            card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+        }
+
         function startDrag(e) {
             isDragging = true;
             startX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -121,6 +125,16 @@
 
                 let deltaX = x - startX;
                 let deltaY = y - startY;
+
+                rotationY += deltaX * 0.2;
+                rotationX -= deltaY * 0.2;
+
+                updateCardRotation();
+
+                startX = x;
+                startY = y;
+                currentX = x;
+                currentY = y;
             }
         }
 
