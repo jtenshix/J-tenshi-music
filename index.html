@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Arriba - Imagen Trasera Correcta)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Visible - Zona Segura Safari)</title>
     <style>
         body {
             margin: 0;
@@ -16,6 +16,7 @@
             overflow: hidden;
             user-select: none;
             position: relative;
+            padding-bottom: env(safe-area-inset-bottom); /* Espacio para la barra inferior de Safari */
         }
 
         .card-container {
@@ -23,8 +24,8 @@
             position: relative;
             cursor: grab;
             transform-style: preserve-3d;
-            margin-top: 30%; /* Subimos la carta significativamente */
-            transform: translateY(-50%); /* Mantenemos el centrado fino */
+            margin-top: 40%; /* Bajamos la carta */
+            transform: translateY(-50%);
         }
 
         .card {
@@ -81,7 +82,7 @@
         .card-back {
             background-image: url('carta_dorso.png.png');
             background-size: cover;
-            transform: rotateY(180deg) rotateZ(180deg); /* Rotamos la imagen de la parte trasera */
+            transform: rotateY(180deg) scaleX(-1); /* Volteamos la imagen horizontalmente */
         }
 
         .flip-button {
@@ -101,7 +102,7 @@
             overflow: hidden;
             z-index: 10;
             position: absolute;
-            bottom: 70px; /* Subimos el botón aún más */
+            bottom: calc(env(safe-area-inset-bottom) + 30px); /* Botón sobre la zona segura */
             right: 20px;
         }
 
