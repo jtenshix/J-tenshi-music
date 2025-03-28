@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Efecto Giro Real Intento Final?)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Intento de Giro Visual Sencillo)</title>
     <style>
         body {
             margin: 0;
@@ -47,7 +47,7 @@
             height: 100%;
             transform-style: preserve-3d;
             backface-visibility: hidden;
-            transition: transform 0.15s ease-in-out, opacity 0.15s ease-in-out;
+            transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out; /* Ajusté la duración a 0.2s */
         }
 
         .card-back-container {
@@ -201,15 +201,16 @@
 
         flipBtn.addEventListener('click', () => {
             isFlipped = !isFlipped;
-            card.classList.toggle('flipped'); // Cambiamos la clase flipped INMEDIATAMENTE
+            card.classList.toggle('flipped');
 
+            // Intentamos el efecto de giro justo antes del cambio de opacidad
             frontContainer.style.transform = isFlipped ? 'rotateY(0deg)' : 'rotateY(15deg)';
             backContainer.style.transform = isFlipped ? 'rotateY(180deg) scaleX(-1)' : 'rotateY(165deg) scaleX(-1)';
 
-            // No necesitamos un setTimeout aquí para iniciar el cambio de clase
-            rotationX = 0;
-            rotationY = 0;
-            updateCardRotation();
+            // YA NO RESETEAMOS LA ROTACIÓN AQUÍ
+            // rotationX = 0;
+            // rotationY = 0;
+            // updateCardRotation();
         });
 
         document.addEventListener('touchstart', startDrag);
