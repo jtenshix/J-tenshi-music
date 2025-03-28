@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Abajo - Prueba Fondo Trasero)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Abajo - Dos Contenedores)</title>
     <style>
         body {
             margin: 0;
@@ -33,18 +33,39 @@
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            transform: rotateX(0deg) rotateY(0deg);
+            transform: rotateX(0deg) rotateY(0deg); /* La rotación ahora se aplica al contenedor .card */
         }
 
-        .card.flipped {
-            transform: rotateY(180deg) rotateX(0deg) !important;
+        .card-front-container,
+        .card-back-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            backface-visibility: hidden; /* Mantenemos esto para las caras individuales */
+        }
+
+        .card-back-container {
+            opacity: 0;
+            pointer-events: none; /* Evita la interacción inicial con la parte trasera */
+        }
+
+        .card.flipped .card-front-container {
+            opacity: 0;
+            pointer-events: none; /* Desactiva la interacción del frente cuando está volteado */
+        }
+
+        .card.flipped .card-back-container {
+            opacity: 1;
+            pointer-events: auto; /* Activa la interacción de la parte trasera cuando está volteado */
         }
 
         .card-side {
             position: absolute;
             width: 100%;
             height: 100%;
-            backface-visibility: hidden;
             border-radius: 10px;
             display: flex;
             justify-content: center;
@@ -54,41 +75,12 @@
         .card-front {
             background-image: url('carta_frente.png.jpg');
             background-size: cover;
-            z-index: 2;
         }
 
         .card-back {
             background-image: url('carta_dorso.png.png');
             background-size: cover;
-            /* transform: rotateY(180deg); */
-            z-index: 1;
-            background-color: lightblue; /* Añade esto para prueba */
-        }
-
-        .card.flipped .card-front {
-            z-index: 1;
-        }
-
-        .card.flipped .card-back {
-            z-index: 2;
-        }
-
-        .interaction-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            cursor: grab;
-        }
-
-        .back-interaction {
-            visibility: hidden; /* Oculta la capa por defecto */
-        }
-
-        .card.flipped .back-interaction {
-            visibility: visible; /* Muestra la capa cuando la carta está volteada */
-            z-index: 3; /* Asegura que esté por encima de las caras de la carta */
+            transform: rotateY(180deg); /* La rotación de 180 grados vuelve aquí */
         }
 
         .flip-button {
@@ -118,9 +110,12 @@
 
     <div class="card-container">
         <div class="card" id="card">
-            <div class="card-side card-front"></div>
-            <div class="card-side card-back"></div>
-            <div class="interaction-layer back-interaction"></div>
+            <div class="card-front-container">
+                <div class="card-side card-front"></div>
+            </div>
+            <div class="card-back-container">
+                <div class="card-side card-back"></div>
+            </div>
         </div>
     </div>
     <button class="flip-button" id="flipBtn"></button>
@@ -128,20 +123,21 @@
     <script>
         const card = document.getElementById('card');
         const flipBtn = document.getElementById('flipBtn');
+        const frontContainer = document.querySelector('.card-front-container');
+        const backContainer = document.querySelector('.card-back-container');
         let isFlipped = false;
         let rotationX = 0, rotationY = 0;
         let isDragging = false;
         let startX = 0, startY = 0;
         let currentX = 0, currentY = 0;
         let dragStartTime;
-        const backInteractionLayer = document.querySelector('.back-interaction');
+        let activeContainer = frontContainer; // Inicialmente interactuamos con el frente
 
         function updateCardRotation() {
             card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
         }
 
-        // Funciones para la interacción con la CARA FRONTAL
-        function startDragFront(e) {
+        function startDrag(e) {
             isDragging = true;
             startX = e.touches ? e.touches[0].clientX : e.clientX;
             startY = e.touches ? e.touches[0].clientY : e.clientY;
@@ -151,7 +147,7 @@
             currentY = startY;
         }
 
-        function dragMoveFront(e) {
+        function dragMove(e) {
             if (isDragging) {
                 let x = e.touches ? e.touches[0].clientX : e.clientX;
                 let y = e.touches ? e.touches[0].clientY : e.clientY;
@@ -160,7 +156,7 @@
                 let deltaX = x - startX;
 
                 rotationX -= deltaY * 0.2;
-                rotationY += deltaX * 0.2;
+                rotationY += deltaX * 0.2 * (isFlipped ? -1 : 1); // Invertimos la rotación en Y si está volteada
 
                 updateCardRotation();
 
@@ -171,7 +167,7 @@
             }
         }
 
-        function stopDragFront() {
+        function stopDrag() {
             if (isDragging) {
                 isDragging = false;
                 card.style.transition = "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)";
@@ -182,7 +178,7 @@
 
                 const inertiaMultiplier = 0.2;
                 rotationX -= velocityY * inertiaMultiplier;
-                rotationY += velocityX * inertiaMultiplier;
+                rotationY += velocityX * inertiaMultiplier * (isFlipped ? -1 : 1); // Invertimos la inercia en Y si está volteada
 
                 rotationX = Math.round(rotationX / 360) * 360;
                 rotationY = Math.round(rotationY / 360) * 360;
@@ -195,92 +191,17 @@
             }
         }
 
-        // Funciones para la interacción con la CARA TRASERA (SIN INVERSIÓN EN Y)
-        function startDragBack(e) {
-            isDragging = true;
-            startX = e.touches ? e.touches[0].clientX : e.clientX;
-            startY = e.touches ? e.touches[0].clientY : e.clientY;
-            dragStartTime = Date.now();
-            card.style.transition = "transform 0.1s ease-out";
-            currentX = startX;
-            currentY = startY;
-        }
-
-        function dragMoveBack(e) {
-            if (isDragging) {
-                let x = e.touches ? e.touches[0].clientX : e.clientX;
-                let y = e.touches ? e.touches[0].clientY : e.clientY;
-
-                let deltaY = y - startY;
-                let deltaX = x - startX;
-
-                rotationX -= deltaY * 0.2;
-                rotationY += deltaX * 0.2; // NO invertimos la rotación en Y
-
-                updateCardRotation();
-
-                startY = y;
-                startX = x;
-                currentY = y;
-                currentX = x;
-            }
-        }
-
-        function stopDragBack() {
-            if (isDragging) {
-                isDragging = false;
-                card.style.transition = "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)";
-
-                const animationDuration = 300;
-                let velocityY = (currentY - startY) / (Date.now() - dragStartTime);
-                let velocityX = (currentX - startX) / (Date.now() - dragStartTime);
-
-                const inertiaMultiplier = 0.2;
-                rotationX -= velocityY * inertiaMultiplier;
-                rotationY += velocityX * inertiaMultiplier; // NO invertimos la inercia en Y
-
-                rotationX = Math.round(rotationX / 360) * 360;
-                rotationY = Math.round(rotationY / 360) * 360;
-
-                updateCardRotation();
-
-                setTimeout(() => {
-                    card.style.transition = "transform 0.3s ease-out";
-                }, animationDuration);
-            }
-        }
-
-        // Event listener para el botón de voltear
         flipBtn.addEventListener('click', () => {
             isFlipped = !isFlipped;
             card.classList.toggle('flipped');
             rotationX = 0;
             rotationY = 0;
             updateCardRotation();
-
-            if (isFlipped) {
-                document.removeEventListener('touchstart', startDragFront);
-                document.removeEventListener('touchmove', dragMoveFront);
-                document.removeEventListener('touchend', stopDragFront);
-
-                backInteractionLayer.addEventListener('touchstart', startDragBack);
-                backInteractionLayer.addEventListener('touchmove', dragMoveBack);
-                backInteractionLayer.addEventListener('touchend', stopDragBack);
-            } else {
-                backInteractionLayer.removeEventListener('touchstart', startDragBack);
-                backInteractionLayer.removeEventListener('touchmove', dragMoveBack);
-                backInteractionLayer.removeEventListener('touchend', stopDragBack);
-
-                document.addEventListener('touchstart', startDragFront);
-                document.addEventListener('touchmove', dragMoveFront);
-                document.addEventListener('touchend', stopDragFront);
-            }
         });
 
-        // Inicialmente, la interacción es con la cara frontal
-        document.addEventListener('touchstart', startDragFront);
-        document.addEventListener('touchmove', dragMoveFront);
-        document.addEventListener('touchend', stopDragFront);
+        document.addEventListener('touchstart', startDrag);
+        document.addEventListener('touchmove', dragMove);
+        document.addEventListener('touchend', stopDrag);
     </script>
 
 </body>
