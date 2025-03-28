@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación Manual + Reset X)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación Manual + Reset X Primero)</title>
     <style>
         body {
             margin: 0;
@@ -95,13 +95,13 @@
         let isFlipped = false;
 
         flipBtn.addEventListener('click', () => {
-            isFlipped = !isFlipped;
-            card.classList.toggle('flipped');
-            // Retrasamos el reset de la rotación en X
+            rotationX = 0; // Reseteamos la rotación en X inmediatamente
+            updateCardRotation();
+            // Retrasamos un poco la aplicación de la clase flipped
             setTimeout(() => {
-                rotationX = 0;
-                updateCardRotation();
-            }, 10);
+                isFlipped = !isFlipped;
+                card.classList.toggle('flipped');
+            }, 50); // Un pequeño retraso (ajusta si es necesario)
         });
 
         let rotationX = 0, rotationY = 0;
