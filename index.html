@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Volteable Básica</title>
+    <title>Carta Volteable con Rotación y Rebote</title>
     <style>
         body {
             margin: 0;
@@ -12,10 +12,12 @@
             align-items: center;
             min-height: 100vh;
             background-color: #f0f0f0;
+            user-select: none; /* Evita la selección de texto al arrastrar */
         }
 
         .card-container {
-            perspective: 600px; /* Necesario para el efecto 3D */
+            perspective: 600px;
+            cursor: grab; /* Indica que se puede arrastrar */
         }
 
         .card {
@@ -23,14 +25,15 @@
             height: 300px;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.5s ease-in-out; /* Transición para la rotación */
+            transition: transform 0.5s ease-in-out cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Transición con rebote */
+            transform: rotateX(0deg) rotateY(0deg);
         }
 
         .card-face {
             position: absolute;
             width: 100%;
             height: 100%;
-            backface-visibility: hidden; /* Oculta la cara trasera cuando mira hacia afuera */
+            backface-visibility: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -46,11 +49,11 @@
         .card-back {
             background-color: lightcoral;
             color: white;
-            transform: rotateY(180deg); /* Inicialmente la cara trasera está rotada */
+            transform: rotateY(180deg);
         }
 
         .card.flipped {
-            transform: rotateY(180deg); /* Clase que activa el volteo */
+            transform: rotateY(180deg) rotateX(0deg); /* Aseguramos que la rotación manual no interfiera */
         }
 
         .flip-button {
@@ -63,7 +66,7 @@
 </head>
 <body>
 
-    <div class="card-container">
+    <div class="card-container" id="cardContainer">
         <div class="card" id="card">
             <div class="card-face card-front">Frente</div>
             <div class="card-face card-back">Dorso</div>
@@ -73,12 +76,85 @@
     <button class="flip-button" id="flipBtn">Voltear</button>
 
     <script>
+        const cardContainer = document.getElementById('cardContainer');
         const card = document.getElementById('card');
         const flipBtn = document.getElementById('flipBtn');
+        let isFlipped = false;
+        let isDragging = false;
+        let startX, startY, currentX, currentY;
+        let rotationX = 0, rotationY = 0;
+        let dragStartTime;
+
+        function updateCardRotation() {
+            card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+        }
+
+        function startDrag(e) {
+            isDragging = true;
+            startX = e.touches ? e.touches[0].clientX : e.clientX;
+            startY = e.touches ? e.touches[0].clientY : e.clientY;
+            currentX = startX;
+            currentY = startY;
+            dragStartTime = Date.now();
+            cardContainer.style.cursor = 'grabbing';
+            card.style.transition = 'transform 0.1s ease-out'; // Menos transición al arrastrar
+        }
+
+        function dragMove(e) {
+            if (isDragging) {
+                const x = e.touches ? e.touches[0].clientX : e.clientX;
+                const y = e.touches ? e.touches[0].clientY : e.clientY;
+                const deltaX = x - currentX;
+                const deltaY = y - currentY;
+
+                rotationY += deltaX * 0.2;
+                rotationX -= deltaY * 0.2;
+
+                updateCardRotation();
+
+                currentX = x;
+                currentY = y;
+            }
+        }
+
+        function stopDrag(e) {
+            if (isDragging) {
+                isDragging = false;
+                cardContainer.style.cursor = 'grab';
+                card.style.transition = 'transform 0.5s ease-in-out cubic-bezier(0.68, -0.55, 0.27, 1.55)'; // Volvemos a la transición con rebote
+
+                const elapsed = Date.now() - dragStartTime;
+                const velocityX = (currentX - startX) / elapsed || 0;
+                const velocityY = (currentY - startY) / elapsed || 0;
+                const inertiaMultiplier = 10; // Ajusta la fuerza del rebote
+
+                rotationY += velocityX * inertiaMultiplier;
+                rotationX -= velocityY * inertiaMultiplier;
+
+                // Limitar las rotaciones para evitar giros excesivos (opcional)
+                // rotationX = Math.max(-180, Math.min(180, rotationX));
+                // rotationY = Math.max(-180, Math.min(180, rotationY));
+
+                updateCardRotation();
+            }
+        }
 
         flipBtn.addEventListener('click', () => {
+            isFlipped = !isFlipped;
             card.classList.toggle('flipped');
+            // Reseteamos la rotación manual al voltear con el botón (opcional)
+            rotationX = 0;
+            rotationY = 0;
+            updateCardRotation();
         });
+
+        cardContainer.addEventListener('mousedown', startDrag);
+        cardContainer.addEventListener('mousemove', dragMove);
+        document.addEventListener('mouseup', stopDrag); // Escuchamos en document para que funcione fuera del contenedor
+
+        cardContainer.addEventListener('touchstart', startDrag);
+        cardContainer.addEventListener('touchmove', dragMove);
+        document.addEventListener('touchend', stopDrag);
     </script>
 
 </body>
