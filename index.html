@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Abajo)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Abajo - Dorso Activo)</title>
     <style>
         body {
             margin: 0;
-            padding: 20px; /* Añadimos un poco de padding general */
+            padding: 20px;
             background-color: #121212;
             display: flex;
-            flex-direction: column; /* Alineamos los items en columna */
-            justify-content: flex-start; /* Alineamos los items al inicio (arriba) */
-            align-items: center; /* Centramos horizontalmente */
-            min-height: 100vh; /* Asegura que el body ocupe toda la altura */
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            min-height: 100vh;
             overflow: hidden;
             user-select: none;
         }
@@ -22,7 +22,7 @@
             perspective: 1200px;
             position: relative;
             cursor: grab;
-            margin-bottom: 40px; /* Espacio entre la carta y el botón */
+            margin-bottom: 40px;
         }
 
         .card {
@@ -45,7 +45,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            backface-visibility: hidden;
+            /* backface-visibility: hidden; Eliminamos esta línea */
             border-radius: 10px;
             display: flex;
             justify-content: center;
@@ -67,7 +67,7 @@
             background-color: rgba(255, 255, 255, 0.8);
             color: #121212;
             border: none;
-            width: 50px; /* Aumentamos un poco el tamaño */
+            width: 50px;
             height: 50px;
             border-radius: 50%;
             display: flex;
@@ -76,7 +76,7 @@
             font-weight: bold;
             cursor: pointer;
             transition: background 0.3s;
-            font-size: 0; /* Sin texto */
+            font-size: 0;
             overflow: hidden;
             z-index: 10;
         }
