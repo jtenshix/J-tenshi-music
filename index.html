@@ -54,12 +54,22 @@
         .card-front {
             background-image: url('carta_frente.png.jpg');
             background-size: cover;
+            z-index: 2; /* La cara frontal está encima por defecto */
         }
 
         .card-back {
             background-image: url('carta_dorso.png.png');
             background-size: cover;
             transform: rotateY(180deg);
+            z-index: 1; /* La cara trasera está debajo por defecto */
+        }
+
+        .card.flipped .card-front {
+            z-index: 1; /* Cuando está volteada, la frontal va debajo */
+        }
+
+        .card.flipped .card-back {
+            z-index: 2; /* Cuando está volteada, la trasera va encima */
         }
 
         .flip-button {
