@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Intento de Giro Visual Sencillo)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Intento de Giro Más Pronunciado)</title>
     <style>
         body {
             margin: 0;
@@ -47,13 +47,14 @@
             height: 100%;
             transform-style: preserve-3d;
             backface-visibility: hidden;
-            transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out; /* Ajusté la duración a 0.2s */
+            transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+            transform: rotateY(0deg); /* Asegúrate de que la transformación inicial sea 0 */
         }
 
         .card-back-container {
             opacity: 0;
             pointer-events: none;
-            transform: rotateY(180deg) scaleX(-1);
+            transform: rotateY(180deg) scaleX(-1); /* Esta es la transformación inicial correcta */
         }
 
         .card.flipped .card-front-container {
@@ -203,14 +204,11 @@
             isFlipped = !isFlipped;
             card.classList.toggle('flipped');
 
-            // Intentamos el efecto de giro justo antes del cambio de opacidad
-            frontContainer.style.transform = isFlipped ? 'rotateY(0deg)' : 'rotateY(15deg)';
-            backContainer.style.transform = isFlipped ? 'rotateY(180deg) scaleX(-1)' : 'rotateY(165deg) scaleX(-1)';
+            // Intentamos un efecto de giro más pronunciado
+            frontContainer.style.transform = isFlipped ? 'rotateY(0deg)' : 'rotateY(30deg)';
+            backContainer.style.transform = isFlipped ? 'rotateY(180deg) scaleX(-1)' : 'rotateY(150deg) scaleX(-1)';
 
             // YA NO RESETEAMOS LA ROTACIÓN AQUÍ
-            // rotationX = 0;
-            // rotationY = 0;
-            // updateCardRotation();
         });
 
         document.addEventListener('touchstart', startDrag);
