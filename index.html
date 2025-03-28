@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Intento de Giro Más Pronunciado)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Animación con requestAnimationFrame)</title>
     <style>
         body {
             margin: 0;
@@ -47,14 +47,14 @@
             height: 100%;
             transform-style: preserve-3d;
             backface-visibility: hidden;
-            transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
-            transform: rotateY(0deg); /* Asegúrate de que la transformación inicial sea 0 */
+            transition: opacity 0.2s ease-in-out; /* Solo transición de opacidad ahora */
+            transform: rotateY(0deg);
         }
 
         .card-back-container {
             opacity: 0;
             pointer-events: none;
-            transform: rotateY(180deg) scaleX(-1); /* Esta es la transformación inicial correcta */
+            transform: rotateY(180deg) scaleX(-1);
         }
 
         .card.flipped .card-front-container {
@@ -141,6 +141,12 @@
         let startX = 0, startY = 0;
         let currentX = 0, currentY = 0;
         let dragStartTime;
+        let animationStartTime;
+        const animationDuration = 150; // Duración de la animación en milisegundos
+        let startFrontRotation;
+        let targetFrontRotation;
+        let startBackRotation;
+        let targetBackRotation;
 
         function updateCardRotation() {
             card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
@@ -200,15 +206,38 @@
             }
         }
 
+        function animateFlip(timestamp) {
+            if (!animationStartTime) {
+                animationStartTime = timestamp;
+            }
+
+            const elapsed = timestamp - animationStartTime;
+            const progress = Math.min(1, elapsed / animationDuration);
+
+            const currentFrontRotation = startFrontRotation + (targetFrontRotation - startFrontRotation) * progress;
+            const currentBackRotation = startBackRotation + (targetBackRotation - startBackRotation) * progress;
+
+            frontContainer.style.transform = `rotateY(${currentFrontRotation}deg)`;
+            backContainer.style.transform = `rotateY(${currentBackRotation}deg) scaleX(-1)`;
+
+            if (progress < 1) {
+                requestAnimationFrame(animateFlip);
+            } else {
+                card.classList.toggle('flipped');
+                animationStartTime = null;
+            }
+        }
+
         flipBtn.addEventListener('click', () => {
+            if (animationStartTime) return; // Evitar iniciar múltiples animaciones
+
             isFlipped = !isFlipped;
-            card.classList.toggle('flipped');
+            startFrontRotation = parseFloat(frontContainer.style.transform.replace('rotateY(', '').replace('deg)', '') || 0);
+            targetFrontRotation = isFlipped ? 0 : 30;
+            startBackRotation = parseFloat(backContainer.style.transform.replace('rotateY(', '').replace('deg)', '').replace(' scaleX(-1)', '') || 180);
+            targetBackRotation = isFlipped ? 180 : 150;
 
-            // Intentamos un efecto de giro más pronunciado
-            frontContainer.style.transform = isFlipped ? 'rotateY(0deg)' : 'rotateY(30deg)';
-            backContainer.style.transform = isFlipped ? 'rotateY(180deg) scaleX(-1)' : 'rotateY(150deg) scaleX(-1)';
-
-            // YA NO RESETEAMOS LA ROTACIÓN AQUÍ
+            requestAnimationFrame(animateFlip);
         });
 
         document.addEventListener('touchstart', startDrag);
