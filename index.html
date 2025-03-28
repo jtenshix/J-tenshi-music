@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo Pulido con Carta Fantasma + Rotación X/Y con Rebote)</title>
+    <title>Carta 3D Interactiva (Volteo Pulido con Carta Fantasma - Ocultación Completa)</title>
     <style>
         body {
             margin: 0;
@@ -44,17 +44,16 @@
             height: 100%;
             transform-style: preserve-3d;
             backface-visibility: hidden;
-            border-radius: 15px; /* Aseguramos que todas tengan los bordes */
-            transition: opacity 0.15s ease-in-out; /* Transición de opacidad para las principales */
+            border-radius: 15px;
         }
 
         .card-front-container {
-            opacity: 1;
+            display: flex; /* Cambiamos opacity por display */
             pointer-events: auto;
         }
 
         .card-back-container {
-            opacity: 0;
+            display: none; /* Cambiamos opacity por display */
             pointer-events: none;
             transform: rotateY(180deg) scaleX(-1);
         }
@@ -64,16 +63,16 @@
             pointer-events: none;
             background-image: url('carta_frente.png.jpg');
             background-size: cover;
-            transition: transform 0.5s ease-in-out, background-image 0.25s ease-in-out; /* Transición más lenta */
+            transition: transform 0.5s ease-in-out, background-image 0.25s ease-in-out;
         }
 
         .card.flipped .card-front-container {
-            opacity: 0;
+            display: none;
             pointer-events: none;
         }
 
         .card.flipped .card-back-container {
-            opacity: 1;
+            display: flex;
             pointer-events: auto;
         }
 
@@ -134,7 +133,7 @@
             pointer-events: none;
             background-image: url('carta_frente.png.jpg');
             background-size: cover;
-            transition: transform 0.5s ease-in-out, background-image 0.25s ease-in-out; /* Transición más lenta */
+            transition: transform 0.5s ease-in-out, background-image 0.25s ease-in-out;
         }
 
         .card-animation-container.animate-flip {
@@ -238,24 +237,22 @@
             if (isAnimatingFlip) return;
             isAnimatingFlip = true;
 
-            // 1. Iniciar la desaparición de las cartas principales
-            cardFrontContainer.style.opacity = 0;
-            cardBackContainer.style.opacity = 0;
+            // 1. Ocultar las cartas principales
+            cardFrontContainer.style.display = 'none';
+            cardBackContainer.style.display = 'none';
 
-            // 2. Preparar la carta de animación después de un breve retraso
+            // 2. Preparar la carta de animación
+            cardAnimation.style.backgroundImage = `url('${isFlipped ? 'carta_dorso.png.jpg' : 'carta_frente.png.jpg'}')`;
+            cardAnimation.style.opacity = 1;
+            cardAnimation.style.pointerEvents = 'auto';
+            cardAnimation.classList.add('animate-flip');
+
+            // 3. Cambiar el fondo a la mitad de la animación
             setTimeout(() => {
-                cardAnimation.style.backgroundImage = `url('${isFlipped ? 'carta_dorso.png.jpg' : 'carta_frente.png.jpg'}')`; // Fondo inicial según el estado actual
-                cardAnimation.style.opacity = 1;
-                cardAnimation.style.pointerEvents = 'auto';
-                cardAnimation.classList.add('animate-flip');
+                cardAnimation.classList.add('animate-to-back');
+            }, flipAnimationDuration / 2);
 
-                // Cambiar el fondo a la mitad de la animación
-                setTimeout(() => {
-                    cardAnimation.classList.add('animate-to-back');
-                }, flipAnimationDuration / 2);
-            }, 100); // Pequeño retraso para que comience la desaparición
-
-            // 3. Finalizar la animación y mostrar la carta real
+            // 4. Finalizar la animación y mostrar la carta real
             setTimeout(() => {
                 cardAnimation.classList.remove('animate-flip');
                 cardAnimation.classList.remove('animate-to-back');
@@ -263,14 +260,14 @@
                 cardAnimation.style.pointerEvents = 'none';
                 isFlipped = !isFlipped;
                 if (isFlipped) {
-                    cardFrontContainer.style.opacity = 0;
-                    cardBackContainer.style.opacity = 1;
+                    cardFrontContainer.style.display = 'none';
+                    cardBackContainer.style.display = 'flex';
                 } else {
-                    cardFrontContainer.style.opacity = 1;
-                    cardBackContainer.style.opacity = 0;
+                    cardFrontContainer.style.display = 'flex';
+                    cardBackContainer.style.display = 'none';
                 }
                 isAnimatingFlip = false;
-            }, flipAnimationDuration + 100); // Consideramos el retraso inicial
+            }, flipAnimationDuration + 100);
         });
 
         cardContainer.addEventListener('touchstart', startDrag);
