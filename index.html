@@ -19,7 +19,7 @@
         .card-container {
             perspective: 1200px;
             position: relative;
-            cursor: grab; /* El cursor de agarre siempre */
+            cursor: grab;
         }
 
         .card {
@@ -28,7 +28,7 @@
             background-color: #fff;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55), rotateY 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            transition: transform 0.3s ease-out, rotateY 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             transform: rotateX(0deg) rotateY(0deg);
         }
@@ -98,9 +98,6 @@
         flipBtn.addEventListener('click', () => {
             isFlipped = !isFlipped;
             card.classList.toggle('flipped');
-            rotationX = 0;
-            rotationY = 0;
-            updateCardRotation();
         });
 
         let rotationX = 0, rotationY = 0;
@@ -118,7 +115,7 @@
             startX = e.touches ? e.touches[0].clientX : e.clientX;
             startY = e.touches ? e.touches[0].clientY : e.clientY;
             dragStartTime = Date.now();
-            card.style.transition = "transform 0.1s ease-out, rotateY 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)";
+            card.style.transition = "transform 0.1s ease-out, rotateY 0.3s ease-out"; // Transición más rápida al inicio
             currentX = startX;
             currentY = startY;
         }
@@ -156,10 +153,11 @@
                 rotationY += velocityX * inertiaMultiplier;
                 rotationX -= velocityY * inertiaMultiplier;
 
-                if (isFlipped) {
-                    rotationY = Math.round(rotationY / 180) * 180 + 180;
+                // Mantenemos la rotación en Y solo si NO se está volteando
+                if (!isFlipped) {
+                    rotationY = Math.round(rotationY / 360) * 360;
                 } else {
-                    rotationY = Math.round(rotationY / 180) * 180;
+                    rotationY = Math.round(rotationY / 360) * 360 + 180;
                 }
                 rotationX = Math.round(rotationX / 360) * 360;
 
