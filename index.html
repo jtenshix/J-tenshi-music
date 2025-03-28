@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Bordes Curvos y Efecto Giro)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Efecto Giro Real)</title>
     <style>
         body {
             margin: 0;
@@ -30,12 +30,12 @@
         .card {
             width: 360px;
             height: 540px;
-            background-color: transparent; /* Hacemos el fondo del contenedor transparente */
+            background-color: transparent;
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             transform: rotateX(0deg) rotateY(0deg);
-            border-radius: 15px; /* Añadimos el border-radius al contenedor también */
+            border-radius: 15px;
         }
 
         .card-front-container,
@@ -47,21 +47,25 @@
             height: 100%;
             transform-style: preserve-3d;
             backface-visibility: hidden;
+            transition: transform 0.2s ease-in-out; /* Añadimos transición a la transformación */
         }
 
         .card-back-container {
             opacity: 0;
             pointer-events: none;
+            transform: rotateY(180deg) scaleX(-1); /* Mantenemos la rotación inicial */
         }
 
         .card.flipped .card-front-container {
             opacity: 0;
             pointer-events: none;
+            transform: rotateY(180deg); /* Rotamos la frontal al voltear */
         }
 
         .card.flipped .card-back-container {
             opacity: 1;
             pointer-events: auto;
+            transform: rotateY(0deg) scaleX(-1); /* Desrotamos la trasera al voltear */
         }
 
         .card-side {
@@ -82,7 +86,6 @@
         .card-back {
             background-image: url('carta_dorso.png.png');
             background-size: cover;
-            transform: rotateY(180deg) scaleX(-1);
         }
 
         .flip-button {
@@ -108,11 +111,6 @@
 
         .flip-button:hover {
             background-color: rgba(255, 255, 255, 0.8);
-        }
-
-        .card.will-flip {
-            transform: rotateY(30deg); /* Aumentamos la rotación del efecto */
-            transition: transform 0.2s ease-in-out; /* Aumentamos la duración de la transición */
         }
     </style>
 </head>
@@ -143,7 +141,7 @@
         let dragStartTime;
 
         function updateCardRotation() {
-            card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+            card.style.transform = `rotateX(<span class="math-inline">\{rotationX\}deg\) rotateY\(</span>{rotationY}deg)`;
         }
 
         function startDrag(e) {
@@ -182,40 +180,4 @@
                 card.style.transition = "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)";
 
                 const animationDuration = 300;
-                let velocityY = (currentY - startY) / (Date.now() - dragStartTime);
-                let velocityX = (currentX - startX) / (Date.now() - dragStartTime);
-
-                const inertiaMultiplier = 0.2;
-                rotationX -= velocityY * inertiaMultiplier; // Inercia vertical sin inversión
-                rotationY += velocityX * inertiaMultiplier; // Inercia horizontal sin inversión
-
-                rotationX = Math.round(rotationX / 360) * 360;
-                rotationY = Math.round(rotationY / 360) * 360;
-
-                updateCardRotation();
-
-                setTimeout(() => {
-                    card.style.transition = "transform 0.3s ease-out";
-                }, animationDuration);
-            }
-        }
-
-        flipBtn.addEventListener('click', () => {
-            card.classList.add('will-flip'); // Añadimos la clase de giro
-            setTimeout(() => {
-                isFlipped = !isFlipped;
-                card.classList.toggle('flipped');
-                card.classList.remove('will-flip'); // Removemos la clase después de un breve tiempo
-                rotationX = 0;
-                rotationY = 0;
-                updateCardRotation();
-            }, 250); // Aumentamos el tiempo de espera a 250ms
-        });
-
-        document.addEventListener('touchstart', startDrag);
-        document.addEventListener('touchmove', dragMove);
-        document.addEventListener('touchend', stopDrag);
-    </script>
-
-</body>
-</html>
+                let velocityY = (currentY - startY) / (Date
