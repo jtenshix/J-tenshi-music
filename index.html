@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Ajuste Fino Posición)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Bordes Curvos y Efecto Giro)</title>
     <style>
         body {
             margin: 0;
@@ -20,7 +20,7 @@
         .card-container {
             perspective: 1200px;
             position: absolute;
-            top: 40%; /* Subimos la carta ajustando el top */
+            top: 40%;
             left: 50%;
             transform: translate(-50%, -50%);
             cursor: grab;
@@ -67,7 +67,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            border-radius: 10px;
+            border-radius: 15px; /* Añadimos bordes curvos */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -81,7 +81,7 @@
         .card-back {
             background-image: url('carta_dorso.png.png');
             background-size: cover;
-            transform: rotateY(180deg) scaleX(-1); /* Volteamos la imagen horizontalmente */
+            transform: rotateY(180deg) scaleX(-1);
         }
 
         .flip-button {
@@ -101,12 +101,17 @@
             overflow: hidden;
             z-index: 10;
             position: absolute;
-            bottom: calc(env(safe-area-inset-bottom) + 90px); /* Subimos el botón aún más */
+            bottom: calc(env(safe-area-inset-bottom) + 90px);
             right: 20px;
         }
 
         .flip-button:hover {
             background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .card.will-flip {
+            transform: rotateY(20deg); /* Pequeña rotación antes del volteo */
+            transition: transform 0.15s ease-in-out;
         }
     </style>
 </head>
@@ -195,11 +200,15 @@
         }
 
         flipBtn.addEventListener('click', () => {
-            isFlipped = !isFlipped;
-            card.classList.toggle('flipped');
-            rotationX = 0;
-            rotationY = 0;
-            updateCardRotation();
+            card.classList.add('will-flip'); // Añadimos la clase de giro
+            setTimeout(() => {
+                isFlipped = !isFlipped;
+                card.classList.toggle('flipped');
+                card.classList.remove('will-flip'); // Removemos la clase después de un breve tiempo
+                rotationX = 0;
+                rotationY = 0;
+                updateCardRotation();
+            }, 150); // Esperamos un poco antes de completar el volteo
         });
 
         document.addEventListener('touchstart', startDrag);
