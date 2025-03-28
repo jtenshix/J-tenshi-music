@@ -3,28 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Abajo Derecha - Ajuste Safari)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Arriba - Imagen Trasera Correcta)</title>
     <style>
         body {
             margin: 0;
-            padding: 0; /* Eliminamos el padding del body para el centrado vertical */
+            padding: 0;
             background-color: #121212;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Centra verticalmente */
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
             user-select: none;
-            position: relative; /* Necesario para posicionar el botón absolutamente */
+            position: relative;
         }
 
         .card-container {
             perspective: 1200px;
             position: relative;
             cursor: grab;
-            margin-bottom: 0; /* Eliminamos el margen inferior de la carta */
             transform-style: preserve-3d;
+            margin-top: 30%; /* Subimos la carta significativamente */
+            transform: translateY(-50%); /* Mantenemos el centrado fino */
         }
 
         .card {
@@ -34,7 +34,7 @@
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            transform: rotateX(0deg) rotateY(0deg); /* La rotación ahora se aplica al contenedor .card */
+            transform: rotateX(0deg) rotateY(0deg);
         }
 
         .card-front-container,
@@ -45,22 +45,22 @@
             width: 100%;
             height: 100%;
             transform-style: preserve-3d;
-            backface-visibility: hidden; /* Mantenemos esto para las caras individuales */
+            backface-visibility: hidden;
         }
 
         .card-back-container {
             opacity: 0;
-            pointer-events: none; /* Evita la interacción inicial con la parte trasera */
+            pointer-events: none;
         }
 
         .card.flipped .card-front-container {
             opacity: 0;
-            pointer-events: none; /* Desactiva la interacción del frente cuando está volteado */
+            pointer-events: none;
         }
 
         .card.flipped .card-back-container {
             opacity: 1;
-            pointer-events: auto; /* Activa la interacción de la parte trasera cuando está volteado */
+            pointer-events: auto;
         }
 
         .card-side {
@@ -81,11 +81,11 @@
         .card-back {
             background-image: url('carta_dorso.png.png');
             background-size: cover;
-            transform: rotateY(180deg); /* La rotación de 180 grados vuelve aquí */
+            transform: rotateY(180deg) rotateZ(180deg); /* Rotamos la imagen de la parte trasera */
         }
 
         .flip-button {
-            background-color: rgba(255, 255, 255, 0.5); /* Semitransparente */
+            background-color: rgba(255, 255, 255, 0.5);
             color: #121212;
             border: none;
             width: 40px;
@@ -101,7 +101,7 @@
             overflow: hidden;
             z-index: 10;
             position: absolute;
-            bottom: 45px; /* Ajustamos la distancia desde la parte inferior */
+            bottom: 70px; /* Subimos el botón aún más */
             right: 20px;
         }
 
