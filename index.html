@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Animación Refinada)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Reset de Transformación)</title>
     <style>
         body {
             margin: 0;
@@ -142,12 +142,12 @@
         let currentX = 0, currentY = 0;
         let dragStartTime;
         let animationStartTime;
-        const animationDuration = 200; // Ligero aumento de la duración
+        const animationDuration = 200;
         let startFrontRotation;
         let targetFrontRotation;
         let startBackRotation;
         let targetBackRotation;
-        let isAnimating = false; // Bandera para controlar si la animación está en curso
+        let isAnimating = false;
 
         function updateCardRotation() {
             card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
@@ -171,8 +171,8 @@
                 let deltaY = y - startY;
                 let deltaX = x - startX;
 
-                rotationX -= deltaY * 0.2; // Rotación vertical sin inversión
-                rotationY += deltaX * 0.2; // Rotación horizontal sin inversión
+                rotationX -= deltaY * 0.2;
+                rotationY += deltaX * 0.2;
 
                 updateCardRotation();
 
@@ -193,8 +193,8 @@
                 let velocityX = (currentX - startX) / (Date.now() - dragStartTime);
 
                 const inertiaMultiplier = 0.2;
-                rotationX -= velocityY * inertiaMultiplier; // Inercia vertical sin inversión
-                rotationY += velocityX * inertiaMultiplier; // Inercia horizontal sin inversión
+                rotationX -= velocityY * inertiaMultiplier;
+                rotationY += velocityX * inertiaMultiplier;
 
                 rotationX = Math.round(rotationX / 360) * 360;
                 rotationY = Math.round(rotationY / 360) * 360;
@@ -226,24 +226,24 @@
             } else {
                 card.classList.toggle('flipped');
                 animationStartTime = null;
-                isAnimating = false; // La animación ha terminado
+                isAnimating = false;
             }
         }
 
         flipBtn.addEventListener('click', () => {
-            if (isAnimating) return; // No iniciar si ya está animando
+            if (isAnimating) return;
             isAnimating = true;
+
+            // RESETEAMOS LA TRANSFORMACIÓN COMPLETA DE LA CARTA
+            card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+            rotationX = 0;
+            rotationY = 0;
 
             isFlipped = !isFlipped;
             startFrontRotation = parseFloat(frontContainer.style.transform.replace('rotateY(', '').replace('deg)', '') || 0);
             targetFrontRotation = isFlipped ? 0 : 30;
             startBackRotation = parseFloat(backContainer.style.transform.replace('rotateY(', '').replace('deg)', '').replace(' scaleX(-1)', '') || 180);
             targetBackRotation = isFlipped ? 180 : 150;
-
-            // Reseteamos la rotación general de la carta al iniciar la animación del botón
-            rotationX = 0;
-            rotationY = 0;
-            updateCardRotation();
 
             animationStartTime = null;
             requestAnimationFrame(animateFlip);
