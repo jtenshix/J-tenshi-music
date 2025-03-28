@@ -95,10 +95,14 @@
         const card = document.getElementById('card');
         const flipBtn = document.getElementById('flipBtn');
         let isFlipped = false;
+        let canRotate = true; // Control para habilitar/deshabilitar la rotación manual
 
         flipBtn.addEventListener('click', () => {
             isFlipped = !isFlipped;
             card.classList.toggle('flipped');
+            rotationY = isFlipped ? 180 : 0;
+            updateCardRotation();
+            canRotate = true; // Reactivamos la rotación después del volteo (si es necesario)
         });
 
         let rotationX = 0, rotationY = 0;
@@ -112,17 +116,19 @@
         }
 
         function startDrag(e) {
-            isDragging = true;
-            startX = e.touches ? e.touches[0].clientX : e.clientX;
-            startY = e.touches ? e.touches[0].clientY : e.clientY;
-            dragStartTime = Date.now();
-            card.style.transition = "transform 0.1s ease-out";
-            currentX = startX;
-            currentY = startY;
+            if (canRotate) {
+                isDragging = true;
+                startX = e.touches ? e.touches[0].clientX : e.clientX;
+                startY = e.touches ? e.touches[0].clientY : e.clientY;
+                dragStartTime = Date.now();
+                card.style.transition = "transform 0.1s ease-out";
+                currentX = startX;
+                currentY = startY;
+            }
         }
 
         function dragMove(e) {
-            if (isDragging) {
+            if (isDragging && canRotate) {
                 let x = e.touches ? e.touches[0].clientX : e.clientX;
                 let y = e.touches ? e.touches[0].clientY : e.clientY;
 
@@ -131,11 +137,6 @@
 
                 rotationY += deltaX * 0.2;
                 rotationX -= deltaY * 0.2;
-
-                // Si la carta está volteada, forzamos la rotationY cerca de 180 o -180
-                if (isFlipped) {
-                    rotationY = rotationY > 90 && rotationY < 270 ? 180 : 0;
-                }
 
                 updateCardRotation();
 
@@ -147,7 +148,7 @@
         }
 
         function stopDrag() {
-            if (isDragging) {
+            if (isDragging && canRotate) {
                 isDragging = false;
                 card.style.transition = "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)";
 
@@ -159,8 +160,8 @@
                 rotationY += velocityX * inertiaMultiplier;
                 rotationX -= velocityY * inertiaMultiplier;
 
-                // Al detener, aseguramos que la rotación en Y esté cerca de 0 o 180
-                rotationY = isFlipped ? Math.round(rotationY / 180) * 180 : Math.round(rotationY / 360) * 360;
+                const targetRotationY = isFlipped ? Math.round(rotationY / 180) * 180 : Math.round(rotationY / 360) * 360;
+                rotationY = targetRotationY;
                 rotationX = Math.round(rotationX / 360) * 360;
 
                 updateCardRotation();
