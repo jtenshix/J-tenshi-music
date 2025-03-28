@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Abajo Derecha)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Abajo Derecha - Corrección Rotación Trasera)</title>
     <style>
         body {
             margin: 0;
@@ -158,8 +158,8 @@
                 let deltaY = y - startY;
                 let deltaX = x - startX;
 
-                rotationX -= deltaY * 0.2;
-                rotationY += deltaX * 0.2 * (isFlipped ? -1 : 1); // Invertimos la rotación en Y si está volteada
+                rotationX -= deltaY * 0.2 * (isFlipped ? -1 : 1); // Invertimos deltaY si la carta está volteada
+                rotationY += deltaX * 0.2 * (isFlipped ? -1 : 1); // Mantenemos la inversión en Y
 
                 updateCardRotation();
 
@@ -180,8 +180,8 @@
                 let velocityX = (currentX - startX) / (Date.now() - dragStartTime);
 
                 const inertiaMultiplier = 0.2;
-                rotationX -= velocityY * inertiaMultiplier;
-                rotationY += velocityX * inertiaMultiplier * (isFlipped ? -1 : 1); // Invertimos la inercia en Y si está volteada
+                rotationX -= velocityY * inertiaMultiplier * (isFlipped ? -1 : 1); // Invertimos la inercia en X si está volteada
+                rotationY += velocityX * inertiaMultiplier * (isFlipped ? -1 : 1); // Mantenemos la inversión en Y
 
                 rotationX = Math.round(rotationX / 360) * 360;
                 rotationY = Math.round(rotationY / 360) * 360;
