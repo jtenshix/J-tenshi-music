@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Efecto Giro Real en Contenedores)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Efecto Giro Real Corregido)</title>
     <style>
         body {
             margin: 0;
@@ -203,14 +203,13 @@
             backContainer.style.transform = 'rotateY(165deg) scaleX(-1)';
 
             setTimeout(() => {
-                isFlipped = !isFlipped;
-                card.classList.toggle('flipped');
-                frontContainer.style.transform = '';
-                backContainer.style.transform = 'rotateY(180deg) scaleX(-1)';
+                card.classList.toggle('flipped'); // Primero cambiamos la clase flipped
+                frontContainer.style.transform = ''; // Luego reseteamos la transformación
+                backContainer.style.transform = 'rotateY(180deg) scaleX(-1)'; // Aseguramos la rotación inicial correcta
                 rotationX = 0;
                 rotationY = 0;
                 updateCardRotation();
-            }, 150); // Ajustamos el tiempo para que coincida con la transición en CSS
+            }, 150);
         });
 
         document.addEventListener('touchstart', startDrag);
