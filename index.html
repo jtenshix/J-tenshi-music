@@ -3,26 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Abajo - Dos Contenedores)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Botón Abajo Derecha)</title>
     <style>
         body {
             margin: 0;
-            padding: 20px;
+            padding: 0; /* Eliminamos el padding del body para el centrado vertical */
             background-color: #121212;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: center; /* Centra verticalmente */
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
             user-select: none;
+            position: relative; /* Necesario para posicionar el botón absolutamente */
         }
 
         .card-container {
             perspective: 1200px;
             position: relative;
             cursor: grab;
-            margin-bottom: 40px;
+            margin-bottom: 0; /* Eliminamos el margen inferior de la carta */
             transform-style: preserve-3d;
         }
 
@@ -84,11 +85,11 @@
         }
 
         .flip-button {
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(255, 255, 255, 0.5); /* Semitransparente */
             color: #121212;
             border: none;
-            width: 50px;
-            height: 50px;
+            width: 40px; /* Reducimos un poco el tamaño */
+            height: 40px; /* Reducimos un poco el tamaño */
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -99,10 +100,13 @@
             font-size: 0;
             overflow: hidden;
             z-index: 10;
+            position: absolute; /* Posicionamiento absoluto */
+            bottom: 20px; /* Espacio desde la parte inferior */
+            right: 20px; /* Espacio desde la derecha */
         }
 
         .flip-button:hover {
-            background-color: rgba(255, 255, 255, 1);
+            background-color: rgba(255, 255, 255, 0.8);
         }
     </style>
 </head>
@@ -131,7 +135,6 @@
         let startX = 0, startY = 0;
         let currentX = 0, currentY = 0;
         let dragStartTime;
-        let activeContainer = frontContainer; // Inicialmente interactuamos con el frente
 
         function updateCardRotation() {
             card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
