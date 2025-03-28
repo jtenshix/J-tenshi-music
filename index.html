@@ -19,6 +19,7 @@
         .card-container {
             perspective: 1200px;
             position: relative;
+            cursor: grab; /* El cursor de agarre siempre */
         }
 
         .card {
@@ -28,13 +29,12 @@
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55), rotateY 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            cursor: grab;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             transform: rotateX(0deg) rotateY(0deg);
         }
 
         .card.flipped {
-            transform: rotateY(180deg) rotateX(0deg); /* Asegura que la rotación 3D se reinicie al voltear */
+            transform: rotateY(180deg) rotateX(0deg);
         }
 
         .card-side {
@@ -72,31 +72,11 @@
             border-radius: 5px;
             transition: background 0.3s;
             font-size: 18px;
-            z-index: 10; /* Asegura que el botón esté por encima de la carta */
+            z-index: 10;
         }
 
         .flip-button:hover {
             background-color: rgba(255, 255, 255, 1);
-        }
-
-        /* Estilos para PC */
-        @media (min-width: 768px) {
-            .flip-button {
-                display: block;
-            }
-            .card-container {
-                cursor: grab; /* Mantiene el cursor de agarre en PC */
-            }
-        }
-
-        /* Estilos para móviles */
-        @media (max-width: 767px) {
-            .flip-button {
-                display: none; /* Oculta el botón en móviles */
-            }
-            .card-container {
-                cursor: grab;
-            }
         }
     </style>
 </head>
@@ -115,17 +95,14 @@
         const flipBtn = document.getElementById('flipBtn');
         let isFlipped = false;
 
-        // Funcionalidad del botón para voltear la carta
         flipBtn.addEventListener('click', () => {
             isFlipped = !isFlipped;
             card.classList.toggle('flipped');
-            // Reinicia la rotación 3D al voltear
             rotationX = 0;
             rotationY = 0;
             updateCardRotation();
         });
 
-        // Movimiento 3D con el dedo (para todos los dispositivos ahora)
         let rotationX = 0, rotationY = 0;
         let isDragging = false;
         let startX = 0, startY = 0;
@@ -141,7 +118,7 @@
             startX = e.touches ? e.touches[0].clientX : e.clientX;
             startY = e.touches ? e.touches[0].clientY : e.clientY;
             dragStartTime = Date.now();
-            card.style.transition = "transform 0.1s ease-out, rotateY 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)"; // Transición más rápida al inicio
+            card.style.transition = "transform 0.1s ease-out, rotateY 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)";
             currentX = startX;
             currentY = startY;
         }
@@ -179,13 +156,12 @@
                 rotationY += velocityX * inertiaMultiplier;
                 rotationX -= velocityY * inertiaMultiplier;
 
-                // Asegura que la rotación en Y no interfiera con el estado flipped
                 if (isFlipped) {
-                    rotationY = Math.round(rotationY / 180) * 180 + 180; // Mantener la rotación trasera
+                    rotationY = Math.round(rotationY / 180) * 180 + 180;
                 } else {
-                    rotationY = Math.round(rotationY / 180) * 180; // Mantener la rotación frontal
+                    rotationY = Math.round(rotationY / 180) * 180;
                 }
-                rotationX = Math.round(rotationX / 360) * 360; // Reiniciar la rotación X para evitar giros extraños
+                rotationX = Math.round(rotationX / 360) * 360;
 
                 updateCardRotation();
 
