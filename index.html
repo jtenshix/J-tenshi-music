@@ -61,7 +61,9 @@
         .card-animation-container {
             opacity: 0;
             pointer-events: none;
-            background-color: rgba(255, 255, 255, 0.1); /* Fondo blanco tenue para ver la "fantasma" */
+            background-image: url('carta_frente.png.jpg'); /* Inicialmente el fondo frontal */
+            background-size: cover;
+            transition: transform 0.3s ease-in-out, background-image 0.1s ease-in-out; /* Añadimos transición al background-image */
         }
 
         .card.flipped .card-front-container {
@@ -127,11 +129,15 @@
         }
 
         .card-animation-container {
-            transition: transform 0.3s ease-in-out; /* Transición para el giro de la animación */
+            transition: transform 0.3s ease-in-out, background-image 0.1s ease-in-out; /* Añadimos transición al background-image */
         }
 
         .card-animation-container.animate-flip {
             transform: rotateY(180deg);
+        }
+
+        .card-animation-container.animate-to-back {
+            background-image: url('carta_dorso.png.png'); /* Cambia al fondo trasero */
         }
     </style>
 </head>
@@ -164,6 +170,7 @@
         let currentX = 0, currentY = 0;
         let dragStartTime;
         let isAnimatingFlip = false;
+        const flipAnimationDuration = 300; // Duración total de la animación
 
         function updateCardRotation() {
             cardWrapper.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
@@ -226,18 +233,25 @@
             if (isAnimatingFlip) return;
             isAnimatingFlip = true;
 
-            // 1. Hacer invisible las cartas principales y visible la de animación
+            // 1. Preparar la carta de animación
+            cardAnimation.style.backgroundImage = `url('carta_frente.png.jpg')`; // Aseguramos el fondo inicial
             cardFrontContainer.style.opacity = 0;
             cardBackContainer.style.opacity = 0;
             cardAnimation.style.opacity = 1;
             cardAnimation.style.pointerEvents = 'auto';
 
-            // 2. Iniciar la animación de volteo de la carta fantasma
+            // 2. Iniciar la animación de volteo
             cardAnimation.classList.add('animate-flip');
 
-            // 3. Después de la animación, revertir la visibilidad y cambiar el estado
+            // 3. Cambiar el fondo a la mitad de la animación
+            setTimeout(() => {
+                cardAnimation.classList.add('animate-to-back');
+            }, flipAnimationDuration / 2);
+
+            // 4. Finalizar la animación y mostrar la carta real
             setTimeout(() => {
                 cardAnimation.classList.remove('animate-flip');
+                cardAnimation.classList.remove('animate-to-back');
                 cardAnimation.style.opacity = 0;
                 cardAnimation.style.pointerEvents = 'none';
                 isFlipped = !isFlipped;
@@ -249,7 +263,7 @@
                     cardBackContainer.style.opacity = 0;
                 }
                 isAnimatingFlip = false;
-            }, 300); // La duración debe coincidir con la transición de .card-animation-container
+            }, flipAnimationDuration);
         });
 
         cardContainer.addEventListener('touchstart', startDrag);
