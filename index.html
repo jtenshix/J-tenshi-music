@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Original + Fantasma Animación Simultánea)</title>
+    <title>Carta 3D Interactiva (Respuesta Inmediata al Botón)</title>
     <style>
         body {
             margin: 0;
@@ -112,6 +112,7 @@
 
         .card-animation-back {
             background-image: url('carta_dorso.png.png');
+            background-size: cover;
             transform: rotateY(180deg);
         }
 
@@ -246,14 +247,14 @@
         flipBtn.addEventListener('click', () => {
             // Iniciar el efecto de "will-flip" en la carta original
             cardOriginal.classList.add('will-flip');
-            setTimeout(() => {
-                isFlippedOriginal = !isFlippedOriginal;
-                cardOriginal.classList.toggle('flipped');
-                cardOriginal.classList.remove('will-flip');
-                rotationXOriginal = 0;
-                rotationYOriginal = 0;
-                updateCardRotationOriginal();
-            }, 200);
+
+            // Iniciar el cambio de estado (volteo real) de la carta original INMEDIATAMENTE
+            isFlippedOriginal = !isFlippedOriginal;
+            cardOriginal.classList.toggle('flipped');
+            cardOriginal.classList.remove('will-flip');
+            rotationXOriginal = 0;
+            rotationYOriginal = 0;
+            updateCardRotationOriginal();
 
             // Iniciar la animación de volteo de la carta fantasma SIN RETRASO
             const fantasmaDelay = 0; // Retraso en milisegundos
