@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Secuencia Fantasma)</title>
+    <title>Carta 3D Interactiva (Secuencia Fantasma Ajustada)</title>
     <style>
         body {
             margin: 0;
@@ -12,9 +12,6 @@
             min-height: 100vh;
             overflow: hidden;
             user-select: none;
-            position: relative;
-            padding-bottom: env(safe-area-inset-bottom);
-            padding-top: env(safe-area-inset-top);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -262,33 +259,33 @@
             if (!isAnimating) {
                 isAnimating = true;
 
-                // Paso 1: Desaparecer la carta original después de 2 segundos
+                // 1. Desaparecer la carta original después de 2 segundos
                 setTimeout(() => {
                     cardOriginal.style.opacity = 0;
                 }, 2000);
 
-                // Paso 2: Aparecer la carta fantasma e iniciar el giro
+                // 2. Aparecer la carta fantasma e iniciar el giro
                 setTimeout(() => {
                     cardFantasmaWrapper.classList.add('visible');
                     void cardFantasmaWrapper.offsetWidth; // Forzar reflow
                     cardFantasmaWrapper.classList.toggle('flipped');
-                }, 2200); // 2 segundos + un pequeño delay
+                }, 2200);
 
-                // Paso 3: Desaparecer la carta fantasma después de 5 segundos (duración del giro)
+                // 3. Desaparecer la carta fantasma después de 5 segundos (duración del giro)
                 setTimeout(() => {
                     cardFantasmaWrapper.classList.remove('visible');
-                }, 7200); // 2.2s + 5s
+                }, 7200);
 
-                // Paso 4: Aparecer la carta original (en su estado volteado) después de 2 segundos
+                // 4. Aparecer la carta original (en su estado volteado) después de 2 segundos
                 setTimeout(() => {
-                    cardOriginal.classList.remove('will-flip'); // Asegurar que no esté en estado de pre-volteo
+                    cardOriginal.classList.remove('will-flip');
                     cardOriginal.classList.toggle('flipped');
                     cardOriginal.style.opacity = 1;
                     rotationXOriginal = 0;
                     rotationYOriginal = 0;
                     updateCardRotationOriginal();
                     isAnimating = false;
-                }, 9200); // 7.2s + 2s
+                }, 9200);
             }
         });
 
