@@ -13,8 +13,6 @@
             overflow: hidden;
             user-select: none;
             position: relative;
-            padding-bottom: env(safe-area-inset-bottom);
-            padding-top: env(safe-area-inset-top);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -23,7 +21,19 @@
         .card-container {
             perspective: 1200px;
             transform-style: preserve-3d;
-            position: absolute; /* Todas las cartas en la misma posición */
+            position: absolute;
+        }
+
+        .card-container.original {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .card-container.fantasma {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         .card {
@@ -265,7 +275,10 @@
         }
 
         flipBtn.addEventListener('click', () => {
-            // 1. Hacer la carta original invisible y la fantasma visible INMEDIATAMENTE
+            // 1. Copiar la transformación de la carta original a la fantasma
+            cardFantasma.style.transform = cardOriginal.style.transform;
+
+            // 2. Hacer la carta original invisible y la fantasma visible INMEDIATAMENTE
             cardOriginal.classList.remove('visible');
             cardOriginal.classList.add('invisible');
             cardFantasma.classList.add('visible');
@@ -279,20 +292,23 @@
             rotationYOriginal = 0;
             updateCardRotationOriginal();
 
-            // Iniciar la animación de volteo de la carta fantasma DIRECTAMENTE (SIN MODIFICAR)
+            // Iniciar la animación de volteo de la carta fantasma DIRECTAMENTE
             void cardFantasma.offsetWidth;
-            cardFantasma.style.transform = 'rotateY(180deg)';
+            // Establecemos la ROTACIÓN ADICIONAL para que inicie el volteo desde su estado actual
+            cardFantasma.style.transform += ' rotateY(180deg)';
             setTimeout(() => {
                 cardFantasma.style.transition = 'transform 0.6s ease-in-out';
-                cardFantasma.style.transform = isFantasmaFlipped ? 'rotateY(0deg)' : 'rotateY(180deg)';
+                cardFantasma.style.transform = cardOriginal.style.transform + (isFantasmaFlipped ? ' rotateY(0deg)' : ' rotateY(180deg)');
                 isFantasmaFlipped = !isFantasmaFlipped;
             }, 10);
 
-            // 2. Esperar a que termine la ANIMACIÓN de la fantasma y revertir la visibilidad
+            // 3. Esperar a que termine la ANIMACIÓN de la fantasma y revertir la visibilidad
             setTimeout(() => {
                 cardFantasma.classList.remove('visible'); // Hacer la fantasma invisible AL FINAL DE SU ANIMACIÓN
                 cardOriginal.classList.remove('invisible');
                 cardOriginal.classList.add('visible'); // Hacer la original visible AL FINAL DE LA ANIMACIÓN
+                // Reiniciar la transformación de la fantasma para el próximo clic
+                cardFantasma.style.transform = 'rotateY(0deg)';
             }, 600); // Espera la DURACIÓN TOTAL de la transición de la fantasma
         });
 
