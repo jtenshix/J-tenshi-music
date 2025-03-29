@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Activación Instantánea Experimental)</title>
+    <title>Carta 3D Interactiva (Misma Posición)</title>
     <style>
         body {
             margin: 0;
@@ -18,12 +18,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 40px;
         }
 
         .card-container {
             perspective: 1200px;
             transform-style: preserve-3d;
+            position: absolute; /* Ahora es absoluta */
         }
 
         .card {
@@ -288,12 +288,12 @@
                 isFantasmaFlipped = !isFantasmaFlipped;
             }, 10);
 
-            // 2. Esperar a que termine la animación de la fantasma y revertir la visibilidad
+            // 2. Esperar a que termine la ANIMACIÓN de la fantasma y revertir la visibilidad
             setTimeout(() => {
-                cardFantasma.classList.remove('visible'); // Hacer la fantasma invisible
+                cardFantasma.classList.remove('visible'); // Hacer la fantasma invisible AL FINAL DE SU ANIMACIÓN
                 cardOriginal.classList.remove('invisible');
-                cardOriginal.classList.add('visible'); // Hacer la original visible
-            }, 600); // Espera la duración de la transición de la fantasma
+                cardOriginal.classList.add('visible'); // Hacer la original visible AL FINAL DE LA ANIMACIÓN
+            }, 600); // Espera la DURACIÓN TOTAL de la transición de la fantasma
         });
 
         document.addEventListener('touchstart', startDragOriginal);
