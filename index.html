@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Intercambio Invisible Animado)</title>
+    <title>Carta 3D Interactiva (Control de Visibilidad)</title>
     <style>
         body {
             margin: 0;
@@ -91,21 +91,25 @@
             width: 360px;
             height: 540px;
             transform-style: preserve-3d;
-            transition: transform 0.6s ease-in-out; /* Misma duración que la original para sincronía visual */
+            transition: transform 0.6s ease-in-out;
             transform: rotateY(0deg);
             border-radius: 15px;
-            opacity: 0; /* Inicialmente invisible */
-            pointer-events: none; /* No interactuable inicialmente */
+            opacity: 0;
+            pointer-events: none;
         }
 
         .card-animation-container.visible {
-            opacity: 1; /* Visible cuando se activa */
-            pointer-events: auto; /* Interactuable cuando es visible */
+            opacity: 1;
+            pointer-events: auto;
         }
 
         .card.will-flip {
             transform: rotateY(30deg);
             transition: transform 0.2s ease-in-out;
+        }
+
+        .card-animation-container.animate-flip {
+            transform: rotateY(180deg);
         }
 
         .card.invisible {
@@ -153,7 +157,7 @@
         let startXOriginal = 0, startYOriginal = 0;
         let currentXOriginal = 0, currentYOriginal = 0;
         let dragStartTimeOriginal;
-        let isFantasmaFlipped = false; // Inicialmente mostrando el frente (para que la primera animación sea al dorso)
+        let isFantasmaFlipped = false; // Controla la dirección de la animación de la fantasma
 
         // Establecemos la rotación inicial de la carta fantasma a 0 grados (invisible por CSS)
         cardFantasma.style.transform = 'rotateY(0deg)';
@@ -216,34 +220,24 @@
             }
         }
 
-        let isOriginalVisible = true; // Controla la visibilidad de la carta original
-
         flipBtn.addEventListener('click', () => {
-            if (isOriginalVisible) {
-                // Ocultar la carta original
-                cardOriginal.classList.remove('visible');
-                cardOriginal.classList.add('invisible');
+            // 1. Ocultar la carta original
+            cardOriginal.classList.remove('visible');
+            cardOriginal.classList.add('invisible');
 
-                // Mostrar la carta fantasma e iniciar su animación
-                cardFantasma.classList.add('visible');
-                cardFantasma.style.transition = 'transform 0.6s ease-in-out'; // Asegurar la transición
+            // 2. Mostrar la carta fantasma y activar su animación
+            cardFantasma.classList.add('visible');
+            cardFantasma.classList.add('animate-flip');
 
-                // Iniciar la animación de volteo de la carta fantasma
-                cardFantasma.style.transform = isFantasmaFlipped ? 'rotateY(0deg)' : 'rotateY(180deg)';
-                isFantasmaFlipped = !isFantasmaFlipped;
+            // 3. Esperar a que termine la animación de la fantasma (600ms por la transición)
+            setTimeout(() => {
+                // 4. Ocultar la carta fantasma
+                cardFantasma.classList.remove('visible');
 
-                // Ocultar la carta fantasma después de la animación
-                setTimeout(() => {
-                    cardFantasma.classList.remove('visible');
-                }, 600); // Espera la duración de la animación
-
-                isOriginalVisible = false;
-            } else {
-                // Mostrar la carta original
+                // 5. Mostrar la carta original
                 cardOriginal.classList.remove('invisible');
                 cardOriginal.classList.add('visible');
-                isOriginalVisible = true;
-            }
+            }, 600); // La duración de la transición 'transform' es 0.6s = 600ms
         });
 
         document.addEventListener('touchstart', startDragOriginal);
