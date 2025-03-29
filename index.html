@@ -271,6 +271,12 @@
                 setTimeout(() => {
                     cardOriginal.style.transition = "transform 0.3s ease-out";
                 }, animationDuration);
+
+                // Activar el volteo de la carta original al soltar (como estaba originalmente)
+                cardOriginal.classList.add('will-flip');
+                isFlippedOriginal = !isFlippedOriginal;
+                cardOriginal.classList.toggle('flipped');
+                cardOriginal.classList.remove('will-flip');
             }
         }
 
@@ -283,11 +289,7 @@
             cardOriginal.classList.add('invisible');
             cardFantasma.classList.add('visible');
 
-            // Iniciar el efecto de "will-flip" en la carta original (SIN MODIFICAR)
-            cardOriginal.classList.add('will-flip');
-            isFlippedOriginal = !isFlippedOriginal;
-            cardOriginal.classList.toggle('flipped');
-            cardOriginal.classList.remove('will-flip');
+            // Reiniciar la rotación de la carta original (SIN TOGGLE FLIPPED AQUÍ)
             rotationXOriginal = 0;
             rotationYOriginal = 0;
             updateCardRotationOriginal();
