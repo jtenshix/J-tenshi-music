@@ -21,12 +21,11 @@
         .card-container {
             perspective: 1200px;
             transform-style: preserve-3d;
-            position: relative; /* Para que las cartas absolutas se posicionen dentro */
         }
 
         .card-container.original,
         .card-container.fantasma {
-            position: absolute;
+            position: absolute; /* ¡ESTO NO DEBÍ QUITARLO! */
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
