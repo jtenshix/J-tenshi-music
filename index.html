@@ -25,7 +25,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /* gap: 40px; */
         }
 
         .card-container {
@@ -93,46 +92,6 @@
             transform: rotateY(180deg);
         }
 
-        .card-animation-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 360px;
-            height: 540px;
-            transform-style: preserve-3d;
-            transition: transform 0.6s ease-in-out;
-            transform: rotateY(0deg);
-            border-radius: 15px;
-            opacity: 0;
-            pointer-events: none;
-            margin-top: -270px;
-            margin-left: -180px;
-        }
-
-        .card-animation-container.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .card-animation-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 15px;
-            background-size: cover;
-        }
-
-        .card-animation-front {
-            background-image: url('carta_frente.png.jpg');
-            transform: rotateY(0deg);
-        }
-
-        .card-animation-back {
-            background-image: url('carta_dorso.png.png');
-            transform: rotateY(180deg);
-        }
-
         .flip-button {
             background-color: rgba(255, 255, 255, 0.5);
             color: #121212;
@@ -163,7 +122,7 @@
             transition: transform 0.2s ease-in-out;
         }
 
-        .card-animation-container.animate-flip {
+        .card.animate-flip { /* Renombrado para aplicarse directamente a la carta */
             transform: rotateY(180deg);
         }
 
@@ -180,7 +139,7 @@
 </head>
 <body>
 
-    <div class="card-container original">
+    <div class="card-container">
         <div class="card visible" id="cardOriginal">
             <div class="card-front-container">
                 <div class="card-side card-front"></div>
@@ -188,13 +147,6 @@
             <div class="card-back-container">
                 <div class="card-side card-back"></div>
             </div>
-        </div>
-    </div>
-
-    <div class="card-container fantasma" style="position: absolute; top: 0; left: 0; width: 0; height: 0; overflow: hidden;">
-        <div class="card-animation-container" id="cardFantasma">
-            <div class="card-animation-face card-animation-front"></div>
-            <div class="card-animation-face card-animation-back"></div>
         </div>
     </div>
 
@@ -206,20 +158,13 @@
 
     <script>
         const cardOriginal = document.getElementById('cardOriginal');
-        const cardFantasma = document.getElementById('cardFantasma');
         const flipBtn = document.getElementById('flipBtn');
-        const frontContainerOriginal = document.querySelector('.card-container.original .card-front-container');
-        const backContainerOriginal = document.querySelector('.card-container.original .card-back-container');
         let isFlippedOriginal = false;
         let rotationXOriginal = 0, rotationYOriginal = 0;
         let isDraggingOriginal = false;
         let startXOriginal = 0, startYOriginal = 0;
         let currentXOriginal = 0, currentYOriginal = 0;
         let dragStartTimeOriginal;
-        let isFantasmaFlipped = false; // Inicialmente mostrando el frente
-
-        // Establecemos la rotación inicial de la carta fantasma a 0 grados
-        cardFantasma.style.transform = 'rotateY(0deg)';
 
         function updateCardRotationOriginal() {
             cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
@@ -280,35 +225,19 @@
         }
 
         flipBtn.addEventListener('click', () => {
-            // Copiar la transformación (incluida la rotación actual)
-            cardFantasma.style.transform = cardOriginal.style.transform;
-
-            // Hacer la carta original invisible y la fantasma visible INMEDIATAMENTE
-            cardOriginal.classList.remove('visible');
-            cardOriginal.classList.add('invisible');
-            cardFantasma.classList.add('visible');
-
-            // Iniciar el efecto de "will-flip" en la carta original (SIN MODIFICAR)
             cardOriginal.classList.add('will-flip');
-            isFlippedOriginal = !isFlippedOriginal;
-            cardOriginal.classList.toggle('flipped');
-            cardOriginal.classList.remove('will-flip');
+            setTimeout(() => {
+                isFlippedOriginal = !isFlippedOriginal;
+                cardOriginal.classList.toggle('flipped');
+                cardOriginal.classList.toggle('animate-flip'); // Añade la clase para la animación
+                cardOriginal.classList.remove('will-flip');
+                setTimeout(() => {
+                    cardOriginal.classList.remove('animate-flip'); // Remueve la clase al final
+                }, 600); // Duración de la transición
+            }, 100); // Pequeño delay para el efecto "will-flip"
             rotationXOriginal = 0;
             rotationYOriginal = 0;
             updateCardRotationOriginal();
-
-            // Iniciar la animación de volteo de la carta fantasma DIRECTAMENTE
-            void cardFantasma.offsetWidth;
-            cardFantasma.style.transition = 'transform 0.6s ease-in-out';
-            cardFantasma.style.transform = isFantasmaFlipped ? 'rotateY(0deg)' : 'rotateY(180deg)';
-            isFantasmaFlipped = !isFantasmaFlipped;
-
-            // 2. Esperar a que termine la animación de la fantasma y revertir la visibilidad
-            setTimeout(() => {
-                cardFantasma.classList.remove('visible'); // Hacer la fantasma invisible
-                cardOriginal.classList.remove('invisible');
-                cardOriginal.classList.add('visible'); // Hacer la original visible
-            }, 600); // Espera la duración de la transición de la fantasma
         });
 
         document.addEventListener('touchstart', startDragOriginal);
