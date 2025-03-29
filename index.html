@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Original + Fantasma Lateral)</title>
+    <title>Carta 3D Interactiva (Original + Fantasma Alternante)</title>
     <style>
         body {
             margin: 0;
@@ -124,10 +124,6 @@
             transform: rotateY(180deg);
         }
 
-        .card-animation-container.animate-flip {
-            transform: rotateY(180deg);
-        }
-
         .flip-button {
             background-color: rgba(255, 255, 255, 0.5);
             color: #121212;
@@ -193,7 +189,7 @@
         let startXOriginal = 0, startYOriginal = 0;
         let currentXOriginal = 0, currentYOriginal = 0;
         let dragStartTimeOriginal;
-        let isAnimatingFantasma = false;
+        let isFantasmaFlipped = false; // Nuevo estado para la carta fantasma
 
         function updateCardRotationOriginal() {
             cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
@@ -254,7 +250,7 @@
         }
 
         flipBtn.addEventListener('click', () => {
-            // Volteo de la carta original
+            // Volteo de la carta original (sin cambios)
             cardOriginal.classList.add('will-flip');
             setTimeout(() => {
                 isFlippedOriginal = !isFlippedOriginal;
@@ -265,15 +261,17 @@
                 updateCardRotationOriginal();
             }, 200);
 
-            // Animación de la carta fantasma
-            if (!isAnimatingFantasma) {
-                isAnimatingFantasma = true;
-                cardFantasma.classList.add('animate-flip');
-                setTimeout(() => {
-                    cardFantasma.classList.remove('animate-flip');
-                    isAnimatingFantasma = false;
-                }, 600); // Duración de la animación fantasma (ajusta si es necesario)
-            }
+            // Animación de la carta fantasma para alternar la vista
+            cardFantasma.classList.add('animate-flip');
+            setTimeout(() => {
+                cardFantasma.classList.remove('animate-flip');
+                isFantasmaFlipped = !isFantasmaFlipped;
+                if (isFantasmaFlipped) {
+                    cardFantasma.style.transform = 'rotateY(180deg)';
+                } else {
+                    cardFantasma.style.transform = 'rotateY(0deg)';
+                }
+            }, 600); // Duración de la animación fantasma
         });
 
         // Eventos de arrastre para la carta original
