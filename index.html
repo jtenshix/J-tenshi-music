@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Original + Fantasma Retraso Animación)</title>
+    <title>Carta 3D Interactiva (Original + Fantasma Retraso Corto Animación)</title>
     <style>
         body {
             margin: 0;
@@ -233,9 +233,6 @@
                 rotationXOriginal -= velocityY * inertiaMultiplier;
                 rotationYOriginal += velocityX * inertiaMultiplier;
 
-                rotationXOriginal = Math.round(rotationXOriginal / 360) * 360;
-                rotationYOriginal = Math.round(rotationYOriginal / 360) * 360;
-
                 updateCardRotationOriginal();
 
                 setTimeout(() => {
@@ -256,10 +253,10 @@
                 updateCardRotationOriginal();
             }, 200);
 
-            // Iniciar la animación de volteo de la carta fantasma con un retraso
-            const fantasmaDelay = 100; // Retraso en milisegundos (ajusta este valor)
+            // Iniciar la animación de volteo de la carta fantasma con un retraso de 10 milisegundos
+            const fantasmaDelay = 10; // Retraso en milisegundos
             setTimeout(() => {
-                void cardFantasma.offsetWidth; // Forzar reflow (opcional, para asegurar inicio)
+                void cardFantasma.offsetWidth; // Forzar reflow (opcional)
                 cardFantasma.classList.add('animate-flip');
                 setTimeout(() => {
                     cardFantasma.classList.remove('animate-flip');
