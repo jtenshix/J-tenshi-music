@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Respuesta Inmediata al Botón)</title>
+    <title>Carta 3D Interactiva (Respuesta Inmediata + Animación Rápida)</title>
     <style>
         body {
             margin: 0;
@@ -91,7 +91,7 @@
             width: 360px;
             height: 540px;
             transform-style: preserve-3d;
-            transition: transform 0.6s ease-in-out;
+            transition: transform 0.3s ease-in-out; /* Reducimos la duración a 0.3s */
             transform: rotateY(0deg);
             border-radius: 15px;
         }
@@ -112,7 +112,6 @@
 
         .card-animation-back {
             background-image: url('carta_dorso.png.png');
-            background-size: cover;
             transform: rotateY(180deg);
         }
 
@@ -269,7 +268,7 @@
                     } else {
                         cardFantasma.style.transform = 'rotateY(0deg)';
                     }
-                }, 600); // Duración de la animación fantasma
+                }, 300); // Duración de la animación fantasma (igual que la transición)
             }, fantasmaDelay);
         });
 
