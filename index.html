@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Respuesta Inmediata + Animación Rápida)</title>
+    <title>Carta 3D Interactiva (Respuesta Inmediata Total)</title>
     <style>
         body {
             margin: 0;
@@ -91,7 +91,7 @@
             width: 360px;
             height: 540px;
             transform-style: preserve-3d;
-            transition: transform 0.3s ease-in-out; /* Reducimos la duración a 0.3s */
+            transition: transform 0.6s ease-in-out; /* La velocidad de la animación sigue siendo 0.6s */
             transform: rotateY(0deg);
             border-radius: 15px;
         }
@@ -255,21 +255,18 @@
             rotationYOriginal = 0;
             updateCardRotationOriginal();
 
-            // Iniciar la animación de volteo de la carta fantasma SIN RETRASO
-            const fantasmaDelay = 0; // Retraso en milisegundos
+            // Iniciar la animación de volteo de la carta fantasma DIRECTAMENTE
+            void cardFantasma.offsetWidth; // Forzar reflow (opcional)
+            cardFantasma.classList.add('animate-flip');
             setTimeout(() => {
-                void cardFantasma.offsetWidth; // Forzar reflow (opcional)
-                cardFantasma.classList.add('animate-flip');
-                setTimeout(() => {
-                    cardFantasma.classList.remove('animate-flip');
-                    isFantasmaFlipped = !isFantasmaFlipped;
-                    if (isFantasmaFlipped) {
-                        cardFantasma.style.transform = 'rotateY(180deg)';
-                    } else {
-                        cardFantasma.style.transform = 'rotateY(0deg)';
-                    }
-                }, 300); // Duración de la animación fantasma (igual que la transición)
-            }, fantasmaDelay);
+                cardFantasma.classList.remove('animate-flip');
+                isFantasmaFlipped = !isFantasmaFlipped;
+                if (isFantasmaFlipped) {
+                    cardFantasma.style.transform = 'rotateY(180deg)';
+                } else {
+                    cardFantasma.style.transform = 'rotateY(0deg)';
+                }
+            }, 600); // La duración de la animación sigue siendo 0.6s (puedes ajustarla en CSS)
         });
 
         document.addEventListener('touchstart', startDragOriginal);
