@@ -18,12 +18,19 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 40px;
+            gap: 40px; /* Esto separará los contenedores si no los posicionas absolutamente */
         }
 
         .card-container {
             perspective: 1200px;
             transform-style: preserve-3d;
+        }
+
+        .card-container.fantasma {
+            position: absolute; /* Añadido para poder usar top y left */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         .card {
