@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Original + Fantasma Inicio Dorso Correcto)</title>
+    <title>Carta 3D Interactiva (Original + Fantasma Inicio Frontal)</title>
     <style>
         body {
             margin: 0;
@@ -18,20 +18,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 40px; /* Espacio entre las cartas */
+            gap: 40px;
         }
 
         .card-container {
             perspective: 1200px;
             transform-style: preserve-3d;
-        }
-
-        .card-container.original {
-            /* Posición relativa ya gestionada por el body flex */
-        }
-
-        .card-container.fantasma {
-            /* Posición relativa ya gestionada por el body flex */
         }
 
         .card {
@@ -96,12 +88,11 @@
         }
 
         .card-animation-container {
-            /* No absolute para que fluya con flex */
             width: 360px;
             height: 540px;
             transform-style: preserve-3d;
             transition: transform 0.6s ease-in-out;
-            transform: rotateY(180deg); /* Inicialmente rotada para el dorso */
+            transform: rotateY(0deg); /* Inicialmente sin rotación */
             border-radius: 15px;
         }
 
@@ -122,7 +113,7 @@
         .card-animation-back {
             background-image: url('carta_dorso.png.png');
             background-size: cover;
-            transform: rotateY(180deg); /* Rotamos la cara trasera para que se vea al inicio */
+            transform: rotateY(180deg); /* El dorso sigue "al revés" */
         }
 
         .flip-button {
@@ -190,10 +181,10 @@
         let startXOriginal = 0, startYOriginal = 0;
         let currentXOriginal = 0, currentYOriginal = 0;
         let dragStartTimeOriginal;
-        let isFantasmaFlipped = true; // Inicialmente en el dorso
+        let isFantasmaFlipped = false; // Inicialmente mostrando el frente
 
-        // Establecemos la rotación inicial de la carta fantasma para mostrar el dorso
-        cardFantasma.style.transform = 'rotateY(180deg)';
+        // Establecemos la rotación inicial de la carta fantasma a 0 grados
+        cardFantasma.style.transform = 'rotateY(0deg)';
 
         function updateCardRotationOriginal() {
             cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
@@ -254,7 +245,6 @@
         }
 
         flipBtn.addEventListener('click', () => {
-            // Volteo de la carta original (sin cambios)
             cardOriginal.classList.add('will-flip');
             setTimeout(() => {
                 isFlippedOriginal = !isFlippedOriginal;
@@ -265,7 +255,6 @@
                 updateCardRotationOriginal();
             }, 200);
 
-            // Animación de la carta fantasma para alternar la vista
             cardFantasma.classList.add('animate-flip');
             setTimeout(() => {
                 cardFantasma.classList.remove('animate-flip');
@@ -275,10 +264,9 @@
                 } else {
                     cardFantasma.style.transform = 'rotateY(0deg)';
                 }
-            }, 600); // Duración de la animación fantasma
+            }, 600);
         });
 
-        // Eventos de arrastre para la carta original
         document.addEventListener('touchstart', startDragOriginal);
         document.addEventListener('touchmove', dragMoveOriginal);
         document.addEventListener('touchend', stopDragOriginal);
