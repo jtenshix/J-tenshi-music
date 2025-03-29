@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo con Fantasma Intermedio - Funciones Originales + Giro)</title>
+    <title>Carta 3D Interactiva (Volteo con Fantasma Intermedio - Sin Giro Inicial)</title>
     <style>
         body {
             margin: 0;
@@ -143,10 +143,7 @@
             background-color: rgba(255, 255, 255, 0.8);
         }
 
-        .card.will-flip {
-            transform: rotateY(30deg); /* ¡Aquí estaba el error! Faltaba esta línea */
-            transition: transform 0.2s ease-in-out;
-        }
+        /* Eliminamos la clase will-flip del CSS */
     </style>
 </head>
 <body>
@@ -246,10 +243,10 @@
         flipBtn.addEventListener('click', () => {
             if (isAnimatingFlip) return;
             isAnimatingFlip = true;
-            card.classList.add('will-flip');
+            // card.classList.add('will-flip'); // ¡Eliminamos esta línea!
 
             setTimeout(() => {
-                card.classList.remove('will-flip');
+                // card.classList.remove('will-flip'); // ¡Eliminamos esta línea!
 
                 // 1. Ocultar la carta original
                 frontContainer.style.opacity = 0;
@@ -279,7 +276,7 @@
                         isAnimatingFlip = false;
                     }, flipDuration);
                 }, animationDelay);
-            }, 200);
+            }, 0); // Reducimos el timeout a 0 ya que no esperamos el giro
         });
 
         document.addEventListener('touchstart', startDrag);
