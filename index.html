@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Original + Fantasma Alternante - Inicio Dorso)</title>
+    <title>Carta 3D Interactiva (Original + Fantasma Inicio Dorso Correcto)</title>
     <style>
         body {
             margin: 0;
@@ -101,7 +101,7 @@
             height: 540px;
             transform-style: preserve-3d;
             transition: transform 0.6s ease-in-out;
-            transform: rotateY(180deg); /* Inicialmente mostramos el dorso */
+            transform: rotateY(180deg); /* Inicialmente rotada para el dorso */
             border-radius: 15px;
         }
 
@@ -121,7 +121,8 @@
 
         .card-animation-back {
             background-image: url('carta_dorso.png.png');
-            transform: rotateY(180deg);
+            background-size: cover;
+            transform: rotateY(180deg); /* Rotamos la cara trasera para que se vea al inicio */
         }
 
         .flip-button {
@@ -169,7 +170,7 @@
     </div>
 
     <div class="card-container fantasma">
-        <div class="card-animation-container" id="cardFantasma" style="transform: rotateY(180deg);">
+        <div class="card-animation-container" id="cardFantasma">
             <div class="card-animation-face card-animation-front"></div>
             <div class="card-animation-face card-animation-back"></div>
         </div>
@@ -190,6 +191,9 @@
         let currentXOriginal = 0, currentYOriginal = 0;
         let dragStartTimeOriginal;
         let isFantasmaFlipped = true; // Inicialmente en el dorso
+
+        // Establecemos la rotación inicial de la carta fantasma para mostrar el dorso
+        cardFantasma.style.transform = 'rotateY(180deg)';
 
         function updateCardRotationOriginal() {
             cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
