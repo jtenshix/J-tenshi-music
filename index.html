@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Original + Fantasma Inicio Frontal)</title>
+    <title>Carta 3D Interactiva (Original + Fantasma Animación Instantánea)</title>
     <style>
         body {
             margin: 0;
@@ -92,7 +92,7 @@
             height: 540px;
             transform-style: preserve-3d;
             transition: transform 0.6s ease-in-out;
-            transform: rotateY(0deg); /* Inicialmente sin rotación */
+            transform: rotateY(0deg);
             border-radius: 15px;
         }
 
@@ -113,7 +113,7 @@
         .card-animation-back {
             background-image: url('carta_dorso.png.png');
             background-size: cover;
-            transform: rotateY(180deg); /* El dorso sigue "al revés" */
+            transform: rotateY(180deg);
         }
 
         .flip-button {
@@ -245,6 +245,7 @@
         }
 
         flipBtn.addEventListener('click', () => {
+            // Iniciar el efecto de "will-flip" en la carta original
             cardOriginal.classList.add('will-flip');
             setTimeout(() => {
                 isFlippedOriginal = !isFlippedOriginal;
@@ -255,6 +256,7 @@
                 updateCardRotationOriginal();
             }, 200);
 
+            // Iniciar la animación de volteo de la carta fantasma INMEDIATAMENTE
             cardFantasma.classList.add('animate-flip');
             setTimeout(() => {
                 cardFantasma.classList.remove('animate-flip');
@@ -264,7 +266,7 @@
                 } else {
                     cardFantasma.style.transform = 'rotateY(0deg)';
                 }
-            }, 600);
+            }, 600); // Duración de la animación fantasma
         });
 
         document.addEventListener('touchstart', startDragOriginal);
