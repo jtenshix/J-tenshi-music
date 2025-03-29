@@ -25,7 +25,7 @@
 
         .card-container.original,
         .card-container.fantasma {
-            position: absolute;
+            position: absolute; /* ¡ESTO ES LO QUE FALTABA! */
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -89,12 +89,12 @@
         }
 
         .card-front {
-            background-image: url('images/carta_frente.png'); /* ¡RUTA DE EJEMPLO - CAMBIA ESTO! */
+            background-image: url('images/carta_frente.png'); /* ¡ASUMIENDO QUE ESTA ES TU RUTA! */
             background-size: cover;
         }
 
         .card-back {
-            background-image: url('images/carta_dorso.png'); /* ¡RUTA DE EJEMPLO - CAMBIA ESTO! */
+            background-image: url('images/carta_dorso.png'); /* ¡ASUMIENDO QUE ESTA ES TU RUTA! */
             background-size: cover;
             transform: rotateY(180deg) scaleX(-1);
         }
@@ -125,12 +125,12 @@
         }
 
         .card-animation-front {
-            background-image: url('images/carta_frente.png'); /* ¡RUTA DE EJEMPLO - CAMBIA ESTO! */
+            background-image: url('images/carta_frente.png'); /* ¡ASUMIENDO QUE ESTA ES TU RUTA! */
             transform: rotateY(0deg);
         }
 
         .card-animation-back {
-            background-image: url('images/carta_dorso.png'); /* ¡RUTA DE EJEMPLO - CAMBIA ESTO! */
+            background-image: url('images/carta_dorso.png'); /* ¡ASUMIENDO QUE ESTA ES TU RUTA! */
             transform: rotateY(180deg);
         }
 
