@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Respuesta Inmediata Total)</title>
+    <title>Carta 3D Interactiva (Activación Instantánea Experimental)</title>
     <style>
         body {
             margin: 0;
@@ -91,7 +91,7 @@
             width: 360px;
             height: 540px;
             transform-style: preserve-3d;
-            transition: transform 0.6s ease-in-out; /* La velocidad de la animación sigue siendo 0.6s */
+            transition: transform 0.6s ease-in-out;
             transform: rotateY(0deg);
             border-radius: 15px;
         }
@@ -143,6 +143,10 @@
         .card.will-flip {
             transform: rotateY(30deg);
             transition: transform 0.2s ease-in-out;
+        }
+
+        .card-animation-container.animate-flip {
+            transform: rotateY(180deg);
         }
     </style>
 </head>
@@ -257,16 +261,12 @@
 
             // Iniciar la animación de volteo de la carta fantasma DIRECTAMENTE
             void cardFantasma.offsetWidth; // Forzar reflow (opcional)
-            cardFantasma.classList.add('animate-flip');
+            cardFantasma.style.transform = 'rotateY(180deg)'; // Establecemos la rotación final de inmediato
             setTimeout(() => {
-                cardFantasma.classList.remove('animate-flip');
+                cardFantasma.style.transition = 'transform 0.6s ease-in-out'; // Re-activamos la transición para el "reverso"
+                cardFantasma.style.transform = isFantasmaFlipped ? 'rotateY(0deg)' : 'rotateY(180deg)';
                 isFantasmaFlipped = !isFantasmaFlipped;
-                if (isFantasmaFlipped) {
-                    cardFantasma.style.transform = 'rotateY(180deg)';
-                } else {
-                    cardFantasma.style.transform = 'rotateY(0deg)';
-                }
-            }, 600); // La duración de la animación sigue siendo 0.6s (puedes ajustarla en CSS)
+            }, 10); // Un pequeño delay para que el browser registre el cambio de transform inicial
         });
 
         document.addEventListener('touchstart', startDragOriginal);
