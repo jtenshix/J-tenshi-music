@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Alternancia Fantasma)</title>
+    <title>Carta 3D Interactiva (Secuencia Estricta)</title>
     <style>
         body {
             margin: 0;
@@ -23,7 +23,7 @@
             position: relative; /* Para apilar las cartas */
         }
 
-        /* Estilos de la Carta Original (Código A) */
+        /* Estilos del Código A (Carta Original) - SIN MODIFICACIONES */
         .card.original {
             width: 360px;
             height: 540px;
@@ -32,7 +32,7 @@
             top: 0;
             left: 0;
             transform-style: preserve-3d;
-            transition: opacity 0.2s ease-in-out, transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.2s ease-in-out;
             transform: rotateX(0deg) rotateY(0deg);
             border-radius: 15px;
         }
@@ -91,7 +91,7 @@
             transition: transform 0.2s ease-in-out;
         }
 
-        /* Estilos de la Carta Fantasma (Código 2) */
+        /* Estilos del Código 2 (Carta Fantasma) - INICIALMENTE INVISIBLE */
         .card-wrapper.fantasma {
             width: 360px;
             height: 540px;
@@ -99,9 +99,9 @@
             top: 0;
             left: 0;
             transform-style: preserve-3d;
-            transition: transform 0.6s ease-in-out, opacity 0.2s ease-in-out; /* Duración del giro: 0.6s (original) */
+            transition: transform 0.6s ease-in-out, opacity 0.2s ease-in-out;
             transform-origin: center center;
-            opacity: 0; /* Inicialmente invisible */
+            opacity: 0; /* INICIALMENTE INVISIBLE */
             pointer-events: none;
         }
 
@@ -271,12 +271,12 @@
                     cardFantasmaWrapper.classList.toggle('flipped');
                 }, 2200);
 
-                // 3. Desaparecer la carta fantasma después de la duración de su giro (0.6s) + un pequeño buffer
+                // 3. Desaparecer la carta fantasma después de 0.6 segundos (duración del giro)
                 setTimeout(() => {
                     cardFantasmaWrapper.classList.remove('visible');
-                }, 2200 + 600 + 200); // 3 segundos
+                }, 2200 + 600);
 
-                // 4. Aparecer la carta original (en su estado volteado) después de un pequeño delay
+                // 4. Aparecer la carta original (en su estado volteado) después de 2 segundos
                 setTimeout(() => {
                     cardOriginal.classList.toggle('flipped');
                     cardOriginal.style.opacity = 1;
@@ -284,7 +284,7 @@
                     rotationYOriginal = 0;
                     updateCardRotationOriginal();
                     isAnimating = false;
-                }, 3500); // Un poco después de que desaparezca la fantasma
+                }, 2200 + 600 + 2000); // Total 4.8 segundos
             }
         });
 
