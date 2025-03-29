@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Activación Instantánea Experimental)</title>
+    <title>Carta 3D Interactiva (Aparición y Animación Alternante)</title>
     <style>
         body {
             margin: 0;
@@ -91,9 +91,24 @@
             width: 360px;
             height: 540px;
             transform-style: preserve-3d;
-            transition: transform 0.6s ease-in-out;
+            transition: transform 0.3s ease-in-out; /* Velocidad de la animación */
             transform: rotateY(0deg);
             border-radius: 15px;
+            opacity: 0; /* Inicialmente invisible */
+            pointer-events: none; /* No interactuable inicialmente */
+        }
+
+        .card-animation-container.visible {
+            opacity: 1; /* Visible cuando se activa */
+            pointer-events: auto; /* Interactuable cuando es visible */
+        }
+
+        .card-animation-container.animate-flip-to-back {
+            transform: rotateY(180deg);
+        }
+
+        .card-animation-container.animate-flip-to-front {
+            transform: rotateY(0deg);
         }
 
         .card-animation-face {
@@ -112,6 +127,7 @@
 
         .card-animation-back {
             background-image: url('carta_dorso.png.png');
+            background-size: cover;
             transform: rotateY(180deg);
         }
 
@@ -145,15 +161,21 @@
             transition: transform 0.2s ease-in-out;
         }
 
-        .card-animation-container.animate-flip {
-            transform: rotateY(180deg);
+        .card.invisible {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .card.visible {
+            opacity: 1;
+            pointer-events: auto;
         }
     </style>
 </head>
 <body>
 
     <div class="card-container original">
-        <div class="card" id="cardOriginal">
+        <div class="card visible" id="cardOriginal">
             <div class="card-front-container">
                 <div class="card-side card-front"></div>
             </div>
@@ -184,7 +206,7 @@
         let startXOriginal = 0, startYOriginal = 0;
         let currentXOriginal = 0, currentYOriginal = 0;
         let dragStartTimeOriginal;
-        let isFantasmaFlipped = false; // Inicialmente mostrando el frente
+        let isFantasmaFlipped = false; // Recuerda el estado de la fantasma
 
         // Establecemos la rotación inicial de la carta fantasma a 0 grados
         cardFantasma.style.transform = 'rotateY(0deg)';
@@ -248,25 +270,35 @@
         }
 
         flipBtn.addEventListener('click', () => {
-            // Iniciar el efecto de "will-flip" en la carta original
-            cardOriginal.classList.add('will-flip');
+            // Hacer la carta original invisible
+            cardOriginal.classList.add('invisible');
+            cardOriginal.classList.remove('visible');
 
-            // Iniciar el cambio de estado (volteo real) de la carta original INMEDIATAMENTE
-            isFlippedOriginal = !isFlippedOriginal;
-            cardOriginal.classList.toggle('flipped');
-            cardOriginal.classList.remove('will-flip');
-            rotationXOriginal = 0;
-            rotationYOriginal = 0;
-            updateCardRotationOriginal();
+            // Hacer la carta fantasma visible
+            cardFantasma.classList.add('visible');
 
-            // Iniciar la animación de volteo de la carta fantasma DIRECTAMENTE
-            void cardFantasma.offsetWidth; // Forzar reflow (opcional)
-            cardFantasma.style.transform = 'rotateY(180deg)'; // Establecemos la rotación final de inmediato
+            // Determinar la dirección de la animación
+            if (isFantasmaFlipped) {
+                cardFantasma.classList.remove('animate-flip-to-back');
+                cardFantasma.classList.add('animate-flip-to-front');
+            } else {
+                cardFantasma.classList.remove('animate-flip-to-front');
+                cardFantasma.classList.add('animate-flip-to-back');
+            }
+
+            // Actualizar el estado de volteo de la fantasma después de la animación
             setTimeout(() => {
-                cardFantasma.style.transition = 'transform 0.6s ease-in-out'; // Re-activamos la transición para el "reverso"
-                cardFantasma.style.transform = isFantasmaFlipped ? 'rotateY(0deg)' : 'rotateY(180deg)';
+                cardFantasma.classList.remove('animate-flip-to-front');
+                cardFantasma.classList.remove('animate-flip-to-back');
                 isFantasmaFlipped = !isFantasmaFlipped;
-            }, 10); // Un pequeño delay para que el browser registre el cambio de transform inicial
+            }, 300); // Espera la duración de la animación
+
+            // Ocultar la fantasma y mostrar la original después de un breve tiempo
+            setTimeout(() => {
+                cardFantasma.classList.remove('visible');
+                cardOriginal.classList.add('visible');
+                cardOriginal.classList.remove('invisible');
+            }, 600); // Espera un poco más para que se vea el estado final de la fantasma
         });
 
         document.addEventListener('touchstart', startDragOriginal);
