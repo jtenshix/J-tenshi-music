@@ -21,20 +21,19 @@
         .card-container {
             perspective: 1200px;
             transform-style: preserve-3d;
+            position: relative; /* Para que las cartas absolutas se posicionen dentro */
         }
 
         .card-container.original,
         .card-container.fantasma {
-            position: absolute; /* ¡ESTO ES LO QUE FALTABA! */
+            position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 80vw;
-            height: calc(80vw * 1.5);
-            max-width: 360px;
-            max-height: 540px;
-            min-width: 200px;
-            min-height: 300px;
+            width: 80vw; /* 80% del ancho de la ventana */
+            height: calc(80vw * 1.5); /* Alto proporcional al ancho (relación 1.5) */
+            max-width: 360px; /* Máximo ancho para pantallas grandes */
+            max-height: 540px; /* Máximo alto para pantallas grandes */
         }
 
         .card {
@@ -45,8 +44,8 @@
             transform-style: preserve-3d;
             transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             transform: rotateX(0deg) rotateY(0deg);
-            border-radius: 2.77vw;
-            max-border-radius: 15px;
+            border-radius: 2.77vw; /* Radio de borde relativo al ancho */
+            max-border-radius: 15px; /* Máximo radio de borde */
         }
 
         .card-front-container,
@@ -59,7 +58,7 @@
             height: 100%;
             transform-style: preserve-3d;
             backface-visibility: hidden;
-            border-radius: inherit;
+            border-radius: inherit; /* Hereda el border-radius del padre */
         }
 
         .card-back-container {
@@ -89,12 +88,12 @@
         }
 
         .card-front {
-            background-image: url('images/carta_frente.png'); /* ¡ASUMIENDO QUE ESTA ES TU RUTA! */
+            background-image: url('carta_frente.png.jpg');
             background-size: cover;
         }
 
         .card-back {
-            background-image: url('images/carta_dorso.png'); /* ¡ASUMIENDO QUE ESTA ES TU RUTA! */
+            background-image: url('carta_dorso.png.png');
             background-size: cover;
             transform: rotateY(180deg) scaleX(-1);
         }
@@ -125,12 +124,12 @@
         }
 
         .card-animation-front {
-            background-image: url('images/carta_frente.png'); /* ¡ASUMIENDO QUE ESTA ES TU RUTA! */
+            background-image: url('carta_frente.png.jpg');
             transform: rotateY(0deg);
         }
 
         .card-animation-back {
-            background-image: url('images/carta_dorso.png'); /* ¡ASUMIENDO QUE ESTA ES TU RUTA! */
+            background-image: url('carta_dorso.png.png');
             transform: rotateY(180deg);
         }
 
@@ -151,8 +150,8 @@
             overflow: hidden;
             z-index: 10;
             position: fixed;
-            bottom: calc(env(safe-area-inset-bottom) + 20px);
-            right: 20px;
+            bottom: calc(env(safe-area-inset-bottom) + 20px); /* Margen inferior */
+            right: 20px; /* Margen derecho */
         }
 
         .flip-button:hover {
