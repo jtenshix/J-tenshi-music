@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Secuencia Fantasma Ajustada)</title>
+    <title>Carta 3D Interactiva (Alternancia Fantasma)</title>
     <style>
         body {
             margin: 0;
@@ -99,7 +99,7 @@
             top: 0;
             left: 0;
             transform-style: preserve-3d;
-            transition: transform 5s ease-in-out, opacity 0.2s ease-in-out; /* Duración del giro: 5s */
+            transition: transform 0.6s ease-in-out, opacity 0.2s ease-in-out; /* Duración del giro: 0.6s (original) */
             transform-origin: center center;
             opacity: 0; /* Inicialmente invisible */
             pointer-events: none;
@@ -241,8 +241,8 @@
                 let velocityX = (currentXOriginal - startXOriginal) / (Date.now() - dragStartTimeOriginal);
 
                 const inertiaMultiplier = 0.2;
-                rotationXOriginal -= velocityY * inertiaMultiplier;
-                rotationYOriginal += velocityX * inertiaMultiplier;
+                rotationXOriginal -= velocityYA * inertiaMultiplier;
+                rotationYOriginal += velocityXA * inertiaMultiplier;
 
                 rotationXOriginal = Math.round(rotationXOriginal / 360) * 360;
                 rotationYOriginal = Math.round(rotationYOriginal / 360) * 360;
@@ -271,21 +271,20 @@
                     cardFantasmaWrapper.classList.toggle('flipped');
                 }, 2200);
 
-                // 3. Desaparecer la carta fantasma después de 5 segundos (duración del giro)
+                // 3. Desaparecer la carta fantasma después de la duración de su giro (0.6s) + un pequeño buffer
                 setTimeout(() => {
                     cardFantasmaWrapper.classList.remove('visible');
-                }, 7200);
+                }, 2200 + 600 + 200); // 3 segundos
 
-                // 4. Aparecer la carta original (en su estado volteado) después de 2 segundos
+                // 4. Aparecer la carta original (en su estado volteado) después de un pequeño delay
                 setTimeout(() => {
-                    cardOriginal.classList.remove('will-flip');
                     cardOriginal.classList.toggle('flipped');
                     cardOriginal.style.opacity = 1;
                     rotationXOriginal = 0;
                     rotationYOriginal = 0;
                     updateCardRotationOriginal();
                     isAnimating = false;
-                }, 9200);
+                }, 3500); // Un poco después de que desaparezca la fantasma
             }
         });
 
