@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo con Fantasma Intermedio - Sin Giro Inicial)</title>
+    <title>Carta 3D Interactiva (Volteo + Rotación X/Y con Rebote - Bordes Curvos)</title>
     <style>
         body {
             margin: 0;
@@ -30,17 +30,16 @@
         .card {
             width: 360px;
             height: 540px;
-            background-color: transparent;
+            background-color: transparent; /* Hacemos el fondo del contenedor transparente */
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             transform: rotateX(0deg) rotateY(0deg);
-            border-radius: 15px;
+            border-radius: 15px; /* Añadimos el border-radius al contenedor también */
         }
 
         .card-front-container,
-        .card-back-container,
-        .card-animation-container {
+        .card-back-container {
             position: absolute;
             top: 0;
             left: 0;
@@ -48,7 +47,6 @@
             height: 100%;
             transform-style: preserve-3d;
             backface-visibility: hidden;
-            border-radius: 15px;
         }
 
         .card-back-container {
@@ -86,36 +84,6 @@
             background-image: url('carta_dorso.png.png');
             background-size: cover;
             transform: rotateY(180deg) scaleX(-1);
-        }
-
-        .card-animation-container {
-            opacity: 0;
-            pointer-events: none;
-            transform-style: preserve-3d;
-            transition: transform 0.5s ease-in-out, opacity 0.3s ease-in-out;
-        }
-
-        .card-animation-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 15px;
-            background-size: cover;
-        }
-
-        .card-animation-front {
-            background-image: url('carta_frente.png.jpg');
-            transform: rotateY(0deg);
-        }
-
-        .card-animation-back {
-            background-image: url('carta_dorso.png.png');
-            transform: rotateY(180deg);
-        }
-
-        .card-animation-container.animate-flip {
-            transform: rotateY(180deg);
         }
 
         .flip-button {
@@ -156,10 +124,6 @@
             <div class="card-back-container">
                 <div class="card-side card-back"></div>
             </div>
-            <div class="card-animation-container" id="cardAnimation">
-                <div class="card-animation-face card-animation-front"></div>
-                <div class="card-animation-face card-animation-back"></div>
-            </div>
         </div>
     </div>
     <button class="flip-button" id="flipBtn"></button>
@@ -169,19 +133,12 @@
         const flipBtn = document.getElementById('flipBtn');
         const frontContainer = document.querySelector('.card-front-container');
         const backContainer = document.querySelector('.card-back-container');
-        const animationContainer = document.getElementById('cardAnimation');
-        const animationFront = document.querySelector('.card-animation-front');
-        const animationBack = document.querySelector('.card-animation-back');
         let isFlipped = false;
         let rotationX = 0, rotationY = 0;
         let isDragging = false;
         let startX = 0, startY = 0;
         let currentX = 0, currentY = 0;
         let dragStartTime;
-        let isAnimatingFlip = false;
-        const fadeDuration = 200;
-        const animationDelay = 100;
-        const flipDuration = 600;
 
         function updateCardRotation() {
             card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
@@ -201,11 +158,12 @@
             if (isDragging) {
                 let x = e.touches ? e.touches[0].clientX : e.clientX;
                 let y = e.touches ? e.touches[0].clientY : e.clientY;
+
                 let deltaY = y - startY;
                 let deltaX = x - startX;
 
-                rotationX -= deltaY * 0.2;
-                rotationY += deltaX * 0.2;
+                rotationX -= deltaY * 0.2; // Rotación vertical sin inversión
+                rotationY += deltaX * 0.2; // Rotación horizontal sin inversión
 
                 updateCardRotation();
 
@@ -226,8 +184,8 @@
                 let velocityX = (currentX - startX) / (Date.now() - dragStartTime);
 
                 const inertiaMultiplier = 0.2;
-                rotationX -= velocityY * inertiaMultiplier;
-                rotationY += velocityX * inertiaMultiplier;
+                rotationX -= velocityY * inertiaMultiplier; // Inercia vertical sin inversión
+                rotationY += velocityX * inertiaMultiplier; // Inercia horizontal sin inversión
 
                 rotationX = Math.round(rotationX / 360) * 360;
                 rotationY = Math.round(rotationY / 360) * 360;
@@ -241,42 +199,13 @@
         }
 
         flipBtn.addEventListener('click', () => {
-            if (isAnimatingFlip) return;
-            isAnimatingFlip = true;
             // card.classList.add('will-flip'); // ¡Eliminamos esta línea!
-
-            setTimeout(() => {
-                // card.classList.remove('will-flip'); // ¡Eliminamos esta línea!
-
-                // 1. Ocultar la carta original
-                frontContainer.style.opacity = 0;
-                backContainer.style.opacity = 0;
-
-                // 2. Activar la animación de la carta fantasma
-                setTimeout(() => {
-                    animationContainer.style.opacity = 1;
-                    animationContainer.style.pointerEvents = 'auto';
-                    animationContainer.classList.add('animate-flip');
-
-                    // 3. Al finalizar la animación de la fantasma, la ocultamos y mostramos la original volteada
-                    setTimeout(() => {
-                        animationContainer.classList.remove('animate-flip');
-                        animationContainer.style.opacity = 0;
-                        animationContainer.style.pointerEvents = 'none';
-                        isFlipped = !isFlipped;
-                        if (isFlipped) {
-                            frontContainer.style.display = 'none';
-                            backContainer.style.display = 'flex';
-                            setTimeout(() => backContainer.style.opacity = 1, fadeDuration);
-                        } else {
-                            frontContainer.style.display = 'flex';
-                            backContainer.style.display = 'none';
-                            setTimeout(() => frontContainer.style.opacity = 1, fadeDuration);
-                        }
-                        isAnimatingFlip = false;
-                    }, flipDuration);
-                }, animationDelay);
-            }, 0); // Reducimos el timeout a 0 ya que no esperamos el giro
+            isFlipped = !isFlipped;
+            card.classList.toggle('flipped');
+            // card.classList.remove('will-flip'); // ¡Eliminamos esta línea!
+            rotationX = 0;
+            rotationY = 0;
+            updateCardRotation();
         });
 
         document.addEventListener('touchstart', startDrag);
