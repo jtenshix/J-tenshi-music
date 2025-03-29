@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Original + Fantasma Lateral + Grabación)</title>
+    <title>Carta 3D Interactiva (Original + Fantasma Lateral)</title>
     <style>
         body {
             margin: 0;
@@ -132,16 +132,21 @@
             background-color: rgba(255, 255, 255, 0.5);
             color: #121212;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
             cursor: pointer;
             transition: background 0.3s;
-            font-weight: bold;
+            font-size: 0;
+            overflow: hidden;
             z-index: 10;
             position: fixed;
-            bottom: calc(env(safe-area-inset-bottom) + 20px);
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: calc(env(safe-area-inset-bottom) + 90px);
+            right: 20px;
         }
 
         .flip-button:hover {
@@ -174,7 +179,7 @@
         </div>
     </div>
 
-    <button class="flip-button" id="flipBtn">Voltear y Grabar</button>
+    <button class="flip-button" id="flipBtn"></button>
 
     <script>
         const cardOriginal = document.getElementById('cardOriginal');
@@ -269,9 +274,6 @@
                     isAnimatingFantasma = false;
                 }, 600); // Duración de la animación fantasma (ajusta si es necesario)
             }
-
-            // Simulación de "grabación"
-            console.log("¡Grabando!");
         });
 
         // Eventos de arrastre para la carta original
