@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo con Fantasma Lento - 5 Segundos)</title>
+    <title>Carta 3D Interactiva (Volteo Fantasma - Corrección Transición Original)</title>
     <style>
         body {
             margin: 0;
@@ -33,9 +33,13 @@
             background-color: transparent;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 5s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Transición de la carta original a 5 segundos (aunque no se verá) */
+            transition: transform 5s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Transición original (ahora controlada) */
             transform: rotateX(0deg) rotateY(0deg);
             border-radius: 15px;
+        }
+
+        .card.no-transform-transition {
+            transition: transform 0s; /* Deshabilitamos la transición temporalmente */
         }
 
         .card-front-container,
@@ -49,7 +53,7 @@
             transform-style: preserve-3d;
             backface-visibility: hidden;
             border-radius: 15px;
-            transition: opacity 5s ease-in-out; /* Transición de opacidad */
+            transition: opacity 5s ease-in-out;
         }
 
         .card-back-container {
@@ -93,7 +97,7 @@
             opacity: 0;
             pointer-events: none;
             transform-style: preserve-3d;
-            transition: transform 5s ease-in-out, opacity 5s ease-in-out; /* Animación fantasma a 5 segundos */
+            transition: transform 5s ease-in-out, opacity 5s ease-in-out;
             transform: rotateY(0deg);
         }
 
@@ -179,7 +183,7 @@
         let currentX = 0, currentY = 0;
         let dragStartTime;
         let isAnimatingFlip = false;
-        const flipDuration = 5000; // 5000 milisegundos = 5 segundos
+        const flipDuration = 5000;
 
         function updateCardRotation() {
             card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
@@ -243,24 +247,28 @@
             if (isAnimatingFlip) return;
             isAnimatingFlip = true;
 
-            // 1. Ocultar la carta original (transición lenta)
+            // 1. Ocultar la carta original y deshabilitar la transición de volteo
+            card.classList.add('no-transform-transition');
             frontContainer.style.opacity = 0;
             backContainer.style.opacity = 0;
 
-            // 2. Mostrar la carta fantasma y iniciar su animación (lenta)
+            // 2. Mostrar la carta fantasma y iniciar su animación
             animationContainer.style.opacity = 1;
             animationContainer.style.pointerEvents = 'auto';
             animationContainer.classList.add('animate-flip');
 
-            // 3. Cambiar el estado de volteo de la carta original
+            // 3. Cambiar el estado de volteo de la carta original (ahora sin transición visual)
             isFlipped = !isFlipped;
             card.classList.toggle('flipped');
 
-            // 4. Después de la animación (lenta), ocultar la fantasma y mostrar la cara correcta de la original (transición lenta)
+            // 4. Después de la animación, ocultar la fantasma y mostrar la cara correcta de la original
             setTimeout(() => {
                 animationContainer.classList.remove('animate-flip');
                 animationContainer.style.opacity = 0;
                 animationContainer.style.pointerEvents = 'none';
+
+                // 5. Re-habilitar la transición de volteo para la interacción manual
+                card.classList.remove('no-transform-transition');
 
                 if (isFlipped) {
                     backContainer.style.opacity = 1;
