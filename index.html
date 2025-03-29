@@ -31,17 +31,17 @@
             height: 540px;
             transform-style: preserve-3d;
             transition: transform 0.6s ease-in-out;
-            transform: rotateY(0deg);
+            transform: rotateY(0deg); /* Inicialmente sin rotación */
             border-radius: 15px;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            transform-origin: center center; /* Aseguramos que el punto de rotación sea el centro */
+            transform-origin: center center;
         }
 
         .card-animation-container.animate-flip {
-            transform: rotateY(180deg);
+            transform: rotateY(180deg); /* La clase ahora rota el contenedor */
         }
 
         .card-animation-face {
@@ -51,7 +51,7 @@
             backface-visibility: hidden;
             border-radius: 15px;
             background-size: cover;
-            transform-origin: center center; /* Añadimos el punto de rotación al centro de cada cara */
+            transform-origin: center center;
         }
 
         .card-animation-front {
@@ -61,7 +61,7 @@
 
         .card-animation-back {
             background-image: url('carta_dorso.png.png');
-            transform: rotateY(180deg);
+            transform: rotateY(180deg); /* La cara trasera está rotada inicialmente */
         }
 
         .flip-button {
