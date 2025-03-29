@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Original + Fantasma Animación Instantánea)</title>
+    <title>Carta 3D Interactiva (Original + Fantasma Retraso Animación)</title>
     <style>
         body {
             margin: 0;
@@ -256,18 +256,21 @@
                 updateCardRotationOriginal();
             }, 200);
 
-            // Iniciar la animación de volteo de la carta fantasma INMEDIATAMENTE
-            void cardFantasma.offsetWidth;
-            cardFantasma.classList.add('animate-flip');
+            // Iniciar la animación de volteo de la carta fantasma con un retraso
+            const fantasmaDelay = 100; // Retraso en milisegundos (ajusta este valor)
             setTimeout(() => {
-                cardFantasma.classList.remove('animate-flip');
-                isFantasmaFlipped = !isFantasmaFlipped;
-                if (isFantasmaFlipped) {
-                    cardFantasma.style.transform = 'rotateY(180deg)';
-                } else {
-                    cardFantasma.style.transform = 'rotateY(0deg)';
-                }
-            }, 600); // Duración de la animación fantasma
+                void cardFantasma.offsetWidth; // Forzar reflow (opcional, para asegurar inicio)
+                cardFantasma.classList.add('animate-flip');
+                setTimeout(() => {
+                    cardFantasma.classList.remove('animate-flip');
+                    isFantasmaFlipped = !isFantasmaFlipped;
+                    if (isFantasmaFlipped) {
+                        cardFantasma.style.transform = 'rotateY(180deg)';
+                    } else {
+                        cardFantasma.style.transform = 'rotateY(0deg)';
+                    }
+                }, 600); // Duración de la animación fantasma
+            }, fantasmaDelay);
         });
 
         document.addEventListener('touchstart', startDragOriginal);
