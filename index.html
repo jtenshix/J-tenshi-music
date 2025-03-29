@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Aparición y Animación Alternante)</title>
+    <title>Carta 3D Interactiva (Volteo Original + Aparición/Animación Fantasma)</title>
     <style>
         body {
             margin: 0;
@@ -127,7 +127,6 @@
 
         .card-animation-back {
             background-image: url('carta_dorso.png.png');
-            background-size: cover;
             transform: rotateY(180deg);
         }
 
@@ -270,14 +269,27 @@
         }
 
         flipBtn.addEventListener('click', () => {
-            // Hacer la carta original invisible
-            cardOriginal.classList.add('invisible');
-            cardOriginal.classList.remove('visible');
+            // Voltear la carta original
+            cardOriginal.classList.add('will-flip');
+            setTimeout(() => {
+                isFlippedOriginal = !isFlippedOriginal;
+                cardOriginal.classList.toggle('flipped');
+                cardOriginal.classList.remove('will-flip');
+                rotationXOriginal = 0;
+                rotationYOriginal = 0;
+                updateCardRotationOriginal();
+            }, 200);
+
+            // Hacer la carta original invisible (después del inicio del volteo)
+            setTimeout(() => {
+                cardOriginal.classList.add('invisible');
+                cardOriginal.classList.remove('visible');
+            }, 100); // Un pequeño retraso para que se vea el inicio del volteo original
 
             // Hacer la carta fantasma visible
             cardFantasma.classList.add('visible');
 
-            // Determinar la dirección de la animación
+            // Determinar la dirección de la animación de la fantasma
             if (isFantasmaFlipped) {
                 cardFantasma.classList.remove('animate-flip-to-back');
                 cardFantasma.classList.add('animate-flip-to-front');
@@ -286,18 +298,17 @@
                 cardFantasma.classList.add('animate-flip-to-back');
             }
 
-            // Actualizar el estado de volteo de la fantasma después de la animación
+            // Actualizar el estado de volteo de la fantasma después de su animación
             setTimeout(() => {
                 cardFantasma.classList.remove('animate-flip-to-front');
                 cardFantasma.classList.remove('animate-flip-to-back');
                 isFantasmaFlipped = !isFantasmaFlipped;
-            }, 300); // Espera la duración de la animación
+            }, 300); // Espera la duración de la animación de la fantasma
 
-            // Ocultar la fantasma y mostrar la original después de un breve tiempo
+            // Ocultar la fantasma después de su animación
             setTimeout(() => {
                 cardFantasma.classList.remove('visible');
-                cardOriginal.classList.add('visible');
-                cardOriginal.classList.remove('invisible');
+                cardOriginal.classList.remove('invisible'); // La original permanece invisible por ahora
             }, 600); // Espera un poco más para que se vea el estado final de la fantasma
         });
 
