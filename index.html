@@ -25,7 +25,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /* gap: 40px; */ /* Comentado temporalmente para probar la alineación */
+            /* gap: 40px; */
         }
 
         .card-container {
@@ -45,8 +45,7 @@
         }
 
         .card-front-container,
-        .card-back-container,
-        .card-animation-container {
+        .card-back-container {
             position: absolute;
             top: 0;
             left: 0;
@@ -104,11 +103,10 @@
             transition: transform 0.6s ease-in-out;
             transform: rotateY(0deg);
             border-radius: 15px;
-            opacity: 0; /* Inicialmente invisible */
-            pointer-events: none; /* Para que no interfiera con los clics en la original */
-            margin-top: -270px; /* Ajuste para centrar verticalmente */
-            margin-left: -180px; /* Ajuste para centrar horizontalmente */
-            /* transform: rotateY(0deg) translate(-0.5px, -0.5px); */ /* Posible ajuste fino */
+            opacity: 0;
+            pointer-events: none;
+            margin-top: -270px;
+            margin-left: -180px;
         }
 
         .card-animation-container.visible {
@@ -193,7 +191,7 @@
         </div>
     </div>
 
-    <div class="card-container fantasma">
+    <div class="card-container fantasma" style="position: absolute; top: 0; left: 0; width: 0; height: 0; overflow: hidden;">
         <div class="card-animation-container" id="cardFantasma">
             <div class="card-animation-face card-animation-front"></div>
             <div class="card-animation-face card-animation-back"></div>
