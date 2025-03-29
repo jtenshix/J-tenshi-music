@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Activación Instantánea Experimental)</title>
+    <title>Carta 3D Interactiva (Responsive)</title>
     <style>
-        body {
+        html, body {
             margin: 0;
             padding: 0;
             background-color: #121212;
@@ -13,12 +13,9 @@
             overflow: hidden;
             user-select: none;
             position: relative;
-            padding-bottom: env(safe-area-inset-bottom);
-            padding-top: env(safe-area-inset-top);
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 40px; /* Esto separará los contenedores si no los posicionas absolutamente */
         }
 
         .card-container {
@@ -26,22 +23,28 @@
             transform-style: preserve-3d;
         }
 
+        .card-container.original,
         .card-container.fantasma {
-            position: absolute; /* Añadido para poder usar top y left */
+            position: absolute; /* ¡ESTO NO DEBÍ QUITARLO! */
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            width: 80vw; /* 80% del ancho de la ventana */
+            height: calc(80vw * 1.5); /* Alto proporcional al ancho (relación 1.5) */
+            max-width: 360px; /* Máximo ancho para pantallas grandes */
+            max-height: 540px; /* Máximo alto para pantallas grandes */
         }
 
         .card {
-            width: 360px;
-            height: 540px;
+            width: 100%;
+            height: 100%;
             background-color: transparent;
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             transform: rotateX(0deg) rotateY(0deg);
-            border-radius: 15px;
+            border-radius: 2.77vw; /* Radio de borde relativo al ancho */
+            max-border-radius: 15px; /* Máximo radio de borde */
         }
 
         .card-front-container,
@@ -54,7 +57,7 @@
             height: 100%;
             transform-style: preserve-3d;
             backface-visibility: hidden;
-            border-radius: 15px;
+            border-radius: inherit; /* Hereda el border-radius del padre */
         }
 
         .card-back-container {
@@ -76,7 +79,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            border-radius: 15px;
+            border-radius: inherit;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -95,12 +98,12 @@
         }
 
         .card-animation-container {
-            width: 360px;
-            height: 540px;
+            width: 100%;
+            height: 100%;
             transform-style: preserve-3d;
             transition: transform 0.6s ease-in-out;
             transform: rotateY(0deg);
-            border-radius: 15px;
+            border-radius: inherit;
             opacity: 0; /* Inicialmente invisible */
             pointer-events: none; /* Para que no interfiera con los clics en la original */
         }
@@ -115,7 +118,7 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 15px;
+            border-radius: inherit;
             background-size: cover;
         }
 
@@ -146,8 +149,8 @@
             overflow: hidden;
             z-index: 10;
             position: fixed;
-            bottom: calc(env(safe-area-inset-bottom) + 90px);
-            right: 20px;
+            bottom: calc(env(safe-area-inset-bottom) + 20px); /* Margen inferior */
+            right: 20px; /* Margen derecho */
         }
 
         .flip-button:hover {
@@ -272,7 +275,10 @@
         }
 
         flipBtn.addEventListener('click', () => {
-            // 1. Hacer la carta original invisible y la fantasma visible INMEDIATAMENTE
+            // Copiar la transformación (incluida la rotación actual)
+            cardFantasma.style.transform = cardOriginal.style.transform;
+
+            // Hacer la carta original invisible y la fantasma visible INMEDIATAMENTE
             cardOriginal.classList.remove('visible');
             cardOriginal.classList.add('invisible');
             cardFantasma.classList.add('visible');
@@ -286,14 +292,11 @@
             rotationYOriginal = 0;
             updateCardRotationOriginal();
 
-            // Iniciar la animación de volteo de la carta fantasma DIRECTAMENTE (SIN MODIFICAR)
+            // Iniciar la animación de volteo de la carta fantasma DIRECTAMENTE
             void cardFantasma.offsetWidth;
-            cardFantasma.style.transform = 'rotateY(180deg)';
-            setTimeout(() => {
-                cardFantasma.style.transition = 'transform 0.6s ease-in-out';
-                cardFantasma.style.transform = isFantasmaFlipped ? 'rotateY(0deg)' : 'rotateY(180deg)';
-                isFantasmaFlipped = !isFantasmaFlipped;
-            }, 10);
+            cardFantasma.style.transition = 'transform 0.6s ease-in-out';
+            cardFantasma.style.transform = isFantasmaFlipped ? 'rotateY(0deg)' : 'rotateY(180deg)';
+            isFantasmaFlipped = !isFantasmaFlipped;
 
             // 2. Esperar a que termine la animación de la fantasma y revertir la visibilidad
             setTimeout(() => {
