@@ -272,7 +272,10 @@
         }
 
         flipBtn.addEventListener('click', () => {
-            // 1. Hacer la carta original invisible y la fantasma visible INMEDIATAMENTE
+            // Copiar la transformación (incluida la rotación actual)
+            cardFantasma.style.transform = cardOriginal.style.transform;
+
+            // Hacer la carta original invisible y la fantasma visible INMEDIATAMENTE
             cardOriginal.classList.remove('visible');
             cardOriginal.classList.add('invisible');
             cardFantasma.classList.add('visible');
@@ -286,14 +289,11 @@
             rotationYOriginal = 0;
             updateCardRotationOriginal();
 
-            // Iniciar la animación de volteo de la carta fantasma DIRECTAMENTE (SIN MODIFICAR)
+            // Iniciar la animación de volteo de la carta fantasma DIRECTAMENTE
             void cardFantasma.offsetWidth;
-            cardFantasma.style.transform = 'rotateY(180deg)';
-            setTimeout(() => {
-                cardFantasma.style.transition = 'transform 0.6s ease-in-out';
-                cardFantasma.style.transform = isFantasmaFlipped ? 'rotateY(0deg)' : 'rotateY(180deg)';
-                isFantasmaFlipped = !isFantasmaFlipped;
-            }, 10);
+            cardFantasma.style.transition = 'transform 0.6s ease-in-out';
+            cardFantasma.style.transform = isFantasmaFlipped ? 'rotateY(0deg)' : 'rotateY(180deg)';
+            isFantasmaFlipped = !isFantasmaFlipped;
 
             // 2. Esperar a que termine la animación de la fantasma y revertir la visibilidad
             setTimeout(() => {
