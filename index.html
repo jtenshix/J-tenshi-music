@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Volteo con Fantasma Intermedio)</title>
+    <title>Carta 3D Interactiva (Volteo con Fantasma Intermedio - Funciones Normales)</title>
     <style>
         body {
             margin: 0;
@@ -246,22 +246,22 @@
         flipBtn.addEventListener('click', () => {
             if (isAnimatingFlip) return;
             isAnimatingFlip = true;
-            card.classList.add('will-flip'); // Iniciar el pequeño giro del botón
+            card.classList.add('will-flip');
 
             setTimeout(() => {
-                card.classList.remove('will-flip'); // Remover la clase de giro
+                card.classList.remove('will-flip');
 
                 // 1. Ocultar la carta original
                 frontContainer.style.opacity = 0;
                 backContainer.style.opacity = 0;
 
-                // 2. Aparecer la carta fantasma
+                // 2. **Aquí activamos la animación de la carta fantasma**
                 setTimeout(() => {
                     animationContainer.style.opacity = 1;
                     animationContainer.style.pointerEvents = 'auto';
                     animationContainer.classList.add('animate-flip');
 
-                    // 3. Desaparecer la carta fantasma y mostrar la carta original volteada
+                    // 3. **Después de la animación de la fantasma, la ocultamos y mostramos la original**
                     setTimeout(() => {
                         animationContainer.classList.remove('animate-flip');
                         animationContainer.style.opacity = 0;
@@ -279,7 +279,7 @@
                         isAnimatingFlip = false;
                     }, flipDuration);
                 }, animationDelay);
-            }, 200); // Tiempo del efecto "will-flip"
+            }, 200);
         });
 
         document.addEventListener('touchstart', startDrag);
