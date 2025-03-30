@@ -3,91 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva</title>
+    <title>Carta 3D Interactiva (Superposición Directa)</title>
     <style>
         body {
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            min-height: 100vh;
+            overflow: hidden;
+            user-select: none;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #2c3e50;
+        }
+
+        .card-container {
             perspective: 1200px;
-        }
-        .carta-container {
-            position: relative;
-            width: 200px;
-            height: 300px;
-        }
-        .carta, .carta-fantasma {
-            width: 100%;
-            height: 100%;
-            position: absolute;
             transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            position: relative;
+            width: 360px;
+            height: 540px;
         }
-        .carta img, .carta-fantasma div {
+
+        /* Estilos de la Carta Original */
+        .card.original,
+        .card-wrapper.fantasma {
             width: 100%;
             height: 100%;
             position: absolute;
+            top: 0;
+            left: 0;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+        }
+
+        .card.original {
+            background-color: transparent;
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.2s ease-in-out;
+            transform: rotateX(0deg) rotateY(0deg);
+        }
+
+        .card.original .card-front-container,
+        .card.original .card-back-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
             backface-visibility: hidden;
+            border-radius: 15px;
         }
-        .carta .frente, .carta-fantasma .blanca {
-            background: url('carta_frente.png.jpg') no-repeat center/cover;
+
+        .card.original .card-back-container {
+            opacity: 0;
+            pointer-events: none;
         }
-        .carta .dorso, .carta-fantasma .roja {
-            background: url('carta_dorso.png.png') no-repeat center/cover;
+
+        .card.original.flipped .card-front-container {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .card.original.flipped .card-back-container {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .card.original .card-side {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-size: cover;
+        }
+
+        .card.original .card-front {
+            background-image: url('carta_frente.png.jpg');
+            background-size: cover;
+        }
+
+        .card.original .card-back {
+            background-image: url('carta_dorso.png.png');
+            background-size: cover;
+            transform: rotateY(180deg) scaleX(-1);
+        }
+
+        .card.original.will-flip {
+            transform: rotateY(30deg);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        /* Estilos de la Carta Fantasma */
+        .card-wrapper.fantasma {
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease-in-out, opacity 0.2s ease-in-out;
+            transform-origin: center center;
+            opacity: 0;
+            pointer-events: none;
+            border-radius: 8px;
+            width: 50%;
+            height: 50%;
+            top: 25%;
+            left: 25%;
+        }
+
+        .card-wrapper.fantasma.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .card-wrapper.fantasma.flipped {
             transform: rotateY(180deg);
         }
-        .boton-voltear {
+
+        .card-face.fantasma {
             position: absolute;
-            bottom: -40px;
-            left: 50%;
-            transform: translateX(-50%);
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-face.fantasma.front {
+            background-color: white;
+            transform: rotateY(0deg);
+        }
+
+        .card-face.fantasma.back {
+            background-color: red;
+            transform: rotateY(180deg);
+        }
+
+        /* Botón de Volteo */
+        .flip-button {
             background-color: rgba(255, 255, 255, 0.5);
+            color: #121212;
             border: none;
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
             cursor: pointer;
+            transition: background 0.3s;
+            font-size: 0;
+            overflow: hidden;
+            z-index: 10;
+            position: fixed;
+            bottom: calc(env(safe-area-inset-bottom) + 90px);
+            right: 20px;
         }
-        .carta-fantasma {
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .carta-fantasma.activa {
-            opacity: 1;
-            animation: girarFantasma 3s linear forwards;
-        }
-        @keyframes girarFantasma {
-            0% { transform: rotateY(0deg); opacity: 1; }
-            33% { transform: rotateY(180deg); }
-            66% { transform: rotateY(180deg); }
-            100% { transform: rotateY(360deg); opacity: 0; }
+
+        .flip-button:hover {
+            background-color: rgba(255, 255, 255, 0.8);
         }
     </style>
 </head>
 <body>
-    <div class="carta-container">
-        <div class="carta">
-            <img class="frente" src="carta_frente.png.jpg" alt="Frente">
-            <img class="dorso" src="carta_dorso.png.png" alt="Dorso">
-        </div>
-        <div class="carta-fantasma">
-            <div class="blanca"></div>
-            <div class="roja"></div>
-        </div>
-        <button class="boton-voltear" onclick="voltearCarta()">🔄</button>
-    </div>
-    <script>
-        let estado = false;
 
-        function voltearCarta() {
-            const cartaFantasma = document.querySelector('.carta-fantasma');
-            estado = !estado;
-            cartaFantasma.classList.remove('activa');
-            void cartaFantasma.offsetWidth;
-            cartaFantasma.classList.add('activa');
+    <div class="card-container">
+        <div class="card original visible" id="cardOriginal">
+            <div class="card-front-container">
+                <div class="card-side card-front"></div>
+            </div>
+            <div class="card-back-container">
+                <div class="card-side card-back"></div>
+            </div>
+        </div>
+        <div class="card-wrapper fantasma" id="cardFantasmaWrapper">
+            <div class="card-face fantasma front"></div>
+            <div class="card-face fantasma back"></div>
+        </div>
+    </div>
+
+    <button class="flip-button" id="flipBtn"></button>
+
+    <script>
+        const cardOriginal = document.getElementById('cardOriginal');
+        const cardFantasmaWrapper = document.getElementById('cardFantasmaWrapper');
+        const flipBtn = document.getElementById('flipBtn');
+        let isFlippedOriginal = false;
+        let rotationXOriginal = 0, rotationYOriginal = 0;
+        let isDraggingOriginal = false;
+        let startXOriginal = 0, startYOriginal = 0;
+        let currentXOriginal = 0, currentYOriginal = 0;
+        let dragStartTimeOriginal;
+        let isAnimating = false;
+
+        function updateCardRotationOriginal() {
+            cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
         }
-    </script>
-</body>
-</html>
+
+        function startDragOriginal(e) {
+            if (!isAnimating) {
+                isDraggingOriginal = true;
+                startXOriginal = e.touches ? e.touches[0].clientX : e.clientX;
+                startYOriginal = e.touches ? e.touches[0].clientY : e.clientY;
+                dragStartTimeOriginal = Date.now();
+                cardOriginal.style.transition = "transform 0.1s ease-out, opacity 0.2s ease-in-out";
+                currentXOriginal = startXOriginal;
+                currentYOriginal = startYOriginal;
+            }
+        }
+
+        function dragMoveOriginal(e) {
+            if (isDraggingOriginal && !isAnimating) {
+                let x = e.touches ? e.touches[0].clientX : e.clientX;
+                let y = e.touches ? e.touches[0].clientY : e.clientY;
+
+                let deltaY = y - startYOriginal;
+                let deltaX = x - startXOriginal;
+
+                rotationXOriginal -= deltaY * 0.2;
+                rotationYOriginal += deltaX * 0.2;
+
+                updateCardRotationOriginal();
+
+                startYOriginal = y;
+                startXOriginal = x;
+                currentYOriginal = y;
+                currentXOriginal = x;
+            }
+        }
+
+        function stopDragOriginal() {
+            if (isDraggingOriginal && !isAnimating) {
+                isDraggingOriginal = false;
+                cardOriginal.style.transition = "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.2s ease-in-out";
+
+                const animationDuration = 300;
+                let velocityY = (currentYOriginal - startYOriginal) / (Date.now() - dragStartTimeOriginal);
+                let velocityX = (currentXOriginal - startXOriginal) / (Date.now() - dragStartTimeOriginal);
+
+                const inertiaMultiplier = 0.2;
+                rotationXOriginal -= velocityY * inertiaMultiplier;
+                rotationYOriginal += velocityX * inertiaMultiplier;
+
+                rotationXOriginal = Math.round(rotationXOriginal / 360) * 360;
+                rotationYOriginal = Math.round(rotationYOriginal / 360) * 360;
+
+                updateCardRotationOriginal();
+
+                setTimeout(() => {
+                    cardOriginal.style.transition = "transform 0.3s ease-out, opacity 0.2s ease-in-out";
+                }, animationDuration);
+            }
+        }
+
+        flipBtn.addEventListener('click', () => {
+            if (!isAnimating) {
+                isAnimating = true;
+
+                cardOriginal.style.opacity = 0;
+
+                cardFantasmaWrapper.classList.add('visible');
+                void cardFantasmaWrapper.offsetWidth;
+                cardFantasmaWrapper.classList.toggle('flipped');
+
+                setTimeout(() => {
+                    cardFantasmaWrapper.classList.remove('visible');
+                    cardFantasmaWrapper.classList.remove('flipped');
+                }, 600);
+
+                setTimeout(() => {
+                    isFlippedOriginal = !isFlippedOriginal;
+                    cardOriginal.classList.toggle('flipped');
+                    cardOriginal.style.opacity = 1;
+                    rotationXOriginal = 0;
+                    rotationY
