@@ -106,6 +106,7 @@
             transition: transform 0.6s ease-in-out, opacity 0.3s ease-in-out;
             transform-origin: center center;
             opacity: 0;
+            display: none; /* Inicialmente no se muestra */
             pointer-events: none;
             border-radius: 15px;
             width: 360px;
@@ -118,6 +119,7 @@
 
         .card-wrapper.fantasma.visible {
             opacity: 1;
+            display: block; /* Se muestra cuando es visible */
             pointer-events: auto;
         }
 
@@ -277,6 +279,7 @@
 
                     // Hacer visible la fantasma
                     cardFantasmaWrapper.classList.add('visible');
+                    // Forzar un reflow
                     void cardFantasmaWrapper.offsetWidth;
 
                     // Iniciar el giro de la fantasma
@@ -293,17 +296,16 @@
                         cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
                         // Ocultar la fantasma
                         cardFantasmaWrapper.classList.remove('visible');
-                        cardFantasmaWrapper.style.opacity = 0;
-                        cardFantasmaWrapper.style.pointerEvents = 'none';
-                        // Mostrar la original
+                        setTimeout(() => {
+                            cardFantasmaWrapper.style.display = 'none';
+                        }, 300);
                         cardOriginal.style.opacity = 1;
                         cardOriginal.style.pointerEvents = 'auto';
                     }, 600);
                 } else {
                     // Si la fantasma está visible (por un clic anterior interrumpido)
                     cardFantasmaWrapper.classList.remove('visible');
-                    cardFantasmaWrapper.style.opacity = 0;
-                    cardFantasmaWrapper.style.pointerEvents = 'none';
+                    cardFantasmaWrapper.style.display = 'none';
                     cardOriginal.style.opacity = 1;
                     cardOriginal.style.pointerEvents = 'auto';
                     isFantasmaAnimating = false;
