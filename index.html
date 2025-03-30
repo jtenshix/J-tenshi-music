@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva con Carta Fantasma (Giro 180 Infinito)</title>
+    <title>Carta 3D Interactiva con Carta Fantasma (Giro 180 Infinito - Visible)</title>
     <style>
         body {
             margin: 0;
@@ -36,7 +36,7 @@
             left: 0;
             transform-style: preserve-3d;
             border-radius: 15px;
-            transition: transform 0.6s ease-in-out, opacity 0.3s ease-in-out; /* Asegúrate de tener transform aquí */
+            transition: transform 0.6s ease-in-out, opacity 0.3s ease-in-out; /* Asegúrate de tener opacity aquí */
         }
 
         .card.original {
@@ -306,6 +306,7 @@
 
                     // Hacer visible la fantasma
                     cardFantasmaWrapper.classList.add('visible');
+                    // Forzar un reflow para asegurar que la opacidad inicial 0 se aplique
                     void cardFantasmaWrapper.offsetWidth;
                     cardFantasmaWrapper.style.opacity = 1; // Iniciar transición de opacidad
 
@@ -315,7 +316,7 @@
 
                     setTimeout(() => {
                         isFantasmaAnimating = false;
-                        // Ocultar y eliminar la fantasma
+                        // Ocultar la fantasma
                         cardFantasmaWrapper.style.opacity = 0;
                         cardFantasmaWrapper.classList.remove('visible');
                         setTimeout(() => {
