@@ -104,7 +104,7 @@
             transform-style: preserve-3d;
             transition: transform 0.6s ease-in-out, opacity 0.2s ease-in-out;
             transform-origin: center center;
-            opacity: 0;
+            opacity: 1; /* Aseguramos que sea visible por defecto */
             pointer-events: none;
             border-radius: 8px;
             width: 80px; /* Tamaño de la carta fantasma */
@@ -275,10 +275,6 @@
             if (!isAnimatingOriginal && !isFantasmaAnimating) {
                 isFantasmaAnimating = true;
 
-                // Hacer visible la carta fantasma
-                cardFantasmaWrapper.classList.add('visible');
-                void cardFantasmaWrapper.offsetWidth;
-
                 // Voltear la carta original
                 isAnimatingOriginal = true;
                 cardOriginal.classList.add('will-flip');
@@ -295,10 +291,8 @@
 
                 setTimeout(() => {
                     isFantasmaAnimating = false;
-                    // Aseguramos que la rotación se actualice antes de desaparecer
                     fantasmaRotation = Math.round(fantasmaRotation / 180) * 180;
                     cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
-                    cardFantasmaWrapper.classList.remove('visible');
                 }, 600);
             }
         });
