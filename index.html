@@ -87,7 +87,7 @@
         </div>
     </div>
 
-    <button class="switch-button" id="switchModeBtn">Modo Volteo</button>
+    <button class="switch-button" id="switchModeBtn">Activar Volteo</button>
 
     <script>
         const interactiveCard = document.getElementById('interactiveCard');
@@ -101,7 +101,7 @@
         let currentMode = 'rotation'; // Modo inicial: rotación
 
         interactiveCard.addEventListener('touchstart', (e) => {
-            if (!isFlipping && currentMode === 'rotation') {
+            if (!isFlipping && currentMode === 'rotacion') {
                 isTouching = true;
                 startX = e.touches[0].clientX;
                 startY = e.touches[0].clientY;
@@ -120,7 +120,7 @@
         });
 
         interactiveCard.addEventListener('touchmove', (e) => {
-            if (!isTouching || isFlipping || currentMode !== 'rotation') return;
+            if (!isTouching || isFlipping || currentMode !== 'rotacion') return;
             currentX = e.touches[0].clientX;
             currentY = e.touches[0].clientY;
 
@@ -147,7 +147,7 @@
         interactiveCard.addEventListener('touchend', () => {
             isTouching = false;
             interactiveCard.style.cursor = 'grab';
-            if (currentMode === 'rotation') {
+            if (currentMode === 'rotacion') {
                 resetRotation();
             }
         });
@@ -155,14 +155,14 @@
         interactiveCard.addEventListener('touchcancel', () => {
             isTouching = false;
             interactiveCard.style.cursor = 'grab';
-            if (currentMode === 'rotation') {
+            if (currentMode === 'rotacion') {
                 resetRotation();
             }
         });
 
         switchModeBtn.addEventListener('click', () => {
-            currentMode = (currentMode === 'rotation') ? 'volteo' : 'rotation';
-            switchModeBtn.textContent = (currentMode === 'rotation') ? 'Modo Volteo' : 'Modo Rotación';
+            currentMode = (currentMode === 'rotacion') ? 'volteo' : 'rotacion';
+            switchModeBtn.textContent = (currentMode === 'rotacion') ? 'Activar Volteo' : 'Activar Rotación';
             switchModeBtn.classList.toggle('volteo-activo', currentMode === 'volteo');
 
             // Si se activa el modo Volteo, voltear la carta
@@ -173,8 +173,8 @@
                 setTimeout(() => {
                     isFlipping = false;
                 }, 600);
-            } else if (currentMode === 'rotation' && isFlipped) {
-                // Si se vuelve al modo Rotación y la carta está volteada, volverla a la parte frontal (opcional)
+            } else if (currentMode === 'rotacion' && isFlipped) {
+                // Si se vuelve al modo Rotación y la carta está volteada, volverla a la parte frontal
                 isFlipping = true;
                 isFlipped = false;
                 interactiveCard.classList.remove('flipped');
