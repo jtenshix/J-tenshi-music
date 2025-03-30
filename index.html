@@ -98,7 +98,7 @@
         let rotationY = 0;
         let isFlipped = false;
         let isFlipping = false;
-        let currentMode = 'rotation'; // Modo inicial: rotación
+        let currentMode = 'rotacion'; // Modo inicial: rotación
 
         interactiveCard.addEventListener('touchstart', (e) => {
             if (!isFlipping && currentMode === 'rotacion') {
@@ -165,22 +165,25 @@
             switchModeBtn.textContent = (currentMode === 'rotacion') ? 'Activar Volteo' : 'Activar Rotación';
             switchModeBtn.classList.toggle('volteo-activo', currentMode === 'volteo');
 
-            // Si se activa el modo Volteo, voltear la carta
-            if (currentMode === 'volteo' && !isFlipped) {
-                isFlipping = true;
-                isFlipped = true;
-                interactiveCard.classList.add('flipped');
-                setTimeout(() => {
-                    isFlipping = false;
-                }, 600);
-            } else if (currentMode === 'rotacion' && isFlipped) {
-                // Si se vuelve al modo Rotación y la carta está volteada, volverla a la parte frontal
-                isFlipping = true;
-                isFlipped = false;
-                interactiveCard.classList.remove('flipped');
-                setTimeout(() => {
-                    isFlipping = false;
-                }, 600);
+            // Voltear la carta al activar el modo Volteo
+            if (currentMode === 'volteo') {
+                if (!isFlipped) {
+                    isFlipping = true;
+                    isFlipped = true;
+                    interactiveCard.classList.add('flipped');
+                    setTimeout(() => {
+                        isFlipping = false;
+                    }, 600);
+                }
+            } else { // Volver la carta al activar el modo Rotación
+                if (isFlipped) {
+                    isFlipping = true;
+                    isFlipped = false;
+                    interactiveCard.classList.remove('flipped');
+                    setTimeout(() => {
+                        isFlipping = false;
+                    }, 600);
+                }
             }
         });
     </script>
