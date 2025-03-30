@@ -293,15 +293,15 @@
                         fantasmaRotation = Math.round(fantasmaRotation / 180) * 180;
                         cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
                         // Ocultar la fantasma
+                        cardFantasmaWrapper.style.opacity = 0; // Establecer opacidad a 0 ANTES de remover la clase
                         cardFantasmaWrapper.classList.remove('visible');
-                        cardFantasmaWrapper.style.opacity = 0; // Aseguramos la opacidad en 0
                         cardOriginal.style.opacity = 1;
                         cardOriginal.style.pointerEvents = 'auto';
                     }, 600);
                 } else {
                     // Si la fantasma está visible
+                    cardFantasmaWrapper.style.opacity = 0; // Establecer opacidad a 0 ANTES de remover la clase
                     cardFantasmaWrapper.classList.remove('visible');
-                    cardFantasmaWrapper.style.opacity = 0; // Aseguramos la opacidad en 0
                     cardOriginal.style.opacity = 1;
                     cardOriginal.style.pointerEvents = 'auto';
                     isFantasmaAnimating = false;
