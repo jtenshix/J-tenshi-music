@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Solo Arrastre)</title>
+    <title>Carta 3D Interactiva (Arrastre + Botón)</title>
     <style>
         body {
             margin: 0;
@@ -70,6 +70,32 @@
             background-image: url('carta_dorso.png.png');
             background-size: cover;
         }
+
+        /* Botón de Volteo */
+        .flip-button {
+            background-color: rgba(255, 255, 255, 0.5);
+            color: #121212;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 0;
+            overflow: hidden;
+            z-index: 10;
+            position: fixed;
+            bottom: calc(env(safe-area-inset-bottom) + 90px);
+            right: 20px;
+        }
+
+        .flip-button:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
     </style>
 </head>
 <body>
@@ -85,8 +111,11 @@
         </div>
     </div>
 
+    <button class="flip-button" id="flipBtn">F</button>
+
     <script>
         const cardOriginal = document.getElementById('cardOriginal');
+        const flipBtn = document.getElementById('flipBtn'); // Referencia al botón
         let rotationXOriginal = 0, rotationYOriginal = 0;
         let isDraggingOriginal = false;
         let startXOriginal = 0, startYOriginal = 0;
@@ -160,6 +189,12 @@
         document.addEventListener('mousemove', dragMoveOriginal);
         document.addEventListener('mouseup', stopDragOriginal);
         document.addEventListener('mouseout', stopDragOriginal);
+
+        // Por ahora, el botón no hace nada relacionado con la fantasma
+        flipBtn.addEventListener('click', () => {
+            console.log("Botón 'F' presionado");
+            // Aquí integraremos la lógica de la carta fantasma después de verificar el arrastre
+        });
     </script>
 
 </body>
