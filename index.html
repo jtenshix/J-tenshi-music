@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación Suave con Elástico Pronunciado - Versión AA)</title>
+    <title>Carta Interactiva (Rotación Suelta, Sin Desplazamiento de Página - Versión AB)</title>
     <style>
         body {
             margin: 0;
@@ -79,7 +79,7 @@
 
     <div class="card-container">
         <div class="card" id="interactiveCard">
-            <div class="card-face front">AA</div>
+            <div class="card-face front">AB</div>
             <div class="card-face back"></div>
         </div>
     </div>
@@ -98,12 +98,12 @@
         let flipAngle = 0; // Ángulo de volteo actual
         let isVolteoActivo = false; // Estado del modo de volteo
         let animationFrameId;
-        const friction = 0.85; // Ajustar fricción para el rebote
-        const springForce = 0.05; // Aumentar la fuerza del resorte
-        const damping = 0.6; // Reducir la amortiguación para un rebote más pronunciado
-        const rotationFactor = 0.15; // Reducir la sensibilidad de la rotación
-        const resistanceThreshold = 5; // Umbral para la resistencia inicial
-        const resistanceFactor = 0.3; // Factor de reducción inicial
+        const friction = 0.85;
+        const springForce = 0.05;
+        const damping = 0.6;
+        const rotationFactor = 0.1; // Reducir aún más la sensibilidad
+        const resistanceThreshold = 5;
+        const resistanceFactor = 0.3;
 
         let velocityY = 0;
         let velocityX = 0;
@@ -122,7 +122,7 @@
                 velocityX = 0;
                 isMoving = false;
             }
-            e.preventDefault();
+            e.preventDefault(); // Evitar desplazamiento de página
         };
 
         const handleTouchMoveRotate = (e) => {
@@ -154,7 +154,7 @@
             interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY + flipAngle}deg)`;
             startX = currentX;
             startY = currentY;
-            e.preventDefault();
+            e.preventDefault(); // Evitar desplazamiento de página
         };
 
         const handleTouchEndRotate = () => {
@@ -206,7 +206,7 @@
                     isFlipping = false;
                 }, 300);
             }
-            e.preventDefault();
+            e.preventDefault(); // Evitar desplazamiento de página
         };
 
         // --- Funciones para activar/desactivar listeners ---
