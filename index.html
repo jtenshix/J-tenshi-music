@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación Más Libre al Inicio - Versión AD)</title>
+    <title>Carta Interactiva (Rotación Sensible, Volteo con Animación CSS - Versión AE)</title>
     <style>
         body {
             margin: 0;
@@ -28,10 +28,14 @@
             width: 300px;
             height: 450px;
             transform-style: preserve-3d;
-            transition: transform 0.3s ease-out;
+            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1.435); /* Transición más elaborada */
             transform: rotateX(0deg) rotateY(0deg);
             position: relative;
             cursor: grab;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
         }
 
         .card-face {
@@ -40,7 +44,7 @@
             height: 100%;
             background-color: white;
             border-radius: 15px;
-            backface-visibility: hidden;
+            backface-visibility: hidden; /* Oculta la cara trasera cuando está de espaldas */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -50,7 +54,7 @@
 
         .card-face.back {
             background-color: lightgray;
-            transform: rotateY(180deg);
+            transform: rotateY(180deg); /* Posiciona la cara trasera inicialmente */
         }
 
         .switch-button {
@@ -79,7 +83,7 @@
 
     <div class="card-container">
         <div class="card" id="interactiveCard">
-            <div class="card-face front">AD</div>
+            <div class="card-face front">AE</div>
             <div class="card-face back"></div>
         </div>
     </div>
@@ -101,7 +105,7 @@
         const friction = 0.88;
         const springForce = 0.08;
         const damping = 0.75;
-        const rotationFactor = 0.25; // Ligeramente más sensible
+        const rotationFactor = 0.25;
 
         let velocityY = 0;
         let velocityX = 0;
@@ -183,14 +187,13 @@
         const handleTouchStartFlip = (e) => {
             if (!isFlipping && isVolteoActivo) {
                 isFlipping = true;
-                flipAngle += 180;
-                interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${flipAngle}deg)`;
+                interactiveCard.classList.toggle('flipped'); // Añade/quita la clase 'flipped'
                 isFlipped = !isFlipped;
                 setTimeout(() => {
                     isFlipping = false;
-                }, 300);
+                }, 600); // Debe coincidir con la duración de la transición CSS
             }
-            e.preventDefault(); // Evitar desplazamiento de página
+            e.preventDefault();
         };
 
         // --- Funciones para activar/desactivar listeners ---
@@ -225,13 +228,16 @@
         switchModeBtn.addEventListener('click', (e) => {
             e.preventDefault();
             isFlipping = true;
-            isVolteoActivo = !isVolteoActivo; // Cambiar el estado del modo de volteo
+            isVolteoActivo = !isVolteoActivo;
 
             if (isVolteoActivo) {
                 switchModeBtn.textContent = 'Desactivar Volteo';
                 switchModeBtn.classList.add('volteo-activo');
                 disableRotationListeners();
                 enableFlipListener();
+                // Asegurarse de que la carta esté en su estado inicial al activar el volteo
+                interactiveCard.classList.remove('flipped');
+                isFlipped = false;
             } else {
                 switchModeBtn.textContent = 'Activar Volteo';
                 switchModeBtn.classList.remove('volteo-activo');
