@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Volteo Misma Dirección - Versión S)</title>
+    <title>Carta Interactiva (Control Rotación/Volteo - Versión R con Logs)</title>
     <style>
         body {
             margin: 0;
@@ -83,7 +83,7 @@
 
     <div class="card-container">
         <div class="card" id="interactiveCard">
-            <div class="card-face front">S</div>
+            <div class="card-face front">R</div>
             <div class="card-face back"></div>
         </div>
     </div>
@@ -97,6 +97,7 @@
         let startX, startY, currentX, currentY;
         let rotationX = 0;
         let rotationY = 0;
+        let isFlipped = false;
         let isFlipping = false;
 
         // --- Listeners para el modo ROTACIÓN ---
@@ -149,9 +150,12 @@
 
         // --- Listener para el modo VOLTEO ---
         const handleTouchStartFlip = (e) => {
+            console.log('Touch start en modo VOLTEO'); // VERIFICACIÓN
             if (!isFlipping) {
                 isFlipping = true;
+                isFlipped = !isFlipped;
                 interactiveCard.classList.toggle('flipped');
+                console.log('Carta volteada. isFlipped:', isFlipped); // VERIFICACIÓN
                 setTimeout(() => {
                     isFlipping = false;
                 }, 600);
@@ -176,10 +180,12 @@
 
         const enableFlipListener = () => {
             interactiveCard.addEventListener('touchstart', handleTouchStartFlip);
+            console.log('Listener de VOLTEO ACTIVADO'); // VERIFICACIÓN
         };
 
         const disableFlipListener = () => {
             interactiveCard.removeEventListener('touchstart', handleTouchStartFlip);
+            console.log('Listener de VOLTEO DESACTIVADO'); // VERIFICACIÓN
         };
 
         // --- Inicialización ---
@@ -199,6 +205,7 @@
                 rotationX = 0;
                 rotationY = 0;
                 interactiveCard.classList.remove('flipped');
+                isFlipped = false;
             } else {
                 switchModeBtn.textContent = 'Activar Volteo';
                 switchModeBtn.classList.remove('volteo-activo');
