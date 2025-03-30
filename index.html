@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación y Volteo Táctil - Bloqueo)</title>
+    <title>Carta Interactiva (Rotación y Volteo Táctil - Rebote)</title>
     <style>
         body {
             margin: 0;
@@ -28,7 +28,7 @@
             width: 300px;
             height: 450px;
             transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Transición para el rebote */
             transform: rotateX(0deg) rotateY(0deg);
             position: relative;
             cursor: grab;
@@ -92,29 +92,28 @@
         let rotationX = 0;
         let rotationY = 0;
         let isFlipped = false;
-        let isFlipping = false; // Nueva variable para controlar el estado de volteo
+        let isFlipping = false;
 
         interactiveCard.addEventListener('touchstart', (e) => {
-            console.log("touchstart - isFlipping:", isFlipping);
-            if (!isFlipping) { // Solo iniciar el arrastre si no se está volteando
+            if (!isFlipping) {
                 isTouching = true;
                 startX = e.touches[0].clientX;
                 startY = e.touches[0].clientY;
                 interactiveCard.style.cursor = 'grabbing';
+                interactiveCard.style.transition = 'transform 0s'; // Remover transición para un movimiento directo
             }
         });
 
         interactiveCard.addEventListener('touchmove', (e) => {
-            console.log("touchmove - isTouching:", isTouching, "isFlipping:", isFlipping);
-            if (!isTouching || isFlipping) return; // No rotar si no se está tocando o si se está volteando
+            if (!isTouching || isFlipping) return;
             currentX = e.touches[0].clientX;
             currentY = e.touches[0].clientY;
 
             const deltaX = currentX - startX;
             const deltaY = currentY - startY;
 
-            rotationY += deltaX * 0.2;
-            rotationX -= deltaY * 0.2;
+            rotationY += deltaX * 0.3; // Aumentamos el multiplicador para más soltura
+            rotationX -= deltaY * 0.3;
 
             interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
 
@@ -122,30 +121,33 @@
             startY = currentY;
         });
 
+        const resetRotation = () => {
+            interactiveCard.style.transition = 'transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)'; // Reestablecer la transición para el rebote
+            rotationX = 0;
+            rotationY = 0;
+            interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+        };
+
         interactiveCard.addEventListener('touchend', () => {
-            console.log("touchend");
             isTouching = false;
             interactiveCard.style.cursor = 'grab';
+            resetRotation();
         });
 
         interactiveCard.addEventListener('touchcancel', () => {
-            console.log("touchcancel");
             isTouching = false;
             interactiveCard.style.cursor = 'grab';
+            resetRotation();
         });
 
         flipCardBtn.addEventListener('click', () => {
-            console.log("Botón Voltear clickeado - isFlipping:", isFlipping);
             if (!isFlipping) {
                 isFlipping = true;
                 isFlipped = !isFlipped;
                 interactiveCard.classList.toggle('flipped');
-                console.log("Iniciando volteo - isFlipping:", isFlipping, "isFlipped:", isFlipped);
-                // Esperar a que termine la transición de volteo antes de permitir otra acción
                 setTimeout(() => {
                     isFlipping = false;
-                    console.log("Volteo terminado - isFlipping:", isFlipping);
-                }, 600); // La duración de la transición es de 0.6s en CSS
+                }, 600);
             }
         });
     </script>
