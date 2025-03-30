@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Rotación y Volteo Horario) - Versión HA</title>
+    <title>Dos Cartas Interactivas (Rotación y Volteo con Torbellino) - Versión IA</title>
     <style>
         body {
             margin: 0;
@@ -79,10 +79,6 @@
             transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1.435);
         }
 
-        .card-flip.flipped {
-            transform: rotateY(180deg);
-        }
-
         .card-flip-face {
             position: absolute;
             width: 100%;
@@ -103,20 +99,30 @@
             background-color: lightcoral;
             transform: rotateY(180deg);
         }
+
+        .card-flip.torbellino {
+            animation: torbellinoAnimation 2s linear infinite;
+            transition: none; /* Desactivar la transición normal durante el torbellino */
+        }
+
+        @keyframes torbellinoAnimation {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(3600deg); } /* 10 vueltas rápidas */
+        }
     </style>
 </head>
 <body>
 
     <div class="card-container">
         <div class="card" id="rotateCard">
-            HA - Rotar
+            IA - Rotar
         </div>
     </div>
 
     <div class="card-flip-container">
         <div class="card-flip" id="flipCard">
-            <div class="card-flip-face front">HA - Front</div>
-            <div class="card-flip-face back">HA - Back</div>
+            <div class="card-flip-face front">IA - Front</div>
+            <div class="card-flip-face back">IA - Back</div>
         </div>
         <button class="flip-button" id="toggleFlipBtn">Voltear Carta</button>
     </div>
@@ -199,20 +205,34 @@
         rotateCard.addEventListener('touchend', handleTouchEndRotate);
         rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-        // --- Script para la Carta de Volteo 180 Grados Horario ---
+        // --- Script para la Carta de Volteo con Torbellino ---
         const flipCard = document.getElementById('flipCard');
         const toggleFlipBtn = document.getElementById('toggleFlipBtn');
         let currentRotation = 0;
+        let flipCount = 0;
         let isFlipping = false;
 
         toggleFlipBtn.addEventListener('click', () => {
             if (!isFlipping) {
                 isFlipping = true;
-                currentRotation += 180;
-                flipCard.style.transform = `rotateY(${currentRotation}deg)`;
-                setTimeout(() => {
-                    isFlipping = false;
-                }, 600); // Duración de la transición
+                flipCount++;
+
+                if (flipCount % 10 === 0) {
+                    flipCard.classList.add('torbellino');
+                    setTimeout(() => {
+                        flipCard.classList.remove('torbellino');
+                        currentRotation = 0;
+                        flipCard.style.transform = `rotateY(${currentRotation}deg)`;
+                        isFlipping = false;
+                        flipCount = 0; // Reiniciar el contador
+                    }, 2000); // Duración del torbellino (coincide con la animación)
+                } else {
+                    currentRotation += 180;
+                    flipCard.style.transform = `rotateY(${currentRotation}deg)`;
+                    setTimeout(() => {
+                        isFlipping = false;
+                    }, 600); // Duración de la transición normal
+                }
             }
         });
     </script>
