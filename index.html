@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación/Volteo Switch Táctil - Botón Táctil)</title>
+    <title>Carta Interactiva (Rotación/Volteo Switch Táctil - Retraso Botón)</title>
     <style>
+        /* Estilos CSS (sin cambios) */
         body {
             margin: 0;
             padding: 20px;
@@ -28,7 +29,7 @@
             width: 300px;
             height: 450px;
             transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Transición más suave para el volteo */
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             transform: rotateX(0deg) rotateY(0deg);
             position: relative;
             cursor: grab;
@@ -66,11 +67,11 @@
             cursor: pointer;
             font-size: 16px;
             transition: background 0.3s;
-            touch-action: manipulation; /* Evitar comportamientos táctiles predeterminados que puedan interferir */
+            touch-action: manipulation;
         }
 
         .switch-button.volteo-activo {
-            background-color: rgba(100, 149, 237, 0.7); /* Cornflower Blue */
+            background-color: rgba(100, 149, 237, 0.7);
             color: white;
         }
 
@@ -100,6 +101,7 @@
         let isFlipped = false;
         let isFlipping = false;
         let currentMode = 'rotacion'; // Modo inicial: rotación
+        let canClickButton = true; // Control para el retraso del botón
 
         interactiveCard.addEventListener('touchstart', (e) => {
             if (!isFlipping && currentMode === 'rotacion') {
@@ -110,6 +112,7 @@
                 interactiveCard.style.transition = 'transform 0s';
             }
             e.preventDefault();
+            canClickButton = false; // Deshabilitar el botón al tocar la carta
         });
 
         interactiveCard.addEventListener('touchmove', (e) => {
@@ -143,6 +146,9 @@
             if (currentMode === 'rotacion') {
                 resetRotation();
             }
+            setTimeout(() => {
+                canClickButton = true; // Habilitar el botón después de un breve retraso
+            }, 200); // Retraso de 200 milisegundos (puedes ajustar este valor)
         });
 
         interactiveCard.addEventListener('touchcancel', () => {
@@ -151,15 +157,14 @@
             if (currentMode === 'rotacion') {
                 resetRotation();
             }
+            setTimeout(() => {
+                canClickButton = true; // Habilitar el botón después de un breve retraso
+            }, 200); // Retraso de 200 milisegundos
         });
 
-        switchModeBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Prevenir la emulación de eventos de mouse
-        });
-
-        switchModeBtn.addEventListener('touchend', (e) => {
+        switchModeBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            if (!isFlipping) {
+            if (!isFlipping && canClickButton) {
                 isFlipping = true;
                 currentMode = (currentMode === 'rotacion') ? 'volteo' : 'rotacion';
                 switchModeBtn.textContent = (currentMode === 'rotacion') ? 'Activar Volteo' : 'Activar Rotación';
