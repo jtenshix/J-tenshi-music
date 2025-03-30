@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Volteo Correcto, Rotación Elástica - Versión V)</title>
+    <title>Carta Interactiva (Volteo Funcional, Rotación Elástica Suave - Versión W)</title>
     <style>
         body {
             margin: 0;
@@ -28,7 +28,7 @@
             width: 300px;
             height: 450px;
             transform-style: preserve-3d;
-            transition: transform 0.3s ease-out; /* Transición para el volteo */
+            transition: transform 0.3s ease-out;
             transform: rotateX(0deg) rotateY(0deg);
             position: relative;
             cursor: grab;
@@ -83,7 +83,7 @@
 
     <div class="card-container">
         <div class="card" id="interactiveCard">
-            <div class="card-face front">V</div>
+            <div class="card-face front">W</div>
             <div class="card-face back"></div>
         </div>
     </div>
@@ -101,8 +101,8 @@
         let isFlipping = false;
         let isVolteoActivo = false;
         let animationFrameId;
-        const friction = 0.9; // Factor de fricción para la rotación
-        const snapThreshold = 10; // Umbral para el "imán" central
+        const friction = 0.85; // Aumentar la fricción para un retorno más suave
+        const snapThreshold = 20; // Aumentar el umbral del "imán"
 
         // --- Listeners para el modo ROTACIÓN ---
         const handleTouchStartRotate = (e) => {
@@ -138,8 +138,8 @@
             isTouchingCard = false;
             interactiveCard.style.cursor = 'grab';
 
-            let velocityY = (currentX - startX) * 0.5;
-            let velocityX = (startY - currentY) * 0.5;
+            let velocityY = (currentX - startX) * 0.3; // Reducir la velocidad inicial
+            let velocityX = (startY - currentY) * 0.3;
 
             const animateRebound = () => {
                 velocityY *= friction;
@@ -147,19 +147,16 @@
                 rotationY += velocityY;
                 rotationX += velocityX;
 
-                // Efecto "imán" al centro
-                if (Math.abs(rotationY) < snapThreshold && Math.abs(velocityY) < 0.5) {
-                    rotationY *= 0.7; // Reducir más rápido cerca del centro
-                    if (Math.abs(rotationY) < 0.01) rotationY = 0;
-                }
-                if (Math.abs(rotationX) < snapThreshold && Math.abs(velocityX) < 0.5) {
-                    rotationX *= 0.7;
-                    if (Math.abs(rotationX) < 0.01) rotationX = 0;
-                }
+                // Efecto "imán" elástico
+                rotationY *= (Math.abs(rotationY) < snapThreshold && Math.abs(velocityY) < 0.3) ? 0.8 : 1;
+                rotationX *= (Math.abs(rotationX) < snapThreshold && Math.abs(velocityX) < 0.3) ? 0.8 : 1;
+
+                if (Math.abs(rotationY) < 0.01) rotationY = 0;
+                if (Math.abs(rotationX) < 0.01) rotationX = 0;
 
                 interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
 
-                if (Math.abs(velocityY) > 0.01 || Math.abs(velocityX) > 0.01 || Math.abs(rotationY) > 0.01 || Math.abs(rotationX) > 0.01) {
+                if (Math.abs(velocityY) > 0.005 || Math.abs(velocityX) > 0.005 || Math.abs(rotationY) > 0.005 || Math.abs(rotationX) > 0.005) {
                     animationFrameId = requestAnimationFrame(animateRebound);
                 }
             };
