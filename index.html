@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación/Volteo Switch Táctil - Retraso Botón)</title>
+    <title>Carta Interactiva (Rotación/Volteo Switch Táctil - Reseteo Táctil)</title>
     <style>
         /* Estilos CSS (sin cambios) */
         body {
@@ -101,7 +101,6 @@
         let isFlipped = false;
         let isFlipping = false;
         let currentMode = 'rotacion'; // Modo inicial: rotación
-        let canClickButton = true; // Control para el retraso del botón
 
         interactiveCard.addEventListener('touchstart', (e) => {
             if (!isFlipping && currentMode === 'rotacion') {
@@ -112,7 +111,6 @@
                 interactiveCard.style.transition = 'transform 0s';
             }
             e.preventDefault();
-            canClickButton = false; // Deshabilitar el botón al tocar la carta
         });
 
         interactiveCard.addEventListener('touchmove', (e) => {
@@ -146,9 +144,6 @@
             if (currentMode === 'rotacion') {
                 resetRotation();
             }
-            setTimeout(() => {
-                canClickButton = true; // Habilitar el botón después de un breve retraso
-            }, 200); // Retraso de 200 milisegundos (puedes ajustar este valor)
         });
 
         interactiveCard.addEventListener('touchcancel', () => {
@@ -157,14 +152,11 @@
             if (currentMode === 'rotacion') {
                 resetRotation();
             }
-            setTimeout(() => {
-                canClickButton = true; // Habilitar el botón después de un breve retraso
-            }, 200); // Retraso de 200 milisegundos
         });
 
         switchModeBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            if (!isFlipping && canClickButton) {
+            if (!isFlipping) {
                 isFlipping = true;
                 currentMode = (currentMode === 'rotacion') ? 'volteo' : 'rotacion';
                 switchModeBtn.textContent = (currentMode === 'rotacion') ? 'Activar Volteo' : 'Activar Rotación';
