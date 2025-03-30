@@ -293,13 +293,13 @@
                 fantasmaRotation += 180;
                 cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
 
-                // Esperar a que termine la transición del giro (600ms) y luego ocultar
                 setTimeout(() => {
                     isFantasmaAnimating = false;
+                    // Aseguramos que la rotación se actualice antes de desaparecer
                     fantasmaRotation = Math.round(fantasmaRotation / 180) * 180;
                     cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
                     cardFantasmaWrapper.classList.remove('visible');
-                }, 650); // Un pequeño extra de tiempo para asegurar la finalización visual
+                }, 600);
             }
         });
 
