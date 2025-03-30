@@ -121,25 +121,12 @@
             transition: transform 0.8s ease-in-out; /* Aumentamos la duración */
         }
 
-        .card-face.fantasma {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .card-wrapper.fantasma.rojo-fantasma {
+            transform: rotateY(180deg); /* Muestra el lado rojo */
         }
 
-        .card-face.fantasma.front {
-            background-color: white; /* Frente blanco */
-            transform: rotateY(0deg);
-        }
-
-        .card-face.fantasma.back {
-            background-color: red; /* Dorso rojo */
-            transform: rotateY(180deg);
+        .card-wrapper.fantasma.blanco-fantasma {
+            transform: rotateY(0deg); /* Muestra el lado blanco */
         }
 
         /* Botón de Volteo */
@@ -287,7 +274,9 @@
 
                     // 3. Después de la animación (0.8s), esperar 2 segundos y luego desaparecer
                     setTimeout(() => {
-                        cardFantasmaWrapper.classList.remove('visible'); // Solo removemos 'visible' para ocultarla
+                        cardFantasmaWrapper.classList.add('rojo-fantasma'); // Forzamos la clase roja
+                        cardFantasmaWrapper.classList.remove('visible'); // Ocultamos
+                        cardFantasmaWrapper.classList.remove('girando-180'); // Opcional: removemos la clase de giro
                         isFantasmaActiva = false;
                     }, 800 + 2000);
                 }, 50);
