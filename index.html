@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Fusión Centrada - Ajuste Fantasma)</title>
+    <title>Carta 3D Interactiva (Superposición Directa)</title>
     <style>
         body {
             margin: 0;
@@ -20,21 +20,27 @@
         .card-container {
             perspective: 1200px;
             transform-style: preserve-3d;
-            position: relative; /* Para apilar las cartas */
+            position: relative; /* Contenedor para las cartas */
+            width: 360px; /* Ancho de la carta original */
+            height: 540px; /* Alto de la carta original */
         }
 
-        /* Estilos del Código A (Carta Original) */
-        .card.original {
-            width: 360px;
-            height: 540px;
-            background-color: transparent;
+        /* Estilos de la Carta Original */
+        .card.original,
+        .card-wrapper.fantasma {
+            width: 100%; /* Ocupan el 100% del contenedor */
+            height: 100%; /* Ocupan el 100% del contenedor */
             position: absolute;
             top: 0;
             left: 0;
             transform-style: preserve-3d;
+            border-radius: 15px;
+        }
+
+        .card.original {
+            background-color: transparent;
             transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.2s ease-in-out;
             transform: rotateX(0deg) rotateY(0deg);
-            border-radius: 15px;
         }
 
         .card.original .card-front-container,
@@ -91,22 +97,18 @@
             transition: transform 0.2s ease-in-out;
         }
 
-        /* Estilos de la Carta Fantasma (Código 2) - CENTRADA Y CON COLOR - AJUSTADA */
+        /* Estilos de la Carta Fantasma */
         .card-wrapper.fantasma {
-            width: 180px;
-            height: 270px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             transform-style: preserve-3d;
             transition: transform 0.6s ease-in-out, opacity 0.2s ease-in-out;
             transform-origin: center center;
             opacity: 0;
             pointer-events: none;
-            border-radius: 8px;
-            margin-top: -135px; /* -(altura / 2) */
-            margin-left: -90px; /* -(ancho / 2) */
+            border-radius: 8px; /* Ajustar el radio del borde */
+            width: 50%; /* Más pequeña */
+            height: 50%; /* Más pequeña */
+            top: 25%; /* Centrada verticalmente */
+            left: 25%; /* Centrada horizontalmente */
         }
 
         .card-wrapper.fantasma.visible {
@@ -115,7 +117,7 @@
         }
 
         .card-wrapper.fantasma.flipped {
-            transform: translate(-50%, -50%) rotateY(180deg);
+            transform: rotateY(180deg);
         }
 
         .card-face.fantasma {
@@ -123,19 +125,19 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 8px;
+            border-radius: 8px; /* Ajustar el radio del borde */
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
         .card-face.fantasma.front {
-            background-color: white;
+            background-color: white; /* Frente blanco */
             transform: rotateY(0deg);
         }
 
         .card-face.fantasma.back {
-            background-color: red;
+            background-color: red; /* Dorso rojo */
             transform: rotateY(180deg);
         }
 
@@ -264,7 +266,7 @@
                 // 1. Desaparecer la carta original
                 cardOriginal.style.opacity = 0;
 
-                // 2. Aparecer la carta fantasma (roja y blanca) en el medio y hacer el efecto de volteo
+                // 2. Aparecer la carta fantasma (roja y blanca) en el mismo lugar y hacer el efecto de volteo
                 cardFantasmaWrapper.classList.add('visible');
                 void cardFantasmaWrapper.offsetWidth; // Forzar reflow
                 cardFantasmaWrapper.classList.toggle('flipped');
