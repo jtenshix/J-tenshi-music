@@ -315,20 +315,20 @@
             if (!isAnimatingOriginal && !isFantasmaAnimating) {
                 isFantasmaAnimating = true;
 
-                // 1. Hacer visible la carta fantasma
-                cardFantasmaWrapper.classList.add('visible');
-                void cardFantasmaWrapper.offsetWidth; // Forzar reflow
+                // Hacer visible la carta fantasma si no lo está
+                if (!cardFantasmaWrapper.classList.contains('visible')) {
+                    cardFantasmaWrapper.classList.add('visible');
+                    // Forzar un reflow para que la transición funcione correctamente al aparecer
+                    void cardFantasmaWrapper.offsetWidth;
+                }
 
-                // 2. Iniciar el giro de 180 grados añadiendo la clase 'girada'
-                cardFantasmaWrapper.classList.add('girada');
+                // Alternar la clase 'girada' para el efecto de volteo
+                cardFantasmaWrapper.classList.toggle('girada');
 
-                // 3. Esperar la duración de la animación del giro + 1 segundo de visibilidad en rojo
+                // Esperar la duración de la transición y finalizar la animación
                 setTimeout(() => {
-                    // 4. Hacer invisible la carta fantasma
-                    cardFantasmaWrapper.classList.remove('visible');
                     isFantasmaAnimating = false;
-                    // La clase 'girada' se mantiene, así que estará en rojo al volver a aparecer (si se volviera a activar)
-                }, 600 + 1000); // Duración del giro + 1 segundo visible
+                }, 600); // Duración de la transición de la fantasma
             }
         });
 
