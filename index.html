@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación Sensible, Volteo con Animación CSS - Versión AH)</title>
+    <title>Carta Interactiva (Rotación Sensible, Volteo con Animación CSS - Versión AI)</title>
     <style>
         body {
             margin: 0;
@@ -83,7 +83,7 @@
 
     <div class="card-container">
         <div class="card" id="interactiveCard">
-            <div class="card-face front">AH</div>
+            <div class="card-face front">AI</div>
             <div class="card-face back"></div>
         </div>
     </div>
@@ -237,13 +237,15 @@
                 switchModeBtn.classList.add('volteo-activo');
                 disableRotationListeners();
                 enableFlipListener();
-                interactiveCard.classList.remove('flipped'); // Asegurarse de que no esté volteada al activar
+                interactiveCard.classList.remove('flipped');
                 isFlipped = false;
+                isTouchingCard = false; // Reseteamos isTouchingCard al activar el modo de volteo
             } else {
                 switchModeBtn.textContent = 'Activar Volteo';
                 switchModeBtn.classList.remove('volteo-activo');
                 disableFlipListener();
                 enableRotationListeners();
+                isTouchingCard = false; // Reseteamos isTouchingCard al desactivar el modo de volteo
             }
 
             setTimeout(() => {
