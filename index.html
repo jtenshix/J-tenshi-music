@@ -148,34 +148,8 @@
             transform: rotateY(180deg);
         }
 
-        /* Botón de Volteo para la Carta Original */
-        .flip-button-original {
-            background-color: rgba(255, 255, 255, 0.5);
-            color: #121212;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-            font-size: 0;
-            overflow: hidden;
-            z-index: 10;
-            position: fixed;
-            bottom: calc(env(safe-area-inset-bottom) + 150px); /* Más arriba que el otro botón */
-            right: 20px;
-        }
-
-        .flip-button-original:hover {
-            background-color: rgba(255, 255, 255, 0.8);
-        }
-
-        /* Botón para la Carta Fantasma */
-        .flip-button-fantasma {
+        /* Nuevo botón para voltear ambas cartas */
+        .flip-button-ambas {
             background-color: rgba(255, 255, 255, 0.5);
             color: #121212;
             border: none;
@@ -192,11 +166,11 @@
             overflow: hidden;
             z-index: 10;
             position: fixed;
-            bottom: calc(env(safe-area-inset-bottom) + 90px); /* Misma posición que antes */
-            right: 20px;
+            bottom: calc(env(safe-area-inset-bottom) + 90px); /* Puedes ajustar esta posición */
+            right: 20px; /* Puedes ajustar esta posición */
         }
 
-        .flip-button-fantasma:hover {
+        .flip-button-ambas:hover {
             background-color: rgba(255, 255, 255, 0.8);
         }
     </style>
@@ -221,14 +195,12 @@
         </div>
     </div>
 
-    <button class="flip-button-original" id="flipBtnOriginal"></button>
-    <button class="flip-button-fantasma" id="flipBtnFantasma">&#x21CB;</button>
+    <button class="flip-button-ambas" id="flipBtnAmbas">&#x21CB;</button>
 
     <script>
         const cardOriginal = document.getElementById('cardOriginal');
         const cardFantasmaWrapper = document.getElementById('cardFantasmaWrapper');
-        const flipBtnOriginal = document.getElementById('flipBtnOriginal');
-        const flipBtnFantasma = document.getElementById('flipBtnFantasma');
+        const flipBtnAmbas = document.getElementById('flipBtnAmbas');
         let isFlippedOriginal = false;
         let rotationXOriginal = 0, rotationYOriginal = 0;
         let isDraggingOriginal = false;
@@ -237,7 +209,7 @@
         let dragStartTimeOriginal;
         let isAnimatingOriginal = false;
         let isFantasmaAnimating = false;
-        let fantasmaRotation = 0; // Variable para rastrear la rotación actual
+        let fantasmaRotation = 0;
 
         function updateCardRotationOriginal() {
             cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
@@ -299,8 +271,9 @@
             }
         }
 
-        flipBtnOriginal.addEventListener('click', () => {
+        flipBtnAmbas.addEventListener('click', () => {
             if (!isAnimatingOriginal && !isFantasmaAnimating) {
+                // Voltear la carta original
                 isAnimatingOriginal = true;
                 cardOriginal.classList.add('will-flip');
                 setTimeout(() => {
@@ -309,13 +282,9 @@
                     cardOriginal.classList.remove('will-flip');
                     isAnimatingOriginal = false;
                 }, 200);
-            }
-        });
 
-        flipBtnFantasma.addEventListener('click', () => {
-            if (!isAnimatingOriginal && !isFantasmaAnimating) {
+                // Voltear la carta fantasma
                 isFantasmaAnimating = true;
-
                 cardFantasmaWrapper.classList.add('visible');
                 void cardFantasmaWrapper.offsetWidth;
 
