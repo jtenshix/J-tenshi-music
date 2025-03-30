@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Fantasma Rápida y Desaparición)</title>
+    <title>Carta 3D Interactiva (Superposición A y 2)</title>
     <style>
         body {
             margin: 0;
@@ -20,12 +20,12 @@
         .card-container {
             perspective: 1200px;
             transform-style: preserve-3d;
-            position: relative;
-            width: 360px;
-            height: 540px;
+            position: relative; /* Para contener ambas cartas */
+            width: 360px; /* Ancho de la carta */
+            height: 540px; /* Alto de la carta */
         }
 
-        /* Estilos de la Carta Original */
+        /* Estilos del Código A (Carta Original) */
         .card.original {
             width: 100%;
             height: 100%;
@@ -34,7 +34,7 @@
             top: 0;
             left: 0;
             transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.2s ease-in-out;
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             transform: rotateX(0deg) rotateY(0deg);
             border-radius: 15px;
         }
@@ -88,29 +88,21 @@
             transform: rotateY(180deg) scaleX(-1);
         }
 
-        .card.original.will-flip {
-            transform: rotateY(30deg);
-            transition: transform 0.2s ease-in-out;
-        }
-
-        /* Estilos de la Carta Fantasma (Roja y Blanca) */
+        /* Estilos del Código 2 (Carta Fantasma) */
         .card-wrapper.fantasma {
-            width: 50%;
-            height: 50%;
+            width: 100%; /* Ocupa el mismo espacio */
+            height: 100%; /* Ocupa el mismo espacio */
             position: absolute;
-            top: 25%;
-            left: 25%;
+            top: 0;
+            left: 0;
             transform-style: preserve-3d;
-            transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out; /* Transición más rápida */
+            transition: transform 0.6s ease-in-out;
             transform-origin: center center;
-            opacity: 0;
-            pointer-events: none;
-            border-radius: 8px;
+            opacity: 0; /* Inicialmente invisible */
         }
 
         .card-wrapper.fantasma.visible {
-            opacity: 1;
-            pointer-events: auto;
+            opacity: 1; /* Se vuelve visible al activarse */
         }
 
         .card-wrapper.fantasma.flipped {
@@ -122,19 +114,21 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 8px;
+            border-radius: 15px;
+            background-size: cover;
+            transform-origin: center center;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
         .card-face.fantasma.front {
-            background-color: white;
+            background-color: white; /* Color frontal */
             transform: rotateY(0deg);
         }
 
         .card-face.fantasma.back {
-            background-color: red;
+            background-color: red; /* Color trasero */
             transform: rotateY(180deg);
         }
 
@@ -177,14 +171,15 @@
             </div>
         </div>
         <div class="card-wrapper fantasma" id="cardFantasmaWrapper">
-            <div class="card-face fantasma front"></div>
-            <div class="card-face fantasma back"></div>
+            <div class="card-face front"></div>
+            <div class="card-face back"></div>
         </div>
     </div>
 
     <button class="flip-button" id="flipBtn"></button>
 
     <script>
+        // JavaScript del Código A (con modificaciones para controlar la visibilidad de la fantasma)
         const cardOriginal = document.getElementById('cardOriginal');
         const cardFantasmaWrapper = document.getElementById('cardFantasmaWrapper');
         const flipBtn = document.getElementById('flipBtn');
@@ -194,26 +189,23 @@
         let startXOriginal = 0, startYOriginal = 0;
         let currentXOriginal = 0, currentYOriginal = 0;
         let dragStartTimeOriginal;
-        let isAnimating = false;
 
         function updateCardRotationOriginal() {
             cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
         }
 
         function startDragOriginal(e) {
-            if (!isAnimating) {
-                isDraggingOriginal = true;
-                startXOriginal = e.touches ? e.touches[0].clientX : e.clientX;
-                startYOriginal = e.touches ? e.touches[0].clientY : e.clientY;
-                dragStartTimeOriginal = Date.now();
-                cardOriginal.style.transition = "transform 0.1s ease-out, opacity 0.2s ease-in-out";
-                currentXOriginal = startXOriginal;
-                currentYOriginal = startYOriginal;
-            }
+            isDraggingOriginal = true;
+            startXOriginal = e.touches ? e.touches[0].clientX : e.clientX;
+            startYOriginal = e.touches ? e.touches[0].clientY : e.clientY;
+            dragStartTimeOriginal = Date.now();
+            cardOriginal.style.transition = "transform 0.1s ease-out";
+            currentXOriginal = startXOriginal;
+            currentYOriginal = startYOriginal;
         }
 
         function dragMoveOriginal(e) {
-            if (isDraggingOriginal && !isAnimating) {
+            if (isDraggingOriginal) {
                 let x = e.touches ? e.touches[0].clientX : e.clientX;
                 let y = e.touches ? e.touches[0].clientY : e.clientY;
 
@@ -233,9 +225,9 @@
         }
 
         function stopDragOriginal() {
-            if (isDraggingOriginal && !isAnimating) {
+            if (isDraggingOriginal) {
                 isDraggingOriginal = false;
-                cardOriginal.style.transition = "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.2s ease-in-out";
+                cardOriginal.style.transition = "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)";
 
                 const animationDuration = 300;
                 let velocityY = (currentYOriginal - startYOriginal) / (Date.now() - dragStartTimeOriginal);
@@ -251,35 +243,15 @@
                 updateCardRotationOriginal();
 
                 setTimeout(() => {
-                    cardOriginal.style.transition = "transform 0.3s ease-out, opacity 0.2s ease-in-out";
+                    cardOriginal.style.transition = "transform 0.3s ease-out";
                 }, animationDuration);
             }
         }
 
         flipBtn.addEventListener('click', () => {
-            if (!isAnimating) {
-                isAnimating = true;
-
-                // 1. Desaparecer la carta original
-                cardOriginal.style.opacity = 0;
-
-                // 2. Aparecer la carta fantasma (roja y blanca) y hacer el efecto de volteo
-                cardFantasmaWrapper.classList.add('visible');
-                void cardFantasmaWrapper.offsetWidth; // Forzar reflow
-                cardFantasmaWrapper.classList.add('flipped'); // Añadir la clase 'flipped'
-
-                // 3. Esperar un poco más que la duración de la transición de la fantasma (ahora 0.3s)
-                setTimeout(() => {
-                    // 4. Desaparecer la carta fantasma
-                    cardFantasmaWrapper.classList.remove('visible');
-                    cardFantasmaWrapper.classList.remove('flipped'); // Resetear su estado
-
-                    // 5. Hacer aparecer la carta original
-                    cardOriginal.style.opacity = 1;
-
-                    isAnimating = false; // Permitir futuras interacciones
-                }, 400); // 400ms debería ser suficiente para la transición más rápida
-            }
+            cardFantasmaWrapper.classList.toggle('visible'); // Mostrar/ocultar la fantasma
+            cardFantasmaWrapper.classList.toggle('flipped'); // Animar el volteo de la fantasma
+            // No modificamos la carta original aquí
         });
 
         document.addEventListener('touchstart', startDragOriginal);
