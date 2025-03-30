@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación/Volteo Switch Táctil - Forzar Reinicio)</title>
+    <title>Segunda Carta Interactiva (Gestos Deslizantes)</title>
     <style>
-        /* Estilos CSS (sin cambios) */
         body {
             margin: 0;
             padding: 20px;
@@ -14,33 +13,30 @@
             overflow: hidden;
             user-select: none;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
         }
 
-        .card-container {
+        .card-container-2 {
             perspective: 1200px;
             transform-style: preserve-3d;
-            margin-bottom: 40px;
         }
 
-        .card {
+        .card-2 {
             width: 300px;
             height: 450px;
             transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             transform: rotateX(0deg) rotateY(0deg);
-            transform-style: preserve-3d; /* Asegurar que preserve-3d se mantenga */
             position: relative;
             cursor: grab;
         }
 
-        .card.flipped {
+        .card-2.flipped {
             transform: rotateY(180deg);
         }
 
-        .card-face {
+        .card-face-2 {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -54,130 +50,82 @@
             font-weight: bold;
         }
 
-        .card-face.back {
+        .card-face-2.back {
             background-color: lightgray;
             transform: rotateY(180deg);
-        }
-
-        .switch-button {
-            background-color: rgba(255, 255, 255, 0.5);
-            color: #121212;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s;
-            touch-action: manipulation;
-        }
-
-        .switch-button.volteo-activo {
-            background-color: rgba(100, 149, 237, 0.7);
-            color: white;
-        }
-
-        .switch-button:hover {
-            background-color: rgba(255, 255, 255, 0.8);
         }
     </style>
 </head>
 <body>
 
-    <div class="card-container">
-        <div class="card" id="interactiveCard">
-            <div class="card-face front">X</div>
-            <div class="card-face back"></div>
+    <div class="card-container-2">
+        <div class="card-2" id="gestureCard">
+            <div class="card-face-2 front">Y</div>
+            <div class="card-face-2 back"></div>
         </div>
     </div>
 
-    <button class="switch-button" id="switchModeBtn">Activar Volteo</button>
-
     <script>
-        const interactiveCard = document.getElementById('interactiveCard');
-        const switchModeBtn = document.getElementById('switchModeBtn');
-        let isTouchingCard = false;
-        let startX, startY, currentX, currentY;
-        let rotationX = 0;
-        let rotationY = 0;
-        let isFlipped = false;
-        let isFlipping = false;
-        let currentMode = 'rotacion'; // Modo inicial: rotación
+        const gestureCard = document.getElementById('gestureCard');
+        let isTouchingCard2 = false;
+        let startX2, startY2, currentX2, currentY2;
+        let rotationY2 = 0;
+        let isFlipped2 = false;
+        const flipThreshold = 50; // Sensibilidad para el deslizamiento vertical (volteo)
 
-        interactiveCard.addEventListener('touchstart', (e) => {
-            console.log('touchstart en la carta. Modo:', currentMode, 'isFlipping:', isFlipping);
-            if (!isFlipping) {
-                isTouchingCard = true;
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
-                interactiveCard.style.cursor = 'grabbing';
-                interactiveCard.style.transition = 'transform 0s';
-            } else if (!isFlipping && currentMode === 'volteo') {
-                console.log('Modo Volteo activado - Intentando voltear');
-                // Forzar un reinicio visual antes de intentar voltear
-                interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-                void interactiveCard.offsetWidth; // Disparar un reflow
-                interactiveCard.style.transition = 'transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)'; // Reaplicar la transición
-
-                isFlipping = true;
-                isFlipped = !isFlipped;
-                interactiveCard.classList.toggle('flipped');
-                setTimeout(() => {
-                    isFlipping = false;
-                    console.log('Volteo finalizado. isFlipped:', isFlipped);
-                }, 600);
-            }
+        gestureCard.addEventListener('touchstart', (e) => {
+            isTouchingCard2 = true;
+            startX2 = e.touches[0].clientX;
+            startY2 = e.touches[0].clientY;
+            gestureCard.style.cursor = 'grabbing';
+            gestureCard.style.transition = 'transform 0s';
             e.preventDefault();
         });
 
-        interactiveCard.addEventListener('touchmove', (e) => {
-            if (!isTouchingCard || isFlipping) return;
-            if (currentMode === 'rotacion') {
-                currentX = e.touches[0].clientX;
-                currentY = e.touches[0].clientY;
+        gestureCard.addEventListener('touchmove', (e) => {
+            if (!isTouchingCard2) return;
+            currentX2 = e.touches[0].clientX;
+            currentY2 = e.touches[0].clientY;
 
-                const deltaX = currentX - startX;
-                const deltaY = currentY - startY;
+            const deltaX2 = currentX2 - startX2;
+            const deltaY2 = currentY2 - startY2;
 
-                rotationY += deltaX * 0.2;
-                rotationX -= deltaY * 0.2;
+            // Deslizamiento horizontal para rotación en Y
+            rotationY2 += deltaX2 * 0.2;
+            gestureCard.style.transform = `rotateY(${rotationY2}deg) rotateX(0deg)`;
 
-                interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-
-                startX = currentX;
-                startY = currentY;
-            }
+            startX2 = currentX2;
+            startY2 = currentY2;
             e.preventDefault();
         });
 
-        const resetRotation = () => {
-            interactiveCard.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            rotationX = 0;
-            rotationY = 0;
-            interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+        const resetRotation2 = () => {
+            gestureCard.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            rotationY2 = 0;
+            gestureCard.style.transform = `rotateY(${rotationY2}deg) rotateX(0deg)`;
         };
 
-        interactiveCard.addEventListener('touchend', () => {
-            isTouchingCard = false;
-            interactiveCard.style.cursor = 'grab';
-            if (currentMode === 'rotacion') {
-                resetRotation();
-            }
-        });
+        gestureCard.addEventListener('touchend', (e) => {
+            isTouchingCard2 = false;
+            gestureCard.style.cursor = 'grab';
 
-        interactiveCard.addEventListener('touchcancel', () => {
-            isTouchingCard = false;
-            interactiveCard.style.cursor = 'grab';
-            if (currentMode === 'rotacion') {
-                resetRotation();
-            }
-        });
+            const endY = e.changedTouches[0].clientY;
+            const deltaY = endY - startY2;
 
-        switchModeBtn.addEventListener('click', (e) => {
+            // Deslizamiento vertical para volteo
+            if (Math.abs(deltaY) > flipThreshold) {
+                gestureCard.classList.toggle('flipped');
+                isFlipped2 = !isFlipped2;
+            } else {
+                resetRotation2(); // Si no hay suficiente deslizamiento vertical, resetear la rotación horizontal
+            }
             e.preventDefault();
-            currentMode = (currentMode === 'rotacion') ? 'volteo' : 'rotacion';
-            switchModeBtn.textContent = (currentMode === 'rotacion') ? 'Activar Volteo' : 'Activar Rotación';
-            switchModeBtn.classList.toggle('volteo-activo', currentMode === 'volteo');
-            console.log('Botón clickeado. Nuevo modo:', currentMode, 'isFlipped:', isFlipped);
+        });
+
+        gestureCard.addEventListener('touchcancel', () => {
+            isTouchingCard2 = false;
+            gestureCard.style.cursor = 'grab';
+            resetRotation2();
         });
     </script>
 
