@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Volteo Funcional, Rotación Elástica Suave - Versión W)</title>
+    <title>Carta Interactiva (Rotación, Volteo Infinito y Persistente - Versión T)</title>
     <style>
         body {
             margin: 0;
@@ -28,14 +28,10 @@
             width: 300px;
             height: 450px;
             transform-style: preserve-3d;
-            transition: transform 0.3s ease-out;
+            transition: transform 0.3s ease-in-out;
             transform: rotateX(0deg) rotateY(0deg);
             position: relative;
             cursor: grab;
-        }
-
-        .card.flipped {
-            transform: rotateY(180deg);
         }
 
         .card-face {
@@ -83,7 +79,7 @@
 
     <div class="card-container">
         <div class="card" id="interactiveCard">
-            <div class="card-face front">W</div>
+            <div class="card-face front">T</div>
             <div class="card-face back"></div>
         </div>
     </div>
@@ -99,10 +95,8 @@
         let rotationY = 0;
         let isFlipped = false;
         let isFlipping = false;
-        let isVolteoActivo = false;
-        let animationFrameId;
-        const friction = 0.85; // Aumentar la fricción para un retorno más suave
-        const snapThreshold = 20; // Aumentar el umbral del "imán"
+        let flipAngle = 0; // Ángulo de volteo actual
+        let isVolteoActivo = false; // Estado del modo de volteo
 
         // --- Listeners para el modo ROTACIÓN ---
         const handleTouchStartRotate = (e) => {
@@ -112,7 +106,6 @@
                 startY = e.touches[0].clientY;
                 interactiveCard.style.cursor = 'grabbing';
                 interactiveCard.style.transition = 'transform 0s';
-                cancelAnimationFrame(animationFrameId);
             }
             e.preventDefault();
         };
@@ -128,54 +121,35 @@
             rotationY += deltaX * 0.2;
             rotationX -= deltaY * 0.2;
 
-            interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-            startX = currentX;
-            startY = currentY;
+            interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY + flipAngle}deg)`; // Considerar el ángulo de volteo
             e.preventDefault();
         };
 
         const handleTouchEndRotate = () => {
             isTouchingCard = false;
             interactiveCard.style.cursor = 'grab';
-
-            let velocityY = (currentX - startX) * 0.3; // Reducir la velocidad inicial
-            let velocityX = (startY - currentY) * 0.3;
-
-            const animateRebound = () => {
-                velocityY *= friction;
-                velocityX *= friction;
-                rotationY += velocityY;
-                rotationX += velocityX;
-
-                // Efecto "imán" elástico
-                rotationY *= (Math.abs(rotationY) < snapThreshold && Math.abs(velocityY) < 0.3) ? 0.8 : 1;
-                rotationX *= (Math.abs(rotationX) < snapThreshold && Math.abs(velocityX) < 0.3) ? 0.8 : 1;
-
-                if (Math.abs(rotationY) < 0.01) rotationY = 0;
-                if (Math.abs(rotationX) < 0.01) rotationX = 0;
-
-                interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-
-                if (Math.abs(velocityY) > 0.005 || Math.abs(velocityX) > 0.005 || Math.abs(rotationY) > 0.005 || Math.abs(rotationX) > 0.005) {
-                    animationFrameId = requestAnimationFrame(animateRebound);
-                }
-            };
-
-            animateRebound();
+            interactiveCard.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            rotationX = 0;
+            rotationY = 0;
+            interactiveCard.style.transform = `rotateX(0deg) rotateY(${flipAngle}deg)`; // Mantener el ángulo de volteo
         };
 
         const handleTouchCancelRotate = () => {
             isTouchingCard = false;
             interactiveCard.style.cursor = 'grab';
-            handleTouchEndRotate();
+            interactiveCard.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            rotationX = 0;
+            rotationY = 0;
+            interactiveCard.style.transform = `rotateX(0deg) rotateY(${flipAngle}deg)`; // Mantener el ángulo de volteo
         };
 
         // --- Listener para el modo VOLTEO ---
         const handleTouchStartFlip = (e) => {
             if (!isFlipping && isVolteoActivo) {
                 isFlipping = true;
+                flipAngle += 180;
+                interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${flipAngle}deg)`;
                 isFlipped = !isFlipped;
-                interactiveCard.classList.toggle('flipped');
                 setTimeout(() => {
                     isFlipping = false;
                 }, 300);
@@ -215,7 +189,7 @@
         switchModeBtn.addEventListener('click', (e) => {
             e.preventDefault();
             isFlipping = true;
-            isVolteoActivo = !isVolteoActivo;
+            isVolteoActivo = !isVolteoActivo; // Cambiar el estado del modo de volteo
 
             if (isVolteoActivo) {
                 switchModeBtn.textContent = 'Desactivar Volteo';
