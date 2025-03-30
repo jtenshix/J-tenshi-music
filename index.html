@@ -322,11 +322,16 @@
                 // 2. Iniciar el giro de 180 grados añadiendo la clase 'girada'
                 cardFantasmaWrapper.classList.add('girada');
 
-                // 3. Esperar la duración de la animación y mantenerla visible en rojo
+                // 3. Esperar la duración de la animación del giro
                 setTimeout(() => {
-                    // La clase 'girada' se mantiene, mostrando el lado rojo
-                    isFantasmaAnimating = false;
-                }, 600); // Duración de la transición de la fantasma
+                    // 4. Esperar 1 segundo mostrando la parte roja
+                    setTimeout(() => {
+                        // 5. Hacer invisible la carta fantasma
+                        cardFantasmaWrapper.classList.remove('visible');
+                        isFantasmaAnimating = false;
+                        // La clase 'girada' se mantiene, así que estará en rojo al volver a aparecer
+                    }, 1000); // 1000 milisegundos = 1 segundo
+                }, 600); // Duración de la transición del giro de la fantasma
             }
         });
 
