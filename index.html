@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Reseteo Rotación al Activar Volteo)</title>
+    <title>Carta Interactiva (Listeners Separados - Versión Q)</title>
     <style>
         body {
             margin: 0;
@@ -83,7 +83,7 @@
 
     <div class="card-container">
         <div class="card" id="interactiveCard">
-            <div class="card-face front">V</div>
+            <div class="card-face front">Q</div>
             <div class="card-face back"></div>
         </div>
     </div>
@@ -101,26 +101,20 @@
         let isFlipping = false;
         let rotationEnabled = true; // Control para la rotación
 
-        interactiveCard.addEventListener('touchstart', (e) => {
-            if (!isFlipping && rotationEnabled) {
+        // --- Listeners para el modo ROTACIÓN ---
+        const handleTouchStartRotate = (e) => {
+            if (!isFlipping) {
                 isTouchingCard = true;
                 startX = e.touches[0].clientX;
                 startY = e.touches[0].clientY;
                 interactiveCard.style.cursor = 'grabbing';
                 interactiveCard.style.transition = 'transform 0s';
-            } else if (!isFlipping && !rotationEnabled) { // Si la rotación está bloqueada (modo Volteo)
-                isFlipping = true;
-                isFlipped = !isFlipped;
-                interactiveCard.classList.toggle('flipped');
-                setTimeout(() => {
-                    isFlipping = false;
-                }, 600);
             }
             e.preventDefault();
-        });
+        };
 
-        interactiveCard.addEventListener('touchmove', (e) => {
-            if (!isTouchingCard || isFlipping || !rotationEnabled) return;
+        const handleTouchMoveRotate = (e) => {
+            if (!isTouchingCard || isFlipping) return;
             currentX = e.touches[0].clientX;
             currentY = e.touches[0].clientY;
 
@@ -135,52 +129,83 @@
             startX = currentX;
             startY = currentY;
             e.preventDefault();
-        });
+        };
 
-        const resetRotation = () => {
+        const handleTouchEndRotate = () => {
+            isTouchingCard = false;
+            interactiveCard.style.cursor = 'grab';
             interactiveCard.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
             rotationX = 0;
             rotationY = 0;
-            interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+            interactiveCard.style.transform = `rotateX(0deg) rotateY(0deg)`;
         };
 
-        interactiveCard.addEventListener('touchend', () => {
+        const handleTouchCancelRotate = () => {
             isTouchingCard = false;
             interactiveCard.style.cursor = 'grab';
-            if (rotationEnabled) {
-                resetRotation();
-            }
-        });
+            interactiveCard.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            rotationX = 0;
+            rotationY = 0;
+            interactiveCard.style.transform = `rotateX(0deg) rotateY(0deg)`;
+        };
 
-        interactiveCard.addEventListener('touchcancel', () => {
-            isTouchingCard = false;
-            interactiveCard.style.cursor = 'grab';
-            if (rotationEnabled) {
-                resetRotation();
+        // --- Listener para el modo VOLTEO ---
+        const handleTouchStartFlip = (e) => {
+            if (!isFlipping) {
+                isFlipping = true;
+                isFlipped = !isFlipped;
+                interactiveCard.classList.toggle('flipped');
+                setTimeout(() => {
+                    isFlipping = false;
+                }, 600);
             }
-        });
+            e.preventDefault();
+        };
 
+        // --- Función para activar/desactivar listeners ---
+        const enableRotationListeners = () => {
+            interactiveCard.addEventListener('touchstart', handleTouchStartRotate);
+            interactiveCard.addEventListener('touchmove', handleTouchMoveRotate);
+            interactiveCard.addEventListener('touchend', handleTouchEndRotate);
+            interactiveCard.addEventListener('touchcancel', handleTouchCancelRotate);
+        };
+
+        const disableRotationListeners = () => {
+            interactiveCard.removeEventListener('touchstart', handleTouchStartRotate);
+            interactiveCard.removeEventListener('touchmove', handleTouchMoveRotate);
+            interactiveCard.removeEventListener('touchend', handleTouchEndRotate);
+            interactiveCard.removeEventListener('touchcancel', handleTouchCancelRotate);
+        };
+
+        const enableFlipListener = () => {
+            interactiveCard.addEventListener('touchstart', handleTouchStartFlip);
+        };
+
+        const disableFlipListener = () => {
+            interactiveCard.removeEventListener('touchstart', handleTouchStartFlip);
+        };
+
+        // --- Inicialización ---
+        enableRotationListeners();
+
+        // --- Lógica del botón ---
         switchModeBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            isFlipping = true; // Iniciar el estado de "flipping" para evitar interacciones durante la transición del modo
+            isFlipping = true;
 
             if (switchModeBtn.textContent === 'Activar Volteo') {
                 switchModeBtn.textContent = 'Desactivar Volteo';
                 switchModeBtn.classList.add('volteo-activo');
-                rotationEnabled = false; // Bloquear rotación
-                // Resetear la rotación al activar el modo de volteo
-                rotationX = 0;
-                rotationY = 0;
-                interactiveCard.style.transform = `rotateX(0deg) rotateY(0deg)`;
+                disableRotationListeners();
+                enableFlipListener();
+                // Forzar la carta a su estado frontal al activar el volteo
+                interactiveCard.classList.remove('flipped');
+                isFlipped = false;
             } else {
                 switchModeBtn.textContent = 'Activar Volteo';
                 switchModeBtn.classList.remove('volteo-activo');
-                rotationEnabled = true; // Activar rotación
-                // Si se desactiva el volteo, podríamos querer que la carta vuelva a su estado frontal
-                if (isFlipped) {
-                    interactiveCard.classList.remove('flipped');
-                    isFlipped = false;
-                }
+                disableFlipListener();
+                enableRotationListeners();
             }
 
             setTimeout(() => {
