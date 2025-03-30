@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Rotación y Volteo Ajustado) - Versión JA</title>
+    <title>Dos Cartas Interactivas (Rotación y Volteo con Torbellino Ajustado) - Versión KA</title>
     <style>
         body {
             margin: 0;
@@ -46,10 +46,10 @@
             background-color: rgba(255, 255, 255, 0.5);
             color: #121212;
             border: none;
-            padding: 8px 16px; /* Aumentar el padding para hacerlo más grande */
-            border-radius: 5px; /* Un poco más redondeado */
+            padding: 8px 16px;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 14px; /* Aumentar un poco la fuente */
+            font-size: 14px;
             transition: background 0.3s;
             touch-action: manipulation;
         }
@@ -107,7 +107,7 @@
 
         @keyframes torbellinoAnimation {
             from { transform: rotateY(0deg); }
-            to { transform: rotateY(1800deg); } /* 5 vueltas rápidas (360 * 5) */
+            to { transform: rotateY(720deg); } /* 2 vueltas rápidas (360 * 2) */
         }
     </style>
 </head>
@@ -115,14 +115,14 @@
 
     <div class="card-container">
         <div class="card" id="rotateCard">
-            JA - Rotar
+            KA - Rotar
         </div>
     </div>
 
     <div class="card-flip-container">
         <div class="card-flip" id="flipCard">
-            <div class="card-flip-face front">JA - Front</div>
-            <div class="card-flip-face back">JA - Back</div>
+            <div class="card-flip-face front">KA - Front</div>
+            <div class="card-flip-face back">KA - Back</div>
         </div>
         <button class="flip-button" id="toggleFlipBtn">Voltear Carta</button>
     </div>
@@ -205,13 +205,13 @@
         rotateCard.addEventListener('touchend', handleTouchEndRotate);
         rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-        // --- Script para la Carta de Volteo con Torbellino (Ajustado) ---
+        // --- Script para la Carta de Volteo con Torbellino (Velocidad Original, Vueltas Ajustadas) ---
         const flipCard = document.getElementById('flipCard');
         const toggleFlipBtn = document.getElementById('toggleFlipBtn');
         let currentRotation = 0;
         let flipCount = 0;
         let isFlipping = false;
-        const torbellinoVueltas = 5; // Reducir las vueltas del torbellino
+        const torbellinoVueltas = 2; // 2 vueltas
 
         toggleFlipBtn.addEventListener('click', () => {
             if (!isFlipping) {
@@ -226,7 +226,7 @@
                         flipCard.style.transform = `rotateY(${currentRotation}deg)`;
                         isFlipping = false;
                         flipCount = 0; // Reiniciar el contador
-                    }, 2000); // Duración del torbellino
+                    }, 2000); // Duración del torbellino (misma velocidad)
                 } else {
                     currentRotation += 180;
                     flipCard.style.transform = `rotateY(${currentRotation}deg)`;
