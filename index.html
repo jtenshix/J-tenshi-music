@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación/Volteo Switch Táctil - Reseteo Táctil)</title>
+    <title>Carta Interactiva (Rotación/Volteo Switch Táctil - Desactivación Temporal)</title>
     <style>
         /* Estilos CSS (sin cambios) */
         body {
@@ -101,9 +101,10 @@
         let isFlipped = false;
         let isFlipping = false;
         let currentMode = 'rotacion'; // Modo inicial: rotación
+        let rotationEnabled = true; // Control para habilitar/deshabilitar la rotación
 
         interactiveCard.addEventListener('touchstart', (e) => {
-            if (!isFlipping && currentMode === 'rotacion') {
+            if (!isFlipping && currentMode === 'rotacion' && rotationEnabled) {
                 isTouchingCard = true;
                 startX = e.touches[0].clientX;
                 startY = e.touches[0].clientY;
@@ -114,7 +115,7 @@
         });
 
         interactiveCard.addEventListener('touchmove', (e) => {
-            if (!isTouchingCard || isFlipping || currentMode !== 'rotacion') return;
+            if (!isTouchingCard || isFlipping || currentMode !== 'rotacion' || !rotationEnabled) return;
             currentX = e.touches[0].clientX;
             currentY = e.touches[0].clientY;
 
@@ -141,7 +142,7 @@
         interactiveCard.addEventListener('touchend', () => {
             isTouchingCard = false;
             interactiveCard.style.cursor = 'grab';
-            if (currentMode === 'rotacion') {
+            if (currentMode === 'rotacion' && rotationEnabled) {
                 resetRotation();
             }
         });
@@ -149,7 +150,7 @@
         interactiveCard.addEventListener('touchcancel', () => {
             isTouchingCard = false;
             interactiveCard.style.cursor = 'grab';
-            if (currentMode === 'rotacion') {
+            if (currentMode === 'rotacion' && rotationEnabled) {
                 resetRotation();
             }
         });
@@ -158,6 +159,9 @@
             e.preventDefault();
             if (!isFlipping) {
                 isFlipping = true;
+                // Deshabilitar la rotación temporalmente
+                rotationEnabled = false;
+
                 currentMode = (currentMode === 'rotacion') ? 'volteo' : 'rotacion';
                 switchModeBtn.textContent = (currentMode === 'rotacion') ? 'Activar Volteo' : 'Activar Rotación';
                 switchModeBtn.classList.toggle('volteo-activo', currentMode === 'volteo');
@@ -167,6 +171,8 @@
 
                 setTimeout(() => {
                     isFlipping = false;
+                    // Reactivar la rotación después del volteo (o al volver al modo rotación)
+                    rotationEnabled = true;
                 }, 600);
             }
         });
