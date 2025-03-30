@@ -105,8 +105,7 @@
             transform-style: preserve-3d;
             transition: transform 0.6s ease-in-out, opacity 0.3s ease-in-out;
             transform-origin: center center;
-            opacity: 0;
-            display: none;
+            opacity: 0; /* Inicialmente invisible */
             pointer-events: none;
             border-radius: 15px;
             width: 360px;
@@ -119,7 +118,6 @@
 
         .card-wrapper.fantasma.visible {
             opacity: 1;
-            display: block;
             pointer-events: auto;
         }
 
@@ -208,7 +206,7 @@
         let fantasmaRotation = 0;
 
         function updateCardRotationOriginal() {
-            cardOriginal.style.transform = `rotateX(<span class="math-inline">\{rotationXOriginal\}deg\) rotateY\(</span>{rotationYOriginal}deg)`;
+            cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
         }
 
         function startDragOriginal(e) {
@@ -277,7 +275,6 @@
                     cardOriginal.style.pointerEvents = 'none';
                     // Asegurarse de que la fantasma comience con la cara frontal visible
                     cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation % 360}deg)`;
-                    cardFantasmaWrapper.style.display = 'block'; // Asegurar que se muestre
 
                     // Hacer visible la fantasma
                     cardFantasmaWrapper.classList.add('visible');
@@ -297,18 +294,29 @@
                         cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
                         // Ocultar la fantasma
                         cardFantasmaWrapper.classList.remove('visible');
-                        setTimeout(() => {
-                            cardFantasmaWrapper.style.display = 'none';
-                        }, 300);
+                        cardFantasmaWrapper.style.opacity = 0; // Aseguramos la opacidad en 0
                         cardOriginal.style.opacity = 1;
                         cardOriginal.style.pointerEvents = 'auto';
                     }, 600);
                 } else {
-                    // Si la fantasma está visible (por un clic anterior interrumpido o un segundo clic)
+                    // Si la fantasma está visible
                     cardFantasmaWrapper.classList.remove('visible');
-                    cardFantasmaWrapper.style.display = 'none';
+                    cardFantasmaWrapper.style.opacity = 0; // Aseguramos la opacidad en 0
                     cardOriginal.style.opacity = 1;
                     cardOriginal.style.pointerEvents = 'auto';
                     isFantasmaAnimating = false;
                     isFlippedOriginal = !isFlippedOriginal;
                     cardOriginal.classList.toggle('flipped');
+                    // Para el siguiente ciclo, aseguramos que la fantasma gire desde su estado actual
+                    cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation % 360}deg)`;
+                }
+            }
+        });
+
+        document.addEventListener('touchstart', startDragOriginal);
+        document.addEventListener('touchmove', dragMoveOriginal);
+        document.addEventListener('touchend', stopDragOriginal);
+    </script>
+
+</body>
+</html>
