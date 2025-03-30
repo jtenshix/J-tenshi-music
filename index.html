@@ -285,12 +285,11 @@
                 setTimeout(() => {
                     cardFantasmaWrapper.classList.add('girando-180');
 
-                    // 3. Después de la animación (0.8s), esperar 1 segundo y luego desaparecer
+                    // 3. Después de la animación (0.8s), esperar 2 segundos y luego desaparecer
                     setTimeout(() => {
-                        cardFantasmaWrapper.classList.remove('visible');
-                        cardFantasmaWrapper.classList.remove('girando-180');
+                        cardFantasmaWrapper.classList.remove('visible'); // Solo removemos 'visible' para ocultarla
                         isFantasmaActiva = false;
-                    }, 800 + 1000);
+                    }, 800 + 2000);
                 }, 50);
             }
         });
