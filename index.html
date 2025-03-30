@@ -273,15 +273,19 @@
                     // Preparar para mostrar la fantasma
                     cardOriginal.style.opacity = 0;
                     cardOriginal.style.pointerEvents = 'none';
-                    cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`; // Asegurar la rotación actual
+                    cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
 
                     // Hacer visible la fantasma
                     cardFantasmaWrapper.classList.add('visible');
-                    void cardFantasmaWrapper.offsetWidth; // Forzar reflow
+                    void cardFantasmaWrapper.offsetWidth;
 
-                    // Iniciar el giro
+                    // Iniciar el giro de la fantasma
                     fantasmaRotation += 180;
                     cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
+
+                    // Voltear la carta original al mismo tiempo (para la *próxima* vez que se muestre)
+                    isFlippedOriginal = !isFlippedOriginal;
+                    cardOriginal.classList.toggle('flipped');
 
                     setTimeout(() => {
                         isFantasmaAnimating = false;
@@ -298,6 +302,9 @@
                     cardOriginal.style.opacity = 1;
                     cardOriginal.style.pointerEvents = 'auto';
                     isFantasmaAnimating = false;
+                    // También podríamos querer invertir el estado flipped de la original aquí si es necesario
+                    isFlippedOriginal = !isFlippedOriginal;
+                    cardOriginal.classList.toggle('flipped');
                 }
             }
         });
