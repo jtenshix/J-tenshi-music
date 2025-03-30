@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación y Volteo - Bloqueo)</title>
+    <title>Carta Interactiva (Rotación y Volteo - Bloqueo - Sin Desplazamiento)</title>
     <style>
         body {
             margin: 0;
@@ -93,19 +93,20 @@
         let rotationY = 0;
         let isFlipped = false;
         let isFlipping = false;
-        let isRotationLocked = false; // Nueva variable para bloquear la rotación
+        let isRotationLocked = false;
 
         interactiveCard.addEventListener('touchstart', (e) => {
-            if (!isFlipping && !isRotationLocked) { // Solo iniciar el arrastre si no se está volteando y la rotación no está bloqueada
+            if (!isFlipping && !isRotationLocked) {
                 isTouching = true;
                 startX = e.touches[0].clientX;
                 startY = e.touches[0].clientY;
                 interactiveCard.style.cursor = 'grabbing';
             }
+            e.preventDefault(); // Prevenir el desplazamiento táctil predeterminado
         });
 
         interactiveCard.addEventListener('touchmove', (e) => {
-            if (!isTouching || isFlipping || isRotationLocked) return; // No rotar si no se está tocando, se está volteando o la rotación está bloqueada
+            if (!isTouching || isFlipping || isRotationLocked) return;
             currentX = e.touches[0].clientX;
             currentY = e.touches[0].clientY;
 
@@ -119,6 +120,7 @@
 
             startX = currentX;
             startY = currentY;
+            e.preventDefault(); // Prevenir el desplazamiento táctil predeterminado
         });
 
         interactiveCard.addEventListener('touchend', () => {
@@ -136,11 +138,10 @@
                 isFlipping = true;
                 isFlipped = !isFlipped;
                 interactiveCard.classList.toggle('flipped');
-                // Bloquear la rotación durante el volteo
                 isRotationLocked = true;
                 setTimeout(() => {
                     isFlipping = false;
-                    isRotationLocked = false; // Liberar el bloqueo de rotación después del volteo
+                    isRotationLocked = false;
                 }, 600);
             }
         });
