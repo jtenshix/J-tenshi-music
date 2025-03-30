@@ -283,7 +283,7 @@
                     fantasmaRotation += 180;
                     cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
 
-                    // Voltear la carta original al mismo tiempo (para la *próxima* vez que se muestre)
+                    // Voltear la carta original al mismo tiempo
                     isFlippedOriginal = !isFlippedOriginal;
                     cardOriginal.classList.toggle('flipped');
 
@@ -293,16 +293,17 @@
                         cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
                         // Ocultar la fantasma y mostrar la original
                         cardFantasmaWrapper.classList.remove('visible');
+                        cardFantasmaWrapper.style.opacity = 0; // Aseguramos la opacidad en 0
                         cardOriginal.style.opacity = 1;
                         cardOriginal.style.pointerEvents = 'auto';
                     }, 600);
                 } else {
                     // Si la fantasma está visible (por un clic anterior interrumpido)
                     cardFantasmaWrapper.classList.remove('visible');
+                    cardFantasmaWrapper.style.opacity = 0; // Aseguramos la opacidad en 0
                     cardOriginal.style.opacity = 1;
                     cardOriginal.style.pointerEvents = 'auto';
                     isFantasmaAnimating = false;
-                    // También podríamos querer invertir el estado flipped de la original aquí si es necesario
                     isFlippedOriginal = !isFlippedOriginal;
                     cardOriginal.classList.toggle('flipped');
                 }
