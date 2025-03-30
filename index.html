@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva con Carta Fantasma Dinámica (Rotación Controlada)</title>
+    <title>Carta 3D Interactiva con Carta Fantasma Dinámica</title>
     <style>
         body {
             margin: 0;
@@ -225,7 +225,7 @@
         }
 
         function updateCardRotationOriginal() {
-            cardOriginal.style.transform = `rotateX(<span class="math-inline">\{rotationXOriginal\}deg\) rotateY\(</span>{rotationYOriginal}deg)`;
+            cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
         }
 
         function startDragOriginal(e) {
@@ -307,12 +307,8 @@
                     void cardFantasmaWrapper.offsetWidth;
                     cardFantasmaWrapper.style.opacity = 1; // Iniciar la transición de opacidad
 
-                    // Iniciar el giro de la fantasma (si no está ya girada 180 grados)
-                    if (Math.abs(fantasmaRotation % 360) < 1) { // Si está en 0 o 360 grados
-                        fantasmaRotation += 180;
-                    } else { // Si ya está en 180 grados
-                        fantasmaRotation += 180; // La llevamos a 360 (efectivamente 0)
-                    }
+                    // Iniciar el giro de la fantasma
+                    fantasmaRotation += 180;
                     cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
 
                     // Voltear la carta original al mismo tiempo
@@ -321,5 +317,29 @@
 
                     setTimeout(() => {
                         isFantasmaAnimating = false;
-                        // Asegurar que la rotación final sea un múltiplo de 180
-                        fantasmaRotation = Math.round(fantasmaRotation / 180) *
+                        fantasmaRotation = Math.round(fantasmaRotation / 180) * 180;
+                        cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
+                        // Ocultar y eliminar la fantasma
+                        cardFantasmaWrapper.style.opacity = 0;
+                        cardFantasmaWrapper.classList.remove('visible');
+                        setTimeout(() => {
+                            if (cardContainer && cardFantasmaWrapper) {
+                                cardContainer.removeChild(cardFantasmaWrapper);
+                                cardFantasmaWrapper = null; // Resetear la referencia
+                            }
+                        }, 300);
+                        cardOriginal.style.opacity = 1;
+                        cardOriginal.style.pointerEvents = 'auto';
+                    }, 600);
+                }
+                // No necesitamos un 'else' aquí ya que la lógica se basa en si cardFantasmaWrapper existe
+            }
+        });
+
+        document.addEventListener('touchstart', startDragOriginal);
+        document.addEventListener('touchmove', dragMoveOriginal);
+        document.addEventListener('touchend', stopDragOriginal);
+    </script>
+
+</body>
+</html>
