@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación/Volteo Switch Táctil)</title>
+    <title>Carta Interactiva (Rotación/Volteo Switch Táctil - Volteo al Activar)</title>
     <style>
         body {
             margin: 0;
@@ -164,6 +164,24 @@
             currentMode = (currentMode === 'rotation') ? 'volteo' : 'rotation';
             switchModeBtn.textContent = (currentMode === 'rotation') ? 'Modo Volteo' : 'Modo Rotación';
             switchModeBtn.classList.toggle('volteo-activo', currentMode === 'volteo');
+
+            // Si se activa el modo Volteo, voltear la carta
+            if (currentMode === 'volteo' && !isFlipped) {
+                isFlipping = true;
+                isFlipped = true;
+                interactiveCard.classList.add('flipped');
+                setTimeout(() => {
+                    isFlipping = false;
+                }, 600);
+            } else if (currentMode === 'rotation' && isFlipped) {
+                // Si se vuelve al modo Rotación y la carta está volteada, volverla a la parte frontal (opcional)
+                isFlipping = true;
+                isFlipped = false;
+                interactiveCard.classList.remove('flipped');
+                setTimeout(() => {
+                    isFlipping = false;
+                }, 600);
+            }
         });
     </script>
 
