@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Rotación y Volteo 180) - Versión EA</title>
+    <title>Dos Cartas Interactivas (Rotación y Volteo Animado) - Versión FA</title>
     <style>
         body {
             margin: 0;
@@ -42,12 +42,6 @@
             font-weight: bold;
         }
 
-        .button-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
         .flip-button {
             background-color: rgba(255, 255, 255, 0.5);
             color: #121212;
@@ -64,7 +58,7 @@
             background-color: rgba(255, 255, 255, 0.8);
         }
 
-        /* Estilos para la carta de volteo */
+        /* Estilos para la carta de volteo animado */
         .card-flip-container {
             perspective: 1200px;
             transform-style: preserve-3d;
@@ -80,13 +74,8 @@
             background-color: lightblue;
             border-radius: 8px;
             transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1.435);
-            transform: rotateY(0deg);
             position: relative;
-        }
-
-        .card-flip.flipped {
-            transform: rotateY(180deg);
+            transform: rotateY(0deg);
         }
 
         .card-flip-face {
@@ -109,20 +98,38 @@
             background-color: lightcoral;
             transform: rotateY(180deg);
         }
+
+        .card-flip.flipping {
+            animation: flipClockwise 0.6s forwards;
+        }
+
+        .card-flip.flipped {
+            transform: rotateY(180deg);
+        }
+
+        @keyframes flipClockwise {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(180deg); }
+        }
+
+        @keyframes flipCounterClockwise {
+            from { transform: rotateY(180deg); }
+            to { transform: rotateY(0deg); }
+        }
     </style>
 </head>
 <body>
 
     <div class="card-container">
         <div class="card" id="rotateCard">
-            EA - Rotar
+            FA - Rotar
         </div>
     </div>
 
     <div class="card-flip-container">
         <div class="card-flip" id="flipCard">
-            <div class="card-flip-face front">EA - Front</div>
-            <div class="card-flip-face back">EA - Back</div>
+            <div class="card-flip-face front">FA - Front</div>
+            <div class="card-flip-face back">FA - Back</div>
         </div>
         <button class="flip-button" id="toggleFlipBtn">Voltear Carta</button>
     </div>
@@ -205,7 +212,7 @@
         rotateCard.addEventListener('touchend', handleTouchEndRotate);
         rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-        // --- Script para la Carta de Volteo 180 Grados con Botón ---
+        // --- Script para la Carta de Volteo 180 Grados Animado ---
         const flipCard = document.getElementById('flipCard');
         const toggleFlipBtn = document.getElementById('toggleFlipBtn');
         let isFlipped = false;
@@ -214,11 +221,13 @@
         toggleFlipBtn.addEventListener('click', () => {
             if (!isFlipping) {
                 isFlipping = true;
-                flipCard.classList.toggle('flipped');
-                isFlipped = !isFlipped;
+                flipCard.classList.add('flipping');
                 setTimeout(() => {
+                    flipCard.classList.remove('flipping');
+                    flipCard.classList.toggle('flipped');
+                    isFlipped = !isFlipped;
                     isFlipping = false;
-                }, 600); // Debe coincidir con la duración de la transición CSS
+                }, 600); // Debe coincidir con la duración de la animación
             }
         });
     </script>
