@@ -293,12 +293,12 @@
                 fantasmaRotation += 180;
                 cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
 
+                // Hacer invisible la carta fantasma después de iniciar el giro hacia la parte trasera
                 setTimeout(() => {
+                    cardFantasmaWrapper.classList.remove('visible');
                     isFantasmaAnimating = false;
                     fantasmaRotation = Math.round(fantasmaRotation / 180) * 180;
                     cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
-                    // Hacer invisible la carta fantasma después de que termine el giro (cuando muestra la parte trasera)
-                    cardFantasmaWrapper.classList.remove('visible');
                 }, 600);
             }
         });
