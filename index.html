@@ -100,7 +100,7 @@
         /* Estilos de la Carta Fantasma */
         .card-wrapper.fantasma {
             transform-style: preserve-3d;
-            transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out; /* Transición más rápida para el giro */
+            transition: transform 0.6s ease-in-out, opacity 0.2s ease-in-out; /* Transición para el giro */
             transform-origin: center center;
             opacity: 0;
             pointer-events: none;
@@ -116,42 +116,17 @@
             pointer-events: auto;
         }
 
-        .card-wrapper.fantasma.girando {
-            animation: giroFantasma 0.6s linear infinite; /* Animación de giro */
-        }
-
-        @keyframes giroFantasma {
-            from { transform: rotateY(0deg); }
-            to { transform: rotateY(360deg); }
-        }
-
-        .card-face.fantasma {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 8px; /* Ajustar el radio del borde */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .card-face.fantasma.front {
-            background-color: white; /* Frente blanco */
-            transform: rotateY(0deg);
-        }
-
-        .card-face.fantasma.back {
-            background-color: red; /* Dorso rojo */
-            transform: rotateY(180deg);
+        .card-wrapper.fantasma.girando-180 {
+            transform: rotateY(180deg); /* Gira 180 grados */
+            transition: transform 0.6s ease-in-out; /* Asegura la transición */
         }
 
         .card-wrapper.fantasma.rojo-fantasma {
-            transform: rotateY(180deg); /* Mostrar el lado rojo */
+            transform: rotateY(180deg); /* Muestra el lado rojo */
         }
 
         .card-wrapper.fantasma.blanco-fantasma {
-            transform: rotateY(0deg); /* Mostrar el lado blanco */
+            transform: rotateY(0deg); /* Muestra el lado blanco */
         }
 
         /* Botón de Volteo */
@@ -211,7 +186,6 @@
         let currentXOriginal = 0, currentYOriginal = 0;
         let dragStartTimeOriginal;
         let isAnimatingOriginal = false; // Para controlar la animación de la carta original
-        let fantasmaActivacionCount = 0; // Contador para alternar el lado de la fantasma
         let isFantasmaActiva = false; // Para evitar ejecuciones simultáneas de la fantasma
 
         function updateCardRotationOriginal() {
@@ -277,49 +251,42 @@
         flipBtn.addEventListener('click', () => {
             // Hacer invisible la carta original
             cardOriginal.style.opacity = 0;
-            cardOriginal.style.pointerEvents = 'none'; // Para que no capture eventos táctiles mientras está invisible
+            cardOriginal.style.pointerEvents = 'none';
 
             if (!isAnimatingOriginal && !isFantasmaActiva) {
-                isAnimatingOriginal = true; // Marca el inicio de la animación de la carta original
+                isAnimatingOriginal = true;
                 cardOriginal.classList.add('will-flip');
                 setTimeout(() => {
                     isFlippedOriginal = !isFlippedOriginal;
                     cardOriginal.classList.toggle('flipped');
                     cardOriginal.classList.remove('will-flip');
-                    isAnimatingOriginal = false; // Marca el fin de la animación de la carta original
+                    isAnimatingOriginal = false;
                 }, 200);
             }
 
             if (!isFantasmaActiva) {
                 isFantasmaActiva = true;
-                fantasmaActivacionCount++;
 
+                // 1. Hacer visible la carta fantasma (inicialmente en blanco por defecto en CSS)
                 cardFantasmaWrapper.classList.add('visible');
-                cardFantasmaWrapper.classList.add('girando');
 
+                // 2. Iniciar el giro de 180 grados después de un breve delay para asegurar que sea visible
                 setTimeout(() => {
-                    cardFantasmaWrapper.classList.remove('girando');
-                    if (fantasmaActivacionCount % 2 !== 0) {
-                        cardFantasmaWrapper.classList.add('rojo-fantasma');
-                        cardFantasmaWrapper.classList.remove('blanco-fantasma');
-                    } else {
-                        cardFantasmaWrapper.classList.add('blanco-fantasma');
-                        cardFantasmaWrapper.classList.remove('rojo-fantasma');
-                    }
+                    cardFantasmaWrapper.classList.add('girando-180');
 
+                    // 3. Después de la animación (0.6s), esperar 1 segundo y luego desaparecer
                     setTimeout(() => {
                         cardFantasmaWrapper.classList.remove('visible');
-                        cardFantasmaWrapper.classList.remove('rojo-fantasma');
-                        cardFantasmaWrapper.classList.remove('blanco-fantasma');
+                        cardFantasmaWrapper.classList.remove('girando-180');
                         isFantasmaActiva = false;
 
-                        // Hacer visible de nuevo la carta original después de la animación de la fantasma
+                        // Hacer visible de nuevo la carta original
                         setTimeout(() => {
                             cardOriginal.style.opacity = 1;
                             cardOriginal.style.pointerEvents = 'auto';
-                        }, 100); // Un pequeño delay para evitar parpadeos
-                    }, 1000);
-                }, 600);
+                        }, 100);
+                    }, 600 + 1000); // 0.6s de giro + 1s de espera
+                }, 50); // Pequeño delay para asegurar que la clase 'visible' se aplique primero
             }
         });
 
