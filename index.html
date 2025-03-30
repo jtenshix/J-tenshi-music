@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva con Carta Fantasma Dinámica</title>
+    <title>Carta 3D Interactiva con Carta Fantasma Dinámica (Rotación Precisa)</title>
     <style>
         body {
             margin: 0;
@@ -36,7 +36,7 @@
             left: 0;
             transform-style: preserve-3d;
             border-radius: 15px;
-            transition: opacity 0.3s ease-in-out;
+            transition: opacity 0.3s ease-in-out, transform 0.6s ease-in-out; /* Añadimos transform a la transición */
         }
 
         .card.original {
