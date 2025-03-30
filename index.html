@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación/Volteo Switch Táctil - Revisión Volteo)</title>
+    <title>Carta Interactiva (Rotación/Volteo Switch Táctil - Forzar Reinicio)</title>
     <style>
         /* Estilos CSS (sin cambios) */
         body {
@@ -31,6 +31,7 @@
             transform-style: preserve-3d;
             transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             transform: rotateX(0deg) rotateY(0deg);
+            transform-style: preserve-3d; /* Asegurar que preserve-3d se mantenga */
             position: relative;
             cursor: grab;
         }
@@ -103,7 +104,7 @@
         let currentMode = 'rotacion'; // Modo inicial: rotación
 
         interactiveCard.addEventListener('touchstart', (e) => {
-            console.log('touchstart en la carta. Modo:', currentMode, 'isFlipping:', isFlipping); // Verificación detallada
+            console.log('touchstart en la carta. Modo:', currentMode, 'isFlipping:', isFlipping);
             if (!isFlipping) {
                 isTouchingCard = true;
                 startX = e.touches[0].clientX;
@@ -111,13 +112,18 @@
                 interactiveCard.style.cursor = 'grabbing';
                 interactiveCard.style.transition = 'transform 0s';
             } else if (!isFlipping && currentMode === 'volteo') {
-                console.log('Modo Volteo activado - Intentando voltear'); // Verificación
+                console.log('Modo Volteo activado - Intentando voltear');
+                // Forzar un reinicio visual antes de intentar voltear
+                interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+                void interactiveCard.offsetWidth; // Disparar un reflow
+                interactiveCard.style.transition = 'transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)'; // Reaplicar la transición
+
                 isFlipping = true;
                 isFlipped = !isFlipped;
                 interactiveCard.classList.toggle('flipped');
                 setTimeout(() => {
                     isFlipping = false;
-                    console.log('Volteo finalizado. isFlipped:', isFlipped); // Verificación
+                    console.log('Volteo finalizado. isFlipped:', isFlipped);
                 }, 600);
             }
             e.preventDefault();
@@ -171,7 +177,7 @@
             currentMode = (currentMode === 'rotacion') ? 'volteo' : 'rotacion';
             switchModeBtn.textContent = (currentMode === 'rotacion') ? 'Activar Volteo' : 'Activar Rotación';
             switchModeBtn.classList.toggle('volteo-activo', currentMode === 'volteo');
-            console.log('Botón clickeado. Nuevo modo:', currentMode, 'isFlipped:', isFlipped); // Verificación
+            console.log('Botón clickeado. Nuevo modo:', currentMode, 'isFlipped:', isFlipped);
         });
     </script>
 
