@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación Suelta, Sin Desplazamiento de Página - Versión AB)</title>
+    <title>Carta Interactiva (Rotación Sensible, Elástico al Soltar - Versión AC)</title>
     <style>
         body {
             margin: 0;
@@ -79,7 +79,7 @@
 
     <div class="card-container">
         <div class="card" id="interactiveCard">
-            <div class="card-face front">AB</div>
+            <div class="card-face front">AC</div>
             <div class="card-face back"></div>
         </div>
     </div>
@@ -98,16 +98,13 @@
         let flipAngle = 0; // Ángulo de volteo actual
         let isVolteoActivo = false; // Estado del modo de volteo
         let animationFrameId;
-        const friction = 0.85;
-        const springForce = 0.05;
-        const damping = 0.6;
-        const rotationFactor = 0.1; // Reducir aún más la sensibilidad
-        const resistanceThreshold = 5;
-        const resistanceFactor = 0.3;
+        const friction = 0.88; // Ajustar fricción para el rebote
+        const springForce = 0.08; // Aumentar la fuerza del resorte
+        const damping = 0.75; // Aumentar la amortiguación para un rebote más controlado
+        const rotationFactor = 0.2; // Volver a una rotación más sensible
 
         let velocityY = 0;
         let velocityX = 0;
-        let isMoving = false;
 
         // --- Listeners para el modo ROTACIÓN ---
         const handleTouchStartRotate = (e) => {
@@ -120,7 +117,6 @@
                 cancelAnimationFrame(animationFrameId);
                 velocityY = 0;
                 velocityX = 0;
-                isMoving = false;
             }
             e.preventDefault(); // Evitar desplazamiento de página
         };
@@ -133,23 +129,11 @@
             const deltaX = currentX - startX;
             const deltaY = currentY - startY;
 
-            if (!isMoving && (Math.abs(deltaX) > resistanceThreshold || Math.abs(deltaY) > resistanceThreshold)) {
-                isMoving = true;
-            }
+            rotationY += deltaX * rotationFactor;
+            rotationX -= deltaY * rotationFactor;
 
-            let effectiveDeltaX = deltaX;
-            let effectiveDeltaY = deltaY;
-
-            if (!isMoving) {
-                effectiveDeltaX *= resistanceFactor;
-                effectiveDeltaY *= resistanceFactor;
-            }
-
-            rotationY += effectiveDeltaX * rotationFactor;
-            rotationX -= effectiveDeltaY * rotationFactor;
-
-            velocityY = deltaX * 0.4;
-            velocityX = -deltaY * 0.4;
+            velocityY = deltaX * 0.5;
+            velocityX = -deltaY * 0.5;
 
             interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY + flipAngle}deg)`;
             startX = currentX;
