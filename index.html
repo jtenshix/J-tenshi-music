@@ -319,20 +319,15 @@
                 cardFantasmaWrapper.classList.add('visible');
                 void cardFantasmaWrapper.offsetWidth; // Forzar reflow
 
-                if (!isFantasmaRoja) {
-                    // Girar de blanco a rojo (hacia la derecha - +180 grados)
-                    cardFantasmaWrapper.style.transform = 'rotateY(180deg)';
-                    isFantasmaRoja = true;
-                } else {
-                    // Girar de rojo a blanco (hacia la derecha - +180 grados adicionales, o resetear a 0)
-                    cardFantasmaWrapper.style.transform = 'rotateY(360deg)'; // También puedes usar 'rotateY(0deg)'
-                    isFantasmaRoja = false;
-                }
+                let targetRotation = isFantasmaRoja ? '0deg' : '180deg';
+
+                cardFantasmaWrapper.style.transform = `rotateY(${targetRotation})`;
+                isFantasmaRoja = !isFantasmaRoja;
 
                 setTimeout(() => {
                     isFantasmaAnimating = false;
-                    // Reiniciar la rotación a 0 o 180 para la próxima animación, asegurando la continuidad
-                    cardFantasmaWrapper.style.transform = isFantasmaRoja ? 'rotateY(180deg)' : 'rotateY(0deg)';
+                    // Aseguramos que la transformación final sea exactamente 0 o 180
+                    cardFantasmaWrapper.style.transform = `rotateY(${targetRotation})`;
                 }, 600); // Duración de la transición
             }
         });
