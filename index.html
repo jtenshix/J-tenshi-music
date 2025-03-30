@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación y Volteo - Bloqueo - Sin Desplazamiento)</title>
+    <title>Carta Interactiva (Rotación, Volteo y Rebote Táctil)</title>
     <style>
         body {
             margin: 0;
@@ -28,7 +28,7 @@
             width: 300px;
             height: 450px;
             transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Transición para el rebote */
             transform: rotateX(0deg) rotateY(0deg);
             position: relative;
             cursor: grab;
@@ -101,8 +101,9 @@
                 startX = e.touches[0].clientX;
                 startY = e.touches[0].clientY;
                 interactiveCard.style.cursor = 'grabbing';
+                interactiveCard.style.transition = 'transform 0s'; // Remover transición para movimiento directo
             }
-            e.preventDefault(); // Prevenir el desplazamiento táctil predeterminado
+            e.preventDefault();
         });
 
         interactiveCard.addEventListener('touchmove', (e) => {
@@ -113,24 +114,33 @@
             const deltaX = currentX - startX;
             const deltaY = currentY - startY;
 
-            rotationY += deltaX * 0.2;
+            rotationY += deltaX * 0.2; // Ajusté el multiplicador a 0.2 para un rebote más sutil
             rotationX -= deltaY * 0.2;
 
             interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
 
             startX = currentX;
             startY = currentY;
-            e.preventDefault(); // Prevenir el desplazamiento táctil predeterminado
+            e.preventDefault();
         });
+
+        const resetRotation = () => {
+            interactiveCard.style.transition = 'transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)'; // Reestablecer la transición para el rebote
+            rotationX = 0;
+            rotationY = 0;
+            interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+        };
 
         interactiveCard.addEventListener('touchend', () => {
             isTouching = false;
             interactiveCard.style.cursor = 'grab';
+            resetRotation();
         });
 
         interactiveCard.addEventListener('touchcancel', () => {
             isTouching = false;
             interactiveCard.style.cursor = 'grab';
+            resetRotation();
         });
 
         flipCardBtn.addEventListener('click', () => {
