@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Original Solamente)</title>
+    <title>Carta 3D Interactiva (Con Volteo Visual)</title>
     <style>
         body {
             margin: 0;
@@ -12,13 +12,9 @@
             min-height: 100vh;
             overflow: hidden;
             user-select: none;
-            position: relative;
-            padding-bottom: env(safe-area-inset-bottom);
-            padding-top: env(safe-area-inset-top);
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 40px; /* Esto separará los contenedores si no los posicionas absolutamente */
         }
 
         .card-container {
@@ -50,18 +46,15 @@
         }
 
         .card-back-container {
-            opacity: 0;
-            pointer-events: none;
+            transform: rotateY(180deg); /* Inicialmente volteado hacia atrás */
         }
 
         .card.flipped .card-front-container {
-            opacity: 0;
-            pointer-events: none;
+            transform: rotateY(180deg);
         }
 
         .card.flipped .card-back-container {
-            opacity: 1;
-            pointer-events: auto;
+            transform: rotateY(0deg);
         }
 
         .card-side {
@@ -83,7 +76,6 @@
         .card-back {
             background-image: url('carta_dorso.png.png');
             background-size: cover;
-            transform: rotateY(180deg) scaleX(-1);
         }
 
         .flip-button {
@@ -115,22 +107,12 @@
             transform: rotateY(30deg);
             transition: transform 0.2s ease-in-out;
         }
-
-        .card.invisible {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .card.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
     </style>
 </head>
 <body>
 
-    <div class="card-container original">
-        <div class="card visible" id="cardOriginal">
+    <div class="card-container">
+        <div class="card" id="cardOriginal">
             <div class="card-front-container">
                 <div class="card-side card-front"></div>
             </div>
@@ -145,8 +127,6 @@
     <script>
         const cardOriginal = document.getElementById('cardOriginal');
         const flipBtn = document.getElementById('flipBtn');
-        const frontContainerOriginal = document.querySelector('.card-container.original .card-front-container');
-        const backContainerOriginal = document.querySelector('.card-container.original .card-back-container');
         let isFlippedOriginal = false;
         let rotationXOriginal = 0, rotationYOriginal = 0;
         let isDraggingOriginal = false;
