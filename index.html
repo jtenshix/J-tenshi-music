@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación/Volteo Switch Táctil - Verificación Inicial)</title>
+    <title>Carta Interactiva (Rotación/Volteo Switch Táctil - Revisión Volteo)</title>
     <style>
-        /* Estilos CSS (sin cambios, asegurándonos de que no haya un fondo azul inesperado) */
+        /* Estilos CSS (sin cambios) */
         body {
             margin: 0;
             padding: 20px;
@@ -78,11 +78,6 @@
         .switch-button:hover {
             background-color: rgba(255, 255, 255, 0.8);
         }
-
-        /* Asegurándonos de que no haya un estilo azul al tocar */
-        .card:active, .card-container:active, .card-face:active {
-            background-color: transparent !important;
-        }
     </style>
 </head>
 <body>
@@ -107,10 +102,8 @@
         let isFlipping = false;
         let currentMode = 'rotacion'; // Modo inicial: rotación
 
-        console.log('Script cargado. Modo inicial:', currentMode); // Verificación
-
         interactiveCard.addEventListener('touchstart', (e) => {
-            console.log('touchstart en la carta. Modo:', currentMode); // Verificación
+            console.log('touchstart en la carta. Modo:', currentMode, 'isFlipping:', isFlipping); // Verificación detallada
             if (!isFlipping) {
                 isTouchingCard = true;
                 startX = e.touches[0].clientX;
@@ -118,11 +111,13 @@
                 interactiveCard.style.cursor = 'grabbing';
                 interactiveCard.style.transition = 'transform 0s';
             } else if (!isFlipping && currentMode === 'volteo') {
+                console.log('Modo Volteo activado - Intentando voltear'); // Verificación
                 isFlipping = true;
                 isFlipped = !isFlipped;
                 interactiveCard.classList.toggle('flipped');
                 setTimeout(() => {
                     isFlipping = false;
+                    console.log('Volteo finalizado. isFlipped:', isFlipped); // Verificación
                 }, 600);
             }
             e.preventDefault();
@@ -176,7 +171,7 @@
             currentMode = (currentMode === 'rotacion') ? 'volteo' : 'rotacion';
             switchModeBtn.textContent = (currentMode === 'rotacion') ? 'Activar Volteo' : 'Activar Rotación';
             switchModeBtn.classList.toggle('volteo-activo', currentMode === 'volteo');
-            console.log('Botón clickeado. Nuevo modo:', currentMode); // Verificación
+            console.log('Botón clickeado. Nuevo modo:', currentMode, 'isFlipped:', isFlipped); // Verificación
         });
     </script>
 
