@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación/Volteo Switch Táctil - Desactivación Temporal)</title>
+    <title>Carta Interactiva (Rotación/Volteo Switch Táctil - Simplificación Volteo)</title>
     <style>
         /* Estilos CSS (sin cambios) */
         body {
@@ -159,20 +159,16 @@
             e.preventDefault();
             if (!isFlipping) {
                 isFlipping = true;
-                // Deshabilitar la rotación temporalmente
-                rotationEnabled = false;
 
                 currentMode = (currentMode === 'rotacion') ? 'volteo' : 'rotacion';
                 switchModeBtn.textContent = (currentMode === 'rotacion') ? 'Activar Volteo' : 'Activar Rotación';
                 switchModeBtn.classList.toggle('volteo-activo', currentMode === 'volteo');
 
-                isFlipped = !isFlipped;
-                interactiveCard.classList.toggle('flipped');
+                isFlipped = !isFlipped; // Cambiar el estado de volteo
+                interactiveCard.classList.toggle('flipped'); // Aplicar la clase para el volteo
 
                 setTimeout(() => {
                     isFlipping = false;
-                    // Reactivar la rotación después del volteo (o al volver al modo rotación)
-                    rotationEnabled = true;
                 }, 600);
             }
         });
