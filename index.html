@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Fantasma Roja Final)</title>
+    <title>Carta 3D Interactiva (Fantasma Gira al Clic)</title>
     <style>
         body {
             margin: 0;
@@ -35,6 +35,7 @@
             left: 0;
             transform-style: preserve-3d;
             border-radius: 15px;
+            backface-visibility: hidden; /* Importante para evitar parpadeos */
         }
 
         .card.original {
@@ -99,8 +100,8 @@
 
         /* Estilos de la Carta Fantasma */
         .card-wrapper.fantasma {
-            transform-style: preserve-3d;
             transition: transform 0.6s ease-in-out, opacity 0.2s ease-in-out;
+            transform-style: preserve-3d;
             transform-origin: center center;
             opacity: 0;
             pointer-events: none;
@@ -194,13 +195,14 @@
         let currentXOriginal = 0, currentYOriginal = 0;
         let dragStartTimeOriginal;
         let isAnimating = false;
+        let isFantasmaVisible = false;
 
         function updateCardRotationOriginal() {
             cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
         }
 
         function startDragOriginal(e) {
-            if (!isAnimating) {
+            if (!isAnimating && !isFantasmaVisible) { // No permitir arrastrar si la fantasma está visible o animando
                 isDraggingOriginal = true;
                 startXOriginal = e.touches ? e.touches[0].clientX : e.clientX;
                 startYOriginal = e.touches ? e.touches[0].clientY : e.clientY;
@@ -212,7 +214,7 @@
         }
 
         function dragMoveOriginal(e) {
-            if (isDraggingOriginal && !isAnimating) {
+            if (isDraggingOriginal && !isAnimating && !isFantasmaVisible) {
                 let x = e.touches ? e.touches[0].clientX : e.clientX;
                 let y = e.touches ? e.touches[0].clientY : e.clientY;
 
@@ -232,7 +234,7 @@
         }
 
         function stopDragOriginal() {
-            if (isDraggingOriginal && !isAnimating) {
+            if (isDraggingOriginal && !isAnimating && !isFantasmaVisible) {
                 isDraggingOriginal = false;
                 cardOriginal.style.transition = "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.2s ease-in-out";
 
@@ -259,18 +261,21 @@
             if (!isAnimating) {
                 isAnimating = true;
 
-                // 1. Desaparecer la carta original
-                cardOriginal.style.opacity = 0;
-
-                // 2. Aparecer la carta fantasma (roja y blanca) y voltearla al lado rojo
-                cardFantasmaWrapper.classList.add('visible');
-                void cardFantasmaWrapper.offsetWidth; // Forzar reflow
-                cardFantasmaWrapper.classList.add('flipped');
-
-                // 3. La carta fantasma SE QUEDA visible en el lado rojo
-                // No necesitamos el setTimeout para hacerla desaparecer
-
-                isAnimating = false;
+                if (!isFantasmaVisible) {
+                    // Mostrar la fantasma y ocultar la original
+                    cardOriginal.style.opacity = 0;
+                    cardFantasmaWrapper.classList.add('visible');
+                    void cardFantasmaWrapper.offsetWidth; // Forzar reflow
+                    cardFantasmaWrapper.classList.add('flipped');
+                    isFantasmaVisible = true;
+                    isAnimating = false; // Permitir futuros clics
+                } else {
+                    // Girar la fantasma
+                    cardFantasmaWrapper.classList.toggle('flipped');
+                    setTimeout(() => {
+                        isAnimating = false; // Permitir futuros clics después de la animación
+                    }, 600); // Esperar la duración de la animación
+                }
             }
         });
 
