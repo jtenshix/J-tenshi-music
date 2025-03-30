@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación con Rebote Oscilante - Versión Z)</title>
+    <title>Carta Interactiva (Rotación Suave con Elástico Pronunciado - Versión AA)</title>
     <style>
         body {
             margin: 0;
@@ -79,7 +79,7 @@
 
     <div class="card-container">
         <div class="card" id="interactiveCard">
-            <div class="card-face front">Z</div>
+            <div class="card-face front">AA</div>
             <div class="card-face back"></div>
         </div>
     </div>
@@ -98,11 +98,16 @@
         let flipAngle = 0; // Ángulo de volteo actual
         let isVolteoActivo = false; // Estado del modo de volteo
         let animationFrameId;
-        const friction = 0.88; // Reducir un poco la fricción para el rebote
-        const springForce = 0.03; // Fuerza del "resorte" hacia el centro
-        const damping = 0.7; // Amortiguación del rebote
+        const friction = 0.85; // Ajustar fricción para el rebote
+        const springForce = 0.05; // Aumentar la fuerza del resorte
+        const damping = 0.6; // Reducir la amortiguación para un rebote más pronunciado
+        const rotationFactor = 0.15; // Reducir la sensibilidad de la rotación
+        const resistanceThreshold = 5; // Umbral para la resistencia inicial
+        const resistanceFactor = 0.3; // Factor de reducción inicial
+
         let velocityY = 0;
         let velocityX = 0;
+        let isMoving = false;
 
         // --- Listeners para el modo ROTACIÓN ---
         const handleTouchStartRotate = (e) => {
@@ -115,6 +120,7 @@
                 cancelAnimationFrame(animationFrameId);
                 velocityY = 0;
                 velocityX = 0;
+                isMoving = false;
             }
             e.preventDefault();
         };
@@ -127,11 +133,23 @@
             const deltaX = currentX - startX;
             const deltaY = currentY - startY;
 
-            rotationY += deltaX * 0.2;
-            rotationX -= deltaY * 0.2;
+            if (!isMoving && (Math.abs(deltaX) > resistanceThreshold || Math.abs(deltaY) > resistanceThreshold)) {
+                isMoving = true;
+            }
 
-            velocityY = deltaX * 0.5;
-            velocityX = -deltaY * 0.5;
+            let effectiveDeltaX = deltaX;
+            let effectiveDeltaY = deltaY;
+
+            if (!isMoving) {
+                effectiveDeltaX *= resistanceFactor;
+                effectiveDeltaY *= resistanceFactor;
+            }
+
+            rotationY += effectiveDeltaX * rotationFactor;
+            rotationX -= effectiveDeltaY * rotationFactor;
+
+            velocityY = deltaX * 0.4;
+            velocityX = -deltaY * 0.4;
 
             interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY + flipAngle}deg)`;
             startX = currentX;
@@ -151,11 +169,10 @@
                 rotationY += velocityY;
                 rotationX += velocityX;
 
-                // Aplicar fuerza de "resorte" hacia el centro
                 rotationY += -rotationY * springForce;
                 rotationX += -rotationX * springForce;
 
-                velocityY *= damping; // Amortiguar la velocidad
+                velocityY *= damping;
                 velocityX *= damping;
 
                 interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY + flipAngle}deg)`;
