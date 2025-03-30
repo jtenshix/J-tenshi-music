@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación/Volteo Switch Táctil - Volteo al Activar)</title>
+    <title>Carta Interactiva (Rotación/Volteo Switch Táctil - Volteo Automático)</title>
     <style>
         body {
             margin: 0;
@@ -28,7 +28,7 @@
             width: 300px;
             height: 450px;
             transform-style: preserve-3d;
-            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Transición más suave para el volteo */
             transform: rotateX(0deg) rotateY(0deg);
             position: relative;
             cursor: grab;
@@ -161,30 +161,18 @@
         });
 
         switchModeBtn.addEventListener('click', () => {
+            isFlipping = true; // Iniciar el estado de volteo
+
             currentMode = (currentMode === 'rotacion') ? 'volteo' : 'rotacion';
             switchModeBtn.textContent = (currentMode === 'rotacion') ? 'Activar Volteo' : 'Activar Rotación';
             switchModeBtn.classList.toggle('volteo-activo', currentMode === 'volteo');
 
-            // Voltear la carta al activar el modo Volteo
-            if (currentMode === 'volteo') {
-                if (!isFlipped) {
-                    isFlipping = true;
-                    isFlipped = true;
-                    interactiveCard.classList.add('flipped');
-                    setTimeout(() => {
-                        isFlipping = false;
-                    }, 600);
-                }
-            } else { // Volver la carta al activar el modo Rotación
-                if (isFlipped) {
-                    isFlipping = true;
-                    isFlipped = false;
-                    interactiveCard.classList.remove('flipped');
-                    setTimeout(() => {
-                        isFlipping = false;
-                    }, 600);
-                }
-            }
+            isFlipped = !isFlipped; // Cambiar el estado de volteo
+            interactiveCard.classList.toggle('flipped'); // Aplicar la clase para el volteo
+
+            setTimeout(() => {
+                isFlipping = false; // Finalizar el estado de volteo después de la animación
+            }, 600);
         });
     </script>
 
