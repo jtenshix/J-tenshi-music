@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación y Volteo - Versión BA)</title>
+    <title>Carta con Rotación y Rebote (Versión CA)</title>
     <style>
         body {
             margin: 0;
@@ -21,60 +21,39 @@
         .card-container {
             perspective: 1200px;
             transform-style: preserve-3d;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
         }
 
         .card {
-            width: 300px;
-            height: 450px;
-            transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1.435);
-            transform: rotateX(0deg) rotateY(0deg);
-            position: relative;
-            cursor: grab;
-        }
-
-        .card.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .card-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 150px;
+            height: 225px;
             background-color: white;
-            border-radius: 15px;
-            backface-visibility: hidden;
+            border-radius: 8px;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease-out;
+            transform: rotateX(0deg) rotateY(0deg);
+            cursor: grab;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 48px;
+            font-size: 24px;
             font-weight: bold;
         }
 
-        .card-face.back {
-            background-color: lightgray;
-            transform: rotateY(180deg);
-        }
-
-        .switch-button {
+        .rotate-button {
             background-color: rgba(255, 255, 255, 0.5);
             color: #121212;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 5px 10px;
+            border-radius: 3px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 12px;
             transition: background 0.3s;
             touch-action: manipulation;
+            margin-bottom: 10px;
         }
 
-        .switch-button.volteo-activo {
-            background-color: rgba(100, 149, 237, 0.7);
-            color: white;
-        }
-
-        .switch-button:hover {
+        .rotate-button:hover {
             background-color: rgba(255, 255, 255, 0.8);
         }
     </style>
@@ -82,174 +61,110 @@
 <body>
 
     <div class="card-container">
-        <div class="card" id="interactiveCard">
-            <div class="card-face front">BA</div>
-            <div class="card-face back"></div>
+        <div class="card" id="rotateCard">
+            CA
         </div>
+        <button class="rotate-button" id="enableRotateBtn">Activar Rotación</button>
     </div>
 
-    <button class="switch-button" id="switchModeBtn">Activar Volteo</button>
-
     <script>
-        const interactiveCard = document.getElementById('interactiveCard');
-        const switchModeBtn = document.getElementById('switchModeBtn');
-        let isTouchingCard = false;
-        let startX, startY, currentX, currentY;
-        let rotationX = 0;
-        let rotationY = 0;
-        let isFlipped = false;
-        let isFlipping = false;
-        let isVolteoActivo = false;
-        let animationFrameId;
-        const friction = 0.88;
-        const springForce = 0.08;
-        const damping = 0.75;
-        const rotationFactor = 0.25;
-        const centerTolerance = 0.5;
+        const rotateCard = document.getElementById('rotateCard');
+        const enableRotateBtn = document.getElementById('enableRotateBtn');
+        let isTouchingRotateCard = false;
+        let startXRotate, startYRotate, currentXRotate, currentYRotate;
+        let rotationXRotate = 0;
+        let rotationYRotate = 0;
+        let animationFrameRotateId;
+        const frictionRotate = 0.88;
+        const springForceRotate = 0.08;
+        const dampingRotate = 0.75;
+        const rotationFactorRotate = 0.5;
 
-        let velocityY = 0;
-        let velocityX = 0;
+        let velocityYRotate = 0;
+        let velocityXRotate = 0;
+        let isRotationEnabled = true;
 
-        // --- Listeners para el modo ROTACIÓN ---
         const handleTouchStartRotate = (e) => {
-            if (!isFlipping && !isVolteoActivo) {
-                isTouchingCard = true;
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
-                interactiveCard.style.cursor = 'grabbing';
-                interactiveCard.style.transition = 'transform 0s';
-                cancelAnimationFrame(animationFrameId);
-                velocityY = 0;
-                velocityX = 0;
+            if (isRotationEnabled) {
+                isTouchingRotateCard = true;
+                startXRotate = e.touches[0].clientX;
+                startYRotate = e.touches[0].clientY;
+                rotateCard.style.cursor = 'grabbing';
+                rotateCard.style.transition = 'transform 0s';
+                cancelAnimationFrame(animationFrameRotateId);
+                velocityYRotate = 0;
+                velocityXRotate = 0;
+                e.preventDefault();
             }
-            e.preventDefault();
         };
 
         const handleTouchMoveRotate = (e) => {
-            if (!isTouchingCard || isFlipping || isVolteoActivo) return;
-            currentX = e.touches[0].clientX;
-            currentY = e.touches[0].clientY;
+            if (!isTouchingRotateCard || !isRotationEnabled) return;
+            currentXRotate = e.touches[0].clientX;
+            currentYRotate = e.touches[0].clientY;
 
-            const deltaX = currentX - startX;
-            const deltaY = currentY - startY;
+            const deltaX = currentXRotate - startXRotate;
+            const deltaY = currentYRotate - startYRotate;
 
-            rotationY += deltaX * rotationFactor;
-            rotationX -= deltaY * rotationFactor;
+            rotationYRotate += deltaX * rotationFactorRotate;
+            rotationXRotate -= deltaY * rotationFactorRotate;
 
-            velocityY = deltaX * 0.5;
-            velocityX = -deltaY * 0.5;
+            velocityYRotate = deltaX * 0.5;
+            velocityXRotate = -deltaY * 0.5;
 
-            interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-            startX = currentX;
-            startY = currentY;
+            rotateCard.style.transform = `rotateX(${rotationXRotate}deg) rotateY(${rotationYRotate}deg)`;
+            startXRotate = currentXRotate;
+            startYRotate = currentYRotate;
             e.preventDefault();
         };
 
         const handleTouchEndRotate = () => {
-            isTouchingCard = false;
-            interactiveCard.style.cursor = 'grab';
-            interactiveCard.style.transition = 'transform 0.3s ease-out';
+            if (!isRotationEnabled) return;
+            isTouchingRotateCard = false;
+            rotateCard.style.cursor = 'grab';
+            rotateCard.style.transition = 'transform 0.3s ease-out';
 
-            const animateRebound = () => {
-                velocityY *= friction;
-                velocityX *= friction;
+            const animateReboundRotate = () => {
+                velocityYRotate *= frictionRotate;
+                velocityXRotate *= frictionRotate;
 
-                rotationY += velocityY;
-                rotationX += velocityX;
+                rotationYRotate += velocityYRotate;
+                rotationXRotate += velocityXRotate;
 
-                rotationY += -rotationY * springForce;
-                rotationX += -rotationX * springForce;
+                rotationYRotate += -rotationYRotate * springForceRotate;
+                rotationXRotate += -rotationXRotate * springForceRotate;
 
-                velocityY *= damping;
-                velocityX *= damping;
+                velocityYRotate *= dampingRotate;
+                velocityXRotate *= dampingRotate;
 
-                interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+                rotateCard.style.transform = `rotateX(${rotationXRotate}deg) rotateY(${rotationYRotate}deg)`;
 
-                if (Math.abs(velocityY) > 0.005 || Math.abs(velocityX) > 0.005 || Math.abs(rotationY) > 0.005 || Math.abs(rotationX) > 0.005) {
-                    animationFrameId = requestAnimationFrame(animateRebound);
+                if (Math.abs(velocityYRotate) > 0.005 || Math.abs(velocityXRotate) > 0.005 || Math.abs(rotationYRotate) > 0.005 || Math.abs(rotationXRotate) > 0.005) {
+                    animationFrameRotateId = requestAnimationFrame(animateReboundRotate);
                 } else {
-                    rotationX = 0;
-                    rotationY = 0;
-                    interactiveCard.style.transform = `rotateX(0deg) rotateY(0deg)`;
+                    rotationXRotate = 0;
+                    rotationYRotate = 0;
+                    rotateCard.style.transform = `rotateX(0deg) rotateY(0deg)`;
                 }
             };
 
-            animateRebound();
+            animateReboundRotate();
         };
 
         const handleTouchCancelRotate = () => {
-            isTouchingCard = false;
-            interactiveCard.style.cursor = 'grab';
+            if (!isRotationEnabled) return;
+            isTouchingRotateCard = false;
             handleTouchEndRotate();
         };
 
-        // --- Listener para el modo VOLTEO ---
-        const handleTouchStartFlip = (e) => {
-            if (!isFlipping && isVolteoActivo) {
-                isFlipping = true;
-                interactiveCard.classList.toggle('flipped');
-                isFlipped = !isFlipped;
-                setTimeout(() => {
-                    isFlipping = false;
-                }, 600);
-            }
-            e.preventDefault();
-        };
+        rotateCard.addEventListener('touchstart', handleTouchStartRotate);
+        rotateCard.addEventListener('touchmove', handleTouchMoveRotate);
+        rotateCard.addEventListener('touchend', handleTouchEndRotate);
+        rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-        // --- Funciones para activar/desactivar listeners ---
-        const enableRotationListeners = () => {
-            interactiveCard.addEventListener('touchstart', handleTouchStartRotate);
-            interactiveCard.addEventListener('touchmove', handleTouchMoveRotate);
-            interactiveCard.addEventListener('touchend', handleTouchEndRotate);
-            interactiveCard.addEventListener('touchcancel', handleTouchCancelRotate);
-            console.log('Listeners de ROTACIÓN ACTIVADOS');
-        };
-
-        const disableRotationListeners = () => {
-            interactiveCard.removeEventListener('touchstart', handleTouchStartRotate);
-            interactiveCard.removeEventListener('touchmove', handleTouchMoveRotate);
-            interactiveCard.removeEventListener('touchend', handleTouchEndRotate);
-            interactiveCard.removeEventListener('touchcancel', handleTouchCancelRotate);
-            console.log('Listeners de ROTACIÓN DESACTIVADOS');
-        };
-
-        const enableFlipListener = () => {
-            interactiveCard.addEventListener('touchstart', handleTouchStartFlip);
-            console.log('Listener de VOLTEO ACTIVADO');
-        };
-
-        const disableFlipListener = () => {
-            interactiveCard.removeEventListener('touchstart', handleTouchStartFlip);
-            console.log('Listener de VOLTEO DESACTIVADO');
-        };
-
-        // --- Inicialización ---
-        enableRotationListeners(); // Inicialmente en modo rotación
-
-        // --- Lógica del botón ---
-        switchModeBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            isFlipping = true;
-            isVolteoActivo = !isVolteoActivo;
-            isTouchingCard = false; // Reseteamos el estado del toque
-
-            if (isVolteoActivo) {
-                switchModeBtn.textContent = 'Desactivar Volteo';
-                switchModeBtn.classList.add('volteo-activo');
-                disableRotationListeners();
-                enableFlipListener();
-                interactiveCard.classList.remove('flipped'); // Asegurarse de que no esté volteada al activar
-                isFlipped = false;
-            } else {
-                switchModeBtn.textContent = 'Activar Volteo';
-                switchModeBtn.classList.remove('volteo-activo');
-                disableFlipListener();
-                enableRotationListeners();
-            }
-
-            setTimeout(() => {
-                isFlipping = false;
-            }, 100);
+        enableRotateBtn.addEventListener('click', () => {
+            isRotationEnabled = !isRotationEnabled;
+            enableRotateBtn.textContent = isRotationEnabled ? 'Desactivar Rotación' : 'Activar Rotación';
         });
     </script>
 
