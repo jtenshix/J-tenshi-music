@@ -146,11 +146,11 @@
             transform: rotateY(180deg);
         }
 
-        .card-wrapper.fantasma.rojo {
+        .card-wrapper.fantasma.rojo-fantasma {
             transform: rotateY(180deg); /* Mostrar el lado rojo */
         }
 
-        .card-wrapper.fantasma.blanco {
+        .card-wrapper.fantasma.blanco-fantasma {
             transform: rotateY(0deg); /* Mostrar el lado blanco */
         }
 
@@ -211,15 +211,15 @@
         let currentXOriginal = 0, currentYOriginal = 0;
         let dragStartTimeOriginal;
         let isAnimatingOriginal = false; // Para controlar la animación de la carta original
-        let fantasmaCounter = 0; // Contador para alternar el lado de la fantasma
-        let isFantasmaAnimating = false; // Para evitar activaciones múltiples de la fantasma
+        let fantasmaActivacionCount = 0; // Contador para alternar el lado de la fantasma
+        let isFantasmaActiva = false; // Para evitar ejecuciones simultáneas de la fantasma
 
         function updateCardRotationOriginal() {
             cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
         }
 
         function startDragOriginal(e) {
-            if (!isAnimatingOriginal && !isFantasmaAnimating) {
+            if (!isAnimatingOriginal && !isFantasmaActiva) {
                 isDraggingOriginal = true;
                 startXOriginal = e.touches ? e.touches[0].clientX : e.clientX;
                 startYOriginal = e.touches ? e.touches[0].clientY : e.clientY;
@@ -231,7 +231,7 @@
         }
 
         function dragMoveOriginal(e) {
-            if (isDraggingOriginal && !isAnimatingOriginal && !isFantasmaAnimating) {
+            if (isDraggingOriginal && !isAnimatingOriginal && !isFantasmaActiva) {
                 let x = e.touches ? e.touches[0].clientX : e.clientX;
                 let y = e.touches ? e.touches[0].clientY : e.clientY;
 
@@ -251,7 +251,7 @@
         }
 
         function stopDragOriginal() {
-            if (isDraggingOriginal && !isAnimatingOriginal && !isFantasmaAnimating) {
+            if (isDraggingOriginal && !isAnimatingOriginal && !isFantasmaActiva) {
                 isDraggingOriginal = false;
                 cardOriginal.style.transition = "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.2s ease-in-out";
 
@@ -275,33 +275,41 @@
         }
 
         flipBtn.addEventListener('click', () => {
-            if (!isAnimatingOriginal && !isFantasmaAnimating) {
-                isFantasmaAnimating = true;
-                fantasmaCounter++;
+            if (!isAnimatingOriginal && !isFantasmaActiva) {
+                isAnimatingOriginal = true; // Marca el inicio de la animación de la carta original
+                cardOriginal.classList.add('will-flip');
+                setTimeout(() => {
+                    isFlippedOriginal = !isFlippedOriginal;
+                    cardOriginal.classList.toggle('flipped');
+                    cardOriginal.classList.remove('will-flip');
+                    isAnimatingOriginal = false; // Marca el fin de la animación de la carta original
+                }, 200);
+            }
 
-                // 1. Hacer visible la carta fantasma y iniciar la animación
+            if (!isFantasmaActiva) {
+                isFantasmaActiva = true;
+                fantasmaActivacionCount++;
+
                 cardFantasmaWrapper.classList.add('visible');
                 cardFantasmaWrapper.classList.add('girando');
 
-                // 2. Determinar el lado a mostrar y detener el giro después de un tiempo
                 setTimeout(() => {
                     cardFantasmaWrapper.classList.remove('girando');
-                    if (fantasmaCounter % 2 !== 0) { // Impar: Rojo
-                        cardFantasmaWrapper.classList.remove('blanco');
-                        cardFantasmaWrapper.classList.add('rojo');
-                    } else { // Par: Blanco
-                        cardFantasmaWrapper.classList.remove('rojo');
-                        cardFantasmaWrapper.classList.add('blanco');
+                    if (fantasmaActivacionCount % 2 !== 0) {
+                        cardFantasmaWrapper.classList.add('rojo-fantasma');
+                        cardFantasmaWrapper.classList.remove('blanco-fantasma');
+                    } else {
+                        cardFantasmaWrapper.classList.add('blanco-fantasma');
+                        cardFantasmaWrapper.classList.remove('rojo-fantasma');
                     }
 
-                    // 3. Mantener visible por 1 segundo y luego desaparecer
                     setTimeout(() => {
                         cardFantasmaWrapper.classList.remove('visible');
-                        cardFantasmaWrapper.classList.remove('rojo');
-                        cardFantasmaWrapper.classList.remove('blanco');
-                        isFantasmaAnimating = false;
+                        cardFantasmaWrapper.classList.remove('rojo-fantasma');
+                        cardFantasmaWrapper.classList.remove('blanco-fantasma');
+                        isFantasmaActiva = false;
                     }, 1000);
-                }, 600); // Tiempo estimado para que se complete una parte del giro
+                }, 600);
             }
         });
 
