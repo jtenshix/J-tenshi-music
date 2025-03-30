@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva con Carta Fantasma Dinámica (Rotación Precisa)</title>
+    <title>Carta 3D Interactiva con Carta Fantasma Dinámica</title>
     <style>
         body {
             margin: 0;
@@ -36,7 +36,7 @@
             left: 0;
             transform-style: preserve-3d;
             border-radius: 15px;
-            transition: opacity 0.3s ease-in-out, transform 0.6s ease-in-out; /* Añadimos transform a la transición */
+            transition: opacity 0.3s ease-in-out;
         }
 
         .card.original {
@@ -225,7 +225,7 @@
         }
 
         function updateCardRotationOriginal() {
-            cardOriginal.style.transform = `rotateX(<span class="math-inline">\{rotationXOriginal\}deg\) rotateY\(</span>{rotationYOriginal}deg)`;
+            cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
         }
 
         function startDragOriginal(e) {
@@ -298,20 +298,17 @@
                     // Preparar para mostrar la fantasma
                     cardOriginal.style.opacity = 0;
                     cardOriginal.style.pointerEvents = 'none';
-                    cardFantasmaWrapper.style.opacity = 0; // Asegurar invisibilidad inicial
-
-                    // Establecer la rotación inicial de la fantasma para la animación
-                    const currentRotation = fantasmaRotation % 360;
-                    const targetRotation = currentRotation === 0 ? 180 : 0;
-                    cardFantasmaWrapper.style.transform = `rotateY(${currentRotation}deg)`;
+                    // Asegurarse de que la fantasma comience con la cara frontal visible
+                    cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation % 360}deg)`;
+                    cardFantasmaWrapper.style.opacity = 0; // Asegurar que esté invisible antes de mostrar
 
                     // Hacer visible la fantasma
                     cardFantasmaWrapper.classList.add('visible');
                     void cardFantasmaWrapper.offsetWidth;
-                    cardFantasmaWrapper.style.opacity = 1; // Iniciar transición de opacidad
+                    cardFantasmaWrapper.style.opacity = 1; // Iniciar la transición de opacidad
 
-                    // Iniciar el giro de la fantasma a la rotación objetivo
-                    fantasmaRotation = targetRotation;
+                    // Iniciar el giro de la fantasma
+                    fantasmaRotation += 180;
                     cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
 
                     // Voltear la carta original al mismo tiempo
@@ -320,8 +317,7 @@
 
                     setTimeout(() => {
                         isFantasmaAnimating = false;
-                        // Asegurar que la rotación final sea 0 o 180
-                        fantasmaRotation = fantasmaRotation % 360;
+                        fantasmaRotation = Math.round(fantasmaRotation / 180) * 180;
                         cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
                         // Ocultar y eliminar la fantasma
                         cardFantasmaWrapper.style.opacity = 0;
@@ -329,6 +325,21 @@
                         setTimeout(() => {
                             if (cardContainer && cardFantasmaWrapper) {
                                 cardContainer.removeChild(cardFantasmaWrapper);
-                                cardFantasmaWrapper = null; // Resetear referencia
+                                cardFantasmaWrapper = null; // Resetear la referencia
                             }
-                        }, 3
+                        }, 300);
+                        cardOriginal.style.opacity = 1;
+                        cardOriginal.style.pointerEvents = 'auto';
+                    }, 600);
+                }
+                // No necesitamos un 'else' aquí ya que la lógica se basa en si cardFantasmaWrapper existe
+            }
+        });
+
+        document.addEventListener('touchstart', startDragOriginal);
+        document.addEventListener('touchmove', dragMoveOriginal);
+        document.addEventListener('touchend', stopDragOriginal);
+    </script>
+
+</body>
+</html>
