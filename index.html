@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación, Volteo Infinito y Persistente - Versión T)</title>
+    <title>Carta Interactiva (Rotación con Rebote Automático - Versión Y)</title>
     <style>
         body {
             margin: 0;
@@ -28,7 +28,7 @@
             width: 300px;
             height: 450px;
             transform-style: preserve-3d;
-            transition: transform 0.3s ease-in-out;
+            transition: transform 0.3s ease-out;
             transform: rotateX(0deg) rotateY(0deg);
             position: relative;
             cursor: grab;
@@ -79,7 +79,7 @@
 
     <div class="card-container">
         <div class="card" id="interactiveCard">
-            <div class="card-face front">T</div>
+            <div class="card-face front">Y</div>
             <div class="card-face back"></div>
         </div>
     </div>
@@ -97,6 +97,10 @@
         let isFlipping = false;
         let flipAngle = 0; // Ángulo de volteo actual
         let isVolteoActivo = false; // Estado del modo de volteo
+        let animationFrameId;
+        const friction = 0.92; // Ajustar fricción para un rebote más suave
+        let velocityY = 0;
+        let velocityX = 0;
 
         // --- Listeners para el modo ROTACIÓN ---
         const handleTouchStartRotate = (e) => {
@@ -106,6 +110,9 @@
                 startY = e.touches[0].clientY;
                 interactiveCard.style.cursor = 'grabbing';
                 interactiveCard.style.transition = 'transform 0s';
+                cancelAnimationFrame(animationFrameId);
+                velocityY = 0; // Resetear la velocidad al iniciar un nuevo toque
+                velocityX = 0;
             }
             e.preventDefault();
         };
@@ -121,26 +128,44 @@
             rotationY += deltaX * 0.2;
             rotationX -= deltaY * 0.2;
 
+            velocityY = deltaX * 0.5; // Calcular velocidad en movimiento
+            velocityX = -deltaY * 0.5;
+
             interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY + flipAngle}deg)`; // Considerar el ángulo de volteo
+            startX = currentX;
+            startY = currentY;
             e.preventDefault();
         };
 
         const handleTouchEndRotate = () => {
             isTouchingCard = false;
             interactiveCard.style.cursor = 'grab';
-            interactiveCard.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            rotationX = 0;
-            rotationY = 0;
-            interactiveCard.style.transform = `rotateX(0deg) rotateY(${flipAngle}deg)`; // Mantener el ángulo de volteo
+            interactiveCard.style.transition = 'transform 0.3s ease-out'; // Añadir transición para el rebote
+
+            const animateRebound = () => {
+                rotationY += velocityY;
+                rotationX += velocityX;
+                velocityY *= friction;
+                velocityX *= friction;
+
+                interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY + flipAngle}deg)`;
+
+                if (Math.abs(velocityY) > 0.01 || Math.abs(velocityX) > 0.01 || Math.abs(rotationY) > 0.01 || Math.abs(rotationX) > 0.01) {
+                    animationFrameId = requestAnimationFrame(animateRebound);
+                } else {
+                    rotationX = 0;
+                    rotationY = 0;
+                    interactiveCard.style.transform = `rotateX(0deg) rotateY(${flipAngle}deg)`;
+                }
+            };
+
+            animateRebound();
         };
 
         const handleTouchCancelRotate = () => {
             isTouchingCard = false;
             interactiveCard.style.cursor = 'grab';
-            interactiveCard.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            rotationX = 0;
-            rotationY = 0;
-            interactiveCard.style.transform = `rotateX(0deg) rotateY(${flipAngle}deg)`; // Mantener el ángulo de volteo
+            handleTouchEndRotate();
         };
 
         // --- Listener para el modo VOLTEO ---
