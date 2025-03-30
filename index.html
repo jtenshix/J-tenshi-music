@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación Sensible, Elástico al Soltar - Versión AC)</title>
+    <title>Carta Interactiva (Rotación Más Libre al Inicio - Versión AD)</title>
     <style>
         body {
             margin: 0;
@@ -79,7 +79,7 @@
 
     <div class="card-container">
         <div class="card" id="interactiveCard">
-            <div class="card-face front">AC</div>
+            <div class="card-face front">AD</div>
             <div class="card-face back"></div>
         </div>
     </div>
@@ -98,10 +98,10 @@
         let flipAngle = 0; // Ángulo de volteo actual
         let isVolteoActivo = false; // Estado del modo de volteo
         let animationFrameId;
-        const friction = 0.88; // Ajustar fricción para el rebote
-        const springForce = 0.08; // Aumentar la fuerza del resorte
-        const damping = 0.75; // Aumentar la amortiguación para un rebote más controlado
-        const rotationFactor = 0.2; // Volver a una rotación más sensible
+        const friction = 0.88;
+        const springForce = 0.08;
+        const damping = 0.75;
+        const rotationFactor = 0.25; // Ligeramente más sensible
 
         let velocityY = 0;
         let velocityX = 0;
