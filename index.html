@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva con Carta Fantasma Dinámica (Rotación Precisa)</title>
+    <title>Carta 3D Interactiva con Carta Fantasma (Giro 180 Infinito)</title>
     <style>
         body {
             margin: 0;
@@ -36,7 +36,7 @@
             left: 0;
             transform-style: preserve-3d;
             border-radius: 15px;
-            transition: opacity 0.3s ease-in-out, transform 0.6s ease-in-out; /* Añadimos transform a la transición */
+            transition: transform 0.6s ease-in-out, opacity 0.3s ease-in-out; /* Asegúrate de tener transform aquí */
         }
 
         .card.original {
@@ -298,18 +298,16 @@
                     // Preparar para mostrar la fantasma
                     cardOriginal.style.opacity = 0;
                     cardOriginal.style.pointerEvents = 'none';
-                    // Asegurarse de que la fantasma comience con la cara frontal visible
-                    cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation % 360}deg)`;
-                    cardFantasmaWrapper.style.opacity = 0; // Asegurar que esté invisible antes de mostrar
+                    cardFantasmaWrapper.style.opacity = 0; // Asegurar invisibilidad inicial
+
+                    // Determinar la rotación objetivo (alternar entre 0 y 180)
+                    fantasmaRotation = (fantasmaRotation % 360 === 0) ? 180 : 0;
+                    cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
 
                     // Hacer visible la fantasma
                     cardFantasmaWrapper.classList.add('visible');
                     void cardFantasmaWrapper.offsetWidth;
-                    cardFantasmaWrapper.style.opacity = 1; // Iniciar la transición de opacidad
-
-                    // Iniciar el giro de la fantasma
-                    fantasmaRotation += 180;
-                    cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
+                    cardFantasmaWrapper.style.opacity = 1; // Iniciar transición de opacidad
 
                     // Voltear la carta original al mismo tiempo
                     isFlippedOriginal = !isFlippedOriginal;
@@ -317,8 +315,6 @@
 
                     setTimeout(() => {
                         isFantasmaAnimating = false;
-                        fantasmaRotation = Math.round(fantasmaRotation / 180) * 180;
-                        cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
                         // Ocultar y eliminar la fantasma
                         cardFantasmaWrapper.style.opacity = 0;
                         cardFantasmaWrapper.classList.remove('visible');
@@ -332,7 +328,6 @@
                         cardOriginal.style.pointerEvents = 'auto';
                     }, 600);
                 }
-                // No necesitamos un 'else' aquí ya que la lógica se basa en si cardFantasmaWrapper existe
             }
         });
 
