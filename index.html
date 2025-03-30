@@ -237,9 +237,10 @@
         let dragStartTimeOriginal;
         let isAnimatingOriginal = false;
         let isFantasmaAnimating = false;
+        let isFantasmaRoja = false; // Variable para rastrear si la carta fantasma está mostrando la cara roja
 
         function updateCardRotationOriginal() {
-            cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
+            cardOriginal.style.transform = `rotateX(<span class="math-inline">\{rotationXOriginal\}deg\) rotateY\(</span>{rotationYOriginal}deg)`;
         }
 
         function startDragOriginal(e) {
@@ -315,27 +316,20 @@
             if (!isAnimatingOriginal && !isFantasmaAnimating) {
                 isFantasmaAnimating = true;
 
-                // Hacer visible la carta fantasma si no lo está
-                if (!cardFantasmaWrapper.classList.contains('visible')) {
-                    cardFantasmaWrapper.classList.add('visible');
-                    // Forzar un reflow para que la transición funcione correctamente al aparecer
-                    void cardFantasmaWrapper.offsetWidth;
+                cardFantasmaWrapper.classList.add('visible');
+                void cardFantasmaWrapper.offsetWidth; // Forzar reflow
+
+                if (!isFantasmaRoja) {
+                    // Girar de blanco a rojo (hacia la derecha - +180 grados)
+                    cardFantasmaWrapper.style.transform = 'rotateY(180deg)';
+                    isFantasmaRoja = true;
+                } else {
+                    // Girar de rojo a blanco (hacia la derecha - +180 grados adicionales, o resetear a 0)
+                    cardFantasmaWrapper.style.transform = 'rotateY(360deg)'; // También puedes usar 'rotateY(0deg)'
+                    isFantasmaRoja = false;
                 }
 
-                // Alternar la clase 'girada' para el efecto de volteo
-                cardFantasmaWrapper.classList.toggle('girada');
-
-                // Esperar la duración de la transición y finalizar la animación
                 setTimeout(() => {
                     isFantasmaAnimating = false;
-                }, 600); // Duración de la transición de la fantasma
-            }
-        });
-
-        document.addEventListener('touchstart', startDragOriginal);
-        document.addEventListener('touchmove', dragMoveOriginal);
-        document.addEventListener('touchend', stopDragOriginal);
-    </script>
-
-</body>
-</html>
+                    // Reiniciar la rotación a 0 o 180 para la próxima animación, asegurando la continuidad
+                    cardFantasmaWrapper.style
