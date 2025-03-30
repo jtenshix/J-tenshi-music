@@ -275,6 +275,10 @@
         }
 
         flipBtn.addEventListener('click', () => {
+            // Hacer invisible la carta original
+            cardOriginal.style.opacity = 0;
+            cardOriginal.style.pointerEvents = 'none'; // Para que no capture eventos táctiles mientras está invisible
+
             if (!isAnimatingOriginal && !isFantasmaActiva) {
                 isAnimatingOriginal = true; // Marca el inicio de la animación de la carta original
                 cardOriginal.classList.add('will-flip');
@@ -308,6 +312,12 @@
                         cardFantasmaWrapper.classList.remove('rojo-fantasma');
                         cardFantasmaWrapper.classList.remove('blanco-fantasma');
                         isFantasmaActiva = false;
+
+                        // Hacer visible de nuevo la carta original después de la animación de la fantasma
+                        setTimeout(() => {
+                            cardOriginal.style.opacity = 1;
+                            cardOriginal.style.pointerEvents = 'auto';
+                        }, 100); // Un pequeño delay para evitar parpadeos
                     }, 1000);
                 }, 600);
             }
