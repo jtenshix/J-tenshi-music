@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Fantasma Se Queda Roja)</title>
+    <title>Carta 3D Interactiva (Fantasma Rápida y Desaparición)</title>
     <style>
         body {
             margin: 0;
@@ -101,7 +101,7 @@
             top: 25%;
             left: 25%;
             transform-style: preserve-3d;
-            transition: transform 0.6s ease-in-out, opacity 0.2s ease-in-out;
+            transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out; /* Transición más rápida */
             transform-origin: center center;
             opacity: 0;
             pointer-events: none;
@@ -263,12 +263,22 @@
                 // 1. Desaparecer la carta original
                 cardOriginal.style.opacity = 0;
 
-                // 2. Aparecer la carta fantasma (roja y blanca) y hacer el efecto de volteo (se queda roja)
+                // 2. Aparecer la carta fantasma (roja y blanca) y hacer el efecto de volteo
                 cardFantasmaWrapper.classList.add('visible');
                 void cardFantasmaWrapper.offsetWidth; // Forzar reflow
-                cardFantasmaWrapper.classList.add('flipped'); // Añadir la clase 'flipped' y dejarla
+                cardFantasmaWrapper.classList.add('flipped'); // Añadir la clase 'flipped'
 
-                isAnimating = false; // Permitir futuras interacciones
+                // 3. Esperar un poco más que la duración de la transición de la fantasma (ahora 0.3s)
+                setTimeout(() => {
+                    // 4. Desaparecer la carta fantasma
+                    cardFantasmaWrapper.classList.remove('visible');
+                    cardFantasmaWrapper.classList.remove('flipped'); // Resetear su estado
+
+                    // 5. Hacer aparecer la carta original
+                    cardOriginal.style.opacity = 1;
+
+                    isAnimating = false; // Permitir futuras interacciones
+                }, 400); // 400ms debería ser suficiente para la transición más rápida
             }
         });
 
