@@ -237,7 +237,7 @@
         let dragStartTimeOriginal;
         let isAnimatingOriginal = false;
         let isFantasmaAnimating = false;
-        let isFantasmaRoja = false; // Variable para rastrear si la carta fantasma está mostrando la cara roja
+        let fantasmaRotation = 0; // Variable para rastrear la rotación actual de la carta fantasma
 
         function updateCardRotationOriginal() {
             cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
@@ -319,15 +319,14 @@
                 cardFantasmaWrapper.classList.add('visible');
                 void cardFantasmaWrapper.offsetWidth; // Forzar reflow
 
-                let targetRotation = isFantasmaRoja ? '0deg' : '180deg';
-
-                cardFantasmaWrapper.style.transform = `rotateY(${targetRotation})`;
-                isFantasmaRoja = !isFantasmaRoja;
+                fantasmaRotation += 180; // Incrementamos la rotación en 180 grados
+                cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
 
                 setTimeout(() => {
                     isFantasmaAnimating = false;
-                    // Aseguramos que la transformación final sea exactamente 0 o 180
-                    cardFantasmaWrapper.style.transform = `rotateY(${targetRotation})`;
+                    // Aseguramos que la rotación se quede en un múltiplo exacto de 180
+                    fantasmaRotation = Math.round(fantasmaRotation / 180) * 180;
+                    cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
                 }, 600); // Duración de la transición
             }
         });
