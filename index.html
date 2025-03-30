@@ -271,36 +271,31 @@
 
                 if (!cardFantasmaWrapper.classList.contains('visible')) {
                     // Preparar para mostrar la fantasma
+                    console.log("Mostrando fantasma");
                     cardOriginal.style.opacity = 0;
                     cardOriginal.style.pointerEvents = 'none';
                     cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
-
-                    // Hacer visible la fantasma
                     cardFantasmaWrapper.classList.add('visible');
                     void cardFantasmaWrapper.offsetWidth;
-
-                    // Iniciar el giro de la fantasma
                     fantasmaRotation += 180;
                     cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
-
-                    // Voltear la carta original al mismo tiempo
                     isFlippedOriginal = !isFlippedOriginal;
                     cardOriginal.classList.toggle('flipped');
 
                     setTimeout(() => {
+                        console.log("Ocultando fantasma");
                         isFantasmaAnimating = false;
                         fantasmaRotation = Math.round(fantasmaRotation / 180) * 180;
                         cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
-                        // Ocultar la fantasma y mostrar la original
                         cardFantasmaWrapper.classList.remove('visible');
-                        cardFantasmaWrapper.style.opacity = 0; // Aseguramos la opacidad en 0
+                        cardFantasmaWrapper.style.opacity = 0;
                         cardOriginal.style.opacity = 1;
                         cardOriginal.style.pointerEvents = 'auto';
                     }, 600);
                 } else {
-                    // Si la fantasma está visible (por un clic anterior interrumpido)
+                    console.log("Fantasma ya visible (¿error?)");
                     cardFantasmaWrapper.classList.remove('visible');
-                    cardFantasmaWrapper.style.opacity = 0; // Aseguramos la opacidad en 0
+                    cardFantasmaWrapper.style.opacity = 0;
                     cardOriginal.style.opacity = 1;
                     cardOriginal.style.pointerEvents = 'auto';
                     isFantasmaAnimating = false;
