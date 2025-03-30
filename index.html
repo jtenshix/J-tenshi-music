@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación con Rebote Automático - Versión Y)</title>
+    <title>Carta Interactiva (Rotación con Rebote Oscilante - Versión Z)</title>
     <style>
         body {
             margin: 0;
@@ -79,7 +79,7 @@
 
     <div class="card-container">
         <div class="card" id="interactiveCard">
-            <div class="card-face front">Y</div>
+            <div class="card-face front">Z</div>
             <div class="card-face back"></div>
         </div>
     </div>
@@ -98,7 +98,9 @@
         let flipAngle = 0; // Ángulo de volteo actual
         let isVolteoActivo = false; // Estado del modo de volteo
         let animationFrameId;
-        const friction = 0.92; // Ajustar fricción para un rebote más suave
+        const friction = 0.88; // Reducir un poco la fricción para el rebote
+        const springForce = 0.03; // Fuerza del "resorte" hacia el centro
+        const damping = 0.7; // Amortiguación del rebote
         let velocityY = 0;
         let velocityX = 0;
 
@@ -111,7 +113,7 @@
                 interactiveCard.style.cursor = 'grabbing';
                 interactiveCard.style.transition = 'transform 0s';
                 cancelAnimationFrame(animationFrameId);
-                velocityY = 0; // Resetear la velocidad al iniciar un nuevo toque
+                velocityY = 0;
                 velocityX = 0;
             }
             e.preventDefault();
@@ -128,10 +130,10 @@
             rotationY += deltaX * 0.2;
             rotationX -= deltaY * 0.2;
 
-            velocityY = deltaX * 0.5; // Calcular velocidad en movimiento
+            velocityY = deltaX * 0.5;
             velocityX = -deltaY * 0.5;
 
-            interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY + flipAngle}deg)`; // Considerar el ángulo de volteo
+            interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY + flipAngle}deg)`;
             startX = currentX;
             startY = currentY;
             e.preventDefault();
@@ -140,17 +142,25 @@
         const handleTouchEndRotate = () => {
             isTouchingCard = false;
             interactiveCard.style.cursor = 'grab';
-            interactiveCard.style.transition = 'transform 0.3s ease-out'; // Añadir transición para el rebote
+            interactiveCard.style.transition = 'transform 0.3s ease-out';
 
             const animateRebound = () => {
-                rotationY += velocityY;
-                rotationX += velocityX;
                 velocityY *= friction;
                 velocityX *= friction;
 
+                rotationY += velocityY;
+                rotationX += velocityX;
+
+                // Aplicar fuerza de "resorte" hacia el centro
+                rotationY += -rotationY * springForce;
+                rotationX += -rotationX * springForce;
+
+                velocityY *= damping; // Amortiguar la velocidad
+                velocityX *= damping;
+
                 interactiveCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY + flipAngle}deg)`;
 
-                if (Math.abs(velocityY) > 0.01 || Math.abs(velocityX) > 0.01 || Math.abs(rotationY) > 0.01 || Math.abs(rotationX) > 0.01) {
+                if (Math.abs(velocityY) > 0.005 || Math.abs(velocityX) > 0.005 || Math.abs(rotationY) > 0.005 || Math.abs(rotationX) > 0.005) {
                     animationFrameId = requestAnimationFrame(animateRebound);
                 } else {
                     rotationX = 0;
