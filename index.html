@@ -102,26 +102,24 @@
         /* Estilos de la Carta Fantasma (separada) */
         .card-wrapper.fantasma {
             transform-style: preserve-3d;
-            transition: transform 0.6s ease-in-out, opacity 0.2s ease-in-out, transform 0s 0.6s; /* Añadimos transición para el translate */
+            transition: transform 0.6s ease-in-out, opacity 0.2s ease-in-out;
             transform-origin: center center;
             opacity: 0;
             pointer-events: none;
             border-radius: 8px;
-            width: 80px;
-            height: 120px;
-            position: fixed;
+            width: 80px; /* Tamaño de la carta fantasma */
+            height: 120px; /* Tamaño de la carta fantasma */
+            position: fixed; /* Para posicionarla independientemente */
             top: 50%;
             left: 50%;
             margin-top: -60px;
             margin-left: -40px;
-            transform: rotateY(0deg) translateY(500px); /* Oculta al inicio */
+            transform: rotateY(0deg); /* Aseguramos que empiece sin rotación */
         }
 
         .card-wrapper.fantasma.visible {
             opacity: 1;
             pointer-events: auto;
-            transform: rotateY(0deg) translateY(0px); /* Vuelve a la posición */
-            transition: transform 0.6s ease-in-out, opacity 0.2s ease-in-out; /* Restablece la transición normal */
         }
 
         /* Nueva clase para el giro de 180 grados */
@@ -214,7 +212,7 @@
         let fantasmaRotation = 0;
 
         function updateCardRotationOriginal() {
-            cardOriginal.style.transform = `rotateX(<span class="math-inline">\{rotationXOriginal\}deg\) rotateY\(</span>{rotationYOriginal}deg)`;
+            cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
         }
 
         function startDragOriginal(e) {
@@ -295,13 +293,13 @@
                 fantasmaRotation += 180;
                 cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
 
+                // Esperar a que termine la transición del giro (600ms) y luego ocultar
                 setTimeout(() => {
                     isFantasmaAnimating = false;
                     fantasmaRotation = Math.round(fantasmaRotation / 180) * 180;
                     cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
-                    // Ocultar la carta fantasma moviéndola fuera de la vista
                     cardFantasmaWrapper.classList.remove('visible');
-                }, 600);
+                }, 650); // Un pequeño extra de tiempo para asegurar la finalización visual
             }
         });
 
@@ -311,3 +309,4 @@
     </script>
 
 </body>
+</html>
