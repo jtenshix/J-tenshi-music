@@ -249,9 +249,7 @@
         }
 
         flipBtn.addEventListener('click', () => {
-            // Hacer invisible la carta original
-            cardOriginal.style.opacity = 0;
-            cardOriginal.style.pointerEvents = 'none';
+            // La carta original se mantiene visible, no hacemos nada con su visibilidad aquí.
 
             if (!isAnimatingOriginal && !isFantasmaActiva) {
                 isAnimatingOriginal = true;
@@ -267,10 +265,10 @@
             if (!isFantasmaActiva) {
                 isFantasmaActiva = true;
 
-                // 1. Hacer visible la carta fantasma (inicialmente en blanco por defecto en CSS)
+                // 1. Hacer visible la carta fantasma
                 cardFantasmaWrapper.classList.add('visible');
 
-                // 2. Iniciar el giro de 180 grados después de un breve delay para asegurar que sea visible
+                // 2. Iniciar el giro de 180 grados después de un breve delay
                 setTimeout(() => {
                     cardFantasmaWrapper.classList.add('girando-180');
 
@@ -279,14 +277,8 @@
                         cardFantasmaWrapper.classList.remove('visible');
                         cardFantasmaWrapper.classList.remove('girando-180');
                         isFantasmaActiva = false;
-
-                        // Hacer visible de nuevo la carta original
-                        setTimeout(() => {
-                            cardOriginal.style.opacity = 1;
-                            cardOriginal.style.pointerEvents = 'auto';
-                        }, 100);
-                    }, 600 + 1000); // 0.6s de giro + 1s de espera
-                }, 50); // Pequeño delay para asegurar que la clase 'visible' se aplique primero
+                    }, 600 + 1000);
+                }, 50);
             }
         });
 
