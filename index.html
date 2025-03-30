@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Superposición Directa)</title>
+    <title>Carta 3D Interactiva (Arrastre + Fantasma Pulida)</title>
     <style>
         body {
             margin: 0;
@@ -20,16 +20,15 @@
         .card-container {
             perspective: 1200px;
             transform-style: preserve-3d;
-            position: relative; /* Contenedor para las cartas */
-            width: 360px; /* Ancho de la carta original */
-            height: 540px; /* Alto de la carta original */
+            position: relative;
+            width: 360px;
+            height: 540px;
         }
 
-        /* Estilos de la Carta Original */
         .card.original,
         .card-wrapper.fantasma {
-            width: 100%; /* Ocupan el 100% del contenedor */
-            height: 100%; /* Ocupan el 100% del contenedor */
+            width: 100%;
+            height: 100%;
             position: absolute;
             top: 0;
             left: 0;
@@ -102,13 +101,9 @@
             transform-style: preserve-3d;
             transition: transform 0.6s ease-in-out, opacity 0.2s ease-in-out;
             transform-origin: center center;
-            opacity: 0;
+            opacity: 0; /* Inicialmente invisible */
             pointer-events: none;
-            border-radius: 8px; /* Ajustar el radio del borde */
-            width: 50%; /* Más pequeña */
-            height: 50%; /* Más pequeña */
-            top: 25%; /* Centrada verticalmente */
-            left: 25%; /* Centrada horizontalmente */
+            border-radius: 15px; /* Ajustar el radio del borde */
         }
 
         .card-wrapper.fantasma.visible {
@@ -125,19 +120,19 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 8px; /* Ajustar el radio del borde */
+            border-radius: 15px; /* Ajustar el radio del borde */
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
         .card-face.fantasma.front {
-            background-color: white; /* Frente blanco */
+            background-color: white;
             transform: rotateY(0deg);
         }
 
         .card-face.fantasma.back {
-            background-color: red; /* Dorso rojo */
+            background-color: red;
             transform: rotateY(180deg);
         }
 
@@ -185,7 +180,7 @@
         </div>
     </div>
 
-    <button class="flip-button" id="flipBtn"></button>
+    <button class="flip-button" id="flipBtn">F</button>
 
     <script>
         const cardOriginal = document.getElementById('cardOriginal');
@@ -263,30 +258,25 @@
             if (!isAnimating) {
                 isAnimating = true;
 
-                // 1. Desaparecer la carta original
+                // 1. Ocultar la carta original
                 cardOriginal.style.opacity = 0;
 
-                // 2. Aparecer la carta fantasma (roja y blanca) en el mismo lugar y hacer el efecto de volteo
+                // 2. Mostrar la carta fantasma (lado rojo por defecto en CSS)
                 cardFantasmaWrapper.classList.add('visible');
                 void cardFantasmaWrapper.offsetWidth; // Forzar reflow
-                cardFantasmaWrapper.classList.toggle('flipped');
 
-                // 3. Esperar la duración de la animación de la fantasma y hacerla invisible
+                // 3. Esperar un breve instante y luego iniciar la rotación
                 setTimeout(() => {
-                    cardFantasmaWrapper.classList.remove('visible');
-                    cardFantasmaWrapper.classList.remove('flipped'); // Resetear la fantasma
-                }, 600);
+                    cardFantasmaWrapper.classList.add('flipped');
 
-                // 4. Después de un pequeño delay, voltear la original y hacerla visible
-                setTimeout(() => {
-                    isFlippedOriginal = !isFlippedOriginal;
-                    cardOriginal.classList.toggle('flipped');
-                    cardOriginal.style.opacity = 1;
-                    rotationXOriginal = 0;
-                    rotationYOriginal = 0;
-                    updateCardRotationOriginal();
-                    isAnimating = false;
-                }, 700);
+                    // 4. Esperar a que termine la rotación y luego ocultar la fantasma
+                    setTimeout(() => {
+                        cardFantasmaWrapper.classList.remove('visible');
+                        cardFantasmaWrapper.classList.remove('flipped'); // Resetear para la próxima vez
+                        cardOriginal.style.opacity = 1; // Mostrar la original de nuevo
+                        isAnimating = false;
+                    }, 600); // Duración de la rotación
+                }, 100); // Breve delay antes de girar
             }
         });
 
