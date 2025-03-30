@@ -212,7 +212,7 @@
         let fantasmaRotation = 0;
 
         function updateCardRotationOriginal() {
-            cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
+            cardOriginal.style.transform = `rotateX(<span class="math-inline">\{rotationXOriginal\}deg\) rotateY\(</span>{rotationYOriginal}deg)`;
         }
 
         function startDragOriginal(e) {
@@ -273,36 +273,8 @@
 
         flipBtnAmbas.addEventListener('click', () => {
             if (!isAnimatingOriginal && !isFantasmaAnimating) {
-                // Voltear la carta original
-                isAnimatingOriginal = true;
-                cardOriginal.classList.add('will-flip');
-                setTimeout(() => {
-                    isFlippedOriginal = !isFlippedOriginal;
-                    cardOriginal.classList.toggle('flipped');
-                    cardOriginal.classList.remove('will-flip');
-                    isAnimatingOriginal = false;
-                }, 200);
-
-                // Voltear la carta fantasma
                 isFantasmaAnimating = true;
+
+                // Hacer visible la carta fantasma
                 cardFantasmaWrapper.classList.add('visible');
-                void cardFantasmaWrapper.offsetWidth;
-
-                fantasmaRotation += 180;
-                cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
-
-                setTimeout(() => {
-                    isFantasmaAnimating = false;
-                    fantasmaRotation = Math.round(fantasmaRotation / 180) * 180;
-                    cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
-                }, 600);
-            }
-        });
-
-        document.addEventListener('touchstart', startDragOriginal);
-        document.addEventListener('touchmove', dragMoveOriginal);
-        document.addEventListener('touchend', stopDragOriginal);
-    </script>
-
-</body>
-</html>
+                void
