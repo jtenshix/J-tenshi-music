@@ -270,14 +270,16 @@
                 isFantasmaAnimating = true;
 
                 if (!cardFantasmaWrapper.classList.contains('visible')) {
-                    // Hacer visible la carta fantasma e invisible la original
-                    cardFantasmaWrapper.classList.add('visible');
+                    // Preparar para mostrar la fantasma
                     cardOriginal.style.opacity = 0;
                     cardOriginal.style.pointerEvents = 'none';
+                    cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`; // Asegurar la rotación actual
 
-                    void cardFantasmaWrapper.offsetWidth;
+                    // Hacer visible la fantasma
+                    cardFantasmaWrapper.classList.add('visible');
+                    void cardFantasmaWrapper.offsetWidth; // Forzar reflow
 
-                    // Girar la carta fantasma
+                    // Iniciar el giro
                     fantasmaRotation += 180;
                     cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
 
@@ -285,16 +287,13 @@
                         isFantasmaAnimating = false;
                         fantasmaRotation = Math.round(fantasmaRotation / 180) * 180;
                         cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
-                        // Hacer invisible la carta fantasma y visible la original
+                        // Ocultar la fantasma y mostrar la original
                         cardFantasmaWrapper.classList.remove('visible');
                         cardOriginal.style.opacity = 1;
                         cardOriginal.style.pointerEvents = 'auto';
-
                     }, 600);
                 } else {
-                    // Si la fantasma está visible (por un clic anterior que no completó el ciclo)
-                    fantasmaRotation += 180;
-                    cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
+                    // Si la fantasma está visible (por un clic anterior interrumpido)
                     cardFantasmaWrapper.classList.remove('visible');
                     cardOriginal.style.opacity = 1;
                     cardOriginal.style.pointerEvents = 'auto';
