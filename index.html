@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva con Carta Fantasma Separada</title>
+    <title>Carta 3D Interactiva con Carta Fantasma Dinámica</title>
     <style>
         body {
             margin: 0;
@@ -105,7 +105,7 @@
             transform-style: preserve-3d;
             transition: transform 0.6s ease-in-out, opacity 0.3s ease-in-out;
             transform-origin: center center;
-            opacity: 0; /* Inicialmente invisible */
+            opacity: 0;
             pointer-events: none;
             border-radius: 15px;
             width: 360px;
@@ -183,17 +183,13 @@
                 <div class="card-side card-back"></div>
             </div>
         </div>
-        <div class="card-wrapper fantasma" id="cardFantasmaWrapper">
-            <div class="card-face fantasma front"></div>
-            <div class="card-face fantasma back"></div>
-        </div>
     </div>
 
     <button class="flip-button-ambas" id="flipBtnAmbas">&#x21CB;</button>
 
     <script>
         const cardOriginal = document.getElementById('cardOriginal');
-        const cardFantasmaWrapper = document.getElementById('cardFantasmaWrapper');
+        const cardContainer = document.querySelector('.card-container');
         const flipBtnAmbas = document.getElementById('flipBtnAmbas');
         let isFlippedOriginal = false;
         let rotationXOriginal = 0, rotationYOriginal = 0;
@@ -204,6 +200,29 @@
         let isAnimatingOriginal = false;
         let isFantasmaAnimating = false;
         let fantasmaRotation = 0;
+        let cardFantasmaWrapper = null; // Inicialmente null
+
+        function createFantasmaCard() {
+            const fantasmaWrapper = document.createElement('div');
+            fantasmaWrapper.classList.add('card-wrapper', 'fantasma');
+            fantasmaWrapper.id = 'cardFantasmaWrapper';
+            fantasmaWrapper.style.opacity = 0;
+            fantasmaWrapper.style.pointerEvents = 'none';
+            fantasmaWrapper.style.transformOrigin = 'center center';
+            fantasmaWrapper.style.transition = 'transform 0.6s ease-in-out, opacity 0.3s ease-in-out';
+            fantasmaWrapper.style.transform = `rotateY(0deg)`;
+
+            const frontFace = document.createElement('div');
+            frontFace.classList.add('card-face', 'fantasma', 'front');
+
+            const backFace = document.createElement('div');
+            backFace.classList.add('card-face', 'fantasma', 'back');
+
+            fantasmaWrapper.appendChild(frontFace);
+            fantasmaWrapper.appendChild(backFace);
+
+            return fantasmaWrapper;
+        }
 
         function updateCardRotationOriginal() {
             cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
@@ -269,16 +288,24 @@
             if (!isAnimatingOriginal && !isFantasmaAnimating) {
                 isFantasmaAnimating = true;
 
+                if (!cardFantasmaWrapper) {
+                    // Crear e insertar la carta fantasma si no existe
+                    cardFantasmaWrapper = createFantasmaCard();
+                    cardContainer.appendChild(cardFantasmaWrapper);
+                }
+
                 if (!cardFantasmaWrapper.classList.contains('visible')) {
                     // Preparar para mostrar la fantasma
                     cardOriginal.style.opacity = 0;
                     cardOriginal.style.pointerEvents = 'none';
                     // Asegurarse de que la fantasma comience con la cara frontal visible
                     cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation % 360}deg)`;
+                    cardFantasmaWrapper.style.opacity = 0; // Asegurar que esté invisible antes de mostrar
 
                     // Hacer visible la fantasma
                     cardFantasmaWrapper.classList.add('visible');
                     void cardFantasmaWrapper.offsetWidth;
+                    cardFantasmaWrapper.style.opacity = 1; // Iniciar la transición de opacidad
 
                     // Iniciar el giro de la fantasma
                     fantasmaRotation += 180;
@@ -292,24 +319,20 @@
                         isFantasmaAnimating = false;
                         fantasmaRotation = Math.round(fantasmaRotation / 180) * 180;
                         cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation}deg)`;
-                        // Ocultar la fantasma
-                        cardFantasmaWrapper.style.opacity = 0; // Establecer opacidad a 0 ANTES de remover la clase
+                        // Ocultar y eliminar la fantasma
+                        cardFantasmaWrapper.style.opacity = 0;
                         cardFantasmaWrapper.classList.remove('visible');
+                        setTimeout(() => {
+                            if (cardContainer && cardFantasmaWrapper) {
+                                cardContainer.removeChild(cardFantasmaWrapper);
+                                cardFantasmaWrapper = null; // Resetear la referencia
+                            }
+                        }, 300);
                         cardOriginal.style.opacity = 1;
                         cardOriginal.style.pointerEvents = 'auto';
                     }, 600);
-                } else {
-                    // Si la fantasma está visible
-                    cardFantasmaWrapper.style.opacity = 0; // Establecer opacidad a 0 ANTES de remover la clase
-                    cardFantasmaWrapper.classList.remove('visible');
-                    cardOriginal.style.opacity = 1;
-                    cardOriginal.style.pointerEvents = 'auto';
-                    isFantasmaAnimating = false;
-                    isFlippedOriginal = !isFlippedOriginal;
-                    cardOriginal.classList.toggle('flipped');
-                    // Para el siguiente ciclo, aseguramos que la fantasma gire desde su estado actual
-                    cardFantasmaWrapper.style.transform = `rotateY(${fantasmaRotation % 360}deg)`;
                 }
+                // No necesitamos un 'else' aquí ya que la lógica se basa en si cardFantasmaWrapper existe
             }
         });
 
