@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Rotación y Volteo) - Versión DA</title>
+    <title>Dos Cartas Interactivas (Rotación y Volteo 180) - Versión EA</title>
     <style>
         body {
             margin: 0;
@@ -48,7 +48,7 @@
             margin-bottom: 20px;
         }
 
-        .rotate-button, .flip-button {
+        .flip-button {
             background-color: rgba(255, 255, 255, 0.5);
             color: #121212;
             border: none;
@@ -60,7 +60,7 @@
             touch-action: manipulation;
         }
 
-        .rotate-button:hover, .flip-button:hover {
+        .flip-button:hover {
             background-color: rgba(255, 255, 255, 0.8);
         }
 
@@ -80,7 +80,13 @@
             background-color: lightblue;
             border-radius: 8px;
             transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1.435);
+            transform: rotateY(0deg);
             position: relative;
+        }
+
+        .card-flip.flipped {
+            transform: rotateY(180deg);
         }
 
         .card-flip-face {
@@ -103,38 +109,27 @@
             background-color: lightcoral;
             transform: rotateY(180deg);
         }
-
-        .card-flip.flipping {
-            animation: rotateClockwise 2s linear infinite;
-        }
-
-        @keyframes rotateClockwise {
-            from { transform: rotateY(0deg); }
-            to { transform: rotateY(360deg); }
-        }
     </style>
 </head>
 <body>
 
     <div class="card-container">
         <div class="card" id="rotateCard">
-            DA - Rotar
+            EA - Rotar
         </div>
-        <button class="rotate-button" id="enableRotateBtn">Activar Rotación</button>
     </div>
 
     <div class="card-flip-container">
         <div class="card-flip" id="flipCard">
-            <div class="card-flip-face front">DA - Front</div>
-            <div class="card-flip-face back">DA - Back</div>
+            <div class="card-flip-face front">EA - Front</div>
+            <div class="card-flip-face back">EA - Back</div>
         </div>
-        <button class="flip-button" id="toggleFlipBtn">Activar Volteo</button>
+        <button class="flip-button" id="toggleFlipBtn">Voltear Carta</button>
     </div>
 
     <script>
-        // --- Script para la Carta de Rotación ---
+        // --- Script para la Carta de Rotación (Siempre Activa) ---
         const rotateCard = document.getElementById('rotateCard');
-        const enableRotateBtn = document.getElementById('enableRotateBtn');
         let isTouchingRotateCard = false;
         let startXRotate, startYRotate, currentXRotate, currentYRotate;
         let rotationXRotate = 0;
@@ -146,24 +141,21 @@
         const rotationFactorRotate = 0.5;
         let velocityYRotate = 0;
         let velocityXRotate = 0;
-        let isRotationEnabled = true;
 
         const handleTouchStartRotate = (e) => {
-            if (isRotationEnabled) {
-                isTouchingRotateCard = true;
-                startXRotate = e.touches[0].clientX;
-                startYRotate = e.touches[0].clientY;
-                rotateCard.style.cursor = 'grabbing';
-                rotateCard.style.transition = 'transform 0s';
-                cancelAnimationFrame(animationFrameRotateId);
-                velocityYRotate = 0;
-                velocityXRotate = 0;
-                e.preventDefault();
-            }
+            isTouchingRotateCard = true;
+            startXRotate = e.touches[0].clientX;
+            startYRotate = e.touches[0].clientY;
+            rotateCard.style.cursor = 'grabbing';
+            rotateCard.style.transition = 'transform 0s';
+            cancelAnimationFrame(animationFrameRotateId);
+            velocityYRotate = 0;
+            velocityXRotate = 0;
+            e.preventDefault();
         };
 
         const handleTouchMoveRotate = (e) => {
-            if (!isTouchingRotateCard || !isRotationEnabled) return;
+            if (!isTouchingRotateCard) return;
             currentXRotate = e.touches[0].clientX;
             currentYRotate = e.touches[0].clientY;
             const deltaX = currentXRotate - startXRotate;
@@ -179,7 +171,6 @@
         };
 
         const handleTouchEndRotate = () => {
-            if (!isRotationEnabled) return;
             isTouchingRotateCard = false;
             rotateCard.style.cursor = 'grab';
             rotateCard.style.transition = 'transform 0.3s ease-out';
@@ -205,7 +196,6 @@
         };
 
         const handleTouchCancelRotate = () => {
-            if (!isRotationEnabled) return;
             isTouchingRotateCard = false;
             handleTouchEndRotate();
         };
@@ -215,20 +205,21 @@
         rotateCard.addEventListener('touchend', handleTouchEndRotate);
         rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-        enableRotateBtn.addEventListener('click', () => {
-            isRotationEnabled = !isRotationEnabled;
-            enableRotateBtn.textContent = isRotationEnabled ? 'Desactivar Rotación' : 'Activar Rotación';
-        });
-
-        // --- Script para la Carta de Volteo Infinito ---
+        // --- Script para la Carta de Volteo 180 Grados con Botón ---
         const flipCard = document.getElementById('flipCard');
         const toggleFlipBtn = document.getElementById('toggleFlipBtn');
-        let isFlippingInfinitely = false;
+        let isFlipped = false;
+        let isFlipping = false;
 
         toggleFlipBtn.addEventListener('click', () => {
-            isFlippingInfinitely = !isFlippingInfinitely;
-            flipCard.classList.toggle('flipping', isFlippingInfinitely);
-            toggleFlipBtn.textContent = isFlippingInfinitely ? 'Desactivar Volteo' : 'Activar Volteo';
+            if (!isFlipping) {
+                isFlipping = true;
+                flipCard.classList.toggle('flipped');
+                isFlipped = !isFlipped;
+                setTimeout(() => {
+                    isFlipping = false;
+                }, 600); // Debe coincidir con la duración de la transición CSS
+            }
         });
     </script>
 
