@@ -20,16 +20,16 @@
         .card-container {
             perspective: 1200px;
             transform-style: preserve-3d;
-            position: relative;
-            width: 360px;
-            height: 540px;
+            position: relative; /* Contenedor para las cartas */
+            width: 360px; /* Ancho de la carta original */
+            height: 540px; /* Alto de la carta original */
         }
 
         /* Estilos de la Carta Original */
         .card.original,
         .card-wrapper.fantasma {
-            width: 100%;
-            height: 100%;
+            width: 100%; /* Ocupan el 100% del contenedor */
+            height: 100%; /* Ocupan el 100% del contenedor */
             position: absolute;
             top: 0;
             left: 0;
@@ -104,11 +104,11 @@
             transform-origin: center center;
             opacity: 0;
             pointer-events: none;
-            border-radius: 8px;
-            width: 50%;
-            height: 50%;
-            top: 25%;
-            left: 25%;
+            border-radius: 8px; /* Ajustar el radio del borde */
+            width: 50%; /* Más pequeña */
+            height: 50%; /* Más pequeña */
+            top: 25%; /* Centrada verticalmente */
+            left: 25%; /* Centrada horizontalmente */
         }
 
         .card-wrapper.fantasma.visible {
@@ -125,19 +125,19 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 8px;
+            border-radius: 8px; /* Ajustar el radio del borde */
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
         .card-face.fantasma.front {
-            background-color: white;
+            background-color: white; /* Frente blanco */
             transform: rotateY(0deg);
         }
 
         .card-face.fantasma.back {
-            background-color: red;
+            background-color: red; /* Dorso rojo */
             transform: rotateY(180deg);
         }
 
@@ -263,20 +263,37 @@
             if (!isAnimating) {
                 isAnimating = true;
 
+                // 1. Desaparecer la carta original
                 cardOriginal.style.opacity = 0;
 
+                // 2. Aparecer la carta fantasma (roja y blanca) en el mismo lugar y hacer el efecto de volteo
                 cardFantasmaWrapper.classList.add('visible');
-                void cardFantasmaWrapper.offsetWidth;
+                void cardFantasmaWrapper.offsetWidth; // Forzar reflow
                 cardFantasmaWrapper.classList.toggle('flipped');
 
+                // 3. Esperar la duración de la animación de la fantasma y hacerla invisible
                 setTimeout(() => {
                     cardFantasmaWrapper.classList.remove('visible');
-                    cardFantasmaWrapper.classList.remove('flipped');
+                    cardFantasmaWrapper.classList.remove('flipped'); // Resetear la fantasma
                 }, 600);
 
+                // 4. Después de un pequeño delay, voltear la original y hacerla visible
                 setTimeout(() => {
                     isFlippedOriginal = !isFlippedOriginal;
                     cardOriginal.classList.toggle('flipped');
                     cardOriginal.style.opacity = 1;
                     rotationXOriginal = 0;
-                    rotationY
+                    rotationYOriginal = 0;
+                    updateCardRotationOriginal();
+                    isAnimating = false;
+                }, 700);
+            }
+        });
+
+        document.addEventListener('touchstart', startDragOriginal);
+        document.addEventListener('touchmove', dragMoveOriginal);
+        document.addEventListener('touchend', stopDragOriginal);
+    </script>
+
+</body>
+</html>
