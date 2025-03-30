@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva (Rotación y Volteo)</title>
+    <title>Carta Interactiva (Rotación y Volteo Táctil)</title>
     <style>
         body {
             margin: 0;
-            padding: 0;
+            padding: 20px;
             background-color: #121212;
             min-height: 100vh;
             overflow: hidden;
             user-select: none;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
         }
@@ -20,6 +21,7 @@
         .card-container {
             perspective: 1200px;
             transform-style: preserve-3d;
+            margin-bottom: 40px;
         }
 
         .card {
@@ -29,7 +31,7 @@
             transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             transform: rotateX(0deg) rotateY(0deg);
             position: relative;
-            cursor: grab;
+            cursor: grab; /* Mantener el cursor de agarre como indicativo */
         }
 
         .card.flipped {
@@ -64,7 +66,6 @@
             cursor: pointer;
             font-size: 16px;
             transition: background 0.3s;
-            margin-top: 20px;
         }
 
         .flip-button:hover {
@@ -86,23 +87,23 @@
     <script>
         const interactiveCard = document.getElementById('interactiveCard');
         const flipCardBtn = document.getElementById('flipCardBtn');
-        let isDragging = false;
+        let isTouching = false;
         let startX, startY, currentX, currentY;
         let rotationX = 0;
         let rotationY = 0;
         let isFlipped = false;
 
-        interactiveCard.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
+        interactiveCard.addEventListener('touchstart', (e) => {
+            isTouching = true;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
             interactiveCard.style.cursor = 'grabbing';
         });
 
-        interactiveCard.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            currentX = e.clientX;
-            currentY = e.clientY;
+        interactiveCard.addEventListener('touchmove', (e) => {
+            if (!isTouching) return;
+            currentX = e.touches[0].clientX;
+            currentY = e.touches[0].clientY;
 
             const deltaX = currentX - startX;
             const deltaY = currentY - startY;
@@ -116,13 +117,13 @@
             startY = currentY;
         });
 
-        interactiveCard.addEventListener('mouseup', () => {
-            isDragging = false;
+        interactiveCard.addEventListener('touchend', () => {
+            isTouching = false;
             interactiveCard.style.cursor = 'grab';
         });
 
-        interactiveCard.addEventListener('mouseleave', () => {
-            isDragging = false;
+        interactiveCard.addEventListener('touchcancel', () => {
+            isTouching = false;
             interactiveCard.style.cursor = 'grab';
         });
 
