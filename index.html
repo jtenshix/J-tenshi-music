@@ -240,7 +240,7 @@
         let isFantasmaRoja = false; // Variable para rastrear si la carta fantasma está mostrando la cara roja
 
         function updateCardRotationOriginal() {
-            cardOriginal.style.transform = `rotateX(<span class="math-inline">\{rotationXOriginal\}deg\) rotateY\(</span>{rotationYOriginal}deg)`;
+            cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
         }
 
         function startDragOriginal(e) {
@@ -332,4 +332,15 @@
                 setTimeout(() => {
                     isFantasmaAnimating = false;
                     // Reiniciar la rotación a 0 o 180 para la próxima animación, asegurando la continuidad
-                    cardFantasmaWrapper.style
+                    cardFantasmaWrapper.style.transform = isFantasmaRoja ? 'rotateY(180deg)' : 'rotateY(0deg)';
+                }, 600); // Duración de la transición
+            }
+        });
+
+        document.addEventListener('touchstart', startDragOriginal);
+        document.addEventListener('touchmove', dragMoveOriginal);
+        document.addEventListener('touchend', stopDragOriginal);
+    </script>
+
+</body>
+</html>
