@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Fantasma y Volteo Original)</title>
+    <title>Carta 3D Interactiva (Arrastre + Fantasma)</title>
     <style>
         body {
             margin: 0;
@@ -199,7 +199,6 @@
         let currentXOriginal = 0, currentYOriginal = 0;
         let dragStartTimeOriginal;
         let isAnimating = false;
-        let isOriginalFlipped = false;
 
         function updateCardRotationOriginal() {
             cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
@@ -263,21 +262,14 @@
             }
         }
 
-        function flipCardOriginal() {
-            if (!isAnimating) {
-                isOriginalFlipped = !isOriginalFlipped;
-                cardOriginal.classList.toggle('flipped');
-            }
-        }
-
         flipBtn.addEventListener('click', () => {
             if (!isAnimating) {
                 isAnimating = true;
 
-                // 1. Ocultar la carta original (sin voltear)
+                // 1. Ocultar la carta original
                 cardOriginal.style.opacity = 0;
 
-                // 2. Hacer visible la carta fantasma (lado rojo por defecto)
+                // 2. Hacer visible la carta fantasma
                 cardFantasmaWrapper.classList.add('visible');
                 void cardFantasmaWrapper.offsetWidth;
 
@@ -294,14 +286,21 @@
             }
         });
 
-        cardOriginal.addEventListener('touchstart', startDragOriginal);
-        cardOriginal.addEventListener('touchmove', dragMoveOriginal);
-        cardOriginal.addEventListener('touchend', stopDragOriginal);
-        cardOriginal.addEventListener('mousedown', startDragOriginal);
-        cardOriginal.addEventListener('mousemove', dragMoveOriginal);
-        cardOriginal.addEventListener('mouseup', stopDragOriginal);
-        cardOriginal.addEventListener('mouseout', stopDragOriginal);
-        cardOriginal.addEventListener('click', flipCardOriginal); // Añadimos el listener para el volteo de la original
+        // Añadimos los listeners para el arrastre en la carta original
+        document.addEventListener('touchstart', startDragOriginal);
+        document.addEventListener('touchmove', dragMoveOriginal);
+        document.addEventListener('touchend', stopDragOriginal);
+        document.addEventListener('mousedown', startDragOriginal);
+        document.addEventListener('mousemove', dragMoveOriginal);
+        document.addEventListener('mouseup', stopDragOriginal);
+        document.addEventListener('mouseout', stopDragOriginal);
+
+        // Opcional: Si también quieres el volteo de la original con un clic, uncomment this
+        // cardOriginal.addEventListener('click', () => {
+        //     if (!isAnimating) {
+        //         cardOriginal.classList.toggle('flipped');
+        //     }
+        // });
     </script>
 
 </body>
