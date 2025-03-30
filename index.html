@@ -114,6 +114,7 @@
             left: 50%;
             margin-top: -60px;
             margin-left: -40px;
+            transform: rotateY(0deg); /* Aseguramos que empiece sin rotación */
         }
 
         .card-wrapper.fantasma.visible {
@@ -121,7 +122,8 @@
             pointer-events: auto;
         }
 
-        .card-wrapper.fantasma.flipped {
+        /* Nueva clase para el giro de 180 grados */
+        .card-wrapper.fantasma.girada {
             transform: rotateY(180deg);
         }
 
@@ -220,7 +222,9 @@
     </div>
 
     <button class="flip-button-original" id="flipBtnOriginal"></button>
-    <button class="flip-button-fantasma" id="flipBtnFantasma">&#x21CB;</button> <script>
+    <button class="flip-button-fantasma" id="flipBtnFantasma">&#x21CB;</button>
+
+    <script>
         const cardOriginal = document.getElementById('cardOriginal');
         const cardFantasmaWrapper = document.getElementById('cardFantasmaWrapper');
         const flipBtnOriginal = document.getElementById('flipBtnOriginal');
@@ -315,15 +319,14 @@
                 cardFantasmaWrapper.classList.add('visible');
                 void cardFantasmaWrapper.offsetWidth; // Forzar reflow
 
-                // 2. Iniciar el volteo de la carta fantasma
-                cardFantasmaWrapper.classList.toggle('flipped');
+                // 2. Iniciar el giro de 180 grados añadiendo la clase 'girada'
+                cardFantasmaWrapper.classList.add('girada');
 
-                // 3. Esperar la duración de la animación y hacerla invisible
+                // 3. Esperar la duración de la animación y mantenerla visible en rojo
                 setTimeout(() => {
-                    cardFantasmaWrapper.classList.remove('visible');
-                    cardFantasmaWrapper.classList.remove('flipped'); // Resetear para la próxima vez
+                    // La clase 'girada' se mantiene, mostrando el lado rojo
                     isFantasmaAnimating = false;
-                }, 600); // Duración de la transición de la fantasma (igual al CSS)
+                }, 600); // Duración de la transición de la fantasma
             }
         });
 
