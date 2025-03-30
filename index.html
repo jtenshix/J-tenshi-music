@@ -100,7 +100,7 @@
         /* Estilos de la Carta Fantasma */
         .card-wrapper.fantasma {
             transform-style: preserve-3d;
-            transition: transform 0.6s ease-in-out, opacity 0.2s ease-in-out;
+            transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out; /* Transición más rápida para el giro */
             transform-origin: center center;
             opacity: 0;
             pointer-events: none;
@@ -116,8 +116,13 @@
             pointer-events: auto;
         }
 
-        .card-wrapper.fantasma.flipped {
-            transform: rotateY(180deg);
+        .card-wrapper.fantasma.girando {
+            animation: giroFantasma 0.6s linear infinite; /* Animación de giro */
+        }
+
+        @keyframes giroFantasma {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
         }
 
         .card-face.fantasma {
@@ -139,6 +144,14 @@
         .card-face.fantasma.back {
             background-color: red; /* Dorso rojo */
             transform: rotateY(180deg);
+        }
+
+        .card-wrapper.fantasma.rojo {
+            transform: rotateY(180deg); /* Mostrar el lado rojo */
+        }
+
+        .card-wrapper.fantasma.blanco {
+            transform: rotateY(0deg); /* Mostrar el lado blanco */
         }
 
         /* Botón de Volteo */
@@ -197,14 +210,16 @@
         let startXOriginal = 0, startYOriginal = 0;
         let currentXOriginal = 0, currentYOriginal = 0;
         let dragStartTimeOriginal;
-        let isAnimating = false;
+        let isAnimatingOriginal = false; // Para controlar la animación de la carta original
+        let fantasmaCounter = 0; // Contador para alternar el lado de la fantasma
+        let isFantasmaAnimating = false; // Para evitar activaciones múltiples de la fantasma
 
         function updateCardRotationOriginal() {
             cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
         }
 
         function startDragOriginal(e) {
-            if (!isAnimating) {
+            if (!isAnimatingOriginal && !isFantasmaAnimating) {
                 isDraggingOriginal = true;
                 startXOriginal = e.touches ? e.touches[0].clientX : e.clientX;
                 startYOriginal = e.touches ? e.touches[0].clientY : e.clientY;
@@ -216,7 +231,7 @@
         }
 
         function dragMoveOriginal(e) {
-            if (isDraggingOriginal && !isAnimating) {
+            if (isDraggingOriginal && !isAnimatingOriginal && !isFantasmaAnimating) {
                 let x = e.touches ? e.touches[0].clientX : e.clientX;
                 let y = e.touches ? e.touches[0].clientY : e.clientY;
 
@@ -236,7 +251,7 @@
         }
 
         function stopDragOriginal() {
-            if (isDraggingOriginal && !isAnimating) {
+            if (isDraggingOriginal && !isAnimatingOriginal && !isFantasmaAnimating) {
                 isDraggingOriginal = false;
                 cardOriginal.style.transition = "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.2s ease-in-out";
 
@@ -260,33 +275,33 @@
         }
 
         flipBtn.addEventListener('click', () => {
-            if (!isAnimating) {
-                isAnimating = true;
+            if (!isAnimatingOriginal && !isFantasmaAnimating) {
+                isFantasmaAnimating = true;
+                fantasmaCounter++;
 
-                // 1. Desaparecer la carta original
-                cardOriginal.style.opacity = 0;
-
-                // 2. Aparecer la carta fantasma (roja y blanca) en el mismo lugar y hacer el efecto de volteo
+                // 1. Hacer visible la carta fantasma y iniciar la animación
                 cardFantasmaWrapper.classList.add('visible');
-                void cardFantasmaWrapper.offsetWidth; // Forzar reflow
-                cardFantasmaWrapper.classList.toggle('flipped');
+                cardFantasmaWrapper.classList.add('girando');
 
-                // 3. Esperar la duración de la animación de la fantasma y hacerla invisible
+                // 2. Determinar el lado a mostrar y detener el giro después de un tiempo
                 setTimeout(() => {
-                    cardFantasmaWrapper.classList.remove('visible');
-                    cardFantasmaWrapper.classList.remove('flipped'); // Resetear la fantasma
-                }, 600);
+                    cardFantasmaWrapper.classList.remove('girando');
+                    if (fantasmaCounter % 2 !== 0) { // Impar: Rojo
+                        cardFantasmaWrapper.classList.remove('blanco');
+                        cardFantasmaWrapper.classList.add('rojo');
+                    } else { // Par: Blanco
+                        cardFantasmaWrapper.classList.remove('rojo');
+                        cardFantasmaWrapper.classList.add('blanco');
+                    }
 
-                // 4. Después de un pequeño delay, voltear la original y hacerla visible
-                setTimeout(() => {
-                    isFlippedOriginal = !isFlippedOriginal;
-                    cardOriginal.classList.toggle('flipped');
-                    cardOriginal.style.opacity = 1;
-                    rotationXOriginal = 0;
-                    rotationYOriginal = 0;
-                    updateCardRotationOriginal();
-                    isAnimating = false;
-                }, 700);
+                    // 3. Mantener visible por 1 segundo y luego desaparecer
+                    setTimeout(() => {
+                        cardFantasmaWrapper.classList.remove('visible');
+                        cardFantasmaWrapper.classList.remove('rojo');
+                        cardFantasmaWrapper.classList.remove('blanco');
+                        isFantasmaAnimating = false;
+                    }, 1000);
+                }, 600); // Tiempo estimado para que se complete una parte del giro
             }
         });
 
