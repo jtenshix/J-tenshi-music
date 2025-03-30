@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Código A - Arrastre)</title>
+    <title>Carta 3D Interactiva (A Original + 2)</title>
     <style>
         body {
             margin: 0;
@@ -20,9 +20,11 @@
         .card-container {
             perspective: 1200px;
             transform-style: preserve-3d;
+            position: relative; /* Para contener ambas cartas */
         }
 
-        .card {
+        /* Estilos del Código A Original (Carta Principal) */
+        .card.original {
             width: 360px;
             height: 540px;
             background-color: transparent;
@@ -31,10 +33,15 @@
             transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             transform: rotateX(0deg) rotateY(0deg);
             border-radius: 15px;
+            cursor: grab;
         }
 
-        .card-front-container,
-        .card-back-container {
+        .card.original.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card.original .card-front-container,
+        .card.original .card-back-container {
             position: absolute;
             top: 0;
             left: 0;
@@ -45,22 +52,11 @@
             border-radius: 15px;
         }
 
-        .card-back-container {
-            opacity: 0;
-            pointer-events: none;
+        .card.original .card-back-container {
+            transform: rotateY(180deg) scaleX(-1);
         }
 
-        .card.flipped .card-front-container {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .card.flipped .card-back-container {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .card-side {
+        .card.original .card-side {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -71,27 +67,95 @@
             background-size: cover;
         }
 
-        .card-front {
+        .card.original .card-front {
             background-image: url('carta_frente.png.jpg');
             background-size: cover;
         }
 
-        .card-back {
+        .card.original .card-back {
             background-image: url('carta_dorso.png.png');
             background-size: cover;
-            transform: rotateY(180deg) scaleX(-1);
         }
 
-        .card.will-flip {
-            transform: rotateY(30deg);
-            transition: transform 0.2s ease-in-out;
+        /* Estilos del Código 2 (Carta Fantasma) - Centrada y más pequeña */
+        .card-wrapper.fantasma {
+            width: 180px; /* Mitad del ancho original */
+            height: 270px; /* Mitad del alto original */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease-in-out, opacity 0.2s ease-in-out;
+            transform-origin: center center;
+            opacity: 0; /* Inicialmente invisible */
+            pointer-events: none; /* Para que no bloquee los eventos de la original */
+            border-radius: 8px;
+        }
+
+        .card-wrapper.fantasma.visible {
+            opacity: 1;
+            pointer-events: auto; /* Permite interactuar con la fantasma si es necesario */
+        }
+
+        .card-wrapper.fantasma.flipped {
+            transform: translate(-50%, -50%) rotateY(180deg);
+        }
+
+        .card-face.fantasma {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            background-size: cover;
+            transform-origin: center center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-face.fantasma.front {
+            background-color: white;
+            transform: rotateY(0deg);
+        }
+
+        .card-face.fantasma.back {
+            background-color: red;
+            transform: rotateY(180deg);
+        }
+
+        /* Botón de Volteo */
+        .flip-button {
+            background-color: rgba(255, 255, 255, 0.5);
+            color: #121212;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 0;
+            overflow: hidden;
+            z-index: 10;
+            position: fixed;
+            bottom: calc(env(safe-area-inset-bottom) + 90px);
+            right: 20px;
+        }
+
+        .flip-button:hover {
+            background-color: rgba(255, 255, 255, 0.8);
         }
     </style>
 </head>
 <body>
 
     <div class="card-container">
-        <div class="card visible" id="card">
+        <div class="card original" id="cardOriginal">
             <div class="card-front-container">
                 <div class="card-side card-front"></div>
             </div>
@@ -99,77 +163,104 @@
                 <div class="card-side card-back"></div>
             </div>
         </div>
+        <div class="card-wrapper fantasma" id="cardFantasmaWrapper">
+            <div class="card-face front"></div>
+            <div class="card-face back"></div>
+        </div>
     </div>
 
+    <button class="flip-button" id="flipBtn">F</button>
+
     <script>
-        const card = document.getElementById('card');
-        let rotationX = 0, rotationY = 0;
-        let isDragging = false;
-        let startX = 0, startY = 0;
-        let currentX = 0, currentY = 0;
-        let dragStartTime;
+        // JavaScript del Código A Original (arrastre y volteo de la carta original)
+        const cardOriginal = document.getElementById('cardOriginal');
+        let rotationXOriginal = 0, rotationYOriginal = 0;
+        let isDraggingOriginal = false;
+        let startXOriginal = 0, startYOriginal = 0;
+        let currentXOriginal = 0, currentYOriginal = 0;
+        let dragStartTimeOriginal;
 
-        function updateCardRotation() {
-            card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+        function updateCardRotationOriginal() {
+            cardOriginal.style.transform = `rotateX(${rotationXOriginal}deg) rotateY(${rotationYOriginal}deg)`;
         }
 
-        function startDrag(e) {
-            isDragging = true;
-            startX = e.touches ? e.touches[0].clientX : e.clientX;
-            startY = e.touches ? e.touches[0].clientY : e.clientY;
-            dragStartTime = Date.now();
-            card.style.transition = "transform 0.1s ease-out";
-            currentX = startX;
-            currentY = startY;
+        function startDragOriginal(e) {
+            isDraggingOriginal = true;
+            startXOriginal = e.touches ? e.touches[0].clientX : e.clientX;
+            startYOriginal = e.touches ? e.touches[0].clientY : e.clientY;
+            dragStartTimeOriginal = Date.now();
+            cardOriginal.style.transition = "transform 0.1s ease-out";
+            currentXOriginal = startXOriginal;
+            currentYOriginal = startYOriginal;
+            cardOriginal.style.cursor = 'grabbing';
         }
 
-        function dragMove(e) {
-            if (isDragging) {
+        function dragMoveOriginal(e) {
+            if (isDraggingOriginal) {
                 let x = e.touches ? e.touches[0].clientX : e.clientX;
                 let y = e.touches ? e.touches[0].clientY : e.clientY;
 
-                let deltaY = y - startY;
-                let deltaX = x - startX;
+                let deltaY = y - startYOriginal;
+                let deltaX = x - startXOriginal;
 
-                rotationX -= deltaY * 0.2;
-                rotationY += deltaX * 0.2;
+                rotationXOriginal -= deltaY * 0.2;
+                rotationYOriginal += deltaX * 0.2;
 
-                updateCardRotation();
+                updateCardRotationOriginal();
 
-                startY = y;
-                startX = x;
-                currentY = y;
-                currentX = x;
+                startYOriginal = y;
+                startXOriginal = x;
+                currentYOriginal = y;
+                currentXOriginal = x;
             }
         }
 
-        function stopDrag() {
-            if (isDragging) {
-                isDragging = false;
-                card.style.transition = "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)";
+        function stopDragOriginal() {
+            if (isDraggingOriginal) {
+                isDraggingOriginal = false;
+                cardOriginal.style.transition = "transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55)";
 
                 const animationDuration = 300;
-                let velocityY = (currentY - startY) / (Date.now() - dragStartTime);
-                let velocityX = (currentX - startX) / (Date.now() - dragStartTime);
+                let velocityY = (currentYOriginal - startYOriginal) / (Date.now() - dragStartTimeOriginal);
+                let velocityX = (currentXOriginal - startXOriginal) / (Date.now() - dragStartTimeOriginal);
 
                 const inertiaMultiplier = 0.2;
-                rotationX -= velocityY * inertiaMultiplier;
-                rotationY += velocityX * inertiaMultiplier;
+                rotationXOriginal -= velocityY * inertiaMultiplier;
+                rotationYOriginal += velocityX * inertiaMultiplier;
 
-                rotationX = Math.round(rotationX / 360) * 360;
-                rotationY = Math.round(rotationY / 360) * 360;
+                rotationXOriginal = Math.round(rotationXOriginal / 360) * 360;
+                rotationYOriginal = Math.round(rotationYOriginal / 360) * 360;
 
-                updateCardRotation();
+                updateCardRotationOriginal();
+                cardOriginal.style.cursor = 'grab';
 
                 setTimeout(() => {
-                    card.style.transition = "transform 0.3s ease-out";
+                    cardOriginal.style.transition = "transform 0.3s ease-out";
                 }, animationDuration);
             }
         }
 
-        document.addEventListener('touchstart', startDrag);
-        document.addEventListener('touchmove', dragMove);
-        document.addEventListener('touchend', stopDrag);
+        function flipCardOriginal() {
+            cardOriginal.classList.toggle('flipped');
+        }
+
+        cardOriginal.addEventListener('touchstart', startDragOriginal);
+        cardOriginal.addEventListener('touchmove', dragMoveOriginal);
+        cardOriginal.addEventListener('touchend', stopDragOriginal);
+        cardOriginal.addEventListener('mousedown', startDragOriginal);
+        cardOriginal.addEventListener('mousemove', dragMoveOriginal);
+        cardOriginal.addEventListener('mouseup', stopDragOriginal);
+        cardOriginal.addEventListener('mouseout', stopDragOriginal);
+        cardOriginal.addEventListener('click', flipCardOriginal);
+
+        // JavaScript del Código 2 (volteo de la carta fantasma con botón)
+        const cardFantasmaWrapper = document.getElementById('cardFantasmaWrapper');
+        const flipBtn = document.getElementById('flipBtn');
+
+        flipBtn.addEventListener('click', () => {
+            cardFantasmaWrapper.classList.toggle('visible');
+            cardFantasmaWrapper.classList.toggle('flipped');
+        });
     </script>
 
 </body>
