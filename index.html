@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (A + 2 Funcionales)</title>
+    <title>Carta 3D Interactiva (A y 2 Originales Combinados)</title>
     <style>
         body {
             margin: 0;
@@ -21,8 +21,8 @@
             perspective: 1200px;
             transform-style: preserve-3d;
             position: relative; /* Para contener ambas cartas */
-            width: 360px; /* Ancho de la carta */
-            height: 540px; /* Alto de la carta */
+            width: 360px; /* Ancho de la carta original */
+            height: 540px; /* Alto de la carta original */
         }
 
         /* Estilos del Código A (Carta Original) */
@@ -178,14 +178,11 @@
         </div>
     </div>
 
-    <button class="flip-button" id="flipBtn"></button>
+    <button class="flip-button" id="flipBtn">F</button>
 
     <script>
-        // JavaScript combinado de A (arrastre) y 2 (volteo de fantasma)
+        // JavaScript del Código A (arrastre de la carta original)
         const cardOriginal = document.getElementById('cardOriginal');
-        const cardFantasmaWrapper = document.getElementById('cardFantasmaWrapper');
-        const flipBtn = document.getElementById('flipBtn');
-        let isFlippedOriginal = false;
         let rotationXOriginal = 0, rotationYOriginal = 0;
         let isDraggingOriginal = false;
         let startXOriginal = 0, startYOriginal = 0;
@@ -249,6 +246,10 @@
                 }, animationDuration);
             }
         }
+
+        // JavaScript del Código 2 (volteo de la carta fantasma)
+        const cardFantasmaWrapper = document.getElementById('cardFantasmaWrapper');
+        const flipBtn = document.getElementById('flipBtn');
 
         flipBtn.addEventListener('click', () => {
             cardFantasmaWrapper.classList.toggle('visible');
