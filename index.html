@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta 3D Interactiva (Fantasma Centrada)</title>
+    <title>Carta 3D Interactiva (Combinación Funcional)</title>
     <style>
         body {
             margin: 0;
@@ -21,11 +21,11 @@
             perspective: 1200px;
             transform-style: preserve-3d;
             position: relative; /* Para contener ambas cartas */
-            width: 360px; /* Ancho de la carta original */
-            height: 540px; /* Alto de la carta original */
+            width: 360px; /* Ancho de la carta */
+            height: 540px; /* Alto de la carta */
         }
 
-        /* Estilos de la Carta Original */
+        /* Estilos del Código A (Carta Original) */
         .card.original {
             width: 100%;
             height: 100%;
@@ -88,26 +88,29 @@
             transform: rotateY(180deg) scaleX(-1);
         }
 
-        /* Estilos de la Carta Fantasma (Centrada) */
+        /* Estilos del Código 2 (Carta Fantasma) - Centrada y más pequeña */
         .card-wrapper.fantasma {
-            width: 50%; /* Más pequeña */
-            height: 50%; /* Más pequeña */
+            width: 50%;
+            height: 50%;
             position: absolute;
-            top: 50%; /* Centrado vertical */
-            left: 50%; /* Centrado horizontal */
-            transform: translate(-50%, -50%); /* Ajuste para centrar */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             transform-style: preserve-3d;
             transition: transform 0.6s ease-in-out, opacity 0.2s ease-in-out;
             transform-origin: center center;
-            opacity: 0; /* Inicialmente invisible */
+            /* opacity: 0; Inicialmente invisible - lo controlaremos con JS */
+            pointer-events: none; /* Para que no bloquee los eventos de la original */
+            border-radius: 8px;
         }
 
         .card-wrapper.fantasma.visible {
-            opacity: 1; /* Se vuelve visible al activarse */
+            opacity: 1;
+            pointer-events: auto; /* Permite interactuar con la fantasma si es necesario */
         }
 
         .card-wrapper.fantasma.flipped {
-            transform: translate(-50%, -50%) rotateY(180deg); /* Mantener el centrado al girar */
+            transform: translate(-50%, -50%) rotateY(180deg);
         }
 
         .card-face.fantasma {
@@ -178,7 +181,7 @@
     <button class="flip-button" id="flipBtn"></button>
 
     <script>
-        // JavaScript del Código A (con control de visibilidad y sin modificaciones extrañas)
+        // JavaScript combinado de A (arrastre) y 2 (volteo de fantasma)
         const cardOriginal = document.getElementById('cardOriginal');
         const cardFantasmaWrapper = document.getElementById('cardFantasmaWrapper');
         const flipBtn = document.getElementById('flipBtn');
@@ -248,9 +251,8 @@
         }
 
         flipBtn.addEventListener('click', () => {
-            cardFantasmaWrapper.classList.toggle('visible'); // Mostrar/ocultar la fantasma
-            cardFantasmaWrapper.classList.toggle('flipped'); // Animar el volteo de la fantasma
-            // No modificamos la carta original aquí
+            cardFantasmaWrapper.classList.toggle('visible');
+            cardFantasmaWrapper.classList.toggle('flipped');
         });
 
         document.addEventListener('touchstart', startDragOriginal);
