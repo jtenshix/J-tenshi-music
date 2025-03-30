@@ -95,6 +95,7 @@
         let isFlipping = false; // Nueva variable para controlar el estado de volteo
 
         interactiveCard.addEventListener('touchstart', (e) => {
+            console.log("touchstart - isFlipping:", isFlipping);
             if (!isFlipping) { // Solo iniciar el arrastre si no se está volteando
                 isTouching = true;
                 startX = e.touches[0].clientX;
@@ -104,6 +105,7 @@
         });
 
         interactiveCard.addEventListener('touchmove', (e) => {
+            console.log("touchmove - isTouching:", isTouching, "isFlipping:", isFlipping);
             if (!isTouching || isFlipping) return; // No rotar si no se está tocando o si se está volteando
             currentX = e.touches[0].clientX;
             currentY = e.touches[0].clientY;
@@ -121,23 +123,28 @@
         });
 
         interactiveCard.addEventListener('touchend', () => {
+            console.log("touchend");
             isTouching = false;
             interactiveCard.style.cursor = 'grab';
         });
 
         interactiveCard.addEventListener('touchcancel', () => {
+            console.log("touchcancel");
             isTouching = false;
             interactiveCard.style.cursor = 'grab';
         });
 
         flipCardBtn.addEventListener('click', () => {
+            console.log("Botón Voltear clickeado - isFlipping:", isFlipping);
             if (!isFlipping) {
                 isFlipping = true;
                 isFlipped = !isFlipped;
                 interactiveCard.classList.toggle('flipped');
+                console.log("Iniciando volteo - isFlipping:", isFlipping, "isFlipped:", isFlipped);
                 // Esperar a que termine la transición de volteo antes de permitir otra acción
                 setTimeout(() => {
                     isFlipping = false;
+                    console.log("Volteo terminado - isFlipping:", isFlipping);
                 }, 600); // La duración de la transición es de 0.6s en CSS
             }
         });
