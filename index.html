@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Rotación y Volteo Fantasma - Botón Visible) - Versión BA</title>
+    <title>Dos Cartas Interactivas (Rotación y Volteo Fantasma - Botón en Posición PA) - Versión FPA</title>
     <style>
         body {
             margin: 0;
@@ -24,7 +24,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative; /* Para que las cartas se posicionen relativas a este contenedor */
+            position: relative; /* Para que las cartas y el botón se posicionen relativas a este contenedor */
         }
 
         .card {
@@ -42,6 +42,7 @@
             font-size: 24px;
             font-weight: bold;
             position: absolute; /* Para superponerse */
+            z-index: 1; /* Asegurarse de que las cartas estén en una capa */
         }
 
         .flip-button {
@@ -54,7 +55,9 @@
             font-size: 14px;
             transition: background 0.3s;
             touch-action: manipulation;
-            margin-top: 20px; /* Espacio entre las cartas y el botón */
+            margin-top: 240px; /* Para que quede debajo de la primera carta (aproximadamente) */
+            z-index: 10; /* Asegurarse de que el botón esté por encima de las cartas */
+            position: relative; /* Para que el margin-top funcione como se espera dentro del container relative */
         }
 
         .flip-button:hover {
@@ -69,6 +72,7 @@
             flex-direction: column;
             align-items: center;
             position: absolute; /* Para superponerse */
+            z-index: 1; /* Asegurarse de que la carta esté en una capa */
         }
 
         .card-flip {
@@ -123,17 +127,16 @@
 
     <div class="card-container">
         <div class="card" id="rotateCard">
-            BA - Rotar
+            FPA - Rotar
         </div>
         <div class="card-flip-container hidden" id="flipCardContainer">
             <div class="card-flip" id="flipCard">
-                <div class="card-flip-face front">BA - Front</div>
-                <div class="card-flip-face back">BA - Back</div>
+                <div class="card-flip-face front">FPA - Front</div>
+                <div class="card-flip-face back">FPA - Back</div>
             </div>
         </div>
+        <button class="flip-button" id="toggleFlipBtn">Voltear Carta</button>
     </div>
-
-    <button class="flip-button" id="toggleFlipBtn">Voltear Carta</button>
 
     <script>
         // --- Script para la Carta de Rotación (Siempre Activa) ---
@@ -213,7 +216,7 @@
         rotateCard.addEventListener('touchend', handleTouchEndRotate);
         rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-        // --- Script para la Carta de Volteo Fantasma (Botón Visible) ---
+        // --- Script para la Carta de Volteo Fantasma (Botón en Posición PA) ---
         const rotateCardElement = document.getElementById('rotateCard');
         const flipCardContainer = document.getElementById('flipCardContainer');
         const flipCard = document.getElementById('flipCard');
