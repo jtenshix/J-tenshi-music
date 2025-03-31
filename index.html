@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Rotación y Volteo Invisible - Posición PA) - Versión IPA</title>
+    <title>Dos Cartas Interactivas (Rotación y Volteo - Control de Visibilidad Fino) - Versión FIPA</title>
     <style>
         body {
             margin: 0;
@@ -127,12 +127,12 @@
 
     <div class="card-container">
         <div class="card" id="rotateCard">
-            IPA - Rotar
+            FIPA - Rotar
         </div>
-        <div class="card-flip-container" id="flipCardContainer">
+        <div class="card-flip-container invisible" id="flipCardContainer">
             <div class="card-flip" id="flipCard">
-                <div class="card-flip-face front">IPA - Front</div>
-                <div class="card-flip-face back">IPA - Back</div>
+                <div class="card-flip-face front">FIPA - Front</div>
+                <div class="card-flip-face back">FIPA - Back</div>
             </div>
         </div>
         <button class="flip-button" id="toggleFlipBtn">Voltear Carta</button>
@@ -216,7 +216,7 @@
         rotateCard.addEventListener('touchend', handleTouchEndRotate);
         rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-        // --- Script para la Carta de Volteo Fantasma (Invisible en Posición Anterior) ---
+        // --- Script para la Carta de Volteo Fantasma (Control de Visibilidad Fino) ---
         const rotateCardElement = document.getElementById('rotateCard');
         const flipCardContainer = document.getElementById('flipCardContainer');
         const flipCard = document.getElementById('flipCard');
@@ -226,17 +226,23 @@
         let isFlipping = false;
 
         // Ocultar la carta de volteo al inicio
-        flipCardContainer.classList.add('hidden');
+        flipCardContainer.classList.add('invisible');
 
         toggleFlipBtn.addEventListener('click', () => {
             if (!isFlipping) {
                 isFlipping = true;
 
-                // Alternar la visibilidad de las cartas
+                // Hacer invisible la carta de rotación y visible la de volteo
                 rotateCardElement.classList.add('invisible');
-                flipCardContainer.classList.remove('hidden');
+                flipCardContainer.classList.remove('invisible');
 
                 flipCount++;
+
+                const resetVisibility = () => {
+                    rotateCardElement.classList.remove('invisible');
+                    flipCardContainer.classList.add('invisible');
+                    isFlipping = false;
+                };
 
                 if (flipCount % 10 === 0) {
                     flipCard.classList.add('torbellino');
@@ -244,16 +250,14 @@
                         flipCard.classList.remove('torbellino');
                         currentRotation = 0;
                         flipCard.style.transform = `rotateY(${currentRotation}deg)`;
-                        isFlipping = false;
                         flipCount = 0; // Reiniciar el contador
-                        rotateCardElement.classList.remove('invisible'); // Mostrar la original de nuevo
-                        flipCardContainer.classList.add('hidden');      // Ocultar la de volteo
+                        resetVisibility();
                     }, 2000); // Duración del torbellino
                 } else {
                     currentRotation += 180;
                     flipCard.style.transform = `rotateY(${currentRotation}deg)`;
                     setTimeout(() => {
-                        isFlipping = false;
+                        resetVisibility();
                     }, 600); // Duración de la transición normal
                 }
             }
