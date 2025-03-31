@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Sincronización con Rotación, Torbellino e Imágenes Correctas) - Versión FINAL</title>
+    <title>Dos Cartas Interactivas (Sincronización Total con Rotación e Imágenes en Ambas) - Versión FINAL</title>
     <style>
         body {
             margin: 0;
@@ -27,12 +27,16 @@
             position: relative; /* Para que las cartas se posicionen relativas a este contenedor */
         }
 
-        .card {
+        .card-container > div {
+            position: relative;
             width: 150px;
             height: 225px;
-            background-color: white; /* Fondo blanco de respaldo */
             border-radius: 8px;
             transform-style: preserve-3d;
+        }
+
+        .card {
+            background-color: white; /* Fondo blanco de respaldo */
             transition: transform 0.3s ease-out, opacity 0.3s ease-in-out;
             transform: rotateX(0deg) rotateY(0deg);
             cursor: grab;
@@ -41,15 +45,52 @@
             align-items: center;
             font-size: 24px;
             font-weight: bold;
-            position: relative; /* Ya no es absolute para mantener el flujo */
-            z-index: 2; /* Asegurarse de que esté por encima si es visible */
             opacity: 1; /* Inicialmente visible */
         }
 
-        .card img {
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-face img {
             max-width: 100%;
             max-height: 100%;
             border-radius: 8px; /* Para que la imagen respete el borde de la carta */
+        }
+
+        .card-front {
+            transform: rotateY(0deg);
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        .card-flip-container {
+            opacity: 0; /* Inicialmente invisible */
+            transition: opacity 0.3s ease-in-out;
+            /* Los estilos internos ya definen posición */
+        }
+
+        .card-flip {
+            background-color: transparent; /* Fondo transparente para ver la imagen */
+            border-radius: 8px;
+            transform: rotateY(0deg);
+            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1.435); /* Transición para el giro normal */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-flip.torbellino {
+            animation: torbellinoAnimation 2s ease-out 1; /* Duración mayor y ease-out */
+            transition: none; /* Desactivar la transición normal durante el torbellino */
         }
 
         .flip-button {
@@ -71,58 +112,6 @@
             background-color: rgba(255, 255, 255, 0.8);
         }
 
-        /* Estilos para la carta de volteo animado con desaceleración */
-        .card-flip-container {
-            perspective: 1200px;
-            transform-style: preserve-3d;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative; /* Ya no es absolute para mantener el flujo */
-            z-index: 1; /* Asegurarse de que esté debajo si la otra es visible */
-            opacity: 0; /* Inicialmente invisible */
-            transition: opacity 0.3s ease-in-out;
-        }
-
-        .card-flip {
-            width: 150px;
-            height: 225px;
-            background-color: transparent; /* Fondo transparente para ver la imagen */
-            border-radius: 8px;
-            transform-style: preserve-3d;
-            position: relative;
-            transform: rotateY(0deg);
-            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1.435); /* Transición para el giro normal */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .card-flip.torbellino {
-            animation: torbellinoAnimation 2s ease-out 1; /* Duración mayor y ease-out */
-            transition: none; /* Desactivar la transición normal durante el torbellino */
-        }
-
-        .card-flip-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .card-flip-face img {
-            max-width: 100%;
-            max-height: 100%;
-            border-radius: 8px; /* Para que la imagen respete el borde de la carta */
-        }
-
-        .card-flip-face.back {
-            transform: rotateY(180deg);
-        }
-
         @keyframes torbellinoAnimation {
             from { transform: rotateY(0deg); }
             to { transform: rotateY(2160deg); } /* 6 vueltas (360 * 6) */
@@ -132,16 +121,23 @@
 <body>
 
     <div class="card-container">
-        <div class="card" id="rotateCard">
-            <img src="carta_dorso.png.png" alt="Dorso de la Carta">
+        <div id="rotateCardContainer">
+            <div class="card" id="rotateCard">
+                <div class="card-face card-front">
+                    <img src="carta_frente.png.jpg" alt="Frente de la Carta (Rotación)">
+                </div>
+                <div class="card-face card-back">
+                    <img src="carta_dorso.png.png" alt="Dorso de la Carta (Rotación)">
+                </div>
+            </div>
         </div>
         <div class="card-flip-container" id="flipCardContainer">
             <div class="card-flip" id="flipCard">
                 <div class="card-flip-face front">
-                    <img src="carta_frente.png.jpg" alt="Frente de la Carta">
+                    <img src="carta_frente.png.jpg" alt="Frente de la Carta (Volteo)">
                 </div>
                 <div class="card-flip-face back">
-                    <img src="carta_dorso.png.png" alt="Dorso de la Carta">
+                    <img src="carta_dorso.png.png" alt="Dorso de la Carta (Volteo)">
                 </div>
             </div>
         </div>
@@ -149,7 +145,8 @@
     </div>
 
     <script>
-        // --- Script para la Carta de Rotación (Siempre Activa) ---
+        // --- Script para la Carta de Rotación (Ahora con Volteo) ---
+        const rotateCardContainer = document.getElementById('rotateCardContainer');
         const rotateCard = document.getElementById('rotateCard');
         let isTouchingRotateCard = false;
         let startXRotate, startYRotate, currentXRotate, currentYRotate;
@@ -226,7 +223,7 @@
         rotateCard.addEventListener('touchend', handleTouchEndRotate);
         rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-        // --- Script para la Carta de Volteo Sincronizadas CON ROTACIÓN Y TORBELLINO E IMÁGENES CORRECTAS ---
+        // --- Script para la Sincronización Total ---
         const rotateCardElement = document.getElementById('rotateCard');
         const flipCardContainer = document.getElementById('flipCardContainer');
         const flipCard = document.getElementById('flipCard');
@@ -244,14 +241,16 @@
             if (!isFlipping) {
                 isFlipping = true;
 
-                // Iniciar la transición de opacidad
+                // Iniciar la transición de opacidad y rotación de la carta superior
                 rotateCardElement.style.opacity = 0;
+                rotateCardElement.style.transform = 'rotateY(180deg)';
                 flipCardContainer.style.opacity = 1;
 
                 flipCount++;
 
                 const resetVisibility = () => {
                     rotateCardElement.style.opacity = 1;
+                    rotateCardElement.style.transform = 'rotateY(0deg)';
                     flipCardContainer.style.opacity = 0;
                     isFlipping = false;
                 };
