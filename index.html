@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Rotación y Volteo Sin Rebote Definitivo) - Versión PA</title>
+    <title>Dos Cartas Interactivas (Rotación y Volteo Fantasma - Misma Posición) - Versión SA</title>
     <style>
         body {
             margin: 0;
@@ -24,6 +24,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative; /* Para que las cartas se posicionen relativas a este contenedor */
         }
 
         .card {
@@ -40,6 +41,7 @@
             align-items: center;
             font-size: 24px;
             font-weight: bold;
+            position: absolute; /* Para superponerse */
         }
 
         .flip-button {
@@ -52,6 +54,7 @@
             font-size: 14px;
             transition: background 0.3s;
             touch-action: manipulation;
+            margin-top: 20px; /* Espacio entre las cartas y el botón */
         }
 
         .flip-button:hover {
@@ -62,10 +65,10 @@
         .card-flip-container {
             perspective: 1200px;
             transform-style: preserve-3d;
-            margin-bottom: 30px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: absolute; /* Para superponerse */
         }
 
         .card-flip {
@@ -109,23 +112,28 @@
             from { transform: rotateY(0deg); }
             to { transform: rotateY(2160deg); } /* 6 vueltas (360 * 6) */
         }
+
+        /* Estilos para ocultar/mostrar las cartas */
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
 
     <div class="card-container">
         <div class="card" id="rotateCard">
-            PA - Rotar
+            SA - Rotar
+        </div>
+        <div class="card-flip-container hidden" id="flipCardContainer">
+            <div class="card-flip" id="flipCard">
+                <div class="card-flip-face front">SA - Front</div>
+                <div class="card-flip-face back">SA - Back</div>
+            </div>
         </div>
     </div>
 
-    <div class="card-flip-container">
-        <div class="card-flip" id="flipCard">
-            <div class="card-flip-face front">PA - Front</div>
-            <div class="card-flip-face back">PA - Back</div>
-        </div>
-        <button class="flip-button" id="toggleFlipBtn">Voltear Carta</button>
-    </div>
+    <button class="flip-button" id="toggleFlipBtn">Voltear Carta</button>
 
     <script>
         // --- Script para la Carta de Rotación (Siempre Activa) ---
@@ -205,16 +213,26 @@
         rotateCard.addEventListener('touchend', handleTouchEndRotate);
         rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-        // --- Script para la Carta de Volteo con Desaceleración (Sin Rebote Definitivo) ---
+        // --- Script para la Carta de Volteo Fantasma (Misma Posición) ---
+        const rotateCardElement = document.getElementById('rotateCard');
+        const flipCardContainer = document.getElementById('flipCardContainer');
         const flipCard = document.getElementById('flipCard');
         const toggleFlipBtn = document.getElementById('toggleFlipBtn');
         let currentRotation = 0;
         let flipCount = 0;
         let isFlipping = false;
 
+        // Ocultar la carta de volteo al inicio
+        flipCardContainer.classList.add('hidden');
+
         toggleFlipBtn.addEventListener('click', () => {
             if (!isFlipping) {
                 isFlipping = true;
+
+                // Alternar la visibilidad de las cartas
+                rotateCardElement.classList.add('hidden');
+                flipCardContainer.classList.remove('hidden');
+
                 flipCount++;
 
                 if (flipCount % 10 === 0) {
@@ -225,6 +243,8 @@
                         flipCard.style.transform = `rotateY(${currentRotation}deg)`;
                         isFlipping = false;
                         flipCount = 0; // Reiniciar el contador
+                        rotateCardElement.classList.remove('hidden'); // Mostrar la original de nuevo
+                        flipCardContainer.classList.add('hidden');      // Ocultar la de volteo
                     }, 2000); // Duración del torbellino
                 } else {
                     currentRotation += 180;
