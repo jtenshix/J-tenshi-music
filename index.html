@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Sincronización Total, Tamaño Visual Uniforme) - Versión FINAL</title>
+    <title>Dos Cartas Interactivas (Sincronización Total, Tamaño Visual Uniforme con Perspectiva en Contenedores) - Versión FINAL</title>
     <style>
         body {
             margin: 0;
@@ -45,6 +45,7 @@
             z-index: 2;
             opacity: 1;
             overflow: hidden;
+            perspective: 1200px; /* Aplicar perspectiva también aquí */
         }
 
         .card img {
@@ -77,7 +78,7 @@
         }
 
         .card-flip-container {
-            perspective: 1200px;
+            perspective: 1200px; /* Aplicar perspectiva también aquí */
             transform-style: preserve-3d;
             display: flex;
             flex-direction: column;
@@ -86,8 +87,8 @@
             z-index: 1;
             opacity: 0;
             transition: opacity 0.3s ease-in-out;
-            width: 150px; /* Asegurar el mismo ancho */
-            height: 225px; /* Asegurar la misma altura */
+            width: 150px;
+            height: 225px;
         }
 
         .card-flip {
@@ -123,6 +124,7 @@
             max-width: 100%;
             max-height: 100%;
             border-radius: 8px;
+            object-fit: cover; /* Volvemos a cover ya que las imágenes son las mismas */
         }
 
         .card-flip-face.back {
