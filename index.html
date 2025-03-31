@@ -33,23 +33,23 @@
         }
 
         .card, .card-flip-container {
-            width: 80%;
-            height: calc(40% - 10px);
-            background-color: white;
-            border-radius: 8px;
-            transform-style: preserve-3d;
-            transition: transform 0.3s ease-out, opacity 0.3s ease-in-out;
-            cursor: grab;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 20px;
-            font-weight: bold;
-            position: absolute;
-            margin: 10%;
-            left: 0;
-            overflow: hidden;
-        }
+    width: 90%; /* Aumenta el ancho de la carta */
+    height: calc(45% - 10px); /* Aumenta la altura de la carta */
+    background-color: white;
+    border-radius: 8px;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-in-out;
+    cursor: grab;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+    position: absolute;
+    margin: 5%; /* Reduce el margen para compensar el aumento de tamaño */
+    left: 0;
+    overflow: hidden;
+}
 
         .card-flip-container {
             opacity: 0;
