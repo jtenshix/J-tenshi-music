@@ -238,10 +238,10 @@
         let isFrontVisibleTop = true; // Variable para rastrear la imagen visible en la carta superior (ahora el frente es inicial)
 
         // Inicialmente la carta de volteo está invisible
-        // flipCardContainer.style.opacity = 0; // Ya se define en CSS
+        flipCardContainer.style.opacity = 0;
         // Inicialmente mostrar el frente en la carta superior
-        // frontImageTop.style.display = 'block'; // Ya se define en CSS
-        // backImageTop.style.display = 'none'; // Ya se define en CSS
+        frontImageTop.style.display = 'block';
+        backImageTop.style.display = 'none';
 
         toggleFlipBtn.addEventListener('click', () => {
             if (!isFlipping) {
@@ -269,20 +269,23 @@
                     isFlipping = false;
                 };
 
+                let flipDuration = 600; // Duración del flip normal
                 if (flipCount % 10 === 0) {
                     flipCard.classList.add('torbellino');
+                    flipDuration = torbellinoDuration;
                     setTimeout(() => {
                         flipCard.classList.remove('torbellino');
                         currentRotation = 0;
                         flipCard.style.transform = `rotateY(${currentRotation}deg)`;
                         flipCount = 0; // Reiniciar el contador
-                        setTimeout(resetVisibility, 0); // Inmediatamente después de que termine el torbellino
-                    }, torbellinoDuration); // Esperar la duración del torbellino
+                    }, torbellinoDuration); // Esperar el torbellino
                 } else {
                     currentRotation += 180;
                     flipCard.style.transform = `rotateY(${currentRotation}deg)`;
-                    setTimeout(resetVisibility, 600); // Después del giro normal
                 }
+
+                // Reiniciar la visibilidad después de la duración de la animación
+                setTimeout(resetVisibility, flipDuration);
             }
         });
     </script>
