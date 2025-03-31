@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Rotación y Volteo - Control de Visibilidad Fino) - Versión FIPA</title>
+    <title>Dos Cartas Interactivas (Rotación y Volteo Sincronizadas) - Versión SINCRO</title>
     <style>
         body {
             margin: 0;
@@ -33,7 +33,7 @@
             background-color: white;
             border-radius: 8px;
             transform-style: preserve-3d;
-            transition: transform 0.3s ease-out;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-in-out;
             transform: rotateX(0deg) rotateY(0deg);
             cursor: grab;
             display: flex;
@@ -43,6 +43,7 @@
             font-weight: bold;
             position: relative; /* Ya no es absolute para mantener el flujo */
             z-index: 2; /* Asegurarse de que esté por encima si es visible */
+            opacity: 1; /* Inicialmente visible */
         }
 
         .flip-button {
@@ -73,6 +74,8 @@
             align-items: center;
             position: relative; /* Ya no es absolute para mantener el flujo */
             z-index: 1; /* Asegurarse de que esté debajo si la otra es visible */
+            opacity: 0; /* Inicialmente invisible */
+            transition: opacity 0.3s ease-in-out;
         }
 
         .card-flip {
@@ -116,23 +119,18 @@
             from { transform: rotateY(0deg); }
             to { transform: rotateY(2160deg); } /* 6 vueltas (360 * 6) */
         }
-
-        /* Estilos para ocultar/mostrar las cartas */
-        .invisible {
-            visibility: hidden;
-        }
     </style>
 </head>
 <body>
 
     <div class="card-container">
         <div class="card" id="rotateCard">
-            FIPA - Rotar
+            SINCRO - Rotar
         </div>
-        <div class="card-flip-container invisible" id="flipCardContainer">
+        <div class="card-flip-container" id="flipCardContainer">
             <div class="card-flip" id="flipCard">
-                <div class="card-flip-face front">FIPA - Front</div>
-                <div class="card-flip-face back">FIPA - Back</div>
+                <div class="card-flip-face front">SINCRO - Front</div>
+                <div class="card-flip-face back">SINCRO - Back</div>
             </div>
         </div>
         <button class="flip-button" id="toggleFlipBtn">Voltear Carta</button>
@@ -216,7 +214,7 @@
         rotateCard.addEventListener('touchend', handleTouchEndRotate);
         rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-        // --- Script para la Carta de Volteo Fantasma (Control de Visibilidad Fino) ---
+        // --- Script para la Carta de Volteo Sincronizadas ---
         const rotateCardElement = document.getElementById('rotateCard');
         const flipCardContainer = document.getElementById('flipCardContainer');
         const flipCard = document.getElementById('flipCard');
@@ -224,23 +222,24 @@
         let currentRotation = 0;
         let flipCount = 0;
         let isFlipping = false;
+        const fadeDuration = 300; // Duración de la transición de opacidad en ms
 
-        // Ocultar la carta de volteo al inicio
-        flipCardContainer.classList.add('invisible');
+        // Inicialmente la carta de volteo está invisible
+        flipCardContainer.style.opacity = 0;
 
         toggleFlipBtn.addEventListener('click', () => {
             if (!isFlipping) {
                 isFlipping = true;
 
-                // Hacer invisible la carta de rotación y visible la de volteo
-                rotateCardElement.classList.add('invisible');
-                flipCardContainer.classList.remove('invisible');
+                // Iniciar la transición de opacidad
+                rotateCardElement.style.opacity = 0;
+                flipCardContainer.style.opacity = 1;
 
                 flipCount++;
 
                 const resetVisibility = () => {
-                    rotateCardElement.classList.remove('invisible');
-                    flipCardContainer.classList.add('invisible');
+                    rotateCardElement.style.opacity = 1;
+                    flipCardContainer.style.opacity = 0;
                     isFlipping = false;
                 };
 
@@ -251,14 +250,12 @@
                         currentRotation = 0;
                         flipCard.style.transform = `rotateY(${currentRotation}deg)`;
                         flipCount = 0; // Reiniciar el contador
-                        resetVisibility();
-                    }, 2000); // Duración del torbellino
+                        setTimeout(resetVisibility, 2000); // Después del torbellino
+                    }, 0); // Iniciar inmediatamente
                 } else {
                     currentRotation += 180;
                     flipCard.style.transform = `rotateY(${currentRotation}deg)`;
-                    setTimeout(() => {
-                        resetVisibility();
-                    }, 600); // Duración de la transición normal
+                    setTimeout(resetVisibility, 600); // Después del giro
                 }
             }
         });
