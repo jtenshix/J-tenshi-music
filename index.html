@@ -18,18 +18,32 @@
             justify-content: center; /* Centra el contenido verticalmente */
         }
 
-        .card-container {
-            perspective: 1200px;
-            transform-style: preserve-3d;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            width: 90vw; /* Ocupa el 90% del ancho de la ventana */
-            max-width: 414px; /* Ancho máximo para pantallas grandes */
-            height: 100vh; /* Ocupa el 80% de la altura de la ventana */
-            max-height: 500px; /* Altura máxima */
-            margin-bottom: 500; /* Sin margen inferior */
+         .card-container {
+    perspective: 1200px;
+    transform-style: preserve-3d;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    width: 80%; /* Ajustado para un ancho del 80% */
+    max-width: 414px;
+    height: 80vh; /* Ajustado para una altura del 80% de la ventana */
+    max-height: 500px;
+    margin-bottom: 500;
+}
+        @media (max-width: 768px) {
+    /* Estilos para dispositivos móviles */
+    .card, .card-flip-container {
+        margin: 5%; /* Margen del 5% en dispositivos móviles */
+    }
+}
+
+@media (min-width: 1200px) {
+    /* Estilos para pantallas grandes */
+    .card, .card-flip-container {
+        margin: 15%; /* Margen del 15% en pantallas grandes */
+    }
+}
         }
 
         .card, .card-flip-container {
@@ -46,7 +60,7 @@
             font-size: 20px; /* Reduce un poco la fuente si es necesario */
             font-weight: bold;
             position: absolute;
-            top: 100;
+            margin: 10%; /* Añadido para crear un margen del 10% */
             left: 0;
             overflow: hidden;
         }
