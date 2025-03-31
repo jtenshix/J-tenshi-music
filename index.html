@@ -1,93 +1,294 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flip Cards</title>
-  <style>
-    .card-container {
-      perspective: 1200px;
-      transform-style: preserve-3d;
-      margin-bottom: 30px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      width: 80vw;
-      height: calc(80vw * 1.5 * 2 + 30px); 
-      max-width: 300px;
-      max-height: calc(450px * 2 + 30px);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dos Cartas Interactivas (Separadas, Centradas, Mismo Tamaño y Lógica de Visibilidad) - Versión FINAL (Anterior)</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #121212;
+            min-height: 100vh;
+            overflow: hidden;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Centrar verticalmente el contenedor de las cartas */
+        }
 
-    .card {
-      width: 100%;
-      height: 100%;
-      max-width: 300px;
-      max-height: 450px;
-      position: absolute;
-      transform-style: preserve-3d;
-      transition: transform 1s;
-    }
+        .card-container {
+            perspective: 1200px;
+            transform-style: preserve-3d;
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centrar horizontalmente las cartas */
+            position: relative; /* Para posicionar las cartas relativas a este contenedor */
+            width: 80vw; /* Ocupar el 80% del ancho de la pantalla */
+            height: calc(80vw * 1.5 * 2 + 30px); /* Alto para dos cartas + margen */
+            max-width: 300px; /* Ancho máximo */
+            max-height: calc(450px * 2 + 30px); /* Alto máximo */
+        }
 
-    .card-front, .card-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 10px;
-    }
+        .card, .card-flip-container {
+            width: 100%; /* Ocupar todo el ancho del contenedor */
+            height: calc(50% - 15px); /* Ocupar la mitad del alto menos el margen */
+            background-color: white; /* Fondo blanco de respaldo */
+            border-radius: 8px;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-in-out;
+            cursor: grab;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            position: absolute; /* Posicionar una encima de la otra inicialmente */
+            top: 0;
+            left: 0;
+            overflow: hidden;
+        }
 
-    .card-front {
-      background-color: #fff;
-    }
+        .card-flip-container {
+            top: calc(50% + 15px); /* Posicionar la segunda carta abajo */
+            opacity: 0; /* Inicialmente invisible */
+            z-index: 1;
+        }
 
-    .card-back {
-      background-color: #333;
-      transform: rotateY(180deg);
-    }
+        .card {
+            opacity: 1; /* Inicialmente visible */
+            z-index: 2;
+        }
 
-    .card:hover {
-      transform: rotateY(180deg);
-    }
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
 
-    .flip-button {
-      background-color: rgba(255, 255, 255, 0.5);
-      color: #121212;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background 0.3s;
-      touch-action: manipulation;
-      z-index: 10;
-      margin-top: 10px; /* Aquí se mueve el botón hacia abajo */
-    }
+        .card-flip {
+            width: 100%;
+            height: 100%;
+            background-color: transparent; /* Fondo transparente para ver la imagen */
+            border-radius: 8px;
+            transform-style: preserve-3d;
+            position: relative;
+            transform: rotateY(0deg);
+            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1.435); /* Transición para el giro normal */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    .flip-button:hover {
-      background-color: rgba(255, 255, 255, 0.7);
-    }
-  </style>
+        .card-flip.torbellino {
+            animation: torbellinoAnimation 2s ease-out 1; /* Duración mayor y ease-out */
+            transition: none; /* Desactivar la transición normal durante el torbellino */
+        }
+
+        .card-flip-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-flip-face img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 8px; /* Para que la imagen respete el borde de la carta */
+            object-fit: cover;
+        }
+
+        .card-flip-face.back {
+            transform: rotateY(180deg);
+        }
+
+        .flip-button {
+            background-color: rgba(255, 255, 255, 0.5);
+            color: #121212;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+            touch-action: manipulation;
+            margin-top: 20px; /* Espacio entre las cartas */
+            z-index: 10; /* Asegurarse de que el botón esté por encima */
+            position: relative;
+        }
+
+        .flip-button:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes torbellinoAnimation {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(2160deg); } /* 6 vueltas (360 * 6) */
+        }
+    </style>
 </head>
 <body>
-  <div class="card-container">
-    <div class="card">
-      <div class="card-front">
-        <h2>Front 1</h2>
-      </div>
-      <div class="card-back">
-        <h2>Back 1</h2>
-      </div>
+
+    <div class="card-container">
+        <div class="card" id="rotateCard">
+            <img class="front-image" src="carta_frente.png.jpg" alt="Frente de la Carta" style="display: block;">
+            <img class="back-image" src="carta_dorso.png.png" alt="Dorso de la Carta" style="display: none;">
+        </div>
+        <div class="card-flip-container" id="flipCardContainer">
+            <div class="card-flip" id="flipCard">
+                <div class="card-flip-face front">
+                    <img src="carta_frente.png.jpg" alt="Frente de la Carta (Volteo)">
+                </div>
+                <div class="card-flip-face back">
+                    <img src="carta_dorso.png.png" alt="Dorso de la Carta (Volteo)">
+                </div>
+            </div>
+        </div>
+        <button class="flip-button" id="toggleFlipBtn">Voltear Carta</button>
     </div>
-    <div class="card">
-      <div class="card-front">
-        <h2>Front 2</h2>
-      </div>
-      <div class="card-back">
-        <h2>Back 2</h2>
-      </div>
-    </div>
-    <button class="flip-button">Flip Cards</button>
-  </div>
+
+    <script>
+        // --- Script para la Carta de Rotación (Siempre Activa) ---
+        const rotateCard = document.getElementById('rotateCard');
+        const frontImageTop = rotateCard.querySelector('.front-image');
+        const backImageTop = rotateCard.querySelector('.back-image');
+        let isTouchingRotateCard = false;
+        let startXRotate, startYRotate, currentXRotate, currentYRotate;
+        let rotationXRotate = 0;
+        let rotationYRotate = 0;
+        let animationFrameRotateId;
+        const frictionRotate = 0.88;
+        const springForceRotate = 0.08;
+        const dampingRotate = 0.75;
+        const rotationFactorRotate = 0.5;
+        let velocityYRotate = 0;
+        let velocityXRotate = 0;
+
+        const handleTouchStartRotate = (e) => {
+            isTouchingRotateCard = true;
+            startXRotate = e.touches[0].clientX;
+            startYRotate = e.touches[0].clientY;
+            rotateCard.style.cursor = 'grabbing';
+            rotateCard.style.transition = 'transform 0s';
+            cancelAnimationFrame(animationFrameRotateId);
+            velocityYRotate = 0;
+            velocityXRotate = 0;
+            e.preventDefault();
+        };
+
+        const handleTouchMoveRotate = (e) => {
+            if (!isTouchingRotateCard) return;
+            currentXRotate = e.touches[0].clientX;
+            currentYRotate = e.touches[0].clientY;
+            const deltaX = currentXRotate - startXRotate;
+            const deltaY = currentYRotate - startYRotate;
+            rotationYRotate += deltaX * rotationFactorRotate;
+            rotationXRotate -= deltaY * rotationFactorRotate;
+            velocityYRotate = deltaX * 0.5;
+            velocityXRotate = -deltaY * 0.5;
+            rotateCard.style.transform = `rotateX(${rotationXRotate}deg) rotateY(${rotationYRotate}deg)`;
+            startXRotate = currentXRotate;
+            startYRotate = currentYRotate;
+            e.preventDefault();
+        };
+
+        const handleTouchEndRotate = () => {
+            isTouchingRotateCard = false;
+            rotateCard.style.cursor = 'grab';
+            rotateCard.style.transition = 'transform 0.3s ease-out';
+            const animateReboundRotate = () => {
+                velocityYRotate *= frictionRotate;
+                velocityXRotate *= frictionRotate;
+                rotationYRotate += velocityYRotate;
+                rotationXRotate += velocityXRotate;
+                rotationYRotate += -rotationYRotate * springForceRotate;
+                rotationXRotate += -rotationXRotate * springForceRotate;
+                velocityYRotate *= dampingRotate;
+                velocityXRotate *= dampingRotate;
+                rotateCard.style.transform = `rotateX(${rotationXRotate}deg) rotateY(${rotationYRotate}deg)`;
+                if (Math.abs(velocityYRotate) > 0.005 || Math.abs(velocityXRotate) > 0.005 || Math.abs(rotationYRotate) > 0.005 || Math.abs(rotationXRotate) > 0.005) {
+                    animationFrameRotateId = requestAnimationFrame(animateReboundRotate);
+                } else {
+                    rotationXRotate = 0;
+                    rotationYRotate = 0;
+                    rotateCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
+                }
+            };
+            animateReboundRotate();
+        };
+
+        const handleTouchCancelRotate = () => {
+            isTouchingRotateCard = false;
+            handleTouchEndRotate();
+        };
+
+        rotateCard.addEventListener('touchstart', handleTouchStartRotate);
+        rotateCard.addEventListener('touchmove', handleTouchMoveRotate);
+        rotateCard.addEventListener('touchend', handleTouchEndRotate);
+        rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
+
+        // --- Script para la Sincronización Total ---
+        const rotateCardElement = document.getElementById('rotateCard');
+        const flipCardContainer = document.getElementById('flipCardContainer');
+        const flipCard = document.getElementById('flipCard');
+        const toggleFlipBtn = document.getElementById('toggleFlipBtn');
+        let currentRotation = 0;
+        let flipCount = 0;
+        let isFlipping = false;
+        const fadeDuration = 300; // Duración de la transición de opacidad en ms
+        const torbellinoDuration = 2000; // Duración del torbellino en ms
+        let isFrontVisibleTop = true; // Variable para rastrear la imagen visible en la carta superior (ahora el frente es inicial)
+
+        // Inicialmente la carta de volteo está invisible
+        flipCardContainer.style.opacity = 0;
+        // Inicialmente mostrar el frente en la carta superior
+        frontImageTop.style.display = 'block';
+        backImageTop.style.display = 'none';
+
+        toggleFlipBtn.addEventListener('click', () => {
+            if (!isFlipping) {
+                isFlipping = true;
+
+                // Iniciar la transición de opacidad
+                rotateCardElement.style.opacity = 0;
+                flipCardContainer.style.opacity = 1;
+
+                // Cambiar la imagen de la carta superior instantáneamente
+                if (isFrontVisibleTop) {
+                    frontImageTop.style.display = 'none';
+                    backImageTop.style.display = 'block';
+                } else {
+                    frontImageTop.style.display = 'block';
+                    backImageTop.style.display = 'none';
+                }
+                isFrontVisibleTop = !isFrontVisibleTop;
+
+                // Girar la carta
+                flipCard.style.transform = `rotateY(${currentRotation + 180}deg)`;
+                currentRotation += 180;
+
+                // Lógica para aplicar animación de torbellino al hacer un flip
+                flipCard.classList.add('torbellino');
+
+                // Luego de un tiempo, resetear el torbellino
+                setTimeout(() => {
+                    flipCard.classList.remove('torbellino');
+                    flipCard.style.transform = `rotateY(${currentRotation}deg)`;
+                    isFlipping = false;
+                }, torbellinoDuration);
+            }
+        });
+    </script>
+
 </body>
 </html>
