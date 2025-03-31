@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Rotación y Volteo con Desaceleración) - Versión NA</title>
+    <title>Dos Cartas Interactivas (Rotación y Volteo Sin Rebote) - Versión OA</title>
     <style>
         body {
             margin: 0;
@@ -115,14 +115,14 @@
 
     <div class="card-container">
         <div class="card" id="rotateCard">
-            NA - Rotar
+            OA - Rotar
         </div>
     </div>
 
     <div class="card-flip-container">
         <div class="card-flip" id="flipCard">
-            <div class="card-flip-face front">NA - Front</div>
-            <div class="card-flip-face back">NA - Back</div>
+            <div class="card-flip-face front">OA - Front</div>
+            <div class="card-flip-face back">OA - Back</div>
         </div>
         <button class="flip-button" id="toggleFlipBtn">Voltear Carta</button>
     </div>
@@ -205,7 +205,7 @@
         rotateCard.addEventListener('touchend', handleTouchEndRotate);
         rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-        // --- Script para la Carta de Volteo con Desaceleración ---
+        // --- Script para la Carta de Volteo con Desaceleración (Sin Rebote) ---
         const flipCard = document.getElementById('flipCard');
         const toggleFlipBtn = document.getElementById('toggleFlipBtn');
         let currentRotation = 0;
@@ -225,7 +225,7 @@
                         flipCard.style.transform = `rotateY(${currentRotation}deg)`;
                         isFlipping = false;
                         flipCount = 0; // Reiniciar el contador
-                    }, 2000); // Duración del torbellino (más largo para desaceleración)
+                    }, 2000); // Duración del torbellino
                 } else {
                     currentRotation += 180;
                     flipCard.style.transform = `rotateY(${currentRotation}deg)`;
@@ -233,6 +233,13 @@
                         isFlipping = false;
                     }, 600); // Duración de la transición normal
                 }
+            }
+        });
+
+        // Evento para asegurar que la rotación final del torbellino sea exactamente 0
+        flipCard.addEventListener('animationend', (event) => {
+            if (event.animationName === 'torbellinoAnimation') {
+                flipCard.style.transform = 'rotateY(0deg)';
             }
         });
     </script>
