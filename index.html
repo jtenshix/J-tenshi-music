@@ -114,8 +114,10 @@
         }
 
         .flip-button {
-    position: relative;
-    margin-top: 40px; /* Mueve el botón más abajo */
+    position: absolute; /* Lo coloca fuera del flujo normal de los elementos */
+    bottom: -40px; /* Ajusta el espacio hacia abajo */
+    left: 50%;
+    transform: translateX(-50%); /* Centra el botón horizontalmente */
     background-color: rgba(255, 255, 255, 0.5);
     color: #121212;
     border: none;
