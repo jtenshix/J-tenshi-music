@@ -18,18 +18,18 @@
             justify-content: center; /* Centrar verticalmente el contenedor de las cartas */
         }
 
-        .card-container {
+      .card-container {
     perspective: 1200px;
     transform-style: preserve-3d;
     margin-bottom: 30px;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centrar ambas cartas horizontalmente */
-    position: relative; 
-    width: 80vw;
-    height: calc(80vw * 1.5 * 2 + 30px);
-    max-width: 300px;
-    max-height: calc(450px * 2 + 30px);
+    align-items: center; /* Centrar horizontalmente las cartas */
+    position: relative; /* Esto es clave para que el botón se posicione bien */
+    width: 80vw; /* Ocupar el 80% del ancho de la pantalla */
+    height: calc(80vw * 1.5 * 2 + 30px); /* Alto para dos cartas + margen */
+    max-width: 300px; /* Ancho máximo */
+    max-height: calc(450px * 2 + 30px); /* Alto máximo */
 }
 
 .card, .card-flip-container {
@@ -115,7 +115,7 @@
 
         .flip-button {
     position: absolute; /* Lo coloca fuera del flujo normal de los elementos */
-    bottom: -40px; /* Ajusta el espacio hacia abajo */
+    bottom: -50px; /* Ajusta el valor según lo que necesites */
     left: 50%;
     transform: translateX(-50%); /* Centra el botón horizontalmente */
     background-color: rgba(255, 255, 255, 0.5);
