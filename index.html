@@ -64,7 +64,7 @@
 
         .card-flip-container {
             z-index: 1; /* Inicialmente detrás */
-            opacity: 0;
+            opacity: 0; /* INICIALMENTE INVISIBLE */
         }
 
         .card-flip {
@@ -238,7 +238,7 @@
         let isFrontVisibleTop = true; // Variable para rastrear la imagen visible en la carta superior (ahora el frente es inicial)
 
         // Inicialmente la carta de volteo está invisible
-        flipCardContainer.style.opacity = 0;
+        // flipCardContainer.style.opacity = 0; // YA ESTÁ DEFINIDO EN CSS
         // Inicialmente mostrar el frente en la carta superior
         frontImageTop.style.display = 'block';
         backImageTop.style.display = 'none';
