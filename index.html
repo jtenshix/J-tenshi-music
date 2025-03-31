@@ -1,10 +1,9 @@
-
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Sincronización con Rotación y Torbellino e Imágenes) - Versión SINCROROT-T</title>
+    <title>Dos Cartas Interactivas (Sincronización Total con Cambio de Imagen en Carta Superior por Botón) - Versión FINAL</title>
     <style>
         body {
             margin: 0;
@@ -134,15 +133,16 @@
 
     <div class="card-container">
         <div class="card" id="rotateCard">
-            <img src="carta_dorso.png.png" alt="Dorso de la Carta">
+            <img class="front-image" src="carta_frente.png.jpg" alt="Frente de la Carta" style="display: none;">
+            <img class="back-image" src="carta_dorso.png.png" alt="Dorso de la Carta">
         </div>
         <div class="card-flip-container" id="flipCardContainer">
             <div class="card-flip" id="flipCard">
                 <div class="card-flip-face front">
-                    <img src="carta_frente.png.jpg" alt="Frente de la Carta">
+                    <img src="carta_frente.png.jpg" alt="Frente de la Carta (Volteo)">
                 </div>
                 <div class="card-flip-face back">
-                    <img src="carta_dorso.png.png" alt="Dorso de la Carta">
+                    <img src="carta_dorso.png.png" alt="Dorso de la Carta (Volteo)">
                 </div>
             </div>
         </div>
@@ -152,6 +152,8 @@
     <script>
         // --- Script para la Carta de Rotación (Siempre Activa) ---
         const rotateCard = document.getElementById('rotateCard');
+        const frontImageTop = rotateCard.querySelector('.front-image');
+        const backImageTop = rotateCard.querySelector('.back-image');
         let isTouchingRotateCard = false;
         let startXRotate, startYRotate, currentXRotate, currentYRotate;
         let rotationXRotate = 0;
@@ -227,7 +229,7 @@
         rotateCard.addEventListener('touchend', handleTouchEndRotate);
         rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-        // --- Script para la Carta de Volteo Sincronizadas CON ROTACIÓN Y TORBELLINO E IMÁGENES ---
+        // --- Script para la Sincronización Total ---
         const rotateCardElement = document.getElementById('rotateCard');
         const flipCardContainer = document.getElementById('flipCardContainer');
         const flipCard = document.getElementById('flipCard');
@@ -237,9 +239,13 @@
         let isFlipping = false;
         const fadeDuration = 300; // Duración de la transición de opacidad en ms
         const torbellinoDuration = 2000; // Duración del torbellino en ms
+        let isFrontVisibleTop = false; // Variable para rastrear la imagen visible en la carta superior
 
         // Inicialmente la carta de volteo está invisible
         flipCardContainer.style.opacity = 0;
+        // Inicialmente mostrar el dorso en la carta superior
+        frontImageTop.style.display = 'none';
+        backImageTop.style.display = 'block';
 
         toggleFlipBtn.addEventListener('click', () => {
             if (!isFlipping) {
@@ -248,6 +254,16 @@
                 // Iniciar la transición de opacidad
                 rotateCardElement.style.opacity = 0;
                 flipCardContainer.style.opacity = 1;
+
+                // Cambiar la imagen de la carta superior instantáneamente
+                if (isFrontVisibleTop) {
+                    frontImageTop.style.display = 'none';
+                    backImageTop.style.display = 'block';
+                } else {
+                    frontImageTop.style.display = 'block';
+                    backImageTop.style.display = 'none';
+                }
+                isFrontVisibleTop = !isFrontVisibleTop;
 
                 flipCount++;
 
