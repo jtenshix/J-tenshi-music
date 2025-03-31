@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Sincronización Total, Mismo Tamaño y Ajuste de Imagen en Carta Superior) - Versión FINAL</title>
+    <title>Dos Cartas Interactivas (Sincronización Total, Tamaño Uniforme) - Versión FINAL</title>
     <style>
         body {
             margin: 0;
@@ -44,14 +44,14 @@
             position: relative; /* Ya no es absolute para mantener el flujo */
             z-index: 2; /* Asegurarse de que esté por encima si es visible */
             opacity: 1;
-            /* overflow: hidden; Eliminamos esto temporalmente para ver si el ajuste de imagen ayuda */
+            overflow: hidden;
         }
 
         .card img {
-            width: 100%; /* Asegurar que la imagen cubra el ancho */
-            height: 100%; /* Asegurar que la imagen cubra la altura */
-            object-fit: cover; /* Recortar o escalar la imagen para cubrir el contenedor */
-            border-radius: 8px; /* Para que la imagen respete el borde de la carta */
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
             position: absolute;
             top: 0;
             left: 0;
@@ -87,11 +87,13 @@
             z-index: 1; /* Asegurarse de que esté debajo si la otra es visible */
             opacity: 0; /* Inicialmente invisible */
             transition: opacity 0.3s ease-in-out;
+            width: 150px; /* Asegurar el mismo ancho */
+            height: 225px; /* Asegurar la misma altura */
         }
 
         .card-flip {
-            width: 150px;
-            height: 225px;
+            width: 100%; /* Ocupar el 100% del contenedor */
+            height: 100%; /* Ocupar el 100% del contenedor */
             background-color: transparent; /* Fondo transparente para ver la imagen */
             border-radius: 8px;
             transform-style: preserve-3d;
