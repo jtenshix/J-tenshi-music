@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Sincronización Total con Imágenes Corregidas y Bordes Ocultos en Carta Superior) - Versión FINAL</title>
+    <title>Dos Cartas Interactivas (Sincronización Total, Mismo Tamaño y Bordes Ocultos en Carta Superior) - Versión FINAL</title>
     <style>
         body {
             margin: 0;
@@ -44,14 +44,14 @@
             position: relative; /* Ya no es absolute para mantener el flujo */
             z-index: 2; /* Asegurarse de que esté por encima si es visible */
             opacity: 1; /* Inicialmente visible */
-            overflow: hidden; /* Añadido para ocultar los bordes */
+            overflow: hidden; /* Para ocultar los bordes */
         }
 
         .card img {
             max-width: 100%;
             max-height: 100%;
             border-radius: 8px; /* Para que la imagen respete el borde de la carta */
-            position: absolute; /* Para controlar mejor el tamaño si fuera necesario */
+            position: absolute;
             top: 0;
             left: 0;
         }
