@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Sincronización con Rotación y Torbellino) - Versión SINCROROT-T</title>
+    <title>Dos Cartas Interactivas (Sincronización con Rotación, Torbellino e Imágenes Correctas) - Versión FINAL</title>
     <style>
         body {
             margin: 0;
@@ -30,7 +30,7 @@
         .card {
             width: 150px;
             height: 225px;
-            background-color: white;
+            background-color: white; /* Fondo blanco de respaldo */
             border-radius: 8px;
             transform-style: preserve-3d;
             transition: transform 0.3s ease-out, opacity 0.3s ease-in-out;
@@ -44,6 +44,12 @@
             position: relative; /* Ya no es absolute para mantener el flujo */
             z-index: 2; /* Asegurarse de que esté por encima si es visible */
             opacity: 1; /* Inicialmente visible */
+        }
+
+        .card img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 8px; /* Para que la imagen respete el borde de la carta */
         }
 
         .flip-button {
@@ -81,12 +87,20 @@
         .card-flip {
             width: 150px;
             height: 225px;
-            background-color: lightblue;
+            background-color: transparent; /* Fondo transparente para ver la imagen */
             border-radius: 8px;
             transform-style: preserve-3d;
             position: relative;
             transform: rotateY(0deg);
             transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1.435); /* Transición para el giro normal */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-flip.torbellino {
+            animation: torbellinoAnimation 2s ease-out 1; /* Duración mayor y ease-out */
+            transition: none; /* Desactivar la transición normal durante el torbellino */
         }
 
         .card-flip-face {
@@ -97,22 +111,16 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 24px;
-            font-weight: bold;
         }
 
-        .card-flip-face.front {
-            background-color: lightblue;
+        .card-flip-face img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 8px; /* Para que la imagen respete el borde de la carta */
         }
 
         .card-flip-face.back {
-            background-color: lightcoral;
             transform: rotateY(180deg);
-        }
-
-        .card-flip.torbellino {
-            animation: torbellinoAnimation 2s ease-out 1; /* Duración mayor y ease-out */
-            transition: none; /* Desactivar la transición normal durante el torbellino */
         }
 
         @keyframes torbellinoAnimation {
@@ -125,12 +133,16 @@
 
     <div class="card-container">
         <div class="card" id="rotateCard">
-            SINCROROT-T - Rotar
+            <img src="carta_dorso.png.png" alt="Dorso de la Carta">
         </div>
         <div class="card-flip-container" id="flipCardContainer">
             <div class="card-flip" id="flipCard">
-                <div class="card-flip-face front">SINCROROT-T - Front</div>
-                <div class="card-flip-face back">SINCROROT-T - Back</div>
+                <div class="card-flip-face front">
+                    <img src="carta_frente.png.jpg" alt="Frente de la Carta">
+                </div>
+                <div class="card-flip-face back">
+                    <img src="carta_dorso.png.png" alt="Dorso de la Carta">
+                </div>
             </div>
         </div>
         <button class="flip-button" id="toggleFlipBtn">Voltear Carta</button>
@@ -214,7 +226,7 @@
         rotateCard.addEventListener('touchend', handleTouchEndRotate);
         rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-        // --- Script para la Carta de Volteo Sincronizadas CON ROTACIÓN Y TORBELLINO ---
+        // --- Script para la Carta de Volteo Sincronizadas CON ROTACIÓN Y TORBELLINO E IMÁGENES CORRECTAS ---
         const rotateCardElement = document.getElementById('rotateCard');
         const flipCardContainer = document.getElementById('flipCardContainer');
         const flipCard = document.getElementById('flipCard');
@@ -251,7 +263,7 @@
                         currentRotation = 0;
                         flipCard.style.transform = `rotateY(${currentRotation}deg)`;
                         flipCount = 0; // Reiniciar el contador
-                        setTimeout(resetVisibility, 0); // Inmediatamente después de que termine el torbellino (la duración ya está definida en CSS)
+                        setTimeout(resetVisibility, 0); // Inmediatamente después de que termine el torbellino
                     }, torbellinoDuration); // Esperar la duración del torbellino
                 } else {
                     currentRotation += 180;
