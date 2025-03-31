@@ -114,23 +114,24 @@
         }
 
         .flip-button {
-            background-color: rgba(255, 255, 255, 0.5);
-            color: #121212;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.3s;
-            touch-action: manipulation;
-            margin-top: 20px; /* Espacio entre las cartas */
-            z-index: 10; /* Asegurarse de que el botón esté por encima */
-            position: relative;
-        }
+    position: relative;
+    margin-top: 15px; /* Espacio debajo de la carta */
+    background-color: rgba(255, 255, 255, 0.5);
+    color: #121212;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+    touch-action: manipulation;
+    z-index: 10; /* Asegurarse de que el botón esté por encima */
+}
 
-        .flip-button:hover {
-            background-color: rgba(255, 255, 255, 0.8);
-        }
+.flip-button:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
 
         @keyframes torbellinoAnimation {
             from { transform: rotateY(0deg); }
