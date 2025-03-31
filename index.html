@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Rotación y Volteo Fantasma - Botón en Posición PA) - Versión FPA</title>
+    <title>Dos Cartas Interactivas (Rotación y Volteo Fantasma - Posición PA) - Versión RPA</title>
     <style>
         body {
             margin: 0;
@@ -24,7 +24,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative; /* Para que las cartas y el botón se posicionen relativas a este contenedor */
+            position: relative; /* Para que las cartas se posicionen relativas a este contenedor */
         }
 
         .card {
@@ -127,12 +127,12 @@
 
     <div class="card-container">
         <div class="card" id="rotateCard">
-            FPA - Rotar
+            RPA - Rotar
         </div>
-        <div class="card-flip-container hidden" id="flipCardContainer">
+        <div class="card-flip-container" id="flipCardContainer">
             <div class="card-flip" id="flipCard">
-                <div class="card-flip-face front">FPA - Front</div>
-                <div class="card-flip-face back">FPA - Back</div>
+                <div class="card-flip-face front">RPA - Front</div>
+                <div class="card-flip-face back">RPA - Back</div>
             </div>
         </div>
         <button class="flip-button" id="toggleFlipBtn">Voltear Carta</button>
@@ -216,7 +216,7 @@
         rotateCard.addEventListener('touchend', handleTouchEndRotate);
         rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-        // --- Script para la Carta de Volteo Fantasma (Botón en Posición PA) ---
+        // --- Script para la Carta de Volteo Fantasma (Posición PA) ---
         const rotateCardElement = document.getElementById('rotateCard');
         const flipCardContainer = document.getElementById('flipCardContainer');
         const flipCard = document.getElementById('flipCard');
