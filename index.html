@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Rotación y Volteo Sincronizadas) - Versión SINCRO</title>
+    <title>Dos Cartas Interactivas (Sincronización con Rotación y Torbellino) - Versión SINCROROT-T</title>
     <style>
         body {
             margin: 0;
@@ -86,7 +86,7 @@
             transform-style: preserve-3d;
             position: relative;
             transform: rotateY(0deg);
-            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1.435);
+            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1.435); /* Transición para el giro normal */
         }
 
         .card-flip-face {
@@ -125,12 +125,12 @@
 
     <div class="card-container">
         <div class="card" id="rotateCard">
-            SINCRO - Rotar
+            SINCROROT-T - Rotar
         </div>
         <div class="card-flip-container" id="flipCardContainer">
             <div class="card-flip" id="flipCard">
-                <div class="card-flip-face front">SINCRO - Front</div>
-                <div class="card-flip-face back">SINCRO - Back</div>
+                <div class="card-flip-face front">SINCROROT-T - Front</div>
+                <div class="card-flip-face back">SINCROROT-T - Back</div>
             </div>
         </div>
         <button class="flip-button" id="toggleFlipBtn">Voltear Carta</button>
@@ -214,7 +214,7 @@
         rotateCard.addEventListener('touchend', handleTouchEndRotate);
         rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-        // --- Script para la Carta de Volteo Sincronizadas ---
+        // --- Script para la Carta de Volteo Sincronizadas CON ROTACIÓN Y TORBELLINO ---
         const rotateCardElement = document.getElementById('rotateCard');
         const flipCardContainer = document.getElementById('flipCardContainer');
         const flipCard = document.getElementById('flipCard');
@@ -223,6 +223,7 @@
         let flipCount = 0;
         let isFlipping = false;
         const fadeDuration = 300; // Duración de la transición de opacidad en ms
+        const torbellinoDuration = 2000; // Duración del torbellino en ms
 
         // Inicialmente la carta de volteo está invisible
         flipCardContainer.style.opacity = 0;
@@ -250,12 +251,12 @@
                         currentRotation = 0;
                         flipCard.style.transform = `rotateY(${currentRotation}deg)`;
                         flipCount = 0; // Reiniciar el contador
-                        setTimeout(resetVisibility, 2000); // Después del torbellino
-                    }, 0); // Iniciar inmediatamente
+                        setTimeout(resetVisibility, 0); // Inmediatamente después de que termine el torbellino (la duración ya está definida en CSS)
+                    }, torbellinoDuration); // Esperar la duración del torbellino
                 } else {
                     currentRotation += 180;
                     flipCard.style.transform = `rotateY(${currentRotation}deg)`;
-                    setTimeout(resetVisibility, 600); // Después del giro
+                    setTimeout(resetVisibility, 600); // Después del giro normal
                 }
             }
         });
