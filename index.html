@@ -9,13 +9,13 @@
             margin: 0;
             padding: 20px;
             background-color: #121212;
-            min-height: 100vh;
-            overflow: hidden;
+            min-height: 100vh; /* Asegura que el body ocupe al menos toda la altura de la pantalla */
+            overflow: auto; /* Permite la barra de desplazamiento si el contenido excede la pantalla */
             user-select: none;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: center; /* Centra el contenido verticalmente */
         }
 
         .card-container {
@@ -24,12 +24,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative; /* Importante para posicionar el botón relativamente a este contenedor */
-            width: 80vw;
-            height: calc(80vw * 1.5 * 2 + 30px);
-            max-width: 300px;
-            max-height: calc(450px * 2 + 30px);
-            margin-bottom: 40px; /* Reducimos el margen inferior del contenedor */
+            position: relative;
+            width: 80vw; /* El ancho será el 80% del ancho de la ventana */
+            /* Vamos a calcular la altura en función del ancho para mantener la proporción */
+            height: calc(80vw * 1.5 * 2 + 70px); /* Ajustamos la altura para incluir el botón */
+            max-width: 300px; /* Mantenemos el ancho máximo */
+            max-height: calc(450px * 2 + 70px); /* Ajustamos la altura máxima */
+            margin-bottom: 0; /* Eliminamos el margen inferior aquí */
         }
 
         .card, .card-flip-container {
@@ -122,13 +123,13 @@
             transition: background 0.3s;
             touch-action: manipulation;
             z-index: 10;
-            position: absolute; /* Mantenemos absolute */
-            bottom: -25px; /* Ajustamos la distancia desde la parte inferior */
-            right: 10px; /* Lo movemos a la esquina derecha */
+            position: absolute;
+            bottom: -25px;
+            right: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
-            transform: translateX(0%); /* Reseteamos la transformación horizontal */
+            transform: translateX(0%);
         }
 
         .flip-button:hover {
@@ -136,7 +137,7 @@
         }
 
         .flip-button::before {
-            content: "\u21BB"; /* Carácter Unicode para flechas */
+            content: "\u21BB";
         }
 
         @keyframes torbellinoAnimation {
