@@ -19,48 +19,49 @@
         }
 
         .card-container {
-            perspective: 1200px;
-            transform-style: preserve-3d;
-            margin-bottom: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* Centrar horizontalmente las cartas */
-            position: relative; /* Para posicionar las cartas relativas a este contenedor */
-            width: 80vw; /* Ocupar el 80% del ancho de la pantalla */
-            height: calc(80vw * 1.5 * 2 + 30px); /* Alto para dos cartas + margen */
-            max-width: 300px; /* Ancho máximo */
-            max-height: calc(450px * 2 + 30px); /* Alto máximo */
-        }
+    perspective: 1200px;
+    transform-style: preserve-3d;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centrar ambas cartas horizontalmente */
+    position: relative; 
+    width: 80vw;
+    height: calc(80vw * 1.5 * 2 + 30px);
+    max-width: 300px;
+    max-height: calc(450px * 2 + 30px);
+}
 
-        .card, .card-flip-container {
-            width: 100%; /* Ocupar todo el ancho del contenedor */
-            height: calc(50% - 15px); /* Ocupar la mitad del alto menos el margen */
-            background-color: white; /* Fondo blanco de respaldo */
-            border-radius: 8px;
-            transform-style: preserve-3d;
-            transition: transform 0.3s ease-out, opacity 0.3s ease-in-out;
-            cursor: grab;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            font-weight: bold;
-            position: absolute; /* Posicionar una encima de la otra inicialmente */
-            top: 0;
-            left: 0;
-            overflow: hidden;
-        }
+.card, .card-flip-container {
+    width: 100%;
+    height: calc(50% - 15px);
+    background-color: white;
+    border-radius: 8px;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-in-out;
+    cursor: grab;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    position: absolute; /* Mantener la posición absoluta para que se superpongan */
+    top: 0; /* Ambas cartas empiezan desde la misma posición */
+    left: 0;
+    overflow: hidden;
+}
 
-        .card-flip-container {
-            top: calc(50% + 15px); /* Posicionar la segunda carta abajo */
-            opacity: 0; /* Inicialmente invisible */
-            z-index: 1;
-        }
+.card-flip-container {
+    opacity: 0;
+    z-index: 1;
+}
 
-        .card {
-            opacity: 1; /* Inicialmente visible */
-            z-index: 2;
-        }
+.card {
+    opacity: 1;
+    z-index: 2;
+}
+
+        
 
         .card img {
             width: 100%;
