@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Sincronización Total, Tamaño Uniforme) - Versión FINAL</title>
+    <title>Dos Cartas Interactivas (Sincronización Total, Tamaño Visual Uniforme) - Versión FINAL</title>
     <style>
         body {
             margin: 0;
@@ -24,13 +24,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative; /* Para que las cartas se posicionen relativas a este contenedor */
+            position: relative;
         }
 
         .card {
             width: 150px;
             height: 225px;
-            background-color: white; /* Fondo blanco de respaldo */
+            background-color: white;
             border-radius: 8px;
             transform-style: preserve-3d;
             transition: transform 0.3s ease-out, opacity 0.3s ease-in-out;
@@ -41,8 +41,8 @@
             align-items: center;
             font-size: 24px;
             font-weight: bold;
-            position: relative; /* Ya no es absolute para mantener el flujo */
-            z-index: 2; /* Asegurarse de que esté por encima si es visible */
+            position: relative;
+            z-index: 2;
             opacity: 1;
             overflow: hidden;
         }
@@ -67,8 +67,8 @@
             font-size: 14px;
             transition: background 0.3s;
             touch-action: manipulation;
-            margin-top: 20px; /* Espacio entre las cartas */
-            z-index: 10; /* Asegurarse de que el botón esté por encima */
+            margin-top: 20px;
+            z-index: 10;
             position: relative;
         }
 
@@ -76,38 +76,37 @@
             background-color: rgba(255, 255, 255, 0.8);
         }
 
-        /* Estilos para la carta de volteo animado con desaceleración */
         .card-flip-container {
             perspective: 1200px;
             transform-style: preserve-3d;
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative; /* Ya no es absolute para mantener el flujo */
-            z-index: 1; /* Asegurarse de que esté debajo si la otra es visible */
-            opacity: 0; /* Inicialmente invisible */
+            position: relative;
+            z-index: 1;
+            opacity: 0;
             transition: opacity 0.3s ease-in-out;
             width: 150px; /* Asegurar el mismo ancho */
             height: 225px; /* Asegurar la misma altura */
         }
 
         .card-flip {
-            width: 100%; /* Ocupar el 100% del contenedor */
-            height: 100%; /* Ocupar el 100% del contenedor */
-            background-color: transparent; /* Fondo transparente para ver la imagen */
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
             border-radius: 8px;
             transform-style: preserve-3d;
             position: relative;
             transform: rotateY(0deg);
-            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1.435); /* Transición para el giro normal */
+            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1.435);
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
         .card-flip.torbellino {
-            animation: torbellinoAnimation 2s ease-out 1; /* Duración mayor y ease-out */
-            transition: none; /* Desactivar la transición normal durante el torbellino */
+            animation: torbellinoAnimation 2s ease-out 1;
+            transition: none;
         }
 
         .card-flip-face {
@@ -123,7 +122,7 @@
         .card-flip-face img {
             max-width: 100%;
             max-height: 100%;
-            border-radius: 8px; /* Para que la imagen respete el borde de la carta */
+            border-radius: 8px;
         }
 
         .card-flip-face.back {
@@ -132,7 +131,7 @@
 
         @keyframes torbellinoAnimation {
             from { transform: rotateY(0deg); }
-            to { transform: rotateY(2160deg); } /* 6 vueltas (360 * 6) */
+            to { transform: rotateY(2160deg); }
         }
     </style>
 </head>
