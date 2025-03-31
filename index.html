@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Sincronización Total con Cambio de Imagen en Carta Superior por Botón) - Versión FINAL</title>
+    <title>Dos Cartas Interactivas (Sincronización Total con Imágenes Corregidas en Carta Superior) - Versión FINAL</title>
     <style>
         body {
             margin: 0;
@@ -133,8 +133,8 @@
 
     <div class="card-container">
         <div class="card" id="rotateCard">
-            <img class="front-image" src="carta_frente.png.jpg" alt="Frente de la Carta" style="display: none;">
-            <img class="back-image" src="carta_dorso.png.png" alt="Dorso de la Carta">
+            <img class="front-image" src="carta_frente.png.jpg" alt="Frente de la Carta" style="display: block;">
+            <img class="back-image" src="carta_dorso.png.png" alt="Dorso de la Carta" style="display: none;">
         </div>
         <div class="card-flip-container" id="flipCardContainer">
             <div class="card-flip" id="flipCard">
@@ -239,13 +239,13 @@
         let isFlipping = false;
         const fadeDuration = 300; // Duración de la transición de opacidad en ms
         const torbellinoDuration = 2000; // Duración del torbellino en ms
-        let isFrontVisibleTop = false; // Variable para rastrear la imagen visible en la carta superior
+        let isFrontVisibleTop = true; // Variable para rastrear la imagen visible en la carta superior (ahora el frente es inicial)
 
         // Inicialmente la carta de volteo está invisible
         flipCardContainer.style.opacity = 0;
-        // Inicialmente mostrar el dorso en la carta superior
-        frontImageTop.style.display = 'none';
-        backImageTop.style.display = 'block';
+        // Inicialmente mostrar el frente en la carta superior
+        frontImageTop.style.display = 'block';
+        backImageTop.style.display = 'none';
 
         toggleFlipBtn.addEventListener('click', () => {
             if (!isFlipping) {
