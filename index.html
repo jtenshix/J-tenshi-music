@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas (Rotación y Volteo Fantasma - Misma Posición) - Versión SA</title>
+    <title>Dos Cartas Interactivas (Rotación y Volteo Fantasma - Botón Visible) - Versión BA</title>
     <style>
         body {
             margin: 0;
@@ -123,12 +123,12 @@
 
     <div class="card-container">
         <div class="card" id="rotateCard">
-            SA - Rotar
+            BA - Rotar
         </div>
         <div class="card-flip-container hidden" id="flipCardContainer">
             <div class="card-flip" id="flipCard">
-                <div class="card-flip-face front">SA - Front</div>
-                <div class="card-flip-face back">SA - Back</div>
+                <div class="card-flip-face front">BA - Front</div>
+                <div class="card-flip-face back">BA - Back</div>
             </div>
         </div>
     </div>
@@ -213,7 +213,7 @@
         rotateCard.addEventListener('touchend', handleTouchEndRotate);
         rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-        // --- Script para la Carta de Volteo Fantasma (Misma Posición) ---
+        // --- Script para la Carta de Volteo Fantasma (Botón Visible) ---
         const rotateCardElement = document.getElementById('rotateCard');
         const flipCardContainer = document.getElementById('flipCardContainer');
         const flipCard = document.getElementById('flipCard');
