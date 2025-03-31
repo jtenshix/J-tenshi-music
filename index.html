@@ -196,32 +196,36 @@
         let velocityXRotate = 0;
 
         const handleTouchStartRotate = (e) => {
-            isTouchingRotateCard = true;
-            startXRotate = e.touches[0].clientX;
-            startYRotate = e.touches[0].clientY;
-            rotateCard.style.cursor = 'grabbing';
-            rotateCard.style.transition = 'transform 0s';
-            cancelAnimationFrame(animationFrameRotateId);
-            velocityYRotate = 0;
-            velocityXRotate = 0;
-            e.preventDefault();
-        };
+    isTouchingRotateCard = true;
+    const rect = rotateCard.getBoundingClientRect();
+    const margin = rect.width * 0.1; // Calcula el margen (10% del ancho)
+    startXRotate = e.touches[0].clientX - rect.left - margin;
+    startYRotate = e.touches[0].clientY - rect.top - margin;
+    rotateCard.style.cursor = 'grabbing';
+    rotateCard.style.transition = 'transform 0s';
+    cancelAnimationFrame(animationFrameRotateId);
+    velocityYRotate = 0;
+    velocityXRotate = 0;
+    e.preventDefault();
+};
 
-        const handleTouchMoveRotate = (e) => {
-            if (!isTouchingRotateCard) return;
-            currentXRotate = e.touches[0].clientX;
-            currentYRotate = e.touches[0].clientY;
-            const deltaX = currentXRotate - startXRotate;
-            const deltaY = currentYRotate - startYRotate;
-            rotationYRotate += deltaX * rotationFactorRotate;
-            rotationXRotate -= deltaY * rotationFactorRotate;
-            velocityYRotate = deltaX * 0.5;
-            velocityXRotate = -deltaY * 0.5;
-            rotateCard.style.transform = `rotateX(${rotationXRotate}deg) rotateY(${rotationYRotate}deg)`;
-            startXRotate = currentXRotate;
-            startYRotate = currentYRotate;
-            e.preventDefault();
-        };
+const handleTouchMoveRotate = (e) => {
+    if (!isTouchingRotateCard) return;
+    const rect = rotateCard.getBoundingClientRect();
+    const margin = rect.width * 0.1; // Calcula el margen (10% del ancho)
+    currentXRotate = e.touches[0].clientX - rect.left - margin;
+    currentYRotate = e.touches[0].clientY - rect.top - margin;
+    const deltaX = currentXRotate - startXRotate;
+    const deltaY = currentYRotate - startYRotate;
+    rotationYRotate += deltaX * rotationFactorRotate;
+    rotationXRotate -= deltaY * rotationFactorRotate;
+    velocityYRotate = deltaX * 0.5;
+    velocityXRotate = -deltaY * 0.5;
+    rotateCard.style.transform = `rotateX(${rotationXRotate}deg) rotateY(${rotationYRotate}deg)`;
+    startXRotate = currentXRotate;
+    startYRotate = currentYRotate;
+    e.preventDefault();
+};
 
         const handleTouchEndRotate = () => {
             isTouchingRotateCard = false;
