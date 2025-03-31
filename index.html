@@ -19,49 +19,47 @@
         }
 
         .card-container {
-            perspective: 1200px;
-            transform-style: preserve-3d;
-            margin-bottom: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* Centrar horizontalmente las cartas */
-            position: relative; /* Para posicionar las cartas relativas a este contenedor */
-            width: 80vw; /* Ocupar el 80% del ancho de la pantalla */
-            height: calc(80vw * 1.5 * 2 + 30px); /* Alto para dos cartas + margen */
-            max-width: 300px; /* Ancho máximo */
-            max-height: calc(450px * 2 + 30px); /* Alto máximo */
-        }
+    perspective: 1200px;
+    transform-style: preserve-3d;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centrar ambas cartas horizontalmente */
+    position: relative; 
+    width: 80vw;
+    height: calc(80vw * 1.5 * 2 + 30px);
+    max-width: 300px;
+    max-height: calc(450px * 2 + 30px);
+}
 
-        .card, .card-flip-container {
-            width: 100%; /* Ocupar todo el ancho del contenedor */
-            height: calc(50% - 15px); /* Ocupar la mitad del alto menos el margen */
-            background-color: white; /* Fondo blanco de respaldo */
-            border-radius: 8px;
-            transform-style: preserve-3d;
-            transition: transform 0.3s ease-out, opacity 0.3s ease-in-out;
-            cursor: grab;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            font-weight: bold;
-            position: absolute; /* Posicionar una encima de la otra inicialmente */
-            top: 0;
-            left: 0;
-            overflow: hidden;
-        }
+.card, .card-flip-container {
+    width: 100%;
+    height: calc(50% - 15px);
+    background-color: white;
+    border-radius: 8px;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-in-out;
+    cursor: grab;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    position: absolute; /* Mantener la posición absoluta para que se superpongan */
+    top: 0; /* Ambas cartas empiezan desde la misma posición */
+    left: 0;
+    overflow: hidden;
+}
 
-        .card-flip-container {
-            top: calc(50% + 15px); /* Posicionar la segunda carta abajo */
-            opacity: 0; /* Inicialmente invisible */
-            z-index: 1;
-        }
+.card-flip-container {
+    opacity: 0;
+    z-index: 1;
+}
 
-        .card {
-            opacity: 1; /* Inicialmente visible */
-            z-index: 2;
-        }
-
+.card {
+    opacity: 1;
+    z-index: 2;
+}
         .card img {
             width: 100%;
             height: 100%;
@@ -221,7 +219,7 @@
                 } else {
                     rotationXRotate = 0;
                     rotationYRotate = 0;
-                    rotateCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
+                    rotateCard.style.transform = `rotateX(0deg) rotateY(0deg)`;
                 }
             };
             animateReboundRotate();
@@ -273,19 +271,31 @@
                 }
                 isFrontVisibleTop = !isFrontVisibleTop;
 
-                // Girar la carta
-                flipCard.style.transform = `rotateY(${currentRotation + 180}deg)`;
-                currentRotation += 180;
+                flipCount++;
 
-                // Lógica para aplicar animación de torbellino al hacer un flip
-                flipCard.classList.add('torbellino');
-
-                // Luego de un tiempo, resetear el torbellino
-                setTimeout(() => {
-                    flipCard.classList.remove('torbellino');
-                    flipCard.style.transform = `rotateY(${currentRotation}deg)`;
+                const resetVisibility = () => {
+                    rotateCardElement.style.opacity = 1;
+                    flipCardContainer.style.opacity = 0;
                     isFlipping = false;
-                }, torbellinoDuration);
+                };
+
+                let flipDuration = 600; // Duración del flip normal
+                if (flipCount % 10 === 0) {
+                    flipCard.classList.add('torbellino');
+                    flipDuration = torbellinoDuration;
+                    setTimeout(() => {
+                        flipCard.classList.remove('torbellino');
+                        currentRotation = 0;
+                        flipCard.style.transform = `rotateY(${currentRotation}deg)`;
+                        flipCount = 0; // Reiniciar el contador
+                    }, torbellinoDuration); // Esperar el torbellino
+                } else {
+                    currentRotation += 180;
+                    flipCard.style.transform = `rotateY(${currentRotation}deg)`;
+                }
+
+                // Reiniciar la visibilidad después de la duración de la animación
+                setTimeout(resetVisibility, flipDuration);
             }
         });
     </script>
