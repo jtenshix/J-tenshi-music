@@ -151,11 +151,11 @@
         let rotationXRotate = 0;
         let rotationYRotate = 0;
         let animationFrameRotateId;
-        const maxRotation = 20;
-        const frictionRotate = 0.85;
-        const springForceRotate = 0.05;
-        const dampingRotate = 0.7;
-        const rotationFactorRotate = 0.2;
+        const maxRotation = 30; // Aumentar el rango de rotación
+        const frictionRotate = 0.8; // Fricción ajustada
+        const springForceRotate = 0.03; // Fuerza del resorte ajustada
+        const dampingRotate = 0.6; // Amortiguación ajustada
+        const rotationFactorRotate = 0.15; // Sensibilidad de rotación reducida
         let velocityYRotate = 0;
         let velocityXRotate = 0;
 
@@ -184,6 +184,7 @@
             rotationYRotate += deltaX * rotationFactorRotate;
             rotationXRotate -= deltaY * rotationFactorRotate;
 
+            // Limitar la rotación
             rotationYRotate = Math.max(-maxRotation, Math.min(maxRotation, rotationYRotate));
             rotationXRotate = Math.max(-maxRotation, Math.min(maxRotation, rotationXRotate));
 
@@ -204,8 +205,13 @@
                 velocityXRotate *= frictionRotate;
                 rotationYRotate += velocityYRotate;
                 rotationXRotate += velocityXRotate;
-                rotationYRotate += -rotationYRotate * springForceRotate;
-                rotationXRotate += -rotationXRotate * springForceRotate;
+
+                // Resistencia progresiva
+                const tension = Math.sqrt(rotationXRotate ** 2 + rotationYRotate ** 2);
+                const resistance = tension * springForceRotate;
+                rotationYRotate -= rotationYRotate * resistance;
+                rotationXRotate -= rotationXRotate * resistance;
+
                 velocityYRotate *= dampingRotate;
                 velocityXRotate *= dampingRotate;
                 rotateCard.style.transform = `rotateX(${rotationXRotate}deg) rotateY(${rotationYRotate}deg)`;
