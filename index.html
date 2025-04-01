@@ -152,10 +152,10 @@
         let rotationX = 0;
         let rotationY = 0;
         let animationFrameRotateId;
-        const frictionRotate = 0.97; // Reducir la fricción para más libertad de movimiento
-        const springForceRotate = 0.002; // Reducir la fuerza del resorte
-        const dampingRotate = 0.3; // Reducir la amortiguación
-        const rotationFactorRotate = 0.25; // Aumentar la sensibilidad de rotación
+        const frictionRotate = 0.85; // Aumentar la fricción para un retorno más rápido
+        const springForceRotate = 0.01; // Ajustar la fuerza del resorte
+        const dampingRotate = 0.7; // Aumentar la amortiguación para un rebote más pronunciado
+        const rotationFactorRotate = 0.25; // Ajustar la sensibilidad de rotación
         let velocityY = 0;
         let velocityX = 0;
 
@@ -217,6 +217,12 @@
                 const resistance = tension * springForceRotate;
                 rotationY -= rotationY * resistance;
                 rotationX -= rotationX * resistance;
+
+                // Añadir un rebote más pronunciado
+                if (Math.abs(rotationX) < 1 && Math.abs(rotationY) < 1) {
+                    rotationX *= -0.5;
+                    rotationY *= -0.5;
+                }
 
                 velocityY *= dampingRotate;
                 velocityX *= dampingRotate;
