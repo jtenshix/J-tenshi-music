@@ -149,16 +149,16 @@
         const backImageTop = rotateCard.querySelector('.back-image');
         let isTouchingRotateCard = false;
         let startXRotate, startYRotate, currentXRotate, currentYRotate;
-        let rotationXRotate = 0;
-        let rotationYRotate = 0;
+        let rotationX = 0;
+        let rotationY = 0;
         let animationFrameRotateId;
-        const maxRotation = 30; // Rango máximo de rotación
-        const frictionRotate = 0.85; // Fricción ajustada
-        const springForceRotate = 0.03; // Fuerza del resorte ajustada
-        const dampingRotate = 0.6; // Amortiguación ajustada
-        const rotationFactorRotate = 0.1; // Sensibilidad de rotación reducida
-        let velocityYRotate = 0;
-        let velocityXRotate = 0;
+        const maxRotation = 80; // Aumentar el rango máximo de rotación
+        const frictionRotate = 0.9; // Reducir la fricción para un retorno más suave
+        const springForceRotate = 0.01; // Reducir la fuerza del resorte
+        const dampingRotate = 0.5; // Reducir la amortiguación
+        const rotationFactorRotate = 0.15; // Ajustar la sensibilidad de rotación
+        let velocityY = 0;
+        let velocityX = 0;
 
         const handleTouchStartRotate = (e) => {
             isTouchingRotateCard = true;
@@ -170,8 +170,8 @@
             rotateCard.style.cursor = 'grabbing';
             rotateCard.style.transition = 'transform 0s';
             cancelAnimationFrame(animationFrameRotateId);
-            velocityYRotate = 0;
-            velocityXRotate = 0;
+            velocityY = 0;
+            velocityX = 0;
             e.preventDefault();
         };
 
@@ -186,22 +186,22 @@
             const deltaY = currentYRotate - startYRotate;
 
             // Ajustar la rotación en función del movimiento del dedo
-            rotationYRotate += deltaX * rotationFactorRotate;
-            rotationXRotate -= deltaY * rotationFactorRotate;
+            rotationY += deltaX * rotationFactorRotate;
+            rotationX -= deltaY * rotationFactorRotate;
 
             // Resistencia progresiva
-            const tension = Math.sqrt(rotationXRotate ** 2 + rotationYRotate ** 2);
+            const tension = Math.sqrt(rotationX ** 2 + rotationY ** 2);
             const resistance = tension * springForceRotate;
-            rotationYRotate -= rotationYRotate * resistance;
-            rotationXRotate -= rotationXRotate * resistance;
+            rotationY -= rotationY * resistance;
+            rotationX -= rotationX * resistance;
 
             // Limitar la rotación
-            rotationYRotate = Math.max(-maxRotation, Math.min(maxRotation, rotationYRotate));
-            rotationXRotate = Math.max(-maxRotation, Math.min(maxRotation, rotationXRotate));
+            rotationY = Math.max(-maxRotation, Math.min(maxRotation, rotationY));
+            rotationX = Math.max(-maxRotation, Math.min(maxRotation, rotationX));
 
-            velocityYRotate = deltaX * 0.5;
-            velocityXRotate = -deltaY * 0.5;
-            rotateCard.style.transform = `rotateX(${rotationXRotate}deg) rotateY(${rotationYRotate}deg)`;
+            velocityY = deltaX * 0.5;
+            velocityX = -deltaY * 0.5;
+            rotateCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
             startXRotate = currentXRotate;
             startYRotate = currentYRotate;
             e.preventDefault();
@@ -212,25 +212,25 @@
             rotateCard.style.cursor = 'grab';
             rotateCard.style.transition = 'transform 0.3s ease-out';
             const animateReboundRotate = () => {
-                velocityYRotate *= frictionRotate;
-                velocityXRotate *= frictionRotate;
-                rotationYRotate += velocityYRotate;
-                rotationXRotate += velocityXRotate;
+                velocityY *= frictionRotate;
+                velocityX *= frictionRotate;
+                rotationY += velocityY;
+                rotationX += velocityX;
 
                 // Resistencia progresiva
-                const tension = Math.sqrt(rotationXRotate ** 2 + rotationYRotate ** 2);
+                const tension = Math.sqrt(rotationX ** 2 + rotationY ** 2);
                 const resistance = tension * springForceRotate;
-                rotationYRotate -= rotationYRotate * resistance;
-                rotationXRotate -= rotationXRotate * resistance;
+                rotationY -= rotationY * resistance;
+                rotationX -= rotationX * resistance;
 
-                velocityYRotate *= dampingRotate;
-                velocityXRotate *= dampingRotate;
-                rotateCard.style.transform = `rotateX(${rotationXRotate}deg) rotateY(${rotationYRotate}deg)`;
-                if (Math.abs(velocityYRotate) > 0.005 || Math.abs(velocityXRotate) > 0.005 || Math.abs(rotationYRotate) > 0.005 || Math.abs(rotationXRotate) > 0.005) {
+                velocityY *= dampingRotate;
+                velocityX *= dampingRotate;
+                rotateCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+                if (Math.abs(velocityY) > 0.005 || Math.abs(velocityX) > 0.005 || Math.abs(rotationY) > 0.005 || Math.abs(rotationX) > 0.005) {
                     animationFrameRotateId = requestAnimationFrame(animateReboundRotate);
                 } else {
-                    rotationXRotate = 0;
-                    rotationYRotate = 0;
+                    rotationX = 0;
+                    rotationY = 0;
                     rotateCard.style.transform = `rotateX(0deg) rotateY(0deg)`;
                 }
             };
