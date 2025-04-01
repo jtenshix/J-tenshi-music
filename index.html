@@ -21,8 +21,8 @@
         .card-container {
             width: 90vw;
             height: 80vh;
-            max-width: 500px;
-            max-height: 700px;
+            max-width: 300px; /* Tamaño más proporcional */
+            max-height: 420px; /* Tamaño más proporcional */
             margin: 0 auto;
             display: flex;
             justify-content: center;
@@ -155,10 +155,11 @@
         let rotationXRotate = 0;
         let rotationYRotate = 0;
         let animationFrameRotateId;
-        const frictionRotate = 0.9; /* Aumentar la fricción para un efecto más suave */
-        const springForceRotate = 0.1; /* Aumentar la fuerza del resorte */
-        const dampingRotate = 0.8; /* Aumentar la amortiguación */
-        const rotationFactorRotate = 0.3; /* Reducir la sensibilidad de la rotación */
+        const maxRotation = 20; /* Límite de rotación */
+        const frictionRotate = 0.85; /* Fricción ajustada */
+        const springForceRotate = 0.05; /* Fuerza del resorte ajustada */
+        const dampingRotate = 0.7; /* Amortiguación ajustada */
+        const rotationFactorRotate = 0.2; /* Sensibilidad de rotación reducida */
         let velocityYRotate = 0;
         let velocityXRotate = 0;
 
@@ -186,6 +187,11 @@
             const deltaY = currentYRotate - startYRotate;
             rotationYRotate += deltaX * rotationFactorRotate;
             rotationXRotate -= deltaY * rotationFactorRotate;
+
+            // Limitar la rotación
+            rotationYRotate = Math.max(-maxRotation, Math.min(maxRotation, rotationYRotate));
+            rotationXRotate = Math.max(-maxRotation, Math.min(maxRotation, rotationXRotate));
+
             velocityYRotate = deltaX * 0.5;
             velocityXRotate = -deltaY * 0.5;
             rotateCard.style.transform = `rotateX(${rotationXRotate}deg) rotateY(${rotationYRotate}deg)`;
