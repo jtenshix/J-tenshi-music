@@ -181,6 +181,8 @@
             currentYRotate = e.touches[0].clientY - rect.top - margin;
             const deltaX = currentXRotate - startXRotate;
             const deltaY = currentYRotate - startYRotate;
+
+            // Ajustar la rotación en función del movimiento del dedo
             rotationYRotate += deltaX * rotationFactorRotate;
             rotationXRotate -= deltaY * rotationFactorRotate;
 
