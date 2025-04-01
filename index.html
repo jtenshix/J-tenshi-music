@@ -1,309 +1,309 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #1a0033, #4a148c, #3f51b5);
-            min-height: 100vh;
-            overflow: hidden;
-            user-select: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dos Cartas Interactivas</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a0033, #4a148c, #3f51b5);
+            min-height: 100vh;
+            overflow: hidden;
+            user-select: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-        .card-container {
-            width: 90vw;
-            height: 80vh;
-            max-width: 300px;
-            max-height: 420px;
-            margin: 0 auto;
-            position: relative;
-            perspective: 1000px;
-        }
+        .card-container {
+            width: 90vw;
+            height: 80vh;
+            max-width: 300px;
+            max-height: 420px;
+            margin: 0 auto;
+            position: relative;
+            perspective: 1000px;
+        }
 
-        .card, .card-flip-container {
-            width: 100%;
-            height: 100%;
-            background-color: transparent;
-            border-radius: 8px;
-            transform-style: preserve-3d;
-            transition: opacity 0.3s ease-in-out;
-            position: absolute;
-            overflow: hidden;
-        }
+        .card, .card-flip-container {
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            border-radius: 8px;
+            transform-style: preserve-3d;
+            transition: opacity 0.3s ease-in-out;
+            position: absolute;
+            overflow: hidden;
+        }
 
-        .card-flip-container {
-            opacity: 0;
-            z-index: 1;
-        }
+        .card-flip-container {
+            opacity: 0;
+            z-index: 1;
+        }
 
-        .card {
-            opacity: 1;
-            z-index: 2;
-            cursor: grab;
-        }
+        .card {
+            opacity: 1;
+            z-index: 2;
+            cursor: grab;
+        }
 
-        .card img, .card-flip-face img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
+        .card img, .card-flip-face img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
 
-        .card-flip {
-            width: 100%;
-            height: 100%;
-            background-color: transparent;
-            border-radius: 8px;
-            transform-style: preserve-3d;
-            position: relative;
-            transform: rotateY(0deg);
-            transition: transform 1.2s cubic-bezier(0.4, 0.0, 0.2, 1.435);
-        }
+        .card-flip {
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            border-radius: 8px;
+            transform-style: preserve-3d;
+            position: relative;
+            transform: rotateY(0deg);
+            transition: transform 1.2s cubic-bezier(0.4, 0.0, 0.2, 1.435);
+        }
 
-        .card-flip.torbellino {
-            animation: torbellinoAnimation 2s ease-out 1;
-            transition: none;
-        }
+        .card-flip.torbellino {
+            animation: torbellinoAnimation 2s ease-out 1;
+            transition: none;
+        }
 
-        .card-flip-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+        .card-flip-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-        .card-flip-face.back {
-            transform: rotateY(180deg);
-        }
+        .card-flip-face.back {
+            transform: rotateY(180deg);
+        }
 
-        .flip-button {
-            background-color: rgba(255, 255, 255, 0.5);
-            color: #121212;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s;
-            touch-action: manipulation;
-            z-index: 10;
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+        .flip-button {
+            background-color: rgba(255, 255, 255, 0.5);
+            color: #121212;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+            touch-action: manipulation;
+            z-index: 10;
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-        .flip-button:hover {
-            background-color: rgba(255, 255, 255, 0.8);
-        }
+        .flip-button:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
 
-        .flip-button::before {
-            content: "\u21BB";
-        }
+        .flip-button::before {
+            content: "\u21BB";
+        }
 
-        @keyframes torbellinoAnimation {
-            from { transform: rotateY(0deg); }
-            to { transform: rotateY(2160deg); }
-        }
-    </style>
+        @keyframes torbellinoAnimation {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(2160deg); }
+        }
+    </style>
 </head>
 <body>
 
-    <div class="card-container">
-        <div class="card" id="rotateCard">
-            <img class="front-image" src="carta_frente.png.jpg" alt="Frente de la Carta" style="display: block;">
-            <img class="back-image" src="carta_dorso.png.png" alt="Dorso de la Carta" style="display: none;">
-        </div>
-        <div class="card-flip-container" id="flipCardContainer">
-            <div class="card-flip" id="flipCard">
-                <div class="card-flip-face front">
-                    <img src="carta_frente.png.jpg" alt="Frente de la Carta (Volteo)">
-                </div>
-                <div class="card-flip-face back">
-                    <img src="carta_dorso.png.png" alt="Dorso de la Carta (Volteo)">
-                </div>
-            </div>
-        </div>
-    </div>
-    <button class="flip-button" id="toggleFlipBtn"></button>
+    <div class="card-container">
+        <div class="card" id="rotateCard">
+            <img class="front-image" src="carta_frente.png.jpg" alt="Frente de la Carta" style="display: block;">
+            <img class="back-image" src="carta_dorso.png.png" alt="Dorso de la Carta" style="display: none;">
+        </div>
+        <div class="card-flip-container" id="flipCardContainer">
+            <div class="card-flip" id="flipCard">
+                <div class="card-flip-face front">
+                    <img src="carta_frente.png.jpg" alt="Frente de la Carta (Volteo)">
+                </div>
+                <div class="card-flip-face back">
+                    <img src="carta_dorso.png.png" alt="Dorso de la Carta (Volteo)">
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="flip-button" id="toggleFlipBtn"></button>
 
-    <script>
-        const rotateCard = document.getElementById('rotateCard');
-        const frontImageTop = rotateCard.querySelector('.front-image');
-        const backImageTop = rotateCard.querySelector('.back-image');
-        let isTouchingRotateCard = false;
-        let startXRotate, startYRotate, currentXRotate, currentYRotate;
-        let rotationXRotate = 0;
-        let rotationYRotate = 0;
-        let animationFrameRotateId;
-        const maxRotation = 30; // Rango máximo de rotación
-        const frictionRotate = 0.85; // Fricción ajustada
-        const springForceRotate = 0.03; // Fuerza del resorte ajustada
-        const dampingRotate = 0.6; // Amortiguación ajustada
-        const rotationFactorRotate = 0.1; // Sensibilidad de rotación reducida
-        let velocityYRotate = 0;
-        let velocityXRotate = 0;
+    <script>
+        const rotateCard = document.getElementById('rotateCard');
+        const frontImageTop = rotateCard.querySelector('.front-image');
+        const backImageTop = rotateCard.querySelector('.back-image');
+        let isTouchingRotateCard = false;
+        let startXRotate, startYRotate, currentXRotate, currentYRotate;
+        let rotationXRotate = 0;
+        let rotationYRotate = 0;
+        let animationFrameRotateId;
+        const maxRotation = 30; // Rango máximo de rotación
+        const frictionRotate = 0.85; // Fricción ajustada
+        const springForceRotate = 0.03; // Fuerza del resorte ajustada
+        const dampingRotate = 0.6; // Amortiguación ajustada
+        const rotationFactorRotate = 0.1; // Sensibilidad de rotación reducida
+        let velocityYRotate = 0;
+        let velocityXRotate = 0;
 
-        const handleTouchStartRotate = (e) => {
-            isTouchingRotateCard = true;
-            const rect = rotateCard.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            startXRotate = e.touches[0].clientX - centerX;
-            startYRotate = e.touches[0].clientY - centerY;
-            rotateCard.style.cursor = 'grabbing';
-            rotateCard.style.transition = 'transform 0s';
-            cancelAnimationFrame(animationFrameRotateId);
-            velocityYRotate = 0;
-            velocityXRotate = 0;
-            e.preventDefault();
-        };
+        const handleTouchStartRotate = (e) => {
+            isTouchingRotateCard = true;
+            const rect = rotateCard.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            startXRotate = e.touches[0].clientX - centerX;
+            startYRotate = e.touches[0].clientY - centerY;
+            rotateCard.style.cursor = 'grabbing';
+            rotateCard.style.transition = 'transform 0s';
+            cancelAnimationFrame(animationFrameRotateId);
+            velocityYRotate = 0;
+            velocityXRotate = 0;
+            e.preventDefault();
+        };
 
-        const handleTouchMoveRotate = (e) => {
-            if (!isTouchingRotateCard) return;
-            const rect = rotateCard.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            currentXRotate = e.touches[0].clientX - centerX;
-            currentYRotate = e.touches[0].clientY - centerY;
-            const deltaX = currentXRotate - startXRotate;
-            const deltaY = currentYRotate - startYRotate;
+        const handleTouchMoveRotate = (e) => {
+            if (!isTouchingRotateCard) return;
+            const rect = rotateCard.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            currentXRotate = e.touches[0].clientX - centerX;
+            currentYRotate = e.touches[0].clientY - centerY;
+            const deltaX = currentXRotate - startXRotate;
+            const deltaY = currentYRotate - startYRotate;
 
-            // Ajustar la rotación en función del movimiento del dedo
-            rotationYRotate += deltaX * rotationFactorRotate;
-            rotationXRotate -= deltaY * rotationFactorRotate;
+            // Ajustar la rotación en función del movimiento del dedo
+            rotationYRotate += deltaX * rotationFactorRotate;
+            rotationXRotate -= deltaY * rotationFactorRotate;
 
-            // Resistencia progresiva
-            const tension = Math.sqrt(rotationXRotate ** 2 + rotationYRotate ** 2);
-            const resistance = tension * springForceRotate;
-            rotationYRotate -= rotationYRotate * resistance;
-            rotationXRotate -= rotationXRotate * resistance;
+            // Resistencia progresiva
+            const tension = Math.sqrt(rotationXRotate ** 2 + rotationYRotate ** 2);
+            const resistance = tension * springForceRotate;
+            rotationYRotate -= rotationYRotate * resistance;
+            rotationXRotate -= rotationXRotate * resistance;
 
-            // Limitar la rotación
-            rotationYRotate = Math.max(-maxRotation, Math.min(maxRotation, rotationYRotate));
-            rotationXRotate = Math.max(-maxRotation, Math.min(maxRotation, rotationXRotate));
+            // Limitar la rotación
+            rotationYRotate = Math.max(-maxRotation, Math.min(maxRotation, rotationYRotate));
+            rotationXRotate = Math.max(-maxRotation, Math.min(maxRotation, rotationXRotate));
 
-            velocityYRotate = deltaX * 0.5;
-            velocityXRotate = -deltaY * 0.5;
-            rotateCard.style.transform = `rotateX(${rotationXRotate}deg) rotateY(${rotationYRotate}deg)`;
-            startXRotate = currentXRotate;
-            startYRotate = currentYRotate;
-            e.preventDefault();
-        };
+            velocityYRotate = deltaX * 0.5;
+            velocityXRotate = -deltaY * 0.5;
+            rotateCard.style.transform = `rotateX(${rotationXRotate}deg) rotateY(${rotationYRotate}deg)`;
+            startXRotate = currentXRotate;
+            startYRotate = currentYRotate;
+            e.preventDefault();
+        };
 
-        const handleTouchEndRotate = () => {
-            isTouchingRotateCard = false;
-            rotateCard.style.cursor = 'grab';
-            rotateCard.style.transition = 'transform 0.3s ease-out';
-            const animateReboundRotate = () => {
-                velocityYRotate *= frictionRotate;
-                velocityXRotate *= frictionRotate;
-                rotationYRotate += velocityYRotate;
-                rotationXRotate += velocityXRotate;
+        const handleTouchEndRotate = () => {
+            isTouchingRotateCard = false;
+            rotateCard.style.cursor = 'grab';
+            rotateCard.style.transition = 'transform 0.3s ease-out';
+            const animateReboundRotate = () => {
+                velocityYRotate *= frictionRotate;
+                velocityXRotate *= frictionRotate;
+                rotationYRotate += velocityYRotate;
+                rotationXRotate += velocityXRotate;
 
-                // Resistencia progresiva
-                const tension = Math.sqrt(rotationXRotate ** 2 + rotationYRotate ** 2);
-                const resistance = tension * springForceRotate;
-                rotationYRotate -= rotationYRotate * resistance;
-                rotationXRotate -= rotationXRotate * resistance;
+                // Resistencia progresiva
+                const tension = Math.sqrt(rotationXRotate ** 2 + rotationYRotate ** 2);
+                const resistance = tension * springForceRotate;
+                rotationYRotate -= rotationYRotate * resistance;
+                rotationXRotate -= rotationXRotate * resistance;
 
-                velocityYRotate *= dampingRotate;
-                velocityXRotate *= dampingRotate;
-                rotateCard.style.transform = `rotateX(${rotationXRotate}deg) rotateY(${rotationYRotate}deg)`;
-                if (Math.abs(velocityYRotate) > 0.005 || Math.abs(velocityXRotate) > 0.005 || Math.abs(rotationYRotate) > 0.005 || Math.abs(rotationXRotate) > 0.005) {
-                    animationFrameRotateId = requestAnimationFrame(animateReboundRotate);
-                } else {
-                    rotationXRotate = 0;
-                    rotationYRotate = 0;
-                    rotateCard.style.transform = `rotateX(0deg) rotateY(0deg)`;
-                }
-            };
-            animateReboundRotate();
-        };
+                velocityYRotate *= dampingRotate;
+                velocityXRotate *= dampingRotate;
+                rotateCard.style.transform = `rotateX(${rotationXRotate}deg) rotateY(${rotationYRotate}deg)`;
+                if (Math.abs(velocityYRotate) > 0.005 || Math.abs(velocityXRotate) > 0.005 || Math.abs(rotationYRotate) > 0.005 || Math.abs(rotationXRotate) > 0.005) {
+                    animationFrameRotateId = requestAnimationFrame(animateReboundRotate);
+                } else {
+                    rotationXRotate = 0;
+                    rotationYRotate = 0;
+                    rotateCard.style.transform = `rotateX(0deg) rotateY(0deg)`;
+                }
+            };
+            animateReboundRotate();
+        };
 
-        const handleTouchCancelRotate = () => {
-            isTouchingRotateCard = false;
-            handleTouchEndRotate();
-        };
+        const handleTouchCancelRotate = () => {
+            isTouchingRotateCard = false;
+            handleTouchEndRotate();
+        };
 
-        rotateCard.addEventListener('touchstart', handleTouchStartRotate);
-        rotateCard.addEventListener('touchmove', handleTouchMoveRotate);
-        rotateCard.addEventListener('touchend', handleTouchEndRotate);
-        rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
+        rotateCard.addEventListener('touchstart', handleTouchStartRotate);
+        rotateCard.addEventListener('touchmove', handleTouchMoveRotate);
+        rotateCard.addEventListener('touchend', handleTouchEndRotate);
+        rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-        const rotateCardElement = document.getElementById('rotateCard');
-        const flipCardContainer = document.getElementById('flipCardContainer');
-        const flipCard = document.getElementById('flipCard');
-        const toggleFlipBtn = document.getElementById('toggleFlipBtn');
-        let currentRotation = 0;
-        let flipCount = 0;
-        let isFlipping = false;
-        const fadeDuration = 300;
-        const torbellinoDuration = 2000;
-        let isFrontVisibleTop = true;
+        const rotateCardElement = document.getElementById('rotateCard');
+        const flipCardContainer = document.getElementById('flipCardContainer');
+        const flipCard = document.getElementById('flipCard');
+        const toggleFlipBtn = document.getElementById('toggleFlipBtn');
+        let currentRotation = 0;
+        let flipCount = 0;
+        let isFlipping = false;
+        const fadeDuration = 300;
+        const torbellinoDuration = 2000;
+        let isFrontVisibleTop = true;
 
-        flipCardContainer.style.opacity = 0;
-        frontImageTop.style.display = 'block';
-        backImageTop.style.display = 'none';
+        flipCardContainer.style.opacity = 0;
+        frontImageTop.style.display = 'block';
+        backImageTop.style.display = 'none';
 
-        toggleFlipBtn.addEventListener('click', () => {
-            if (!isFlipping) {
-                isFlipping = true;
+        toggleFlipBtn.addEventListener('click', () => {
+            if (!isFlipping) {
+                isFlipping = true;
 
-                rotateCardElement.style.opacity = 0;
-                flipCardContainer.style.opacity = 1;
+                rotateCardElement.style.opacity = 0;
+                flipCardContainer.style.opacity = 1;
 
-                if (isFrontVisibleTop) {
-                    frontImageTop.style.display = 'none';
-                    backImageTop.style.display = 'block';
-                } else {
-                    frontImageTop.style.display = 'block';
-                    backImageTop.style.display = 'none';
-                }
-                isFrontVisibleTop = !isFrontVisibleTop;
+                if (isFrontVisibleTop) {
+                    frontImageTop.style.display = 'none';
+                    backImageTop.style.display = 'block';
+                } else {
+                    frontImageTop.style.display = 'block';
+                    backImageTop.style.display = 'none';
+                }
+                isFrontVisibleTop = !isFrontVisibleTop;
 
-                flipCount++;
+                flipCount++;
 
-                const resetVisibility = () => {
-                    rotateCardElement.style.opacity = 1;
-                    flipCardContainer.style.opacity = 0;
-                    isFlipping = false;
-                };
+                const resetVisibility = () => {
+                    rotateCardElement.style.opacity = 1;
+                    flipCardContainer.style.opacity = 0;
+                    isFlipping = false;
+                };
 
-                let flipDuration = 1200; // Aumentar duración para un volteo más lento
-                if (flipCount % 10 === 0) {
-                    flipCard.classList.add('torbellino');
-                    flipDuration = torbellinoDuration;
-                    setTimeout(() => {
-                        flipCard.classList.remove('torbellino');
-                        currentRotation = 0;
-                        flipCard.style.transform = `rotateY(${currentRotation}deg)`;
-                        flipCount = 0;
-                    }, torbellinoDuration);
-                } else {
-                    currentRotation += 180;
-                    flipCard.style.transform = `rotateY(${currentRotation}deg)`;
-                }
+                let flipDuration = 1200; // Aumentar duración para un volteo más lento
+                if (flipCount % 10 === 0) {
+                    flipCard.classList.add('torbellino');
+                    flipDuration = torbellinoDuration;
+                    setTimeout(() => {
+                        flipCard.classList.remove('torbellino');
+                        currentRotation = 0;
+                        flipCard.style.transform = `rotateY(${currentRotation}deg)`;
+                        flipCount = 0;
+                    }, torbellinoDuration);
+                } else {
+                    currentRotation += 180;
+                    flipCard.style.transform = `rotateY(${currentRotation}deg)`;
+                }
 
-                setTimeout(resetVisibility, flipDuration);
-            }
-        });
-    </script>
+                setTimeout(resetVisibility, flipDuration);
+            }
+        });
+    </script>
 </body>
 </html>
