@@ -252,21 +252,45 @@
         backImageTop.style.display = 'none';
 
         toggleFlipBtn.addEventListener('click', () => {
-            if (isFlipping) return;
-            isFlipping = true;
-            flipCardContainer.style.transition = `opacity ${fadeDuration}ms ease-out`;
-            flipCardContainer.style.opacity = 1;
-            setTimeout(() => {
-                flipCard.classList.add('torbellino');
-                isFlipping = false;
-            }, torbellinoDuration);
-            flipCount++;
-            if (flipCount % 2 === 0) {
-                frontImageTop.style.display = 'block';
-                backImageTop.style.display = 'none';
-            } else {
-                frontImageTop.style.display = 'none';
-                backImageTop.style.display = 'block';
+            if (!isFlipping) {
+                isFlipping = true;
+
+                rotateCardElement.style.opacity = 0;
+                flipCardContainer.style.opacity = 1;
+
+                if (isFrontVisibleTop) {
+                    frontImageTop.style.display = 'none';
+                    backImageTop.style.display = 'block';
+                } else {
+                    frontImageTop.style.display = 'block';
+                    backImageTop.style.display = 'none';
+                }
+                isFrontVisibleTop = !isFrontVisibleTop;
+
+                flipCount++;
+
+                const resetVisibility = () => {
+                    rotateCardElement.style.opacity = 1;
+                    flipCardContainer.style.opacity = 0;
+                    isFlipping = false;
+                };
+
+                let flipDuration = 600;
+                if (flipCount % 10 === 0) {
+                    flipCard.classList.add('torbellino');
+                    flipDuration = torbellinoDuration;
+                    setTimeout(() => {
+                        flipCard.classList.remove('torbellino');
+                        currentRotation = 0;
+                        flipCard.style.transform = `rotateY(${currentRotation}deg)`;
+                        flipCount = 0;
+                    }, torbellinoDuration);
+                } else {
+                    currentRotation += 180;
+                    flipCard.style.transform = `rotateY(${currentRotation}deg)`;
+                }
+
+                setTimeout(resetVisibility, flipDuration);
             }
         });
     </script>
