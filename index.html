@@ -63,7 +63,7 @@
         .card img, .card-flip-face img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* Asegura que la imagen cubra completamente el área */
             border-radius: 8px;
             position: absolute;
             top: 0;
@@ -97,6 +97,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            background-color: white; /* Asegura que el fondo sea blanco */
         }
 
         .card-flip-face.back {
@@ -174,142 +175,4 @@
         const rotateCard = document.getElementById('rotateCard');
         const frontImageTop = rotateCard.querySelector('.front-image');
         const backImageTop = rotateCard.querySelector('.back-image');
-        let isTouchingRotateCard = false;
-        let startXRotate, startYRotate, currentXRotate, currentYRotate;
-        let rotationXRotate = 0;
-        let rotationYRotate = 0;
-        let animationFrameRotateId;
-        const frictionRotate = 0.88;
-        const springForceRotate = 0.08;
-        const dampingRotate = 0.75;
-        const rotationFactorRotate = 0.5;
-        let velocityYRotate = 0;
-        let velocityXRotate = 0;
-
-        const handleTouchStartRotate = (e) => {
-            isTouchingRotateCard = true;
-            const rect = rotateCard.getBoundingClientRect();
-            const margin = rect.width * 0.1;
-            startXRotate = e.touches[0].clientX - rect.left - margin;
-            startYRotate = e.touches[0].clientY - rect.top - margin;
-            rotateCard.style.cursor = 'grabbing';
-            rotateCard.style.transition = 'transform 0s';
-            cancelAnimationFrame(animationFrameRotateId);
-            velocityYRotate = 0;
-            velocityXRotate = 0;
-            e.preventDefault();
-        };
-
-        const handleTouchMoveRotate = (e) => {
-            if (!isTouchingRotateCard) return;
-            const rect = rotateCard.getBoundingClientRect();
-            const margin = rect.width * 0.1;
-            currentXRotate = e.touches[0].clientX - rect.left - margin;
-            currentYRotate = e.touches[0].clientY - rect.top - margin;
-            const deltaX = currentXRotate - startXRotate;
-            const deltaY = currentYRotate - startYRotate;
-            rotationYRotate += deltaX * rotationFactorRotate;
-            rotationXRotate -= deltaY * rotationFactorRotate;
-            velocityYRotate = deltaX * 0.5;
-            velocityXRotate = -deltaY * 0.5;
-            rotateCard.style.transform = `rotateX(${rotationXRotate}deg) rotateY(${rotationYRotate}deg)`;
-            startXRotate = currentXRotate;
-            startYRotate = currentYRotate;
-            e.preventDefault();
-        };
-
-        const handleTouchEndRotate = () => {
-            isTouchingRotateCard = false;
-            rotateCard.style.cursor = 'grab';
-            rotateCard.style.transition = 'transform 0.3s ease-out';
-            const animateReboundRotate = () => {
-                velocityYRotate *= frictionRotate;
-                velocityXRotate *= frictionRotate;
-                rotationYRotate += velocityYRotate;
-                rotationXRotate += velocityXRotate;
-                rotationYRotate += -rotationYRotate * springForceRotate;
-                rotationXRotate += -rotationXRotate * springForceRotate;
-                velocityYRotate *= dampingRotate;
-                velocityXRotate *= dampingRotate;
-                rotateCard.style.transform = `rotateX(${rotationXRotate}deg) rotateY(${rotationYRotate}deg)`;
-                if (Math.abs(velocityYRotate) > 0.005 || Math.abs(velocityXRotate) > 0.005 || Math.abs(rotationYRotate) > 0.005 || Math.abs(rotationXRotate) > 0.005) {
-                    animationFrameRotateId = requestAnimationFrame(animateReboundRotate);
-                } else {
-                    rotationXRotate = 0;
-                    rotationYRotate = 0;
-                    rotateCard.style.transform = `rotateX(0deg) rotateY(0deg)`;
-                }
-            };
-            animateReboundRotate();
-        };
-
-        const handleTouchCancelRotate = () => {
-            isTouchingRotateCard = false;
-            handleTouchEndRotate();
-        };
-
-        rotateCard.addEventListener('touchstart', handleTouchStartRotate);
-        rotateCard.addEventListener('touchmove', handleTouchMoveRotate);
-        rotateCard.addEventListener('touchend', handleTouchEndRotate);
-        rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
-
-        const rotateCardElement = document.getElementById('rotateCard');
-        const flipCardContainer = document.getElementById('flipCardContainer');
-        const flipCard = document.getElementById('flipCard');
-        const toggleFlipBtn = document.getElementById('toggleFlipBtn');
-        let currentRotation = 0;
-        let flipCount = 0;
-        let isFlipping = false;
-        const fadeDuration = 300;
-        const torbellinoDuration = 2000;
-        let isFrontVisibleTop = true;
-
-        flipCardContainer.style.opacity = 0;
-        frontImageTop.style.display = 'block';
-        backImageTop.style.display = 'none';
-
-        toggleFlipBtn.addEventListener('click', () => {
-            if (!isFlipping) {
-                isFlipping = true;
-
-                rotateCardElement.style.opacity = 0;
-                flipCardContainer.style.opacity = 1;
-
-                if (isFrontVisibleTop) {
-                    frontImageTop.style.display = 'none';
-                    backImageTop.style.display = 'block';
-                } else {
-                    frontImageTop.style.display = 'block';
-                    backImageTop.style.display = 'none';
-                }
-                isFrontVisibleTop = !isFrontVisibleTop;
-
-                flipCount++;
-
-                const resetVisibility = () => {
-                    rotateCardElement.style.opacity = 1;
-                    flipCardContainer.style.opacity = 0;
-                    isFlipping = false;
-                };
-
-                let flipDuration = 600;
-                if (flipCount % 10 === 0) {
-                    flipCard.classList.add('torbellino');
-                    flipDuration = torbellinoDuration;
-                    setTimeout(() => {
-                        flipCard.classList.remove('torbellino');
-                        currentRotation = 0;
-                        flipCard.style.transform = `rotateY(${currentRotation}deg)`;
-                        flipCount = 0;
-                    }, torbellinoDuration);
-                } else {
-                    currentRotation += 180;
-                    flipCard.style.transform = `rotateY(${currentRotation}deg)`;
-                }
-
-                setTimeout(resetVisibility, flipDuration);
-            }
-        });
-    </script>
-</body>
-</html>
+        let isTouchingRotateCard = fals
