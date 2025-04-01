@@ -160,6 +160,30 @@
         let velocityYRotate = 0;
         let velocityXRotate = 0;
 
+        function updateRotation() {
+    let forceX = -rotationXRotate * springForceRotate;
+    let forceY = -rotationYRotate * springForceRotate;
+    
+    // 🛠️ Resistencia progresiva y rebote mejorado
+    forceX *= Math.abs(rotationXRotate) * 0.02 + 1;
+    forceY *= Math.abs(rotationYRotate) * 0.02 + 1;
+    
+    velocityXRotate += forceX;
+    velocityYRotate += forceY;
+    
+    velocityXRotate *= frictionRotate;
+    velocityYRotate *= frictionRotate;
+    
+    rotationXRotate += velocityXRotate;
+    rotationYRotate += velocityYRotate;
+
+    // Aplicamos la rotación con suavizado
+    rotateCard.style.transform = `rotateX(${rotationYRotate}deg) rotateY(${rotationXRotate}deg)`;
+
+    animationFrameRotateId = requestAnimationFrame(updateRotation);
+}
+
+
         const handleTouchStartRotate = (e) => {
             isTouchingRotateCard = true;
             const rect = rotateCard.getBoundingClientRect();
