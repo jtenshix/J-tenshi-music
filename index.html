@@ -154,9 +154,9 @@
         let animationFrameRotateId;
         const maxRotation = 30; // Rango máximo de rotación
         const frictionRotate = 0.85; // Fricción ajustada
-        const springForceRotate = 0.05; // Fuerza del resorte aumentada
+        const springForceRotate = 0.03; // Fuerza del resorte ajustada
         const dampingRotate = 0.6; // Amortiguación ajustada
-        const rotationFactorRotate = 0.05; // Sensibilidad de rotación reducida
+        const rotationFactorRotate = 0.1; // Sensibilidad de rotación reducida
         let velocityYRotate = 0;
         let velocityXRotate = 0;
 
@@ -188,6 +188,12 @@
             // Ajustar la rotación en función del movimiento del dedo
             rotationYRotate += deltaX * rotationFactorRotate;
             rotationXRotate -= deltaY * rotationFactorRotate;
+
+            // Resistencia progresiva
+            const tension = Math.sqrt(rotationXRotate ** 2 + rotationYRotate ** 2);
+            const resistance = tension * springForceRotate;
+            rotationYRotate -= rotationYRotate * resistance;
+            rotationXRotate -= rotationXRotate * resistance;
 
             // Limitar la rotación
             rotationYRotate = Math.max(-maxRotation, Math.min(maxRotation, rotationYRotate));
