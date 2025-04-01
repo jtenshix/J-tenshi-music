@@ -152,11 +152,11 @@
         let rotationX = 0;
         let rotationY = 0;
         let animationFrameRotateId;
-        const maxRotation = 80; // Aumentar el rango máximo de rotación
-        const frictionRotate = 0.9; // Reducir la fricción para un retorno más suave
-        const springForceRotate = 0.01; // Reducir la fuerza del resorte
-        const dampingRotate = 0.5; // Reducir la amortiguación
-        const rotationFactorRotate = 0.15; // Ajustar la sensibilidad de rotación
+        const maxRotation = 360; // Permitir rotación completa
+        const frictionRotate = 0.95; // Reducir la fricción para más libertad de movimiento
+        const springForceRotate = 0.005; // Reducir la fuerza del resorte
+        const dampingRotate = 0.4; // Reducir la amortiguación
+        const rotationFactorRotate = 0.2; // Aumentar la sensibilidad de rotación
         let velocityY = 0;
         let velocityX = 0;
 
@@ -195,9 +195,9 @@
             rotationY -= rotationY * resistance;
             rotationX -= rotationX * resistance;
 
-            // Limitar la rotación
-            rotationY = Math.max(-maxRotation, Math.min(maxRotation, rotationY));
-            rotationX = Math.max(-maxRotation, Math.min(maxRotation, rotationX));
+            // Eliminar el límite de rotación
+            // rotationY = Math.max(-maxRotation, Math.min(maxRotation, rotationY));
+            // rotationX = Math.max(-maxRotation, Math.min(maxRotation, rotationX));
 
             velocityY = deltaX * 0.5;
             velocityX = -deltaY * 0.5;
