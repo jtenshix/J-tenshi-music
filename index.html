@@ -47,7 +47,6 @@
             opacity: 1;
             z-index: 2;
             cursor: grab;
-            animation: floatAnimation 2s ease-in-out infinite;
         }
 
         .card img, .card-flip-face img {
@@ -121,15 +120,6 @@
         @keyframes torbellinoAnimation {
             from { transform: rotateY(0deg); }
             to { transform: rotateY(2160deg); }
-        }
-
-        @keyframes floatAnimation {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
         }
     </style>
 </head>
