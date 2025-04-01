@@ -67,7 +67,7 @@
             transform-style: preserve-3d;
             position: relative;
             transform: rotateY(0deg);
-            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1.435);
+            transition: transform 1.2s cubic-bezier(0.4, 0.0, 0.2, 1.435); /* Aumentar duración */
         }
 
         .card-flip.torbellino {
@@ -163,9 +163,10 @@
         const handleTouchStartRotate = (e) => {
             isTouchingRotateCard = true;
             const rect = rotateCard.getBoundingClientRect();
-            const margin = rect.width * 0.1;
-            startXRotate = e.touches[0].clientX - rect.left - margin;
-            startYRotate = e.touches[0].clientY - rect.top - margin;
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            startXRotate = e.touches[0].clientX - centerX;
+            startYRotate = e.touches[0].clientY - centerY;
             rotateCard.style.cursor = 'grabbing';
             rotateCard.style.transition = 'transform 0s';
             cancelAnimationFrame(animationFrameRotateId);
@@ -177,9 +178,10 @@
         const handleTouchMoveRotate = (e) => {
             if (!isTouchingRotateCard) return;
             const rect = rotateCard.getBoundingClientRect();
-            const margin = rect.width * 0.1;
-            currentXRotate = e.touches[0].clientX - rect.left - margin;
-            currentYRotate = e.touches[0].clientY - rect.top - margin;
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            currentXRotate = e.touches[0].clientX - centerX;
+            currentYRotate = e.touches[0].clientY - centerY;
             const deltaX = currentXRotate - startXRotate;
             const deltaY = currentYRotate - startYRotate;
 
@@ -278,7 +280,7 @@
                     isFlipping = false;
                 };
 
-                let flipDuration = 600;
+                let flipDuration = 1200; // Aumentar duración para un volteo más lento
                 if (flipCount % 10 === 0) {
                     flipCard.classList.add('torbellino');
                     flipDuration = torbellinoDuration;
