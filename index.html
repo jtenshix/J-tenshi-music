@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dos Cartas Interactivas</title>
+    <title>Cartas Interactivas con Partículas</title>
     <style>
         body {
             margin: 0;
@@ -15,6 +15,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
         }
 
         .card-container {
@@ -117,6 +118,16 @@
             content: "\u21BB";
         }
 
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
         @keyframes torbellinoAnimation {
             from { transform: rotateY(0deg); }
             to { transform: rotateY(2160deg); }
@@ -125,6 +136,7 @@
 </head>
 <body>
 
+    <canvas id="particleCanvas"></canvas>
     <div class="card-container">
         <div class="card" id="rotateCard">
             <img class="front-image" src="carta_frente.png.jpg" alt="Frente de la Carta" style="display: block;">
@@ -152,10 +164,10 @@
         let rotationX = 0;
         let rotationY = 0;
         let animationFrameRotateId;
-        const frictionRotate = 0.9; // Reducir la fricción para más libertad de movimiento
-        const springForceRotate = 0.005; // Ajustar la fuerza del resorte
-        const dampingRotate = 0.5; // Reducir la amortiguación para un movimiento más suave
-        const rotationFactorRotate = 0.3; // Aumentar la sensibilidad de rotación
+        const frictionRotate = 0.9;
+        const springForceRotate = 0.005;
+        const dampingRotate = 0.5;
+        const rotationFactorRotate = 0.3;
         let velocityY = 0;
         let velocityX = 0;
 
@@ -184,11 +196,9 @@
             const deltaX = currentXRotate - startXRotate;
             const deltaY = currentYRotate - startYRotate;
 
-            // Ajustar la rotación en función del movimiento del dedo
             rotationY += deltaX * rotationFactorRotate;
             rotationX -= deltaY * rotationFactorRotate;
 
-            // Resistencia progresiva
             const tension = Math.sqrt(rotationX ** 2 + rotationY ** 2);
             const resistance = tension * springForceRotate;
             rotationY -= rotationY * resistance;
@@ -212,13 +222,11 @@
                 rotationY += velocityY;
                 rotationX += velocityX;
 
-                // Resistencia progresiva
                 const tension = Math.sqrt(rotationX ** 2 + rotationY ** 2);
                 const resistance = tension * springForceRotate;
                 rotationY -= rotationY * resistance;
                 rotationX -= rotationX * resistance;
 
-                // Añadir un rebote más pronunciado
                 if (Math.abs(rotationX) < 1 && Math.abs(rotationY) < 1) {
                     rotationX *= -0.5;
                     rotationY *= -0.5;
@@ -287,7 +295,7 @@
                     isFlipping = false;
                 };
 
-                let flipDuration = 1200; // Aumentar duración para un volteo más lento
+                let flipDuration = 1200;
                 if (flipCount % 10 === 0) {
                     flipCard.classList.add('torbellino');
                     flipDuration = torbellinoDuration;
@@ -305,6 +313,93 @@
                 setTimeout(resetVisibility, flipDuration);
             }
         });
+
+        // Particle setup
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        const particles = [];
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 0.2;
+                this.vy = (Math.random() - 0.5) * 0.2;
+                this.radius = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) {
+                    this.vx = -this.vx;
+                }
+
+                if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) {
+                    this.vy = -this.vy;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                ctx.fill();
+            }
+        }
+
+        function createParticles() {
+            for (let i = 0; i < 50; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                particles.push(new Particle(x, y));
+            }
+        }
+
+        function updateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            requestAnimationFrame(updateParticles);
+        }
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        createParticles();
+        updateParticles();
+
+        function checkCollision(particle) {
+            const rect = rotateCard.getBoundingClientRect();
+            const cardCenterX = rect.left + rect.width / 2;
+            const cardCenterY = rect.top + rect.height / 2;
+            const distance = Math.sqrt((particle.x - cardCenterX) ** 2 + (particle.y - cardCenterY) ** 2);
+
+            if (distance < rect.width / 2) {
+                const angle = Math.atan2(particle.y - cardCenterY, particle.x - cardCenterX);
+                particle.vx = Math.cos(angle) * 0.5;
+                particle.vy = Math.sin(angle) * 0.5;
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(particle => {
+                particle.update();
+                checkCollision(particle);
+                particle.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        animate();
     </script>
 </body>
 </html>
