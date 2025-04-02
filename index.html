@@ -116,8 +116,7 @@
             display: none; /* Ocultar el botón de YouTube por defecto */
         }
 
-        .card-flip-face.back .youtube-button,
-        .card .back-image + .youtube-button {
+        .card-flip-face.back .youtube-button {
             display: flex; /* Mostrar el botón de YouTube solo en la cara trasera */
         }
 
@@ -200,9 +199,6 @@
         <div class="card" id="rotateCard">
             <img class="front-image" src="carta_frente.png.jpg" alt="Frente de la Carta" style="display: block;">
             <img class="back-image" src="carta_dorso.png.png" alt="Dorso de la Carta" style="display: none;">
-            <button class="youtube-button" onclick="window.open('https://www.youtube.com/channel/UCg2fr3xBhOk34a1TocdT5jw', '_blank')">
-                <img src="https://example.com/youtube-icon.png" alt="YouTube">
-            </button>
         </div>
         <div class="card-flip-container" id="flipCardContainer">
             <div class="card-flip" id="flipCard">
