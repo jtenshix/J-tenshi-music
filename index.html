@@ -91,31 +91,29 @@
         }
 
         .flip-button {
-            background-color: rgba(255, 255, 255, 0.5);
-            color: #121212;
+            background-color: rgba(255, 255, 255, 0.7);
             border: none;
             width: 40px;
             height: 40px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s;
-            touch-action: manipulation;
-            z-index: 10;
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: background 0.3s;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            z-index: 10;
+        }
+
+        .flip-button img {
+            width: 24px;
+            height: 24px;
         }
 
         .flip-button:hover {
-            background-color: rgba(255, 255, 255, 0.8);
-        }
-
-        .flip-button::before {
-            content: "\u21BB";
+            background-color: rgba(255, 255, 255, 0.9);
         }
 
         canvas {
@@ -131,6 +129,20 @@
         @keyframes torbellinoAnimation {
             from { transform: rotateY(0deg); }
             to { transform: rotateY(2160deg); }
+        }
+
+        @media (max-width: 600px) {
+            .flip-button {
+                width: 36px;
+                height: 36px;
+                bottom: 8px;
+                right: 8px;
+            }
+
+            .flip-button img {
+                width: 20px;
+                height: 20px;
+            }
         }
     </style>
 </head>
@@ -153,7 +165,9 @@
             </div>
         </div>
     </div>
-    <button class="flip-button" id="toggleFlipBtn"></button>
+    <button class="flip-button" id="toggleFlipBtn">
+        <img src="https://example.com/flechas.png" alt="Voltear">
+    </button>
 
     <script>
         const rotateCard = document.getElementById('rotateCard');
