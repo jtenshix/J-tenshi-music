@@ -84,7 +84,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column; /* Para alinear la imagen y el botón verticalmente */
         }
 
         .card-flip-face.back {
@@ -186,24 +185,6 @@
                 font-size: 20px;
             }
         }
-
-        /* Estilos para el botón de YouTube personalizado */
-        .youtube-custom-button {
-            background-color: #FF0000;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-            margin-top: 10px; /* Espacio entre la imagen y el botón */
-            transition: background-color 0.3s ease;
-        }
-
-        .youtube-custom-button:hover {
-            background-color: #CC0000;
-        }
     </style>
 </head>
 <body>
@@ -213,7 +194,9 @@
         <div class="card" id="rotateCard">
             <img class="front-image" src="carta_frente.png.jpg" alt="Frente de la Carta" style="display: block;">
             <img class="back-image" src="carta_dorso.png.png" alt="Dorso de la Carta" style="display: none;">
-            <button class="youtube-custom-button" onclick="window.open('https://www.youtube.com/@j-tenshimus1c', '_blank')">YUTU</button>
+            <button class="youtube-button" onclick="window.open('https://www.youtube.com/channel/UCg2fr3xBhOk34a1TocdT5jw', '_blank')">
+                <img src="https://example.com/youtube-icon.png" alt="YouTube">
+            </button>
         </div>
         <div class="card-flip-container" id="flipCardContainer">
             <div class="card-flip" id="flipCard">
@@ -222,7 +205,9 @@
                 </div>
                 <div class="card-flip-face back">
                     <img src="carta_dorso.png.png" alt="Dorso de la Carta (Volteo)">
-                    <button class="youtube-custom-button" onclick="window.open('https://www.youtube.com/@j-tenshimus1c', '_blank')">YUTU</button>
+                    <button class="youtube-button" onclick="window.open('https://www.youtube.com/channel/UCg2fr3xBhOk34a1TocdT5jw', '_blank')">
+                        <img src="https://example.com/youtube-icon.png" alt="YouTube">
+                    </button>
                 </div>
             </div>
         </div>
@@ -251,7 +236,6 @@
         const rotationFactorRotate = 0.3;
         let velocityY = 0;
         let velocityX = 0;
-        let isBackVisible = false; // Nueva variable para rastrear si la parte trasera está visible
 
         const handleTouchStartRotate = (e) => {
             isTouchingRotateCard = true;
@@ -265,9 +249,6 @@
             cancelAnimationFrame(animationFrameRotateId);
             velocityY = 0;
             velocityX = 0;
-            isBackVisible = false; // Resetear la visibilidad trasera al inicio de un nuevo toque
-            frontImageTop.style.display = 'block';
-            backImageTop.style.display = 'none';
             e.preventDefault();
         };
 
@@ -295,17 +276,6 @@
             startXRotate = currentXRotate;
             startYRotate = currentYRotate;
             e.preventDefault();
-
-            const absRotationY = Math.abs(rotationY % 360);
-            if ((absRotationY > 90 && absRotationY < 270) || (absRotationY > 270 && absRotationY < 450)) {
-                isBackVisible = true;
-                frontImageTop.style.display = 'none';
-                backImageTop.style.display = 'block';
-            } else if (!isTouchingRotateCard) {
-                isBackVisible = false;
-                frontImageTop.style.display = 'block';
-                backImageTop.style.display = 'none';
-            }
         };
 
         const handleTouchEndRotate = () => {
@@ -323,15 +293,9 @@
                 rotationY -= rotationY * resistance;
                 rotationX -= rotationX * resistance;
 
-                const absFinalRotationY = Math.abs(rotationY % 360);
-                if ((absFinalRotationY > 90 && absFinalRotationY < 270) || (absFinalRotationY > 270 && absFinalRotationY < 450)) {
-                    isBackVisible = true;
-                    frontImageTop.style.display = 'none';
-                    backImageTop.style.display = 'block';
-                } else {
-                    isBackVisible = false;
-                    frontImageTop.style.display = 'block';
-                    backImageTop.style.display = 'none';
+                if (Math.abs(rotationX) < 1 && Math.abs(rotationY) < 1) {
+                    rotationX *= -0.5;
+                    rotationY *= -0.5;
                 }
 
                 velocityY *= dampingRotate;
@@ -343,13 +307,6 @@
                     rotationX = 0;
                     rotationY = 0;
                     rotateCard.style.transform = `rotateX(0deg) rotateY(0deg)`;
-                    if (!isBackVisible) {
-                        frontImageTop.style.display = 'block';
-                        backImageTop.style.display = 'none';
-                    } else {
-                        frontImageTop.style.display = 'none';
-                        backImageTop.style.display = 'block';
-                    }
                 }
             };
             animateReboundRotate();
