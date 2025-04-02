@@ -91,18 +91,22 @@
         }
 
         .flip-button, .youtube-button {
-            background-color: rgba(0, 0, 0, 0.7);
+            /* Se elimina el fondo semitransparente y se asigna rojo */
+            background-color: red;
             border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            /* Ajustamos tamaño y quitamos la forma circular para el botón de texto */
+            padding: 8px 12px;
+            border-radius: 5px;
             cursor: pointer;
-            display: flex;
+            display: none;
             justify-content: center;
             align-items: center;
             transition: background 0.3s;
             position: absolute;
             z-index: 10;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
         }
 
         .flip-button {
@@ -113,22 +117,16 @@
         .youtube-button {
             top: 20px;
             left: 20px;
-            display: none; /* Ocultar el botón de YouTube por defecto */
         }
 
-        /* Mostrar el botón de YouTube solo en la cara trasera de ambas cartas */
+        /* Mostrar el botón de YouTube solo en la parte trasera de ambas cartas */
         .card .back-image + .youtube-button,
         .card-flip-face.back .youtube-button {
             display: flex;
         }
 
-        .flip-button img, .youtube-button img {
-            width: 24px;
-            height: 24px;
-        }
-
         .flip-button:hover, .youtube-button:hover {
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: darkred;
         }
 
         canvas {
@@ -172,15 +170,9 @@
             }
 
             .flip-button, .youtube-button {
-                width: 36px;
-                height: 36px;
+                padding: 6px 10px;
                 top: 15px;
                 right: 15px;
-            }
-
-            .flip-button img, .youtube-button img {
-                width: 20px;
-                height: 20px;
             }
 
             .social-icons {
@@ -201,8 +193,9 @@
         <div class="card" id="rotateCard">
             <img class="front-image" src="carta_frente.png.jpg" alt="Frente de la Carta" style="display: block;">
             <img class="back-image" src="carta_dorso.png.png" alt="Dorso de la Carta" style="display: none;">
+            <!-- Botón en la parte trasera: se mostrará cuando la imagen de dorso esté visible -->
             <button class="youtube-button" onclick="window.open('https://www.youtube.com/channel/UCg2fr3xBhOk34a1TocdT5jw', '_blank')">
-                <img src="https://example.com/youtube-icon.png" alt="YouTube">
+                YUTU
             </button>
         </div>
         <div class="card-flip-container" id="flipCardContainer">
@@ -212,8 +205,9 @@
                 </div>
                 <div class="card-flip-face back">
                     <img src="carta_dorso.png.png" alt="Dorso de la Carta (Volteo)">
+                    <!-- Botón en la parte trasera de la carta volteada -->
                     <button class="youtube-button" onclick="window.open('https://www.youtube.com/channel/UCg2fr3xBhOk34a1TocdT5jw', '_blank')">
-                        <img src="https://example.com/youtube-icon.png" alt="YouTube">
+                        YUTU
                     </button>
                 </div>
             </div>
