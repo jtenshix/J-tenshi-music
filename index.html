@@ -1,485 +1,516 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cartas Interactivas con Partículas</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #1a0033, #4a148c, #3f51b5);
-            min-height: 100vh;
-            overflow: hidden;
-            user-select: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cartas Interactivas con Partículas</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #1a0033, #4a148c, #3f51b5);
+      min-height: 100vh;
+      overflow: hidden;
+      user-select: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
 
-        .card-container {
-            width: 80vw;
-            height: 60vh;
-            max-width: 300px;
-            max-height: 420px;
-            margin: 0 auto;
-            position: relative;
-            perspective: 1000px;
-        }
+    .card-container {
+      width: 80vw;
+      height: 60vh;
+      max-width: 300px;
+      max-height: 420px;
+      margin: 0 auto;
+      position: relative;
+      perspective: 1000px;
+    }
 
-        .card, .card-flip-container {
-            width: 100%;
-            height: 100%;
-            background-color: transparent;
-            border-radius: 8px;
-            transform-style: preserve-3d;
-            transition: opacity 0.3s ease-in-out;
-            position: absolute;
-            overflow: hidden;
-        }
+    .card, .card-flip-container {
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+      border-radius: 8px;
+      transform-style: preserve-3d;
+      transition: opacity 0.3s ease-in-out;
+      position: absolute;
+      overflow: hidden;
+    }
 
-        .card-flip-container {
-            opacity: 0;
-            z-index: 1;
-        }
+    .card-flip-container {
+      opacity: 0;
+      z-index: 1;
+    }
 
-        .card {
-            opacity: 1;
-            z-index: 2;
-            cursor: grab;
-        }
+    .card {
+      opacity: 1;
+      z-index: 2;
+      cursor: grab;
+    }
 
-        .card img, .card-flip-face img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
+    .card img, .card-flip-face img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
 
-        .card-flip {
-            width: 100%;
-            height: 100%;
-            background-color: transparent;
-            border-radius: 8px;
-            transform-style: preserve-3d;
-            position: relative;
-            transform: rotateY(0deg);
-            transition: transform 0.6s ease-in-out;
-        }
+    .card-flip {
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+      border-radius: 8px;
+      transform-style: preserve-3d;
+      position: relative;
+      transform: rotateY(0deg);
+      transition: transform 0.6s ease-in-out;
+    }
 
-        .card-flip.torbellino {
-            animation: torbellinoAnimation 1s ease-out 1;
-            transition: none;
-        }
+    .card-flip.torbellino {
+      animation: torbellinoAnimation 1s ease-out 1;
+      transition: none;
+    }
 
-        .card-flip-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    .card-flip-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-        .card-flip-face.back {
-            transform: rotateY(180deg);
-        }
+    .card-flip-face.back {
+      transform: rotateY(180deg);
+    }
 
-        .flip-button, .youtube-button {
-            /* Se elimina el fondo semitransparente y se asigna rojo */
-            background-color: red;
-            border: none;
-            /* Ajustamos tamaño y quitamos la forma circular para el botón de texto */
-            padding: 8px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            transition: background 0.3s;
-            position: absolute;
-            z-index: 10;
-            color: white;
-            font-family: Arial, sans-serif;
-            font-weight: bold;
-        }
+    .flip-button {
+      background-color: rgba(0, 0, 0, 0.7);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background 0.3s;
+      position: absolute;
+      z-index: 10;
+    }
 
-        .flip-button {
-            top: 20px;
-            right: 20px;
-        }
+    .flip-button {
+      top: 20px;
+      right: 20px;
+    }
 
-        .youtube-button {
-            top: 20px;
-            left: 20px;
-        }
+    /* Botón de YouTube: rojo, rectangular, con texto “YUTU” y oculto por defecto */
+    .youtube-button {
+      background-color: red;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      display: none;
+      position: absolute;
+      z-index: 10;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
 
-        /* Mostrar el botón de YouTube solo en la parte trasera de ambas cartas */
-        .card .back-image + .youtube-button,
-        .card-flip-face.back .youtube-button {
-            display: flex;
-        }
+    .youtube-button:hover {
+      background-color: darkred;
+    }
 
-        .flip-button:hover, .youtube-button:hover {
-            background-color: darkred;
-        }
+    /* Ubicación de los botones de YouTube dentro de cada contenedor trasero */
+    .card .youtube-button {
+      top: 20px;
+      left: 20px;
+    }
 
-        canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
+    .card-flip-face.back .youtube-button {
+      top: 20px;
+      left: 20px;
+    }
 
-        .social-icons {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            display: flex;
-            gap: 10px;
-        }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
 
-        .social-icons a {
-            color: white;
-            text-decoration: none;
-            font-size: 24px;
-            transition: color 0.3s;
-        }
+    .social-icons {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      display: flex;
+      gap: 10px;
+    }
 
-        .social-icons a:hover {
-            color: #3f51b5;
-        }
+    .social-icons a {
+      color: white;
+      text-decoration: none;
+      font-size: 24px;
+      transition: color 0.3s;
+    }
 
-        @keyframes torbellinoAnimation {
-            from { transform: rotateY(0deg); }
-            to { transform: rotateY(2160deg); }
-        }
+    .social-icons a:hover {
+      color: #3f51b5;
+    }
 
-        @media (max-width: 600px) {
-            .card-container {
-                width: 90vw;
-                height: 70vh;
-            }
+    @keyframes torbellinoAnimation {
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(2160deg); }
+    }
 
-            .flip-button, .youtube-button {
-                padding: 6px 10px;
-                top: 15px;
-                right: 15px;
-            }
+    @media (max-width: 600px) {
+      .card-container {
+        width: 90vw;
+        height: 70vh;
+      }
 
-            .social-icons {
-                bottom: 5px;
-                right: 5px;
-            }
+      .flip-button, .youtube-button {
+        padding: 6px 10px;
+        top: 15px;
+        right: 15px;
+      }
 
-            .social-icons a {
-                font-size: 20px;
-            }
-        }
-    </style>
+      .flip-button {
+        width: 36px;
+        height: 36px;
+      }
+
+      .social-icons {
+        bottom: 5px;
+        right: 5px;
+      }
+
+      .social-icons a {
+        font-size: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <canvas id="particleCanvas"></canvas>
-    <div class="card-container">
-        <div class="card" id="rotateCard">
-            <img class="front-image" src="carta_frente.png.jpg" alt="Frente de la Carta" style="display: block;">
-            <img class="back-image" src="carta_dorso.png.png" alt="Dorso de la Carta" style="display: none;">
-            <!-- Botón en la parte trasera: se mostrará cuando la imagen de dorso esté visible -->
-            <button class="youtube-button" onclick="window.open('https://www.youtube.com/channel/UCg2fr3xBhOk34a1TocdT5jw', '_blank')">
-                YUTU
-            </button>
-        </div>
-        <div class="card-flip-container" id="flipCardContainer">
-            <div class="card-flip" id="flipCard">
-                <div class="card-flip-face front">
-                    <img src="carta_frente.png.jpg" alt="Frente de la Carta (Volteo)">
-                </div>
-                <div class="card-flip-face back">
-                    <img src="carta_dorso.png.png" alt="Dorso de la Carta (Volteo)">
-                    <!-- Botón en la parte trasera de la carta volteada -->
-                    <button class="youtube-button" onclick="window.open('https://www.youtube.com/channel/UCg2fr3xBhOk34a1TocdT5jw', '_blank')">
-                        YUTU
-                    </button>
-                </div>
-            </div>
-        </div>
+  <canvas id="particleCanvas"></canvas>
+  <div class="card-container">
+    <div class="card" id="rotateCard">
+      <img class="front-image" src="carta_frente.png.jpg" alt="Frente de la Carta" style="display: block;">
+      <img class="back-image" src="carta_dorso.png.png" alt="Dorso de la Carta" style="display: none;">
+      <!-- Botón de YouTube en la carta principal (se mostrará solo cuando esté el dorso) -->
+      <button class="youtube-button" onclick="window.open('https://www.youtube.com/channel/UCg2fr3xBhOk34a1TocdT5jw', '_blank')">
+        YUTU
+      </button>
     </div>
-    <button class="flip-button" id="toggleFlipBtn">
-        <img src="https://example.com/flechas.png" alt="Voltear">
-    </button>
-    <div class="social-icons">
-        <a href="https://facebook.com/tu_perfil" target="_blank"><i class="fab fa-facebook-f"></i></a>
-        <a href="https://twitter.com/tu_perfil" target="_blank"><i class="fab fa-twitter"></i></a>
-        <a href="https://instagram.com/tu_perfil" target="_blank"><i class="fab fa-instagram"></i></a>
+    <div class="card-flip-container" id="flipCardContainer">
+      <div class="card-flip" id="flipCard">
+        <div class="card-flip-face front">
+          <img src="carta_frente.png.jpg" alt="Frente de la Carta (Volteo)">
+        </div>
+        <div class="card-flip-face back">
+          <img src="carta_dorso.png.png" alt="Dorso de la Carta (Volteo)">
+          <!-- Botón de YouTube en la carta volteada -->
+          <button class="youtube-button" onclick="window.open('https://www.youtube.com/channel/UCg2fr3xBhOk34a1TocdT5jw', '_blank')">
+            YUTU
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
+  <button class="flip-button" id="toggleFlipBtn">
+    <img src="https://example.com/flechas.png" alt="Voltear">
+  </button>
+  <div class="social-icons">
+    <a href="https://facebook.com/tu_perfil" target="_blank"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://twitter.com/tu_perfil" target="_blank"><i class="fab fa-twitter"></i></a>
+    <a href="https://instagram.com/tu_perfil" target="_blank"><i class="fab fa-instagram"></i></a>
+  </div>
 
-    <script>
-        const rotateCard = document.getElementById('rotateCard');
-        const frontImageTop = rotateCard.querySelector('.front-image');
-        const backImageTop = rotateCard.querySelector('.back-image');
-        let isTouchingRotateCard = false;
-        let startXRotate, startYRotate, currentXRotate, currentYRotate;
-        let rotationX = 0;
-        let rotationY = 0;
-        let animationFrameRotateId;
-        const frictionRotate = 0.9;
-        const springForceRotate = 0.005;
-        const dampingRotate = 0.5;
-        const rotationFactorRotate = 0.3;
-        let velocityY = 0;
-        let velocityX = 0;
+  <script>
+    const rotateCard = document.getElementById('rotateCard');
+    const frontImageTop = rotateCard.querySelector('.front-image');
+    const backImageTop = rotateCard.querySelector('.back-image');
+    const youtubeButtonMain = rotateCard.querySelector('.youtube-button');
 
-        const handleTouchStartRotate = (e) => {
-            isTouchingRotateCard = true;
-            const rect = rotateCard.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            startXRotate = e.touches[0].clientX - centerX;
-            startYRotate = e.touches[0].clientY - centerY;
-            rotateCard.style.cursor = 'grabbing';
-            rotateCard.style.transition = 'transform 0s';
-            cancelAnimationFrame(animationFrameRotateId);
-            velocityY = 0;
-            velocityX = 0;
-            e.preventDefault();
+    const flipCardContainer = document.getElementById('flipCardContainer');
+    const flipCard = document.getElementById('flipCard');
+    const youtubeButtonFlip = flipCard.querySelector('.card-flip-face.back .youtube-button');
+
+    const toggleFlipBtn = document.getElementById('toggleFlipBtn');
+
+    let isTouchingRotateCard = false;
+    let startXRotate, startYRotate, currentXRotate, currentYRotate;
+    let rotationX = 0;
+    let rotationY = 0;
+    let animationFrameRotateId;
+    const frictionRotate = 0.9;
+    const springForceRotate = 0.005;
+    const dampingRotate = 0.5;
+    const rotationFactorRotate = 0.3;
+    let velocityY = 0;
+    let velocityX = 0;
+
+    const handleTouchStartRotate = (e) => {
+      isTouchingRotateCard = true;
+      const rect = rotateCard.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      startXRotate = e.touches[0].clientX - centerX;
+      startYRotate = e.touches[0].clientY - centerY;
+      rotateCard.style.cursor = 'grabbing';
+      rotateCard.style.transition = 'transform 0s';
+      cancelAnimationFrame(animationFrameRotateId);
+      velocityY = 0;
+      velocityX = 0;
+      e.preventDefault();
+    };
+
+    const handleTouchMoveRotate = (e) => {
+      if (!isTouchingRotateCard) return;
+      const rect = rotateCard.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      currentXRotate = e.touches[0].clientX - centerX;
+      currentYRotate = e.touches[0].clientY - centerY;
+      const deltaX = currentXRotate - startXRotate;
+      const deltaY = currentYRotate - startYRotate;
+
+      rotationY += deltaX * rotationFactorRotate;
+      rotationX -= deltaY * rotationFactorRotate;
+
+      const tension = Math.sqrt(rotationX ** 2 + rotationY ** 2);
+      const resistance = tension * springForceRotate;
+      rotationY -= rotationY * resistance;
+      rotationX -= rotationX * resistance;
+
+      velocityY = deltaX * 0.5;
+      velocityX = -deltaY * 0.5;
+      rotateCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+      startXRotate = currentXRotate;
+      startYRotate = currentYRotate;
+      e.preventDefault();
+    };
+
+    const handleTouchEndRotate = () => {
+      isTouchingRotateCard = false;
+      rotateCard.style.cursor = 'grab';
+      rotateCard.style.transition = 'transform 0.3s ease-out';
+      const animateReboundRotate = () => {
+        velocityY *= frictionRotate;
+        velocityX *= frictionRotate;
+        rotationY += velocityY;
+        rotationX += velocityX;
+
+        const tension = Math.sqrt(rotationX ** 2 + rotationY ** 2);
+        const resistance = tension * springForceRotate;
+        rotationY -= rotationY * resistance;
+        rotationX -= rotationX * resistance;
+
+        if (Math.abs(rotationX) < 1 && Math.abs(rotationY) < 1) {
+          rotationX *= -0.5;
+          rotationY *= -0.5;
+        }
+
+        velocityY *= dampingRotate;
+        velocityX *= dampingRotate;
+        rotateCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+        if (Math.abs(velocityY) > 0.005 || Math.abs(velocityX) > 0.005 || Math.abs(rotationY) > 0.005 || Math.abs(rotationX) > 0.005) {
+          animationFrameRotateId = requestAnimationFrame(animateReboundRotate);
+        } else {
+          rotationX = 0;
+          rotationY = 0;
+          rotateCard.style.transform = `rotateX(0deg) rotateY(0deg)`;
+        }
+      };
+      animateReboundRotate();
+    };
+
+    const handleTouchCancelRotate = () => {
+      isTouchingRotateCard = false;
+      handleTouchEndRotate();
+    };
+
+    rotateCard.addEventListener('touchstart', handleTouchStartRotate);
+    rotateCard.addEventListener('touchmove', handleTouchMoveRotate);
+    rotateCard.addEventListener('touchend', handleTouchEndRotate);
+    rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
+
+    // Variables para el flip
+    let currentRotation = 0;
+    let flipCount = 0;
+    let isFlipping = false;
+    const torbellinoDuration = 1000;
+    let isFrontVisibleTop = true;
+
+    // Estado inicial: mostramos la parte frontal
+    flipCardContainer.style.opacity = 0;
+    frontImageTop.style.display = 'block';
+    backImageTop.style.display = 'none';
+    youtubeButtonMain.style.display = 'none';
+    youtubeButtonFlip.style.display = 'none';
+
+    toggleFlipBtn.addEventListener('click', () => {
+      if (!isFlipping) {
+        isFlipping = true;
+
+        // Se oculta la carta principal y se muestra la de flip
+        rotateCard.style.opacity = 0;
+        flipCardContainer.style.opacity = 1;
+
+        // Alternamos entre frente y dorso y controlamos la visibilidad del botón de YouTube
+        if (isFrontVisibleTop) {
+          frontImageTop.style.display = 'none';
+          backImageTop.style.display = 'block';
+          youtubeButtonMain.style.display = 'flex';
+          // En la carta volteada, el botón se mostrará automáticamente en la parte trasera
+          youtubeButtonFlip.style.display = 'flex';
+        } else {
+          frontImageTop.style.display = 'block';
+          backImageTop.style.display = 'none';
+          youtubeButtonMain.style.display = 'none';
+          youtubeButtonFlip.style.display = 'none';
+        }
+        isFrontVisibleTop = !isFrontVisibleTop;
+
+        flipCount++;
+
+        const resetVisibility = () => {
+          rotateCard.style.opacity = 1;
+          flipCardContainer.style.opacity = 0;
+          isFlipping = false;
         };
 
-        const handleTouchMoveRotate = (e) => {
-            if (!isTouchingRotateCard) return;
-            const rect = rotateCard.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            currentXRotate = e.touches[0].clientX - centerX;
-            currentYRotate = e.touches[0].clientY - centerY;
-            const deltaX = currentXRotate - startXRotate;
-            const deltaY = currentYRotate - startYRotate;
-
-            rotationY += deltaX * rotationFactorRotate;
-            rotationX -= deltaY * rotationFactorRotate;
-
-            const tension = Math.sqrt(rotationX ** 2 + rotationY ** 2);
-            const resistance = tension * springForceRotate;
-            rotationY -= rotationY * resistance;
-            rotationX -= rotationX * resistance;
-
-            velocityY = deltaX * 0.5;
-            velocityX = -deltaY * 0.5;
-            rotateCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-            startXRotate = currentXRotate;
-            startYRotate = currentYRotate;
-            e.preventDefault();
-        };
-
-        const handleTouchEndRotate = () => {
-            isTouchingRotateCard = false;
-            rotateCard.style.cursor = 'grab';
-            rotateCard.style.transition = 'transform 0.3s ease-out';
-            const animateReboundRotate = () => {
-                velocityY *= frictionRotate;
-                velocityX *= frictionRotate;
-                rotationY += velocityY;
-                rotationX += velocityX;
-
-                const tension = Math.sqrt(rotationX ** 2 + rotationY ** 2);
-                const resistance = tension * springForceRotate;
-                rotationY -= rotationY * resistance;
-                rotationX -= rotationX * resistance;
-
-                if (Math.abs(rotationX) < 1 && Math.abs(rotationY) < 1) {
-                    rotationX *= -0.5;
-                    rotationY *= -0.5;
-                }
-
-                velocityY *= dampingRotate;
-                velocityX *= dampingRotate;
-                rotateCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-                if (Math.abs(velocityY) > 0.005 || Math.abs(velocityX) > 0.005 || Math.abs(rotationY) > 0.005 || Math.abs(rotationX) > 0.005) {
-                    animationFrameRotateId = requestAnimationFrame(animateReboundRotate);
-                } else {
-                    rotationX = 0;
-                    rotationY = 0;
-                    rotateCard.style.transform = `rotateX(0deg) rotateY(0deg)`;
-                }
-            };
-            animateReboundRotate();
-        };
-
-        const handleTouchCancelRotate = () => {
-            isTouchingRotateCard = false;
-            handleTouchEndRotate();
-        };
-
-        rotateCard.addEventListener('touchstart', handleTouchStartRotate);
-        rotateCard.addEventListener('touchmove', handleTouchMoveRotate);
-        rotateCard.addEventListener('touchend', handleTouchEndRotate);
-        rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
-
-        const rotateCardElement = document.getElementById('rotateCard');
-        const flipCardContainer = document.getElementById('flipCardContainer');
-        const flipCard = document.getElementById('flipCard');
-        const toggleFlipBtn = document.getElementById('toggleFlipBtn');
-        let currentRotation = 0;
-        let flipCount = 0;
-        let isFlipping = false;
-        const fadeDuration = 300;
-        const torbellinoDuration = 1000;
-        let isFrontVisibleTop = true;
-
-        flipCardContainer.style.opacity = 0;
-        frontImageTop.style.display = 'block';
-        backImageTop.style.display = 'none';
-
-        toggleFlipBtn.addEventListener('click', () => {
-            if (!isFlipping) {
-                isFlipping = true;
-
-                rotateCardElement.style.opacity = 0;
-                flipCardContainer.style.opacity = 1;
-
-                if (isFrontVisibleTop) {
-                    frontImageTop.style.display = 'none';
-                    backImageTop.style.display = 'block';
-                } else {
-                    frontImageTop.style.display = 'block';
-                    backImageTop.style.display = 'none';
-                }
-                isFrontVisibleTop = !isFrontVisibleTop;
-
-                flipCount++;
-
-                const resetVisibility = () => {
-                    rotateCardElement.style.opacity = 1;
-                    flipCardContainer.style.opacity = 0;
-                    isFlipping = false;
-                };
-
-                let flipDuration = 600;
-                if (flipCount % 10 === 0) {
-                    flipCard.classList.add('torbellino');
-                    flipDuration = torbellinoDuration;
-                    setTimeout(() => {
-                        flipCard.classList.remove('torbellino');
-                        currentRotation = 0;
-                        flipCard.style.transform = `rotateY(${currentRotation}deg)`;
-                        flipCount = 0;
-                    }, torbellinoDuration);
-                } else {
-                    currentRotation += 180;
-                    flipCard.style.transform = `rotateY(${currentRotation}deg)`;
-                }
-
-                setTimeout(resetVisibility, flipDuration);
-            }
-        });
-
-        // Particle setup
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-        const particles = [];
-
-        class Particle {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.vx = (Math.random() - 0.5) * 0.05;
-                this.vy = (Math.random() - 0.5) * 0.05;
-                this.radius = Math.random() * 2 + 1;
-                this.shape = Math.random() < 0.5 ? 'circle' : Math.random() < 0.5 ? 'square' : 'triangle';
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) {
-                    this.vx = -this.vx;
-                }
-
-                if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) {
-                    this.vy = -this.vy;
-                }
-            }
-
-            draw() {
-                ctx.beginPath();
-                if (this.shape === 'circle') {
-                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                } else if (this.shape === 'square') {
-                    ctx.rect(this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2);
-                } else if (this.shape === 'triangle') {
-                    const height = this.radius * Math.sqrt(3);
-                    ctx.moveTo(this.x, this.y - this.radius);
-                    ctx.lineTo(this.x + height / 2, this.y + this.radius);
-                    ctx.lineTo(this.x - height / 2, this.y + this.radius);
-                    ctx.closePath();
-                }
-                ctx.fillStyle = 'rgba(0, 191, 255, 0.7)';
-                ctx.fill();
-            }
+        let flipDuration = 600;
+        if (flipCount % 10 === 0) {
+          flipCard.classList.add('torbellino');
+          flipDuration = torbellinoDuration;
+          setTimeout(() => {
+            flipCard.classList.remove('torbellino');
+            currentRotation = 0;
+            flipCard.style.transform = `rotateY(${currentRotation}deg)`;
+            flipCount = 0;
+          }, torbellinoDuration);
+        } else {
+          currentRotation += 180;
+          flipCard.style.transform = `rotateY(${currentRotation}deg)`;
         }
 
-        function createParticles() {
-            for (let i = 0; i < 50; i++) {
-                const x = Math.random() * canvas.width;
-                const y = Math.random() * canvas.height;
-                particles.push(new Particle(x, y));
-            }
+        setTimeout(resetVisibility, flipDuration);
+      }
+    });
+
+    // Configuración de partículas
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    const particles = [];
+
+    class Particle {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.vx = (Math.random() - 0.5) * 0.05;
+        this.vy = (Math.random() - 0.5) * 0.05;
+        this.radius = Math.random() * 2 + 1;
+        this.shape = Math.random() < 0.5 ? 'circle' : Math.random() < 0.5 ? 'square' : 'triangle';
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) {
+          this.vx = -this.vx;
         }
 
-        function updateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(particle => {
-                particle.update();
-                particle.draw();
-            });
-            requestAnimationFrame(updateParticles);
+        if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) {
+          this.vy = -this.vy;
         }
+      }
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+      draw() {
+        ctx.beginPath();
+        if (this.shape === 'circle') {
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        } else if (this.shape === 'square') {
+          ctx.rect(this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2);
+        } else if (this.shape === 'triangle') {
+          const height = this.radius * Math.sqrt(3);
+          ctx.moveTo(this.x, this.y - this.radius);
+          ctx.lineTo(this.x + height / 2, this.y + this.radius);
+          ctx.lineTo(this.x - height / 2, this.y + this.radius);
+          ctx.closePath();
         }
+        ctx.fillStyle = 'rgba(0, 191, 255, 0.7)';
+        ctx.fill();
+      }
+    }
 
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-        createParticles();
-        updateParticles();
+    function createParticles() {
+      for (let i = 0; i < 50; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        particles.push(new Particle(x, y));
+      }
+    }
 
-        function checkCollision(particle) {
-            const rect = rotateCard.getBoundingClientRect();
-            const cardCenterX = rect.left + rect.width / 2;
-            const cardCenterY = rect.top + rect.height / 2;
-            const distance = Math.sqrt((particle.x - cardCenterX) ** 2 + (particle.y - cardCenterY) ** 2);
+    function updateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      requestAnimationFrame(updateParticles);
+    }
 
-            if (distance < rect.width / 2) {
-                const angle = Math.atan2(particle.y - cardCenterY, particle.x - cardCenterX);
-                particle.vx = Math.cos(angle) * 0.5;
-                particle.vy = Math.sin(angle) * 0.5;
-            }
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    createParticles();
+    updateParticles();
+
+    function checkCollision(particle) {
+      const rect = rotateCard.getBoundingClientRect();
+      const cardCenterX = rect.left + rect.width / 2;
+      const cardCenterY = rect.top + rect.height / 2;
+      const distance = Math.sqrt((particle.x - cardCenterX) ** 2 + (particle.y - cardCenterY) ** 2);
+
+      if (distance < rect.width / 2) {
+        const angle = Math.atan2(particle.y - cardCenterY, particle.x - cardCenterX);
+        particle.vx = Math.cos(angle) * 0.5;
+        particle.vy = Math.sin(angle) * 0.5;
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(particle => {
+        particle.update();
+        if (isTouchingRotateCard) {
+          checkCollision(particle);
         }
+        particle.draw();
+      });
+      requestAnimationFrame(animate);
+    }
 
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(particle => {
-                particle.update();
-                if (isTouchingRotateCard) {
-                    checkCollision(particle);
-                }
-                particle.draw();
-            });
-            requestAnimationFrame(animate);
-        }
-
-        animate();
-    </script>
+    animate();
+  </script>
 </body>
 </html>
