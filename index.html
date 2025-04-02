@@ -251,6 +251,7 @@
         const rotationFactorRotate = 0.3;
         let velocityY = 0;
         let velocityX = 0;
+        let isBackVisible = false; // Nueva variable para rastrear si la parte trasera está visible
 
         const handleTouchStartRotate = (e) => {
             isTouchingRotateCard = true;
@@ -264,6 +265,9 @@
             cancelAnimationFrame(animationFrameRotateId);
             velocityY = 0;
             velocityX = 0;
+            isBackVisible = false; // Resetear la visibilidad trasera al inicio de un nuevo toque
+            frontImageTop.style.display = 'block';
+            backImageTop.style.display = 'none';
             e.preventDefault();
         };
 
@@ -291,6 +295,17 @@
             startXRotate = currentXRotate;
             startYRotate = currentYRotate;
             e.preventDefault();
+
+            const absRotationY = Math.abs(rotationY % 360);
+            if ((absRotationY > 90 && absRotationY < 270) || (absRotationY > 270 && absRotationY < 450)) {
+                isBackVisible = true;
+                frontImageTop.style.display = 'none';
+                backImageTop.style.display = 'block';
+            } else if (!isTouchingRotateCard) {
+                isBackVisible = false;
+                frontImageTop.style.display = 'block';
+                backImageTop.style.display = 'none';
+            }
         };
 
         const handleTouchEndRotate = () => {
@@ -308,9 +323,15 @@
                 rotationY -= rotationY * resistance;
                 rotationX -= rotationX * resistance;
 
-                if (Math.abs(rotationX) < 1 && Math.abs(rotationY) < 1) {
-                    rotationX *= -0.5;
-                    rotationY *= -0.5;
+                const absFinalRotationY = Math.abs(rotationY % 360);
+                if ((absFinalRotationY > 90 && absFinalRotationY < 270) || (absFinalRotationY > 270 && absFinalRotationY < 450)) {
+                    isBackVisible = true;
+                    frontImageTop.style.display = 'none';
+                    backImageTop.style.display = 'block';
+                } else {
+                    isBackVisible = false;
+                    frontImageTop.style.display = 'block';
+                    backImageTop.style.display = 'none';
                 }
 
                 velocityY *= dampingRotate;
@@ -322,6 +343,13 @@
                     rotationX = 0;
                     rotationY = 0;
                     rotateCard.style.transform = `rotateX(0deg) rotateY(0deg)`;
+                    if (!isBackVisible) {
+                        frontImageTop.style.display = 'block';
+                        backImageTop.style.display = 'none';
+                    } else {
+                        frontImageTop.style.display = 'none';
+                        backImageTop.style.display = 'block';
+                    }
                 }
             };
             animateReboundRotate();
