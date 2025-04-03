@@ -62,7 +62,6 @@
       transition: opacity 0.3s ease;
     }
 
-    /* Configuración de visibilidad de las imágenes para lograr la superposición */
     .front-image {
       opacity: 1;
     }
@@ -118,7 +117,6 @@
       right: 20px;
     }
 
-    /* Botón de YouTube: rojo, rectangular, con texto “YUTU” y oculto por defecto */
     .youtube-button {
       background-color: red;
       border: none;
@@ -138,7 +136,6 @@
       background-color: darkred;
     }
 
-    /* Ubicación de los botones de YouTube dentro de cada contenedor */
     .card .youtube-button {
       top: 20px;
       left: 20px;
@@ -238,7 +235,7 @@
   </div>
   <button class="flip-button" id="toggleFlipBtn">
     <img src="https://via.placeholder.com/40/000000/FFFFFF?Text=Flip" alt="Voltear">
-    </button>
+  </button>
   <div class="social-icons">
     <a href="https://facebook.com/tu_perfil" target="_blank"><i class="fab fa-facebook-f"></i></a>
     <a href="https://twitter.com/tu_perfil" target="_blank"><i class="fab fa-twitter"></i></a>
@@ -246,7 +243,6 @@
   </div>
 
   <script>
-    // Elementos para la interacción de giro táctil
     const rotateCard = document.getElementById('rotateCard');
     const frontImageTop = rotateCard.querySelector('.front-image');
     const backImageTop = rotateCard.querySelector('.back-image');
@@ -351,15 +347,12 @@
     rotateCard.addEventListener('touchend', handleTouchEndRotate);
     rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-    // Variables para el flip
     let currentRotation = 0;
     let flipCount = 0;
     let isFlipping = false;
     const torbellinoDuration = 1000;
     let isFrontVisibleTop = true;
 
-    // Estado inicial: ambas imágenes ya están posicionadas,
-    // se controla su visibilidad con opacity y se ocultan los botones de YouTube.
     youtubeButtonMain.style.opacity = 0;
     youtubeButtonFlip.style.opacity = 0;
 
@@ -367,11 +360,9 @@
       if (!isFlipping) {
         isFlipping = true;
 
-        // Se oculta la carta principal y se muestra la de flip
         rotateCard.style.opacity = 0;
         flipCardContainer.style.opacity = 1;
 
-        // Alternamos la visibilidad de las imágenes y los botones mediante opacity
         if (isFrontVisibleTop) {
           frontImageTop.style.opacity = 0;
           backImageTop.style.opacity = 1;
@@ -412,7 +403,6 @@
       }
     });
 
-    // Configuración de partículas
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
     const particles = [];
