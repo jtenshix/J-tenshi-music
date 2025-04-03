@@ -61,7 +61,7 @@
       transition: opacity 0.3s ease;
     }
 
-    /* Configuración de visibilidad de las imágenes para lograr la superposición */
+    /* Control de visibilidad para imágenes */
     .front-image {
       opacity: 1;
     }
@@ -103,8 +103,8 @@
     .flip-button {
       background-color: rgba(0, 0, 0, 0.7);
       border: none;
-      width: 40px;
-      height: 40px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
@@ -117,7 +117,14 @@
       right: 20px;
     }
 
-    /* Botón de YouTube: rojo, rectangular, con texto “YUTU” y oculto por defecto */
+    /* Ícono de flecha (SVG inline) para el botón de voltear */
+    .flip-button svg {
+      width: 24px;
+      height: 24px;
+      fill: #fff;
+    }
+
+    /* Botón de YouTube */
     .youtube-button {
       background-color: red;
       border: none;
@@ -137,7 +144,6 @@
       background-color: darkred;
     }
 
-    /* Ubicación de los botones de YouTube dentro de cada contenedor */
     .card .youtube-button {
       top: 20px;
       left: 20px;
@@ -214,11 +220,10 @@
 
   <canvas id="particleCanvas"></canvas>
   <div class="card-container">
-    <!-- Carta principal: se utiliza para el giro táctil -->
+    <!-- Carta principal para giro táctil -->
     <div class="card" id="rotateCard">
       <img class="front-image" src="carta_frente.png.jpg" alt="Frente de la Carta">
       <img class="back-image" src="carta_dorso.png.png" alt="Dorso de la Carta">
-      <!-- Botón de YouTube en la carta principal -->
       <button class="youtube-button" onclick="window.open('https://www.youtube.com/channel/UCg2fr3xBhOk34a1TocdT5jw', '_blank')">
         YUTU
       </button>
@@ -231,7 +236,6 @@
         </div>
         <div class="card-flip-face back">
           <img src="carta_dorso.png.png" alt="Dorso de la Carta (Volteo)">
-          <!-- Botón de YouTube en la carta volteada -->
           <button class="youtube-button" onclick="window.open('https://www.youtube.com/channel/UCg2fr3xBhOk34a1TocdT5jw', '_blank')">
             YUTU
           </button>
@@ -239,8 +243,11 @@
       </div>
     </div>
   </div>
+  <!-- Botón de voltear con ícono de flecha -->
   <button class="flip-button" id="toggleFlipBtn">
-    <img src="https://example.com/flechas.png" alt="Voltear">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <path d="M256 8C119.043 8 8 119.043 8 256s111.043 248 248 248 248-111.043 248-248S392.957 8 256 8zm0 448c-110.532 0-200-89.468-200-200S145.468 56 256 56s200 89.468 200 200-89.468 200-200 200zm92-284h-80v-80c0-13.255-10.745-24-24-24s-24 10.745-24 24v80h-80c-13.255 0-24 10.745-24 24s10.745 24 24 24h80v80c0 13.255 10.745 24 24 24s24-10.745 24-24v-80h80c13.255 0 24-10.745 24-24s-10.745-24-24-24z"/>
+    </svg>
   </button>
   <div class="social-icons">
     <a href="https://facebook.com/tu_perfil" target="_blank"><i class="fab fa-facebook-f"></i></a>
@@ -361,8 +368,7 @@
     const torbellinoDuration = 1000;
     let isFrontVisibleTop = true;
 
-    // Estado inicial: ambas imágenes ya están posicionadas,
-    // se controla su visibilidad con opacity y se ocultan los botones de YouTube.
+    // Estado inicial: ambas imágenes ya están posicionadas; se ocultan los botones de YouTube.
     youtubeButtonMain.style.opacity = 0;
     youtubeButtonFlip.style.opacity = 0;
 
@@ -374,7 +380,7 @@
         rotateCard.style.opacity = 0;
         flipCardContainer.style.opacity = 1;
 
-        // Alternamos la visibilidad de las imágenes y los botones mediante opacity
+        // Alterna la visibilidad de las imágenes y los botones mediante opacity
         if (isFrontVisibleTop) {
           frontImageTop.style.opacity = 0;
           backImageTop.style.opacity = 1;
