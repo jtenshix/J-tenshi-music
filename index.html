@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cartas Interactivas con Partículas</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     body {
       margin: 0;
@@ -61,7 +62,7 @@
       transition: opacity 0.3s ease;
     }
 
-    /* Control de visibilidad para imágenes */
+    /* Configuración de visibilidad de las imágenes para lograr la superposición */
     .front-image {
       opacity: 1;
     }
@@ -103,8 +104,8 @@
     .flip-button {
       background-color: rgba(0, 0, 0, 0.7);
       border: none;
-      width: 60px;
-      height: 60px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
@@ -117,19 +118,13 @@
       right: 20px;
     }
 
-    /* Ícono de flecha circular para voltear (SVG inline) */
-    .flip-button svg {
-      width: 28px;
-      height: 28px;
-      fill: #fff;
-    }
-
-    /* Botón de YouTube convertido en enlace */
-    .youtube-link {
+    /* Botón de YouTube: rojo, rectangular, con texto “YUTU” y oculto por defecto */
+    .youtube-button {
       background-color: red;
-      text-decoration: none;
+      border: none;
       padding: 8px 12px;
       border-radius: 5px;
+      cursor: pointer;
       position: absolute;
       z-index: 10;
       color: white;
@@ -137,20 +132,19 @@
       font-weight: bold;
       transition: background 0.3s, opacity 0.3s ease;
       opacity: 0;
-      pointer-events: none;
     }
 
-    .youtube-link:hover {
+    .youtube-button:hover {
       background-color: darkred;
     }
 
-    /* Ubicación del enlace de YouTube en ambas caras */
-    .card .youtube-link {
+    /* Ubicación de los botones de YouTube dentro de cada contenedor */
+    .card .youtube-button {
       top: 20px;
       left: 20px;
     }
 
-    .card-flip-face.back .youtube-link {
+    .card-flip-face.back .youtube-button {
       top: 20px;
       left: 20px;
     }
@@ -195,15 +189,15 @@
         height: 70vh;
       }
 
-      .flip-button, .youtube-link {
+      .flip-button, .youtube-button {
         padding: 6px 10px;
         top: 15px;
         right: 15px;
       }
 
       .flip-button {
-        width: 50px;
-        height: 50px;
+        width: 36px;
+        height: 36px;
       }
 
       .social-icons {
@@ -221,14 +215,13 @@
 
   <canvas id="particleCanvas"></canvas>
   <div class="card-container">
-    <!-- Carta principal para giro táctil -->
     <div class="card" id="rotateCard">
       <img class="front-image" src="carta_frente.png.jpg" alt="Frente de la Carta">
       <img class="back-image" src="carta_dorso.png.png" alt="Dorso de la Carta">
-      <!-- Enlace de YouTube -->
-      <a class="youtube-link" href="https://www.youtube.com/channel/UCg2fr3xBhOk34a1TocdT5jw" target="_blank">YUTU</a>
+      <button class="youtube-button" onclick="window.open('https://www.youtube.com/channel/UCg2fr3xBhOk34a1TocdT5jw', '_blank')">
+        YUTU
+      </button>
     </div>
-    <!-- Carta de flip con animación 3D -->
     <div class="card-flip-container" id="flipCardContainer">
       <div class="card-flip" id="flipCard">
         <div class="card-flip-face front">
@@ -236,19 +229,16 @@
         </div>
         <div class="card-flip-face back">
           <img src="carta_dorso.png.png" alt="Dorso de la Carta (Volteo)">
-          <!-- Enlace de YouTube en la cara volteada -->
-          <a class="youtube-link" href="https://www.youtube.com/channel/UCg2fr3xBhOk34a1TocdT5jw" target="_blank">YUTU</a>
+          <button class="youtube-button" onclick="window.open('https://www.youtube.com/channel/UCg2fr3xBhOk34a1TocdT5jw', '_blank')">
+            YUTU
+          </button>
         </div>
       </div>
     </div>
   </div>
-  <!-- Botón de voltear con ícono de flecha circular -->
   <button class="flip-button" id="toggleFlipBtn">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-      <!-- Ícono de rotación (similar a "reload") -->
-      <path d="M500.33 90.86c-20.24-20.24-47.35-31.39-76.35-31.39H357.33c-16.11 0-32.22 6.26-44.53 18.75l-11.17 11.17c-11.63 11.63-9.14 31.25 4.55 42.94 23.27 20.38 52.27 32.81 83.64 32.81h53.65c17.67 0 33.94 7.14 45.32 18.53 11.39 11.39 18.53 27.66 18.53 45.32v53.65c0 31.37-12.43 60.37-32.81 83.64-11.69 13.69-31.31 16.18-42.94 4.55l-11.17-11.17c-12.49-12.31-18.75-28.42-18.75-44.53v-66.65c0-16.11 6.26-32.22 18.75-44.53l11.17-11.17c20.24-20.24 47.35-31.39 76.35-31.39h66.65c16.11 0 32.22-6.26 44.53-18.75l11.17-11.17c11.63-11.63 9.14-31.25-4.55-42.94-23.27-20.38-52.27-32.81-83.64-32.81h-53.65c-17.67 0-33.94-7.14-45.32-18.53-11.39-11.39-18.53-27.66-18.53-45.32V90.86c0-31.37 12.43-60.37 32.81-83.64 11.69-13.69 31.31-16.18 42.94-4.55l11.17 11.17c12.31 12.49 18.75 28.42 18.75 44.53v66.65c0 16.11-6.26 32.22-18.75 44.53l-11.17 11.17z"/>
-    </svg>
-  </button>
+    <img src="https://via.placeholder.com/40/000000/FFFFFF?Text=Flip" alt="Voltear">
+    </button>
   <div class="social-icons">
     <a href="https://facebook.com/tu_perfil" target="_blank"><i class="fab fa-facebook-f"></i></a>
     <a href="https://twitter.com/tu_perfil" target="_blank"><i class="fab fa-twitter"></i></a>
@@ -260,11 +250,11 @@
     const rotateCard = document.getElementById('rotateCard');
     const frontImageTop = rotateCard.querySelector('.front-image');
     const backImageTop = rotateCard.querySelector('.back-image');
-    const youtubeLinkMain = rotateCard.querySelector('.youtube-link');
+    const youtubeButtonMain = rotateCard.querySelector('.youtube-button');
 
     const flipCardContainer = document.getElementById('flipCardContainer');
     const flipCard = document.getElementById('flipCard');
-    const youtubeLinkFlip = flipCard.querySelector('.card-flip-face.back .youtube-link');
+    const youtubeButtonFlip = flipCard.querySelector('.card-flip-face.back .youtube-button');
 
     const toggleFlipBtn = document.getElementById('toggleFlipBtn');
 
@@ -368,11 +358,10 @@
     const torbellinoDuration = 1000;
     let isFrontVisibleTop = true;
 
-    // Estado inicial: ambas imágenes ya están posicionadas; se ocultan los enlaces de YouTube.
-    youtubeLinkMain.style.opacity = 0;
-    youtubeLinkMain.style.pointerEvents = "none";
-    youtubeLinkFlip.style.opacity = 0;
-    youtubeLinkFlip.style.pointerEvents = "none";
+    // Estado inicial: ambas imágenes ya están posicionadas,
+    // se controla su visibilidad con opacity y se ocultan los botones de YouTube.
+    youtubeButtonMain.style.opacity = 0;
+    youtubeButtonFlip.style.opacity = 0;
 
     toggleFlipBtn.addEventListener('click', () => {
       if (!isFlipping) {
@@ -382,21 +371,17 @@
         rotateCard.style.opacity = 0;
         flipCardContainer.style.opacity = 1;
 
-        // Alterna la visibilidad de las imágenes y de los enlaces de YouTube mediante opacity
+        // Alternamos la visibilidad de las imágenes y los botones mediante opacity
         if (isFrontVisibleTop) {
           frontImageTop.style.opacity = 0;
           backImageTop.style.opacity = 1;
-          youtubeLinkMain.style.opacity = 1;
-          youtubeLinkMain.style.pointerEvents = "auto";
-          youtubeLinkFlip.style.opacity = 1;
-          youtubeLinkFlip.style.pointerEvents = "auto";
+          youtubeButtonMain.style.opacity = 1;
+          youtubeButtonFlip.style.opacity = 1;
         } else {
           frontImageTop.style.opacity = 1;
           backImageTop.style.opacity = 0;
-          youtubeLinkMain.style.opacity = 0;
-          youtubeLinkMain.style.pointerEvents = "none";
-          youtubeLinkFlip.style.opacity = 0;
-          youtubeLinkFlip.style.pointerEvents = "none";
+          youtubeButtonMain.style.opacity = 0;
+          youtubeButtonFlip.style.opacity = 0;
         }
         isFrontVisibleTop = !isFrontVisibleTop;
 
