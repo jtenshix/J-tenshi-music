@@ -58,6 +58,16 @@
       position: absolute;
       top: 0;
       left: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Configuración de visibilidad de las imágenes para lograr la superposición */
+    .front-image {
+      opacity: 1;
+    }
+
+    .back-image {
+      opacity: 0;
     }
 
     .card-flip {
@@ -103,9 +113,6 @@
       transition: background 0.3s;
       position: absolute;
       z-index: 10;
-    }
-
-    .flip-button {
       top: 20px;
       right: 20px;
     }
@@ -117,20 +124,20 @@
       padding: 8px 12px;
       border-radius: 5px;
       cursor: pointer;
-      display: none;
       position: absolute;
       z-index: 10;
       color: white;
       font-family: Arial, sans-serif;
       font-weight: bold;
-      transition: background 0.3s;
+      transition: background 0.3s, opacity 0.3s ease;
+      opacity: 0;
     }
 
     .youtube-button:hover {
       background-color: darkred;
     }
 
-    /* Ubicación de los botones de YouTube dentro de cada contenedor trasero */
+    /* Ubicación de los botones de YouTube dentro de cada contenedor */
     .card .youtube-button {
       top: 20px;
       left: 20px;
@@ -207,14 +214,16 @@
 
   <canvas id="particleCanvas"></canvas>
   <div class="card-container">
+    <!-- Carta principal: se utiliza para el giro táctil -->
     <div class="card" id="rotateCard">
-      <img class="front-image" src="carta_frente.png.jpg" alt="Frente de la Carta" style="display: block;">
-      <img class="back-image" src="carta_dorso.png.png" alt="Dorso de la Carta" style="display: none;">
-      <!-- Botón de YouTube en la carta principal (se mostrará solo cuando esté el dorso) -->
+      <img class="front-image" src="carta_frente.png.jpg" alt="Frente de la Carta">
+      <img class="back-image" src="carta_dorso.png.png" alt="Dorso de la Carta">
+      <!-- Botón de YouTube en la carta principal -->
       <button class="youtube-button" onclick="window.open('https://www.youtube.com/channel/UCg2fr3xBhOk34a1TocdT5jw', '_blank')">
         YUTU
       </button>
     </div>
+    <!-- Carta de flip con animación 3D -->
     <div class="card-flip-container" id="flipCardContainer">
       <div class="card-flip" id="flipCard">
         <div class="card-flip-face front">
@@ -240,6 +249,7 @@
   </div>
 
   <script>
+    // Elementos para la interacción de giro táctil
     const rotateCard = document.getElementById('rotateCard');
     const frontImageTop = rotateCard.querySelector('.front-image');
     const backImageTop = rotateCard.querySelector('.back-image');
@@ -320,8 +330,8 @@
         rotationX -= rotationX * resistance;
 
         if (Math.abs(rotationX) < 1 && Math.abs(rotationY) < 1) {
-          rotationX *= -0.5;
-          rotationY *= -0.5;
+          rotationX = 0;
+          rotationY = 0;
         }
 
         velocityY *= dampingRotate;
@@ -329,10 +339,6 @@
         rotateCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
         if (Math.abs(velocityY) > 0.005 || Math.abs(velocityX) > 0.005 || Math.abs(rotationY) > 0.005 || Math.abs(rotationX) > 0.005) {
           animationFrameRotateId = requestAnimationFrame(animateReboundRotate);
-        } else {
-          rotationX = 0;
-          rotationY = 0;
-          rotateCard.style.transform = `rotateX(0deg) rotateY(0deg)`;
         }
       };
       animateReboundRotate();
@@ -355,12 +361,10 @@
     const torbellinoDuration = 1000;
     let isFrontVisibleTop = true;
 
-    // Estado inicial: mostramos la parte frontal
-    flipCardContainer.style.opacity = 0;
-    frontImageTop.style.display = 'block';
-    backImageTop.style.display = 'none';
-    youtubeButtonMain.style.display = 'none';
-    youtubeButtonFlip.style.display = 'none';
+    // Estado inicial: ambas imágenes ya están posicionadas,
+    // se controla su visibilidad con opacity y se ocultan los botones de YouTube.
+    youtubeButtonMain.style.opacity = 0;
+    youtubeButtonFlip.style.opacity = 0;
 
     toggleFlipBtn.addEventListener('click', () => {
       if (!isFlipping) {
@@ -370,18 +374,17 @@
         rotateCard.style.opacity = 0;
         flipCardContainer.style.opacity = 1;
 
-        // Alternamos entre frente y dorso y controlamos la visibilidad del botón de YouTube
+        // Alternamos la visibilidad de las imágenes y los botones mediante opacity
         if (isFrontVisibleTop) {
-          frontImageTop.style.display = 'none';
-          backImageTop.style.display = 'block';
-          youtubeButtonMain.style.display = 'flex';
-          // En la carta volteada, el botón se mostrará automáticamente en la parte trasera
-          youtubeButtonFlip.style.display = 'flex';
+          frontImageTop.style.opacity = 0;
+          backImageTop.style.opacity = 1;
+          youtubeButtonMain.style.opacity = 1;
+          youtubeButtonFlip.style.opacity = 1;
         } else {
-          frontImageTop.style.display = 'block';
-          backImageTop.style.display = 'none';
-          youtubeButtonMain.style.display = 'none';
-          youtubeButtonFlip.style.display = 'none';
+          frontImageTop.style.opacity = 1;
+          backImageTop.style.opacity = 0;
+          youtubeButtonMain.style.opacity = 0;
+          youtubeButtonFlip.style.opacity = 0;
         }
         isFrontVisibleTop = !isFrontVisibleTop;
 
@@ -424,7 +427,7 @@
         this.vx = (Math.random() - 0.5) * 0.05;
         this.vy = (Math.random() - 0.5) * 0.05;
         this.radius = Math.random() * 2 + 1;
-        this.shape = Math.random() < 0.5 ? 'circle' : Math.random() < 0.5 ? 'square' : 'triangle';
+        this.shape = Math.random() < 0.5 ? 'circle' : (Math.random() < 0.5 ? 'square' : 'triangle');
       }
 
       update() {
