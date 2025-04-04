@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cartas Interactivas con Partículas</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" 
-        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" 
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     body {
       margin: 0;
@@ -20,6 +18,7 @@
       align-items: center;
       position: relative;
     }
+
     .card-container {
       width: 80vw;
       height: 60vh;
@@ -29,6 +28,7 @@
       position: relative;
       perspective: 1000px;
     }
+
     .card, .card-flip-container {
       width: 100%;
       height: 100%;
@@ -39,15 +39,18 @@
       position: absolute;
       overflow: hidden;
     }
+
     .card-flip-container {
       opacity: 0;
       z-index: 1;
     }
+
     .card {
       opacity: 1;
       z-index: 2;
       cursor: grab;
     }
+
     .card img, .card-flip-face img {
       width: 100%;
       height: 100%;
@@ -58,12 +61,15 @@
       left: 0;
       transition: opacity 0.3s ease;
     }
+
     .front-image {
       opacity: 1;
     }
+
     .back-image {
       opacity: 0;
     }
+
     .card-flip {
       width: 100%;
       height: 100%;
@@ -74,10 +80,12 @@
       transform: rotateY(0deg);
       transition: transform 0.6s ease-in-out;
     }
+
     .card-flip.torbellino {
       animation: torbellinoAnimation 1s ease-out 1;
       transition: none;
     }
+
     .card-flip-face {
       position: absolute;
       width: 100%;
@@ -87,9 +95,11 @@
       justify-content: center;
       align-items: center;
     }
+
     .card-flip-face.back {
       transform: rotateY(180deg);
     }
+
     .flip-button {
       background-color: rgba(0, 0, 0, 0.7);
       border: none;
@@ -106,6 +116,7 @@
       top: 20px;
       right: 20px;
     }
+
     .youtube-button {
       background-color: red;
       border: none;
@@ -120,17 +131,21 @@
       transition: background 0.3s, opacity 0.3s ease;
       opacity: 1; /* Asegura que el botón sea visible */
     }
+
     .youtube-button:hover {
       background-color: darkred;
     }
+
     .card .youtube-button {
       top: 20px;
       left: 20px;
     }
+
     .card-flip-face.back .youtube-button {
       top: 20px;
       left: 20px;
     }
+
     canvas {
       position: absolute;
       top: 0;
@@ -140,6 +155,7 @@
       pointer-events: none;
       z-index: 1;
     }
+
     .social-icons {
       position: absolute;
       bottom: 10px;
@@ -147,37 +163,45 @@
       display: flex;
       gap: 10px;
     }
+
     .social-icons a {
       color: white;
       text-decoration: none;
       font-size: 24px;
       transition: color 0.3s;
     }
+
     .social-icons a:hover {
       color: #3f51b5;
     }
+
     @keyframes torbellinoAnimation {
       from { transform: rotateY(0deg); }
       to { transform: rotateY(2160deg); }
     }
+
     @media (max-width: 600px) {
       .card-container {
         width: 90vw;
         height: 70vh;
       }
+
       .flip-button, .youtube-button {
         padding: 6px 10px;
         top: 15px;
         right: 15px;
       }
+
       .flip-button {
         width: 36px;
         height: 36px;
       }
+
       .social-icons {
         bottom: 5px;
         right: 5px;
       }
+
       .social-icons a {
         font-size: 20px;
       }
@@ -229,7 +253,9 @@
   </button>
 
   <script>
-    // Variables para la carta principal (efecto 3D táctil)
+    /* ========================================================
+       ROTACIÓN 3D TÁCTIL PARA LA CARTA PRINCIPAL (rotateCard)
+       ======================================================== */
     const rotateCard = document.getElementById('rotateCard');
     const frontImageTop = rotateCard.querySelector('.front-image');
     const backImageTop = rotateCard.querySelector('.back-image');
@@ -251,7 +277,8 @@
       rotateCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
       // Normalizamos el ángulo para determinar qué cara debe verse
       let normalizedY = ((rotationY % 360) + 360) % 360;
-      if(normalizedY > 90 && normalizedY < 270) {
+      // Ajuste: se muestra la parte trasera (y los botones) si el ángulo está entre 45° y 315°
+      if(normalizedY > 45 && normalizedY < 315) {
         frontImageTop.style.opacity = 0;
         backImageTop.style.opacity = 1;
         rotateBackContent.style.opacity = 1;
@@ -401,16 +428,20 @@
         this.radius = Math.random() * 2 + 1;
         this.shape = Math.random() < 0.5 ? 'circle' : (Math.random() < 0.5 ? 'square' : 'triangle');
       }
+
       update() {
         this.x += this.vx;
         this.y += this.vy;
+
         if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) {
           this.vx = -this.vx;
         }
+
         if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) {
           this.vy = -this.vy;
         }
       }
+
       draw() {
         ctx.beginPath();
         if (this.shape === 'circle') {
@@ -461,6 +492,7 @@
       const cardCenterX = rect.left + rect.width / 2;
       const cardCenterY = rect.top + rect.height / 2;
       const distance = Math.sqrt((particle.x - cardCenterX) ** 2 + (particle.y - cardCenterY) ** 2);
+
       if (distance < rect.width / 2) {
         const angle = Math.atan2(particle.y - cardCenterY, particle.x - cardCenterX);
         particle.vx = Math.cos(angle) * 0.5;
@@ -479,6 +511,7 @@
       });
       requestAnimationFrame(animate);
     }
+
     animate();
   </script>
 </body>
