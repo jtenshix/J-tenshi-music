@@ -258,8 +258,8 @@
         const rotateCard = document.getElementById('rotateCard');
         const frontImageTop = rotateCard.querySelector('.front-image');
         const backImageTop = rotateCard.querySelector('.back-image');
-        const youtubeButtonTop = rotateCard.querySelector('.card-flip-face.back .youtube-button'); // Nuevo selector
-        const socialIconsTop = rotateCard.querySelector('.card-flip-face.back .social-icons'); // Nuevo selector
+        const youtubeButtonTop = rotateCard.querySelector('.card > .card-flip-face.back .youtube-button'); // Selector correcto
+        const socialIconsTop = rotateCard.querySelector('.card > .card-flip-face.back .social-icons'); // Selector correcto
 
         const flipCardContainer = document.getElementById('flipCardContainer');
         const flipCard = document.getElementById('flipCard');
@@ -424,6 +424,4 @@
                 this.x = x;
                 this.y = y;
                 this.vx = (Math.random() - 0.5) * 0.05;
-                this.vy = (Math.random() - 0.5) * 0.05;
-                this.radius = Math.random() * 2 + 1;
-                this.shape = Math.random() < 0.5 ? 'circle' : (Math.random() < 0.
+                this.vy = (Math.random() -
