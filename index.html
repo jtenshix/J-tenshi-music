@@ -129,7 +129,7 @@
       font-family: Arial, sans-serif;
       font-weight: bold;
       transition: background 0.3s, opacity 0.3s ease;
-      opacity: 1;
+      opacity: 1; /* Asegura que el botón sea visible */
     }
 
     .youtube-button:hover {
@@ -212,12 +212,10 @@
 
   <canvas id="particleCanvas"></canvas>
   <div class="card-container">
-    <!-- Carta principal: mantiene el efecto 3D táctil -->
     <div class="card" id="rotateCard">
       <img class="front-image" src="carta_frente.png.jpg" alt="Frente de la Carta">
       <img class="back-image" src="carta_dorso.png.png" alt="Dorso de la Carta">
-      <!-- Contenedor de botones en la cara trasera de la carta principal -->
-      <div class="card-flip-face back" id="rotateBackContent" style="opacity: 0;">
+      <div class="card-flip-face back">
         <button class="youtube-button" onclick="window.open('https://www.youtube.com/channel/UCg2fr3xBhOk34a1TocdT5jw', '_blank')">
           <i class="fab fa-youtube"></i>
         </button>
@@ -228,7 +226,6 @@
         </div>
       </div>
     </div>
-    <!-- Carta que voltea -->
     <div class="card-flip-container" id="flipCardContainer">
       <div class="card-flip" id="flipCard">
         <div class="card-flip-face front">
@@ -253,13 +250,14 @@
   </button>
 
   <script>
-    /* ========================================================
-       ROTACIÓN 3D TÁCTIL PARA LA CARTA PRINCIPAL (rotateCard)
-       ======================================================== */
     const rotateCard = document.getElementById('rotateCard');
     const frontImageTop = rotateCard.querySelector('.front-image');
     const backImageTop = rotateCard.querySelector('.back-image');
-    const rotateBackContent = document.getElementById('rotateBackContent');
+
+    const flipCardContainer = document.getElementById('flipCardContainer');
+    const flipCard = document.getElementById('flipCard');
+
+    const toggleFlipBtn = document.getElementById('toggleFlipBtn');
 
     let isTouchingRotateCard = false;
     let startXRotate, startYRotate, currentXRotate, currentYRotate;
@@ -268,27 +266,10 @@
     let animationFrameRotateId;
     const frictionRotate = 0.9;
     const springForceRotate = 0.005;
+    const dampingRotate = 0.5;
     const rotationFactorRotate = 0.3;
-    const dampingRotate = 0.5; // Se restaura el damping para el rebote
     let velocityY = 0;
     let velocityX = 0;
-
-    // Actualiza la transformación y muestra u oculta la parte trasera según el ángulo
-    const updateRotateTransform = () => {
-      rotateCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-      // Normalizamos el ángulo en Y
-      let normalizedY = ((rotationY % 360) + 360) % 360;
-      // Mostramos la parte trasera y los botones si el ángulo está entre 90° y 270°
-      if(normalizedY > 90 && normalizedY < 270) {
-        frontImageTop.style.opacity = 0;
-        backImageTop.style.opacity = 1;
-        rotateBackContent.style.opacity = 1;
-      } else {
-        frontImageTop.style.opacity = 1;
-        backImageTop.style.opacity = 0;
-        rotateBackContent.style.opacity = 0;
-      }
-    };
 
     const handleTouchStartRotate = (e) => {
       isTouchingRotateCard = true;
@@ -325,7 +306,7 @@
 
       velocityY = deltaX * 0.5;
       velocityX = -deltaY * 0.5;
-      updateRotateTransform();
+      rotateCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
       startXRotate = currentXRotate;
       startYRotate = currentYRotate;
       e.preventDefault();
@@ -353,7 +334,7 @@
 
         velocityY *= dampingRotate;
         velocityX *= dampingRotate;
-        updateRotateTransform();
+        rotateCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
         if (Math.abs(velocityY) > 0.005 || Math.abs(velocityX) > 0.005 || Math.abs(rotationY) > 0.005 || Math.abs(rotationX) > 0.005) {
           animationFrameRotateId = requestAnimationFrame(animateReboundRotate);
         }
@@ -371,12 +352,6 @@
     rotateCard.addEventListener('touchend', handleTouchEndRotate);
     rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-    /* ========================================================
-       FUNCIONALIDAD DE FLIP PARA LA CARTA VOLTEABLE (flipCardContainer)
-       ======================================================== */
-    const flipCardContainer = document.getElementById('flipCardContainer');
-    const flipCard = document.getElementById('flipCard');
-    const toggleFlipBtn = document.getElementById('toggleFlipBtn');
     let currentRotation = 0;
     let flipCount = 0;
     let isFlipping = false;
@@ -386,8 +361,10 @@
     toggleFlipBtn.addEventListener('click', () => {
       if (!isFlipping) {
         isFlipping = true;
+
         rotateCard.style.opacity = 0;
         flipCardContainer.style.opacity = 1;
+
         if (isFrontVisibleTop) {
           frontImageTop.style.opacity = 0;
           backImageTop.style.opacity = 1;
@@ -396,12 +373,15 @@
           backImageTop.style.opacity = 0;
         }
         isFrontVisibleTop = !isFrontVisibleTop;
+
         flipCount++;
+
         const resetVisibility = () => {
           rotateCard.style.opacity = 1;
           flipCardContainer.style.opacity = 0;
           isFlipping = false;
         };
+
         let flipDuration = 600;
         if (flipCount % 10 === 0) {
           flipCard.classList.add('torbellino');
@@ -416,13 +396,11 @@
           currentRotation += 180;
           flipCard.style.transform = `rotateY(${currentRotation}deg)`;
         }
+
         setTimeout(resetVisibility, flipDuration);
       }
     });
 
-    /* ========================================================
-       SISTEMA DE PARTÍCULAS
-       ======================================================== */
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
     const particles = [];
