@@ -3,31 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carta Interactiva</title>
+  <title>Carta Interactiva con Partículas</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
+    /* Estilos base y fondo */
     body {
       margin: 0;
       padding: 0;
       background: linear-gradient(135deg, #1a0033, #4a148c, #3f51b5);
-      height: 100vh;
+      min-height: 100vh;
+      overflow: hidden;
+      user-select: none;
       display: flex;
       justify-content: center;
       align-items: center;
-      user-select: none;
+      position: relative;
     }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    /* Contenedor de la carta */
     .card-container {
       width: 300px;
       height: 420px;
-      perspective: 1000px;
       position: relative;
+      perspective: 1000px;
     }
+    /* La carta: estructura 3D con dos caras */
     .card {
       width: 100%;
       height: 100%;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease-out;
       cursor: grab;
     }
     .card.dragging {
@@ -41,13 +55,15 @@
       border-radius: 8px;
       overflow: hidden;
     }
+    /* Cara frontal */
     .card-front {
       z-index: 2;
     }
+    /* Cara trasera: inicialmente rota 180° en Y */
     .card-back {
       transform: rotateY(180deg);
     }
-    /* Contenedor de botones en la parte trasera */
+    /* Contenedor de botones en la cara trasera */
     .card-back-content {
       position: absolute;
       top: 0;
@@ -79,7 +95,7 @@
       font-size: 24px;
       text-decoration: none;
     }
-    /* Botón de flip */
+    /* Botón para voltear la carta */
     #flipButton {
       position: absolute;
       top: 10px;
@@ -94,6 +110,9 @@
   </style>
 </head>
 <body>
+  <!-- Canvas de partículas -->
+  <canvas id="particleCanvas"></canvas>
+  <!-- Contenedor de la carta -->
   <div class="card-container">
     <div class="card" id="card">
       <!-- Cara frontal -->
@@ -115,73 +134,12 @@
         </div>
       </div>
     </div>
+    <!-- Botón para voltear la carta -->
     <button id="flipButton">
       <img src="https://via.placeholder.com/40/000000/FFFFFF?Text=Flip" alt="Voltear">
     </button>
   </div>
 
   <script>
-    const card = document.getElementById('card');
-    const flipButton = document.getElementById('flipButton');
-    let isFlipped = false;
-
-    // Variables para la rotación por drag y auto-rotación
-    let rotationX = 0;
-    let rotationY = 0;
-    let startX, startY;
-    let isDragging = false;
-    let autoRotate = true;
-
-    // Actualiza la transformación combinando el flip y la rotación
-    function updateTransform() {
-      const baseY = isFlipped ? 180 : 0;
-      card.style.transform = `rotateY(${baseY + rotationY}deg) rotateX(${rotationX}deg)`;
-    }
-
-    // Flip: al hacer clic se invierte el estado y se actualiza la transformación
-    flipButton.addEventListener('click', () => {
-      isFlipped = !isFlipped;
-      updateTransform();
-    });
-
-    // Arrastre (drag) para rotar la carta
-    card.addEventListener('mousedown', (e) => {
-      isDragging = true;
-      autoRotate = false;  // Desactiva la auto-rotación mientras se arrastra
-      startX = e.clientX;
-      startY = e.clientY;
-      card.classList.add('dragging');
-    });
-
-    window.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
-      rotationY += dx * 0.5;
-      rotationX -= dy * 0.5;
-      updateTransform();
-      startX = e.clientX;
-      startY = e.clientY;
-    });
-
-    window.addEventListener('mouseup', () => {
-      if (isDragging) {
-        isDragging = false;
-        card.classList.remove('dragging');
-        // Vuelve a habilitar la auto-rotación después de un tiempo (opcional)
-        setTimeout(() => { autoRotate = true; }, 2000);
-      }
-    });
-
-    // Auto-rotación: mientras no se esté arrastrando, la carta gira lentamente
-    function animate() {
-      if (!isDragging && autoRotate) {
-        rotationY += 0.2; // Ajusta la velocidad de auto-rotación
-        updateTransform();
-      }
-      requestAnimationFrame(animate);
-    }
-    animate();
-  </script>
-</body>
-</html>
+    /* ========================================================
+       ROTACIÓN 3D TÁCTIL (mouse y touch)
