@@ -55,7 +55,6 @@
       width: 100%;
       height: 100%;
       z-index: 3;
-      /* Se eliminó pointer-events: none para que los botones sean interactivos y visibles */
     }
     .card-back-content .youtube-button {
       position: absolute;
@@ -126,15 +125,26 @@
     const flipButton = document.getElementById('flipButton');
     let isFlipped = false;
 
+    // Variables para la rotación extra (drag)
+    let rotationX = 0;
+    let rotationY = 0;
+    let startX, startY;
+    let isDragging = false;
+
+    // Función para actualizar la transformación combinada:
+    function updateTransform() {
+      // Si está volteada, la base en Y es 180; de lo contrario 0.
+      const baseY = isFlipped ? 180 : 0;
+      card.style.transform = `rotateY(${baseY + rotationY}deg) rotateX(${rotationX}deg)`;
+    }
+
     // Función para voltear la carta
     flipButton.addEventListener('click', () => {
       isFlipped = !isFlipped;
-      card.style.transform = isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+      updateTransform();
     });
 
-    // Funcionalidad de arrastre para rotar la carta (drag rotation)
-    let isDragging = false, startX, startY, rotationX = 0, rotationY = 0;
-
+    // Manejo de arrastre (drag) para rotar la carta
     card.addEventListener('mousedown', (e) => {
       isDragging = true;
       startX = e.clientX;
@@ -144,12 +154,11 @@
 
     window.addEventListener('mousemove', (e) => {
       if (!isDragging) return;
-      let dx = e.clientX - startX;
-      let dy = e.clientY - startY;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
       rotationY += dx * 0.5;
       rotationX -= dy * 0.5;
-      // Si está volteada, se suma 180deg para mantener la orientación de la parte trasera
-      card.style.transform = `rotateY(${isFlipped ? 180 + rotationY : rotationY}deg) rotateX(${rotationX}deg)`;
+      updateTransform();
       startX = e.clientX;
       startY = e.clientY;
     });
