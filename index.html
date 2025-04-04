@@ -129,7 +129,7 @@
       font-family: Arial, sans-serif;
       font-weight: bold;
       transition: background 0.3s, opacity 0.3s ease;
-      opacity: 1; /* Asegura que el botón sea visible */
+      opacity: 1;
     }
 
     .youtube-button:hover {
@@ -269,16 +269,17 @@
     const frictionRotate = 0.9;
     const springForceRotate = 0.005;
     const rotationFactorRotate = 0.3;
+    const dampingRotate = 0.5; // Se restaura el damping para el rebote
     let velocityY = 0;
     let velocityX = 0;
 
-    // Función para actualizar la transformación y visibilidad en la carta principal
+    // Actualiza la transformación y muestra u oculta la parte trasera según el ángulo
     const updateRotateTransform = () => {
       rotateCard.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-      // Normalizamos el ángulo para determinar qué cara debe verse
+      // Normalizamos el ángulo en Y
       let normalizedY = ((rotationY % 360) + 360) % 360;
-      // Ajuste: se muestra la parte trasera (y los botones) si el ángulo está entre 45° y 315°
-      if(normalizedY > 45 && normalizedY < 315) {
+      // Mostramos la parte trasera y los botones si el ángulo está entre 90° y 270°
+      if(normalizedY > 90 && normalizedY < 270) {
         frontImageTop.style.opacity = 0;
         backImageTop.style.opacity = 1;
         rotateBackContent.style.opacity = 1;
@@ -370,7 +371,12 @@
     rotateCard.addEventListener('touchend', handleTouchEndRotate);
     rotateCard.addEventListener('touchcancel', handleTouchCancelRotate);
 
-    // Flip: mantiene la funcionalidad de la carta que voltea
+    /* ========================================================
+       FUNCIONALIDAD DE FLIP PARA LA CARTA VOLTEABLE (flipCardContainer)
+       ======================================================== */
+    const flipCardContainer = document.getElementById('flipCardContainer');
+    const flipCard = document.getElementById('flipCard');
+    const toggleFlipBtn = document.getElementById('toggleFlipBtn');
     let currentRotation = 0;
     let flipCount = 0;
     let isFlipping = false;
@@ -414,7 +420,9 @@
       }
     });
 
-    // Sistema de partículas
+    /* ========================================================
+       SISTEMA DE PARTÍCULAS
+       ======================================================== */
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
     const particles = [];
