@@ -27,7 +27,7 @@
       height: 100%;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.6s ease-in-out;
+      transition: transform 0.3s ease;
       cursor: grab;
     }
     .card.dragging {
@@ -47,7 +47,7 @@
     .card-back {
       transform: rotateY(180deg);
     }
-    /* Contenedor de los botones en la parte trasera */
+    /* Contenedor de botones en la parte trasera */
     .card-back-content {
       position: absolute;
       top: 0;
@@ -79,7 +79,7 @@
       font-size: 24px;
       text-decoration: none;
     }
-    /* Botón para voltear la carta */
+    /* Botón de flip */
     #flipButton {
       position: absolute;
       top: 10px;
@@ -125,28 +125,29 @@
     const flipButton = document.getElementById('flipButton');
     let isFlipped = false;
 
-    // Variables para la rotación extra (drag)
+    // Variables para la rotación por drag y auto-rotación
     let rotationX = 0;
     let rotationY = 0;
     let startX, startY;
     let isDragging = false;
+    let autoRotate = true;
 
-    // Función para actualizar la transformación combinada:
+    // Actualiza la transformación combinando el flip y la rotación
     function updateTransform() {
-      // Si está volteada, la base en Y es 180; de lo contrario 0.
       const baseY = isFlipped ? 180 : 0;
       card.style.transform = `rotateY(${baseY + rotationY}deg) rotateX(${rotationX}deg)`;
     }
 
-    // Función para voltear la carta
+    // Flip: al hacer clic se invierte el estado y se actualiza la transformación
     flipButton.addEventListener('click', () => {
       isFlipped = !isFlipped;
       updateTransform();
     });
 
-    // Manejo de arrastre (drag) para rotar la carta
+    // Arrastre (drag) para rotar la carta
     card.addEventListener('mousedown', (e) => {
       isDragging = true;
+      autoRotate = false;  // Desactiva la auto-rotación mientras se arrastra
       startX = e.clientX;
       startY = e.clientY;
       card.classList.add('dragging');
@@ -164,9 +165,23 @@
     });
 
     window.addEventListener('mouseup', () => {
-      isDragging = false;
-      card.classList.remove('dragging');
+      if (isDragging) {
+        isDragging = false;
+        card.classList.remove('dragging');
+        // Vuelve a habilitar la auto-rotación después de un tiempo (opcional)
+        setTimeout(() => { autoRotate = true; }, 2000);
+      }
     });
+
+    // Auto-rotación: mientras no se esté arrastrando, la carta gira lentamente
+    function animate() {
+      if (!isDragging && autoRotate) {
+        rotationY += 0.2; // Ajusta la velocidad de auto-rotación
+        updateTransform();
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
   </script>
 </body>
 </html>
