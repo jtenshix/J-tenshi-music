@@ -98,6 +98,8 @@
 
     .card-flip-face.back {
       transform: rotateY(180deg);
+      /* Aseguramos que el contenido trasero esté encima de la imagen trasera */
+      z-index: 3;
     }
 
     .flip-button {
@@ -139,11 +141,13 @@
     .card .youtube-button {
       top: 20px;
       left: 20px;
+      z-index: 4; /* Aseguramos que el botón esté encima de la imagen trasera */
     }
 
     .card-flip-face.back .youtube-button {
       top: 20px;
       left: 20px;
+      z-index: 4; /* Aseguramos que el botón esté encima de la imagen trasera */
     }
 
     canvas {
@@ -162,6 +166,7 @@
       right: 10px;
       display: flex;
       gap: 10px;
+      z-index: 4; /* Aseguramos que los iconos estén encima de la imagen trasera */
     }
 
     .social-icons a {
@@ -238,9 +243,8 @@
           </button>
           <div class="social-icons">
             <a href="https://facebook.com/tu_perfil" target="_blank"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://twitter.com/tu_perfil" target="_blank"><i class="fab fa-twitter"></i></a>
-            <a href="https://instagram.com/tu_perfil" target="_blank"><i class="fab fa-instagram"></i></a>
-          </div>
+          <a href="https://twitter.com/tu_perfil" target="_blank"><i class="fab fa-twitter"></i></a>
+          <a href="https://instagram.com/tu_perfil" target="_blank"><i class="fab fa-instagram"></i></a>
         </div>
       </div>
     </div>
