@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única Flip & Rotate v16 (Trompo Suave)</title>
+    <title>Carta Única Flip & Rotate v15 (Trompo Final Correcto)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        /* CSS Base */
+        /* CSS Base (sin cambios) */
         body { margin: 0; padding: 0; background: linear-gradient(135deg, #1a0033, #4a148c, #3f51b5); min-height: 100vh; min-height: 100svh; overflow: hidden; display: flex; justify-content: center; align-items: center; position: relative; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
         .card-container { width: 85vw; height: auto; aspect-ratio: 300 / 420; max-width: 300px; position: relative; perspective: 1000px; cursor: grab; user-select: none; -webkit-user-drag: none; z-index: 10; }
         .card-container:active { cursor: grabbing; }
@@ -25,18 +25,20 @@
         .flip-button:hover { background-color: white; transform: scale(1.1); }
         canvas#particleCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
 
-        /* *** CSS DEL TROMPO ACTUALIZADO *** */
+        /* *** CSS AÑADIDO/NECESARIO PARA EL TROMPO *** */
         @keyframes torbellinoSpin {
             100% {
-                transform: rotateY(2340deg) rotateX(0deg); /* 6 vueltas + 180 grados */
+                /* Gira múltiples veces y termina en un estado 'volteado' relativo */
+                /* 2340deg = 6 vueltas completas + 180 grados */
+                transform: rotateY(2340deg) rotateX(0deg);
             }
+            /* El estado 'from' se toma implícitamente del transform actual */
         }
 
         .card.trompo-activo {
-            /* Aplicar la animación */
-            /* Aumentada duración a 2.2s */
-            animation: torbellinoSpin 2.2s cubic-bezier(0.25, 1, 0.5, 1) 1;
-            transition: none !important;
+            /* Aplica la animación */
+            animation: torbellinoSpin 2.2s cubic-bezier(0.25, 1, 0.5, 1) 1; /* Duración y curva ajustadas */
+            transition: none !important; /* Sobreescribir transición normal */
         }
         /* *** FIN CSS TROMPO *** */
 
@@ -92,10 +94,10 @@
         // Estado
         let isDragging = false;
         let isFlipping = false;
-        let currentFlipRotation = 0;
+        let currentFlipRotation = 0; // Rotación Y acumulada por el flip
         let dragRotationX = 0;
         let dragRotationY = 0;
-        let flipCount = 0; // Contador para trompo
+        let flipCount = 0; // *** CONTADOR PARA TROMPO ***
 
         // Drag & Physics
         let startX, startY, currentX, currentY;
@@ -104,100 +106,102 @@
         const maxDragRotationY = 40;
         let velocityX = 0;
         let velocityY = 0;
-        const friction = 0.88;
-        const springForce = 0.06; // Valores para rebote corto
+        const friction = 0.88;      // Ajustados para rebote corto
+        const springForce = 0.06;
         let animationFrameId = null;
 
         // --- FUNCIÓN PARA APLICAR TRANSFORMACIÓN ---
         function applyRotation() {
+            // Se asegura que la rotación de drag se aplique sobre la de flip
             cardElement.style.transform = `rotateY(${currentFlipRotation + dragRotationY}deg) rotateX(${dragRotationX}deg)`;
         }
 
-        // --- LÓGICA DE VOLTEO (FLIP) --- CON TROMPO CADA 10 ---
+        // --- LÓGICA DE VOLTEO (FLIP) --- *** ACTUALIZADA CON CONTADOR Y TROMPO *** ---
         flipButton.addEventListener('click', () => {
             if (isFlipping || isDragging) return;
             isFlipping = true;
-            disableDrag();
-            cancelAnimationFrame(animationFrameId); animationFrameId = null;
+            disableDrag(); // Llama a handleDragEnd -> animateRebound si hay offset
+            cancelAnimationFrame(animationFrameId); animationFrameId = null; // Detener rebote
 
-            dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; // Forzar centro
-            applyRotation();
+            // Forzar estado centrado (drag=0) antes de animar
+            dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0;
+            applyRotation(); // Aplicar centro + flip actual
 
-            flipCount++;
+            flipCount++; // Incrementar contador
 
             if (flipCount === 10) {
-                // --- EFECTO TROMPO ---
-                cardElement.style.transition = 'none'; // Quitar transición CSS
-                applyRotation(); // Asegurar rotación Y base actual
-                void cardElement.offsetWidth; // Reflow
+                // --- EFECTO TROMPO (10º Flip) ---
+                // console.log("¡Trompo!");
+                cardElement.style.transition = 'none'; // Quitar transición CSS normal
+                applyRotation(); // Asegurar rotación Y base actual aplicada
+                void cardElement.offsetWidth; // Forzar reflow para que la animación parta bien
 
-                cardElement.classList.add('trompo-activo'); // Activar animación CSS
+                cardElement.classList.add('trompo-activo'); // Añadir clase para activar @keyframes
 
+                // Escuchar fin de la animación CSS ('animationend')
                 cardElement.addEventListener('animationend', () => {
-                    cardElement.classList.remove('trompo-activo');
-                    currentFlipRotation = 180; // Terminar en cara trasera
-                    flipCount = 0; // Reiniciar contador
-                    onFlipEnd();
-                }, { once: true });
+                    cardElement.classList.remove('trompo-activo'); // Limpiar clase
+                    // Forzar estado final a cara trasera (180 grados visuales)
+                    // y resetear la acumulación para el próximo ciclo
+                    currentFlipRotation = 180;
+                    flipCount = 0; // *** REINICIAR CONTADOR ***
+                    onFlipEnd(); // Limpiar estados y reactivar drag
+                }, { once: true }); // Escuchar solo una vez
 
             } else {
-                // --- FLIP NORMAL (ACUMULATIVO) ---
-                currentFlipRotation += 180; // Acumular
+                // --- FLIP NORMAL (1º al 9º - ACUMULATIVO) ---
+                // console.log("Flip normal:", flipCount);
+                currentFlipRotation += 180; // Acumular rotación para giro siempre igual
 
-                cardElement.style.transition = 'transform 0.6s ease-in-out'; // Transición normal
-                applyRotation(); // Aplicar nueva rotación acumulada
+                cardElement.style.transition = 'transform 0.6s ease-in-out'; // Transición CSS normal
+                applyRotation(); // Aplicar nueva rotación acumulada (drag ya está en 0)
 
+                // Escuchar fin de la transición CSS normal ('transitionend')
                 cardElement.addEventListener('transitionend', onFlipEnd, { once: true });
             }
         });
 
-        // Limpieza post-flip/trompo
+        // Limpieza y reactivación después de CUALQUIER flip/trompo
         function onFlipEnd() {
             isFlipping = false;
-            cardElement.style.transition = 'none';
+            cardElement.style.transition = 'none'; // Quitar transición CSS
             // Asegurar reseteo drag/velocidad
             dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0;
-            applyRotation(); // Asegurar estado visual
+            applyRotation(); // Asegurar estado visual correcto
             enableDrag();
         }
 
 
         // --- LÓGICA DE ROTACIÓN INTERACTIVA (DRAG CON FÍSICA + CONDICIONAL VERTICAL) ---
-        function handleDragStart(e) { /* ... Sin cambios ... */
-            if (isFlipping) return;
-            isDragging = true; cardContainer.style.cursor = 'grabbing'; cardElement.style.transition = 'none';
-            cancelAnimationFrame(animationFrameId); animationFrameId = null;
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            const rect = cardContainer.getBoundingClientRect();
-            startX = clientX - (rect.left + rect.width / 2); startY = clientY - (rect.top + rect.height / 2);
-            velocityX = 0; velocityY = 0;
-            document.addEventListener('mousemove', handleDragMove); document.addEventListener('touchmove', handleDragMove, { passive: false });
-            document.addEventListener('mouseup', handleDragEnd); document.addEventListener('touchend', handleDragEnd);
-            document.addEventListener('mouseleave', handleDragEnd);
-        }
-        function handleDragMove(e) { /* ... Sin cambios ... */
+        // (Sin cambios respecto a la última versión)
+        function handleDragStart(e) {
+             if (isFlipping) return; isDragging = true; cardContainer.style.cursor = 'grabbing'; cardElement.style.transition = 'none'; cancelAnimationFrame(animationFrameId); animationFrameId = null;
+             const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+             const rect = cardContainer.getBoundingClientRect(); startX = clientX - (rect.left + rect.width / 2); startY = clientY - (rect.top + rect.height / 2);
+             velocityX = 0; velocityY = 0;
+             document.addEventListener('mousemove', handleDragMove); document.addEventListener('touchmove', handleDragMove, { passive: false }); document.addEventListener('mouseup', handleDragEnd); document.addEventListener('touchend', handleDragEnd); document.addEventListener('mouseleave', handleDragEnd);
+         }
+        function handleDragMove(e) {
              if (!isDragging) return; if (e.touches) e.preventDefault();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            const rect = cardContainer.getBoundingClientRect();
-            currentX = clientX - (rect.left + rect.width / 2); currentY = clientY - (rect.top + rect.height / 2);
-            const deltaX = currentX - startX; const deltaY = currentY - startY;
-            const isBackFacing = Math.round(currentFlipRotation / 180) % 2 !== 0;
-            dragRotationY += deltaX * rotationFactor;
-            if (isBackFacing) { dragRotationX += deltaY * rotationFactor; } else { dragRotationX -= deltaY * rotationFactor; }
-            dragRotationX = Math.max(-maxDragRotationX, Math.min(maxDragRotationX, dragRotationX));
-            dragRotationY = Math.max(-maxDragRotationY, Math.min(maxDragRotationY, dragRotationY));
-            velocityX = -deltaY * 0.5; velocityY = deltaX * 0.5;
-            applyRotation();
-            startX = currentX; startY = currentY;
-        }
-        function handleDragEnd() { /* ... Sin cambios ... */
+             const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+             const rect = cardContainer.getBoundingClientRect(); currentX = clientX - (rect.left + rect.width / 2); currentY = clientY - (rect.top + rect.height / 2);
+             const deltaX = currentX - startX; const deltaY = currentY - startY;
+             const isBackFacing = Math.round(currentFlipRotation / 180) % 2 !== 0;
+             dragRotationY += deltaX * rotationFactor;
+             if (isBackFacing) { dragRotationX += deltaY * rotationFactor; } else { dragRotationX -= deltaY * rotationFactor; }
+             dragRotationX = Math.max(-maxDragRotationX, Math.min(maxDragRotationX, dragRotationX)); dragRotationY = Math.max(-maxDragRotationY, Math.min(maxDragRotationY, dragRotationY));
+             velocityX = -deltaY * 0.5; velocityY = deltaX * 0.5;
+             applyRotation();
+             startX = currentX; startY = currentY;
+         }
+        function handleDragEnd() {
             if (!isDragging) return; isDragging = false; cardContainer.style.cursor = 'grab';
             document.removeEventListener('mousemove', handleDragMove); document.removeEventListener('touchmove', handleDragMove);
             document.removeEventListener('mouseup', handleDragEnd); document.removeEventListener('touchend', handleDragEnd);
             document.removeEventListener('mouseleave', handleDragEnd);
             animateRebound();
          }
-         function animateRebound() { /* ... Sin cambios ... */
+         function animateRebound() {
              if (isDragging || isFlipping) { cancelAnimationFrame(animationFrameId); animationFrameId = null; return; }
              dragRotationY += velocityY; dragRotationX += velocityX; velocityY *= friction; velocityX *= friction;
              const forceY = -dragRotationY * springForce; const forceX = -dragRotationX * springForce;
@@ -207,10 +211,10 @@
                  animationFrameId = requestAnimationFrame(animateRebound);
              } else { dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; applyRotation(); animationFrameId = null; }
          }
-        function enableDrag() { /* ... Sin cambios ... */
-            cardContainer.addEventListener('mousedown', handleDragStart); cardContainer.addEventListener('touchstart', handleDragStart, { passive: false });
+        function enableDrag() {
+             cardContainer.addEventListener('mousedown', handleDragStart); cardContainer.addEventListener('touchstart', handleDragStart, { passive: false });
          }
-        function disableDrag() { /* ... Sin cambios ... */
+        function disableDrag() {
             if(isDragging) { handleDragEnd(); }
             cardContainer.removeEventListener('mousedown', handleDragStart); cardContainer.removeEventListener('touchstart', handleDragStart);
          }
@@ -223,7 +227,7 @@
 
         // --- INICIALIZACIÓN ---
         enableDrag(); // Habilitar drag al cargar
-        // No iniciar bucle Lerp/Rebote aquí, se controla por eventos
+        // El loop de animación de física (`animateRebound`) solo se inicia cuando es necesario
 
         // Inicialización Partículas
         if (canvas && ctx) {
