@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única Flip & Rotate v11 (Flip Corregido)</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Carta Única Flip & Rotate v10 (Rotación Condicional)</title> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* CSS (igual que la última versión completa) */
         body {
@@ -18,7 +17,7 @@
 
         .card {
             width: 100%; height: 100%; position: relative; transform-style: preserve-3d;
-            transition: none;
+            transition: none; /* Transición controlada por JS */
             transform: rotateX(0deg) rotateY(0deg); user-select: none; -webkit-user-drag: none;
         }
 
@@ -31,6 +30,7 @@
         .card-face.front {}
         .card-face.back { transform: rotateY(180deg); background-color: #333; position: relative; }
 
+        /* Botones DENTRO de .card-face.back */
         .card-face.back .button-container {
              position: absolute; inset: 0; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; z-index: 1;
         }
@@ -44,12 +44,13 @@
          .card-face.back .social-icons a { color: white; text-decoration: none; font-size: 20px; transition: color 0.3s; }
          .card-face.back .social-icons a:hover { color: #8c9eff; }
 
+        /* Botón de Voltear General */
         .flip-button {
             background-color: rgba(255, 255, 255, 0.8); border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background 0.3s, transform 0.3s;
-            position: fixed;
+            position: fixed; /* Fijado */
             z-index: 100;
-            bottom: 25px;
-            right: 25px;
+            bottom: 25px; /* Ajustado */
+            right: 25px;  /* Ajustado */
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
          .flip-button:hover { background-color: white; transform: scale(1.1); }
@@ -108,7 +109,7 @@
         // Estado
         let isDragging = false;
         let isFlipping = false;
-        let currentFlipRotation = 0; // Guarda el estado actual: 0 o 180
+        let currentFlipRotation = 0;
 
         // Variables para Lerp
         let currentAppliedDragX = 0; let currentAppliedDragY = 0;
@@ -133,9 +134,7 @@
             const diffY = targetDragY - currentAppliedDragY;
 
             if (!isDragging && Math.abs(diffX) < 0.01 && Math.abs(diffY) < 0.01) {
-                if (currentAppliedDragX !== targetDragX || currentAppliedDragY !== targetDragY) {
-                    currentAppliedDragX = targetDragX; currentAppliedDragY = targetDragY; applyRotation();
-                }
+                if (currentAppliedDragX !== targetDragX || currentAppliedDragY !== targetDragY) { currentAppliedDragX = targetDragX; currentAppliedDragY = targetDragY; applyRotation(); }
                 animationFrameId = null; return;
             }
             currentAppliedDragX = lerp(currentAppliedDragX, targetDragX, smoothingFactor);
@@ -144,47 +143,38 @@
             animationFrameId = requestAnimationFrame(animate);
         }
 
-        // --- LÓGICA DE VOLTEO (FLIP) --- CORREGIDA ---
+        // --- LÓGICA DE VOLTEO (FLIP) --- (Corregida para alternar 0/180)
         flipButton.addEventListener('click', () => {
             if (isFlipping || isDragging) return;
             isFlipping = true;
-            disableDrag(); // Pone targetDrag a 0 y el lerp centrará
-            cancelAnimationFrame(animationFrameId); animationFrameId = null; // Detener Lerp
+            disableDrag();
+            cancelAnimationFrame(animationFrameId); animationFrameId = null;
 
-            // Esperar un poco a que el Lerp visualmente esté cerca del centro
             const checkCentering = setInterval(() => {
                 if (Math.abs(currentAppliedDragX) < 0.5 && Math.abs(currentAppliedDragY) < 0.5) {
                     clearInterval(checkCentering);
-                    // Forzar al centro exacto antes del flip
-                    currentAppliedDragX = 0; currentAppliedDragY = 0; targetDragX = 0; targetDragY = 0;
+                    currentAppliedDragX = 0; currentAppliedDragY = 0; targetDragX = 0; targetDragY = 0; // Forzar centro
                     applyRotation();
 
-                    // *** LÓGICA DE ALTERNANCIA 0/180 ***
-                    const newFlipRotation = (currentFlipRotation === 0) ? 180 : 0;
+                    const newFlipRotation = (currentFlipRotation === 0) ? 180 : 0; // Alternar
 
-                    // Aplicar transición y la nueva rotación objetivo
                     cardElement.style.transition = 'transform 0.6s ease-in-out';
-                    // Aplicar solo el nuevo estado de flip (drag ya está en 0)
-                    cardElement.style.transform = `rotateY(${newFlipRotation}deg) rotateX(0deg)`;
+                    cardElement.style.transform = `rotateY(${newFlipRotation}deg) rotateX(0deg)`; // Animar al nuevo estado
 
-                    // Actualizar el estado CUANDO termine la animación
                     cardElement.addEventListener('transitionend', () => {
-                        currentFlipRotation = newFlipRotation; // Actualizar estado aquí
-                        onFlipEnd(); // Llamar a la función de limpieza/reactivación
+                        currentFlipRotation = newFlipRotation; // Actualizar estado al final
+                        onFlipEnd();
                     }, { once: true });
                 }
             }, 10);
 
-            // Timeout de seguridad por si Lerp no llega rápido
-            setTimeout(() => {
-                if (isFlipping) { // Si el interval no terminó el flip
+            setTimeout(() => { // Timeout de seguridad
+                if (isFlipping) {
                     clearInterval(checkCentering);
                     cancelAnimationFrame(animationFrameId); animationFrameId = null;
                     currentAppliedDragX = 0; currentAppliedDragY = 0; targetDragX = 0; targetDragY = 0;
 
-                    // Calcular de nuevo por si acaso y asegurar flip
                     const newFlipRotation = (currentFlipRotation === 0) ? 180 : 0;
-
                     cardElement.style.transition = 'transform 0.6s ease-in-out';
                     cardElement.style.transform = `rotateY(${newFlipRotation}deg) rotateX(0deg)`;
                     cardElement.addEventListener('transitionend', () => {
@@ -192,20 +182,17 @@
                          onFlipEnd();
                      }, { once: true });
                 }
-            }, 200); // Esperar máximo 200ms
+            }, 200);
         });
 
-        // Se llama al finalizar la transición del flip
         function onFlipEnd() {
             isFlipping = false;
-            cardElement.style.transition = 'none'; // Quitar transición CSS
+            cardElement.style.transition = 'none';
             // currentFlipRotation ya se actualizó en el listener
-            // Asegurar reseteo drag/lerp state
-            targetDragX = 0; targetDragY = 0; currentAppliedDragX = 0; currentAppliedDragY = 0;
-            applyRotation(); // Aplicar estado final limpio
+            targetDragX = 0; targetDragY = 0; currentAppliedDragX = 0; currentAppliedDragY = 0; // Asegurar reseteo drag
+            applyRotation();
             enableDrag();
-             // Reiniciar bucle Lerp si estaba parado
-             if (!animationFrameId) requestAnimationFrame(animate);
+             if (!animationFrameId) requestAnimationFrame(animate); // Reiniciar Lerp
         }
 
         // --- LÓGICA DE ROTACIÓN INTERACTIVA (DRAG CON LERP) ---
@@ -215,7 +202,7 @@
             cardContainer.style.cursor = 'grabbing';
             cardElement.style.transition = 'none';
 
-            if (!animationFrameId) requestAnimationFrame(animate); // Iniciar/asegurar Lerp
+            if (!animationFrameId) requestAnimationFrame(animate);
 
             document.addEventListener('mousemove', handleDragMove);
             document.addEventListener('touchmove', handleDragMove, { passive: false });
@@ -235,10 +222,18 @@
             const percentX = Math.max(-1, Math.min(1, (clientX - rect.left - rect.width / 2) / (rect.width / 2)));
             const percentY = Math.max(-1, Math.min(1, (clientY - rect.top - rect.height / 2) / (rect.height / 2)));
 
-            // Calcular rotación OBJETIVO (target)
-            // Usamos la fórmula que pediste: Arriba -> Inclina Atrás
-            targetDragY = percentX * maxDragRotationY;
-            targetDragX = -percentY * maxDragRotationX; // Esta es la clave para Up->Back
+            // *** LÓGICA CONDICIONAL PARA ROTACIÓN VERTICAL PERCIBIDA CONSISTENTE ***
+            const isBackFacing = Math.round(currentFlipRotation / 180) % 2 !== 0;
+
+            targetDragY = percentX * maxDragRotationY; // Horizontal siempre igual
+
+            if (isBackFacing) {
+                // CARA TRASERA: Fórmula INVERTIDA para que ARRIBA->ATRÁS (percibido)
+                targetDragX = percentY * maxDragRotationX;
+            } else {
+                // CARA FRONTAL: Fórmula ORIGINAL para que ARRIBA -> ATRÁS
+                targetDragX = -percentY * maxDragRotationX;
+            }
 
             // Limitar la rotación OBJETIVO
             targetDragX = Math.max(-maxDragRotationX, Math.min(maxDragRotationX, targetDragX));
