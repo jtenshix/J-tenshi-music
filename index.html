@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Única Flip & Rotate v6 (Final Ajustado)</title>
+    <title>Carta Única Flip & Rotate v7 (Final Suave Invertido)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
@@ -107,12 +107,17 @@
         let dragRotationX = 0;
         let dragRotationY = 0;
 
-        // Drag & Physics - VALORES ACTUALIZADOS
-        const rotationFactor = 0.25; // Más sensible que 0.15
-        const maxDragRotationX = 20;
-        const maxDragRotationY = 30; // Límite horizontal un poco mayor
-
-        // Variables físicas eliminadas, usamos CSS para el retorno
+        // Drag & Physics
+        let startX, startY, currentX, currentY;
+        const rotationFactor = 0.25; // Sensibilidad ajustada
+        const maxDragRotationX = 25; // Límite vertical ajustado
+        const maxDragRotationY = 35; // Límite horizontal ajustado
+        let velocityX = 0;
+        let velocityY = 0;
+        // Ajustados para "Soltura Bonita"
+        const friction = 0.94;
+        const springForce = 0.03;
+        let animationFrameId = null;
 
         // --- FUNCIÓN PARA APLICAR TRANSFORMACIÓN ---
         function applyRotation() {
@@ -123,11 +128,11 @@
         flipButton.addEventListener('click', () => {
             if (isFlipping || isDragging) return;
             isFlipping = true;
-            disableDrag(); // Llama a handleDragEnd implícitamente si isDragging=true
+            disableDrag();
+            cancelAnimationFrame(animationFrameId);
 
             currentFlipRotation += 180;
 
-            // Aplicar volteo usando transición CSS
             cardElement.style.transition = 'transform 0.6s ease-in-out';
             dragRotationX = 0; dragRotationY = 0; // Resetear drag visual
             applyRotation(); // Aplica solo el flip Y
@@ -137,21 +142,30 @@
 
         function onFlipEnd() {
             isFlipping = false;
-            cardElement.style.transition = 'none'; // Quitar transición post-flip
+            cardElement.style.transition = 'none';
             currentFlipRotation %= 360;
-            dragRotationX = 0; dragRotationY = 0; // Asegurar reseteo
+            dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; // Asegurar reseteo
             applyRotation();
             enableDrag();
         }
 
-        // --- LÓGICA DE ROTACIÓN INTERACTIVA (DRAG SUAVE) ---
+        // --- LÓGICA DE ROTACIÓN INTERACTIVA (DRAG) ---
         function handleDragStart(e) {
             if (isFlipping) return;
             isDragging = true;
             cardContainer.style.cursor = 'grabbing';
-            cardElement.style.transition = 'none'; // Quitar transición CSS para drag directo
+            cardElement.style.transition = 'none';
+            cancelAnimationFrame(animationFrameId);
 
-            // Añadir listeners al documento
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const rect = cardContainer.getBoundingClientRect();
+            startX = clientX - (rect.left + rect.width / 2);
+            startY = clientY - (rect.top + rect.height / 2);
+
+            velocityX = 0; velocityY = 0;
+            // No reseteamos dragRotationX/Y aquí para drag continuo relativo
+
             document.addEventListener('mousemove', handleDragMove);
             document.addEventListener('touchmove', handleDragMove, { passive: false });
             document.addEventListener('mouseup', handleDragEnd);
@@ -166,23 +180,29 @@
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
             const rect = cardContainer.getBoundingClientRect();
+            currentX = clientX - (rect.left + rect.width / 2);
+            currentY = clientY - (rect.top + rect.height / 2);
 
-            // Calcular posición relativa al centro (%)
-            // Clamp values between -1 and 1 to avoid extreme jumps if mouse goes far
-            const percentX = Math.max(-1, Math.min(1, (clientX - rect.left - rect.width / 2) / (rect.width / 2)));
-            const percentY = Math.max(-1, Math.min(1, (clientY - rect.top - rect.height / 2) / (rect.height / 2)));
+            const deltaX = currentX - startX;
+            const deltaY = currentY - startY;
 
+            // *** ROTACIÓN VERTICAL INVERTIDA EN AMBAS CARAS ***
+            // dragRotationX ahora usa +deltaY (sin inversión condicional)
+            dragRotationY = deltaX * rotationFactor;
+            dragRotationX = deltaY * rotationFactor; // Arriba -> Inclina adelante
 
-            // *** INVERSIÓN VERTICAL SI CARA TRASERA VISIBLE ***
-            const isBackFacing = Math.round(currentFlipRotation / 180) % 2 !== 0;
-            const verticalFactor = isBackFacing ? 1 : -1; // Invierte si es true (trasera)
+            // Limitar rotación del drag
+            dragRotationX = Math.max(-maxDragRotationX, Math.min(maxDragRotationX, dragRotationX));
+            dragRotationY = Math.max(-maxDragRotationY, Math.min(maxDragRotationY, dragRotationY));
 
-            // Calcular rotación de drag DIRECTAMENTE basada en la posición
-            dragRotationY = percentX * maxDragRotationY; // Usar constante actualizada
-            dragRotationX = verticalFactor * percentY * maxDragRotationX * -1; // Usar constante actualizada
+            // Guardar velocidad (basada en delta, sin invertir para física)
+            velocityX = deltaY * 0.5;
+            velocityY = deltaX * 0.5;
 
             // Aplicar transformación combinada
             applyRotation();
+
+            // No actualizamos startX/Y para que delta sea desde el inicio
         }
 
         function handleDragEnd() {
@@ -190,24 +210,42 @@
             isDragging = false;
             cardContainer.style.cursor = 'grab';
 
-            // Quitar listeners del documento
             document.removeEventListener('mousemove', handleDragMove);
             document.removeEventListener('touchmove', handleDragMove);
             document.removeEventListener('mouseup', handleDragEnd);
             document.removeEventListener('touchend', handleDragEnd);
             document.removeEventListener('mouseleave', handleDragEnd);
 
-            // Volver al centro con Transición CSS
-            cardElement.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)'; // Suave
-            dragRotationX = 0; // Resetear offset de drag
-            dragRotationY = 0;
-            applyRotation(); // Animar solo a la rotación del flip
-
-            // Quitar la transición después de que termine para el próximo drag
-             setTimeout(() => {
-                 if (!isFlipping) cardElement.style.transition = 'none';
-             }, 400); // Duración de la transición
+            // Usar SIEMPRE animateRebound al soltar
+            animateRebound();
         }
+
+         // --- Animación de Rebote/Inercia (Valores ajustados) ---
+         function animateRebound() {
+             if (isDragging || isFlipping) { cancelAnimationFrame(animationFrameId); animationFrameId = null; return; }
+
+             dragRotationY += velocityY; dragRotationX += velocityX; // Aplicar velocidad
+             velocityY *= friction; velocityX *= friction; // Aplicar fricción (0.94)
+
+             // Aplicar fuerza resorte (0.03)
+             const forceY = -dragRotationY * springForce;
+             const forceX = -dragRotationX * springForce;
+             velocityY += forceY; velocityX += forceX;
+
+             dragRotationX = Math.max(-90, Math.min(90, dragRotationX)); dragRotationY = Math.max(-90, Math.min(90, dragRotationY)); // Limitar
+
+             cardElement.style.transition = 'none'; // Sin transición CSS
+             applyRotation(); // Aplicar estado actual (Flip + Drag offset)
+
+             // Condición de parada
+             if (Math.abs(velocityY) > 0.005 || Math.abs(velocityX) > 0.005 || Math.abs(dragRotationY) > 0.005 || Math.abs(dragRotationX) > 0.005) {
+                 animationFrameId = requestAnimationFrame(animateRebound);
+             } else {
+                 dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; // Estado final exacto
+                 applyRotation();
+                 animationFrameId = null;
+             }
+         }
 
         // --- Habilitar/Deshabilitar Drag ---
         function enableDrag() {
@@ -217,18 +255,18 @@
         function disableDrag() {
             cardContainer.removeEventListener('mousedown', handleDragStart);
             cardContainer.removeEventListener('touchstart', handleDragStart);
-            if(isDragging) { handleDragEnd(); } // Forzar fin del drag si estaba activo
+            if(isDragging) { handleDragEnd(); } // Forzar fin del drag
         }
 
         // Activar drag al inicio
         enableDrag();
 
         // --- Partículas (Código completo si se usa) ---
-        class Particle { constructor(x, y) { this.x = x; this.y = y; this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5; this.radius = Math.random() * 1.5 + 0.5; const shapeRand = Math.random(); this.shape = shapeRand < 0.7 ? 'circle' : (shapeRand < 0.85 ? 'square' : 'triangle'); this.color = `rgba(${Math.random() * 100 + 100}, ${Math.random() * 100 + 155}, 255, ${Math.random() * 0.5 + 0.3})`; } update(deltaTime) { if (!deltaTime) deltaTime = 16.67; this.x += this.vx * deltaTime * 0.1; this.y += this.vy * deltaTime * 0.1; if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) { this.vx = -this.vx; this.x = Math.max(this.radius, Math.min(canvas.width - this.radius, this.x)); } if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) { this.vy = -this.vy; this.y = Math.max(this.radius, Math.min(canvas.height - this.radius, this.y)); } if (!isFlipping && cardContainer) { const rect = cardContainer.getBoundingClientRect(); if (rect.width > 0) { const cardCenterX = rect.left + rect.width / 2; const cardCenterY = rect.top + rect.height / 2; const dx = this.x - cardCenterX; const dy = this.y - cardCenterY; const distance = Math.sqrt(dx * dx + dy * dy); const repelRadius = (rect.width / 2) * 1.5; if (distance < repelRadius && distance > 0) { const force = (repelRadius - distance) / repelRadius; const angle = Math.atan2(dy, dx); this.vx += Math.cos(angle) * force * 0.15; this.vy += Math.sin(angle) * force * 0.15; } } } const maxSpeed = 1.5; const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy); if (speed > maxSpeed) { this.vx = (this.vx / speed) * maxSpeed; this.vy = (this.vy / speed) * maxSpeed; } } draw() { if (!ctx) return; ctx.beginPath(); if (this.shape === 'circle') { ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); } else if (this.shape === 'square') { ctx.rect(this.x - this.radius / 2, this.y - this.radius / 2, this.radius, this.radius); } else { const side = this.radius * 1.7; const height = side * Math.sqrt(3) / 2; ctx.moveTo(this.x, this.y - height / 2); ctx.lineTo(this.x + side / 2, this.y + height / 2); ctx.lineTo(this.x - side / 2, this.y + height / 2); ctx.closePath(); } ctx.fillStyle = this.color; ctx.fill(); } }
-        function createParticles() { if (!canvas || !ctx) return; particles.length = 0; const rect = cardContainer.getBoundingClientRect(); const cardRadiusSq = ((rect.width / 2) * 1.6) ** 2; for (let i = 0; i < numParticles; i++) { let x, y, dx, dy, distanceSq; const maxAttempts = 10; let attempts = 0; do { x = Math.random() * canvas.width; y = Math.random() * canvas.height; if (rect.width > 0) { dx = x - (rect.left + rect.width / 2); dy = y - (rect.top + rect.height / 2); distanceSq = dx*dx + dy*dy; } else { distanceSq = Infinity; } attempts++; } while (distanceSq < cardRadiusSq && attempts < maxAttempts) particles.push(new Particle(x, y)); } }
-        let lastTime = 0; function animateParticles(currentTime) { if (!ctx) { requestAnimationFrame(animateParticles); return; } if (lastTime === 0) lastTime = currentTime; const deltaTime = currentTime - lastTime; lastTime = currentTime; ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(particle => { particle.update(deltaTime || 16.67); particle.draw(); }); requestAnimationFrame(animateParticles); }
-        function resizeCanvas() { if(!canvas) return; canvas.width = window.innerWidth; canvas.height = window.innerHeight; createParticles(); }
-        if (canvas && ctx) { window.addEventListener('resize', resizeCanvas); resizeCanvas(); createParticles(); lastTime = performance.now(); requestAnimationFrame(animateParticles); } else { console.error("Canvas element not found or context could not be created."); }
+         class Particle { constructor(x, y) { this.x = x; this.y = y; this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5; this.radius = Math.random() * 1.5 + 0.5; const shapeRand = Math.random(); this.shape = shapeRand < 0.7 ? 'circle' : (shapeRand < 0.85 ? 'square' : 'triangle'); this.color = `rgba(${Math.random() * 100 + 100}, ${Math.random() * 100 + 155}, 255, ${Math.random() * 0.5 + 0.3})`; } update(deltaTime) { if (!deltaTime) deltaTime = 16.67; this.x += this.vx * deltaTime * 0.1; this.y += this.vy * deltaTime * 0.1; if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) { this.vx = -this.vx; this.x = Math.max(this.radius, Math.min(canvas.width - this.radius, this.x)); } if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) { this.vy = -this.vy; this.y = Math.max(this.radius, Math.min(canvas.height - this.radius, this.y)); } if (!isFlipping && cardContainer) { const rect = cardContainer.getBoundingClientRect(); if (rect.width > 0) { const cardCenterX = rect.left + rect.width / 2; const cardCenterY = rect.top + rect.height / 2; const dx = this.x - cardCenterX; const dy = this.y - cardCenterY; const distance = Math.sqrt(dx * dx + dy * dy); const repelRadius = (rect.width / 2) * 1.5; if (distance < repelRadius && distance > 0) { const force = (repelRadius - distance) / repelRadius; const angle = Math.atan2(dy, dx); this.vx += Math.cos(angle) * force * 0.15; this.vy += Math.sin(angle) * force * 0.15; } } } const maxSpeed = 1.5; const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy); if (speed > maxSpeed) { this.vx = (this.vx / speed) * maxSpeed; this.vy = (this.vy / speed) * maxSpeed; } } draw() { if (!ctx) return; ctx.beginPath(); if (this.shape === 'circle') { ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); } else if (this.shape === 'square') { ctx.rect(this.x - this.radius / 2, this.y - this.radius / 2, this.radius, this.radius); } else { const side = this.radius * 1.7; const height = side * Math.sqrt(3) / 2; ctx.moveTo(this.x, this.y - height / 2); ctx.lineTo(this.x + side / 2, this.y + height / 2); ctx.lineTo(this.x - side / 2, this.y + height / 2); ctx.closePath(); } ctx.fillStyle = this.color; ctx.fill(); } }
+         function createParticles() { if (!canvas || !ctx) return; particles.length = 0; const rect = cardContainer.getBoundingClientRect(); const cardRadiusSq = ((rect.width / 2) * 1.6) ** 2; for (let i = 0; i < numParticles; i++) { let x, y, dx, dy, distanceSq; const maxAttempts = 10; let attempts = 0; do { x = Math.random() * canvas.width; y = Math.random() * canvas.height; if (rect.width > 0) { dx = x - (rect.left + rect.width / 2); dy = y - (rect.top + rect.height / 2); distanceSq = dx*dx + dy*dy; } else { distanceSq = Infinity; } attempts++; } while (distanceSq < cardRadiusSq && attempts < maxAttempts) particles.push(new Particle(x, y)); } }
+         let lastTime = 0; function animateParticles(currentTime) { if (!ctx) { requestAnimationFrame(animateParticles); return; } if (lastTime === 0) lastTime = currentTime; const deltaTime = currentTime - lastTime; lastTime = currentTime; ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(particle => { particle.update(deltaTime || 16.67); particle.draw(); }); requestAnimationFrame(animateParticles); }
+         function resizeCanvas() { if(!canvas) return; canvas.width = window.innerWidth; canvas.height = window.innerHeight; createParticles(); }
+         if (canvas && ctx) { window.addEventListener('resize', resizeCanvas); resizeCanvas(); createParticles(); lastTime = performance.now(); requestAnimationFrame(animateParticles); } else { console.error("Canvas element not found or context could not be created."); }
 
     </script>
 
