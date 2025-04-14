@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única Flip & Rotate v20 (Trompo Detallado)</title>
+    <title>Carta Única Flip & Rotate v20 (Trompo Rápido)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* CSS Base (sin cambios) */
@@ -23,26 +23,23 @@
         .card-face.back .social-icons a:hover { color: #8c9eff; }
         .flip-button { background-color: rgba(255, 255, 255, 0.8); border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background 0.3s, transform 0.3s; position: fixed; z-index: 100; bottom: 25px; right: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
         .flip-button:hover { background-color: white; transform: scale(1.1); }
-        /* Botón Torbellino Izquierda */
         .torbellino-button { background-color: rgba(255, 255, 255, 0.8); border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background 0.3s, transform 0.3s; position: fixed; z-index: 100; bottom: 25px; left: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
         .torbellino-button:hover { background-color: white; transform: scale(1.1); }
-
         canvas#particleCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
 
-        /* *** CSS ACTUALIZADO PARA EL TROMPO *** */
+        /* CSS PARA EL TROMPO */
         @keyframes torbellinoSpin {
             100% {
-                /* 10 vueltas completas (3600) + 180 grados para terminar atrás = 3780 grados */
-                transform: rotateY(3780deg) rotateX(0deg);
+                /* Mantenemos ángulo final para que aterrice en la trasera */
+                transform: rotateY(3780deg) rotateX(0deg); /* 10 vueltas + 180 grados */
             }
         }
         .card.trompo-activo {
-            /* Aplicar la animación */
-            /* Duración 2s, y curva ease-out para frenada suave */
-            animation: torbellinoSpin 2s ease-out 1; /* Duración 2s, timing-function ease-out */
+            /* *** ACTUALIZACIÓN AQUÍ: Duración 1s y timing linear *** */
+            animation: torbellinoSpin 1s linear 1;
             transition: none !important;
         }
-        /* *** FIN CSS TROMPO *** */
+        /* FIN CSS TROMPO */
 
         @media (max-width: 600px) {
              .card-container { max-width: 90vw; }
@@ -68,9 +65,7 @@
             <div class="card-face back">
                  <img src="carta_dorso.png.png" alt="Dorso de la Carta">
                  <div class="button-container">
-                     <button class="youtube-button" onclick="window.open('googleusercontent.com/youtube.com/4', '_blank')">
-                         <i class="fab fa-youtube"></i> YouTube
-                     </button>
+                     <button class="youtube-button" onclick="window.open('googleusercontent.com/youtube.com/4', '_blank')"> <i class="fab fa-youtube"></i> YouTube </button>
                      <div class="social-icons">
                          <a href="https://facebook.com/tu_perfil" target="_blank"><i class="fab fa-facebook-f"></i></a>
                          <a href="https://twitter.com/tu_perfil" target="_blank"><i class="fab fa-twitter"></i></a>
@@ -84,11 +79,9 @@
     <button class="flip-button" id="flipButton">
         <i class="fas fa-sync-alt" style="color: #333; font-size: 18px;"></i>
     </button>
-
     <button class="torbellino-button" id="torbellinoButton">
         <i class="fas fa-star" style="color: #333; font-size: 18px;"></i>
     </button>
-
 
     <script>
         // --- VARIABLES ---
@@ -103,90 +96,61 @@
 
         // Estado
         let isDragging = false;
-        let isFlipping = false; // Indica si CUALQUIER animación de flip/trompo está activa
-        let currentFlipRotation = 0; // Rotación Y acumulada por flip normal
-        let dragRotationX = 0;
-        let dragRotationY = 0;
-        // let flipCount = 0; // Ya no se usa
+        let isFlipping = false;
+        let currentFlipRotation = 0;
+        let dragRotationX = 0; let dragRotationY = 0;
 
         // Drag & Physics
         let startX, startY, currentX, currentY;
-        const rotationFactor = 0.3;
-        const maxDragRotationX = 30;
-        const maxDragRotationY = 40;
+        const rotationFactor = 0.3; const maxDragRotationX = 30; const maxDragRotationY = 40;
         let velocityX = 0; let velocityY = 0;
         const friction = 0.88; const springForce = 0.06;
         let animationFrameId = null;
 
         // --- FUNCIÓN PARA APLICAR TRANSFORMACIÓN ---
-        function applyRotation() {
-            cardElement.style.transform = `rotateY(${currentFlipRotation + dragRotationY}deg) rotateX(${dragRotationX}deg)`;
-        }
+        function applyRotation() { cardElement.style.transform = `rotateY(${currentFlipRotation + dragRotationY}deg) rotateX(${dragRotationX}deg)`; }
 
         // --- LÓGICA DE VOLTEO NORMAL (FLIP) ---
         flipButton.addEventListener('click', () => {
-            if (isFlipping || isDragging) return;
-            isFlipping = true;
-            disableDrag();
-            cancelAnimationFrame(animationFrameId); animationFrameId = null;
-
-            // Forzar estado centrado
+            if (isFlipping || isDragging) return; isFlipping = true; disableDrag(); cancelAnimationFrame(animationFrameId); animationFrameId = null;
             dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0;
             cardElement.style.transform = `rotateY(${currentFlipRotation}deg) rotateX(0deg)`;
-
-            currentFlipRotation += 180; // Acumular siempre
-
-            const transitionDuration = 600; // 0.6s
+            currentFlipRotation += 180;
+            const transitionDuration = 600;
             cardElement.style.transition = `transform ${transitionDuration / 1000}s ease-in-out`;
-            applyRotation(); // Animar a la nueva rotación acumulada
-
-            // Usar setTimeout para el cleanup
-            setTimeout(() => {
-                 if (!isFlipping) return;
-                 onFlipEndCommon();
-             }, transitionDuration);
+            applyRotation();
+            setTimeout(() => { if (!isFlipping) return; onFlipEndCommon(); }, transitionDuration);
         });
 
-        // --- LÓGICA DEL BOTÓN TORBELLINO --- *** NUEVA *** ---
+        // --- LÓGICA DEL BOTÓN TORBELLINO ---
         torbellinoButton.addEventListener('click', () => {
-             if (isFlipping || isDragging) return;
-             isFlipping = true;
-             disableDrag();
-             cancelAnimationFrame(animationFrameId); animationFrameId = null;
-
-             // Forzar estado centrado
+             if (isFlipping || isDragging) return; isFlipping = true; disableDrag(); cancelAnimationFrame(animationFrameId); animationFrameId = null;
              dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0;
-             // Aplicar rotación Y actual ANTES de añadir la clase
              cardElement.style.transform = `rotateY(${currentFlipRotation}deg) rotateX(0deg)`;
              void cardElement.offsetWidth; // Reflow
-
-             cardElement.style.transition = 'none'; // Sin transición CSS durante animación
+             cardElement.style.transition = 'none'; // Asegurar no transición
              cardElement.classList.add('trompo-activo'); // Activar animación CSS
-             const animationDuration = 2000; // ms (Debe coincidir con CSS animation-duration de .trompo-activo)
 
-             // Usar setTimeout para el cleanup
+             // *** ACTUALIZACIÓN AQUÍ: Duración del timeout coincide con CSS ***
+             const animationDuration = 1000; // ms (Debe coincidir con 1s en CSS)
+
              setTimeout(() => {
                 if (!isFlipping) return;
                 cardElement.classList.remove('trompo-activo');
-                // Forzar estado final a cara trasera y resetear acumulación si se desea
-                // Podríamos dejar la acumulación o resetear a 180. Resetear es más simple.
-                currentFlipRotation = 180;
+                currentFlipRotation = 180; // Forzar estado final visual a trasero
                 onFlipEndCommon();
              }, animationDuration);
         });
 
         // --- FUNCIÓN DE LIMPIEZA COMÚN ---
         function onFlipEndCommon() {
-            isFlipping = false;
-            cardElement.style.transition = 'none';
+            isFlipping = false; cardElement.style.transition = 'none';
             dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; // Asegurar reseteo drag
             applyRotation(); // Asegurar estado visual final
             enableDrag();
         }
 
-
         // --- LÓGICA DE ROTACIÓN INTERACTIVA (DRAG CON FÍSICA + CONDICIONAL VERTICAL) ---
-        // (Sin cambios)
         function handleDragStart(e) { if (isFlipping) return; isDragging = true; cardContainer.style.cursor = 'grabbing'; cardElement.style.transition = 'none'; cancelAnimationFrame(animationFrameId); animationFrameId = null; const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY; const rect = cardContainer.getBoundingClientRect(); startX = clientX - (rect.left + rect.width / 2); startY = clientY - (rect.top + rect.height / 2); velocityX = 0; velocityY = 0; document.addEventListener('mousemove', handleDragMove); document.addEventListener('touchmove', handleDragMove, { passive: false }); document.addEventListener('mouseup', handleDragEnd); document.addEventListener('touchend', handleDragEnd); document.addEventListener('mouseleave', handleDragEnd); }
         function handleDragMove(e) { if (!isDragging) return; if (e.touches) e.preventDefault(); const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY; const rect = cardContainer.getBoundingClientRect(); currentX = clientX - (rect.left + rect.width / 2); currentY = clientY - (rect.top + rect.height / 2); const deltaX = currentX - startX; const deltaY = currentY - startY; const isBackFacing = Math.round(currentFlipRotation / 180) % 2 !== 0; dragRotationY += deltaX * rotationFactor; if (isBackFacing) { dragRotationX += deltaY * rotationFactor; } else { dragRotationX -= deltaY * rotationFactor; } dragRotationX = Math.max(-maxDragRotationX, Math.min(maxDragRotationX, dragRotationX)); dragRotationY = Math.max(-maxDragRotationY, Math.min(maxDragRotationY, dragRotationY)); velocityX = -deltaY * 0.5; velocityY = deltaX * 0.5; applyRotation(); startX = currentX; startY = currentY; }
         function handleDragEnd() { if (!isDragging) return; isDragging = false; cardContainer.style.cursor = 'grab'; document.removeEventListener('mousemove', handleDragMove); document.removeEventListener('touchmove', handleDragMove); document.removeEventListener('mouseup', handleDragEnd); document.removeEventListener('touchend', handleDragEnd); document.removeEventListener('mouseleave', handleDragEnd); animateRebound(); }
