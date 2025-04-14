@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única Flip & Rotate v18 (Ciclo Trompo Final)</title>
+    <title>Carta Única Flip & Rotate v18 (Trompo por Ángulo)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* CSS Base (sin cambios) */
@@ -25,18 +25,12 @@
         .flip-button:hover { background-color: white; transform: scale(1.1); }
         canvas#particleCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
 
-        /* *** CSS PARA EL TROMPO *** */
+        /* *** CSS PARA EL TROMPO (Sin cambios) *** */
         @keyframes torbellinoSpin {
-            100% {
-                /* Gira múltiples veces y termina en estado trasero (180 relativo al inicio del giro)*/
-                /* Usaremos un número grande impar múltiplo de 180 relativo al giro actual */
-                /* El target exacto lo controla JS al aplicar el transform final */
-                /* La animación solo necesita girar mucho */
-                transform: rotateY(2340deg) rotateX(0deg); /* 6 vueltas + 180 grados */
-            }
+            100% { transform: rotateY(2340deg) rotateX(0deg); }
         }
         .card.trompo-activo {
-            animation: torbellinoSpin 2.2s cubic-bezier(0.25, 1, 0.5, 1) 1; /* Duración 2.2s */
+            animation: torbellinoSpin 2.2s cubic-bezier(0.25, 1, 0.5, 1) 1;
             transition: none !important;
         }
         /* *** FIN CSS TROMPO *** */
@@ -96,7 +90,7 @@
         let currentFlipRotation = 0; // Rotación Y acumulada por el flip
         let dragRotationX = 0;
         let dragRotationY = 0;
-        let flipCount = 0; // *** CONTADOR PARA TROMPO ***
+        // let flipCount = 0; // *** CONTADOR YA NO SE USA ***
 
         // Drag & Physics
         let startX, startY, currentX, currentY;
@@ -114,42 +108,41 @@
             cardElement.style.transform = `rotateY(${currentFlipRotation + dragRotationY}deg) rotateX(${dragRotationX}deg)`;
         }
 
-        // --- LÓGICA DE VOLTEO (FLIP) --- *** CORREGIDA CON CICLO TROMPO *** ---
+        // --- LÓGICA DE VOLTEO (FLIP) --- *** ACTUALIZADA CON TRIGGER POR ÁNGULO *** ---
         flipButton.addEventListener('click', () => {
             if (isFlipping || isDragging) return;
             isFlipping = true;
-            disableDrag(); // Llama a handleDragEnd -> animateRebound si hay offset
-            cancelAnimationFrame(animationFrameId); animationFrameId = null; // Detener rebote
+            disableDrag();
+            cancelAnimationFrame(animationFrameId); animationFrameId = null;
 
             // Forzar estado centrado (drag=0) antes de animar
             dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0;
             // Aplicar rotación Y acumulada actual SIN offset de drag
             cardElement.style.transform = `rotateY(${currentFlipRotation}deg) rotateX(0deg)`;
 
-            flipCount++; // Incrementar contador
-
-            if (flipCount === 10) {
-                // --- EFECTO TROMPO (10º Flip) ---
-                cardElement.style.transition = 'none'; // Quitar transición CSS normal
-
-                // Asegurar estado visual base antes de añadir clase de animación
-                applyRotation(); // (dragX/Y son 0 aquí)
-                void cardElement.offsetWidth; // Forzar reflow
+            // *** CONDICIÓN PARA ACTIVAR TROMPO BASADA EN ÁNGULO ***
+            // 1620 grados es el ángulo después de 9 flips (0->180...->1620)
+            if (currentFlipRotation === 1620) {
+                // --- EFECTO TROMPO ---
+                // console.log("¡Trompo activado por ángulo!");
+                cardElement.style.transition = 'none'; // Sin transición CSS
+                applyRotation(); // Asegurar rotación Y base actual
+                void cardElement.offsetWidth; // Reflow
 
                 cardElement.classList.add('trompo-activo'); // Activar animación CSS
 
                 // Escuchar fin de la ANIMACIÓN CSS ('animationend')
                 cardElement.addEventListener('animationend', () => {
                     cardElement.classList.remove('trompo-activo'); // Limpiar clase
-                    // Forzar estado final a cara trasera (180 grados visuales)
-                    // y resetear la acumulación para el próximo ciclo
-                    currentFlipRotation = 180; // Deja la rotación base en 180
-                    flipCount = 0; // *** REINICIAR CONTADOR ***
+                    // Forzar estado final a cara trasera (180) y resetear acumulación
+                    currentFlipRotation = 180;
+                    // flipCount = 0; // Ya no usamos flipCount
                     onFlipEnd(); // Limpiar estados y reactivar drag
                 }, { once: true });
 
             } else {
-                // --- FLIP NORMAL (1º al 9º - ACUMULATIVO) ---
+                // --- FLIP NORMAL (ACUMULATIVO) ---
+                // console.log("Flip normal, rotación actual:", currentFlipRotation);
                 currentFlipRotation += 180; // Acumular rotación para giro siempre igual
 
                 cardElement.style.transition = 'transform 0.6s ease-in-out'; // Transición CSS normal
@@ -167,7 +160,7 @@
             cardElement.style.transition = 'none'; // Quitar transición CSS
             // Asegurar reseteo drag/velocidad
             dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0;
-            // Aplicar el estado final correcto (importante después del trompo)
+            // Aplicar el estado final de rotación Y (sea 180 post-trompo o el acumulado normal)
             applyRotation();
             enableDrag();
         }
@@ -190,7 +183,7 @@
 
         // --- INICIALIZACIÓN ---
         enableDrag(); // Habilitar drag al cargar
-        // No iniciar animate() aquí, animateRebound se auto-llama cuando es necesario
+        // No iniciar bucle Lerp/Rebote aquí, se controla por eventos
 
         // Inicialización Partículas
         if (canvas && ctx) {
