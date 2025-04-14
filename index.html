@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única Flip & Rotate v9 (Rotación Final)</title>
+    <title>Carta Única Flip & Rotate v10 (Rotación Condicional)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* CSS (igual que la última versión completa) */
         body {
             margin: 0; padding: 0; background: linear-gradient(135deg, #1a0033, #4a148c, #3f51b5); min-height: 100vh;
-            min-height: 100svh; /* Mejor para móviles */
-            overflow: hidden; display: flex; justify-content: center; align-items: center; position: relative; user-select: none; -webkit-user-select: none; touch-action: manipulation;
+            min-height: 100svh; overflow: hidden; display: flex; justify-content: center; align-items: center; position: relative; user-select: none; -webkit-user-select: none; touch-action: manipulation;
         }
         .card-container {
             width: 85vw; height: auto; aspect-ratio: 300 / 420; max-width: 300px; position: relative; perspective: 1000px; cursor: grab; user-select: none; -webkit-user-drag: none; z-index: 10;
@@ -19,7 +18,7 @@
 
         .card {
             width: 100%; height: 100%; position: relative; transform-style: preserve-3d;
-            transition: none;
+            transition: none; /* Transición controlada por JS */
             transform: rotateX(0deg) rotateY(0deg); user-select: none; -webkit-user-drag: none;
         }
 
@@ -32,6 +31,7 @@
         .card-face.front {}
         .card-face.back { transform: rotateY(180deg); background-color: #333; position: relative; }
 
+        /* Botones DENTRO de .card-face.back */
         .card-face.back .button-container {
              position: absolute; inset: 0; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; z-index: 1;
         }
@@ -45,6 +45,7 @@
          .card-face.back .social-icons a { color: white; text-decoration: none; font-size: 20px; transition: color 0.3s; }
          .card-face.back .social-icons a:hover { color: #8c9eff; }
 
+        /* Botón de Voltear General */
         .flip-button {
             background-color: rgba(255, 255, 255, 0.8); border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background 0.3s, transform 0.3s;
             position: fixed; /* Fijado */
@@ -59,7 +60,6 @@
 
         @media (max-width: 600px) {
              .card-container { max-width: 90vw; }
-             /* Ajustar tamaño/posición botón flip si se quiere más pequeño en móvil */
              .flip-button { width: 40px; height: 40px; bottom: 20px; right: 20px;}
              .card-face.back .button-container { padding: 15px; }
              .card-face.back .youtube-button { padding: 6px 10px; font-size: 12px; }
@@ -105,7 +105,7 @@
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas ? canvas.getContext('2d') : null;
         const particles = [];
-        const numParticles = 30; // Reducido para móvil
+        const numParticles = 30;
 
         // Estado
         let isDragging = false;
@@ -113,13 +113,13 @@
         let currentFlipRotation = 0;
 
         // Variables para Lerp
-        let currentAppliedDragX = 0; // Rotación X actual aplicada (interpolada)
-        let currentAppliedDragY = 0; // Rotación Y actual aplicada (interpolada)
-        let targetDragX = 0;  // Rotación X objetivo (basada en input)
-        let targetDragY = 0;  // Rotación Y objetivo (basada en input)
-        const smoothingFactor = 0.08; // Factor de suavizado Lerp
+        let currentAppliedDragX = 0;
+        let currentAppliedDragY = 0;
+        let targetDragX = 0;
+        let targetDragY = 0;
+        const smoothingFactor = 0.08;
 
-        // Límites y sensibilidad de Drag (últimos valores)
+        // Límites y sensibilidad de Drag
         const rotationFactor = 0.25;
         const maxDragRotationX = 25;
         const maxDragRotationY = 35;
@@ -127,9 +127,7 @@
         let animationFrameId = null;
 
         // --- FUNCIÓN LERP ---
-        function lerp(start, end, amt) {
-            return (1 - amt) * start + amt * end;
-        }
+        function lerp(start, end, amt) { return (1 - amt) * start + amt * end; }
 
         // --- FUNCIÓN PARA APLICAR TRANSFORMACIÓN ---
         function applyRotation() {
@@ -143,12 +141,8 @@
 
             if (!isDragging && Math.abs(diffX) < 0.01 && Math.abs(diffY) < 0.01) {
                 currentAppliedDragX = targetDragX; currentAppliedDragY = targetDragY;
-                // Solo aplicar si realmente cambió para evitar repaints innecesarios
-                if (cardElement.style.transform !== `rotateY(${currentFlipRotation + currentAppliedDragY}deg) rotateX(${currentAppliedDragX}deg)`) {
-                    applyRotation();
-                }
-                animationFrameId = null;
-                return;
+                if (cardElement.style.transform !== `rotateY(${currentFlipRotation + currentAppliedDragY}deg) rotateX(${currentAppliedDragX}deg)`) { applyRotation(); }
+                animationFrameId = null; return;
             }
 
             currentAppliedDragX = lerp(currentAppliedDragX, targetDragX, smoothingFactor);
@@ -161,7 +155,7 @@
         flipButton.addEventListener('click', () => {
             if (isFlipping || isDragging) return;
             isFlipping = true;
-            disableDrag(); // Pone targetDrag a 0 y el lerp lo centrará
+            disableDrag();
 
             const checkCentering = setInterval(() => {
                 if (Math.abs(currentAppliedDragX) < 0.5 && Math.abs(currentAppliedDragY) < 0.5) {
@@ -170,18 +164,17 @@
 
                     currentFlipRotation += 180;
                     cardElement.style.transition = 'transform 0.6s ease-in-out';
-                    applyRotation(); // Aplica solo flip Y
+                    applyRotation();
                     cardElement.addEventListener('transitionend', onFlipEnd, { once: true });
                 }
             }, 10);
 
-            setTimeout(() => { // Timeout de seguridad
+            setTimeout(() => {
                 if (isFlipping) {
                     clearInterval(checkCentering);
                     cancelAnimationFrame(animationFrameId); animationFrameId = null;
                     currentAppliedDragX = 0; currentAppliedDragY = 0; targetDragX = 0; targetDragY = 0;
-
-                    currentFlipRotation += 180;
+                    currentFlipRotation += 180; // Asegurar que sume incluso si falla el interval
                     cardElement.style.transition = 'transform 0.6s ease-in-out';
                     applyRotation();
                     cardElement.addEventListener('transitionend', onFlipEnd, { once: true });
@@ -193,10 +186,10 @@
             isFlipping = false;
             cardElement.style.transition = 'none';
             currentFlipRotation %= 360;
-            targetDragX = 0; targetDragY = 0; currentAppliedDragX = 0; currentAppliedDragY = 0; // Asegurar reseteo
+            targetDragX = 0; targetDragY = 0; currentAppliedDragX = 0; currentAppliedDragY = 0;
             applyRotation();
             enableDrag();
-             if (!animationFrameId) requestAnimationFrame(animate); // Reiniciar Lerp
+             if (!animationFrameId) requestAnimationFrame(animate);
         }
 
         // --- LÓGICA DE ROTACIÓN INTERACTIVA (DRAG CON LERP) ---
@@ -204,15 +197,15 @@
             if (isFlipping) return;
             isDragging = true;
             cardContainer.style.cursor = 'grabbing';
-            cardElement.style.transition = 'none'; // Quitar transición CSS
+            cardElement.style.transition = 'none';
 
-            if (!animationFrameId) requestAnimationFrame(animate); // Asegurar que el loop corra
+            if (!animationFrameId) requestAnimationFrame(animate);
 
             document.addEventListener('mousemove', handleDragMove);
             document.addEventListener('touchmove', handleDragMove, { passive: false });
             document.addEventListener('mouseup', handleDragEnd);
             document.addEventListener('touchend', handleDragEnd);
-            cardContainer.addEventListener('mouseleave', handleDragEnd); // En container
+            cardContainer.addEventListener('mouseleave', handleDragEnd);
         }
 
         function handleDragMove(e) {
@@ -226,12 +219,25 @@
             const percentX = Math.max(-1, Math.min(1, (clientX - rect.left - rect.width / 2) / (rect.width / 2)));
             const percentY = Math.max(-1, Math.min(1, (clientY - rect.top - rect.height / 2) / (rect.height / 2)));
 
-            // *** CÁLCULO FINAL ROTACIÓN VERTICAL ***
-            // Arrastrar HACIA ARRIBA (percentY negativo) -> inclina parte superior HACIA ATRÁS (targetDragX positivo)
-            targetDragY = percentX * maxDragRotationY;
-            targetDragX = -percentY * maxDragRotationX; // <<-- El signo menos aquí logra "Arriba -> Atrás"
+            // *** LÓGICA CONDICIONAL PARA ROTACIÓN VERTICAL PERCIBIDA ***
+            const isBackFacing = Math.round(currentFlipRotation / 180) % 2 !== 0;
 
-            // El bucle animate() se encarga del resto
+            // Calcular rotación OBJETIVO (target)
+            targetDragY = percentX * maxDragRotationY; // Horizontal siempre igual
+
+            if (isBackFacing) {
+                // CARA TRASERA: Para que ARRIBA -> ATRÁS (percibido), invertimos la fórmula matemática
+                targetDragX = percentY * maxDragRotationX; // Arriba (Y-) -> targetX (-)
+            } else {
+                // CARA FRONTAL: Para que ARRIBA -> ATRÁS, usamos la fórmula original "natural"
+                targetDragX = -percentY * maxDragRotationX; // Arriba (Y-) -> targetX (+)
+            }
+
+            // Limitar la rotación OBJETIVO
+            targetDragX = Math.max(-maxDragRotationX, Math.min(maxDragRotationX, targetDragX));
+            targetDragY = Math.max(-maxDragRotationY, Math.min(maxDragRotationY, targetDragY));
+
+            // El bucle animate() moverá currentAppliedDragX/Y hacia estos target
         }
 
         function handleDragEnd() {
@@ -248,7 +254,7 @@
             // Poner el objetivo en 0. El bucle animate() hará el retorno suave.
             targetDragX = 0;
             targetDragY = 0;
-            if (!animationFrameId) requestAnimationFrame(animate); // Asegurar que el loop corra para animar el retorno
+            if (!animationFrameId) requestAnimationFrame(animate);
         }
 
         // --- Habilitar/Deshabilitar Drag ---
@@ -257,16 +263,16 @@
             cardContainer.addEventListener('touchstart', handleDragStart, { passive: false });
         }
         function disableDrag() {
-            if(isDragging) { handleDragEnd(); } // Forzar fin del drag si estaba activo
+            if(isDragging) { handleDragEnd(); } // Forzar fin del drag
             cardContainer.removeEventListener('mousedown', handleDragStart);
             cardContainer.removeEventListener('touchstart', handleDragStart);
         }
 
         // --- Partículas (Código completo si se usa) ---
-         class Particle { constructor(x, y) { this.x = x; this.y = y; this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5; this.radius = Math.random() * 1.5 + 0.5; const shapeRand = Math.random(); this.shape = shapeRand < 0.7 ? 'circle' : (shapeRand < 0.85 ? 'square' : 'triangle'); this.color = `rgba(${Math.random() * 100 + 100}, ${Math.random() * 100 + 155}, 255, ${Math.random() * 0.5 + 0.3})`; } update(deltaTime) { if (!deltaTime) deltaTime = 16.67; this.x += this.vx * deltaTime * 0.1; this.y += this.vy * deltaTime * 0.1; if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) { this.vx = -this.vx; this.x = Math.max(this.radius, Math.min(canvas.width - this.radius, this.x)); } if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) { this.vy = -this.vy; this.y = Math.max(this.radius, Math.min(canvas.height - this.radius, this.y)); } if (!isFlipping && cardContainer) { const rect = cardContainer.getBoundingClientRect(); if (rect.width > 0) { const cardCenterX = rect.left + rect.width / 2; const cardCenterY = rect.top + rect.height / 2; const dx = this.x - cardCenterX; const dy = this.y - cardCenterY; const distance = Math.sqrt(dx * dx + dy * dy); const repelRadius = (rect.width / 2) * 1.5; if (distance < repelRadius && distance > 0) { const force = (repelRadius - distance) / repelRadius; const angle = Math.atan2(dy, dx); this.vx += Math.cos(angle) * force * 0.15; this.vy += Math.sin(angle) * force * 0.15; } } } const maxSpeed = 1.5; const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy); if (speed > maxSpeed) { this.vx = (this.vx / speed) * maxSpeed; this.vy = (this.vy / speed) * maxSpeed; } } draw() { if (!ctx) return; ctx.beginPath(); if (this.shape === 'circle') { ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); } else if (this.shape === 'square') { ctx.rect(this.x - this.radius / 2, this.y - this.radius / 2, this.radius, this.radius); } else { const side = this.radius * 1.7; const height = side * Math.sqrt(3) / 2; ctx.moveTo(this.x, this.y - height / 2); ctx.lineTo(this.x + side / 2, this.y + height / 2); ctx.lineTo(this.x - side / 2, this.y + height / 2); ctx.closePath(); } ctx.fillStyle = this.color; ctx.fill(); } }
-         function createParticles() { if (!canvas || !ctx) return; particles.length = 0; const rect = cardContainer.getBoundingClientRect(); const cardRadiusSq = ((rect.width / 2) * 1.6) ** 2; for (let i = 0; i < numParticles; i++) { let x, y, dx, dy, distanceSq; const maxAttempts = 10; let attempts = 0; do { x = Math.random() * canvas.width; y = Math.random() * canvas.height; if (rect.width > 0) { dx = x - (rect.left + rect.width / 2); dy = y - (rect.top + rect.height / 2); distanceSq = dx*dx + dy*dy; } else { distanceSq = Infinity; } attempts++; } while (distanceSq < cardRadiusSq && attempts < maxAttempts) particles.push(new Particle(x, y)); } }
-         let lastTimeParticle = 0; function animateParticles(currentTime) { if (!ctx) { requestAnimationFrame(animateParticles); return; } if (lastTimeParticle === 0) lastTimeParticle = currentTime; const deltaTime = currentTime - lastTimeParticle; lastTimeParticle = currentTime; ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(particle => { particle.update(deltaTime || 16.67); particle.draw(); }); requestAnimationFrame(animateParticles); }
-         function resizeCanvas() { if(!canvas) return; canvas.width = window.innerWidth; canvas.height = window.innerHeight; createParticles(); }
+        class Particle { constructor(x, y) { this.x = x; this.y = y; this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5; this.radius = Math.random() * 1.5 + 0.5; const shapeRand = Math.random(); this.shape = shapeRand < 0.7 ? 'circle' : (shapeRand < 0.85 ? 'square' : 'triangle'); this.color = `rgba(${Math.random() * 100 + 100}, ${Math.random() * 100 + 155}, 255, ${Math.random() * 0.5 + 0.3})`; } update(deltaTime) { if (!deltaTime) deltaTime = 16.67; this.x += this.vx * deltaTime * 0.1; this.y += this.vy * deltaTime * 0.1; if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) { this.vx = -this.vx; this.x = Math.max(this.radius, Math.min(canvas.width - this.radius, this.x)); } if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) { this.vy = -this.vy; this.y = Math.max(this.radius, Math.min(canvas.height - this.radius, this.y)); } if (!isFlipping && cardContainer) { const rect = cardContainer.getBoundingClientRect(); if (rect.width > 0) { const cardCenterX = rect.left + rect.width / 2; const cardCenterY = rect.top + rect.height / 2; const dx = this.x - cardCenterX; const dy = this.y - cardCenterY; const distance = Math.sqrt(dx * dx + dy * dy); const repelRadius = (rect.width / 2) * 1.5; if (distance < repelRadius && distance > 0) { const force = (repelRadius - distance) / repelRadius; const angle = Math.atan2(dy, dx); this.vx += Math.cos(angle) * force * 0.15; this.vy += Math.sin(angle) * force * 0.15; } } } const maxSpeed = 1.5; const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy); if (speed > maxSpeed) { this.vx = (this.vx / speed) * maxSpeed; this.vy = (this.vy / speed) * maxSpeed; } } draw() { if (!ctx) return; ctx.beginPath(); if (this.shape === 'circle') { ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); } else if (this.shape === 'square') { ctx.rect(this.x - this.radius / 2, this.y - this.radius / 2, this.radius, this.radius); } else { const side = this.radius * 1.7; const height = side * Math.sqrt(3) / 2; ctx.moveTo(this.x, this.y - height / 2); ctx.lineTo(this.x + side / 2, this.y + height / 2); ctx.lineTo(this.x - side / 2, this.y + height / 2); ctx.closePath(); } ctx.fillStyle = this.color; ctx.fill(); } }
+        function createParticles() { if (!canvas || !ctx) return; particles.length = 0; const rect = cardContainer.getBoundingClientRect(); const cardRadiusSq = ((rect.width / 2) * 1.6) ** 2; for (let i = 0; i < numParticles; i++) { let x, y, dx, dy, distanceSq; const maxAttempts = 10; let attempts = 0; do { x = Math.random() * canvas.width; y = Math.random() * canvas.height; if (rect.width > 0) { dx = x - (rect.left + rect.width / 2); dy = y - (rect.top + rect.height / 2); distanceSq = dx*dx + dy*dy; } else { distanceSq = Infinity; } attempts++; } while (distanceSq < cardRadiusSq && attempts < maxAttempts) particles.push(new Particle(x, y)); } }
+        let lastTimeParticle = 0; function animateParticles(currentTime) { if (!ctx) { requestAnimationFrame(animateParticles); return; } if (lastTimeParticle === 0) lastTimeParticle = currentTime; const deltaTime = currentTime - lastTimeParticle; lastTimeParticle = currentTime; ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(particle => { particle.update(deltaTime || 16.67); particle.draw(); }); requestAnimationFrame(animateParticles); }
+        function resizeCanvas() { if(!canvas) return; canvas.width = window.innerWidth; canvas.height = window.innerHeight; createParticles(); }
 
 
         // --- INICIALIZACIÓN ---
