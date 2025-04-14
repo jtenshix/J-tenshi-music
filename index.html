@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única Flip & Rotate v19 (Botones Separados)</title>
+    <title>Carta Única Flip & Rotate v20 (Trompo Detallado)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        /* CSS Base (sin cambios excepto añadir estilo para nuevo botón) */
+        /* CSS Base (sin cambios) */
         body { margin: 0; padding: 0; background: linear-gradient(135deg, #1a0033, #4a148c, #3f51b5); min-height: 100vh; min-height: 100svh; overflow: hidden; display: flex; justify-content: center; align-items: center; position: relative; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
         .card-container { width: 85vw; height: auto; aspect-ratio: 300 / 420; max-width: 300px; position: relative; perspective: 1000px; cursor: grab; user-select: none; -webkit-user-drag: none; z-index: 10; }
         .card-container:active { cursor: grabbing; }
@@ -21,31 +21,32 @@
         .card-face.back .social-icons { display: flex; gap: 8px; align-self: flex-end; }
         .card-face.back .social-icons a { color: white; text-decoration: none; font-size: 20px; transition: color 0.3s; }
         .card-face.back .social-icons a:hover { color: #8c9eff; }
-
-        /* Botón de Voltear Normal (Derecha) */
         .flip-button { background-color: rgba(255, 255, 255, 0.8); border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background 0.3s, transform 0.3s; position: fixed; z-index: 100; bottom: 25px; right: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
         .flip-button:hover { background-color: white; transform: scale(1.1); }
-
-        /* *** NUEVO BOTÓN TORBELLINO (Izquierda) *** */
-        .torbellino-button {
-            background-color: rgba(255, 255, 255, 0.8); border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background 0.3s, transform 0.3s;
-            position: fixed; z-index: 100;
-            bottom: 25px; /* Misma altura que el otro */
-            left: 25px;   /* En la esquina izquierda */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-        }
+        /* Botón Torbellino Izquierda */
+        .torbellino-button { background-color: rgba(255, 255, 255, 0.8); border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background 0.3s, transform 0.3s; position: fixed; z-index: 100; bottom: 25px; left: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
         .torbellino-button:hover { background-color: white; transform: scale(1.1); }
-        /* *** FIN NUEVO BOTÓN *** */
 
         canvas#particleCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
 
-        /* CSS PARA EL TROMPO (Sin cambios) */
-        @keyframes torbellinoSpin { 100% { transform: rotateY(2340deg) rotateX(0deg); } }
-        .card.trompo-activo { animation: torbellinoSpin 2.2s cubic-bezier(0.25, 1, 0.5, 1) 1; transition: none !important; }
+        /* *** CSS ACTUALIZADO PARA EL TROMPO *** */
+        @keyframes torbellinoSpin {
+            100% {
+                /* 10 vueltas completas (3600) + 180 grados para terminar atrás = 3780 grados */
+                transform: rotateY(3780deg) rotateX(0deg);
+            }
+        }
+        .card.trompo-activo {
+            /* Aplicar la animación */
+            /* Duración 2s, y curva ease-out para frenada suave */
+            animation: torbellinoSpin 2s ease-out 1; /* Duración 2s, timing-function ease-out */
+            transition: none !important;
+        }
+        /* *** FIN CSS TROMPO *** */
 
         @media (max-width: 600px) {
              .card-container { max-width: 90vw; }
-             .flip-button, .torbellino-button { width: 40px; height: 40px; bottom: 20px; } /* Ajustar ambos botones */
+             .flip-button, .torbellino-button { width: 40px; height: 40px; bottom: 20px; }
              .flip-button { right: 20px; }
              .torbellino-button { left: 20px; }
              .card-face.back .button-container { padding: 15px; }
@@ -65,9 +66,11 @@
                 <img src="carta_frente.png.jpg" alt="Frente de la Carta">
             </div>
             <div class="card-face back">
-                <img src="carta_dorso.png.png" alt="Dorso de la Carta">
+                 <img src="carta_dorso.png.png" alt="Dorso de la Carta">
                  <div class="button-container">
-                     <button class="youtube-button" onclick="window.open('googleusercontent.com/youtube.com/4', '_blank')"> <i class="fab fa-youtube"></i> YouTube </button>
+                     <button class="youtube-button" onclick="window.open('googleusercontent.com/youtube.com/4', '_blank')">
+                         <i class="fab fa-youtube"></i> YouTube
+                     </button>
                      <div class="social-icons">
                          <a href="https://facebook.com/tu_perfil" target="_blank"><i class="fab fa-facebook-f"></i></a>
                          <a href="https://twitter.com/tu_perfil" target="_blank"><i class="fab fa-twitter"></i></a>
@@ -83,7 +86,8 @@
     </button>
 
     <button class="torbellino-button" id="torbellinoButton">
-        <i class="fas fa-star" style="color: #333; font-size: 18px;"></i> </button>
+        <i class="fas fa-star" style="color: #333; font-size: 18px;"></i>
+    </button>
 
 
     <script>
@@ -91,7 +95,7 @@
         const cardContainer = document.getElementById('cardContainer');
         const cardElement = document.getElementById('interactiveCard');
         const flipButton = document.getElementById('flipButton');
-        const torbellinoButton = document.getElementById('torbellinoButton'); // *** NUEVO ***
+        const torbellinoButton = document.getElementById('torbellinoButton'); // Botón nuevo
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas ? canvas.getContext('2d') : null;
         const particles = [];
@@ -100,10 +104,10 @@
         // Estado
         let isDragging = false;
         let isFlipping = false; // Indica si CUALQUIER animación de flip/trompo está activa
-        let currentFlipRotation = 0; // Rotación Y acumulada por el flip NORMAL
+        let currentFlipRotation = 0; // Rotación Y acumulada por flip normal
         let dragRotationX = 0;
         let dragRotationY = 0;
-        // let flipCount = 0; // *** ELIMINADO ***
+        // let flipCount = 0; // Ya no se usa
 
         // Drag & Physics
         let startX, startY, currentX, currentY;
@@ -119,7 +123,7 @@
             cardElement.style.transform = `rotateY(${currentFlipRotation + dragRotationY}deg) rotateX(${dragRotationX}deg)`;
         }
 
-        // --- LÓGICA DE VOLTEO NORMAL (FLIP) --- *** SIMPLIFICADA *** ---
+        // --- LÓGICA DE VOLTEO NORMAL (FLIP) ---
         flipButton.addEventListener('click', () => {
             if (isFlipping || isDragging) return;
             isFlipping = true;
@@ -128,9 +132,9 @@
 
             // Forzar estado centrado
             dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0;
-            cardElement.style.transform = `rotateY(${currentFlipRotation}deg) rotateX(0deg)`; // Aplicar solo Y acumulado
+            cardElement.style.transform = `rotateY(${currentFlipRotation}deg) rotateX(0deg)`;
 
-            currentFlipRotation += 180; // Acumular SIEMPRE para que gire a la derecha
+            currentFlipRotation += 180; // Acumular siempre
 
             const transitionDuration = 600; // 0.6s
             cardElement.style.transition = `transform ${transitionDuration / 1000}s ease-in-out`;
@@ -138,8 +142,8 @@
 
             // Usar setTimeout para el cleanup
             setTimeout(() => {
-                 if (!isFlipping) return; // Check por si acaso
-                 onFlipEndCommon(); // Limpieza común y reactivar drag
+                 if (!isFlipping) return;
+                 onFlipEndCommon();
              }, transitionDuration);
         });
 
@@ -152,34 +156,34 @@
 
              // Forzar estado centrado
              dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0;
-             cardElement.style.transform = `rotateY(${currentFlipRotation}deg) rotateX(0deg)`; // Aplicar estado Y actual
+             // Aplicar rotación Y actual ANTES de añadir la clase
+             cardElement.style.transform = `rotateY(${currentFlipRotation}deg) rotateX(0deg)`;
              void cardElement.offsetWidth; // Reflow
 
-             cardElement.style.transition = 'none'; // Sin transición CSS
+             cardElement.style.transition = 'none'; // Sin transición CSS durante animación
              cardElement.classList.add('trompo-activo'); // Activar animación CSS
-             const animationDuration = 2200; // ms (Debe coincidir con CSS)
+             const animationDuration = 2000; // ms (Debe coincidir con CSS animation-duration de .trompo-activo)
 
              // Usar setTimeout para el cleanup
              setTimeout(() => {
-                if (!isFlipping) return; // Check
+                if (!isFlipping) return;
                 cardElement.classList.remove('trompo-activo');
-                currentFlipRotation = 180; // Forzar estado final visual a trasero
-                // flipCount = 0; // Ya no existe
+                // Forzar estado final a cara trasera y resetear acumulación si se desea
+                // Podríamos dejar la acumulación o resetear a 180. Resetear es más simple.
+                currentFlipRotation = 180;
                 onFlipEndCommon();
              }, animationDuration);
         });
 
         // --- FUNCIÓN DE LIMPIEZA COMÚN ---
         function onFlipEndCommon() {
-            // Se llama después de cualquier animación de flip o trompo
             isFlipping = false;
-            cardElement.style.transition = 'none'; // Quitar transición
-            // Asegurar reseteo drag/velocidad
-            dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0;
-            // Aplicar el estado de rotación Y final correcto
-            applyRotation();
-            enableDrag(); // Reactivar interacción
+            cardElement.style.transition = 'none';
+            dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; // Asegurar reseteo drag
+            applyRotation(); // Asegurar estado visual final
+            enableDrag();
         }
+
 
         // --- LÓGICA DE ROTACIÓN INTERACTIVA (DRAG CON FÍSICA + CONDICIONAL VERTICAL) ---
         // (Sin cambios)
