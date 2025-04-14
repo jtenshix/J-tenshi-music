@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única Flip & Rotate v13 Final</title>
+    <title>Carta Única Flip & Rotate v14 (Física Imantada)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* CSS sin cambios respecto a la última versión completa */
@@ -69,21 +69,21 @@
         // Estado
         let isDragging = false;
         let isFlipping = false;
-        let currentFlipRotation = 0; // 0 o 180
-        let dragRotationX = 0;       // Rotación X acumulada por drag
-        let dragRotationY = 0;       // Rotación Y acumulada por drag
+        let currentFlipRotation = 0;
+        let dragRotationX = 0;
+        let dragRotationY = 0;
 
         // Drag & Physics
         let startX, startY, currentX, currentY;
-        const rotationFactor = 0.3;  // Sensibilidad (ajustar 0.2-0.5)
-        const maxDragRotationX = 30; // Límite vertical
-        const maxDragRotationY = 40; // Límite horizontal
+        const rotationFactor = 0.3; // Sensibilidad
+        const maxDragRotationX = 30;
+        const maxDragRotationY = 40;
         let velocityX = 0;
         let velocityY = 0;
-        // Constantes para "Rebote Pequeño"
-        const friction = 0.88;      // Más fricción (0.8 - 0.9) = frena más rápido
-        const springForce = 0.06;   // Más fuerza = vuelve más rápido (0.05 - 0.1)
-        let animationFrameId = null; // Para controlar el bucle de rebote
+        // *** CONSTANTES DE FÍSICA ACTUALIZADAS ***
+        const friction = 0.88;      // Más fricción (frena más rápido)
+        const springForce = 0.06;   // Resorte más fuerte (vuelve más rápido)
+        let animationFrameId = null;
 
         // --- FUNCIÓN PARA APLICAR TRANSFORMACIÓN ---
         function applyRotation() {
@@ -94,31 +94,28 @@
         flipButton.addEventListener('click', () => {
             if (isFlipping || isDragging) return;
             isFlipping = true;
-            disableDrag(); // Llama a handleDragEnd -> animateRebound si hay offset
+            disableDrag();
             cancelAnimationFrame(animationFrameId); animationFrameId = null;
 
-            // Forzar estado centrado ANTES de iniciar flip
-            // animateRebound llamado por disableDrag debería encargarse, pero aseguramos
-            dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0;
-            applyRotation(); // Aplicar estado centrado
+            dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; // Forzar centro
+            applyRotation();
 
-            const newFlipRotation = (currentFlipRotation === 0) ? 180 : 0; // Alternar
+            const newFlipRotation = (currentFlipRotation === 0) ? 180 : 0;
 
-            cardElement.style.transition = 'transform 0.6s ease-in-out'; // Transición CSS para el flip
-            cardElement.style.transform = `rotateY(${newFlipRotation}deg) rotateX(0deg)`; // Animar a estado de flip
+            cardElement.style.transition = 'transform 0.6s ease-in-out';
+            cardElement.style.transform = `rotateY(${newFlipRotation}deg) rotateX(0deg)`;
 
             cardElement.addEventListener('transitionend', () => {
-                currentFlipRotation = newFlipRotation; // Actualizar estado real al final
+                currentFlipRotation = newFlipRotation;
                 onFlipEnd();
             }, { once: true });
         });
 
         function onFlipEnd() {
             isFlipping = false;
-            cardElement.style.transition = 'none'; // Quitar transición CSS
-            // Asegurar reseteo drag/velocidad post-flip
-            dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0;
-            applyRotation(); // Asegurar estado visual
+            cardElement.style.transition = 'none';
+            dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; // Asegurar reseteo
+            applyRotation();
             enableDrag();
         }
 
@@ -136,7 +133,7 @@
             startX = clientX - (rect.left + rect.width / 2);
             startY = clientY - (rect.top + rect.height / 2);
 
-            velocityX = 0; velocityY = 0; // Resetear velocidad al iniciar drag
+            velocityX = 0; velocityY = 0;
 
             document.addEventListener('mousemove', handleDragMove);
             document.addEventListener('touchmove', handleDragMove, { passive: false });
@@ -158,33 +155,30 @@
             const deltaX = currentX - startX;
             const deltaY = currentY - startY;
 
-            // *** LÓGICA CONDICIONAL PARA ROTACIÓN VERTICAL PERCIBIDA CONSISTENTE ***
             const isBackFacing = Math.round(currentFlipRotation / 180) % 2 !== 0;
 
-            // Acumular rotación horizontal (siempre igual)
+            // Acumular rotación horizontal
             dragRotationY += deltaX * rotationFactor;
 
-            // Acumular rotación vertical (condicional para percepción consistente)
+            // Acumular rotación vertical (condicional para percepción consistente: Arriba -> Atrás)
             if (isBackFacing) {
-                // CARA TRASERA: Fórmula INVERTIDA para que ARRIBA->ATRÁS (percibido)
-                dragRotationX += deltaY * rotationFactor; // Acumula con +deltaY
+                dragRotationX += deltaY * rotationFactor; // Invertida en trasera
             } else {
-                // CARA FRONTAL: Fórmula ORIGINAL para que ARRIBA -> ATRÁS
-                dragRotationX -= deltaY * rotationFactor; // Acumula con -deltaY
+                dragRotationX -= deltaY * rotationFactor; // Normal en frontal
             }
 
-            // Limitar rotación acumulada por drag
+            // Limitar
             dragRotationX = Math.max(-maxDragRotationX, Math.min(maxDragRotationX, dragRotationX));
             dragRotationY = Math.max(-maxDragRotationY, Math.min(maxDragRotationY, dragRotationY));
 
-            // Guardar velocidad instantánea para la inercia (sin invertirla)
-            velocityX = -deltaY * 0.5; // Velocidad X física depende de mov Y
-            velocityY = deltaX * 0.5;  // Velocidad Y física depende de mov X
+            // Guardar velocidad
+            velocityX = -deltaY * 0.5;
+            velocityY = deltaX * 0.5;
 
-            // Aplicar transformación combinada AHORA MISMO
+            // Aplicar transformación
             applyRotation();
 
-            // Actualizar punto de inicio para el siguiente delta
+            // Actualizar inicio para siguiente delta
             startX = currentX;
             startY = currentY;
         }
@@ -200,44 +194,37 @@
             document.removeEventListener('touchend', handleDragEnd);
             document.removeEventListener('mouseleave', handleDragEnd);
 
-            // Iniciar animación de rebote/inercia con la física ajustada
+            // Iniciar animación de rebote
             animateRebound();
         }
 
          // --- Animación de Rebote/Inercia (con física ajustada para rebote pequeño) ---
          function animateRebound() {
-             // No animar si el usuario interactúa o si ya está en el centro sin velocidad
              if (isDragging || isFlipping) { cancelAnimationFrame(animationFrameId); animationFrameId = null; return; }
-             if (Math.abs(velocityX) < 0.01 && Math.abs(velocityY) < 0.01 && Math.abs(dragRotationX) < 0.01 && Math.abs(dragRotationY) < 0.01) {
-                dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; // Asegurar estado final
-                applyRotation();
-                animationFrameId = null;
-                return;
-             }
 
-             // Aplicar velocidad al offset de drag acumulado
-             dragRotationY += velocityY;
-             dragRotationX += velocityX;
+             dragRotationY += velocityY; dragRotationX += velocityX; // Aplicar velocidad
+             velocityY *= friction; velocityX *= friction; // Aplicar fricción (0.88)
 
-             // Aplicar fricción a la velocidad
-             velocityY *= friction; // friction = 0.88
-             velocityX *= friction;
-
-             // Aplicar fuerza de resorte hacia 0 drag offset
-             const forceY = -dragRotationY * springForce; // springForce = 0.06
+             // Aplicar fuerza resorte (0.06) hacia 0 drag offset
+             const forceY = -dragRotationY * springForce;
              const forceX = -dragRotationX * springForce;
-             velocityY += forceY;
-             velocityX += forceX;
+             velocityY += forceY; velocityX += forceX;
 
              // Limitar (opcional)
              // dragRotationX = Math.max(-90, Math.min(90, dragRotationX));
              // dragRotationY = Math.max(-90, Math.min(90, dragRotationY));
 
-             cardElement.style.transition = 'none'; // Sin transición CSS durante la animación JS
+             cardElement.style.transition = 'none';
              applyRotation(); // Aplicar estado actual
 
-             // Continuar animación si todavía hay movimiento significativo
-             animationFrameId = requestAnimationFrame(animateRebound);
+             // Condición de parada
+             if (Math.abs(velocityY) > 0.01 || Math.abs(velocityX) > 0.01 || Math.abs(dragRotationY) > 0.01 || Math.abs(dragRotationX) > 0.01) {
+                 animationFrameId = requestAnimationFrame(animateRebound);
+             } else {
+                 dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; // Estado final exacto
+                 applyRotation();
+                 animationFrameId = null;
+             }
          }
 
         // --- Habilitar/Deshabilitar Drag ---
@@ -246,7 +233,7 @@
             cardContainer.addEventListener('touchstart', handleDragStart, { passive: false });
         }
         function disableDrag() {
-            if(isDragging) { handleDragEnd(); } // Forzar fin del drag si estaba activo
+            if(isDragging) { handleDragEnd(); } // Forzar fin del drag
             cardContainer.removeEventListener('mousedown', handleDragStart);
             cardContainer.removeEventListener('touchstart', handleDragStart);
         }
@@ -257,10 +244,9 @@
          let lastTimeParticle = 0; function animateParticles(currentTime) { if (!ctx) { requestAnimationFrame(animateParticles); return; } if (lastTimeParticle === 0) lastTimeParticle = currentTime; const deltaTime = currentTime - lastTimeParticle; lastTimeParticle = currentTime; ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(particle => { particle.update(deltaTime || 16.67); particle.draw(); }); requestAnimationFrame(animateParticles); }
          function resizeCanvas() { if(!canvas) return; canvas.width = window.innerWidth; canvas.height = window.innerHeight; createParticles(); }
 
-
         // --- INICIALIZACIÓN ---
         enableDrag(); // Habilitar drag al cargar
-        // El loop de animación de física (`animateRebound`) solo se inicia cuando es necesario (en handleDragEnd)
+        // No iniciar animate() Lerp aquí, solo animateRebound cuando sea necesario
 
         // Inicialización Partículas
         if (canvas && ctx) {
