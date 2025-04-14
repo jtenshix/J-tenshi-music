@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única Flip & Rotate v17 (Trompo Ciclo Reimplementado)</title>
+    <title>Carta Única Flip & Rotate v18 (Ciclo Trompo Final)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* CSS Base (sin cambios) */
@@ -28,9 +28,11 @@
         /* *** CSS PARA EL TROMPO *** */
         @keyframes torbellinoSpin {
             100% {
-                /* Gira múltiples veces y termina en estado trasero (180) */
-                /* 2340deg = 6 * 360 + 180 */
-                transform: rotateY(2340deg) rotateX(0deg);
+                /* Gira múltiples veces y termina en estado trasero (180 relativo al inicio del giro)*/
+                /* Usaremos un número grande impar múltiplo de 180 relativo al giro actual */
+                /* El target exacto lo controla JS al aplicar el transform final */
+                /* La animación solo necesita girar mucho */
+                transform: rotateY(2340deg) rotateX(0deg); /* 6 vueltas + 180 grados */
             }
         }
         .card.trompo-activo {
@@ -112,27 +114,26 @@
             cardElement.style.transform = `rotateY(${currentFlipRotation + dragRotationY}deg) rotateX(${dragRotationX}deg)`;
         }
 
-        // --- LÓGICA DE VOLTEO (FLIP) --- *** REIMPLEMENTADA CON TROMPO *** ---
+        // --- LÓGICA DE VOLTEO (FLIP) --- *** CORREGIDA CON CICLO TROMPO *** ---
         flipButton.addEventListener('click', () => {
-            if (isFlipping || isDragging) return; // Evitar acciones simultáneas
+            if (isFlipping || isDragging) return;
             isFlipping = true;
-            disableDrag(); // Llama a handleDragEnd -> animateRebound para centrar
-            cancelAnimationFrame(animationFrameId); animationFrameId = null; // Detener rebote explícitamente
+            disableDrag(); // Llama a handleDragEnd -> animateRebound si hay offset
+            cancelAnimationFrame(animationFrameId); animationFrameId = null; // Detener rebote
 
-            // Forzar estado centrado (drag=0) antes de la animación de flip/trompo
+            // Forzar estado centrado (drag=0) antes de animar
             dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0;
-            // Aplicar la rotación Y acumulada actual SIN offset de drag
+            // Aplicar rotación Y acumulada actual SIN offset de drag
             cardElement.style.transform = `rotateY(${currentFlipRotation}deg) rotateX(0deg)`;
-
 
             flipCount++; // Incrementar contador
 
             if (flipCount === 10) {
                 // --- EFECTO TROMPO (10º Flip) ---
-                cardElement.style.transition = 'none'; // Sin transición CSS para animación
+                cardElement.style.transition = 'none'; // Quitar transición CSS normal
 
-                // Aplicar rotación base actual antes de añadir clase (importante para que @keyframes parta bien)
-                cardElement.style.transform = `rotateY(${currentFlipRotation}deg) rotateX(0deg)`;
+                // Asegurar estado visual base antes de añadir clase de animación
+                applyRotation(); // (dragX/Y son 0 aquí)
                 void cardElement.offsetWidth; // Forzar reflow
 
                 cardElement.classList.add('trompo-activo'); // Activar animación CSS
@@ -140,9 +141,9 @@
                 // Escuchar fin de la ANIMACIÓN CSS ('animationend')
                 cardElement.addEventListener('animationend', () => {
                     cardElement.classList.remove('trompo-activo'); // Limpiar clase
-                    // Forzar estado final visual a cara trasera (180 grados)
+                    // Forzar estado final a cara trasera (180 grados visuales)
                     // y resetear la acumulación para el próximo ciclo
-                    currentFlipRotation = 180;
+                    currentFlipRotation = 180; // Deja la rotación base en 180
                     flipCount = 0; // *** REINICIAR CONTADOR ***
                     onFlipEnd(); // Limpiar estados y reactivar drag
                 }, { once: true });
@@ -152,7 +153,7 @@
                 currentFlipRotation += 180; // Acumular rotación para giro siempre igual
 
                 cardElement.style.transition = 'transform 0.6s ease-in-out'; // Transición CSS normal
-                // Aplicar rotación acumulada (drag ya está en 0)
+                // Aplicar nueva rotación acumulada (drag ya está en 0)
                 cardElement.style.transform = `rotateY(${currentFlipRotation}deg) rotateX(0deg)`;
 
                 // Escuchar fin de la TRANSICIÓN CSS normal ('transitionend')
@@ -166,10 +167,11 @@
             cardElement.style.transition = 'none'; // Quitar transición CSS
             // Asegurar reseteo drag/velocidad
             dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0;
-            // Asegurar que el estado visual coincida con el estado lógico final
+            // Aplicar el estado final correcto (importante después del trompo)
             applyRotation();
             enableDrag();
         }
+
 
         // --- LÓGICA DE ROTACIÓN INTERACTIVA (DRAG CON FÍSICA + CONDICIONAL VERTICAL) ---
         // (Sin cambios respecto a la última versión que tenía física)
@@ -188,7 +190,7 @@
 
         // --- INICIALIZACIÓN ---
         enableDrag(); // Habilitar drag al cargar
-        // No iniciar bucle Lerp/Rebote aquí, se controla por eventos
+        // No iniciar animate() aquí, animateRebound se auto-llama cuando es necesario
 
         // Inicialización Partículas
         if (canvas && ctx) {
