@@ -3,68 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única Flip & Rotate v10 (Rotación Condicional)</title> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Carta Única Flip & Rotate v12 (Rebote Ajustado)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        /* CSS (igual que la última versión completa) */
-        body {
-            margin: 0; padding: 0; background: linear-gradient(135deg, #1a0033, #4a148c, #3f51b5); min-height: 100vh;
-            min-height: 100svh; overflow: hidden; display: flex; justify-content: center; align-items: center; position: relative; user-select: none; -webkit-user-select: none; touch-action: manipulation;
-        }
-        .card-container {
-            width: 85vw; height: auto; aspect-ratio: 300 / 420; max-width: 300px; position: relative; perspective: 1000px; cursor: grab; user-select: none; -webkit-user-drag: none; z-index: 10;
-        }
+        /* CSS sin cambios respecto a la última versión completa */
+        body { margin: 0; padding: 0; background: linear-gradient(135deg, #1a0033, #4a148c, #3f51b5); min-height: 100vh; min-height: 100svh; overflow: hidden; display: flex; justify-content: center; align-items: center; position: relative; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+        .card-container { width: 85vw; height: auto; aspect-ratio: 300 / 420; max-width: 300px; position: relative; perspective: 1000px; cursor: grab; user-select: none; -webkit-user-drag: none; z-index: 10; }
         .card-container:active { cursor: grabbing; }
-
-        .card {
-            width: 100%; height: 100%; position: relative; transform-style: preserve-3d;
-            transition: none; /* Transición controlada por JS */
-            transform: rotateX(0deg) rotateY(0deg); user-select: none; -webkit-user-drag: none;
-        }
-
-        .card-face {
-            position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 8px; overflow: hidden; background-color: #555; display: block; user-select: none; -webkit-user-drag: none;
-        }
-        .card-face img {
-            width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; user-select: none; -webkit-user-drag: none;
-        }
+        .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: none; transform: rotateX(0deg) rotateY(0deg); user-select: none; -webkit-user-drag: none; }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 8px; overflow: hidden; background-color: #555; display: block; user-select: none; -webkit-user-drag: none; }
+        .card-face img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; user-select: none; -webkit-user-drag: none; }
         .card-face.front {}
         .card-face.back { transform: rotateY(180deg); background-color: #333; position: relative; }
-
-        /* Botones DENTRO de .card-face.back */
-        .card-face.back .button-container {
-             position: absolute; inset: 0; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; z-index: 1;
-        }
-         .card-face.back .youtube-button {
-             background-color: red; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; color: white; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; transition: background 0.3s; margin-bottom: auto;
-         }
-         .card-face.back .youtube-button:hover { background-color: darkred; }
-         .card-face.back .social-icons {
-             display: flex; gap: 8px; align-self: flex-end;
-         }
-         .card-face.back .social-icons a { color: white; text-decoration: none; font-size: 20px; transition: color 0.3s; }
-         .card-face.back .social-icons a:hover { color: #8c9eff; }
-
-        /* Botón de Voltear General */
-        .flip-button {
-            background-color: rgba(255, 255, 255, 0.8); border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background 0.3s, transform 0.3s;
-            position: fixed; /* Fijado */
-            z-index: 100;
-            bottom: 25px; /* Ajustado */
-            right: 25px;  /* Ajustado */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-        }
-         .flip-button:hover { background-color: white; transform: scale(1.1); }
-
+        .card-face.back .button-container { position: absolute; inset: 0; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; z-index: 1; }
+        .card-face.back .youtube-button { background-color: red; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; color: white; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; transition: background 0.3s; margin-bottom: auto; }
+        .card-face.back .youtube-button:hover { background-color: darkred; }
+        .card-face.back .social-icons { display: flex; gap: 8px; align-self: flex-end; }
+        .card-face.back .social-icons a { color: white; text-decoration: none; font-size: 20px; transition: color 0.3s; }
+        .card-face.back .social-icons a:hover { color: #8c9eff; }
+        .flip-button { background-color: rgba(255, 255, 255, 0.8); border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background 0.3s, transform 0.3s; position: fixed; z-index: 100; bottom: 25px; right: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+        .flip-button:hover { background-color: white; transform: scale(1.1); }
         canvas#particleCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-
-        @media (max-width: 600px) {
-             .card-container { max-width: 90vw; }
-             .flip-button { width: 40px; height: 40px; bottom: 20px; right: 20px;}
-             .card-face.back .button-container { padding: 15px; }
-             .card-face.back .youtube-button { padding: 6px 10px; font-size: 12px; }
-             .card-face.back .social-icons { gap: 8px;}
-             .card-face.back .social-icons a { font-size: 18px; }
-         }
+        @media (max-width: 600px) { .card-container { max-width: 90vw; } .flip-button { width: 40px; height: 40px; bottom: 20px; right: 20px;} .card-face.back .button-container { padding: 15px; } .card-face.back .youtube-button { padding: 6px 10px; font-size: 12px; } .card-face.back .social-icons { gap: 8px;} .card-face.back .social-icons a { font-size: 18px; } }
     </style>
 </head>
 <body>
@@ -110,105 +70,80 @@
         let isDragging = false;
         let isFlipping = false;
         let currentFlipRotation = 0;
+        let dragRotationX = 0; // Rotación X acumulada por drag
+        let dragRotationY = 0; // Rotación Y acumulada por drag
 
-        // Variables para Lerp
-        let currentAppliedDragX = 0; let currentAppliedDragY = 0;
-        let targetDragX = 0; let targetDragY = 0;
-        const smoothingFactor = 0.08;
-
-        // Límites y sensibilidad de Drag
-        const rotationFactor = 0.25; const maxDragRotationX = 25; const maxDragRotationY = 35;
+        // Drag & Physics Variables
+        let startX, startY, currentX, currentY;
+        const rotationFactor = 0.3; // Sensibilidad (ajustar si es necesario)
+        const maxDragRotationX = 30; // Límites (ajustar si es necesario)
+        const maxDragRotationY = 40;
+        let velocityX = 0;
+        let velocityY = 0;
+        // *** VALORES FÍSICA para "Rebote Pequeño" ***
+        const friction = 0.88;      // Más fricción -> frena rápido el rebote
+        const springForce = 0.06;   // Resorte más fuerte -> vuelve rápido con pequeño overshoot
         let animationFrameId = null;
-
-        // --- FUNCIÓN LERP ---
-        function lerp(start, end, amt) { return (1 - amt) * start + amt * end; }
 
         // --- FUNCIÓN PARA APLICAR TRANSFORMACIÓN ---
         function applyRotation() {
-            cardElement.style.transform = `rotateY(${currentFlipRotation + currentAppliedDragY}deg) rotateX(${currentAppliedDragX}deg)`;
+            // Aplica rotación del flip + rotación acumulada por drag
+            cardElement.style.transform = `rotateY(${currentFlipRotation + dragRotationY}deg) rotateX(${dragRotationX}deg)`;
         }
 
-        // --- BUCLE PRINCIPAL DE ANIMACIÓN (LERP) ---
-        function animate() {
-            const diffX = targetDragX - currentAppliedDragX;
-            const diffY = targetDragY - currentAppliedDragY;
-
-            if (!isDragging && Math.abs(diffX) < 0.01 && Math.abs(diffY) < 0.01) {
-                if (currentAppliedDragX !== targetDragX || currentAppliedDragY !== targetDragY) { currentAppliedDragX = targetDragX; currentAppliedDragY = targetDragY; applyRotation(); }
-                animationFrameId = null; return;
-            }
-            currentAppliedDragX = lerp(currentAppliedDragX, targetDragX, smoothingFactor);
-            currentAppliedDragY = lerp(currentAppliedDragY, targetDragY, smoothingFactor);
-            applyRotation();
-            animationFrameId = requestAnimationFrame(animate);
-        }
-
-        // --- LÓGICA DE VOLTEO (FLIP) --- (Corregida para alternar 0/180)
+        // --- LÓGICA DE VOLTEO (FLIP) --- (Usando alternancia 0/180)
         flipButton.addEventListener('click', () => {
             if (isFlipping || isDragging) return;
             isFlipping = true;
-            disableDrag();
-            cancelAnimationFrame(animationFrameId); animationFrameId = null;
+            disableDrag(); // Llama a handleDragEnd -> animateRebound
+            cancelAnimationFrame(animationFrameId); animationFrameId = null; // Detener rebote
 
-            const checkCentering = setInterval(() => {
-                if (Math.abs(currentAppliedDragX) < 0.5 && Math.abs(currentAppliedDragY) < 0.5) {
-                    clearInterval(checkCentering);
-                    currentAppliedDragX = 0; currentAppliedDragY = 0; targetDragX = 0; targetDragY = 0; // Forzar centro
-                    applyRotation();
+            // Forzar estado centrado antes del flip
+            dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0;
+            applyRotation();
 
-                    const newFlipRotation = (currentFlipRotation === 0) ? 180 : 0; // Alternar
+            const newFlipRotation = (currentFlipRotation === 0) ? 180 : 0; // Alternar
 
-                    cardElement.style.transition = 'transform 0.6s ease-in-out';
-                    cardElement.style.transform = `rotateY(${newFlipRotation}deg) rotateX(0deg)`; // Animar al nuevo estado
+            cardElement.style.transition = 'transform 0.6s ease-in-out'; // Transición CSS para el flip
+            cardElement.style.transform = `rotateY(${newFlipRotation}deg) rotateX(0deg)`; // Animar a estado de flip
 
-                    cardElement.addEventListener('transitionend', () => {
-                        currentFlipRotation = newFlipRotation; // Actualizar estado al final
-                        onFlipEnd();
-                    }, { once: true });
-                }
-            }, 10);
-
-            setTimeout(() => { // Timeout de seguridad
-                if (isFlipping) {
-                    clearInterval(checkCentering);
-                    cancelAnimationFrame(animationFrameId); animationFrameId = null;
-                    currentAppliedDragX = 0; currentAppliedDragY = 0; targetDragX = 0; targetDragY = 0;
-
-                    const newFlipRotation = (currentFlipRotation === 0) ? 180 : 0;
-                    cardElement.style.transition = 'transform 0.6s ease-in-out';
-                    cardElement.style.transform = `rotateY(${newFlipRotation}deg) rotateX(0deg)`;
-                    cardElement.addEventListener('transitionend', () => {
-                         currentFlipRotation = newFlipRotation;
-                         onFlipEnd();
-                     }, { once: true });
-                }
-            }, 200);
+            cardElement.addEventListener('transitionend', () => {
+                currentFlipRotation = newFlipRotation; // Actualizar estado al final
+                onFlipEnd();
+            }, { once: true });
         });
 
         function onFlipEnd() {
             isFlipping = false;
-            cardElement.style.transition = 'none';
-            // currentFlipRotation ya se actualizó en el listener
-            targetDragX = 0; targetDragY = 0; currentAppliedDragX = 0; currentAppliedDragY = 0; // Asegurar reseteo drag
-            applyRotation();
+            cardElement.style.transition = 'none'; // Quitar transición CSS
+            // Asegurar reset drag/velocidad
+            dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0;
+            applyRotation(); // Aplicar estado final limpio
             enableDrag();
-             if (!animationFrameId) requestAnimationFrame(animate); // Reiniciar Lerp
         }
 
-        // --- LÓGICA DE ROTACIÓN INTERACTIVA (DRAG CON LERP) ---
+        // --- LÓGICA DE ROTACIÓN INTERACTIVA (DRAG CON ACUMULACIÓN + FÍSICA) ---
         function handleDragStart(e) {
             if (isFlipping) return;
             isDragging = true;
             cardContainer.style.cursor = 'grabbing';
             cardElement.style.transition = 'none';
+            cancelAnimationFrame(animationFrameId); animationFrameId = null;
 
-            if (!animationFrameId) requestAnimationFrame(animate);
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const rect = cardContainer.getBoundingClientRect();
+            startX = clientX - (rect.left + rect.width / 2);
+            startY = clientY - (rect.top + rect.height / 2);
+
+            velocityX = 0; velocityY = 0; // Resetear velocidad al iniciar
+            // NO reseteamos dragRotationX/Y para continuar desde donde estaba
 
             document.addEventListener('mousemove', handleDragMove);
             document.addEventListener('touchmove', handleDragMove, { passive: false });
             document.addEventListener('mouseup', handleDragEnd);
             document.addEventListener('touchend', handleDragEnd);
-            cardContainer.addEventListener('mouseleave', handleDragEnd);
+            document.addEventListener('mouseleave', handleDragEnd);
         }
 
         function handleDragMove(e) {
@@ -218,28 +153,30 @@
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
             const rect = cardContainer.getBoundingClientRect();
+            currentX = clientX - (rect.left + rect.width / 2);
+            currentY = clientY - (rect.top + rect.height / 2);
 
-            const percentX = Math.max(-1, Math.min(1, (clientX - rect.left - rect.width / 2) / (rect.width / 2)));
-            const percentY = Math.max(-1, Math.min(1, (clientY - rect.top - rect.height / 2) / (rect.height / 2)));
+            const deltaX = currentX - startX;
+            const deltaY = currentY - startY;
 
-            // *** LÓGICA CONDICIONAL PARA ROTACIÓN VERTICAL PERCIBIDA CONSISTENTE ***
-            const isBackFacing = Math.round(currentFlipRotation / 180) % 2 !== 0;
+            // *** ACUMULAR ROTACIÓN (Arriba -> Inclina Atrás) ***
+            dragRotationY += deltaX * rotationFactor;
+            dragRotationX -= deltaY * rotationFactor; // Con el "-" es Arriba -> Atrás
 
-            targetDragY = percentX * maxDragRotationY; // Horizontal siempre igual
+            // Limitar rotación del drag
+            dragRotationX = Math.max(-maxDragRotationX, Math.min(maxDragRotationX, dragRotationX));
+            dragRotationY = Math.max(-maxDragRotationY, Math.min(maxDragRotationY, dragRotationY));
 
-            if (isBackFacing) {
-                // CARA TRASERA: Fórmula INVERTIDA para que ARRIBA->ATRÁS (percibido)
-                targetDragX = percentY * maxDragRotationX;
-            } else {
-                // CARA FRONTAL: Fórmula ORIGINAL para que ARRIBA -> ATRÁS
-                targetDragX = -percentY * maxDragRotationX;
-            }
+            // Guardar velocidad instantánea para la inercia
+            velocityX = -deltaY * 0.5; // Velocidad X basada en mov Y
+            velocityY = deltaX * 0.5;  // Velocidad Y basada en mov X
 
-            // Limitar la rotación OBJETIVO
-            targetDragX = Math.max(-maxDragRotationX, Math.min(maxDragRotationX, targetDragX));
-            targetDragY = Math.max(-maxDragRotationY, Math.min(maxDragRotationY, targetDragY));
+            // Aplicar transformación combinada AHORA MISMO
+            applyRotation();
 
-            // El bucle animate() moverá currentAppliedDragX/Y hacia estos target
+            // Actualizar punto de inicio para el siguiente evento move
+            startX = currentX;
+            startY = currentY;
         }
 
         function handleDragEnd() {
@@ -251,13 +188,47 @@
             document.removeEventListener('touchmove', handleDragMove);
             document.removeEventListener('mouseup', handleDragEnd);
             document.removeEventListener('touchend', handleDragEnd);
-            cardContainer.removeEventListener('mouseleave', handleDragEnd);
+            document.removeEventListener('mouseleave', handleDragEnd);
 
-            // Poner el objetivo en 0. El bucle animate() hará el retorno suave.
-            targetDragX = 0;
-            targetDragY = 0;
-            if (!animationFrameId) requestAnimationFrame(animate); // Asegurar lerp para retorno
+            // Iniciar animación de rebote/inercia con la física ajustada
+            animateRebound();
         }
+
+         // --- Animación de Rebote/Inercia (Reintroducida con física ajustada) ---
+         function animateRebound() {
+             if (isDragging || isFlipping) { cancelAnimationFrame(animationFrameId); animationFrameId = null; return; }
+
+             // Aplicar velocidad al offset de drag acumulado
+             dragRotationY += velocityY;
+             dragRotationX += velocityX;
+
+             // Aplicar fricción (0.88)
+             velocityY *= friction;
+             velocityX *= friction;
+
+             // Aplicar fuerza de resorte (0.06) hacia 0 drag offset
+             const forceY = -dragRotationY * springForce;
+             const forceX = -dragRotationX * springForce;
+             velocityY += forceY;
+             velocityX += forceX;
+
+             // Limitar (opcional durante animación)
+             // dragRotationX = Math.max(-90, Math.min(90, dragRotationX));
+             // dragRotationY = Math.max(-90, Math.min(90, dragRotationY));
+
+             cardElement.style.transition = 'none'; // Sin transición CSS
+             applyRotation(); // Aplicar estado actual (Flip + Drag offset)
+
+             // Condición de parada (cuando casi no haya movimiento ni offset)
+             if (Math.abs(velocityY) > 0.01 || Math.abs(velocityX) > 0.01 || Math.abs(dragRotationY) > 0.01 || Math.abs(dragRotationX) > 0.01) {
+                 animationFrameId = requestAnimationFrame(animateRebound);
+             } else {
+                 // Asegurar estado final exacto (sin drag offset)
+                 dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0;
+                 applyRotation();
+                 animationFrameId = null;
+             }
+         }
 
         // --- Habilitar/Deshabilitar Drag ---
         function enableDrag() {
@@ -265,7 +236,7 @@
             cardContainer.addEventListener('touchstart', handleDragStart, { passive: false });
         }
         function disableDrag() {
-            if(isDragging) { handleDragEnd(); } // Forzar fin del drag
+            if(isDragging) { handleDragEnd(); } // Forzar fin del drag si estaba activo
             cardContainer.removeEventListener('mousedown', handleDragStart);
             cardContainer.removeEventListener('touchstart', handleDragStart);
         }
@@ -276,9 +247,10 @@
          let lastTimeParticle = 0; function animateParticles(currentTime) { if (!ctx) { requestAnimationFrame(animateParticles); return; } if (lastTimeParticle === 0) lastTimeParticle = currentTime; const deltaTime = currentTime - lastTimeParticle; lastTimeParticle = currentTime; ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(particle => { particle.update(deltaTime || 16.67); particle.draw(); }); requestAnimationFrame(animateParticles); }
          function resizeCanvas() { if(!canvas) return; canvas.width = window.innerWidth; canvas.height = window.innerHeight; createParticles(); }
 
+
         // --- INICIALIZACIÓN ---
         enableDrag(); // Habilitar drag al cargar
-        requestAnimationFrame(animate); // Iniciar bucle de animación Lerp
+        // Ya no iniciamos animate() aquí, se inicia con el drag o el rebote
 
         // Inicialización Partículas
         if (canvas && ctx) {
