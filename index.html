@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Única Flip & Rotate v4 (Final Suave)</title>
+    <title>Carta Única Flip & Rotate v5 (Suave)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
@@ -15,7 +15,10 @@
         .card-container:active { cursor: grabbing; }
 
         .card {
-            width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: none; /* Transición controlada por JS */ transform: rotateX(0deg) rotateY(0deg); user-select: none; -webkit-user-drag: none;
+            width: 100%; height: 100%; position: relative; transform-style: preserve-3d;
+            /* La transición se maneja explícitamente con JS */
+            transition: none;
+            transform: rotateX(0deg) rotateY(0deg); user-select: none; -webkit-user-drag: none;
         }
 
         .card-face {
@@ -29,14 +32,14 @@
 
         /* Botones DENTRO de .card-face.back */
         .card-face.back .button-container {
-             position: absolute; inset: 0; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; /* Alinea items */ z-index: 1;
+             position: absolute; inset: 0; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; z-index: 1;
         }
          .card-face.back .youtube-button {
-             background-color: red; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; color: white; font-family: Arial, sans-serif; font-weight: bold; transition: background 0.3s; margin-bottom: auto; /* Empuja redes sociales abajo */
+             background-color: red; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; color: white; font-family: Arial, sans-serif; font-weight: bold; transition: background 0.3s; margin-bottom: auto;
          }
          .card-face.back .youtube-button:hover { background-color: darkred; }
          .card-face.back .social-icons {
-             display: flex; gap: 10px; align-self: flex-end; /* Abajo a la derecha */
+             display: flex; gap: 10px; align-self: flex-end;
          }
          .card-face.back .social-icons a { color: white; text-decoration: none; font-size: 24px; transition: color 0.3s; }
          .card-face.back .social-icons a:hover { color: #8c9eff; }
@@ -105,15 +108,10 @@
         let dragRotationX = 0;
         let dragRotationY = 0;
 
-        // Drag & Physics
-        let startX, startY;
-        const rotationFactor = 0.4;
-        let velocityX = 0;
-        let velocityY = 0;
-        // *** Ajustados para Suavidad ***
-        const friction = 0.95;      // Más cercano a 1 = Menos fricción / Más suave
-        const springForce = 0.025;  // Menor fuerza = Retorno más suave
-        let animationFrameId = null;
+        // Drag
+        const rotationFactor = 0.15; // Sensibilidad reducida para suavidad
+        const maxDragRotationX = 20;
+        const maxDragRotationY = 25;
 
         // --- FUNCIÓN PARA APLICAR TRANSFORMACIÓN ---
         function applyRotation() {
@@ -124,16 +122,14 @@
         flipButton.addEventListener('click', () => {
             if (isFlipping || isDragging) return;
             isFlipping = true;
-            disableDrag();
-            cancelAnimationFrame(animationFrameId);
+            disableDrag(); // Llama a handleDragEnd implícitamente si isDragging=true
 
             currentFlipRotation += 180;
 
+            // Aplicar volteo usando transición CSS
             cardElement.style.transition = 'transform 0.6s ease-in-out';
-            // Resetear drag visual al voltear
-            dragRotationX = 0;
-            dragRotationY = 0;
-            applyRotation(); // Aplica solo el flip Y
+            dragRotationX = 0; dragRotationY = 0; // Resetear drag visual
+            applyRotation(); // Aplicar solo flip Y
 
             cardElement.addEventListener('transitionend', onFlipEnd, { once: true });
         });
@@ -142,27 +138,20 @@
             isFlipping = false;
             cardElement.style.transition = 'none'; // Quitar transición post-flip
             currentFlipRotation %= 360;
-            dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; // Asegurar reseteo
+            // Asegurar reseteo visual
+            dragRotationX = 0; dragRotationY = 0;
             applyRotation();
             enableDrag();
         }
 
-        // --- LÓGICA DE ROTACIÓN INTERACTIVA (DRAG) ---
+        // --- LÓGICA DE ROTACIÓN INTERACTIVA (DRAG SUAVE) ---
         function handleDragStart(e) {
             if (isFlipping) return;
             isDragging = true;
             cardContainer.style.cursor = 'grabbing';
-            cardElement.style.transition = 'none';
-            cancelAnimationFrame(animationFrameId);
+            cardElement.style.transition = 'none'; // Asegurar no transición durante drag
 
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            const rect = cardContainer.getBoundingClientRect();
-            startX = clientX - (rect.left + rect.width / 2);
-            startY = clientY - (rect.top + rect.height / 2);
-
-            velocityX = 0; velocityY = 0;
-
+            // Añadir listeners al documento
             document.addEventListener('mousemove', handleDragMove);
             document.addEventListener('touchmove', handleDragMove, { passive: false });
             document.addEventListener('mouseup', handleDragEnd);
@@ -177,31 +166,21 @@
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
             const rect = cardContainer.getBoundingClientRect();
-            const currentX = clientX - (rect.left + rect.width / 2);
-            const currentY = clientY - (rect.top + rect.height / 2);
 
-            const deltaX = currentX - startX;
-            const deltaY = currentY - startY;
+            // Calcular posición relativa al centro (%)
+            const percentX = (clientX - rect.left - rect.width / 2) / (rect.width / 2);
+            const percentY = (clientY - rect.top - rect.height / 2) / (rect.height / 2);
 
-            // *** INVERSIÓN VERTICAL SI CARA TRASERA VISIBLE ***
+            // Inversión Vertical si cara trasera visible
             const isBackFacing = Math.round(currentFlipRotation / 180) % 2 !== 0;
-            const verticalFactor = isBackFacing ? 1 : -1; // Invierte si es true (trasera)
+            const verticalFactor = isBackFacing ? 1 : -1;
 
-            // Calcular offset de rotación por drag
-            dragRotationY = deltaX * rotationFactor;
-            dragRotationX = verticalFactor * deltaY * rotationFactor; // Aplica inversión
-
-            // Limitar
-            dragRotationX = Math.max(-60, Math.min(60, dragRotationX));
-            dragRotationY = Math.max(-80, Math.min(80, dragRotationY));
-
-            // Guardar velocidad (sin invertir)
-            velocityX = (-deltaY) * 0.5;
-            velocityY = deltaX * 0.5;
+            // Calcular rotación de drag DIRECTAMENTE basada en la posición
+            dragRotationY = percentX * maxDragRotationY;
+            dragRotationX = verticalFactor * percentY * maxDragRotationX * -1; // Invertir Y y aplicar factor
 
             // Aplicar transformación combinada
             applyRotation();
-            // NO actualizar startX/Y para que delta sea desde el inicio
         }
 
         function handleDragEnd() {
@@ -209,49 +188,25 @@
             isDragging = false;
             cardContainer.style.cursor = 'grab';
 
+            // Quitar listeners del documento
             document.removeEventListener('mousemove', handleDragMove);
             document.removeEventListener('touchmove', handleDragMove);
             document.removeEventListener('mouseup', handleDragEnd);
             document.removeEventListener('touchend', handleDragEnd);
             document.removeEventListener('mouseleave', handleDragEnd);
 
-            // *** AJUSTE SUAVIDAD: Siempre usar animateRebound si hubo drag/velocidad ***
-            if (Math.abs(velocityX) > 0.01 || Math.abs(velocityY) > 0.01 || Math.abs(dragRotationX) > 0.01 || Math.abs(dragRotationY) > 0.01) {
-                 animateRebound();
-             } else {
-                 // Si no hubo nada, asegurar estado sin drag (quizás innecesario si no se movió)
-                 dragRotationX = 0; dragRotationY = 0;
-                 velocityX = 0; velocityY = 0;
-                 applyRotation();
-             }
+            // Volver al centro con Transición CSS (Sin física)
+            cardElement.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)'; // Suave
+            dragRotationX = 0; // Resetear offset de drag
+            dragRotationY = 0;
+            applyRotation(); // Animar solo a la rotación del flip
+
+            // Quitar la transición después de que termine para el próximo drag
+             setTimeout(() => {
+                 // Solo quitar si no estamos en medio de un flip
+                 if (!isFlipping) cardElement.style.transition = 'none';
+             }, 400); // Duración de la transición + pequeño margen
         }
-
-         // --- Animación de Rebote/Inercia (con valores ajustados) ---
-         function animateRebound() {
-             if (isDragging || isFlipping) { cancelAnimationFrame(animationFrameId); animationFrameId = null; return; }
-
-             dragRotationY += velocityY; dragRotationX += velocityX; // Aplicar velocidad
-             velocityY *= friction; velocityX *= friction; // Aplicar fricción (0.95)
-
-             // Aplicar fuerza resorte (0.025)
-             const forceY = -dragRotationY * springForce;
-             const forceX = -dragRotationX * springForce;
-             velocityY += forceY; velocityX += forceX;
-
-             dragRotationX = Math.max(-90, Math.min(90, dragRotationX)); dragRotationY = Math.max(-90, Math.min(90, dragRotationY)); // Limitar
-
-             cardElement.style.transition = 'none'; // Sin transición CSS
-             applyRotation(); // Aplicar estado
-
-             // Condición de parada (umbral bajo para suavidad)
-             if (Math.abs(velocityY) > 0.005 || Math.abs(velocityX) > 0.005 || Math.abs(dragRotationY) > 0.005 || Math.abs(dragRotationX) > 0.005) {
-                 animationFrameId = requestAnimationFrame(animateRebound);
-             } else {
-                 dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; // Estado final exacto
-                 applyRotation();
-                 animationFrameId = null;
-             }
-         }
 
         // --- Habilitar/Deshabilitar Drag ---
         function enableDrag() {
@@ -261,7 +216,7 @@
         function disableDrag() {
             cardContainer.removeEventListener('mousedown', handleDragStart);
             cardContainer.removeEventListener('touchstart', handleDragStart);
-            if(isDragging) { handleDragEnd(); } // Forzar fin del drag
+            if(isDragging) { handleDragEnd(); } // Forzar fin del drag si estaba activo
         }
 
         // Activar drag al inicio
