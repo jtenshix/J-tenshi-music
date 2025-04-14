@@ -75,14 +75,14 @@
 
         // Drag & Physics
         let startX, startY, currentX, currentY;
-        const rotationFactor = 0.3; // Sensibilidad (Puedes ajustarla)
-        const maxDragRotationX = 30; // Límites (Puedes ajustarlos)
-        const maxDragRotationY = 40;
+        const rotationFactor = 0.2; // Sensibilidad (Puedes ajustarla)
+        const maxDragRotationX = 50; // Límites (Puedes ajustarlos)
+        const maxDragRotationY = 50;
         let velocityX = 0;
         let velocityY = 0;
         // Constantes para "Rebote Pequeño"
-        const friction = 0.88;
-        const springForce = 0.06;
+        const friction = 0.80;
+        const springForce = 0.12;
         let animationFrameId = null; // Para controlar el bucle de rebote
 
         // --- FUNCIÓN PARA APLICAR TRANSFORMACIÓN ---
