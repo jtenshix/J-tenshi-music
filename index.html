@@ -3,47 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única v31 (RGB Glitch + AutoGiro 2s) - 2025-04-14</title>
+    <title>Carta Única v29 (Despliegue Digital + AutoGiro 3s) - 2025-04-14</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body { margin: 0; padding: 0; background: linear-gradient(135deg, #1a0033, #4a148c, #3f51b5); min-height: 100vh; min-height: 100svh; overflow: hidden; display: flex; justify-content: center; align-items: center; position: relative; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
         
-        /* --- Keyframes para Aparición Rápida de la Carta --- */
-         @keyframes cardAppearQuick { 
-           from { 
-             opacity: 0; 
-             transform: scale(0.97); 
-           } 
-           to { 
-             opacity: 1; 
-             transform: scale(1); 
-           } 
-         }
-
-        /* --- Keyframes para el Glitch (Canales RGB simulados) --- */
-        /* Animación para el canal "Rojo" */
-        @keyframes glitchRedShift {
-          0%, 100% { opacity: 0; transform: translate(0, 0); }
-          20% { opacity: 0.6; transform: translate(-4px, 1px); } 
-          25% { opacity: 0; }
-          40% { opacity: 0.7; transform: translate(3px, -2px); }
-          45% { opacity: 0; }
-          70% { opacity: 0.5; transform: translate(-2px, 2px); }
-          75% { opacity: 0; }
+        /* --- Keyframes para la Animación "Despliegue Digital" --- */
+        @keyframes digitalUnfold {
+          0% {
+            opacity: 0;
+            transform: rotateY(-90deg) scale(0.9); 
+            filter: brightness(1.5);
+          }
+          70% {
+            opacity: 1;
+            transform: rotateY(10deg) scale(1.05); 
+            filter: brightness(1.2);
+          }
+          100% {
+            opacity: 1;
+            transform: rotateY(0deg) scale(1);
+            filter: brightness(1);
+          }
         }
 
-        /* Animación para el canal "Cyan" */
-        @keyframes glitchCyanShift {
-          0%, 100% { opacity: 0; transform: translate(0, 0); }
-          20% { opacity: 0.6; transform: translate(4px, -1px); } 
-          25% { opacity: 0; }
-          40% { opacity: 0.7; transform: translate(-3px, 2px); }
-          45% { opacity: 0; }
-          70% { opacity: 0.5; transform: translate(2px, -2px); }
-          75% { opacity: 0; }
-        }
-
-        /* --- Estilo del Contenedor con Animación de Aparición --- */
+        /* --- Estilo del Contenedor con la Animación "Despliegue Digital" --- */
         .card-container { 
             width: 85vw; 
             height: auto; 
@@ -60,68 +44,19 @@
             pointer-events: auto; 
             backface-visibility: hidden; 
 
-            /* Animación de aparición rápida */
-            animation: cardAppearQuick 
-                       0.2s /* Duración aparición: 0.2 segundos */
+            /* Aplicar la animación "Despliegue Digital" */
+            animation: digitalUnfold 
+                       0.6s /* Duración: 0.6 segundos */
                        ease-out 
                        forwards; 
         }
 
-        /* --- Estilos restantes --- */
+        /* --- Estilos restantes (sin cambios desde v29) --- */
         .card-container:active { cursor: grabbing; }
         .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: none; transform: rotateX(0deg) rotateY(0deg); user-select: none; -webkit-user-drag: none; }
-        
-        /* Preparación para pseudo-elementos de glitch */
-        .card-face { 
-            position: absolute; /* Necesario si no lo era ya */
-            width: 100%; height: 100%; 
-            backface-visibility: hidden; 
-            border-radius: 8px; 
-            overflow: hidden; /* Importante para contener glitch */
-            background-color: #555; display: block; user-select: none; -webkit-user-drag: none; 
-        }
-        .card-face.front {
-             position: relative; /* Para que ::before y ::after se posicionen respecto a él */
-             overflow: hidden; /* Contener los pseudo-elementos */
-        }
-
-        /* Pseudo-elementos para Glitch RGB */
-        .card-face.front::before,
-        .card-face.front::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0; /* Empiezan invisibles */
-            pointer-events: none; 
-            /* Usamos colores sólidos + blend mode */
-            mix-blend-mode: screen; /* Experimenta con screen, lighten, difference */
-        }
-
-        /* Aplicar colores y animación de glitch a los pseudo-elementos */
-        .card-face.front::before {
-            background-color: rgba(255, 0, 0, 0.7); /* Rojo */
-            animation: glitchRedShift 
-                       0.4s /* Duración del glitch */
-                       linear 
-                       0.2s /* Delay = duración de cardAppearQuick */
-                       1 /* Repetir 1 vez */
-                       forwards; /* Terminar en opacity 0 */
-        }
-        .card-face.front::after {
-            background-color: rgba(0, 255, 255, 0.7); /* Cyan */
-            animation: glitchCyanShift 
-                       0.4s /* Misma duración */
-                       linear 
-                       0.2s /* Mismo Delay */
-                       1 
-                       forwards;
-        }
-
-        /* Estilos de imagen y cara trasera sin cambios */
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 8px; overflow: hidden; background-color: #555; display: block; user-select: none; -webkit-user-drag: none; }
         .card-face img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; user-select: none; -webkit-user-drag: none; }
+        .card-face.front {}
         .card-face.back { transform: rotateY(180deg); background-color: #333; position: relative; }
         .card-face.back .button-container { position: absolute; inset: 0; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; z-index: 1; }
         .card-face.back .youtube-button { background-color: red; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; color: white; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; transition: background 0.3s; margin-bottom: auto; }
@@ -188,9 +123,9 @@
         let animationFrameId_Rebound = null;
         let animationFrameId_Trompo = null; 
         
-        // Timings (ACTUALIZADOS)
-        const entranceAnimationDurationMs = 600; // Duración TOTAL entrada (0.2s appear + 0.4s glitch)
-        const autoFlipDelayMs = 2000; // Espera después de la entrada (2s)
+        // Timings para Auto-Giro (Restaurados a 0.6s + 3s)
+        const entranceAnimationDurationMs = 600; // Duración de 'digitalUnfold'
+        const autoFlipDelayMs = 3000; // Espera de 3 segundos
         const flipTransitionDurationMs = 600; 
 
         // --- FUNCIONES UTILITARIAS ---
@@ -262,7 +197,7 @@
         window.addEventListener('resize', resizeCanvas);
         enableDrag(); 
 
-        // Programar Auto-Giro
+        // Programar Auto-Giro con los tiempos de v29 (0.6s + 3s)
         const totalDelayForAutoFlip = entranceAnimationDurationMs + autoFlipDelayMs;
         console.log(`Programando auto-giro en ${totalDelayForAutoFlip / 1000} segundos...`);
         setTimeout(() => {
