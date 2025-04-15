@@ -3,27 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única v29 (Despliegue Digital + AutoGiro 3s) - 2025-04-14</title>
+    <title>Carta Única v30 (Glitch Form + AutoGiro 2s) - 2025-04-14</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body { margin: 0; padding: 0; background: linear-gradient(135deg, #1a0033, #4a148c, #3f51b5); min-height: 100vh; min-height: 100svh; overflow: hidden; display: flex; justify-content: center; align-items: center; position: relative; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
         
-        /* --- Keyframes para la Nueva Animación "Despliegue Digital" --- */
-        @keyframes digitalUnfold {
+        /* --- Keyframes para la Nueva Animación "Glitch y Formación" --- */
+        @keyframes glitchForm {
           0% {
             opacity: 0;
-            transform: rotateY(-90deg) scale(0.9); 
-            filter: brightness(1.5);
+            transform: scale(0.9) skew(-15deg, 5deg) translateX(-30px);
+            filter: brightness(1.8) hue-rotate(180deg);
+            clip-path: inset(35% 35% 35% 35%); 
           }
-          70% {
-            opacity: 1;
-            transform: rotateY(10deg) scale(1.05); 
-            filter: brightness(1.2);
+          25% {
+            opacity: 0.7;
+            transform: scale(1.05) skew(10deg, -5deg) translateX(20px);
+            filter: brightness(1) hue-rotate(90deg);
+            clip-path: inset(10% 50% 50% 10%);
+          }
+          50% {
+            opacity: 0.6;
+            transform: scale(0.95) skew(-5deg, 10deg) translateX(-15px);
+            filter: brightness(1.5) hue-rotate(270deg);
+            clip-path: inset(50% 10% 10% 50%);
+          }
+          75% {
+            opacity: 0.9;
+            transform: scale(1.02) skew(0deg, 0deg) translateX(5px);
+            filter: brightness(1.2) hue-rotate(0deg);
+            clip-path: inset(5% 5% 5% 5%);
           }
           100% {
             opacity: 1;
-            transform: rotateY(0deg) scale(1);
-            filter: brightness(1);
+            transform: scale(1) skew(0deg, 0deg) translateX(0px);
+            filter: brightness(1) hue-rotate(0deg);
+            clip-path: inset(0% 0% 0% 0%); 
           }
         }
 
@@ -40,15 +55,14 @@
             -webkit-user-drag: none; 
             z-index: 10; 
             
-            /* Estado inicial implícito por la animación (opacity 0) */
-            opacity: 0; /* Necesario para que no flashee antes de animar */
+            opacity: 0; 
             pointer-events: auto; 
             backface-visibility: hidden; 
 
-            /* Aplicar la NUEVA animación directamente */
-            animation: digitalUnfold 
-                       0.6s /* Nueva Duración: 0.6 segundos */
-                       ease-out 
+            /* Aplicar la animación "Glitch" directamente */
+            animation: glitchForm 
+                       0.5s /* Duración corta: 0.5 segundos */
+                       linear /* Easing lineal para glitches */
                        forwards; 
         }
 
@@ -109,14 +123,14 @@
         const cardElement = document.getElementById('interactiveCard');
         const flipButton = document.getElementById('flipButton');
         
-        // Variables de estado
+        // Estado
         let isDragging = false;
         let isFlipping = false;
         let currentFlipRotation = 0;
         let dragRotationX = 0; let dragRotationY = 0;
         let flipCount = 0; 
 
-        // Variables de Física y Drag
+        // Física y Drag
         let startX, startY, currentX, currentY;
         const rotationFactor = 0.3; const maxDragRotationX = 30; const maxDragRotationY = 40;
         let velocityX = 0; let velocityY = 0;
@@ -124,17 +138,15 @@
         let animationFrameId_Rebound = null;
         let animationFrameId_Trompo = null; 
         
-        // Timings para Auto-Giro (ACTUALIZADOS)
-        const entranceAnimationDurationMs = 600; // Duración de 'digitalUnfold' (0.6s)
-        const autoFlipDelayMs = 3000; // Espera después de la entrada (3s)
-        const flipTransitionDurationMs = 600; // Duración del giro en sí
+        // Timings (ACTUALIZADOS)
+        const entranceAnimationDurationMs = 500; // Duración de 'glitchForm' (0.5s)
+        const autoFlipDelayMs = 2000; // Espera después de la entrada (2s)
+        const flipTransitionDurationMs = 600; 
 
         // --- FUNCIONES UTILITARIAS ---
         function lerp(start, end, amt) { return (1 - amt) * start + amt * end; }
         function easeOutCubic(t) { return (--t) * t * t + 1; }
         function applyRotation(flipRot = currentFlipRotation, dragX = dragRotationX, dragY = dragRotationY) {
-            // Evitar aplicar transform si la opacidad aún no es 1 (durante la animación inicial)
-            // excepto si estamos activamente volteando
              if (!isFlipping && parseFloat(window.getComputedStyle(cardContainer).opacity) < 1) return;
             cardElement.style.transform = `rotateY(${flipRot + dragY}deg) rotateX(${dragX}deg)`;
         }
@@ -160,19 +172,12 @@
             cancelAnimationFrame(animationFrameId_Rebound); 
             animationFrameId_Rebound = null;
             dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0;
-            // Aplicar rotación actual inmediatamente, sin transición aún
              applyRotation(); 
-
             currentFlipRotation += 180; 
-
-            // Aplicar transición y rotación final
             cardElement.style.transition = `transform ${flipTransitionDurationMs / 1000}s ease-in-out`;
             applyRotation(); 
-
             setTimeout(() => {
-                 if (isFlipping) { 
-                     onFlipEndCommon(); 
-                 }
+                 if (isFlipping) { onFlipEndCommon(); }
             }, flipTransitionDurationMs);
         }
 
@@ -196,25 +201,27 @@
         function enableDrag() { console.log("Habilitando drag"); cardContainer.addEventListener('mousedown', handleDragStart); cardContainer.addEventListener('touchstart', handleDragStart, { passive: false }); }
         function disableDrag() { console.log("Deshabilitando drag"); if(isDragging) { handleDragEnd(); } cardContainer.removeEventListener('mousedown', handleDragStart); cardContainer.removeEventListener('touchstart', handleDragStart); }
 
+
         // --- INICIALIZACIÓN ---
         
         // Función Resize simplificada
         function resizeCanvas() { 
-            console.log("Window resized - No canvas actions needed.");
+            // Ya no usa el canvas, podría eliminarse si no hay otros usos futuros
+             console.log("Window resized - No actions needed.");
         }
 
         // Setup Inicial
         window.addEventListener('resize', resizeCanvas);
 
-        // Habilitar drag (será usable cuando la animación termine)
+        // Habilitar drag (la interacción real espera a que termine la animación CSS)
         enableDrag(); 
 
-        // Programar Auto-Giro después de la animación de entrada + espera
+        // Programar Auto-Giro
         const totalDelayForAutoFlip = entranceAnimationDurationMs + autoFlipDelayMs;
         console.log(`Programando auto-giro en ${totalDelayForAutoFlip / 1000} segundos...`);
         setTimeout(() => {
             console.log("Ejecutando auto-giro programado.");
-            triggerFlip(); // Llama a la función de giro normal
+            triggerFlip(); 
         }, totalDelayForAutoFlip);
 
         // Fin del Script
