@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única v26 (Ensamblaje Partículas)</title>
+    <title>Carta Única v27 (Ensamblaje Rápido + Pop) - 2025-04-14</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body { margin: 0; padding: 0; background: linear-gradient(135deg, #1a0033, #4a148c, #3f51b5); min-height: 100vh; min-height: 100svh; overflow: hidden; display: flex; justify-content: center; align-items: center; position: relative; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
         
+        /* --- Estado Inicial de la Carta (Oculta y lista para Pop-in) --- */
         .card-container { 
             width: 85vw; 
             height: auto; 
@@ -19,11 +20,10 @@
             user-select: none; 
             -webkit-user-drag: none; 
             z-index: 10; 
-            /* --- Estado Inicial Oculto para Ensamblaje --- */
             opacity: 0; 
             pointer-events: none; 
-            /* Quitar animaciones CSS de entrada previas si existían */
-            /* animation: none; */
+            transform: scale(0.5); /* Estado inicial para pop */
+            backface-visibility: hidden; /* Para que no se vea raro al escalar */
         }
 
         .card-container:active { cursor: grabbing; }
@@ -40,9 +40,51 @@
         .card-face.back .social-icons a:hover { color: #8c9eff; }
         .flip-button { background-color: rgba(255, 255, 255, 0.8); border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background 0.3s, transform 0.3s; position: fixed; z-index: 100; bottom: 25px; right: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
         .flip-button:hover { background-color: white; transform: scale(1.1); }
-        canvas#particleCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
         
+        /* El canvas sigue existiendo pero no tendrá partículas permanentes */
+        canvas#particleCanvas { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            pointer-events: none; 
+            z-index: 0; 
+        }
+        
+        /* --- Keyframes para la Animación Pop-in --- */
+        @keyframes cardPopIn {
+          0% {
+            opacity: 0;
+            transform: scale(0.5);
+          }
+          60% { /* Crece rápido y se pasa un poco */
+            opacity: 1;
+            transform: scale(1.1); 
+          }
+          80% { /* Rebote */
+            transform: scale(0.95);
+          }
+          100% { /* Estado final estable */
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        /* --- Clase que Dispara la Animación --- */
+        .card-container.card-appeared {
+          /* Aplica la animación y estado final */
+          opacity: 1; /* Asegura visibilidad final */
+          pointer-events: auto; /* Hacer interactuable */
+          /* La transformación final la establece la animación 'forwards' */
+          animation: cardPopIn 
+                     0.4s /* Duración (igual a popInDuration en JS) */
+                     cubic-bezier(0.34, 1.56, 0.64, 1) /* Easing con rebote */
+                     forwards; /* Mantener estado final */
+        }
+
         @media (max-width: 600px) { 
+            /* No hay cambios específicos aquí respecto a la versión anterior */
             .card-container { max-width: 90vw; } 
             .flip-button { width: 40px; height: 40px; bottom: 20px; right: 20px; } 
             .card-face.back .button-container { padding: 15px; } 
@@ -86,23 +128,19 @@
         const flipButton = document.getElementById('flipButton');
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas ? canvas.getContext('2d') : null;
-        
-        // Variables Partículas de Fondo
-        const backgroundParticles = [];
-        const numBackgroundParticles = 30; // Renombrado para claridad
-        let animationFrameId_Background = null;
-        let lastTimeBackground = 0;
+        const cardFrontImageElement = document.getElementById('cardFrontImage'); // Para obtener el src
 
         // Variables Ensamblaje de Carta
-        const cardFrontImageElement = document.getElementById('cardFrontImage');
         let cardAssemblyParticles = [];
         let cardImage = new Image();
         let isCardImageLoaded = false;
-        let isAssembling = false; // Flag para indicar si la animación de entrada está activa
-        const particleSize = 2; 
-        const pixelSampleRate = 4; // Aumenta para mejorar rendimiento (menos partículas)
+        let isAssembling = false; 
+        const particleSize = 3; 
+        const pixelSampleRate = 10; // Menos partículas (más rápido)
+        const easingFactor = 0.15; // Movimiento más rápido
+        const assemblyCompleteThreshold = 0.80; // Umbral para terminar ensamblaje
+        const popInDuration = 400; // ms (debe coincidir con animación CSS)
         let animationFrameId_Assembly = null;
-
 
         // Estado General
         let isDragging = false;
@@ -123,49 +161,70 @@
         function lerp(start, end, amt) { return (1 - amt) * start + amt * end; }
         function easeOutCubic(t) { return (--t) * t * t + 1; }
         function applyRotation(flipRot = currentFlipRotation, dragX = dragRotationX, dragY = dragRotationY) {
+            // Aplicar rotación solo si la carta no está en su estado inicial de scale(0.5)
+            // O mejor, dejar que la clase .card-appeared controle la transformación final
+             if (!cardContainer.classList.contains('card-appeared')) {
+                 // Mientras no aparece, mantenerla escalada si es necesario (aunque está opacity 0)
+                 // cardElement.style.transform = `scale(0.5) rotateY(${flipRot + dragY}deg) rotateX(${dragX}deg)`;
+                 // O simplemente no aplicar transform aún:
+                  return; 
+             }
             cardElement.style.transform = `rotateY(${flipRot + dragY}deg) rotateX(${dragX}deg)`;
         }
 
         // --- LÓGICA DE ENSAMBLAJE DE PARTÍCULAS ---
 
-        // 1. Carga de la Imagen (se inicia al final)
+        // 1. Carga de la Imagen
         cardImage.onload = () => {
             console.log("Imagen de la carta cargada para ensamblaje.");
             isCardImageLoaded = true;
-            // Esperar un poco para que el layout se estabilice antes de medir
             setTimeout(() => {
                 prepareCardAssembly(); 
                 startCardAssemblyAnimation(); 
-            }, 100); // Pequeño delay
+            }, 100); 
         };
         cardImage.onerror = () => {
-            console.error("Error al cargar la imagen de la carta para ensamblaje.");
-            // Si falla, simplemente mostrar la carta sin animación
-             cardContainer.style.opacity = '1';
-             cardContainer.style.pointerEvents = 'auto';
-             enableDrag(); // Habilitar drag igualmente
-             startBackgroundParticleAnimation(); // Iniciar partículas de fondo
+            console.error("Error al cargar la imagen de la carta. Mostrando directamente.");
+            cardContainer.style.opacity = '1';
+            cardContainer.style.pointerEvents = 'auto';
+            cardContainer.style.transform = 'scale(1)'; // Asegurar tamaño normal
+            enableDrag(); 
         };
         
         // 2. Preparación de Partículas de Ensamblaje
         function prepareCardAssembly() {
+            // (Esta función no necesita cambios respecto a la versión anterior)
             if (!isCardImageLoaded || !ctx || !cardContainer) return;
-
             const cardRect = cardContainer.getBoundingClientRect();
-            if (cardRect.width === 0 || cardRect.height === 0) {
-                console.warn("Dimensiones del contenedor de la carta son cero. Esperando...");
-                setTimeout(prepareCardAssembly, 100); // Reintentar
-                return;
-            }
-            
-            const targetWidth = cardRect.width;
-            const targetHeight = cardRect.height;
-            const targetXOffset = cardRect.left;
-            const targetYOffset = cardRect.top;
+             // Usar el tamaño intrínseco del contenedor si getBoundingClientRect da 0 al inicio
+            const containerStyle = window.getComputedStyle(cardContainer);
+            let initialWidth = cardRect.width;
+            let initialHeight = cardRect.height;
+             if(initialWidth === 0 && containerStyle.width && containerStyle.width !== 'auto') {
+                 initialWidth = parseFloat(containerStyle.width);
+                 // Calcular alto basado en aspect-ratio si no está explícito
+                 if(containerStyle.aspectRatio) {
+                     const ratioParts = containerStyle.aspectRatio.split('/').map(Number);
+                     if(ratioParts.length === 2 && ratioParts[1] !== 0) {
+                         initialHeight = initialWidth * (ratioParts[1] / ratioParts[0]);
+                     }
+                 } else if (containerStyle.height && containerStyle.height !== 'auto') {
+                     initialHeight = parseFloat(containerStyle.height);
+                 }
+             }
+             // Aún si es 0, proceder pero las partículas irán al centro top-left
+             if(initialWidth === 0 || initialHeight === 0) {
+                 console.warn("No se pudieron determinar dimensiones iniciales para posicionar partículas.");
+             }
+
+
+            // Posición relativa al viewport
+            const targetXOffset = cardRect.left || 0; // Usar 0 si no hay posición aún
+            const targetYOffset = cardRect.top || 0;
+
 
             const tempCanvas = document.createElement('canvas');
             const tempCtx = tempCanvas.getContext('2d', { willReadFrequently: true });
-
             tempCanvas.width = cardImage.naturalWidth;
             tempCanvas.height = cardImage.naturalHeight;
             tempCtx.drawImage(cardImage, 0, 0);
@@ -174,61 +233,50 @@
                 const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
                 const data = imageData.data;
                 cardAssemblyParticles = []; 
-
                 for (let y = 0; y < tempCanvas.height; y += pixelSampleRate) {
                     for (let x = 0; x < tempCanvas.width; x += pixelSampleRate) {
                         const index = (y * tempCanvas.width + x) * 4;
                         const alpha = data[index + 3]; 
-
                         if (alpha > 128) { 
-                            const red = data[index];
-                            const green = data[index + 1];
-                            const blue = data[index + 2];
+                            const red = data[index]; const green = data[index + 1]; const blue = data[index + 2];
                             const color = `rgb(${red},${green},${blue})`;
-
-                            const targetX = targetXOffset + (x / tempCanvas.width) * targetWidth;
-                            const targetY = targetYOffset + (y / tempCanvas.height) * targetHeight;
-
+                            const targetX = targetXOffset + (x / tempCanvas.width) * initialWidth;
+                            const targetY = targetYOffset + (y / tempCanvas.height) * initialHeight;
                             const startX = Math.random() * canvas.width;
                             const startY = Math.random() * canvas.height;
-
                             cardAssemblyParticles.push({
-                                startX: startX, startY: startY,
-                                currentX: startX, currentY: startY,
-                                targetX: targetX, targetY: targetY,
-                                color: color
+                                startX: startX, startY: startY, currentX: startX, currentY: startY,
+                                targetX: targetX, targetY: targetY, color: color
                             });
                         }
                     }
                 }
                 console.log(`Preparadas ${cardAssemblyParticles.length} partículas para ensamblaje.`);
             } catch (error) {
-                console.error("Error al obtener ImageData (posible problema de CORS si la imagen es de otro dominio):", error);
-                 // Fallback si getImageData falla
+                console.error("Error al obtener ImageData:", error);
                  cardContainer.style.opacity = '1';
                  cardContainer.style.pointerEvents = 'auto';
+                 cardContainer.style.transform = 'scale(1)';
                  enableDrag(); 
-                 startBackgroundParticleAnimation();
             }
         }
 
-        // 3. Animación de Ensamblaje
+        // 3. Animación de Ensamblaje y Disparo de Pop-in
         function startCardAssemblyAnimation() {
              if (!ctx || cardAssemblyParticles.length === 0) {
-                 console.warn("No hay partículas de ensamblaje o contexto de canvas. Mostrando carta directamente.");
+                 console.warn("No hay partículas de ensamblaje o contexto. Mostrando carta.");
                  cardContainer.style.opacity = '1';
                  cardContainer.style.pointerEvents = 'auto';
+                 cardContainer.style.transform = 'scale(1)';
                  enableDrag();
-                 startBackgroundParticleAnimation();
                  return;
              }
             
             isAssembling = true;
-            stopBackgroundParticleAnimation(); // Detener partículas de fondo
+            // Ya no hay animación de fondo que detener
 
             let particlesSettled = 0;
             const totalParticles = cardAssemblyParticles.length;
-            const easingFactor = 0.08; 
 
             function assemblyStep() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height); 
@@ -237,125 +285,52 @@
                 cardAssemblyParticles.forEach(p => {
                     p.currentX = lerp(p.currentX, p.targetX, easingFactor);
                     p.currentY = lerp(p.currentY, p.targetY, easingFactor);
-
                     ctx.fillStyle = p.color;
                     ctx.fillRect(p.currentX - particleSize / 2, p.currentY - particleSize / 2, particleSize, particleSize);
-
                     const dx = p.currentX - p.targetX;
                     const dy = p.currentY - p.targetY;
-                    if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) {
+                    if (Math.abs(dx) < 5 && Math.abs(dy) < 5) { // Umbral un poco más grande es ok
                         particlesSettled++;
                     }
                 });
 
-                if (particlesSettled < totalParticles * 0.99) { // Esperar a que casi todas lleguen
+                // Comprobar si suficientes partículas están cerca
+                if (particlesSettled < totalParticles * assemblyCompleteThreshold && totalParticles > 0) { 
                     animationFrameId_Assembly = requestAnimationFrame(assemblyStep);
                 } else {
-                    console.log("Ensamblaje de carta completado.");
-                    isAssembling = false;
-                    cancelAnimationFrame(animationFrameId_Assembly);
+                    // --- Disparar Pop In ---
+                    console.log("Suficientes partículas cerca. Disparando pop-in.");
+                    isAssembling = false; 
+                    cancelAnimationFrame(animationFrameId_Assembly); 
                     animationFrameId_Assembly = null;
                     
-                    // Limpiar canvas y mostrar carta HTML real
-                    ctx.clearRect(0, 0, canvas.width, canvas.height); 
-                    cardContainer.style.opacity = '1';
-                    cardContainer.style.pointerEvents = 'auto'; 
+                    ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar canvas
                     
-                    enableDrag(); // Habilitar drag AHORA
-                    startBackgroundParticleAnimation(); // Iniciar partículas de fondo AHORA
+                    cardContainer.classList.add('card-appeared'); // Activar animación CSS
+                    
+                    // Habilitar interacciones DESPUÉS de la animación pop-in
+                    setTimeout(() => {
+                        console.log("Pop-in completado. Habilitando drag.");
+                        enableDrag(); 
+                        // Ya no hay animación de fondo que iniciar
+                    }, popInDuration); 
                 }
             }
             cancelAnimationFrame(animationFrameId_Assembly); 
             assemblyStep();
         }
 
-
-        // --- LÓGICA DE PARTÍCULAS DE FONDO (Refactorizada) ---
-        class BackgroundParticle { // Renombrada para claridad
-            constructor(x, y) { this.x = x; this.y = y; this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5; this.radius = Math.random() * 1.5 + 0.5; const shapeRand = Math.random(); this.shape = shapeRand < 0.7 ? 'circle' : (shapeRand < 0.85 ? 'square' : 'triangle'); this.color = `rgba(${Math.random() * 100 + 100}, ${Math.random() * 100 + 155}, 255, ${Math.random() * 0.5 + 0.3})`; } 
-            update(deltaTime) { if (!deltaTime) deltaTime = 16.67; this.x += this.vx * deltaTime * 0.1; this.y += this.vy * deltaTime * 0.1; if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) { this.vx = -this.vx; this.x = Math.max(this.radius, Math.min(canvas.width - this.radius, this.x)); } if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) { this.vy = -this.vy; this.y = Math.max(this.radius, Math.min(canvas.height - this.radius, this.y)); } 
-                // Repulsión solo si no se está ensamblando y la carta es visible
-                if (!isAssembling && !isFlipping && cardContainer && parseFloat(cardContainer.style.opacity || 0) === 1) { 
-                    const rect = cardContainer.getBoundingClientRect(); if (rect.width > 0) { const cardCenterX = rect.left + rect.width / 2; const cardCenterY = rect.top + rect.height / 2; const dx = this.x - cardCenterX; const dy = this.y - cardCenterY; const distance = Math.sqrt(dx * dx + dy * dy); const repelRadius = (rect.width / 2) * 1.5; if (distance < repelRadius && distance > 0) { const force = (repelRadius - distance) / repelRadius; const angle = Math.atan2(dy, dx); this.vx += Math.cos(angle) * force * 0.15; this.vy += Math.sin(angle) * force * 0.15; } } 
-                 }
-                const maxSpeed = 1.5; const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy); if (speed > maxSpeed) { this.vx = (this.vx / speed) * maxSpeed; this.vy = (this.vy / speed) * maxSpeed; } } 
-            draw() { if (!ctx) return; ctx.beginPath(); if (this.shape === 'circle') { ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); } else if (this.shape === 'square') { ctx.rect(this.x - this.radius / 2, this.y - this.radius / 2, this.radius, this.radius); } else { const side = this.radius * 1.7; const height = side * Math.sqrt(3) / 2; ctx.moveTo(this.x, this.y - height / 2); ctx.lineTo(this.x + side / 2, this.y + height / 2); ctx.lineTo(this.x - side / 2, this.y + height / 2); ctx.closePath(); } ctx.fillStyle = this.color; ctx.fill(); } 
-        }
-        function createBackgroundParticles() { 
-            if (!canvas || !ctx || !cardContainer) return; 
-            backgroundParticles.length = 0; 
-            const rect = cardContainer.getBoundingClientRect(); 
-            // Si la carta aún no es visible, usa 0 como referencia o espera
-            const cardRadiusSq = rect.width > 0 ? ((rect.width / 2) * 1.6) ** 2 : 0; 
-            
-            for (let i = 0; i < numBackgroundParticles; i++) { 
-                let x, y, dx, dy, distanceSq; 
-                const maxAttempts = 10; let attempts = 0; 
-                do { 
-                    x = Math.random() * canvas.width; 
-                    y = Math.random() * canvas.height; 
-                    if (rect.width > 0) { 
-                        dx = x - (rect.left + rect.width / 2); 
-                        dy = y - (rect.top + rect.height / 2); 
-                        distanceSq = dx*dx + dy*dy; 
-                    } else { 
-                        distanceSq = Infinity; // No evitar si la carta no está posicionada
-                    } 
-                    attempts++; 
-                } while (distanceSq < cardRadiusSq && attempts < maxAttempts) 
-                backgroundParticles.push(new BackgroundParticle(x, y)); 
-            } 
-        }
-
-        function backgroundParticleStep(currentTime) { 
-            if (!ctx || isAssembling) { // No dibujar fondo si se está ensamblando
-                 animationFrameId_Background = requestAnimationFrame(backgroundParticleStep);
-                 return; 
-            } 
-            if (lastTimeBackground === 0) lastTimeBackground = currentTime; 
-            const deltaTime = currentTime - lastTimeBackground; 
-            lastTimeBackground = currentTime; 
-            
-            // Limpiar solo si no estamos ensamblando (aunque ya lo chequeamos arriba, doble seguridad)
-            if (!isAssembling) {
-                 ctx.clearRect(0, 0, canvas.width, canvas.height); 
-            }
-
-            backgroundParticles.forEach(particle => { 
-                particle.update(deltaTime || 16.67); 
-                particle.draw(); 
-            }); 
-            animationFrameId_Background = requestAnimationFrame(backgroundParticleStep); 
-        }
-
-        function startBackgroundParticleAnimation() {
-            console.log("Iniciando partículas de fondo.");
-            if (!animationFrameId_Background) { // Evitar múltiples bucles
-                lastTimeBackground = performance.now();
-                createBackgroundParticles(); // Crear partículas justo antes de empezar
-                animationFrameId_Background = requestAnimationFrame(backgroundParticleStep);
-            }
-        }
-
-        function stopBackgroundParticleAnimation() {
-             console.log("Deteniendo partículas de fondo.");
-             if (animationFrameId_Background) {
-                 cancelAnimationFrame(animationFrameId_Background);
-                 animationFrameId_Background = null;
-             }
-        }
-
-        // --- LÓGICA DE FLIP/TORBELLINO --- (Sin cambios internos, pero con chequeo de isAssembling)
+        // --- LÓGICA DE FLIP/TORBELLINO --- (Sin cambios respecto a v26)
         function onFlipEndCommon() { isFlipping = false; cardElement.style.transition = 'none'; dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; applyRotation(); enableDrag(); }
         function startTorbellinoAnimation() { if (isFlipping || isDragging || isAssembling) return; isFlipping = true; disableDrag(); cancelAnimationFrame(animationFrameId_Rebound); animationFrameId_Rebound = null; dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; applyRotation(currentFlipRotation, 0, 0); const startRot = currentFlipRotation; const totalSpins = 10; const targetRotation = startRot + 180 + (totalSpins * 360); const duration = 2500; let startTime = null; cardElement.style.transition = 'none'; function trompoStep(timestamp) { if (!isFlipping) { cancelAnimationFrame(animationFrameId_Trompo); animationFrameId_Trompo = null; return; } if (!startTime) startTime = timestamp; const elapsed = timestamp - startTime; let progress = Math.min(1, elapsed / duration); const easedProgress = easeOutCubic(progress); const currentAnimRotation = lerp(startRot, targetRotation, easedProgress); cardElement.style.transform = `rotateY(${currentAnimRotation}deg) rotateX(0deg)`; if (progress < 1) { animationFrameId_Trompo = requestAnimationFrame(trompoStep); } else { currentFlipRotation = 180; flipCount = 0; console.log("Torbellino terminado. Contador reiniciado a 0. Carta mostrando dorso."); onFlipEndCommon(); animationFrameId_Trompo = null; } } cancelAnimationFrame(animationFrameId_Trompo); animationFrameId_Trompo = requestAnimationFrame(trompoStep); }
         flipButton.addEventListener('click', () => {
-            if (isFlipping || isDragging || isAssembling) return; // <-- Añadido chequeo isAssembling
+            if (isFlipping || isDragging || isAssembling) return; 
             flipCount++; console.log(`Flip count: ${flipCount}`); 
             if (flipCount < 10) { isFlipping = true; disableDrag(); cancelAnimationFrame(animationFrameId_Rebound); animationFrameId_Rebound = null; dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; applyRotation(); currentFlipRotation += 180; const transitionDuration = 600; cardElement.style.transition = `transform ${transitionDuration / 1000}s ease-in-out`; applyRotation(); setTimeout(() => { if (isFlipping && flipCount < 10) { onFlipEndCommon(); } }, transitionDuration); } 
             else { console.log("Activando Torbellino!"); startTorbellinoAnimation(); } 
         });
 
-        // --- LÓGICA DE DRAG & REBOUND --- (Sin cambios internos)
+        // --- LÓGICA DE DRAG & REBOUND --- (Sin cambios respecto a v26)
         function handleDragStart(e) { if (isFlipping || isAssembling) return; isDragging = true; cardContainer.style.cursor = 'grabbing'; cardElement.style.transition = 'none'; cancelAnimationFrame(animationFrameId_Rebound); animationFrameId_Rebound = null; const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY; const rect = cardContainer.getBoundingClientRect(); startX = clientX - (rect.left + rect.width / 2); startY = clientY - (rect.top + rect.height / 2); velocityX = 0; velocityY = 0; document.addEventListener('mousemove', handleDragMove); document.addEventListener('touchmove', handleDragMove, { passive: false }); document.addEventListener('mouseup', handleDragEnd); document.addEventListener('touchend', handleDragEnd); document.addEventListener('mouseleave', handleDragEnd); }
         function handleDragMove(e) { if (!isDragging) return; if (e.touches) e.preventDefault(); const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY; const rect = cardContainer.getBoundingClientRect(); currentX = clientX - (rect.left + rect.width / 2); currentY = clientY - (rect.top + rect.height / 2); const deltaX = currentX - startX; const deltaY = currentY - startY; const isBackFacing = Math.round(currentFlipRotation / 180) % 2 !== 0; dragRotationY += deltaX * rotationFactor; if (isBackFacing) { dragRotationX += deltaY * rotationFactor; } else { dragRotationX -= deltaY * rotationFactor; } dragRotationX = Math.max(-maxDragRotationX, Math.min(maxDragRotationX, dragRotationX)); dragRotationY = Math.max(-maxDragRotationY, Math.min(maxDragRotationY, dragRotationY)); velocityX = -deltaY * 0.5; velocityY = deltaX * 0.5; applyRotation(); startX = currentX; startY = currentY; }
         function handleDragEnd() { if (!isDragging) return; isDragging = false; cardContainer.style.cursor = 'grab'; document.removeEventListener('mousemove', handleDragMove); document.removeEventListener('touchmove', handleDragMove); document.removeEventListener('mouseup', handleDragEnd); document.removeEventListener('touchend', handleDragEnd); document.removeEventListener('mouseleave', handleDragEnd); animateRebound(); }
@@ -366,50 +341,44 @@
 
         // --- INICIALIZACIÓN ---
         
-        // Canvas Resize Handling
+        // Canvas Resize Handling (Simplificado sin partículas de fondo)
         function resizeCanvas() { 
             if(!canvas) return; 
             canvas.width = window.innerWidth; 
             canvas.height = window.innerHeight; 
             
-            // Si la imagen ya cargó, recalcular posiciones de ensamblaje
+            // Si la imagen ya cargó y no está ensamblando, recalcular posiciones
             if (isCardImageLoaded && !isAssembling) {
+                 console.log("Redimensionando - Preparando de nuevo partículas de ensamblaje");
                  prepareCardAssembly(); 
             }
-            // Siempre recrear partículas de fondo al redimensionar (si no está ensamblando)
-            if (!isAssembling) {
-                 createBackgroundParticles();
-            }
+            // Ya no se crean partículas de fondo aquí
         }
 
         // Setup Inicial
         if (canvas && ctx) {
              window.addEventListener('resize', resizeCanvas);
-             resizeCanvas(); // Establecer tamaño inicial del canvas
+             resizeCanvas(); 
              
-             // Iniciar carga de imagen para ensamblaje (el onload se encargará del resto)
-             // Asegúrate que la ID 'cardFrontImage' esté en tu <img> del frente
+             // Iniciar carga de imagen (el resto lo maneja el 'onload')
              if (cardFrontImageElement) {
                  cardImage.src = cardFrontImageElement.src; 
              } else {
-                 console.error("No se encontró el elemento de imagen #cardFrontImage");
-                 // Fallback: mostrar carta directamente sin animación de ensamblaje
+                 console.error("No se encontró #cardFrontImage. Mostrando carta directamente.");
                  cardContainer.style.opacity = '1';
                  cardContainer.style.pointerEvents = 'auto';
+                 cardContainer.style.transform = 'scale(1)';
                  enableDrag();
-                 startBackgroundParticleAnimation();
              }
-
         } else { 
-            console.error("Canvas element not found or context could not be created."); 
-            // Fallback si no hay canvas: mostrar carta
+            console.error("Canvas no encontrado. Mostrando carta directamente."); 
             cardContainer.style.opacity = '1';
             cardContainer.style.pointerEvents = 'auto';
-             enableDrag();
+            cardContainer.style.transform = 'scale(1)';
+            enableDrag();
         }
 
-        // Nota: enableDrag() y startBackgroundParticleAnimation() AHORA se llaman
-        // cuando la animación de ensamblaje termina, o en los fallbacks.
+        // enableDrag() se llama al final de la animación pop-in ahora.
 
     </script>
 
