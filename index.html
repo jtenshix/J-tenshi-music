@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única v41 (Linktree Style Buttons + AutoGiro 3s) - 2025-04-15</title>
+    <title>Carta Única v42 (User Base + ALL Links Corrected) - 2025-04-15</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
+        /* CSS EXACTAMENTE como lo pegaste (v33) */
         body { margin: 0; padding: 0; background: linear-gradient(135deg, #1a0033, #4a148c, #3f51b5); min-height: 100vh; min-height: 100svh; overflow: hidden; display: flex; justify-content: center; align-items: center; position: relative; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
         
-        /* Keyframes Animación Entrada (Sin cambios) */
         @keyframes compactUnfoldPop {
           0% { opacity: 0; transform: scale(0.1) rotateY(-70deg); filter: brightness(1.5); }
           60% { opacity: 1; transform: scale(1.1) rotateY(10deg); filter: brightness(1.2); }
@@ -16,7 +16,6 @@
           100% { opacity: 1; transform: scale(1) rotateY(0deg); filter: brightness(1); }
         }
 
-        /* Contenedor Principal con Animación Entrada */
         .card-container { 
             width: 85vw; height: auto; aspect-ratio: 300 / 420; max-width: 300px; 
             position: relative; perspective: 1000px; cursor: grab; 
@@ -25,88 +24,28 @@
             animation: compactUnfoldPop 0.7s cubic-bezier(0.175, 0.885, 0.320, 1.275) forwards; 
         }
 
-        /* --- Estilos restantes --- */
         .card-container:active { cursor: grabbing; }
         .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: none; transform: rotateX(0deg) rotateY(0deg); user-select: none; -webkit-user-drag: none; }
-        .card-face { 
-            position: absolute; width: 100%; height: 100%; 
-            backface-visibility: hidden; border-radius: 8px; 
-            overflow: hidden; 
-            background-color: #555; 
-            display: block; user-select: none; -webkit-user-drag: none; 
-        }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 8px; overflow: hidden; background-color: #555; display: block; user-select: none; -webkit-user-drag: none; }
         .card-face img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; user-select: none; -webkit-user-drag: none; }
         .card-face.front {}
-        
-        /* --- NUEVO Estilo Cara Trasera (Contenedor de botones Linktree) --- */
-        .card-face.back { 
-            transform: rotateY(180deg); 
-            background-color: #2a2a2a; /* Un fondo oscuro pero no negro total */
-            position: relative; 
-            display: flex; /* Usar flexbox */
-            flex-direction: column; /* Apilar botones */
-            justify-content: center; /* Centrar verticalmente */
-            align-items: center; /* Centrar horizontalmente */
-            padding: 25px 20px; /* Padding interno */
-            box-sizing: border-box; 
-        }
-        
-        /* --- NUEVO Contenedor de los Botones --- */
-        .link-buttons {
-            width: 90%; /* Ancho de los botones */
-            display: flex;
-            flex-direction: column;
-            gap: 15px; /* Espacio entre botones */
-            max-height: 90%; /* Evitar que se desborde si hay muchos */
-            overflow-y: auto; /* Permitir scroll si es necesario */
-        }
-
-        /* --- NUEVO Estilo Botón Individual (tipo Linktree) --- */
-        .link-button {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start; /* Alinear contenido a la izquierda */
-            padding: 12px 18px;
-            border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.1); /* Fondo semitransparente */
-            color: white;
-            text-decoration: none;
-            font-family: Arial, sans-serif;
-            font-size: 15px;
-            font-weight: 500;
-            text-align: left; /* Alinear texto a la izquierda */
-            transition: background-color 0.3s, transform 0.2s ease-out;
-            border: 1px solid rgba(255, 255, 255, 0.2); /* Borde sutil */
-        }
-        
-        .link-button:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            transform: scale(1.04); /* Efecto hover sutil */
-        }
-
-        .link-button i {
-            margin-right: 12px; /* Espacio entre icono y texto */
-            font-size: 20px; /* Tamaño del icono */
-            width: 22px; /* Ancho fijo para alinear texto */
-            text-align: center;
-            flex-shrink: 0; /* Evitar que el icono se encoja */
-        }
-         /* Opcional: Colores específicos (descomentar si quieres) */
-        /* .link-button.instagram { background-color: rgba(225, 48, 108, 0.8); border-color: rgba(225, 48, 108, 1); } */
-        /* .link-button.youtube { background-color: rgba(255, 0, 0, 0.8); border-color: rgba(255, 0, 0, 1); } */
-
-
-        /* Botón Flip (sin cambios) */
+        .card-face.back { transform: rotateY(180deg); background-color: #333; position: relative; }
+        .card-face.back .button-container { position: absolute; inset: 0; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; z-index: 1; }
+        .card-face.back .youtube-button { background-color: red; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; color: white; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; transition: background 0.3s; margin-bottom: auto; }
+        .card-face.back .youtube-button:hover { background-color: darkred; }
+        .card-face.back .social-icons { display: flex; gap: 8px; align-self: flex-end; }
+        .card-face.back .social-icons a { color: white; text-decoration: none; font-size: 20px; transition: color 0.3s; }
+        .card-face.back .social-icons a:hover { color: #8c9eff; }
         .flip-button { background-color: rgba(255, 255, 255, 0.8); border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background 0.3s, transform 0.3s; position: fixed; z-index: 100; bottom: 25px; right: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
         .flip-button:hover { background-color: white; transform: scale(1.1); }
         
         @media (max-width: 600px) { 
             .card-container { max-width: 90vw; } 
             .flip-button { width: 40px; height: 40px; bottom: 20px; right: 20px; } 
-            .card-face.back { padding: 20px 15px; }
-            .link-buttons { width: 100%; gap: 12px; }
-            .link-button { padding: 10px 15px; font-size: 14px; }
-            .link-button i { font-size: 18px; margin-right: 10px; width: 20px;}
+            .card-face.back .button-container { padding: 15px; } 
+            .card-face.back .youtube-button { padding: 6px 10px; font-size: 12px; } 
+            .card-face.back .social-icons { gap: 8px;} 
+            .card-face.back .social-icons a { font-size: 18px; } 
         }
     </style>
 </head>
@@ -118,19 +57,18 @@
                 <img src="carta_frente.png.jpg" alt="Frente de la Carta" id="cardFrontImage"> 
             </div>
             <div class="card-face back">
-                 <div class="link-buttons">
-                     <a href="https://www.instagram.com/jtenshi_/" target="_blank" class="link-button instagram">
-                         <i class="fab fa-instagram"></i> 
-                         <span>Instagram</span> </a> 
-                     <a href="https://www.youtube.com/...6" target="_blank" class="link-button youtube">
-                         <i class="fab fa-youtube"></i> 
-                         <span>Canal de YouTube</span>
-                     </a> 
-                      <a href="https://www.youtube.com/...7" target="_blank" class="link-button youtube-video">
-                         <i class="fas fa-play"></i> <span>Video: Temptation</span> </a> 
+                 <img src="carta_dorso.png.png" alt="Dorso de la Carta">
+                 <div class="button-container">
+                     <button class="youtube-button" onclick="window.open('https://www.youtube.com/...6', '_blank')"> 
+                         <i class="fab fa-youtube"></i> YouTube 
+                     </button>
+                     <div class="social-icons">
+                         <a href="https://www.instagram.com/jtenshi_/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                         <a href="https://www.youtube.com/...7" target="_blank" title="Video Temptation"><i class="fas fa-play"></i></a> 
+                         </div>
                  </div>
             </div>
-            </div>
+        </div>
     </div>
 
     <button class="flip-button" id="flipButton">
@@ -138,7 +76,7 @@
     </button>
     
     <script>
-        // --- JAVASCRIPT EXACTAMENTE COMO LO PEGASTE (v32/v33) ---
+        // --- JAVASCRIPT EXACTAMENTE COMO LO PEGASTE (v33) ---
         
         // --- VARIABLES ---
         const cardContainer = document.getElementById('cardContainer');
@@ -203,7 +141,6 @@
         function animateRebound() { if (isDragging || isFlipping) { cancelAnimationFrame(animationFrameId_Rebound); animationFrameId_Rebound = null; return; } dragRotationY += velocityY; dragRotationX += velocityX; velocityY *= friction; velocityX *= friction; const forceY = -dragRotationY * springForce; const forceX = -dragRotationX * springForce; velocityY += forceY; velocityX += forceX; cardElement.style.transition = 'none'; applyRotation(); if (Math.abs(velocityY) > 0.01 || Math.abs(velocityX) > 0.01 || Math.abs(dragRotationY) > 0.01 || Math.abs(dragRotationX) > 0.01) { animationFrameId_Rebound = requestAnimationFrame(animateRebound); } else { dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; applyRotation(); animationFrameId_Rebound = null; } }
         function enableDrag() { console.log("Habilitando drag"); cardContainer.addEventListener('mousedown', handleDragStart); cardContainer.addEventListener('touchstart', handleDragStart, { passive: false }); }
         function disableDrag() { console.log("Deshabilitando drag"); if(isDragging) { handleDragEnd(); } cardContainer.removeEventListener('mousedown', handleDragStart); cardContainer.removeEventListener('touchstart', handleDragStart); }
-
 
         // --- INICIALIZACIÓN ---
         
