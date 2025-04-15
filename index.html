@@ -3,81 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única v33 (Compact Unfold Pop + AutoGiro 1s) - 2025-04-14</title>
+    <title>Carta Única v38 (Video Embed v2 + AutoGiro 0.5s) - 2025-04-15</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body { margin: 0; padding: 0; background: linear-gradient(135deg, #1a0033, #4a148c, #3f51b5); min-height: 100vh; min-height: 100svh; overflow: hidden; display: flex; justify-content: center; align-items: center; position: relative; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
         
-        /* --- Keyframes para Animación "Despliegue Compacto y Pop" --- */
+        /* Keyframes Animación Entrada (Sin cambios) */
         @keyframes compactUnfoldPop {
-          0% {
-            opacity: 0;
-            transform: scale(0.1) rotateY(-70deg); 
-            filter: brightness(1.5);
-          }
-          60% { 
-            opacity: 1;
-            transform: scale(1.1) rotateY(10deg); 
-            filter: brightness(1.2);
-          }
-          80% {
-            transform: scale(0.97) rotateY(-5deg);
-            filter: brightness(1); 
-          }
-          100% {
-            opacity: 1;
-            transform: scale(1) rotateY(0deg);
-            filter: brightness(1);
-          }
+          0% { opacity: 0; transform: scale(0.1) rotateY(-70deg); filter: brightness(1.5); }
+          60% { opacity: 1; transform: scale(1.1) rotateY(10deg); filter: brightness(1.2); }
+          80% { transform: scale(0.97) rotateY(-5deg); filter: brightness(1); }
+          100% { opacity: 1; transform: scale(1) rotateY(0deg); filter: brightness(1); }
         }
 
-        /* --- Estilo del Contenedor con Animación --- */
+        /* Contenedor Principal con Animación Entrada */
         .card-container { 
-            width: 85vw; 
-            height: auto; 
-            aspect-ratio: 300 / 420; 
-            max-width: 300px; 
-            position: relative; 
-            perspective: 1000px; 
-            cursor: grab; 
-            user-select: none; 
-            -webkit-user-drag: none; 
-            z-index: 10; 
-            
-            opacity: 0; 
-            pointer-events: auto; 
-            backface-visibility: hidden; 
-
-            /* Aplicar la animación */
-            animation: compactUnfoldPop 
-                       0.7s /* Duración entrada: 0.7 segundos */
-                       cubic-bezier(0.175, 0.885, 0.320, 1.275) 
-                       forwards; 
+            width: 85vw; height: auto; aspect-ratio: 300 / 420; max-width: 300px; 
+            position: relative; perspective: 1000px; cursor: grab; 
+            user-select: none; -webkit-user-drag: none; z-index: 10; 
+            opacity: 0; pointer-events: auto; backface-visibility: hidden; 
+            animation: compactUnfoldPop 0.7s cubic-bezier(0.175, 0.885, 0.320, 1.275) forwards; 
         }
 
-        /* --- Estilos restantes (sin cambios) --- */
         .card-container:active { cursor: grabbing; }
         .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: none; transform: rotateX(0deg) rotateY(0deg); user-select: none; -webkit-user-drag: none; }
-        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 8px; overflow: hidden; background-color: #555; display: block; user-select: none; -webkit-user-drag: none; }
-        .card-face img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; user-select: none; -webkit-user-drag: none; }
-        .card-face.front {}
-        .card-face.back { transform: rotateY(180deg); background-color: #333; position: relative; }
-        .card-face.back .button-container { position: absolute; inset: 0; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; z-index: 1; }
-        .card-face.back .youtube-button { background-color: red; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; color: white; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; transition: background 0.3s; margin-bottom: auto; }
-        .card-face.back .youtube-button:hover { background-color: darkred; }
-        .card-face.back .social-icons { display: flex; gap: 8px; align-self: flex-end; }
-        .card-face.back .social-icons a { color: white; text-decoration: none; font-size: 20px; transition: color 0.3s; }
-        .card-face.back .social-icons a:hover { color: #8c9eff; }
+        
+        /* Estilos Caras */
+        .card-face { 
+            position: absolute; width: 100%; height: 100%; 
+            backface-visibility: hidden; border-radius: 8px; 
+            overflow: hidden; 
+            background-color: #333; 
+            display: block; user-select: none; -webkit-user-drag: none; 
+        }
+        .card-face.front { background-color: #555; }
+        .card-face.front img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; user-select: none; -webkit-user-drag: none; }
+        
+        /* --- NUEVO Estilo Cara Trasera (Flex Container) --- */
+        .card-face.back { 
+            transform: rotateY(180deg); 
+            background-color: #000; /* Fondo oscuro para video */
+            position: relative; 
+            display: flex; /* Usar flexbox */
+            flex-direction: column; /* Apilar video arriba, links abajo */
+            justify-content: flex-start; /* Alinear al inicio */
+            align-items: stretch; /* Estirar hijos horizontalmente */
+            padding: 0; /* Sin padding en la cara general */
+        }
+
+        /* --- NUEVO Estilo Iframe Video --- */
+        .card-face.back iframe {
+            width: 100%;
+            /* height: 85%; O usar flex-grow */
+            flex-grow: 1; /* Que ocupe el espacio disponible */
+            border: none; 
+            /* No redondear si está al borde */
+            border-radius: 0; 
+             /* border-top-left-radius: 8px; opcional si quieres redondear arriba */
+             /* border-top-right-radius: 8px; opcional si quieres redondear arriba */
+        }
+
+        /* --- NUEVO Contenedor para Links Inferiores --- */
+        .back-links {
+            height: 55px; /* Altura fija para la franja de links (ajustar) */
+            flex-shrink: 0; /* No encoger */
+            background-color: rgba(10, 10, 10, 0.8); /* Fondo oscuro semitransparente */
+            display: flex;
+            justify-content: center; /* Centrar iconos horizontalmente */
+            align-items: center; /* Centrar iconos verticalmente */
+            gap: 30px; /* Espacio entre iconos */
+            border-bottom-left-radius: 8px; /* Redondear abajo */
+            border-bottom-right-radius: 8px;
+            box-sizing: border-box;
+        }
+        /* Estilo Iconos Individuales en la franja */
+        .back-links a { 
+            color: white; 
+            text-decoration: none; 
+            font-size: 26px; /* Tamaño iconos */
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5); 
+            transition: transform 0.2s ease;
+        }
+        .back-links a:hover { transform: scale(1.15); }
+
+        /* Botón Flip (sin cambios) */
         .flip-button { background-color: rgba(255, 255, 255, 0.8); border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background 0.3s, transform 0.3s; position: fixed; z-index: 100; bottom: 25px; right: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
         .flip-button:hover { background-color: white; transform: scale(1.1); }
         
         @media (max-width: 600px) { 
             .card-container { max-width: 90vw; } 
             .flip-button { width: 40px; height: 40px; bottom: 20px; right: 20px; } 
-            .card-face.back .button-container { padding: 15px; } 
-            .card-face.back .youtube-button { padding: 6px 10px; font-size: 12px; } 
-            .card-face.back .social-icons { gap: 8px;} 
-            .card-face.back .social-icons a { font-size: 18px; } 
+            .back-links { height: 50px; gap: 25px; } /* Ajustar franja en móvil */
+            .back-links a { font-size: 24px; }
         }
     </style>
 </head>
@@ -88,15 +105,17 @@
             <div class="card-face front">
                 <img src="carta_frente.png.jpg" alt="Frente de la Carta" id="cardFrontImage"> 
             </div>
-            <div class="card-face back">
-                 <img src="carta_dorso.png.png" alt="Dorso de la Carta">
-                 <div class="button-container">
-                     <button class="youtube-button" onclick="window.open('googleusercontent.com/youtube.com/4', '_blank')"> <i class="fab fa-youtube"></i> YouTube </button>
-                     <div class="social-icons">
-                         <a href="https://facebook.com/tu_perfil" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                         <a href="https://twitter.com/tu_perfil" target="_blank"><i class="fab fa-twitter"></i></a>
-                         <a href="https://instagram.com/tu_perfil" target="_blank"><i class="fab fa-instagram"></i></a>
-                     </div>
+            <div class="card-face back"> 
+                 <iframe 
+                     src="https://www.youtube.com/watch?v=0_QHL7cDYno9" 
+                     title="YouTube video player" 
+                     frameborder="0" 
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                     allowfullscreen>
+                 </iframe>
+                 <div class="back-links">
+                     <a href="https://www.instagram.com/jtenshi_/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a> 
+                     <a href="https://www.youtube.com/...2" target="_blank" title="Canal de YouTube"><i class="fab fa-youtube"></i></a> 
                  </div>
             </div>
         </div>
@@ -127,10 +146,10 @@
         let animationFrameId_Rebound = null;
         let animationFrameId_Trompo = null; 
         
-        // Timings (ACTUALIZADOS)
-        const entranceAnimationDurationMs = 700; // Duración de 'compactUnfoldPop' (0.7s)
-        const autoFlipDelayMs = 1000; // <-- ACTUALIZADO: 1 segundo de espera
-        const flipTransitionDurationMs = 200; 
+        // Timings (ACTUALIZADOS: Entrada 0.7s + Espera 0.5s)
+        const entranceAnimationDurationMs = 700; 
+        const autoFlipDelayMs = 500; // Espera de medio segundo
+        const flipTransitionDurationMs = 600; 
 
         // --- FUNCIONES UTILITARIAS ---
         function lerp(start, end, amt) { return (1 - amt) * start + amt * end; }
@@ -140,34 +159,15 @@
             cardElement.style.transform = `rotateY(${flipRot + dragY}deg) rotateX(${dragX}deg)`;
         }
 
-        // --- LÓGICA DE FLIP/TORBELLINO ---
+        // --- LÓGICA DE FLIP/TORBELLINO --- (Sin cambios)
         function onFlipEndCommon() { 
-            isFlipping = false; 
-            cardElement.style.transition = 'none'; 
-            dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0;
-            applyRotation(); 
-            enableDrag(); 
-            console.log("Flip terminado, drag habilitado.");
+            isFlipping = false; cardElement.style.transition = 'none'; dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; applyRotation(); enableDrag(); console.log("Flip terminado, drag habilitado.");
         }
 
         function triggerFlip() {
-            if (isFlipping || isDragging) {
-                console.log("Intento de flip bloqueado (ocupado)");
-                return;
-            }
-            console.log("Iniciando flip...");
-            isFlipping = true;
-            disableDrag(); 
-            cancelAnimationFrame(animationFrameId_Rebound); 
-            animationFrameId_Rebound = null;
-            dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0;
-             applyRotation(); 
-            currentFlipRotation += 180; 
-            cardElement.style.transition = `transform ${flipTransitionDurationMs / 1000}s ease-in-out`;
-            applyRotation(); 
-            setTimeout(() => {
-                 if (isFlipping) { onFlipEndCommon(); }
-            }, flipTransitionDurationMs);
+            if (isFlipping || isDragging) { console.log("Intento de flip bloqueado (ocupado)"); return; }
+            console.log("Iniciando flip..."); isFlipping = true; disableDrag(); cancelAnimationFrame(animationFrameId_Rebound); animationFrameId_Rebound = null; dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; applyRotation(); currentFlipRotation += 180; cardElement.style.transition = `transform ${flipTransitionDurationMs / 1000}s ease-in-out`; applyRotation(); 
+            setTimeout(() => { if (isFlipping) { onFlipEndCommon(); } }, flipTransitionDurationMs);
         }
 
         function startTorbellinoAnimation() { 
@@ -193,23 +193,17 @@
 
         // --- INICIALIZACIÓN ---
         
-        function resizeCanvas() { 
-            console.log("Window resized - No actions needed.");
-        }
-
-        // Setup Inicial
+        function resizeCanvas() { console.log("Window resized - No actions needed."); }
         window.addEventListener('resize', resizeCanvas);
         enableDrag(); 
 
-        // Programar Auto-Giro (0.7s animación + 1s espera)
+        // Programar Auto-Giro (0.7s animación + 0.5s espera = 1.2s total)
         const totalDelayForAutoFlip = entranceAnimationDurationMs + autoFlipDelayMs;
-        console.log(`Programando auto-giro en ${totalDelayForAutoFlip / 1000} segundos...`); // Debería loguear 1.7 segundos
+        console.log(`Programando auto-giro en ${totalDelayForAutoFlip / 1000} segundos...`);
         setTimeout(() => {
             console.log("Ejecutando auto-giro programado.");
             triggerFlip(); 
         }, totalDelayForAutoFlip);
-
-        // Fin del Script
 
     </script>
 
