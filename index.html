@@ -3,31 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única v29 (Despliegue Digital + AutoGiro 3s) - 2025-04-14</title>
+    <title>Carta Única v32 (Compact Unfold Pop + AutoGiro 3s) - 2025-04-14</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body { margin: 0; padding: 0; background: linear-gradient(135deg, #1a0033, #4a148c, #3f51b5); min-height: 100vh; min-height: 100svh; overflow: hidden; display: flex; justify-content: center; align-items: center; position: relative; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
         
-        /* --- Keyframes para la Animación "Despliegue Digital" --- */
-        @keyframes digitalUnfold {
+        /* --- Keyframes para la Nueva Animación "Despliegue Compacto y Pop" --- */
+        @keyframes compactUnfoldPop {
           0% {
             opacity: 0;
-            transform: rotateY(-90deg) scale(0.9); 
+            /* Empieza MUY pequeña y girada */
+            transform: scale(0.1) rotateY(-70deg); 
             filter: brightness(1.5);
           }
-          70% {
+          60% { 
+            /* Se expande rápidamente pasando el tamaño final y la rotación 0 */
             opacity: 1;
-            transform: rotateY(10deg) scale(1.05); 
+            transform: scale(1.1) rotateY(10deg); 
             filter: brightness(1.2);
           }
+          80% {
+             /* Rebote hacia atrás (más pequeño y rotación opuesta leve) */
+            transform: scale(0.97) rotateY(-5deg);
+            filter: brightness(1); /* Brillo normalizado */
+          }
           100% {
+            /* Termina estable en la posición y tamaño final */
             opacity: 1;
-            transform: rotateY(0deg) scale(1);
+            transform: scale(1) rotateY(0deg);
             filter: brightness(1);
           }
         }
 
-        /* --- Estilo del Contenedor con la Animación "Despliegue Digital" --- */
+        /* --- Estilo del Contenedor con la Nueva Animación --- */
         .card-container { 
             width: 85vw; 
             height: auto; 
@@ -44,14 +52,14 @@
             pointer-events: auto; 
             backface-visibility: hidden; 
 
-            /* Aplicar la animación "Despliegue Digital" */
-            animation: digitalUnfold 
-                       0.6s /* Duración: 0.6 segundos */
-                       ease-out 
+            /* Aplicar la NUEVA animación "Compact Unfold Pop" */
+            animation: compactUnfoldPop 
+                       0.7s /* Duración ajustada: 0.7 segundos */
+                       cubic-bezier(0.175, 0.885, 0.320, 1.275) /* Easing con rebote */
                        forwards; 
         }
 
-        /* --- Estilos restantes (sin cambios desde v29) --- */
+        /* --- Estilos restantes (sin cambios) --- */
         .card-container:active { cursor: grabbing; }
         .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: none; transform: rotateX(0deg) rotateY(0deg); user-select: none; -webkit-user-drag: none; }
         .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 8px; overflow: hidden; background-color: #555; display: block; user-select: none; -webkit-user-drag: none; }
@@ -123,15 +131,17 @@
         let animationFrameId_Rebound = null;
         let animationFrameId_Trompo = null; 
         
-        // Timings para Auto-Giro (Restaurados a 0.6s + 3s)
-        const entranceAnimationDurationMs = 600; // Duración de 'digitalUnfold'
-        const autoFlipDelayMs = 3000; // Espera de 3 segundos
+        // Timings (ACTUALIZADOS)
+        const entranceAnimationDurationMs = 700; // Duración de 'compactUnfoldPop' (0.7s)
+        const autoFlipDelayMs = 3000; // Espera después de la entrada (3s)
         const flipTransitionDurationMs = 600; 
 
         // --- FUNCIONES UTILITARIAS ---
         function lerp(start, end, amt) { return (1 - amt) * start + amt * end; }
         function easeOutCubic(t) { return (--t) * t * t + 1; }
         function applyRotation(flipRot = currentFlipRotation, dragX = dragRotationX, dragY = dragRotationY) {
+             // Evitar aplicar transform si opacidad no es 1 (durante animación inicial)
+             // excepto si estamos activamente volteando. Usar computedStyle es más fiable.
              if (!isFlipping && parseFloat(window.getComputedStyle(cardContainer).opacity) < 1) return;
             cardElement.style.transform = `rotateY(${flipRot + dragY}deg) rotateX(${dragX}deg)`;
         }
@@ -197,7 +207,7 @@
         window.addEventListener('resize', resizeCanvas);
         enableDrag(); 
 
-        // Programar Auto-Giro con los tiempos de v29 (0.6s + 3s)
+        // Programar Auto-Giro (0.7s animación + 3s espera)
         const totalDelayForAutoFlip = entranceAnimationDurationMs + autoFlipDelayMs;
         console.log(`Programando auto-giro en ${totalDelayForAutoFlip / 1000} segundos...`);
         setTimeout(() => {
