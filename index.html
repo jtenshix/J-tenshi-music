@@ -6,23 +6,24 @@
     <title>Cargando tu contenido...</title>
     <script>
         function detectDeviceAndRedirect() {
-            const mobilePage = "tarjeta-movil.html";
-            const desktopPage = "mi-sitio-web.html";
+            const mobilePage = "tarjeta-movil.html"; // Página para dispositivos móviles (la tarjeta)
+            const desktopPage = "mi-sitio-web.html"; // Página para dispositivos de escritorio (la web completa)
 
-            // Estas líneas son para depuración y puedes eliminarlas más tarde si todo funciona bien.
-            console.log("User Agent:", navigator.userAgent);
+            // Detección del tipo de dispositivo
+            // Utiliza el User Agent del navegador para saber si es un móvil
             const isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            console.log("¿Es móvil?", isMobile);
 
+            // Redirección condicional
             if (isMobile) {
-                console.log("Redirigiendo a:", mobilePage);
+                // Si es un dispositivo móvil, redirige a la tarjeta
                 window.location.href = mobilePage;
             } else {
-                console.log("Redirigiendo a:", desktopPage);
+                // Si no es un dispositivo móvil (es un PC/escritorio), redirige a la web completa
                 window.location.href = desktopPage;
             }
         }
 
+        // Ejecutar la función de detección y redirección inmediatamente al cargar la página
         detectDeviceAndRedirect();
     </script>
 </head>
