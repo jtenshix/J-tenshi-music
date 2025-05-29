@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cargando tu contenido...</title>
+    <script>
+        function detectDeviceAndRedirect() {
+            // Estas son las rutas a tus otras páginas.
+            // Asegúrate de que los nombres de los archivos coincidan exactamente.
+            const mobilePage = "tarjeta-movil.html"; // Tu tarjeta actual (que renombraste)
+            const desktopPage = "mi-sitio-web.html"; // ¡Aquí irá tu futura web completa!
+
+            // Detecta si el navegador es un dispositivo móvil
+            const isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+            if (isMobile) {
+                // Si es un móvil, redirige a la tarjeta
+                window.location.href = mobilePage;
+            } else {
+                // Si es un PC, redirige a la web completa
+                window.location.href = desktopPage;
+            }
+        }
+
+        // Llama a la función en cuanto la página se carga
+        detectDeviceAndRedirect();
+    </script>
+</head>
+<body>
+    <p>Cargando la versión correcta para tu dispositivo...</p>
+</body>
+</html>
