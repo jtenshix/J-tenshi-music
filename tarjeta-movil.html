@@ -36,23 +36,7 @@
             background-color: #555; /* Fondo por defecto si imagen no carga */
             display: block; user-select: none; -webkit-user-drag: none; 
         }
-         .card-face::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -100%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                90deg,
-                rgba(255, 255, 255, 1) 0%,
-                rgba(255, 255, 255, 0.7) 50%,
-                rgba(255, 255, 255, 1) 100%
-            );
-            transform: rotate(30deg);
-            pointer-events: none;
-        }
-
+         
         /* Imagen (común a ambas caras si se quiere) */
         .card-face img.face-background { 
             position: absolute; /* Para que esté detrás del contenido */
