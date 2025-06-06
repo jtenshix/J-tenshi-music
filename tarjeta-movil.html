@@ -181,6 +181,10 @@
         const rotationFactor = 0.3; const maxDragRotationX = 30; const maxDragRotationY = 40;
         let velocityX = 0; let velocityY = 0;
         const friction = 0.50; const springForce = 0.06;
+        const baseSpringForce = 0.06;
+        const springScaleFactor = 0.002;
+        const baseFriction = 0.88;
+        const frictionScaleFactor = 0.0005;
         let animationFrameId_Rebound = null;
         let animationFrameId_Trompo = null; 
         
@@ -224,7 +228,13 @@
         function handleDragStart(e) { if (isFlipping) return; isDragging = true; cardContainer.style.cursor = 'grabbing'; cardElement.style.transition = 'none'; cancelAnimationFrame(animationFrameId_Rebound); animationFrameId_Rebound = null; const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY; const rect = cardContainer.getBoundingClientRect(); startX = clientX - (rect.left + rect.width / 2); startY = clientY - (rect.top + rect.height / 2); velocityX = 0; velocityY = 0; document.addEventListener('mousemove', handleDragMove); document.addEventListener('touchmove', handleDragMove, { passive: false }); document.addEventListener('mouseup', handleDragEnd); document.addEventListener('touchend', handleDragEnd); document.addEventListener('mouseleave', handleDragEnd); }
         function handleDragMove(e) { if (!isDragging) return; if (e.touches) e.preventDefault(); const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY; const rect = cardContainer.getBoundingClientRect(); currentX = clientX - (rect.left + rect.width / 2); currentY = clientY - (rect.top + rect.height / 2); const deltaX = currentX - startX; const deltaY = currentY - startY; const isBackFacing = Math.round(currentFlipRotation / 180) % 2 !== 0; dragRotationY += deltaX * rotationFactor; if (isBackFacing) { dragRotationX += deltaY * rotationFactor; } else { dragRotationX -= deltaY * rotationFactor; } dragRotationX = Math.max(-maxDragRotationX, Math.min(maxDragRotationX, dragRotationX)); dragRotationY = Math.max(-maxDragRotationY, Math.min(maxDragRotationY, dragRotationY)); velocityX = -deltaY * 0.5; velocityY = deltaX * 0.5; applyRotation(); startX = currentX; startY = currentY; }
         function handleDragEnd() { if (!isDragging) return; isDragging = false; cardContainer.style.cursor = 'grab'; document.removeEventListener('mousemove', handleDragMove); document.removeEventListener('touchmove', handleDragMove); document.removeEventListener('mouseup', handleDragEnd); document.removeEventListener('touchend', handleDragEnd); document.removeEventListener('mouseleave', handleDragEnd); animateRebound(); }
-        function animateRebound() { if (isDragging || isFlipping) { cancelAnimationFrame(animationFrameId_Rebound); animationFrameId_Rebound = null; return; } dragRotationY += velocityY; dragRotationX += velocityX; velocityY *= friction; velocityX *= friction; const forceY = -dragRotationY * springForce; const forceX = -dragRotationX * springForce; velocityY += forceY; velocityX += forceX; cardElement.style.transition = 'none'; applyRotation(); if (Math.abs(velocityY) > 0.01 || Math.abs(velocityX) > 0.01 || Math.abs(dragRotationY) > 0.01 || Math.abs(dragRotationX) > 0.01) { animationFrameId_Rebound = requestAnimationFrame(animateRebound); } else { dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; applyRotation(); animationFrameId_Rebound = null; } }
+        function animateRebound() { if (isDragging || isFlipping) { cancelAnimationFrame(animationFrameId_Rebound); animationFrameId_Rebound = null; return; } dragRotationY += velocityY; dragRotationX += velocityX; velocityY *= effectiveFriction; velocityX *= effectiveFriction;
+;// Primero, mira qué tan lejos está la tarjeta
+        const totalRotationMagnitude = Math.sqrt(
+        (dragRotationX * dragRotationX) + (dragRotationY * dragRotationY)
+);
+        const effectiveSpringForce = baseSpringForce + (totalRotationMagnitude * springScaleFactor);
+        const effectiveFriction = Math.max(baseFriction, baseFriction + (totalRotationMagnitude * frictionScaleFactor)); const forceY = -dragRotationY * effectiveSpringForce; const forceX = -dragRotationX * effectiveSpringForce; velocityY += forceY; velocityX += forceX; cardElement.style.transition = 'none'; applyRotation(); if (Math.abs(velocityY) > 0.01 || Math.abs(velocityX) > 0.01 || Math.abs(dragRotationY) > 0.01 || Math.abs(dragRotationX) > 0.01) { animationFrameId_Rebound = requestAnimationFrame(animateRebound); } else { dragRotationX = 0; dragRotationY = 0; velocityX = 0; velocityY = 0; applyRotation(); animationFrameId_Rebound = null; } }
         function enableDrag() { console.log("Habilitando drag"); cardContainer.addEventListener('mousedown', handleDragStart); cardContainer.addEventListener('touchstart', handleDragStart, { passive: false }); }
         function disableDrag() { console.log("Deshabilitando drag"); if(isDragging) { handleDragEnd(); } cardContainer.removeEventListener('mousedown', handleDragStart); cardContainer.removeEventListener('touchstart', handleDragStart); }
 
