@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Carta con Efecto Holográfico</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
             margin: 0;
@@ -19,8 +20,10 @@
         }
 
         .card-container {
-            width: 300px;
-            height: 420px;
+            width: 85vw;
+            height: auto;
+            aspect-ratio: 300 / 420;
+            max-width: 300px;
             position: relative;
             perspective: 1000px;
             cursor: grab;
@@ -31,7 +34,7 @@
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.1s;
+            transition: none;
         }
 
         .card-face {
@@ -61,10 +64,73 @@
             pointer-events: none;
         }
 
-        .card-face img {
+        .card-face img.face-background {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
+            z-index: 0;
+        }
+
+        .card-face.back {
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 25px 20px;
+            box-sizing: border-box;
+            background-color: #333;
+        }
+
+        .link-buttons {
+            position: relative;
+            z-index: 1;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .link-button {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 12px 18px;
+            border-radius: 25px;
+            background-color: rgba(40, 40, 40, 0.75);
+            color: white;
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            transition: background-color 0.3s, transform 0.2s ease-out;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+        }
+
+        .flip-button {
+            background-color: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            z-index: 100;
+            bottom: 25px;
+            right: 25px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
     </style>
 </head>
@@ -72,25 +138,61 @@
     <div class="card-container" id="cardContainer">
         <div class="card" id="interactiveCard">
             <div class="card-face front">
-                <img src="carta_frente.png.jpg" alt="Frente de la Carta">
+                <img src="carta_frente.png.jpg" alt="Frente de la Carta" class="face-background">
+            </div>
+            <div class="card-face back">
+                <img src="carta_dorso.png.png" alt="Dorso de la Carta" class="face-background">
+                <div class="link-buttons">
+                    <a href="https://www.instagram.com/jtenshi_/" target="_blank" class="link-button instagram">
+                        <i class="fab fa-instagram"></i>
+                        <span>Instagram</span>
+                    </a>
+                    <a href="https://youtube.com/@j-tenshimus1c?si=3MX3w9MmR-XNXWmx" target="_blank" class="link-button youtube">
+                        <i class="fab fa-youtube"></i>
+                        <span>Canal de YouTube</span>
+                    </a>
+                    <a href="https://youtu.be/0_QHL7cDYno?si=-gfNkI5mHWKMHbKW" target="_blank" class="link-button youtube-video">
+                        <i class="fas fa-play"></i>
+                        <span>Último Video Musical</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 
+    <button class="flip-button" id="flipButton">
+        <i class="fas fa-sync-alt" style="color: #333; font-size: 18px;"></i>
+    </button>
+
     <script>
         const cardContainer = document.getElementById('cardContainer');
         const card = document.getElementById('interactiveCard');
+        const flipButton = document.getElementById('flipButton');
         const cardFace = document.querySelector('.card-face');
 
         let isDragging = false;
-        let startX, startY;
-        let currentX = 0, currentY = 0;
+        let isFlipping = false;
+        let currentFlipRotation = 0;
+        let dragRotationX = 0, dragRotationY = 0;
+        let startX, startY, currentX = 0, currentY = 0;
         let shinePosition = -100;
+        let flipCount = 0;
 
-        cardContainer.addEventListener('mousedown', startDrag);
-        cardContainer.addEventListener('touchstart', startDrag, { passive: false });
+        // Funciones para voltear la tarjeta
+        function triggerFlip() {
+            if (isFlipping || isDragging) return;
+            isFlipping = true;
+            currentFlipRotation += 180;
+            card.style.transition = 'transform 0.6s ease-in-out';
+            card.style.transform = `rotateY(${currentFlipRotation}deg)`;
+            setTimeout(() => {
+                isFlipping = false;
+                card.style.transition = 'none';
+            }, 600);
+        }
 
         function startDrag(e) {
+            if (isFlipping) return;
             isDragging = true;
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
@@ -106,11 +208,9 @@
 
         function drag(e) {
             if (!isDragging) return;
-
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
             const rect = cardContainer.getBoundingClientRect();
-
             currentX = clientX - rect.left;
             currentY = clientY - rect.top;
 
@@ -118,7 +218,9 @@
             const deltaY = currentY - startY;
 
             // Mueve la tarjeta
-            card.style.transform = `rotateY(${deltaX * 0.1}deg) rotateX(${deltaY * 0.1}deg)`;
+            dragRotationY = deltaX * 0.1;
+            dragRotationX = deltaY * 0.1;
+            card.style.transform = `rotateY(${currentFlipRotation + dragRotationY}deg) rotateX(${dragRotationX}deg)`;
 
             // Ajusta la posición del brillo basado en el movimiento
             shinePosition = -100 + (deltaX * 0.2);
@@ -135,6 +237,10 @@
             document.removeEventListener('mouseup', endDrag);
             document.removeEventListener('touchend', endDrag);
         }
+
+        flipButton.addEventListener('click', triggerFlip);
+        cardContainer.addEventListener('mousedown', startDrag);
+        cardContainer.addEventListener('touchstart', startDrag, { passive: false });
     </script>
 </body>
 </html>
