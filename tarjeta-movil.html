@@ -10,10 +10,10 @@
         
         /* Keyframes Animación Entrada (Sin cambios) */
         @keyframes compactUnfoldPop {
-          0% { opacity: 0; transform: scale(0.1) rotateY(-70deg); filter: brightness(1.5); }
-          60% { opacity: 1; transform: scale(1.1) rotateY(10deg); filter: brightness(1.2); }
-          80% { transform: scale(0.97) rotateY(-5deg); filter: brightness(1); }
-          100% { opacity: 1; transform: scale(1) rotateY(0deg); filter: brightness(1); }
+            0% { opacity: 0; transform: scale(0.1) rotateY(-70deg); filter: brightness(1.5); }
+            60% { opacity: 1; transform: scale(1.1) rotateY(10deg); filter: brightness(1.2); }
+            80% { transform: scale(0.97) rotateY(-5deg); filter: brightness(1); }
+            100% { opacity: 1; transform: scale(1) rotateY(0deg); filter: brightness(1); }
         }
 
         /* Contenedor Principal con Animación Entrada */
@@ -181,7 +181,6 @@
         let startX, startY, currentX, currentY;
         const rotationFactor = 0.15; const maxDragRotationX = 60; const maxDragRotationY = 60;
         let velocityX = 0; let velocityY = 0;
-        maxDragDistance = 0; // ¡Ponemos el medidor en cero para un nuevo juego!
         const friction = 0.70; const springForce = 0.06;
         const baseSpringForce = 0.04;
         const springScaleFactor = 0.012;
@@ -189,10 +188,10 @@
         const frictionForOneBounce = 0.95; // Este freno es fuerte para 1 solo salto
         const frictionForTwoBounces = 0.88; // Este freno es más suave para 2 saltos
 
-// Calculamos qué tan lejos puedes estirar la carta al máximo (esto no cambia)
-const maxPossibleDragMagnitude = Math.sqrt(
-    (maxDragRotationX * maxDragRotationX) + (maxDragRotationY * maxDragRotationY)
-);
+        // Calculamos qué tan lejos puedes estirar la carta al máximo (esto no cambia)
+        const maxPossibleDragMagnitude = Math.sqrt(
+            (maxDragRotationX * maxDragRotationX) + (maxDragRotationY * maxDragRotationY)
+        );
         const baseFriction = 0.93;
         const frictionScaleFactor = 0.003;
         let animationFrameId_Rebound = null;
@@ -207,7 +206,7 @@ const maxPossibleDragMagnitude = Math.sqrt(
         function lerp(start, end, amt) { return (1 - amt) * start + amt * end; }
         function easeOutCubic(t) { return (--t) * t * t + 1; }
         function applyRotation(flipRot = currentFlipRotation, dragX = dragRotationX, dragY = dragRotationY) {
-             if (!isFlipping && parseFloat(window.getComputedStyle(cardContainer).opacity) < 1) return;
+            if (!isFlipping && parseFloat(window.getComputedStyle(cardContainer).opacity) < 1) return;
             cardElement.style.transform = `rotateY(${flipRot + dragY}deg) rotateX(${dragX}deg)`;
         }
 
@@ -236,71 +235,73 @@ const maxPossibleDragMagnitude = Math.sqrt(
 
         // --- LÓGICA DE DRAG & REBOUND ---
         function handleDragStart(e) { if (isFlipping) return; isDragging = true; cardContainer.style.cursor = 'grabbing'; cardElement.style.transition = 'none'; cancelAnimationFrame(animationFrameId_Rebound); animationFrameId_Rebound = null; const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY; const rect = cardContainer.getBoundingClientRect(); startX = clientX - (rect.left + rect.width / 2); startY = clientY - (rect.top + rect.height / 2); velocityX = 0; velocityY = 0; document.addEventListener('mousemove', handleDragMove); document.addEventListener('touchmove', handleDragMove, { passive: false }); document.addEventListener('mouseup', handleDragEnd); document.addEventListener('touchend', handleDragEnd); document.addEventListener('mouseleave', handleDragEnd); }
-        function handleDragMove(e) { if (!isDragging) return; if (e.touches) e.preventDefault(); const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY; const rect = cardContainer.getBoundingClientRect(); currentX = clientX - (rect.left + rect.width / 2); currentY = clientY - (rect.top + rect.height / 2); const deltaX = currentX - startX; const deltaY = currentY - startY; const isBackFacing = Math.round(currentFlipRotation / 180) % 2 !== 0; dragRotationY += deltaX * rotationFactor; if (isBackFacing) { dragRotationX += deltaY * rotationFactor; } else { dragRotationX -= deltaY * rotationFactor; } dragRotationX = Math.max(-maxDragRotationX, Math.min(maxDragRotationX, dragRotationX)); dragRotationY = Math.max(-maxDragRotationY, Math.min(maxDragRotationY, dragRotationY)// ¡El medidor mira qué tan lejos estiraste la carta!
-const currentDragMagnitude = Math.sqrt(
-    (dragRotationX * dragRotationX) + (dragRotationY * dragRotationY)
-);
-// Y guarda el número más grande que midió
-maxDragDistance = Math.max(maxDragDistance, currentDragMagnitude);); velocityX = -deltaY * 0.5; velocityY = deltaX * 0.5; applyRotation(); startX = currentX; startY = currentY; }
+        function handleDragMove(e) { if (!isDragging) return; if (e.touches) e.preventDefault(); const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY; const rect = cardContainer.getBoundingClientRect(); currentX = clientX - (rect.left + rect.width / 2); currentY = clientY - (rect.top + rect.height / 2); const deltaX = currentX - startX; const deltaY = currentY - startY; const isBackFacing = Math.round(currentFlipRotation / 180) % 2 !== 0; dragRotationY += deltaX * rotationFactor; if (isBackFacing) { dragRotationX += deltaY * rotationFactor; } else { dragRotationX -= deltaY * rotationFactor; } dragRotationX = Math.max(-maxDragRotationX, Math.min(maxDragRotationX, dragRotationX)); dragRotationY = Math.max(-maxDragRotationY, Math.min(maxDragRotationY, dragRotationY));
+        // ¡El medidor mira qué tan lejos estiraste la carta!
+        const currentDragMagnitude = Math.sqrt(
+            (dragRotationX * dragRotationX) + (dragRotationY * dragRotationY)
+        );
+        // Y guarda el número más grande que midió
+        maxDragDistance = Math.max(maxDragDistance, currentDragMagnitude);
+        velocityX = -deltaY * 0.5; velocityY = deltaX * 0.5; applyRotation(); startX = currentX; startY = currentY; }
         function handleDragEnd() { if (!isDragging) return; isDragging = false; cardContainer.style.cursor = 'grab'; document.removeEventListener('mousemove', handleDragMove); document.removeEventListener('touchmove', handleDragMove); document.removeEventListener('mouseup', handleDragEnd); document.removeEventListener('touchend', handleDragEnd); document.removeEventListener('mouseleave', handleDragEnd); animateRebound(); }
         function animateRebound() {
-    if (isDragging || isFlipping) {
-        cancelAnimationFrame(animationFrameId_Rebound);
-        animationFrameId_Rebound = null;
-        return;
-    }
+            if (isDragging || isFlipping) {
+                cancelAnimationFrame(animationFrameId_Rebound);
+                animationFrameId_Rebound = null;
+                return;
+            }
 
-    dragRotationY += velocityY;
-    dragRotationX += velocityX;
+            dragRotationY += velocityY;
+            dragRotationX += velocityX;
 
-    // Primero, mira qué tan lejos está la tarjeta
-    const totalRotationMagnitude = Math.sqrt(
-        (dragRotationX * dragRotationX) + (dragRotationY * dragRotationY)
-    );
+            // Primero, mira qué tan lejos está la tarjeta
+            const totalRotationMagnitude = Math.sqrt(
+                (dragRotationX * dragRotationX) + (dragRotationY * dragRotationY)
+            );
 
-    // Luego, haz que el resorte sea más fuerte si la estiraste mucho
-    const effectiveSpringForce = baseSpringForce + (totalRotationMagnitude * springScaleFactor);
-            // --- NUEVAS REGLAS DEL FRENO ---
-let dynamicFriction;
-// Miramos qué tanto estiraste la carta (en porcentaje)
-const dragPercentage = maxDragDistance / maxPossibleDragMagnitude;
+            // Luego, haz que el resorte sea más fuerte si la estiraste mucho
+            const effectiveSpringForce = baseSpringForce + (totalRotationMagnitude * springScaleFactor);
+                        // --- NUEVAS REGLAS DEL FRENO ---
+            let dynamicFriction;
+            // Miramos qué tanto estiraste la carta (en porcentaje)
+            const dragPercentage = maxDragDistance / maxPossibleDragMagnitude;
 
-if (dragPercentage < reboundThreshold) {
-    // Si estiraste poquito, usa el freno fuerte (para 1 rebote)
-    dynamicFriction = frictionForOneBounce;
-} else {
-    // Si estiraste mucho, usa el freno suave (para 2 rebotes)
-    dynamicFriction = frictionForTwoBounces;
-}
+            if (dragPercentage < reboundThreshold) {
+                // Si estiraste poquito, usa el freno fuerte (para 1 rebote)
+                dynamicFriction = frictionForOneBounce;
+            } else {
+                // Si estiraste mucho, usa el freno suave (para 2 rebotes)
+                dynamicFriction = frictionForTwoBounces;
+            }
 
-// Para que el freno no sea muy loco, lo mantenemos en un buen rango
-dynamicFriction = Math.max(0.7, Math.min(0.99, dynamicFriction));
-// --- FIN DE LAS NUEVAS REGLAS ---
+            // Para que el freno no sea muy loco, lo mantenemos en un buen rango
+            dynamicFriction = Math.max(0.7, Math.min(0.99, dynamicFriction));
+            // --- FIN DE LAS NUEVAS REGLAS ---
 
-    velocityY *= dynamicFriction; // ¡Usamos el freno que elegimos!
-    velocityX *= dynamicFriction; // ¡Usamos el freno que elegimos!
+            velocityY *= dynamicFriction; // ¡Usamos el freno que elegimos!
+            velocityX *= dynamicFriction; // ¡Usamos el freno que elegimos!
 
-    const forceY = -dragRotationY * effectiveSpringForce;
-    const forceX = -dragRotationX * effectiveSpringForce;
+            const forceY = -dragRotationY * effectiveSpringForce;
+            const forceX = -dragRotationX * effectiveSpringForce;
 
-    velocityY += forceY;
-    velocityX += forceX;
+            velocityY += forceY;
+            velocityX += forceX;
 
-    cardElement.style.transition = 'none';
-    applyRotation();
+            cardElement.style.transition = 'none';
+            applyRotation();
 
-    if (Math.abs(velocityY) > 0.01 || Math.abs(velocityX) > 0.01 || Math.abs(dragRotationY) > 0.01 || Math.abs(dragRotationX) > 0.01) {
-        animationFrameId_Rebound = requestAnimationFrame(animateRebound);
-    } else {
-        dragRotationX = 0;
-        dragRotationY = 0;
-        velocityY = 0;
-        velocityX = 0;
-        applyRotation();
-        animationFrameId_Rebound = null;
-        maxDragDistance = 0; // ¡Ponemos el medidor en cero para el próximo juego!
-    }
-}
+            if (Math.abs(velocityY) > 0.01 || Math.abs(velocityX) > 0.01 || Math.abs(dragRotationY) > 0.01 || Math.abs(dragRotationX) > 0.01) {
+                animationFrameId_Rebound = requestAnimationFrame(animateRebound);
+            } else {
+                dragRotationX = 0;
+                dragRotationY = 0;
+                velocityY = 0;
+                velocityX = 0;
+                applyRotation();
+                animationFrameId_Rebound = null;
+                maxDragDistance = 0; // ¡Ponemos el medidor en cero para el próximo juego!
+            }
+        }
         function enableDrag() { console.log("Habilitando drag"); cardContainer.addEventListener('mousedown', handleDragStart); cardContainer.addEventListener('touchstart', handleDragStart, { passive: false }); }
         function disableDrag() { console.log("Deshabilitando drag"); if(isDragging) { handleDragEnd(); } cardContainer.removeEventListener('mousedown', handleDragStart); cardContainer.removeEventListener('touchstart', handleDragStart); }
 
