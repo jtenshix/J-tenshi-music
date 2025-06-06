@@ -35,6 +35,28 @@
             overflow: hidden; 
             background-color: #555; /* Fondo por defecto si imagen no carga */
             display: block; user-select: none; -webkit-user-drag: none; 
+            .card-face {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-face::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.5) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    animation: shine 3s infinite;
+}
+
         }
         /* Imagen (común a ambas caras si se quiere) */
         .card-face img.face-background { 
@@ -126,8 +148,19 @@
             .link-button { padding: 10px 15px; font-size: 14px; border-radius: 20px;}
             .link-button i { font-size: 18px; margin-right: 10px; width: 20px;}
              .link-button span { padding-right: 30px; }
+
+            @keyframes shine {
+    from {
+        left: -100%;
+    }
+    to {
+        left: 100%;
+    }
+}
+
         }
-    </style>
+    </style> 
+    
 </head>
 <body>
 
