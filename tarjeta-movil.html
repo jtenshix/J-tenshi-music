@@ -185,8 +185,8 @@
         const baseSpringForce = 0.04;
         const springScaleFactor = 0.012;
         const reboundThreshold = 0.5; // La mitad de lo que puedes estirar (50%)
-        const frictionForOneBounce = 0.95; // Este freno es fuerte para 1 solo salto
-        const frictionForTwoBounces = 0.88; // Este freno es más suave para 2 saltos
+        const frictionForOneBounce = 0.5; // Este freno es fuerte para 1 solo salto
+        const frictionForTwoBounces = 0.8; // Este freno es más suave para 2 saltos
 
         // Calculamos qué tan lejos puedes estirar la carta al máximo (esto no cambia)
         const maxPossibleDragMagnitude = Math.sqrt(
