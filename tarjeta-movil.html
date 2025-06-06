@@ -178,13 +178,13 @@
 
         // Física y Drag
         let startX, startY, currentX, currentY;
-        const rotationFactor = 0.2; const maxDragRotationX = 60; const maxDragRotationY = 60;
+        const rotationFactor = 0.1; const maxDragRotationX = 60; const maxDragRotationY = 60;
         let velocityX = 0; let velocityY = 0;
         const friction = 0.70; const springForce = 0.06;
-        const baseSpringForce = 0.06;
-        const springScaleFactor = 0.002;
-        const baseFriction = 0.88;
-        const frictionScaleFactor = 0.0005;
+        const baseSpringForce = 0.02;
+        const springScaleFactor = 0.009;
+        const baseFriction = 0.90;
+        const frictionScaleFactor = 0.001;
         let animationFrameId_Rebound = null;
         let animationFrameId_Trompo = null; 
         
