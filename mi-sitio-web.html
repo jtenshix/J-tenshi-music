@@ -1,255 +1,179 @@
 <!DOCTYPE html>
-<html lang="es">
-<head> 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Sitio Web - Placeholder</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Noto Sans JP', sans-serif;
-            background-color: #f8f8f8; /* Fondo general claro */
-            color: #333;
-        }
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KAF Inspired Web</title>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        /* Header */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            position: fixed;
-            width: 90%;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-        }
+    body {
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      background-color: #0f0f0f;
+      color: #eaeaea;
+      overflow-x: hidden;
+    }
 
-        .header .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 28px;
-            font-weight: 700;
-            color: #d4a761; /* Color dorado/ocre */
-            text-decoration: none;
-        }
+    header {
+      position: fixed;
+      width: 100%;
+      padding: 20px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+    }
 
-        .header-nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 25px;
-        }
+    .logo {
+      font-size: 24px;
+      color: #f6d375;
+      text-decoration: none;
+      letter-spacing: 2px;
+    }
 
-        .header-nav a {
-            text-decoration: none;
-            color: #555;
-            font-size: 16px;
-            font-weight: 400;
-            transition: color 0.3s ease;
-        }
+    nav ul {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
 
-        .header-nav a:hover {
-            color: #d4a761;
-        }
+    nav a {
+      text-decoration: none;
+      color: #aaa;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
 
-        .header-nav .profile-icon {
-            font-size: 20px;
-            margin-left: 10px;
-            color: #555;
-        }
+    nav a:hover {
+      color: #f6d375;
+    }
 
-        /* Main Section - Hero */
-        .hero-section {
-            position: relative;
-            width: 100%;
-            height: 100vh; /* Ocupa toda la altura de la ventana */
-            background-color: #e0e0e0; /* Color de fondo si la imagen no carga */
-            overflow: hidden; /* Asegura que la imagen no se desborde */
-            display: flex;
-            align-items: center;
-            justify-content: flex-start; /* Contenido a la izquierda */
-            padding-left: 5%; /* Espacio a la izquierda */
-            box-sizing: border-box;
-            padding-top: 70px; /* Espacio para el header fijo */
-        }
+    .hero {
+      height: 100vh;
+      background: url('https://images.unsplash.com/photo-1600675240980-1a7fbb97f0be?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0 10%;
+      position: relative;
+    }
 
-        .hero-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Cubre todo el espacio sin distorsionar */
-            z-index: -1; /* Detrás del contenido */
-            filter: brightness(0.7); /* Oscurecimiento para mejor legibilidad del texto */
-        }
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 1;
+    }
 
-        .hero-content {
-            color: white; /* Color del texto sobre la imagen */
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* Sombra para el texto */
-            max-width: 45%; /* Limita el ancho del texto para que no se extienda demasiado */
-            text-align: left;
-            padding-bottom: 10%; /* Espacio para el footer si es necesario */
-        }
+    .hero-text {
+      position: relative;
+      z-index: 2;
+      color: white;
+      max-width: 600px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    }
 
-        .hero-content h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 5vw; /* Tamaño de fuente relativo al ancho de la ventana */
-            margin-bottom: 15px;
-            line-height: 1.1;
-            color: #d4a761; /* Color del título */
-        }
+    .hero-text h1 {
+      font-size: 3.5rem;
+      color: #f6d375;
+      margin-bottom: 20px;
+    }
 
-        .hero-content p {
-            font-size: 1.5vw; /* Tamaño de fuente relativo al ancho de la ventana */
-            line-height: 1.5;
-            margin-bottom: 25px;
-        }
+    .hero-text p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+    }
 
-        /* Footer Nav */
-        .footer-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: #f0f0f0; /* Fondo más claro que el body */
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
-            padding: 15px 5%;
-            box-sizing: border-box;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
+    footer {
+      background-color: #111;
+      padding: 30px 10%;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      color: #888;
+      font-size: 14px;
+    }
 
-        .footer-nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 40px; /* Más espacio entre los elementos del footer */
-        }
+    footer ul {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+    }
 
-        .footer-nav a {
-            text-decoration: none;
-            color: #555;
-            font-size: 16px;
-            font-weight: 400;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: color 0.3s ease;
-        }
+    footer a {
+      color: #888;
+      text-decoration: none;
+    }
 
-        .footer-nav a:hover {
-            color: #d4a761;
-        }
+    footer a:hover {
+      color: #f6d375;
+    }
 
-        .footer-nav a i {
-            font-size: 22px;
-            margin-bottom: 5px;
-        }
+    @media screen and (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px 20px;
+      }
 
-        /* Media Queries para responsividad (ajustes básicos) */
-        @media (max-width: 768px) {
-            .header {
-                padding: 10px 3%;
-            }
-            .header .logo {
-                font-size: 24px;
-            }
-            .header-nav ul {
-                gap: 15px;
-            }
-            .header-nav a {
-                font-size: 14px;
-            }
-            .hero-content {
-                max-width: 80%; /* Más ancho en pantallas pequeñas */
-                text-align: center;
-                padding-left: 0;
-                padding-bottom: 0;
-            }
-            .hero-content h1 {
-                font-size: 8vw;
-            }
-            .hero-content p {
-                font-size: 2.5vw;
-            }
-            .footer-nav ul {
-                gap: 20px;
-            }
-            .footer-nav a {
-                font-size: 14px;
-            }
-            .footer-nav a i {
-                font-size: 18px;
-            }
-        }
+      .hero-text h1 {
+        font-size: 2.5rem;
+      }
 
-        @media (max-width: 480px) {
-            .header-nav {
-                display: none; /* Ocultar nav en móviles muy pequeños */
-            }
-            .header {
-                justify-content: center; /* Centrar logo si no hay nav */
-            }
-            .hero-content h1 {
-                font-size: 10vw;
-            }
-            .hero-content p {
-                font-size: 3.5vw;
-            }
-            .footer-nav {
-                padding: 10px 2%;
-            }
-        }
+      .hero-text p {
+        font-size: 1rem;
+      }
 
-    </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      nav ul {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <a href="#" class="logo">MI PERSONAJE</a>
+    <nav>
+      <ul>
+        <li><a href="#">Inicio</a></li>
+        <li><a href="#">Historia</a></li>
+        <li><a href="#">Obras</a></li>
+        <li><a href="#">Mundo</a></li>
+        <li><a href="#">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <header class="header">
-        <a href="#" class="logo">TU LOGO</a>
-        <nav class="header-nav">
-            <ul>
-                <li><a href="#">Historia</a></li>
-                <li><a href="wallpapers.html">Galería</a></li> <li><a href="#">Personajes</a></li>
-                <li><a href="#">Mundo</a></li>
-                <li><a href="#"><i class="fas fa-user profile-icon"></i></a></li>
-            </ul>
-        </nav>
-    </header>
+  <section class="hero">
+    <div class="hero-text">
+      <h1>記憶の歌</h1>
+      <p>
+        闇の中に差す光。<br>
+        言葉にできない感情を、音と共に繋げる物語。<br>
+        あなたの心に、そっと触れる音楽の旅へようこそ。
+      </p>
+    </div>
+  </section>
 
-    <main class="hero-section">
-        <img src="carta_frente.png.jpg" alt="Fondo de la página" class="hero-background"> <div class="hero-content">
-            <h1>魔法の冒険</h1>
-            <p>
-                「過去の物語を紡ぐ、未来の旅へ」
-                深き森の奥、忘れ去られた神殿が目覚める時、
-                運命の歯車が再び動き出す。
-                失われた記憶、新たな仲間、そして世界を揺るがす真実。
-                壮大なファンタジーの冒険が、今、始まる.
-            </p>
-        </div>
-    </main>
-
-    <footer class="footer-nav">
-        <ul>
-            <li><a href="#"><i class="fas fa-home"></i> Inicio</a></li>
-            <li><a href="#"><i class="fas fa-book"></i> Leer</a></li>
-            <li><a href="#"><i class="fas fa-play-circle"></i> Ver</a></li>
-            <li><a href="#"><i class="fas fa-comment"></i> Social</a></li>
-            <li><a href="#"><i class="fas fa-ellipsis-h"></i> Más</a></li>
-        </ul>
-    </footer>
-
+  <footer>
+    <p>© 2025 Tenshi Studio</p>
+    <ul>
+      <li><a href="#">X</a></li>
+      <li><a href="#">YouTube</a></li>
+      <li><a href="#">Instagram</a></li>
+    </ul>
+  </footer>
 </body>
 </html>
