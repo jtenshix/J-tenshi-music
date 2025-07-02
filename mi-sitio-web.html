@@ -4,159 +4,64 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MI PERSONAJE | 幻想の響き</title>
-  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Zen Kaku Gothic New', sans-serif;
-      background-color: #0b0b0b;
-      color: #f0f0f0;
-      overflow-x: hidden;
-      transition: background-color 0.4s, color 0.4s;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
+
+    body {
+      font-family: sans-serif;
+      background: #0b0b0b;
+      color: #f0f0f0;
+      transition: 0.4s;
+      overflow-x: hidden;
+    }
+
     body.light {
-      background-color: #f8f8f8;
+      background: #f8f8f8;
       color: #111;
     }
+
     header {
       position: fixed;
+      top: 0;
       width: 100%;
-      padding: 20px 60px;
+      padding: 20px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      background-color: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.8);
       z-index: 1000;
     }
+
     body.light header {
-      background-color: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.8);
     }
+
     .logo {
       font-size: 24px;
       color: #e0c27b;
       text-decoration: none;
-      letter-spacing: 2px;
     }
+
     nav ul {
-      display: flex;
-      gap: 30px;
       list-style: none;
+      display: flex;
+      gap: 20px;
     }
+
     nav a {
-      text-decoration: none;
       color: #aaa;
-      font-size: 16px;
-      transition: color 0.3s;
-    }
-    body.light nav a { color: #444; }
-    nav a:hover { color: #e0c27b; }
-
-    .hero {
-      height: 100vh;
-      background: url("https://cdn.pixabay.com/photo/2017/10/04/23/42/anime-2814579_1280.jpg") center/cover no-repeat;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 0 10%;
-      position: relative;
-    }
-    .hero::after {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background-color: rgba(0, 0, 0, 0.6);
-      z-index: 1;
-    }
-    .hero-text {
-      position: relative;
-      z-index: 2;
-      color: white;
-      max-width: 600px;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-    }
-    .hero-text h1 {
-      font-size: 3.5rem;
-      color: #e0c27b;
-      margin-bottom: 20px;
-    }
-    .hero-text p {
-      font-size: 1.2rem;
-      line-height: 1.6;
+      text-decoration: none;
+      transition: 0.3s;
     }
 
-    .section {
-      padding: 80px 10%;
-      background-color: #141414;
-      border-top: 1px solid #222;
-      transition: background-color 0.4s;
-    }
-    body.light .section {
-      background-color: #fff;
-      border-top: 1px solid #ddd;
-    }
-    .section h2 {
-      font-size: 2rem;
-      color: #e0c27b;
-      margin-bottom: 20px;
-    }
-
-    .albums {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 30px;
-    }
-    .album {
-      background-color: #1c1c1c;
-      border: 1px solid #333;
-      width: 220px;
-      padding: 20px;
-      text-align: center;
-      transition: background-color 0.4s, color 0.4s;
-    }
-    body.light .album {
-      background-color: #f2f2f2;
-      border: 1px solid #ccc;
-      color: #111;
-    }
-    .album img {
-      width: 100%;
-      height: auto;
-      margin-bottom: 10px;
-      border-radius: 6px;
-    }
-    .album-title {
-      font-size: 1rem;
-    }
-    .album-meta {
-      font-size: 0.85rem;
-      color: #999;
-    }
-    body.light .album-meta { color: #666; }
-
-    footer {
-      background-color: #0b0b0b;
-      padding: 40px 10%;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      color: #666;
-      font-size: 14px;
-      transition: background-color 0.4s, color 0.4s;
-    }
-    body.light footer {
-      background-color: #eee;
+    body.light nav a {
       color: #444;
     }
-    footer ul {
-      list-style: none;
-      display: flex;
-      gap: 30px;
-    }
-    footer a {
-      color: #888;
-      text-decoration: none;
-    }
-    footer a:hover {
+
+    nav a:hover {
       color: #e0c27b;
     }
 
@@ -166,16 +71,126 @@
       right: 20px;
       padding: 8px 16px;
       background: #e0c27b;
-      color: black;
+      color: #000;
       border: none;
       cursor: pointer;
-      z-index: 2000;
       border-radius: 5px;
-      user-select: none;
+      z-index: 2000;
+    }
+
+    .hero {
+      height: 100vh;
+      background: url("https://images.alphacoders.com/1118581/large.jpg") center/cover no-repeat;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding-left: 10%;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .hero-text {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+      color: #fff;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+    }
+
+    .section {
+      padding: 80px 10%;
+      background: #141414;
+      border-top: 1px solid #222;
+      transition: 0.4s;
+    }
+
+    body.light .section {
+      background: #fff;
+      border-top: 1px solid #ddd;
+    }
+
+    .section h2 {
+      color: #e0c27b;
+      margin-bottom: 20px;
+      font-size: 2rem;
+    }
+
+    .albums {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .album {
+      background: #1c1c1c;
+      padding: 20px;
+      border: 1px solid #333;
+      width: 220px;
+      transition: 0.4s;
+    }
+
+    body.light .album {
+      background: #f2f2f2;
+      border: 1px solid #ccc;
+      color: #111;
+    }
+
+    .album img {
+      width: 100%;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .album-title {
+      font-size: 1rem;
+    }
+
+    .album-meta {
+      font-size: 0.85rem;
+      color: #999;
+    }
+
+    body.light .album-meta {
+      color: #666;
+    }
+
+    footer {
+      background: #0b0b0b;
+      padding: 40px 10%;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      transition: 0.4s;
+    }
+
+    body.light footer {
+      background: #eee;
+      color: #444;
+    }
+
+    footer ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    footer a {
+      color: #888;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: #e0c27b;
     }
   </style>
 </head>
 <body>
+
   <button class="toggle-mode" onclick="document.body.classList.toggle('light')">🌙/☀️</button>
 
   <header>
@@ -195,8 +210,8 @@
     <div class="hero-text">
       <h1>幻想の響き</h1>
       <p>
-        消えゆく光の中で、<br />
-        声にならない音が未来を導く。<br />
+        消えゆく光の中で、<br>
+        声にならない音が未来を導く。<br>
         この世界の片隅で、私たちは出会う。
       </p>
     </div>
@@ -206,17 +221,17 @@
     <h2>ディスコグラフィー</h2>
     <div class="albums">
       <div class="album">
-        <img src="https://cdn.pixabay.com/photo/2020/05/08/09/35/anime-5149347_1280.jpg" alt="Album 1">
+        <img src="https://images.wall.alphacoders.com/1118581/large.jpg" alt="Album 1">
         <div class="album-title">夜を編む者たち</div>
         <div class="album-meta">2025年4月リリース</div>
       </div>
       <div class="album">
-        <img src="https://cdn.pixabay.com/photo/2021/10/19/13/26/anime-6728417_1280.jpg" alt="Album 2">
+        <img src="https://images.alphacoders.com/1064648/large.jpg" alt="Album 2">
         <div class="album-title">記憶の雫</div>
         <div class="album-meta">2025年2月リリース</div>
       </div>
       <div class="album">
-        <img src="https://cdn.pixabay.com/photo/2018/10/17/03/40/anime-3754118_1280.jpg" alt="Album 3">
+        <img src="https://images.wallpapers.com/dark/hoodie.jpg" alt="Album 3">
         <div class="album-title">光と影の間</div>
         <div class="album-meta">2024年12月リリース</div>
       </div>
@@ -224,12 +239,13 @@
   </section>
 
   <footer>
-    <p>© 2025 Tenshi Studio</p>
+    <p>©2025 Tenshi Studio</p>
     <ul>
       <li><a href="#">X</a></li>
       <li><a href="#">YouTube</a></li>
       <li><a href="#">Instagram</a></li>
     </ul>
   </footer>
+
 </body>
 </html>
