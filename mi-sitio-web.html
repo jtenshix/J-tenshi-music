@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MI PERSONAJE | 幻想の響き</title>
-  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     body {
-      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-family: "Zen Kaku Gothic New", sans-serif;
       background-color: #0b0b0b;
       color: #f0f0f0;
       overflow-x: hidden;
@@ -37,18 +44,27 @@
       text-decoration: none;
       letter-spacing: 2px;
     }
-    nav ul { display: flex; gap: 30px; list-style: none; }
+    nav ul {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
     nav a {
       text-decoration: none;
       color: #aaa;
       font-size: 16px;
       transition: color 0.3s;
     }
-    body.light nav a { color: #444; }
-    nav a:hover { color: #e0c27b; }
+    body.light nav a {
+      color: #444;
+    }
+    nav a:hover {
+      color: #e0c27b;
+    }
     .hero {
       height: 100vh;
-      background: url('https://rawpixel.com/image/12149158/anime-style-girl-illustration') center/cover no-repeat;
+      background: url("https://i.pinimg.com/originals/30/af/cf/30afcfbb5ca74894a5631df4e26982a6.jpg")
+        center/cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: flex-start;
@@ -56,10 +72,12 @@
       position: relative;
     }
     .hero::after {
-      content: '';
+      content: "";
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background-color: rgba(0, 0, 0, 0.6);
       z-index: 1;
     }
@@ -68,7 +86,7 @@
       z-index: 2;
       color: white;
       max-width: 600px;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     }
     .hero-text h1 {
       font-size: 3.5rem;
@@ -94,12 +112,16 @@
       color: #e0c27b;
       margin-bottom: 20px;
     }
-    .albums, .quotes, .timeline {
+    .albums,
+    .quotes,
+    .timeline {
       display: flex;
       flex-wrap: wrap;
       gap: 30px;
     }
-    .album, .quote-box, .timeline-box {
+    .album,
+    .quote-box,
+    .timeline-box {
       background-color: #1c1c1c;
       border: 1px solid #333;
       width: 220px;
@@ -107,7 +129,9 @@
       text-align: center;
       transition: background-color 0.4s, color 0.4s;
     }
-    body.light .album, body.light .quote-box, body.light .timeline-box {
+    body.light .album,
+    body.light .quote-box,
+    body.light .timeline-box {
       background-color: #f2f2f2;
       border: 1px solid #ccc;
       color: #111;
@@ -116,18 +140,25 @@
       width: 100%;
       height: auto;
       margin-bottom: 10px;
+      border-radius: 6px;
     }
     .album-title {
       font-size: 1rem;
     }
-    .album-meta, .quote, .timeline-date {
+    .album-meta,
+    .quote,
+    .timeline-date {
       font-size: 0.85rem;
       color: #999;
     }
-    body.light .album-meta, body.light .quote, body.light .timeline-date {
+    body.light .album-meta,
+    body.light .quote,
+    body.light .timeline-date {
       color: #666;
     }
-    .quote { font-style: italic; }
+    .quote {
+      font-style: italic;
+    }
     footer {
       background-color: #0b0b0b;
       padding: 40px 10%;
@@ -151,7 +182,9 @@
       color: #888;
       text-decoration: none;
     }
-    footer a:hover { color: #e0c27b; }
+    footer a:hover {
+      color: #e0c27b;
+    }
     .toggle-mode {
       position: fixed;
       top: 20px;
@@ -163,6 +196,7 @@
       cursor: pointer;
       z-index: 2000;
       border-radius: 5px;
+      user-select: none;
     }
   </style>
 </head>
@@ -185,8 +219,8 @@
     <div class="hero-text">
       <h1>幻想の響き</h1>
       <p>
-        消えゆく光の中で、<br>
-        声にならない音が未来を導く。<br>
+        消えゆく光の中で、<br />
+        声にならない音が未来を導く。<br />
         この世界の片隅で、私たちは出会う。
       </p>
     </div>
@@ -196,17 +230,26 @@
     <h2>ディスコグラフィー</h2>
     <div class="albums">
       <div class="album">
-        <img src="https://rawpixel.com/image/12149158/anime-style-girl-illustration" alt="Waifu 1">
+        <img
+          src="https://i.pinimg.com/originals/8a/ca/39/8aca3999ff20f3d9371b29a32a9278f8.jpg"
+          alt="KAF Album 1"
+        />
         <div class="album-title">夜を編む者たち</div>
         <div class="album-meta">2025年4月リリース</div>
       </div>
       <div class="album">
-        <img src="https://rawpixel.com/image/11816592/anime-girl-digital-art" alt="Waifu 2">
+        <img
+          src="https://i.pinimg.com/originals/4b/f2/9b/4bf29be1a0b2a3f6a9f780d317383350.jpg"
+          alt="KAF Album 2"
+        />
         <div class="album-title">記憶の雫</div>
         <div class="album-meta">2025年2月リリース</div>
       </div>
       <div class="album">
-        <img src="https://rawpixel.com/image/11823495/illustration-anime-girl" alt="Waifu 3">
+        <img
+          src="https://i.pinimg.com/originals/5d/d9/3a/5dd93a9982237d8283e16c82cfd1a978.jpg"
+          alt="KAF Album 3"
+        />
         <div class="album-title">光と影の間</div>
         <div class="album-meta">2024年12月リリース</div>
       </div>
