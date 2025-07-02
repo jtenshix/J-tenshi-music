@@ -1,251 +1,211 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MI PERSONAJE | 幻想の響き</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tenshi | 幻想の響き</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: sans-serif;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      font-family: 'Helvetica Neue', sans-serif;
       background: #0b0b0b;
-      color: #f0f0f0;
-      transition: 0.4s;
+      color: #f5f5f5;
       overflow-x: hidden;
     }
-
-    body.light {
-      background: #f8f8f8;
-      color: #111;
-    }
-
     header {
       position: fixed;
       top: 0;
       width: 100%;
-      padding: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 20px 5%;
       display: flex;
       justify-content: space-between;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 1000;
+      z-index: 999;
     }
-
-    body.light header {
-      background: rgba(255, 255, 255, 0.8);
+    header .logo {
+      color: #fff;
+      font-size: 20px;
+      letter-spacing: 2px;
     }
-
-    .logo {
-      font-size: 24px;
-      color: #e0c27b;
-      text-decoration: none;
-    }
-
     nav ul {
-      list-style: none;
       display: flex;
-      gap: 20px;
+      gap: 25px;
+      list-style: none;
     }
-
     nav a {
-      color: #aaa;
+      color: #ccc;
       text-decoration: none;
-      transition: 0.3s;
+      font-size: 14px;
     }
-
-    body.light nav a {
-      color: #444;
-    }
-
-    nav a:hover {
-      color: #e0c27b;
-    }
-
-    .toggle-mode {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 8px 16px;
-      background: #e0c27b;
-      color: #000;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-      z-index: 2000;
-    }
+    nav a:hover { color: #e0c27b; }
 
     .hero {
-      height: 100vh;
-      background: url("https://i.pinimg.com/736x/62/fb/f3/62fbf3b38b68e50c17cf0b9f91a7ca8c.jpg") center/cover no-repeat;
       position: relative;
-      display: flex;
-      align-items: center;
-      padding-left: 10%;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
     }
-
+    .hero img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 130vh;
+      object-fit: cover;
+      z-index: 0;
+      transform: translateY(0);
+      transition: transform 0.2s ease-out;
+    }
     .hero::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1;
     }
-
     .hero-text {
       position: relative;
-      z-index: 1;
-      max-width: 600px;
-      color: #fff;
+      z-index: 2;
+      color: white;
+      font-size: 2rem;
+      padding: 60px 5%;
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     }
 
     .section {
-      padding: 80px 10%;
-      background: #141414;
-      border-top: 1px solid #222;
-      transition: 0.4s;
+      padding: 80px 5%;
+      border-top: 1px solid #333;
     }
-
-    body.light .section {
-      background: #fff;
-      border-top: 1px solid #ddd;
-    }
-
     .section h2 {
-      color: #e0c27b;
+      font-size: 1.8rem;
       margin-bottom: 20px;
-      font-size: 2rem;
+      color: #e0c27b;
     }
 
-    .albums {
-      display: flex;
+    .albums, .news-list, .schedule-list, .movies {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 20px;
-      flex-wrap: wrap;
     }
-
-    .album {
-      background: #1c1c1c;
-      padding: 20px;
+    .card {
+      background: #1a1a1a;
+      padding: 15px;
       border: 1px solid #333;
-      width: 220px;
-      transition: 0.4s;
     }
-
-    body.light .album {
-      background: #f2f2f2;
-      border: 1px solid #ccc;
-      color: #111;
-    }
-
-    .album img {
+    .card img {
       width: 100%;
-      border-radius: 6px;
+      border-radius: 5px;
       margin-bottom: 10px;
     }
-
-    .album-title {
+    .card h3 {
       font-size: 1rem;
+      margin-bottom: 5px;
     }
-
-    .album-meta {
-      font-size: 0.85rem;
-      color: #999;
-    }
-
-    body.light .album-meta {
-      color: #666;
+    .card p {
+      font-size: 0.9rem;
+      color: #aaa;
     }
 
     footer {
-      background: #0b0b0b;
-      padding: 40px 10%;
+      background: #000;
+      padding: 40px 5%;
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
-      transition: 0.4s;
     }
-
-    body.light footer {
-      background: #eee;
-      color: #444;
-    }
-
-    footer ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-    }
-
     footer a {
       color: #888;
       text-decoration: none;
-    }
-
-    footer a:hover {
-      color: #e0c27b;
+      margin-right: 15px;
     }
   </style>
+  <script>
+    window.addEventListener('scroll', () => {
+      const img = document.querySelector('.hero img');
+      const scrollY = window.scrollY;
+      img.style.transform = `translateY(${scrollY * 0.3}px)`;
+    });
+  </script>
 </head>
 <body>
-
-  <button class="toggle-mode" onclick="document.body.classList.toggle('light')">🌙/☀️</button>
-
   <header>
-    <a href="#" class="logo">MI PERSONAJE</a>
+    <div class="logo">Tenshi</div>
     <nav>
       <ul>
-        <li><a href="#">Inicio</a></li>
-        <li><a href="#">Historia</a></li>
-        <li><a href="#">Obras</a></li>
-        <li><a href="#">Frases</a></li>
-        <li><a href="#">Contacto</a></li>
+        <li><a href="#discography">Discography</a></li>
+        <li><a href="#schedule">Schedule</a></li>
+        <li><a href="#news">News</a></li>
+        <li><a href="#movies">Movies</a></li>
       </ul>
     </nav>
   </header>
 
   <section class="hero">
+    <img src="https://i.pinimg.com/736x/62/fb/f3/62fbf3b38b68e50c17cf0b9f91a7ca8c.jpg" alt="Hero Image">
     <div class="hero-text">
-      <h1>幻想の響き</h1>
-      <p>
-        消えゆく光の中で、<br>
-        声にならない音が未来を導く。<br>
-        この世界の片隅で、私たちは出会う。
-      </p>
+      幻想の響き - Tenshi's World
     </div>
   </section>
 
-  <section class="section">
-    <h2>ディスコグラフィー</h2>
+  <section id="discography" class="section">
+    <h2>Discography</h2>
     <div class="albums">
-      <div class="album">
-        <img src="https://images.wall.alphacoders.com/1118581/large.jpg" alt="Album 1">
-        <div class="album-title">夜を編む者たち</div>
-        <div class="album-meta">2025年4月リリース</div>
+      <div class="card">
+        <img src="https://images.alphacoders.com/1064648/large.jpg" alt="Album">
+        <h3>記憶の雫</h3>
+        <p>2025年春</p>
       </div>
-      <div class="album">
-        <img src="https://images.alphacoders.com/1064648/large.jpg" alt="Album 2">
-        <div class="album-title">記憶の雫</div>
-        <div class="album-meta">2025年2月リリース</div>
+      <div class="card">
+        <img src="https://images.wall.alphacoders.com/1118581/large.jpg" alt="Album">
+        <h3>灯火</h3>
+        <p>2024年冬</p>
       </div>
-      <div class="album">
-        <img src="https://images.wallpapers.com/dark/hoodie.jpg" alt="Album 3">
-        <div class="album-title">光と影の間</div>
-        <div class="album-meta">2024年12月リリース</div>
+    </div>
+  </section>
+
+  <section id="schedule" class="section">
+    <h2>Schedule</h2>
+    <div class="schedule-list">
+      <div class="card">
+        <h3>NEW - 2025.07.10</h3>
+        <p>ライブ配信 - 星空の夜</p>
+      </div>
+      <div class="card">
+        <h3>2025.07.03</h3>
+        <p>インタビュー掲載 - AnimeStyle</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="news" class="section">
+    <h2>News</h2>
+    <div class="news-list">
+      <div class="card">
+        <h3>NEW アルバム予約開始！</h3>
+        <p>2025.07.01 - 特設サイトにて先行予約スタート</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="movies" class="section">
+    <h2>Movies</h2>
+    <div class="movies">
+      <div class="card">
+        <img src="https://images3.alphacoders.com/132/1329583.jpeg" alt="Movie">
+        <h3>光を追う</h3>
+        <p>Official Music Video</p>
       </div>
     </div>
   </section>
 
   <footer>
     <p>©2025 Tenshi Studio</p>
-    <ul>
-      <li><a href="#">X</a></li>
-      <li><a href="#">YouTube</a></li>
-      <li><a href="#">Instagram</a></li>
-    </ul>
+    <div>
+      <a href="#">Twitter</a>
+      <a href="#">YouTube</a>
+      <a href="#">Instagram</a>
+    </div>
   </footer>
-
 </body>
 </html>
