@@ -4,18 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MI PERSONAJE | 幻想の響き</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: "Zen Kaku Gothic New", sans-serif;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
       background-color: #0b0b0b;
       color: #f0f0f0;
       overflow-x: hidden;
@@ -55,12 +48,9 @@
       font-size: 16px;
       transition: color 0.3s;
     }
-    body.light nav a {
-      color: #444;
-    }
-    nav a:hover {
-      color: #e0c27b;
-    }
+    body.light nav a { color: #444; }
+    nav a:hover { color: #e0c27b; }
+
     .hero {
       height: 100vh;
       background: url("https://cdn.pixabay.com/photo/2017/10/04/23/42/anime-2814579_1280.jpg") center/cover no-repeat;
@@ -73,10 +63,7 @@
     .hero::after {
       content: "";
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0; width: 100%; height: 100%;
       background-color: rgba(0, 0, 0, 0.6);
       z-index: 1;
     }
@@ -96,6 +83,7 @@
       font-size: 1.2rem;
       line-height: 1.6;
     }
+
     .section {
       padding: 80px 10%;
       background-color: #141414;
@@ -111,16 +99,13 @@
       color: #e0c27b;
       margin-bottom: 20px;
     }
-    .albums,
-    .quotes,
-    .timeline {
+
+    .albums {
       display: flex;
       flex-wrap: wrap;
       gap: 30px;
     }
-    .album,
-    .quote-box,
-    .timeline-box {
+    .album {
       background-color: #1c1c1c;
       border: 1px solid #333;
       width: 220px;
@@ -128,9 +113,7 @@
       text-align: center;
       transition: background-color 0.4s, color 0.4s;
     }
-    body.light .album,
-    body.light .quote-box,
-    body.light .timeline-box {
+    body.light .album {
       background-color: #f2f2f2;
       border: 1px solid #ccc;
       color: #111;
@@ -144,20 +127,12 @@
     .album-title {
       font-size: 1rem;
     }
-    .album-meta,
-    .quote,
-    .timeline-date {
+    .album-meta {
       font-size: 0.85rem;
       color: #999;
     }
-    body.light .album-meta,
-    body.light .quote,
-    body.light .timeline-date {
-      color: #666;
-    }
-    .quote {
-      font-style: italic;
-    }
+    body.light .album-meta { color: #666; }
+
     footer {
       background-color: #0b0b0b;
       padding: 40px 10%;
@@ -184,6 +159,7 @@
     footer a:hover {
       color: #e0c27b;
     }
+
     .toggle-mode {
       position: fixed;
       top: 20px;
@@ -201,6 +177,7 @@
 </head>
 <body>
   <button class="toggle-mode" onclick="document.body.classList.toggle('light')">🌙/☀️</button>
+
   <header>
     <a href="#" class="logo">MI PERSONAJE</a>
     <nav>
@@ -229,61 +206,19 @@
     <h2>ディスコグラフィー</h2>
     <div class="albums">
       <div class="album">
-        <img
-          src="https://cdn.pixabay.com/photo/2017/10/04/23/42/anime-2814579_1280.jpg"
-          alt="Album 1"
-        />
+        <img src="https://cdn.pixabay.com/photo/2020/05/08/09/35/anime-5149347_1280.jpg" alt="Album 1">
         <div class="album-title">夜を編む者たち</div>
         <div class="album-meta">2025年4月リリース</div>
       </div>
       <div class="album">
-        <img
-          src="https://cdn.pixabay.com/photo/2020/05/08/09/35/anime-5149347_1280.jpg"
-          alt="Album 2"
-        />
+        <img src="https://cdn.pixabay.com/photo/2021/10/19/13/26/anime-6728417_1280.jpg" alt="Album 2">
         <div class="album-title">記憶の雫</div>
         <div class="album-meta">2025年2月リリース</div>
       </div>
       <div class="album">
-        <img
-          src="https://cdn.pixabay.com/photo/2021/10/19/13/26/anime-6728417_1280.jpg"
-          alt="Album 3"
-        />
+        <img src="https://cdn.pixabay.com/photo/2018/10/17/03/40/anime-3754118_1280.jpg" alt="Album 3">
         <div class="album-title">光と影の間</div>
         <div class="album-meta">2024年12月リリース</div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <h2>WORDS</h2>
-    <div class="quotes">
-      <div class="quote-box">
-        <div class="quote">"私はまだ、私自身を歌っている最中。"</div>
-      </div>
-      <div class="quote-box">
-        <div class="quote">"音にすべてを託したなら、それは誰かの心に届くかもしれない。"</div>
-      </div>
-      <div class="quote-box">
-        <div class="quote">"透明な感情の欠片が、今日も宙を舞う。"</div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <h2>HISTORY</h2>
-    <div class="timeline">
-      <div class="timeline-box">
-        <div class="timeline-date">2023</div>
-        <div class="quote">バーチャルデビュー</div>
-      </div>
-      <div class="timeline-box">
-        <div class="timeline-date">2024</div>
-        <div class="quote">初のアルバム「記憶の雫」リリース</div>
-      </div>
-      <div class="timeline-box">
-        <div class="timeline-date">2025</div>
-        <div class="quote">「夜を編む者たち」発売・初のライブイベント</div>
       </div>
     </div>
   </section>
