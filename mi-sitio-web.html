@@ -12,6 +12,11 @@
       background-color: #0b0b0b;
       color: #f0f0f0;
       overflow-x: hidden;
+      transition: background-color 0.4s, color 0.4s;
+    }
+    body.light {
+      background-color: #f8f8f8;
+      color: #111;
     }
     header {
       position: fixed;
@@ -22,6 +27,9 @@
       align-items: center;
       background-color: rgba(0, 0, 0, 0.8);
       z-index: 1000;
+    }
+    body.light header {
+      background-color: rgba(255, 255, 255, 0.8);
     }
     .logo {
       font-size: 24px;
@@ -36,10 +44,11 @@
       font-size: 16px;
       transition: color 0.3s;
     }
+    body.light nav a { color: #444; }
     nav a:hover { color: #e0c27b; }
     .hero {
       height: 100vh;
-      background: url('https://images.unsplash.com/photo-1635805737707-575885ab0820') center/cover no-repeat;
+      background: url('https://rawpixel.com/image/12149158/anime-style-girl-illustration') center/cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: flex-start;
@@ -74,6 +83,11 @@
       padding: 80px 10%;
       background-color: #141414;
       border-top: 1px solid #222;
+      transition: background-color 0.4s;
+    }
+    body.light .section {
+      background-color: #fff;
+      border-top: 1px solid #ddd;
     }
     .section h2 {
       font-size: 2rem;
@@ -91,6 +105,12 @@
       width: 220px;
       padding: 20px;
       text-align: center;
+      transition: background-color 0.4s, color 0.4s;
+    }
+    body.light .album, body.light .quote-box, body.light .timeline-box {
+      background-color: #f2f2f2;
+      border: 1px solid #ccc;
+      color: #111;
     }
     .album img {
       width: 100%;
@@ -99,11 +119,13 @@
     }
     .album-title {
       font-size: 1rem;
-      color: #f0f0f0;
     }
     .album-meta, .quote, .timeline-date {
       font-size: 0.85rem;
       color: #999;
+    }
+    body.light .album-meta, body.light .quote, body.light .timeline-date {
+      color: #666;
     }
     .quote { font-style: italic; }
     footer {
@@ -114,6 +136,11 @@
       flex-wrap: wrap;
       color: #666;
       font-size: 14px;
+      transition: background-color 0.4s, color 0.4s;
+    }
+    body.light footer {
+      background-color: #eee;
+      color: #444;
     }
     footer ul {
       list-style: none;
@@ -125,9 +152,22 @@
       text-decoration: none;
     }
     footer a:hover { color: #e0c27b; }
+    .toggle-mode {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 8px 16px;
+      background: #e0c27b;
+      color: black;
+      border: none;
+      cursor: pointer;
+      z-index: 2000;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
+  <button class="toggle-mode" onclick="document.body.classList.toggle('light')">🌙/☀️</button>
   <header>
     <a href="#" class="logo">MI PERSONAJE</a>
     <nav>
@@ -156,17 +196,17 @@
     <h2>ディスコグラフィー</h2>
     <div class="albums">
       <div class="album">
-        <img src="https://rawpixel.com/image/11823495/illustration-anime-girl" alt="Waifu 1">
+        <img src="https://rawpixel.com/image/12149158/anime-style-girl-illustration" alt="Waifu 1">
         <div class="album-title">夜を編む者たち</div>
         <div class="album-meta">2025年4月リリース</div>
       </div>
       <div class="album">
-        <img src="https://rawpixel.com/image/12149158/anime-style-girl-illustration" alt="Waifu 2">
+        <img src="https://rawpixel.com/image/11816592/anime-girl-digital-art" alt="Waifu 2">
         <div class="album-title">記憶の雫</div>
         <div class="album-meta">2025年2月リリース</div>
       </div>
       <div class="album">
-        <img src="https://rawpixel.com/image/11816592/anime-girl-digital-art" alt="Waifu 3">
+        <img src="https://rawpixel.com/image/11823495/illustration-anime-girl" alt="Waifu 3">
         <div class="album-title">光と影の間</div>
         <div class="album-meta">2024年12月リリース</div>
       </div>
