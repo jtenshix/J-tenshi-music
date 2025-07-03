@@ -41,7 +41,7 @@
 
     .hero-wrapper {
       position: relative;
-      height: 90vh;
+      height: 75vh;
       overflow: hidden;
     }
     .hero-bg {
@@ -49,8 +49,8 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 140vh;
-      background: url('https://i.pinimg.com/736x/62/fb/f3/62fbf3b38b68e50c17cf0b9f91a7ca8c.jpg') center top no-repeat;
+      height: 120vh;
+      background: url('https://i.pinimg.com/736x/62/fb/f3/62fbf3b38b68e50c17cf0b9f91a7ca8c.jpg') center center no-repeat;
       background-size: cover;
       z-index: 0;
       transform: translateY(0);
@@ -63,61 +63,47 @@
       font-size: 2rem;
       padding: 60px 5%;
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-      height: 90vh;
+      height: 75vh;
       display: flex;
       align-items: center;
     }
-    .social-icons {
-      position: absolute;
-      bottom: 5%;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 3;
-      display: flex;
-      gap: 20px;
-    }
-    .social-icons a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 20px;
-    }
-    .social-icons a:hover {
-      color: #e0c27b;
-    }
 
-    .section {
-      padding: 80px 5%;
-      border-top: 1px solid #333;
-      background-color: #0b0b0b;
-    }
-    .section h2 {
-      font-size: 1.8rem;
-      margin-bottom: 20px;
-      color: #e0c27b;
-    }
-
-    .albums, .news-list, .schedule-list, .movies {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: #1a1a1a;
-      padding: 15px;
-      border: 1px solid #333;
-    }
-    .card img {
+    .floating-socials {
       width: 100%;
-      border-radius: 5px;
-      margin-bottom: 10px;
+      background: #0b0b0b;
+      padding: 80px 0;
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      position: relative;
+      z-index: 10;
     }
-    .card h3 {
-      font-size: 1rem;
-      margin-bottom: 5px;
+    .floating-socials a svg {
+      width: 48px;
+      height: 48px;
+      fill: #fff;
+      transition: fill 0.3s ease, transform 0.3s ease;
     }
-    .card p {
-      font-size: 0.9rem;
-      color: #aaa;
+    .floating-socials a:hover svg {
+      fill: #e0c27b;
+      transform: scale(1.2);
+    }
+
+    section {
+      padding: 80px 5%;
+      background-color: #111;
+    }
+    section h2 {
+      font-size: 28px;
+      color: #e0c27b;
+      margin-bottom: 30px;
+    }
+    .album, .news, .schedule {
+      margin-bottom: 60px;
+    }
+    .album p, .news p, .schedule p {
+      color: #bbb;
+      font-size: 16px;
     }
 
     footer {
@@ -140,7 +126,6 @@
       bg.style.transform = `translateY(${scrollY * -0.2}px)`;
     });
   </script>
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <header>
@@ -160,63 +145,36 @@
     <div class="hero-text">
       幻想の響き - Tenshi's World
     </div>
-    <div class="social-icons">
-      <a href="#"><i class="fab fa-instagram"></i></a>
-      <a href="#"><i class="fab fa-facebook"></i></a>
-      <a href="#"><i class="fab fa-youtube"></i></a>
-      <a href="#"><i class="fab fa-spotify"></i></a>
-    </div>
   </div>
 
-  <section id="discography" class="section">
+  <div class="floating-socials">
+    <a href="#" title="Instagram">
+      <svg viewBox="0 0 448 512"><path d="M224,202.66A53.34,53.34,0,1,0,277.34,256,53.38,53.38,0,0,0,224,202.66Zm124.71-41a54,54,0,0,0-30.77-30.77C294.87,124,224,124,224,124s-70.87,0-93.94,6.89A54,54,0,0,0,99.29,161.71C92.4,184.78,92.4,256,92.4,256s0,71.22,6.89,94.29a54,54,0,0,0,30.77,30.77C153.13,388,224,388,224,388s70.87,0,93.94-6.89a54,54,0,0,0,30.77-30.77C355.6,327.22,355.6,256,355.6,256S355.6,184.78,348.71,161.71ZM224,338a82,82,0,1,1,82-82A82,82,0,0,1,224,338Zm85.33-148.19a19.2,19.2,0,1,1,19.2-19.2A19.19,19.19,0,0,1,309.33,189.81Z"/></svg>
+    </a>
+    <a href="#" title="Facebook">
+      <svg viewBox="0 0 320 512"><path d="M279.14 288l14.22-92.66h-88.91V141.09c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S293.55 0 263.7 0c-73.22 0-121.38 44.38-121.38 124.72V195.3H89.09V288h53.22v224h104.89V288z"/></svg>
+    </a>
+    <a href="#" title="YouTube">
+      <svg viewBox="0 0 576 512"><path d="M549.655 124.083c-6.281-23.65-24.797-42.207-48.415-48.528C465.9 64 288 64 288 64s-177.9 0-213.24 11.555c-23.618 6.32-42.134 24.877-48.415 48.528C16 159.5 16 256 16 256s0 96.5 10.345 131.917c6.281 23.65 24.797 42.207 48.415 48.528C110.1 448 288 448 288 448s177.9 0 213.24-11.555c23.618-6.32 42.134-24.877 48.415-48.528C560 352.5 560 256 560 256s0-96.5-10.345-131.917zM232 336V176l142.857 80L232 336z"/></svg>
+    </a>
+    <a href="#" title="Spotify">
+      <svg viewBox="0 0 496 512"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zM375 372c-4 6-11 8-17 4-45-27-101-33-168-17-7 1-14-3-16-10-3-8 2-16 10-18 75-18 140-11 193 21 7 4 9 13 4 20zm25-61c-5 7-14 10-22 5-51-31-129-40-188-21-9 3-18-2-21-11s2-18 11-21c71-22 159-12 219 25 7 4 9 14 5 23zm2-65c-60-36-160-39-218-20-11 3-22-3-25-14-3-11 3-22 14-25 71-22 183-18 255 24 10 6 13 20 7 30-6 10-20 13-30 7z"/></svg>
+    </a>
+  </div>
+
+  <section class="album" id="discography">
     <h2>Discography</h2>
-    <div class="albums">
-      <div class="card">
-        <img src="https://images.alphacoders.com/1064648/large.jpg" alt="Album">
-        <h3>記憶の雫</h3>
-        <p>2025年春</p>
-      </div>
-      <div class="card">
-        <img src="https://images.wall.alphacoders.com/1118581/large.jpg" alt="Album">
-        <h3>灯火</h3>
-        <p>2024年冬</p>
-      </div>
-    </div>
+    <p>Sample Album - "Eternal Echoes" (2025)</p>
   </section>
 
-  <section id="schedule" class="section">
-    <h2>Schedule</h2>
-    <div class="schedule-list">
-      <div class="card">
-        <h3>NEW - 2025.07.10</h3>
-        <p>ライブ配信 - 星空の夜</p>
-      </div>
-      <div class="card">
-        <h3>2025.07.03</h3>
-        <p>インタビュー掲載 - AnimeStyle</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="news" class="section">
+  <section class="news" id="news">
     <h2>News</h2>
-    <div class="news-list">
-      <div class="card">
-        <h3>NEW アルバム予約開始！</h3>
-        <p>2025.07.01 - 特設サイトにて先行予約スタート</p>
-      </div>
-    </div>
+    <p>New MV Coming Soon - July 10th, 2025</p>
   </section>
 
-  <section id="movies" class="section">
-    <h2>Movies</h2>
-    <div class="movies">
-      <div class="card">
-        <img src="https://images3.alphacoders.com/132/1329583.jpeg" alt="Movie">
-        <h3>光を追う</h3>
-        <p>Official Music Video</p>
-      </div>
-    </div>
+  <section class="schedule" id="schedule">
+    <h2>Schedule</h2>
+    <p>Live Performance - Tokyo Dome, August 14th</p>
   </section>
 
   <footer>
