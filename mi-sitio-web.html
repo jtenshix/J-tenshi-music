@@ -1,219 +1,347 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tenshi | 幻想の響き</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tenshi | 幻想の響き</title>
 
-  <!--
-    ====== ESTILOS PRINCIPALES ======
-    Aquí definimos la tipografía, colores, diseño fijo del header, el fondo y animaciones.
-  -->
-  <style>
-    /* Reset de márgenes y padding para todo */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    <style>
+    /* Reset de márgenes y padding para todo */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* Estilos base para html y body */
-    html, body {
-      font-family: 'Helvetica Neue', sans-serif;
-      background: #0b0b0b;  /* Fondo negro oscuro */
-      color: #f5f5f5;       /* Texto blanco */
-      overflow-x: hidden;   /* Evitar scroll horizontal */
-    }
+    /* Estilos base para html y body */
+    html, body {
+      font-family: 'Helvetica Neue', sans-serif;
+      background: #0b0b0b;  /* Fondo negro oscuro */
+      color: #f5f5f5;       /* Texto blanco */
+      overflow-x: hidden;   /* Evitar scroll horizontal */
+    }
 
-    /* ====== HEADER FIJO ====== */
-    header {
-      position: fixed;      /* Siempre visible arriba */
-      top: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.8); /* Fondo negro semi-transparente */
-      padding: 20px 5%;
-      display: flex;
-      justify-content: space-between;
-      z-index: 999;         /* Que quede arriba de todo */
-    }
-    header .logo {
-      color: #fff;
-      font-size: 20px;
-      letter-spacing: 2px;
-    }
+    /* ====== HEADER FIJO ====== */
+    header {
+      position: fixed;      /* Siempre visible arriba */
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.8); /* Fondo negro semi-transparente */
+      padding: 20px 5%;
+  	  display: flex;
+  	  justify-content: space-between;
+  	  align-items: center; /* Centrar verticalmente */
+  	  z-index: 999;         /* Que quede arriba de todo */
+  	  box-shadow: 0 2px 10px rgba(0,0,0,0.5); /* Sombra para profundidad */
+    }
+    header .logo {
+      color: #fff;
+      font-size: 20px;
+      letter-spacing: 2px;
+      text-transform: uppercase; /* Logo en mayúsculas */
+    }
 
-    /* Navegación */
-    nav ul {
-      display: flex;
-      gap: 25px;
-      list-style: none;
-    }
-    nav a {
-      color: #ccc;
-      text-decoration: none;
-      font-size: 14px;
-    }
-    nav a:hover { color: #e0c27b; } /* Color dorado al pasar el mouse */
+    /* Navegación */
+    nav ul {
+      display: flex;
+      gap: 25px;
+      list-style: none;
+  	  margin: 0; /* Asegurar que no haya margen */
+  	  padding: 0; /* Asegurar que no haya padding */
+    }
+  	nav a {
+  	  color: #ccc;
+  	  text-decoration: none;
+  	  font-size: 14px;
+  	  padding: 5px 0; /* Pequeño padding para el hover */
+  	  transition: color 0.3s ease;
+  	}
+  	nav a:hover { color: #e0c27b; } /* Color dorado al pasar el mouse */
 
-    /* ====== BANNER / PORTADA (HERO) ====== */
-    .hero-wrapper {
-      position: relative;
-      height: 75vh;           /* Alto relativo a la pantalla */
-      overflow: hidden;       /* Esconder lo que se salga */
-    }
-    .hero-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 120vh;          /* Un poco más alto para efecto scroll */
-      /* Aquí está la imagen de fondo que querés cambiar */
-      background: url('banner%20portada.png') center center no-repeat;
-      background-size: cover; /* La imagen cubre todo el espacio */
-      z-index: 0;
-      transform: translateY(0);
-      transition: transform 0.2s ease-out;
-    }
-    .hero-text {
-      position: relative;
-      z-index: 2;             /* Por encima del fondo */
-      color: white;
-      font-size: 2rem;
-      padding: 60px 5%;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6); /* Sombra para que resalte */
-      height: 75vh;
-      display: flex;
-      align-items: center;    /* Centrado vertical */
-    }
+  	/* Media Queries para Header */
+  	@media (max-width: 768px) {
+  	  header {
+  	    flex-direction: column;
+  	    align-items: flex-start; /* Alinear a la izquierda */
+  	    padding: 15px 5%;
+  	  }
+  	  header .logo { margin-bottom: 10px; }
+  	  nav ul { flex-direction: column; gap: 10px; }
+  	  nav a { font-size: 13px; }
+  	}
 
-    /* ====== ICONOS DE REDES SOCIALES FLOTANTES ====== */
-    .floating-socials {
-      width: 100%;
-      background: #0b0b0b;
-      padding: 80px 0;
-      display: flex;
-      justify-content: center;
-      gap: 60px;
-      position: relative;
-      z-index: 10;
-    }
-    .floating-socials a svg {
-      width: 48px;
-      height: 48px;
-      fill: #fff;
-      transition: fill 0.3s ease, transform 0.3s ease;
-    }
-    .floating-socials a:hover svg {
-      fill: #e0c27b;          /* Cambia a dorado al pasar el mouse */
-      transform: scale(1.2);  /* Se agranda */
-    }
 
-    /* ====== SECCIONES (Discografía, Noticias, Horarios) ====== */
-    section {
-      padding: 80px 5%;
-      background-color: #111; /* Fondo oscuro */
-    }
-    section h2 {
-      font-size: 28px;
-      color: #e0c27b;         /* Títulos dorados */
-      margin-bottom: 30px;
-    }
-    .album, .news, .schedule {
-      margin-bottom: 60px;
-    }
-    .album p, .news p, .schedule p {
-      color: #bbb;            /* Texto gris suave */
-      font-size: 16px;
-    }
+    /* ====== BANNER / PORTADA (HERO) ====== */
+    .hero-wrapper {
+      position: relative;
+      height: 75vh;           /* Alto relativo a la pantalla */
+      overflow: hidden;       /* Esconder lo que se salga */
+    }
+  	.hero-bg {
+  	  position: absolute;
+  	  top: 0;
+  	  left: 0;
+  	  width: 100%;
+  	  height: 120vh;          /* Un poco más alto para efecto scroll */
+  	  /* Aquí está la imagen de fondo que querés cambiar */
+  	  background: url('banner%20portada.png') center center no-repeat;
+  	  background-size: cover; /* La imagen cubre todo el espacio */
+  	  z-index: 0;
+  	  transform: translateY(0);
+  	  transition: transform 0.2s ease-out;
+  	}
+  	.hero-text {
+  	  position: relative;
+  	  z-index: 2;             /* Por encima del fondo */
+  	  color: white;
+  	  font-size: 2rem;
+  	  padding: 60px 5%;
+  	  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6); /* Sombra para que resalte */
+  	  height: 75vh;
+  	  display: flex;
+  	  flex-direction: column; /* Para apilar título y subtítulo */
+  	  justify-content: center; /* Centrado vertical */
+  	  align-items: flex-start; /* Alinear texto a la izquierda */
+  	}
+  	.hero-text h1 {
+  	  font-size: 3em; /* Título principal grande */
+  	  margin-bottom: 10px;
+  	  color: #fff; /* Asegurar color blanco */
+  	}
+  	.hero-text p {
+  	  font-size: 1.2em; /* Subtítulo */
+  	  color: #f0f0f0;
+  	}
 
-    /* ====== FOOTER ====== */
-    footer {
-      background: #000;
-      padding: 40px 5%;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-    footer a {
-      color: #888;
-      text-decoration: none;
-      margin-right: 15px;
-    }
-  </style>
+  	/* Media Query para Hero Text */
+  	@media (max-width: 768px) {
+  	  .hero-text h1 { font-size: 2.2em; }
+  	  .hero-text p { font-size: 1em; }
+  	}
+  	@media (max-width: 480px) {
+  	  .hero-text h1 { font-size: 1.8em; }
+  	  .hero-text p { font-size: 0.9em; }
+  	}
 
-  <!--
-    ====== ANIMACIÓN DE SCROLL PARA EL FONDO ======
-    El fondo del banner se mueve levemente hacia arriba cuando hacés scroll.
-  -->
-  <script>
-    window.addEventListener('scroll', () => {
-      const bg = document.querySelector('.hero-bg');
-      const scrollY = window.scrollY;
-      bg.style.transform = `translateY(${scrollY * -0.2}px)`;
-    });
-  </script>
+
+  	/* ====== ICONOS DE REDES SOCIALES FLOTANTES ====== */
+  	.floating-socials {
+  	  width: 100%;
+  	  background: #0b0b0b;
+  	  padding: 80px 0;
+  	  display: flex;
+  	  justify-content: center;
+  	  gap: 60px;
+  	  position: relative;
+  	  z-index: 10;
+  	}
+  	.floating-socials a svg {
+  	  width: 48px;
+  	  height: 48px;
+  	  fill: #fff;
+  	  transition: fill 0.3s ease, transform 0.3s ease;
+  	}
+  	.floating-socials a:hover svg {
+  	  fill: #e0c27b;          /* Cambia a dorado al pasar el mouse */
+  	  transform: scale(1.2);  /* Se agranda */
+  	}
+
+  	/* ====== SECCIONES (Discografía, Noticias, Horarios) ====== */
+  	section {
+  	  padding: 80px 5%;
+  	  background-color: #111; /* Fondo oscuro */
+  	}
+  	section h2 {
+  	  font-size: 28px;
+  	  color: #e0c27b;         /* Títulos dorados */
+  	  margin-bottom: 30px;
+  	  text-align: center; /* Centrar títulos de sección */
+  	}
+  	.album, .news, .schedule {
+  	  margin-bottom: 60px;
+  	}
+  	/* Esto será eliminado o modificado por contenido dinámico */
+  	.album p, .news p, .schedule p {
+  	  color: #bbb;            /* Texto gris suave */
+  	  font-size: 16px;
+  	}
+
+  	/* ESTILOS ESPECÍFICOS PARA EL CRONOGRAMA */
+  	.schedule-list {
+  	  display: grid;
+  	  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Columnas responsivas */
+  	  gap: 30px; /* Espacio entre eventos */
+  	}
+
+  	.schedule-item {
+  	  background-color: #1a1a1a; /* Fondo más claro para cada evento */
+  	  padding: 25px;
+  	  border-radius: 8px;
+  	  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra suave */
+  	  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  	}
+
+  	.schedule-item:hover {
+  	  transform: translateY(-5px); /* Pequeño levantamiento al pasar el mouse */
+  	  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  	}
+
+  	.schedule-item h3 {
+  	  color: #e0c27b; /* Título del evento en dorado */
+  	  font-size: 22px;
+  	  margin-bottom: 10px;
+  	}
+
+  	.schedule-item p {
+  	  color: #ccc; /* Texto del evento */
+  	  font-size: 15px;
+  	  line-height: 1.6;
+  	  margin-bottom: 8px;
+  	}
+
+  	.schedule-item .event-date {
+  	  font-weight: bold;
+  	  color: #fff; /* Fecha en blanco y negrita */
+  	}
+
+  	.schedule-item .event-location {
+  	  font-style: italic;
+  	  color: #aaa; /* Ubicación en cursiva y más tenue */
+  	}
+
+  	.schedule-item .event-link a {
+  	  color: #60a5fa; /* Enlace azul claro */
+  	  text-decoration: none;
+  	  font-weight: bold;
+  	  display: inline-block;
+  	  margin-top: 10px;
+  	}
+  	.schedule-item .event-link a:hover {
+  	  text-decoration: underline;
+  	}
+
+
+  	/* ====== FOOTER ====== */
+  	footer {
+  	  background: #000;
+  	  padding: 40px 5%;
+  	  display: flex;
+  	  justify-content: space-between;
+  	  flex-wrap: wrap;
+  	  align-items: center; /* Centrar elementos en el footer */
+  	  color: #888; /* Color base para el texto del footer */
+  	  font-size: 14px;
+  	}
+  	footer p { margin: 0; }
+  	footer div { margin-top: 10px; } /* Espacio en móvil */
+  	footer a {
+  	  color: #888;
+  	  text-decoration: none;
+  	  margin-right: 15px;
+  	  transition: color 0.3s ease;
+  	}
+  	footer a:hover { color: #e0c27b; }
+
+  	/* Media Query para Footer */
+  	@media (max-width: 480px) {
+  	  footer { flex-direction: column; text-align: center; }
+  	  footer div { margin-top: 15px; }
+  	}
+  </style>
+
+    <script>
+    window.addEventListener('scroll', () => {
+      const bg = document.querySelector('.hero-bg');
+      if (bg) { // Asegurarse de que el elemento exista
+        const scrollY = window.scrollY;
+        bg.style.transform = `translateY(${scrollY * -0.2}px)`;
+      }
+    });
+  </script>
 </head>
 
 <body>
-  <!-- ====== HEADER FIJO CON LOGO Y MENÚ ====== -->
-  <header>
-    <div class="logo">Tenshi</div>
-    <nav>
-      <ul>
-        <li><a href="#discography">Discography</a></li>
-        <li><a href="#schedule">Schedule</a></li>
-        <li><a href="#news">News</a></li>
-        <li><a href="#movies">Movies</a></li>
-      </ul>
-    </nav>
-  </header>
+    <header>
+    <div class="logo">Tenshi</div>
+    <nav>
+      <ul>
+        <li><a href="#discography">Discography</a></li>
+        <li><a href="#schedule">Schedule</a></li>
+        <li><a href="#news">News</a></li>
+        <li><a href="#movies">Movies</a></li>
+      </ul>
+    </nav>
+  </header>
 
-  <!-- ====== BANNER / PORTADA ====== -->
-  <div class="hero-wrapper">
-    <div class="hero-bg"></div>  <!-- Fondo con tu imagen 'banner portada.png' -->
-    <div class="hero-text">
-      幻想の響き - Tenshi's World
-    </div>
-  </div>
+    <div class="hero-wrapper">
+    <div class="hero-bg"></div>      <div class="hero-text" id="hero-dynamic-content">
+            <h1>Tenshi | 幻想の響き</h1>
+      <p>Sumérgete en el mundo de la música y la fantasía.</p>
+    </div>
+  </div>
 
-  <!-- ====== ICONOS DE REDES SOCIALES ====== -->
-  <div class="floating-socials">
-    <a href="#" title="Instagram">
-      <svg viewBox="0 0 448 512"><path d="M224,202.66A53.34,53.34,0,1,0,277.34,256,53.38,53.38,0,0,0,224,202.66Zm124.71-41a54,54,0,0,0-30.77-30.77C294.87,124,224,124,224,124s-70.87,0-93.94,6.89A54,54,0,0,0,99.29,161.71C92.4,184.78,92.4,256,92.4,256s0,71.22,6.89,94.29a54,54,0,0,0,30.77,30.77C153.13,388,224,388,224,388s70.87,0,93.94-6.89a54,54,0,0,0,30.77-30.77C355.6,327.22,355.6,256,355.6,256S355.6,184.78,348.71,161.71ZM224,338a82,82,0,1,1,82-82A82,82,0,0,1,224,338Zm85.33-148.19a19.2,19.2,0,1,1,19.2-19.2A19.19,19.19,0,0,1,309.33,189.81Z"/></svg>
-    </a>
-    <a href="#" title="Facebook">
-      <svg viewBox="0 0 320 512"><path d="M279.14 288l14.22-92.66h-88.91V141.09c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S293.55 0 263.7 0c-73.22 0-121.38 44.38-121.38 124.72V195.3H89.09V288h53.22v224h104.89V288z"/></svg>
-    </a>
-    <a href="#" title="YouTube">
-      <svg viewBox="0 0 576 512"><path d="M549.655 124.083c-6.281-23.65-24.797-42.207-48.415-48.528C465.9 64 288 64 288 64s-177.9 0-213.24 11.555c-23.618 6.32-42.134 24.877-48.415 48.528C16 159.5 16 256 16 256s0 96.5 10.345 131.917c6.281 23.65 24.797 42.207 48.415 48.528C110.1 448 288 448 288 448s177.9 0 213.24-11.555c23.618-6.32 42.134-24.877 48.415-48.528C560 352.5 560 256 560 256s0-96.5-10.345-131.917zM232 336V176l142.857 80L232 336z"/></svg>
-    </a>
-    <a href="#" title="Spotify">
-      <svg viewBox="0 0 496 512"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zM375 372c-4 6-11 8-17 4-45-27-101-33-168-17-7 1-14-3-16-10-3-8 2-16 10-18 75-18 140-11 193 21 7 4 9 13 4 20zm25-61c-5 7-14 10-22 5-51-31-129-40-188-21-9 3-18-2-21-11s2-18 11-21c71-22 159-12 219 25 7 4 9 14 5 23zm2-65c-60-36-160-39-218-20-11 3-22-3-25-14-3-11 3-22 14-25 71-22 183-18 255 24 10 6 13 20 7 30-6 10-20 13-30 7z"/></svg>
-    </a>
-  </div>
+    <div class="floating-socials">
+    <a href="#" title="Instagram">
+      <svg viewBox="0 0 448 512"><path d="M224,202.66A53.34,53.34,0,1,0,277.34,256,53.38,53.38,0,0,0,224,202.66Zm124.71-41a54,54,0,0,0-30.77-30.77C294.87,124,224,124,224,124s-70.87,0-93.94,6.89A54,54,0,0,0,99.29,161.71C92.4,184.78,92.4,256,92.4,256s0,71.22,6.89,94.29a54,54,0,0,0,30.77,30.77C153.13,388,224,388,224,388s70.87,0,93.94-6.89a54,54,0,0,0,30.77-30.77C355.6,327.22,355.6,256,355.6,256S355.6,184.78,348.71,161.71ZM224,338a82,82,0,1,1,82-82A82,82,0,0,1,224,338Zm85.33-148.19a19.2,19.2,0,1,1,19.2-19.2A19.19,19.19,0,0,1,309.33,189.81Z"/></svg>
+    </a>
+    <a href="#" title="Facebook">
+      <svg viewBox="0 0 320 512"><path d="M279.14 288l14.22-92.66h-88.91V141.09c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S293.55 0 263.7 0c-73.22 0-121.38 44.38-121.38 124.72V195.3H89.09V288h53.22v224h104.89V288z"/></svg>
+    </a>
+    <a href="#" title="YouTube">
+      <svg viewBox="0 0 576 512"><path d="M549.655 124.083c-6.281-23.65-24.797-42.207-48.415-48.528C465.9 64 288 64 288 64s-177.9 0-213.24 11.555c-23.618 6.32-42.134 24.877-48.415 48.528C16 159.5 16 256 16 256s0 96.5 10.345 131.917c6.281 23.65 24.797 42.207 48.415 48.528C110.1 448 288 448 288 448s177.9 0 213.24-11.555c23.618-6.32 42.134-24.877 48.415-48.528C560 352.5 560 256 560 256s0-96.5-10.345-131.917zM232 336V176l142.857 80L232 336z"/></svg>
+    </a>
+    <a href="#" title="Spotify">
+      <svg viewBox="0 0 496 512"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zM375 372c-4 6-11 8-17 4-45-27-101-33-168-17-7 1-14-3-16-10-3-8 2-16 10-18 75-18 140-11 193 21 7 4 9 13 4 20zm25-61c-5 7-14 10-22 5-51-31-129-40-188-21-9 3-18-2-21-11s2-18 11-21c71-22 159-12 219 25 7 4 9 14 5 23zm2-65c-60-36-160-39-218-20-11 3-22-3-25-14-3-11 3-22 14-25 71-22 183-18 255 24 10 6 13 20 7 30-6 10-20 13-30 7z"/></svg>
+    </a>
+  </div>
 
-  <!-- ====== SECCIÓN DE DISCOGRAFÍA ====== -->
-  <section class="album" id="discography">
-    <h2>Discography</h2>
-    <p>Sample Album - "Eternal Echoes" (2025)</p>
-  </section>
+    <section class="album" id="discography">
+    <h2>Discography</h2>
+        <div id="discography-list">
+            <div class="album-item">
+        <h3>[Título del Álbum Aquí]</h3>
+        <p class="album-year">[Año de Lanzamiento]</p>
+        <p>[Descripción corta del álbum. Lorem ipsum dolor sit amet.]</p>
+              </div>
+          </div>
+  </section>
 
-  <!-- ====== SECCIÓN DE NOTICIAS ====== -->
-  <section class="news" id="news">
-    <h2>News</h2>
-    <p>New MV Coming Soon - July 10th, 2025</p>
-  </section>
+    <section class="news" id="news">
+    <h2>News</h2>
+        <div id="news-list">
+            <div class="news-item">
+        <h3>[Título de la Noticia]</h3>
+        <p class="news-date">[Fecha: 01/01/2025]</p>
+        <p>[Cuerpo de la noticia o resumen. Lorem ipsum dolor sit amet, consectetur adipiscing elit.]</p>
+              </div>
+          </div>
+  </section>
 
-  <!-- ====== SECCIÓN DE HORARIOS ====== -->
-  <section class="schedule" id="schedule">
-    <h2>Schedule</h2>
-    <p>Live Performance - Tokyo Dome, August 14th</p>
-  </section>
+    <section class="schedule" id="schedule">
+    <h2>Cronograma de Eventos</h2>
+        <div id="schedule-list" class="schedule-list">
+            <div class="schedule-item">
+        <h3>[Nombre del Evento, ej. Concierto KAF en Chile]</h3>
+        <p class="event-date">[Fecha y Hora: DD/MM/AAAA - HH:MM]</p>
+        <p class="event-location">[Ubicación: Ciudad, País / Nombre del lugar]</p>
+        <p>[Descripción corta del evento. Por ejemplo, detalles de la presentación.]</p>
+        <p class="event-link"><a href="#">[Enlace a Entradas/Más info]</a></p>
+      </div>
 
-  <!-- ====== FOOTER ====== -->
-  <footer>
-    <p>©2025 Tenshi Studio</p>
-    <div>
-      <a href="#">Twitter</a>
-      <a href="#">YouTube</a>
-      <a href="#">Instagram</a>
-    </div>
-  </footer>
+            <div class="schedule-item">
+        <h3>[Nombre del Segundo Evento, ej. Firma de Autógrafos]</h3>
+        <p class="event-date">[Fecha y Hora: DD/MM/AAAA - HH:MM]</p>
+        <p class="event-location">[Ubicación: Tienda X, Ciudad]</p>
+        <p>[Detalles sobre este evento.]</p>
+        <p class="event-link"><a href="#">[Enlace a Más detalles]</a></p>
+      </div>
+
+          </div>
+  </section>
+
+    <footer>
+    <p>©2025 Tenshi Studio</p>
+    <div>
+      <a href="#">Twitter</a>
+      <a href="#">YouTube</a>
+      <a href="#">Instagram</a>
+    </div>
+  </footer>
 </body>
 </html>
