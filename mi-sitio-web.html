@@ -24,55 +24,35 @@
       width: 100%;
       background: rgba(0, 0, 0, 0.8); /* Fondo negro semi-transparente */
       padding: 20px 5%;
-  	  display: flex;
-  	  justify-content: space-between;
-  	  align-items: center; /* Centrar verticalmente */
-  	  z-index: 999;         /* Que quede arriba de todo */
-  	  box-shadow: 0 2px 10px rgba(0,0,0,0.5); /* Sombra para profundidad */
+      display: flex;
+      justify-content: space-between;
+      z-index: 999;         /* Que quede arriba de todo */
     }
     header .logo {
-      color: #fff;
-      font-size: 20px;
-      letter-spacing: 2px;
-      text-transform: uppercase; /* Logo en mayúsculas */
-    }
+  	  color: #fff;
+  	  font-size: 20px;
+  	  letter-spacing: 2px;
+  	}
 
-    /* Navegación */
-    nav ul {
-      display: flex;
-      gap: 25px;
-      list-style: none;
-  	  margin: 0; /* Asegurar que no haya margen */
-  	  padding: 0; /* Asegurar que no haya padding */
-    }
+  	/* Navegación */
+  	nav ul {
+  	  display: flex;
+  	  gap: 25px;
+  	  list-style: none;
+  	}
   	nav a {
   	  color: #ccc;
   	  text-decoration: none;
   	  font-size: 14px;
-  	  padding: 5px 0; /* Pequeño padding para el hover */
-  	  transition: color 0.3s ease;
   	}
   	nav a:hover { color: #e0c27b; } /* Color dorado al pasar el mouse */
 
-  	/* Media Queries para Header */
-  	@media (max-width: 768px) {
-  	  header {
-  	    flex-direction: column;
-  	    align-items: flex-start; /* Alinear a la izquierda */
-  	    padding: 15px 5%;
-  	  }
-  	  header .logo { margin-bottom: 10px; }
-  	  nav ul { flex-direction: column; gap: 10px; }
-  	  nav a { font-size: 13px; }
+  	/* ====== BANNER / PORTADA (HERO) ====== */
+  	.hero-wrapper {
+  	  position: relative;
+  	  height: 75vh;           /* Alto relativo a la pantalla */
+  	  overflow: hidden;       /* Esconder lo que se salga */
   	}
-
-
-    /* ====== BANNER / PORTADA (HERO) ====== */
-    .hero-wrapper {
-      position: relative;
-      height: 75vh;           /* Alto relativo a la pantalla */
-      overflow: hidden;       /* Esconder lo que se salga */
-    }
   	.hero-bg {
   	  position: absolute;
   	  top: 0;
@@ -95,30 +75,8 @@
   	  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6); /* Sombra para que resalte */
   	  height: 75vh;
   	  display: flex;
-  	  flex-direction: column; /* Para apilar título y subtítulo */
-  	  justify-content: center; /* Centrado vertical */
-  	  align-items: flex-start; /* Alinear texto a la izquierda */
+  	  align-items: center;    /* Centrado vertical */
   	}
-  	.hero-text h1 {
-  	  font-size: 3em; /* Título principal grande */
-  	  margin-bottom: 10px;
-  	  color: #fff; /* Asegurar color blanco */
-  	}
-  	.hero-text p {
-  	  font-size: 1.2em; /* Subtítulo */
-  	  color: #f0f0f0;
-  	}
-
-  	/* Media Query para Hero Text */
-  	@media (max-width: 768px) {
-  	  .hero-text h1 { font-size: 2.2em; }
-  	  .hero-text p { font-size: 1em; }
-  	}
-  	@media (max-width: 480px) {
-  	  .hero-text h1 { font-size: 1.8em; }
-  	  .hero-text p { font-size: 0.9em; }
-  	}
-
 
   	/* ====== ICONOS DE REDES SOCIALES FLOTANTES ====== */
   	.floating-socials {
@@ -151,71 +109,79 @@
   	  font-size: 28px;
   	  color: #e0c27b;         /* Títulos dorados */
   	  margin-bottom: 30px;
-  	  text-align: center; /* Centrar títulos de sección */
   	}
   	.album, .news, .schedule {
   	  margin-bottom: 60px;
   	}
-  	/* Esto será eliminado o modificado por contenido dinámico */
-  	.album p, .news p, .schedule p {
+  	.album p, .news p { /* Mantener los estilos originales para estas secciones */
   	  color: #bbb;            /* Texto gris suave */
   	  font-size: 16px;
   	}
 
-  	/* ESTILOS ESPECÍFICOS PARA EL CRONOGRAMA */
-  	.schedule-list {
-  	  display: grid;
-  	  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Columnas responsivas */
-  	  gap: 30px; /* Espacio entre eventos */
-  	}
+    /* ====== ESTILOS ESPECÍFICOS PARA EL CRONOGRAMA ====== */
+    /* Contenedor de la lista de eventos */
+    .schedule-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Columnas responsivas */
+        gap: 30px; /* Espacio entre eventos */
+        padding: 0; /* Asegurarse de que no haya padding de lista por defecto */
+        list-style: none; /* Quitar viñetas si se usa ul/li */
+    }
 
-  	.schedule-item {
-  	  background-color: #1a1a1a; /* Fondo más claro para cada evento */
-  	  padding: 25px;
-  	  border-radius: 8px;
-  	  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra suave */
-  	  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  	}
+    /* Estilo de cada elemento individual del cronograma */
+    .schedule-item {
+        background-color: #1a1a1a; /* Fondo más claro para cada evento */
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra suave */
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column; /* Apilar contenido */
+        justify-content: space-between; /* Espacio entre elementos */
+    }
 
-  	.schedule-item:hover {
-  	  transform: translateY(-5px); /* Pequeño levantamiento al pasar el mouse */
-  	  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
-  	}
+    .schedule-item:hover {
+        transform: translateY(-5px); /* Pequeño levantamiento al pasar el mouse */
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    }
 
-  	.schedule-item h3 {
-  	  color: #e0c27b; /* Título del evento en dorado */
-  	  font-size: 22px;
-  	  margin-bottom: 10px;
-  	}
+    .schedule-item h3 {
+        color: #e0c27b; /* Título del evento en dorado */
+        font-size: 22px;
+        margin-bottom: 10px;
+        word-wrap: break-word; /* Evitar que el texto se salga */
+    }
 
-  	.schedule-item p {
-  	  color: #ccc; /* Texto del evento */
-  	  font-size: 15px;
-  	  line-height: 1.6;
-  	  margin-bottom: 8px;
-  	}
+    .schedule-item p {
+        color: #ccc; /* Texto del evento */
+        font-size: 15px;
+        line-height: 1.6;
+        margin-bottom: 8px;
+    }
 
-  	.schedule-item .event-date {
-  	  font-weight: bold;
-  	  color: #fff; /* Fecha en blanco y negrita */
-  	}
+    .schedule-item .event-date {
+        font-weight: bold;
+        color: #fff; /* Fecha en blanco y negrita */
+    }
 
-  	.schedule-item .event-location {
-  	  font-style: italic;
-  	  color: #aaa; /* Ubicación en cursiva y más tenue */
-  	}
+    .schedule-item .event-location {
+        font-style: italic;
+        color: #aaa; /* Ubicación en cursiva y más tenue */
+    }
 
-  	.schedule-item .event-link a {
-  	  color: #60a5fa; /* Enlace azul claro */
-  	  text-decoration: none;
-  	  font-weight: bold;
-  	  display: inline-block;
-  	  margin-top: 10px;
-  	}
-  	.schedule-item .event-link a:hover {
-  	  text-decoration: underline;
-  	}
-
+    .schedule-item .event-link {
+        margin-top: auto; /* Empuja el enlace al final si el contenido es variable */
+    }
+    .schedule-item .event-link a {
+        color: #60a5fa; /* Enlace azul claro */
+        text-decoration: none;
+        font-weight: bold;
+        display: inline-block;
+        margin-top: 10px;
+    }
+    .schedule-item .event-link a:hover {
+        text-decoration: underline;
+    }
 
   	/* ====== FOOTER ====== */
   	footer {
@@ -224,31 +190,18 @@
   	  display: flex;
   	  justify-content: space-between;
   	  flex-wrap: wrap;
-  	  align-items: center; /* Centrar elementos en el footer */
-  	  color: #888; /* Color base para el texto del footer */
-  	  font-size: 14px;
   	}
-  	footer p { margin: 0; }
-  	footer div { margin-top: 10px; } /* Espacio en móvil */
   	footer a {
   	  color: #888;
   	  text-decoration: none;
   	  margin-right: 15px;
-  	  transition: color 0.3s ease;
-  	}
-  	footer a:hover { color: #e0c27b; }
-
-  	/* Media Query para Footer */
-  	@media (max-width: 480px) {
-  	  footer { flex-direction: column; text-align: center; }
-  	  footer div { margin-top: 15px; }
   	}
   </style>
 
     <script>
     window.addEventListener('scroll', () => {
       const bg = document.querySelector('.hero-bg');
-      if (bg) { // Asegurarse de que el elemento exista
+      if (bg) { // Añadir esta verificación para evitar errores si el elemento no existe por alguna razón
         const scrollY = window.scrollY;
         bg.style.transform = `translateY(${scrollY * -0.2}px)`;
       }
@@ -270,9 +223,8 @@
   </header>
 
     <div class="hero-wrapper">
-    <div class="hero-bg"></div>      <div class="hero-text" id="hero-dynamic-content">
-            <h1>Tenshi | 幻想の響き</h1>
-      <p>Sumérgete en el mundo de la música y la fantasía.</p>
+    <div class="hero-bg"></div>      <div class="hero-text">
+      幻想の響き - Tenshi's World
     </div>
   </div>
 
@@ -293,24 +245,12 @@
 
     <section class="album" id="discography">
     <h2>Discography</h2>
-        <div id="discography-list">
-            <div class="album-item">
-        <h3>[Título del Álbum Aquí]</h3>
-        <p class="album-year">[Año de Lanzamiento]</p>
-        <p>[Descripción corta del álbum. Lorem ipsum dolor sit amet.]</p>
-              </div>
-          </div>
+    <p>Sample Album - "Eternal Echoes" (2025)</p>
   </section>
 
     <section class="news" id="news">
     <h2>News</h2>
-        <div id="news-list">
-            <div class="news-item">
-        <h3>[Título de la Noticia]</h3>
-        <p class="news-date">[Fecha: 01/01/2025]</p>
-        <p>[Cuerpo de la noticia o resumen. Lorem ipsum dolor sit amet, consectetur adipiscing elit.]</p>
-              </div>
-          </div>
+    <p>New MV Coming Soon - July 10th, 2025</p>
   </section>
 
     <section class="schedule" id="schedule">
