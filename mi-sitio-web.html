@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tenshi | 幻想の響き</title>
 
-  <!-- ====== ESTILOS PRINCIPALES ====== -->
   <style>
+    /* ============ ESTILOS BASE ============ */
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     html, body {
       font-family: 'Helvetica Neue', sans-serif;
       background: #0b0b0b;
@@ -31,7 +30,6 @@
       font-size: 20px;
       letter-spacing: 2px;
     }
-
     nav ul {
       display: flex;
       gap: 25px;
@@ -44,7 +42,7 @@
     }
     nav a:hover { color: #e0c27b; }
 
-    /* ====== BANNER / PORTADA (REEMPLAZADO CON TU IMAGEN) ====== */
+    /* ============ HERO / BANNER ============ */
     .hero-wrapper {
       position: relative;
       height: 75vh;
@@ -74,7 +72,7 @@
       align-items: center;
     }
 
-    /* ====== REDES SOCIALES ====== */
+    /* ============ REDES SOCIALES ============ */
     .floating-socials {
       width: 100%;
       background: #0b0b0b;
@@ -96,55 +94,75 @@
       transform: scale(1.2);
     }
 
-    /* ====== SECCIONES GENERALES ====== */
-    section {
+    /* ============ SECCIÓN SCHEDULE (ESTILO KAF) ============ */
+    .schedule {
       padding: 80px 5%;
       background-color: #111;
     }
-    section h2 {
-      font-size: 28px;
-      color: #e0c27b;
-      margin-bottom: 30px;
+    .schedule h2 {
+      font-size: 32px;
+      color: #fff;
+      margin-bottom: 10px;
     }
-    .album, .news {
-      margin-bottom: 60px;
+    .schedule h2 span {
+      font-size: 14px;
+      color: #ccc;
     }
 
-    /* ====== EVENTOS (ESTILO NUEVO TIPO KAF) ====== */
-    .event-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 40px;
+    .schedule-filters {
+      margin-bottom: 20px;
     }
-    .evento {
-      background: #1a1a1a;
-      padding: 20px;
-      border-radius: 10px;
+    .schedule-filters button {
+      background: none;
+      border: none;
+      color: #ccc;
+      margin-right: 15px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .schedule-filters button.active {
+      color: #e0c27b;
+    }
+
+    .schedule-list {
+      list-style: none;
+      padding: 0;
+    }
+    .schedule-list li {
+      margin-bottom: 16px;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .schedule-list li img {
+      width: 200px;
+      height: auto;
+      margin-right: 20px;
+      border-radius: 6px;
+    }
+    .schedule-list li .info {
+      flex: 1;
+    }
+    .schedule-list li .info p {
+      margin: 4px 0;
       color: #fff;
     }
-    .evento img {
-      width: 100%;
-      border-radius: 10px;
-    }
-    .evento .etiqueta {
-      display: inline-block;
-      border: 1px solid #fff;
-      padding: 3px 10px;
+    .label {
+      border: 1px solid #e0c27b;
+      padding: 2px 6px;
       font-size: 12px;
+      color: #e0c27b;
       margin-left: 10px;
     }
-    .evento .new {
-      display: inline-block;
+    .new {
       background: #000;
       color: #fff;
-      padding: 3px 8px;
-      border-radius: 999px;
+      padding: 2px 6px;
       font-size: 12px;
-      font-weight: bold;
-      margin-right: 8px;
+      border-radius: 999px;
+      margin-right: 10px;
     }
 
-    /* ====== FOOTER ====== */
+    /* ============ FOOTER ============ */
     footer {
       background: #000;
       padding: 40px 5%;
@@ -159,8 +177,8 @@
     }
   </style>
 
-  <!-- ====== EFECTO SCROLL EN BANNER ====== -->
   <script>
+    // Efecto parallax del banner
     window.addEventListener('scroll', () => {
       const bg = document.querySelector('.hero-bg');
       const scrollY = window.scrollY;
@@ -170,7 +188,7 @@
 </head>
 
 <body>
-  <!-- ====== HEADER ====== -->
+  <!-- ============ HEADER ============ -->
   <header>
     <div class="logo">Tenshi</div>
     <nav>
@@ -183,36 +201,33 @@
     </nav>
   </header>
 
-  <!-- ====== BANNER / HERO ====== -->
+  <!-- ============ HERO / PORTADA ============ -->
   <div class="hero-wrapper">
     <div class="hero-bg"></div>
     <div class="hero-text">幻想の響き - Tenshi's World</div>
   </div>
 
-  <!-- ====== REDES SOCIALES ====== -->
+  <!-- ============ REDES SOCIALES ============ -->
   <div class="floating-socials">
-    <!-- (SVGs recortados para acortar el mensaje) -->
+    <!-- Instagram, Facebook, YouTube, Spotify -->
+    <!-- Tus SVGs van aquí como ya estaban -->
   </div>
 
-  <!-- ====== DISCOGRAFÍA ====== -->
-  <section class="album" id="discography">
-    <h2>Discography</h2>
-    <p>Sample Album - "Eternal Echoes" (2025)</p>
-  </section>
-
-  <!-- ====== NOTICIAS ====== -->
-  <section class="news" id="news">
-    <h2>News</h2>
-    <p>New MV Coming Soon - July 10th, 2025</p>
-  </section>
-
-  <!-- ====== NUEVA SECCIÓN DE EVENTOS / SCHEDULE ====== -->
+  <!-- ============ SECCIÓN SCHEDULE ============ -->
   <section class="schedule" id="schedule">
-    <h2>Schedule</h2>
-    <div class="event-grid" id="eventos"></div>
+    <h2>SCHEDULE <span>スケジュール</span></h2>
+
+    <nav class="schedule-filters">
+      <button data-filter="all" class="active">ALL</button>
+      <button data-filter="LIVE">LIVE</button>
+      <button data-filter="RELEASE">RELEASE</button>
+      <button data-filter="EXHIBITION">EXHIBITION</button>
+    </nav>
+
+    <ul class="schedule-list" id="eventos"></ul>
   </section>
 
-  <!-- ====== FOOTER ====== -->
+  <!-- ============ FOOTER ============ -->
   <footer>
     <p>©2025 Tenshi Studio</p>
     <div>
@@ -222,26 +237,10 @@
     </div>
   </footer>
 
-  <!-- ====== SCRIPT PARA CARGAR EVENTOS DESDE JSON ====== -->
+  <!-- ============ SCRIPT PARA CARGAR EVENTOS ============ -->
   <script>
     fetch('events.json')
       .then(res => res.json())
       .then(data => {
-        const contenedor = document.getElementById('eventos');
-        data.forEach(evento => {
-          contenedor.innerHTML += `
-            <div class="evento">
-              <img src="${evento.imagen}" alt="${evento.titulo}">
-              <p>
-                ${evento.nuevo ? '<span class="new">NEW</span>' : ''}
-                <strong>${evento.fecha}</strong>
-                <span class="etiqueta">${evento.tipo}</span>
-              </p>
-              <p>${evento.titulo}</p>
-            </div>
-          `;
-        });
-      });
-  </script>
-</body>
-</html>
+        const cont = document.getElementById('eventos');
+        data.forEach(e => {
