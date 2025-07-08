@@ -142,25 +142,29 @@
     /* Noticia grande */
     .main-news {
       flex: 2;
-      background: #222;
-      border-radius: 12px;
-      padding: 25px;
+      background: linear-gradient(135deg, #1f2937, #4c51bf);
+      border-radius: 16px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       gap: 15px;
-      min-height: 480px;
-      box-shadow: 0 0 15px rgba(224, 194, 123, 0.3);
+      min-height: 400px;
+      max-height: 420px;
+      box-shadow: 0 0 20px rgba(76, 81, 191, 0.8);
+      color: #fff;
     }
     .main-news img {
-      width: 100%;
-      border-radius: 10px;
+      max-height: 200px;
+      border-radius: 12px;
       object-fit: cover;
-      max-height: 280px;
+      margin-bottom: 15px;
     }
     .main-news .date {
-      font-weight: 600;
-      color: #e0c27b;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      margin-bottom: 8px;
       font-size: 18px;
+      color: #f3f3f3cc;
     }
     .main-news h3 {
       font-size: 22px;
@@ -189,39 +193,44 @@
       flex: 1;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto auto;
-      gap: 20px;
-      min-height: 480px;
+      grid-auto-rows: 220px; /* altura fija para cuadrado */
+      gap: 25px;
+      min-height: 440px;
     }
     .side-news .news-card {
-      background: #333;
-      border-radius: 10px;
+      border-radius: 14px;
+      color: white;
       padding: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.5);
-      transition: transform 0.2s ease;
+      justify-content: flex-start;
+      overflow: hidden;
+      transition: transform 0.3s ease;
     }
     .side-news .news-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 0 15px #e0c27b;
     }
     .side-news img {
+      height: 110px;
       width: 100%;
-      border-radius: 8px;
+      border-radius: 10px;
       object-fit: cover;
-      max-height: 140px;
-    }
-    .side-news .date {
-      font-weight: 600;
-      color: #e0c27b;
-      font-size: 14px;
+      margin-bottom: 12px;
     }
     .side-news h4 {
-      color: #fff;
+      margin-bottom: 10px;
       font-size: 16px;
-      margin-bottom: 4px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .side-news .date {
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #f3f3f3cc;
     }
     .side-news p {
       color: #ccc;
@@ -240,6 +249,37 @@
       letter-spacing: 1px;
     }
 
+    /* Colores diferentes para cada noticia pequeña */
+    .side-news .news-card:nth-child(1) {
+      background: linear-gradient(135deg, #d53f8c, #805ad5);
+      box-shadow: 0 0 15px rgba(133, 90, 252, 0.7);
+    }
+    .side-news .news-card:nth-child(2) {
+      background: linear-gradient(135deg, #ed8936, #f6ad55);
+      box-shadow: 0 0 15px rgba(246, 173, 85, 0.7);
+    }
+    .side-news .news-card:nth-child(3) {
+      background: linear-gradient(135deg, #48bb78, #38a169);
+      box-shadow: 0 0 15px rgba(56, 161, 105, 0.7);
+    }
+    .side-news .news-card:nth-child(4) {
+      background: linear-gradient(135deg, #3182ce, #63b3ed);
+      box-shadow: 0 0 15px rgba(99, 179, 237, 0.7);
+    }
+
+    /* ============ FOOTER ============ */
+    footer {
+      background: #000;
+      padding: 40px 5%;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    footer a {
+      color: #888;
+      text-decoration: none;
+      margin-right: 15px;
+    }
   </style>
 
   <script>
@@ -293,57 +333,6 @@
       <article class="main-news">
         <div class="date">08 JUL 2025</div>
         <h3>Gran Concierto de Tenshi en Tokio</h3>
-        <img src="https://via.placeholder.com/600x280?text=Gran+Concierto" alt="Gran Concierto"/>
+        <img src="https://via.placeholder.com/600x200/4c51bf/ffffff?text=Concierto+Tenshi" alt="Gran Concierto"/>
         <p>El esperado concierto de Tenshi en el estadio Nippon será el evento más grande del año. ¡No te lo pierdas!</p>
-        <span class="label new">NEW</span>
-      </article>
-
-      <!-- Noticias pequeñas 2x2 -->
-      <div class="side-news">
-        <article class="news-card">
-          <div class="date">05 JUL 2025</div>
-          <h4>Lanzamiento del nuevo single "Eclipse"</h4>
-          <img src="https://via.placeholder.com/280x140?text=Single+Eclipse" alt="Single Eclipse"/>
-          <p>Ya disponible en todas las plataformas de streaming.</p>
-          <span class="label">RELEASE</span>
-        </article>
-
-        <article class="news-card">
-          <div class="date">02 JUL 2025</div>
-          <h4>Exposición de arte digital "Luz Infinita"</h4>
-          <img src="https://via.placeholder.com/280x140?text=Exposicion+Arte" alt="Exposición"/>
-          <p>Muestra única de artistas digitales en la galería virtual.</p>
-          <span class="label">EXHIBITION</span>
-        </article>
-
-        <article class="news-card">
-          <div class="date">30 JUN 2025</div>
-          <h4>Live Stream especial: Sesión acústica</h4>
-          <img src="https://via.placeholder.com/280x140?text=Live+Stream" alt="Live Stream"/>
-          <p>Disfruta de una sesión íntima en vivo con Tenshi desde casa.</p>
-          <span class="label">LIVE</span>
-        </article>
-
-        <article class="news-card">
-          <div class="date">25 JUN 2025</div>
-          <h4>Nuevo videoclip "Sueños de Cristal"</h4>
-          <img src="https://via.placeholder.com/280x140?text=Video+Clip" alt="Video Clip"/>
-          <p>Disponible ahora en el canal oficial de YouTube.</p>
-          <span class="label">RELEASE</span>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ FOOTER ============ -->
-  <footer>
-    <p>©2025 Tenshi Studio</p>
-    <div>
-      <a href="#">Twitter</a>
-      <a href="#">YouTube</a>
-      <a href="#">Instagram</a>
-    </div>
-  </footer>
-
-</body>
-</html>
+        <span class="label new
