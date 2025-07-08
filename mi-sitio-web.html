@@ -123,33 +123,36 @@
     }
     .schedule-container {
       display: flex;
-      gap: 40px;
-      flex-wrap: wrap;
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+      height: 450px; /* altura fija para alinear cuadrados */
     }
     .main-news {
-      flex: 1 1 calc(50% - 20px);
+      flex: 0 0 50%;
       background: linear-gradient(135deg, #1f2937, #4c51bf);
       border-radius: 16px;
       padding: 20px;
-      display: flex;
-      flex-direction: column;
       box-shadow: 0 0 20px rgba(76, 81, 191, 0.8);
       color: #fff;
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 1 / 1; /* cuadrado */
+      display: flex;
+      flex-direction: column;
     }
     .main-news img {
       width: 100%;
-      height: auto;
-      aspect-ratio: 1.5 / 1;
+      aspect-ratio: 1 / 1; /* imagen cuadrada */
       border-radius: 12px;
       object-fit: cover;
       margin-bottom: 15px;
     }
     .side-news {
-      flex: 1 1 calc(50% - 20px);
+      flex: 0 0 50%;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 25px;
+      grid-template-rows: 1fr 1fr;
+      gap: 20px;
+      height: 100%; /* para ocupar toda la altura */
     }
     .news-card {
       background: #222;
@@ -159,11 +162,10 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 1 / 1; /* cuadrado */
     }
     .news-card img {
       width: 100%;
-      height: auto;
       aspect-ratio: 1 / 1;
       border-radius: 10px;
       object-fit: cover;
@@ -232,34 +234,34 @@
       <article class="main-news">
         <div class="date">08 JUL 2025</div>
         <h3>Gran Concierto de Tenshi en Tokio</h3>
-        <img src="https://via.placeholder.com/400x200/4c51bf/ffffff?text=Concierto+Tenshi" />
+        <img src="https://via.placeholder.com/400x400/4c51bf/ffffff?text=Concierto+Tenshi" alt="Concierto Tenshi"/>
         <p>El esperado concierto de Tenshi en el estadio Nippon será el evento más grande del año.</p>
         <span class="label new">NEW</span>
       </article>
       <div class="side-news">
         <div class="news-card">
-          <img src="https://via.placeholder.com/200x200/ff69b4/000000?text=Noticia+1" />
+          <img src="https://via.placeholder.com/200x200/ff69b4/000000?text=Noticia+1" alt="Noticia 1"/>
           <div class="date">07 JUL 2025</div>
           <h4>Lanzamiento de nuevo sencillo</h4>
           <p>Nuevo tema "Shinkai no Melody" disponible ya en plataformas.</p>
           <span class="label">RELEASE</span>
         </div>
         <div class="news-card">
-          <img src="https://via.placeholder.com/200x200/f6ad55/000000?text=Noticia+2" />
+          <img src="https://via.placeholder.com/200x200/f6ad55/000000?text=Noticia+2" alt="Noticia 2"/>
           <div class="date">05 JUL 2025</div>
           <h4>Evento en vivo online</h4>
           <p>Streaming especial con invitados y sorpresas para fans.</p>
           <span class="label">EVENT</span>
         </div>
         <div class="news-card">
-          <img src="https://via.placeholder.com/200x200/38a169/000000?text=Noticia+3" />
+          <img src="https://via.placeholder.com/200x200/38a169/000000?text=Noticia+3" alt="Noticia 3"/>
           <div class="date">03 JUL 2025</div>
           <h4>Premio a Mejor Artista</h4>
           <p>Tenshi gana premio a la mejor artista emergente en Japón.</p>
           <span class="label">AWARD</span>
         </div>
         <div class="news-card">
-          <img src="https://via.placeholder.com/200x200/63b3ed/000000?text=Noticia+4" />
+          <img src="https://via.placeholder.com/200x200/63b3ed/000000?text=Noticia+4" alt="Noticia 4"/>
           <div class="date">01 JUL 2025</div>
           <h4>Nuevo video musical</h4>
           <p>Lanzamiento del video oficial para “Shinkai no Melody”.</p>
