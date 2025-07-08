@@ -7,335 +7,165 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    html, body {
-      font-family: 'Helvetica Neue', sans-serif;
-      background: #0b0b0b;
-      color: #f5f5f5;
-      overflow-x: hidden;
-    }
-
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      padding: 20px 5%;
-      display: flex;
-      justify-content: space-between;
-      z-index: 999;
-    }
-
-    header .logo {
-      color: #fff;
-      font-size: 20px;
-      letter-spacing: 2px;
-    }
-
-    nav ul {
-      display: flex;
-      gap: 25px;
-      list-style: none;
-    }
-
-    nav a {
-      color: #ccc;
-      text-decoration: none;
-      font-size: 14px;
-    }
-
-    nav a:hover {
-      color: #e0c27b;
-    }
-
-    .hero-wrapper {
-      position: relative;
-      height: 75vh;
-      overflow: hidden;
-      margin-top: 70px;
-    }
-
-    .hero-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 75vh;
-      background: url('banner portada.png') center center no-repeat;
-      background-size: cover;
-      z-index: 0;
-    }
-
-    .hero-text {
-      position: relative;
-      z-index: 2;
-      color: white;
-      font-size: 2rem;
-      padding: 60px 5%;
-      height: 75vh;
-      display: flex;
-      align-items: center;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-    }
-
-    .floating-socials {
-      width: 100%;
-      background: #0b0b0b;
-      padding: 80px 0;
-      display: flex;
-      justify-content: center;
-      gap: 60px;
-      position: relative;
-      z-index: 10;
-    }
-
-    .floating-socials a svg {
-      width: 48px;
-      height: 48px;
-      fill: #fff;
-      transition: fill 0.3s ease, transform 0.3s ease;
-    }
-
-    .floating-socials a:hover svg {
-      fill: #e0c27b;
-      transform: scale(1.2);
+    body {
+      background: #fff;
+      color: #000;
+      font-family: "Helvetica Neue", sans-serif;
     }
 
     .schedule {
-      padding: 80px 5%;
-      background-color: #111;
       max-width: 1200px;
-      margin: 0 auto 100px auto;
+      margin: 100px auto;
+      padding: 40px;
     }
 
     .schedule h2 {
       font-size: 32px;
-      color: #fff;
-      margin-bottom: 30px;
+      font-weight: 700;
+      margin-bottom: 20px;
     }
 
-    .schedule h2 span {
-      font-size: 14px;
-      color: #ccc;
-      margin-left: 10px;
+    .main-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 30px;
     }
 
-    .schedule-filters {
-      margin-bottom: 40px;
+    .main-event {
+      background: #fff;
       display: flex;
+      flex-direction: column;
+    }
+
+    .main-event img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .main-event .info {
+      padding: 15px 0;
+    }
+
+    .main-event .label {
+      display: inline-block;
+      border: 1px solid #000;
+      font-size: 12px;
+      padding: 2px 10px;
+      margin-top: 10px;
+    }
+
+    .main-event .date {
+      font-weight: bold;
+      margin: 10px 0 5px;
+    }
+
+    .main-event .text {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .side-events {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 20px;
     }
 
-    .schedule-filters button {
-      background: none;
-      border: 1px solid #555;
-      color: #ccc;
-      padding: 8px 18px;
-      font-size: 14px;
-      cursor: pointer;
-      border-radius: 20px;
-      transition: all 0.3s ease;
-    }
-
-    .schedule-filters button.active,
-    .schedule-filters button:hover {
-      color: #e0c27b;
-      border-color: #e0c27b;
-    }
-
-    .schedule-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 40px;
-      justify-content: center;
-    }
-
-    .main-news {
-      width: 400px;
-      height: 400px;
-      background: linear-gradient(135deg, #1f2937, #4c51bf);
-      border-radius: 16px;
-      padding: 20px;
+    .side-card {
       display: flex;
       flex-direction: column;
-      box-shadow: 0 0 20px rgba(76, 81, 191, 0.8);
-      color: #fff;
+      background: #fff;
     }
 
-    .main-news img {
+    .side-card img {
       width: 100%;
-      height: 160px;
+      aspect-ratio: 1 / 1;
       object-fit: cover;
-      border-radius: 12px;
-      margin-bottom: 15px;
+      border-radius: 8px;
     }
 
-    .main-news .date {
-      font-weight: 700;
-      font-size: 18px;
-      color: #f3f3f3cc;
+    .side-card .info {
+      padding: 10px 0;
     }
 
-    .main-news h3 {
-      font-size: 22px;
-      margin-top: 10px;
-    }
-
-    .main-news p {
-      font-size: 16px;
-      color: #ddd;
-      flex-grow: 1;
-    }
-
-    .label.new {
-      background: #000;
-      padding: 4px 8px;
-      border-radius: 999px;
-      font-size: 12px;
-      color: #fff;
+    .side-card .label {
       display: inline-block;
-      margin-top: 10px;
-    }
-
-    .side-news {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 25px;
-      width: 850px;
-    }
-
-    .news-card {
-      width: 400px;
-      height: 400px;
-      background: #222;
-      border-radius: 14px;
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      box-shadow: 0 0 15px rgba(0,0,0,0.5);
-    }
-
-    .news-card img {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-      border-radius: 10px;
-      margin-bottom: 12px;
-    }
-
-    .news-card .date {
-      font-weight: 700;
-      font-size: 14px;
-      color: #f3f3f3cc;
-    }
-
-    .news-card h4 {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .news-card p {
-      font-size: 14px;
-      color: #ccc;
-      flex-grow: 1;
-    }
-
-    .news-card .label {
+      border: 1px solid #000;
       font-size: 11px;
-      color: #e0c27b;
-      border: 1px solid #e0c27b;
-      padding: 2px 6px;
-      border-radius: 999px;
-      width: fit-content;
+      padding: 2px 8px;
       margin-top: 6px;
     }
 
-    footer {
-      padding: 30px;
-      text-align: center;
-      background: #0a0a0a;
-      font-size: 14px;
-      color: #777;
+    .side-card .date {
+      font-weight: bold;
+      font-size: 13px;
+      margin-top: 6px;
     }
+
+    .side-card .text {
+      font-size: 13px;
+      margin-top: 4px;
+      line-height: 1.3;
+    }
+
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="logo">Tenshi</div>
-    <nav>
-      <ul>
-        <li><a href="#schedule">Schedule</a></li>
-        <li><a href="#contact">Contacto</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <div class="hero-wrapper">
-    <div class="hero-bg"></div>
-    <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
-  </div>
-
-  <div class="floating-socials">
-    <a href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="white"/></svg></a>
-    <a href="#"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" fill="white"/></svg></a>
-  </div>
-
   <section class="schedule" id="schedule">
     <h2>SCHEDULE <span>スケジュール</span></h2>
-    <nav class="schedule-filters">
-      <button class="active">Todos</button>
-      <button>Conciertos</button>
-      <button>Lanzamientos</button>
-      <button>Eventos</button>
-    </nav>
 
-    <div class="schedule-container">
-      <article class="main-news">
-        <div class="date">08 JUL 2025</div>
-        <h3>Gran Concierto de Tenshi en Tokio</h3>
-        <img src="https://via.placeholder.com/400x160/4c51bf/ffffff?text=Concierto+Tenshi" />
-        <p>El esperado concierto de Tenshi en el estadio Nippon será el evento más grande del año.</p>
-        <span class="label new">NEW</span>
-      </article>
-
-      <div class="side-news">
-        <div class="news-card">
-          <img src="https://via.placeholder.com/400x160/ff69b4/000000?text=Noticia+1" />
-          <div class="date">07 JUL 2025</div>
-          <h4>Lanzamiento de sencillo</h4>
-          <p>"Shinkai no Melody" disponible en plataformas.</p>
-          <span class="label">RELEASE</span>
-        </div>
-        <div class="news-card">
-          <img src="https://via.placeholder.com/400x160/f6ad55/000000?text=Noticia+2" />
-          <div class="date">05 JUL 2025</div>
-          <h4>Evento online</h4>
-          <p>Streaming especial con invitados sorpresa.</p>
-          <span class="label">EVENT</span>
-        </div>
-        <div class="news-card">
-          <img src="https://via.placeholder.com/400x160/38a169/000000?text=Noticia+3" />
-          <div class="date">03 JUL 2025</div>
-          <h4>Premio recibido</h4>
-          <p>Artista revelación del año en Japón.</p>
-          <span class="label">AWARD</span>
-        </div>
-        <div class="news-card">
-          <img src="https://via.placeholder.com/400x160/63b3ed/000000?text=Noticia+4" />
-          <div class="date">01 JUL 2025</div>
-          <h4>Nuevo videoclip</h4>
-          <p>Lanzamiento de video para “Shinkai no Melody”.</p>
-          <span class="label">VIDEO</span>
+    <div class="main-grid">
+      
+      <!-- Noticia principal tipo banner -->
+      <div class="main-event">
+        <img src="https://via.placeholder.com/900x500/000000/ffffff?text=VIRTUAL+LIVE+1" alt="Banner Principal">
+        <div class="info">
+          <span class="label">LIVE</span>
+          <div class="date">2025.6.19 (Thu)</div>
+          <div class="text">EXPO 2025 Virtual Osaka Healthcare Pavilion “Eudaimonia” presents VIRTUAL LIVE「ARK-或ル世界-」</div>
         </div>
       </div>
+
+      <!-- Noticias cuadradas al lado derecho -->
+      <div class="side-events">
+        <div class="side-card">
+          <img src="https://via.placeholder.com/400x400/ff69b4/000000?text=Noticia+1" />
+          <div class="info">
+            <span class="label">LIVE</span>
+            <div class="date">2025.6.7</div>
+            <div class="text">「Anime Festival Asia Indonesia 2025」に出演決定！</div>
+          </div>
+        </div>
+        <div class="side-card">
+          <img src="https://via.placeholder.com/400x400/f3c/000000?text=Noticia+2" />
+          <div class="info">
+            <span class="label">EXHIBITION</span>
+            <div class="date">2025.4.5 - 4.13</div>
+            <div class="text">「花譜」新春桜祭 開催決定！</div>
+          </div>
+        </div>
+        <div class="side-card">
+          <img src="https://via.placeholder.com/400x400/000/fff?text=Noticia+3" />
+          <div class="info">
+            <span class="label">RELEASE</span>
+            <div class="date">2025.3.5</div>
+            <div class="text">新しい楽曲『孔雀婚礼』がリリース！</div>
+          </div>
+        </div>
+        <div class="side-card">
+          <img src="https://via.placeholder.com/400x400/fec/000?text=Noticia+4" />
+          <div class="info">
+            <span class="label">INFO</span>
+            <div class="date">2025.2.20</div>
+            <div class="text">物語学講義録が公開されました！</div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
-
-  <footer>
-    © 2025 Tenshi | 幻想の響き. Todos los derechos reservados.
-  </footer>
 
 </body>
 </html>
