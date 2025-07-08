@@ -14,7 +14,6 @@
       color: #f5f5f5;
       overflow-x: hidden;
     }
-
     header {
       position: fixed;
       top: 0;
@@ -94,87 +93,153 @@
       transform: scale(1.2);
     }
 
-    /* ============ SECCIÓN SCHEDULE (ESTILO KAF) ============ */
+    /* ============ SECCIÓN SCHEDULE ESTILO KAF ============ */
     .schedule {
       padding: 80px 5%;
       background-color: #111;
+      max-width: 1200px;
+      margin: 0 auto 100px auto;
     }
     .schedule h2 {
       font-size: 32px;
       color: #fff;
-      margin-bottom: 10px;
+      margin-bottom: 30px;
     }
     .schedule h2 span {
       font-size: 14px;
       color: #ccc;
+      margin-left: 10px;
     }
 
     .schedule-filters {
-      margin-bottom: 20px;
+      margin-bottom: 40px;
+      display: flex;
+      gap: 20px;
     }
     .schedule-filters button {
       background: none;
-      border: none;
+      border: 1px solid #555;
       color: #ccc;
-      margin-right: 15px;
+      padding: 8px 18px;
       font-size: 14px;
       cursor: pointer;
+      border-radius: 20px;
+      transition: all 0.3s ease;
     }
-    .schedule-filters button.active {
+    .schedule-filters button.active,
+    .schedule-filters button:hover {
       color: #e0c27b;
+      border-color: #e0c27b;
     }
 
-    .schedule-list {
-      list-style: none;
-      padding: 0;
-    }
-    .schedule-list li {
-      margin-bottom: 16px;
+    /* Contenedor principal: 2 columnas */
+    .schedule-container {
       display: flex;
+      gap: 40px;
       flex-wrap: wrap;
     }
-    .schedule-list li img {
-      width: 200px;
-      height: auto;
-      margin-right: 20px;
-      border-radius: 6px;
+
+    /* Noticia grande */
+    .main-news {
+      flex: 2;
+      background: #222;
+      border-radius: 12px;
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      min-height: 480px;
+      box-shadow: 0 0 15px rgba(224, 194, 123, 0.3);
     }
-    .schedule-list li .info {
-      flex: 1;
+    .main-news img {
+      width: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+      max-height: 280px;
     }
-    .schedule-list li .info p {
-      margin: 4px 0;
+    .main-news .date {
+      font-weight: 600;
+      color: #e0c27b;
+      font-size: 18px;
+    }
+    .main-news h3 {
+      font-size: 22px;
+      margin-top: 10px;
       color: #fff;
     }
-    .label {
+    .main-news p {
+      color: #ddd;
+      font-size: 16px;
+      line-height: 1.4;
+      flex-grow: 1;
+    }
+    .label.new {
+      background: #000;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: #fff;
+      display: inline-block;
+      margin-top: 10px;
+      letter-spacing: 1px;
+    }
+
+    /* Contenedor noticias pequeñas 2x2 */
+    .side-news {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 20px;
+      min-height: 480px;
+    }
+    .side-news .news-card {
+      background: #333;
+      border-radius: 10px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.5);
+      transition: transform 0.2s ease;
+    }
+    .side-news .news-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 15px #e0c27b;
+    }
+    .side-news img {
+      width: 100%;
+      border-radius: 8px;
+      object-fit: cover;
+      max-height: 140px;
+    }
+    .side-news .date {
+      font-weight: 600;
+      color: #e0c27b;
+      font-size: 14px;
+    }
+    .side-news h4 {
+      color: #fff;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+    .side-news p {
+      color: #ccc;
+      font-size: 14px;
+      flex-grow: 1;
+    }
+    .side-news .label {
+      font-size: 11px;
+      color: #e0c27b;
       border: 1px solid #e0c27b;
       padding: 2px 6px;
-      font-size: 12px;
-      color: #e0c27b;
-      margin-left: 10px;
-    }
-    .new {
-      background: #000;
-      color: #fff;
-      padding: 2px 6px;
-      font-size: 12px;
       border-radius: 999px;
-      margin-right: 10px;
+      display: inline-block;
+      margin-top: 6px;
+      width: fit-content;
+      letter-spacing: 1px;
     }
 
-    /* ============ FOOTER ============ */
-    footer {
-      background: #000;
-      padding: 40px 5%;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-    footer a {
-      color: #888;
-      text-decoration: none;
-      margin-right: 15px;
-    }
   </style>
 
   <script>
@@ -209,11 +274,10 @@
 
   <!-- ============ REDES SOCIALES ============ -->
   <div class="floating-socials">
-    <!-- Instagram, Facebook, YouTube, Spotify -->
-    <!-- Tus SVGs van aquí como ya estaban -->
+    <!-- Aquí van los iconos SVG -->
   </div>
 
-  <!-- ============ SECCIÓN SCHEDULE ============ -->
+  <!-- ============ SECCIÓN SCHEDULE (CRONOGRAMA) ============ -->
   <section class="schedule" id="schedule">
     <h2>SCHEDULE <span>スケジュール</span></h2>
 
@@ -224,7 +288,51 @@
       <button data-filter="EXHIBITION">EXHIBITION</button>
     </nav>
 
-    <ul class="schedule-list" id="eventos"></ul>
+    <div class="schedule-container">
+      <!-- Noticia grande -->
+      <article class="main-news">
+        <div class="date">08 JUL 2025</div>
+        <h3>Gran Concierto de Tenshi en Tokio</h3>
+        <img src="https://via.placeholder.com/600x280?text=Gran+Concierto" alt="Gran Concierto"/>
+        <p>El esperado concierto de Tenshi en el estadio Nippon será el evento más grande del año. ¡No te lo pierdas!</p>
+        <span class="label new">NEW</span>
+      </article>
+
+      <!-- Noticias pequeñas 2x2 -->
+      <div class="side-news">
+        <article class="news-card">
+          <div class="date">05 JUL 2025</div>
+          <h4>Lanzamiento del nuevo single "Eclipse"</h4>
+          <img src="https://via.placeholder.com/280x140?text=Single+Eclipse" alt="Single Eclipse"/>
+          <p>Ya disponible en todas las plataformas de streaming.</p>
+          <span class="label">RELEASE</span>
+        </article>
+
+        <article class="news-card">
+          <div class="date">02 JUL 2025</div>
+          <h4>Exposición de arte digital "Luz Infinita"</h4>
+          <img src="https://via.placeholder.com/280x140?text=Exposicion+Arte" alt="Exposición"/>
+          <p>Muestra única de artistas digitales en la galería virtual.</p>
+          <span class="label">EXHIBITION</span>
+        </article>
+
+        <article class="news-card">
+          <div class="date">30 JUN 2025</div>
+          <h4>Live Stream especial: Sesión acústica</h4>
+          <img src="https://via.placeholder.com/280x140?text=Live+Stream" alt="Live Stream"/>
+          <p>Disfruta de una sesión íntima en vivo con Tenshi desde casa.</p>
+          <span class="label">LIVE</span>
+        </article>
+
+        <article class="news-card">
+          <div class="date">25 JUN 2025</div>
+          <h4>Nuevo videoclip "Sueños de Cristal"</h4>
+          <img src="https://via.placeholder.com/280x140?text=Video+Clip" alt="Video Clip"/>
+          <p>Disponible ahora en el canal oficial de YouTube.</p>
+          <span class="label">RELEASE</span>
+        </article>
+      </div>
+    </div>
   </section>
 
   <!-- ============ FOOTER ============ -->
@@ -237,10 +345,5 @@
     </div>
   </footer>
 
-  <!-- ============ SCRIPT PARA CARGAR EVENTOS ============ -->
-  <script>
-    fetch('events.json')
-      .then(res => res.json())
-      .then(data => {
-        const cont = document.getElementById('eventos');
-        data.forEach(e => {
+</body>
+</html>
