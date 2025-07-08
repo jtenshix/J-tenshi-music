@@ -4,9 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tenshi | 幻想の響き</title>
-
   <style>
-    /* ============ ESTILOS BASE ============ */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       font-family: 'Helvetica Neue', sans-serif;
@@ -40,8 +38,6 @@
       font-size: 14px;
     }
     nav a:hover { color: #e0c27b; }
-
-    /* ============ HERO / BANNER ============ */
     .hero-wrapper {
       position: relative;
       height: 75vh;
@@ -70,8 +66,6 @@
       display: flex;
       align-items: center;
     }
-
-    /* ============ REDES SOCIALES ============ */
     .floating-socials {
       width: 100%;
       background: #0b0b0b;
@@ -92,8 +86,6 @@
       fill: #e0c27b;
       transform: scale(1.2);
     }
-
-    /* ============ SECCIÓN SCHEDULE ESTILO KAF ============ */
     .schedule {
       padding: 80px 5%;
       background-color: #111;
@@ -110,7 +102,6 @@
       color: #ccc;
       margin-left: 10px;
     }
-
     .schedule-filters {
       margin-bottom: 40px;
       display: flex;
@@ -131,15 +122,11 @@
       color: #e0c27b;
       border-color: #e0c27b;
     }
-
-    /* Contenedor principal: 2 columnas */
     .schedule-container {
       display: flex;
       gap: 40px;
       flex-wrap: wrap;
     }
-
-    /* Noticia grande */
     .main-news {
       flex: 2;
       background: linear-gradient(135deg, #1f2937, #4c51bf);
@@ -159,41 +146,15 @@
       object-fit: cover;
       margin-bottom: 15px;
     }
-    .main-news .date {
-      font-weight: 700;
-      letter-spacing: 1.2px;
-      margin-bottom: 8px;
-      font-size: 18px;
-      color: #f3f3f3cc;
-    }
-    .main-news h3 {
-      font-size: 22px;
-      margin-top: 10px;
-      color: #fff;
-    }
-    .main-news p {
-      color: #ddd;
-      font-size: 16px;
-      line-height: 1.4;
-      flex-grow: 1;
-    }
-    .label.new {
-      background: #000;
-      padding: 4px 8px;
-      border-radius: 999px;
-      font-size: 12px;
-      color: #fff;
-      display: inline-block;
-      margin-top: 10px;
-      letter-spacing: 1px;
-    }
-
-    /* Contenedor noticias pequeñas 2x2 */
+    .main-news .date { font-weight: 700; letter-spacing: 1.2px; margin-bottom: 8px; font-size: 18px; color: #f3f3f3cc; }
+    .main-news h3 { font-size: 22px; margin-top: 10px; color: #fff; }
+    .main-news p { color: #ddd; font-size: 16px; line-height: 1.4; flex-grow: 1; }
+    .label.new { background: #000; padding: 4px 8px; border-radius: 999px; font-size: 12px; color: #fff; display: inline-block; margin-top: 10px; letter-spacing: 1px; }
     .side-news {
       flex: 1;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      grid-auto-rows: 220px; /* altura fija para cuadrado */
+      grid-auto-rows: 220px;
       gap: 25px;
       min-height: 440px;
     }
@@ -208,131 +169,48 @@
       overflow: hidden;
       transition: transform 0.3s ease;
     }
-    .side-news .news-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 0 15px #e0c27b;
-    }
-    .side-news img {
-      height: 110px;
-      width: 100%;
-      border-radius: 10px;
-      object-fit: cover;
-      margin-bottom: 12px;
-    }
-    .side-news h4 {
-      margin-bottom: 10px;
-      font-size: 16px;
-      font-weight: 700;
-      color: #fff;
-    }
-    .side-news .date {
-      font-weight: 700;
-      letter-spacing: 1.2px;
-      margin-bottom: 8px;
-      font-size: 14px;
-      color: #f3f3f3cc;
-    }
-    .side-news p {
-      color: #ccc;
-      font-size: 14px;
-      flex-grow: 1;
-    }
-    .side-news .label {
-      font-size: 11px;
-      color: #e0c27b;
-      border: 1px solid #e0c27b;
-      padding: 2px 6px;
-      border-radius: 999px;
-      display: inline-block;
-      margin-top: 6px;
-      width: fit-content;
-      letter-spacing: 1px;
-    }
-
-    /* Colores diferentes para cada noticia pequeña */
-    .side-news .news-card:nth-child(1) {
-      background: linear-gradient(135deg, #d53f8c, #805ad5);
-      box-shadow: 0 0 15px rgba(133, 90, 252, 0.7);
-    }
-    .side-news .news-card:nth-child(2) {
-      background: linear-gradient(135deg, #ed8936, #f6ad55);
-      box-shadow: 0 0 15px rgba(246, 173, 85, 0.7);
-    }
-    .side-news .news-card:nth-child(3) {
-      background: linear-gradient(135deg, #48bb78, #38a169);
-      box-shadow: 0 0 15px rgba(56, 161, 105, 0.7);
-    }
-    .side-news .news-card:nth-child(4) {
-      background: linear-gradient(135deg, #3182ce, #63b3ed);
-      box-shadow: 0 0 15px rgba(99, 179, 237, 0.7);
-    }
-
-    /* ============ FOOTER ============ */
-    footer {
-      background: #000;
-      padding: 40px 5%;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-    footer a {
-      color: #888;
-      text-decoration: none;
-      margin-right: 15px;
-    }
+    .side-news .news-card:hover { transform: translateY(-5px); box-shadow: 0 0 15px #e0c27b; }
+    .side-news img { height: 110px; width: 100%; border-radius: 10px; object-fit: cover; margin-bottom: 12px; }
+    .side-news h4 { margin-bottom: 10px; font-size: 16px; font-weight: 700; color: #fff; }
+    .side-news .date { font-weight: 700; letter-spacing: 1.2px; margin-bottom: 8px; font-size: 14px; color: #f3f3f3cc; }
+    .side-news p { color: #ccc; font-size: 14px; flex-grow: 1; }
+    .side-news .label { font-size: 11px; color: #e0c27b; border: 1px solid #e0c27b; padding: 2px 6px; border-radius: 999px; display: inline-block; margin-top: 6px; width: fit-content; letter-spacing: 1px; }
+    .side-news .news-card:nth-child(1) { background: linear-gradient(135deg, #d53f8c, #805ad5); box-shadow: 0 0 15px rgba(133, 90, 252, 0.7); }
+    .side-news .news-card:nth-child(2) { background: linear-gradient(135deg, #ed8936, #f6ad55); box-shadow: 0 0 15px rgba(246, 173, 85, 0.7); }
+    .side-news .news-card:nth-child(3) { background: linear-gradient(135deg, #48bb78, #38a169); box-shadow: 0 0 15px rgba(56, 161, 105, 0.7); }
+    .side-news .news-card:nth-child(4) { background: linear-gradient(135deg, #3182ce, #63b3ed); box-shadow: 0 0 15px rgba(99, 179, 237, 0.7); }
   </style>
-
-  <script>
-    // Efecto parallax del banner
-    window.addEventListener('scroll', () => {
-      const bg = document.querySelector('.hero-bg');
-      const scrollY = window.scrollY;
-      bg.style.transform = `translateY(${scrollY * -0.2}px)`;
-    });
-  </script>
 </head>
-
 <body>
-  <!-- ============ HEADER ============ -->
-  <header>
-    <div class="logo">Tenshi</div>
-    <nav>
-      <ul>
-        <li><a href="#discography">Discography</a></li>
-        <li><a href="#schedule">Schedule</a></li>
-        <li><a href="#news">News</a></li>
-        <li><a href="#movies">Movies</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <!-- ============ HERO / PORTADA ============ -->
-  <div class="hero-wrapper">
-    <div class="hero-bg"></div>
-    <div class="hero-text">幻想の響き - Tenshi's World</div>
-  </div>
-
-  <!-- ============ REDES SOCIALES ============ -->
-  <div class="floating-socials">
-    <!-- Aquí van los iconos SVG -->
-  </div>
-
-  <!-- ============ SECCIÓN SCHEDULE (CRONOGRAMA) ============ -->
+  <header>...</header>
+  <div class="hero-wrapper">...</div>
+  <div class="floating-socials">...</div>
   <section class="schedule" id="schedule">
     <h2>SCHEDULE <span>スケジュール</span></h2>
-
-    <nav class="schedule-filters">
-      <button data-filter="all" class="active">ALL</button>
-      <button data-filter="LIVE">LIVE</button>
-      <button data-filter="RELEASE">RELEASE</button>
-      <button data-filter="EXHIBITION">EXHIBITION</button>
-    </nav>
-
+    <nav class="schedule-filters">...</nav>
     <div class="schedule-container">
-      <!-- Noticia grande -->
       <article class="main-news">
         <div class="date">08 JUL 2025</div>
         <h3>Gran Concierto de Tenshi en Tokio</h3>
-        <img src="https://via.placeholder.com/600x200/4c51bf/ffffff?text=Concierto+Tenshi" alt="Gran Concierto"/>
-        <p>El esperado concierto de Tenshi en el estadio Nippon será el evento más grande del año. ¡No te lo pierdas!</p>
-        <span class="label new
+        <img src="https://via.placeholder.com/600x200/4c51bf/ffffff?text=Concierto+Tenshi" />
+        <p>El esperado concierto de Tenshi en el estadio Nippon será el evento más grande del año.</p>
+        <span class="label new">NEW</span>
+      </article>
+      <div class="side-news">
+        <div class="news-card">
+          <img src="https://via.placeholder.com/300x170/ff69b4/000000?text=Noticia+1" />
+          <div class="date">07 JUL 2025</div>
+          <h4>Lanzamiento de nuevo sencillo</h4>
+          <p>Nuevo tema "Shinkai no Melody" disponible ya en plataformas.</p>
+          <span class="label">RELEASE</span>
+        </div>
+        <div class="news-card">...</div>
+        <div class="news-card">...</div>
+        <div class="news-card">...</div>
+      </div>
+    </div>
+  </section>
+  <footer>...</footer>
+  <script>...</script>
+</body>
+</html>
