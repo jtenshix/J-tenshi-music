@@ -1,379 +1,275 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tenshi | 幻想の響き</title>
-  <style>
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-    }
-    html, body {
-      font-family: 'Helvetica Neue', sans-serif;
-      background: #0b0b0b;
-      color: #f5f5f5;
-      overflow-x: hidden;
-    }
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      padding: 20px 5%;
-      display: flex;
-      justify-content: space-between;
-      z-index: 999;
-    }
-    header .logo {
-      color: #fff;
-      font-size: 20px;
-      letter-spacing: 2px;
-    }
-    nav ul {
-      display: flex;
-      gap: 25px;
-      list-style: none;
-    }
-    nav a {
-      color: #ccc;
-      text-decoration: none;
-      font-size: 14px;
-    }
-    nav a:hover {
-      color: #e0c27b;
-    }
-
-    /* Banner */
-    .hero-wrapper {
-      position: relative;
-      height: 75vh;
-      overflow: hidden;
-      margin-top: 70px; /* para que no tape el header fijo */
-    }
-    .hero-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 75vh;
-      background: url('banner portada.png') center center no-repeat;
-      background-size: cover;
-      z-index: 0;
-    }
-    .hero-text {
-      position: relative;
-      z-index: 2;
-      color: white;
-      font-size: 2rem;
-      padding: 60px 5%;
-      height: 75vh;
-      display: flex;
-      align-items: center;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-    }
-
-    /* Redes sociales flotantes */
-    .floating-socials {
-      width: 100%;
-      background: #0b0b0b;
-      padding: 80px 0;
-      display: flex;
-      justify-content: center;
-      gap: 60px;
-      position: relative;
-      z-index: 10;
-    }
-    .floating-socials a svg {
-      width: 48px;
-      height: 48px;
-      fill: #fff;
-      transition: fill 0.3s ease, transform 0.3s ease;
-    }
-    .floating-socials a:hover svg {
-      fill: #e0c27b;
-      transform: scale(1.2);
-    }
-
-    /* Cronograma */
-    .schedule {
-      padding: 80px 5%;
-      background-color: #111;
-      max-width: 1200px;
-      margin: 0 auto 100px auto;
-    }
-    .schedule h2 {
-      font-size: 32px;
-      color: #fff;
-      margin-bottom: 30px;
-    }
-    .schedule h2 span {
-      font-size: 14px;
-      color: #ccc;
-      margin-left: 10px;
-    }
-    .schedule-filters {
-      margin-bottom: 40px;
-      display: flex;
-      gap: 20px;
-    }
-    .schedule-filters button {
-      background: none;
-      border: 1px solid #555;
-      color: #ccc;
-      padding: 8px 18px;
-      font-size: 14px;
-      cursor: pointer;
-      border-radius: 20px;
-      transition: all 0.3s ease;
-    }
-    .schedule-filters button.active,
-    .schedule-filters button:hover {
-      color: #e0c27b;
-      border-color: #e0c27b;
-    }
-
-    .schedule-container {
-      display: flex;
-      gap: 40px;
-      flex-wrap: wrap;
-    }
-
-    /* Noticia principal cuadrada */
-    .main-news {
-      flex: 2;
-      background: linear-gradient(135deg, #1f2937, #4c51bf);
-      border-radius: 16px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      min-height: 400px;
-      max-height: 450px; /* fijo para cuadrado */
-      box-shadow: 0 0 20px rgba(76, 81, 191, 0.8);
-      color: #fff;
-    }
-    .main-news img {
-      width: 100%;
-      height: 220px; /* cuadrado */
-      border-radius: 12px;
-      object-fit: cover;
-      margin-bottom: 15px;
-    }
-    .main-news .date {
-      font-weight: 700;
-      letter-spacing: 1.2px;
-      margin-bottom: 8px;
-      font-size: 18px;
-      color: #f3f3f3cc;
-    }
-    .main-news h3 {
-      font-size: 22px;
-      color: #fff;
-    }
-    .main-news p {
-      color: #ddd;
-      font-size: 16px;
-      line-height: 1.4;
-      flex-grow: 1;
-    }
-    .label.new {
-      background: #000;
-      padding: 4px 8px;
-      border-radius: 999px;
-      font-size: 12px;
-      color: #fff;
-      display: inline-block;
-      margin-top: 10px;
-      letter-spacing: 1px;
-    }
-
-    /* Noticias laterales cuadradas */
-    .side-news {
-      flex: 1;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      /* grid-auto-rows: 280px; <-- Esta línea se puede quitar, el padding-top de news-card lo maneja */
-      gap: 25px;
-      min-height: 440px; /* Puedes ajustar o quitar si ya no es necesario con el truco del cuadrado */
-    }
-
-    .side-news .news-card {
-      border-radius: 14px;
-      color: white;
-      /* padding: 15px; <-- Este padding lo movemos a .content-wrapper */
-      box-shadow: 0 0 15px rgba(0,0,0,0.5);
-
-      position: relative; /* ¡CLAVE para que .content-wrapper se posicione correctamente! */
-      padding-top: 100%; /* ¡El truco para que la tarjeta sea un cuadrado perfecto! */
-      height: 0; /* Necesario para que padding-top funcione como altura principal */
-      overflow: hidden; /* Oculta cualquier contenido que se salga del cuadrado */
-
-      transition: transform 0.3s ease;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tenshi | 幻想の響き</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      font-family: 'Helvetica Neue', sans-serif;
+      background: #0b0b0b;
+      color: #f5f5f5;
+      overflow-x: hidden;
     }
-
-    .side-news .news-card .content-wrapper {
-      position: absolute; /* Se posiciona encima del "padding-top" de .news-card */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 20px 5%;
+      display: flex;
+      justify-content: space-between;
+      z-index: 999;
+    }
+    header .logo {
+      color: #fff;
+      font-size: 20px;
+      letter-spacing: 2px;
+    }
+    nav ul {
+      display: flex;
+      gap: 25px;
+      list-style: none;
+    }
+    nav a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    nav a:hover { color: #e0c27b; }
+    .hero-wrapper {
+      position: relative;
+      height: 75vh;
+      overflow: hidden;
+      margin-top: 70px;
+    }
+    .hero-bg {
+      position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
-      padding: 15px; /* Aquí va el padding interno de la tarjeta */
-      display: flex; /* Para organizar el contenido (imagen, texto) en columna */
-      flex-direction: column;
-      justify-content: flex-start;
+      height: 75vh;
+      background: url('banner portada.png') center center no-repeat;
+      background-size: cover;
+      z-index: 0;
     }
-
-    .side-news .news-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 0 15px #e0c27b;
-    }
-    .side-news img {
-      width: 100%;
-      height: 140px; /* cuadrado para la imagen (o rectangular si lo prefieres) */
-      border-radius: 10px;
-      object-fit: cover;
-      margin-bottom: 12px;
-    }
-    .side-news h4 {
-      margin-bottom: 10px;
-      font-size: 16px;
-      font-weight: 700;
-      color: #fff;
-    }
-    .side-news .date {
-      font-weight: 700;
-      letter-spacing: 1.2px;
-      margin-bottom: 8px;
-      font-size: 14px;
-      color: #f3f3f3cc;
-    }
-    .side-news p {
-      color: #ccc;
-      font-size: 14px;
-      flex-grow: 1;
-    }
-    .side-news .label {
-      font-size: 11px;
-      color: #e0c27b;
-      border: 1px solid #e0c27b;
-      padding: 2px 6px;
-      border-radius: 999px;
-      display: inline-block;
-      margin-top: 6px;
-      width: fit-content;
-      letter-spacing: 1px;
-    }
-    /* Colores diferentes para cada noticia lateral */
-    .side-news .news-card:nth-child(1) {
-      background: linear-gradient(135deg, #d53f8c, #805ad5);
-      box-shadow: 0 0 15px rgba(133, 90, 252, 0.7);
-    }
-    .side-news .news-card:nth-child(2) {
-      background: linear-gradient(135deg, #ed8936, #f6ad55);
-      box-shadow: 0 0 15px rgba(246, 173, 85, 0.7);
-    }
-    .side-news .news-card:nth-child(3) {
-      background: linear-gradient(135deg, #48bb78, #38a169);
-      box-shadow: 0 0 15px rgba(56, 161, 105, 0.7);
-    }
-    .side-news .news-card:nth-child(4) {
-      background: linear-gradient(135deg, #3182ce, #63b3ed);
-      box-shadow: 0 0 15px rgba(99, 179, 237, 0.7);
-    }
-
-    footer {
-      padding: 20px 5%;
-      background: #111;
-      text-align: center;
-      color: #777;
-      font-size: 14px;
-      margin-bottom: 40px;
-    }
-  </style>
+    .hero-text {
+      position: relative;
+      z-index: 2;
+      color: white;
+      font-size: 2rem;
+      padding: 60px 5%;
+      height: 75vh;
+      display: flex;
+      align-items: center;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+    }
+    .floating-socials {
+      width: 100%;
+      background: #0b0b0b;
+      padding: 80px 0;
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      position: relative;
+      z-index: 10;
+    }
+    .floating-socials a svg {
+      width: 48px;
+      height: 48px;
+      fill: #fff;
+      transition: fill 0.3s ease, transform 0.3s ease;
+    }
+    .floating-socials a:hover svg {
+      fill: #e0c27b;
+      transform: scale(1.2);
+    }
+    .schedule {
+      padding: 80px 5%;
+      background-color: #111;
+      max-width: 1200px;
+      margin: 0 auto 100px auto;
+    }
+    .schedule h2 {
+      font-size: 32px;
+      color: #fff;
+      margin-bottom: 30px;
+    }
+    .schedule h2 span {
+      font-size: 14px;
+      color: #ccc;
+      margin-left: 10px;
+    }
+    .schedule-filters {
+      margin-bottom: 40px;
+      display: flex;
+      gap: 20px;
+    }
+    .schedule-filters button {
+      background: none;
+      border: 1px solid #555;
+      color: #ccc;
+      padding: 8px 18px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+    .schedule-filters button.active,
+    .schedule-filters button:hover {
+      color: #e0c27b;
+      border-color: #e0c27b;
+    }
+    .schedule-container {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .main-news {
+      flex: 1 1 calc(50% - 20px);
+      background: linear-gradient(135deg, #1f2937, #4c51bf);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 20px rgba(76, 81, 191, 0.8);
+      color: #fff;
+      aspect-ratio: 1 / 1;
+    }
+    .main-news img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1.5 / 1;
+      border-radius: 12px;
+      object-fit: cover;
+      margin-bottom: 15px;
+    }
+    .side-news {
+      flex: 1 1 calc(50% - 20px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+    .news-card {
+      background: #222;
+      border-radius: 14px;
+      padding: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      aspect-ratio: 1 / 1;
+    }
+    .news-card img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1 / 1;
+      border-radius: 10px;
+      object-fit: cover;
+      margin-bottom: 12px;
+    }
+    .news-card h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .news-card .date {
+      font-weight: 700;
+      font-size: 14px;
+      color: #ccc;
+    }
+    .news-card p {
+      color: #ccc;
+      font-size: 14px;
+    }
+    .news-card .label {
+      font-size: 11px;
+      color: #e0c27b;
+      border: 1px solid #e0c27b;
+      padding: 2px 6px;
+      border-radius: 999px;
+      width: fit-content;
+    }
+    footer {
+      padding: 20px 5%;
+      background: #111;
+      text-align: center;
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 40px;
+    }
+  </style>
 </head>
 <body>
-
-  <header>
-    <div class="logo">Tenshi</div>
-    <nav>
-      <ul>
-        <li><a href="#schedule">Schedule</a></li>
-        <li><a href="#contact">Contacto</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <div class="hero-wrapper">
-    <div class="hero-bg"></div>
-    <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
-  </div>
-
-  <div class="floating-socials">
-        <a href="#" aria-label="Instagram">
-      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.414a4.92 4.92 0 011.675 1.01 4.92 4.92 0 011.01 1.674c.175.462.36 1.262.414 2.432.058 1.267.07 1.647.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.414 2.43a4.92 4.92 0 01-1.01 1.675 4.92 4.92 0 01-1.675 1.01c-.462.175-1.262.36-2.432.414-1.267.058-1.647.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.414a4.92 4.92 0 01-1.675-1.01 4.92 4.92 0 01-1.01-1.675c-.175-.462-.36-1.262-.414-2.432-.058-1.267-.07-1.647-.07-4.85s.012-3.584.07-4.85c.054-1.17.24-1.97.414-2.43a4.92 4.92 0 011.01-1.675 4.92 4.92 0 011.675-1.01c.462-.175 1.262-.36 2.432-.414 1.267-.058 1.647-.07 4.85-.07zm0-2.163C8.735 0 8.332.013 7.052.072 5.773.131 4.67.355 3.68.754a6.882 6.882 0 00-2.49 1.636 6.882 6.882 0 00-1.635 2.49C-.131 5.773-.355 6.876-.414 8.155-.472 9.435-.485 9.838-.485 12c0 2.163.013 2.566.072 3.846.059 1.279.283 2.383.682 3.373a6.882 6.882 0 001.636 2.49 6.882 6.882 0 002.49 1.635c.99.399 2.094.623 3.373.682 1.279.059 1.682.072 3.846.072 2.163 0 2.566-.013 3.846-.072 1.279-.059 2.383-.283 3.373-.682a6.882 6.882 0 002.49-1.636 6.882 6.882 0 001.635-2.49c.399-.99.623-2.094.682-3.373.059-1.279.072-1.682.072-3.846 0-2.163-.013-2.566-.072-3.846-.059-1.279-.283-2.383-.682-3.373a6.882 6.882 0 00-1.636-2.49 6.882 6.882 0 00-2.49-1.635C18.383.355 17.279.131 16 .072 14.72.013 14.317 0 12 0z"/></svg>
-    </a>
-      </div>
-
-  <section class="schedule" id="schedule">
-    <h2>SCHEDULE <span>スケジュール</span></h2>
-    <nav class="schedule-filters">
-      <button class="active">Todos</button>
-      <button>Conciertos</button>
-      <button>Lanzamientos</button>
-      <button>Eventos</button>
-    </nav>
-    <div class="schedule-container">
-      <article class="main-news">
-        <div class="date">08 JUL 2025</div>
-        <h3>Gran Concierto de Tenshi en Tokio</h3>
-        <img src="https://via.placeholder.com/400x200/4c51bf/ffffff?text=Concierto+Tenshi" alt="Concierto Tenshi" />
-        <p>El esperado concierto de Tenshi en el estadio Nippon será el evento más grande del año.</p>
-        <span class="label new">NEW</span>
-      </article>
-      <div class="side-news">
-        <div class="news-card">
-          <div class="content-wrapper">             <img src="https://via.placeholder.com/200x200/ff69b4/000000?text=Noticia+1" alt="Noticia 1" />
-            <div class="date">07 JUL 2025</div>
-            <h4>Lanzamiento de nuevo sencillo</h4>
-            <p>Nuevo tema "Shinkai no Melody" disponible ya en plataformas.</p>
-            <span class="label">RELEASE</span>
-          </div>
-        </div>
-        <div class="news-card">
-          <div class="content-wrapper">             <img src="https://via.placeholder.com/200x200/f6ad55/000000?text=Noticia+2" alt="Noticia 2" />
-            <div class="date">05 JUL 2025</div>
-            <h4>Evento en vivo online</h4>
-            <p>Streaming especial con invitados y sorpresas para fans.</p>
-            <span class="label">EVENT</span>
-          </div>
-        </div>
-        <div class="news-card">
-          <div class="content-wrapper">             <img src="https://via.placeholder.com/200x200/38a169/000000?text=Noticia+3" alt="Noticia 3" />
-            <div class="date">03 JUL 2025</div>
-            <h4>Premio a Mejor Artista</h4>
-            <p>Tenshi gana premio a la mejor artista emergente en Japón.</p>
-            <span class="label">AWARD</span>
-          </div>
-        </div>
-        <div class="news-card">
-          <div class="content-wrapper">             <img src="https://via.placeholder.com/200x200/63b3ed/000000?text=Noticia+4" alt="Noticia 4" />
-            <div class="date">01 JUL 2025</div>
-            <h4>Nuevo video musical</h4>
-            <p>Lanzamiento del video oficial para “Shinkai no Melody”.</p>
-            <span class="label">VIDEO</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    © 2025 Tenshi | 幻想の響き. Todos los derechos reservados.
-  </footer>
-
-  <script>
-    // Aquí podrías añadir la funcionalidad de filtros si quieres
-  </script>
-
+  <header>
+    <div class="logo">Tenshi</div>
+    <nav>
+      <ul>
+        <li><a href="#schedule">Schedule</a></li>
+        <li><a href="#contact">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+  <div class="hero-wrapper">
+    <div class="hero-bg"></div>
+    <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
+  </div>
+  <div class="floating-socials">
+    <a href="#">Instagram</a>
+    <a href="#">Twitter</a>
+    <a href="#">YouTube</a>
+  </div>
+  <section class="schedule" id="schedule">
+    <h2>SCHEDULE <span>スケジュール</span></h2>
+    <nav class="schedule-filters">
+      <button class="active">Todos</button>
+      <button>Conciertos</button>
+      <button>Lanzamientos</button>
+      <button>Eventos</button>
+    </nav>
+    <div class="schedule-container">
+      <article class="main-news">
+        <div class="date">08 JUL 2025</div>
+        <h3>Gran Concierto de Tenshi en Tokio</h3>
+        <img src="https://via.placeholder.com/400x200/4c51bf/ffffff?text=Concierto+Tenshi" />
+        <p>El esperado concierto de Tenshi en el estadio Nippon será el evento más grande del año.</p>
+        <span class="label new">NEW</span>
+      </article>
+      <div class="side-news">
+        <div class="news-card">
+          <img src="https://via.placeholder.com/200x200/ff69b4/000000?text=Noticia+1" />
+          <div class="date">07 JUL 2025</div>
+          <h4>Lanzamiento de nuevo sencillo</h4>
+          <p>Nuevo tema "Shinkai no Melody" disponible ya en plataformas.</p>
+          <span class="label">RELEASE</span>
+        </div>
+        <div class="news-card">
+          <img src="https://via.placeholder.com/200x200/f6ad55/000000?text=Noticia+2" />
+          <div class="date">05 JUL 2025</div>
+          <h4>Evento en vivo online</h4>
+          <p>Streaming especial con invitados y sorpresas para fans.</p>
+          <span class="label">EVENT</span>
+        </div>
+        <div class="news-card">
+          <img src="https://via.placeholder.com/200x200/38a169/000000?text=Noticia+3" />
+          <div class="date">03 JUL 2025</div>
+          <h4>Premio a Mejor Artista</h4>
+          <p>Tenshi gana premio a la mejor artista emergente en Japón.</p>
+          <span class="label">AWARD</span>
+        </div>
+        <div class="news-card">
+          <img src="https://via.placeholder.com/200x200/63b3ed/000000?text=Noticia+4" />
+          <div class="date">01 JUL 2025</div>
+          <h4>Nuevo video musical</h4>
+          <p>Lanzamiento del video oficial para “Shinkai no Melody”.</p>
+          <span class="label">VIDEO</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer>
+    © 2025 Tenshi | 幻想の響き. Todos los derechos reservados.
+  </footer>
 </body>
 </html>
