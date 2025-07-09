@@ -1,191 +1,134 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tenshi | 幻想の響き</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       font-family: 'Helvetica Neue', sans-serif;
       background: #0b0b0b;
       color: #f5f5f5;
       overflow-x: hidden;
     }
-
+    body.light-mode {
+      background: #f5f5f5; color: #111;
+    }
     header {
-      position: fixed;
-      top: 0;
-      width: 100%;
+      position: fixed; top: 0; width: 100%;
       background: rgba(0, 0, 0, 0.8);
       padding: 20px 5%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: flex; justify-content: space-between; align-items: center;
       z-index: 999;
     }
-
-    header .logo {
-      color: #fff;
-      font-size: 20px;
-      letter-spacing: 2px;
-    }
-
-    nav ul {
-      display: flex;
-      gap: 25px;
-      list-style: none;
-    }
-
-    nav a {
-      color: #ccc;
-      text-decoration: none;
-      font-size: 14px;
-    }
-
-    nav a:hover {
-      color: #e0c27b;
-    }
-
+    .logo { color: #fff; font-size: 20px; letter-spacing: 2px; }
+    nav ul { display: flex; gap: 25px; list-style: none; }
+    nav a { color: #ccc; text-decoration: none; font-size: 14px; }
+    nav a:hover { color: #e0c27b; }
     .theme-toggle {
-      background: none;
-      border: 1px solid #777;
-      color: #ccc;
-      padding: 6px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 12px;
+      background: none; border: 1px solid #777; color: #ccc;
+      padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 12px;
     }
-
     .hero-wrapper {
-      position: relative;
-      height: 75vh;
-      overflow: hidden;
-      margin-top: 70px;
+      position: relative; height: 75vh; overflow: hidden; margin-top: 70px;
     }
-
     .hero-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 75vh;
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 75vh;
       background: url('banner portada.png') center center no-repeat;
-      background-size: cover;
-      z-index: 0;
+      background-size: cover; z-index: 0;
     }
-
     .hero-text {
-      position: relative;
-      z-index: 2;
-      color: white;
-      font-size: 2rem;
-      padding: 60px 5%;
-      height: 75vh;
-      display: flex;
-      align-items: center;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+      position: relative; z-index: 2; color: white; font-size: 2rem;
+      padding: 60px 5%; height: 75vh; display: flex; align-items: center;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
     }
 
+    /* NEWS */
     .news {
       padding: 100px 5% 80px;
-      background-color: #1a1a1a;
-      max-width: 1200px;
-      margin: 40px auto;
-      border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-    }
-
-    .news h2 {
-      font-size: 32px;
-      color: #fff;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-
-    .schedule-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      background: #1a1a1a; max-width: 1200px; margin: 40px auto;
+      border-radius: 12px; box-shadow: 0 0 30px rgba(0,0,0,0.3);
+      display: grid; grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: auto 1fr;
       gap: 30px;
     }
-
+    .news h2 {
+      grid-column: 1 / 4; text-align: center;
+      color: #fff; font-size: 32px;
+    }
     .main-news {
-      grid-row: 1 / span 2;
+      grid-row: 2 / span 2; grid-column: 1 / 2;
       background: linear-gradient(135deg, #1f2937, #4c51bf);
       border-radius: 16px;
-      padding: 20px;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      padding: 20px; color: #fff;
+      display: flex; flex-direction: column; justify-content: space-between;
       aspect-ratio: 1 / 1;
     }
-
     .main-news .date {
-      font-size: 14px;
-      font-weight: bold;
-      margin-bottom: 10px;
+      font-size: 14px; font-weight: bold; margin-bottom: 10px;
     }
-
     .main-news h3 {
-      font-size: 20px;
-      margin-bottom: 10px;
+      font-size: 20px; margin-bottom: 10px;
     }
-
     .main-news p {
-      font-size: 14px;
-      color: #ddd;
+      font-size: 14px; color: #ddd; flex-grow: 1;
     }
-
     .main-news .label {
-      font-size: 11px;
-      color: #e0c27b;
-      border: 1px solid #e0c27b;
-      padding: 2px 6px;
+      font-size: 11px; color: #e0c27b;
+      border: 1px solid #e0c27b; padding: 2px 6px;
       border-radius: 999px;
-      width: fit-content;
     }
-
     .news-card {
-      background: #222;
-      border-radius: 14px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      aspect-ratio: 1 / 1;
+      background: #222; border-radius: 14px; padding: 20px;
+      display: flex; flex-direction: column;
+      justify-content: space-between; aspect-ratio: 1 / 1;
+      cursor: pointer; box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      transition: background .3s;
     }
-
+    .news-card:hover { background: #333; }
     .news-card .date {
-      font-size: 14px;
-      font-weight: bold;
-      margin-bottom: 10px;
+      font-size: 14px; font-weight: bold; margin-bottom: 10px;
       color: #ccc;
     }
-
-    .news-card h4 {
-      font-size: 16px;
-      color: #fff;
-      margin-bottom: 10px;
-    }
-
-    .news-card p {
-      font-size: 14px;
-      color: #ccc;
-    }
-
+    .news-card h4 { font-size: 16px; color: #fff; margin-bottom: 10px; }
+    .news-card p { font-size: 14px; color: #ccc; flex-grow: 1; }
     .news-card .label {
-      font-size: 11px;
-      color: #e0c27b;
-      border: 1px solid #e0c27b;
-      padding: 2px 6px;
+      font-size: 11px; color: #e0c27b;
+      border: 1px solid #e0c27b; padding: 2px 6px;
       border-radius: 999px;
-      width: fit-content;
+    }
+
+    /* Discography / Videos similar */
+    .discography, .videos {
+      padding: 100px 5% 80px; background: #0f0f0f;
+      max-width: 1200px; margin: 40px auto;
+      border-radius: 12px; box-shadow: 0 0 30px rgba(0,0,0,0.2);
+    }
+    .discography h2, .videos h2 {
+      color: #fff; font-size: 32px; text-align: center; margin-bottom: 30px;
+    }
+    .media-grid {
+      display: flex; gap: 30px; justify-content: center; flex-wrap: wrap;
+    }
+    .media-card {
+      background: #222; border-radius: 14px; padding: 20px;
+      width: 280px; aspect-ratio: 1 / 1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+      cursor: pointer; transition: transform .3s, box-shadow .3s;
+    }
+    .media-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(224,194,123,0.5);
+    }
+    .media-card h4 { font-size: 16px; color: #fff; margin-bottom: 6px; }
+    .media-card .label {
+      font-size: 11px; color: #e0c27b;
+      border: 1px solid #e0c27b; padding: 2px 6px;
+      border-radius: 999px;
     }
   </style>
 </head>
@@ -195,6 +138,8 @@
     <nav>
       <ul>
         <li><a href="#news">NEWS</a></li>
+        <li><a href="#discography">Discography</a></li>
+        <li><a href="#videos">Videos</a></li>
         <li><a href="wallpapers.html">Gallery</a></li>
         <li><a href="#mystudio">My Studio</a></li>
       </ul>
@@ -209,42 +154,75 @@
 
   <section class="news" id="news">
     <h2>NEWS <span>ニュース</span></h2>
-    <div class="schedule-grid">
-      <!-- Noticia Principal -->
-      <article class="main-news">
-        <div class="date">08 JUL 2025</div>
-        <h3>Gran Concierto de Tenshi en Tokio</h3>
-        <p>El esperado concierto en el Nippon será el evento del año.</p>
-        <span class="label">NEW</span>
-      </article>
 
-      <!-- Noticias pequeñas -->
-      <div class="news-card">
-        <div class="date">07 JUL 2025</div>
-        <h4>Nuevo sencillo</h4>
-        <p>"Shinkai no Melody" disponible ya.</p>
-        <span class="label">RELEASE</span>
+    <article class="main-news">
+      <div class="date">08 JUL 2025</div>
+      <h3>Gran Concierto de Tenshi en Tokio</h3>
+      <p>El esperado concierto en el Nippon será el evento del año.</p>
+      <span class="label new">NEW</span>
+    </article>
+
+    <div class="news-card">
+      <div class="date">07 JUL 2025</div>
+      <h4>Nuevo sencillo</h4>
+      <p>"Shinkai no Melody" disponible ya.</p>
+      <span class="label">RELEASE</span>
+    </div>
+
+    <div class="news-card">
+      <div class="date">05 JUL 2025</div>
+      <h4>Evento online</h4>
+      <p>Streaming con sorpresas.</p>
+      <span class="label">EVENT</span>
+    </div>
+
+    <div class="news-card">
+      <div class="date">03 JUL 2025</div>
+      <h4>Premio ganado</h4>
+      <p>Mejor artista emergente.</p>
+      <span class="label">AWARD</span>
+    </div>
+
+    <div class="news-card" onclick="location.href='wallpapers.html'">
+      <div class="date">09 JUL 2025</div>
+      <h4>Nuevo Wallpaper</h4>
+      <p>Descarga el nuevo wallpaper oficial.</p>
+      <span class="label new">NEW</span>
+    </div>
+  </section>
+
+  <section class="discography" id="discography">
+    <h2>DISCOGRAPHY <span>ディスコグラフィー</span></h2>
+    <div class="media-grid">
+      <div class="media-card">
+        <h4>Shinkai no Melody</h4>
+        <span class="label">Single</span>
       </div>
-
-      <div class="news-card">
-        <div class="date">05 JUL 2025</div>
-        <h4>Evento online</h4>
-        <p>Streaming con sorpresas.</p>
-        <span class="label">EVENT</span>
+      <div class="media-card">
+        <h4>Yoru no Uta</h4>
+        <span class="label">Single</span>
       </div>
-
-      <div class="news-card">
-        <div class="date">03 JUL 2025</div>
-        <h4>Premio ganado</h4>
-        <p>Mejor artista emergente.</p>
-        <span class="label">AWARD</span>
+      <div class="media-card">
+        <h4>Midnight Echo</h4>
+        <span class="label">Single</span>
       </div>
+    </div>
+  </section>
 
-      <div class="news-card" onclick="location.href='wallpapers.html'">
-        <div class="date">09 JUL 2025</div>
-        <h4>Nuevo Wallpaper</h4>
-        <p>Descarga el nuevo wallpaper oficial.</p>
-        <span class="label">NEW</span>
+  <section class="videos" id="videos">
+    <h2>VIDEOS <span>ビデオ</span></h2>
+    <div class="media-grid">
+      <div class="media-card">
+        <h4>Shinkai Visualizer</h4>
+        <span class="label">YouTube</span>
+      </div>
+      <div class="media-card">
+        <h4>Intro Cinemática</h4>
+        <span class="label">YouTube</span>
+      </div>
+      <div class="media-card">
+        <h4>Opening Project</h4>
+        <span class="label">YouTube</span>
       </div>
     </div>
   </section>
@@ -254,7 +232,6 @@
       document.body.classList.toggle('light-mode');
       localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
     }
-
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-mode');
     }
