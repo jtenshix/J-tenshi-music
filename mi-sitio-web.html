@@ -19,7 +19,6 @@
       transition: background 0.3s, color 0.3s;
     }
 
-    /* 🌗 MODO CLARO */
     body.light-mode {
       background: #f5f5f5;
       color: #111;
@@ -40,12 +39,15 @@
       border-color: #c59f3f;
       color: #c59f3f;
     }
-
-    /* 🌗 MODO CLARO PARA SCHEDULE */
     body.light-mode .schedule {
       background-color: #f0f0f0;
       color: #111;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+    body.light-mode .discography,
+    body.light-mode .videos {
+      background-color: #f7f7f7;
+      color: #111;
     }
 
     header {
@@ -122,10 +124,9 @@
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     }
 
-    /* 🔳 SCHEDULE ESTILO TARJETA */
     .schedule {
       padding: 100px 5% 80px;
-      background-color: #1a1a1a; /* más claro que fondo principal */
+      background-color: #1a1a1a;
       max-width: 1200px;
       margin: 40px auto;
       border-radius: 12px;
@@ -186,8 +187,6 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-
-      /* 🔷 MEDIDAS CUADRADOS AQUÍ 🔷 */
       aspect-ratio: 1 / 1;
       max-height: 420px;
       overflow: hidden;
@@ -198,8 +197,6 @@
       border-radius: 12px;
       object-fit: cover;
       margin: 15px 0;
-
-      /* 🔷 MEDIDAS CUADRADOS AQUÍ 🔷 */
       aspect-ratio: 1 / 1;
     }
 
@@ -211,8 +208,6 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-
-      /* 🔷 MEDIDAS CUADRADOS AQUÍ 🔷 */
       aspect-ratio: 1 / 1;
       max-height: 420px;
       overflow: hidden;
@@ -223,8 +218,6 @@
       border-radius: 10px;
       object-fit: cover;
       margin-bottom: 12px;
-
-      /* 🔷 MEDIDAS CUADRADOS AQUÍ 🔷 */
       aspect-ratio: 1 / 1;
     }
 
@@ -233,18 +226,15 @@
       font-weight: 700;
       color: #fff;
     }
-
     .news-card .date {
       font-weight: 700;
       font-size: 14px;
       color: #ccc;
     }
-
     .news-card p {
       color: #ccc;
       font-size: 14px;
     }
-
     .news-card .label {
       font-size: 11px;
       color: #e0c27b;
@@ -252,6 +242,73 @@
       padding: 2px 6px;
       border-radius: 999px;
       width: fit-content;
+    }
+
+    /* 🎵 DISCOS Y VIDEOS */
+    .discography, .videos {
+      padding: 100px 5% 80px;
+      background-color: #0f0f0f;
+      max-width: 1200px;
+      margin: 40px auto;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .discography h2, .videos h2 {
+      font-size: 32px;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .discography h2 span, .videos h2 span {
+      font-size: 14px;
+      color: #ccc;
+      margin-left: 10px;
+    }
+
+    .media-grid {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .media-card {
+      background: #222;
+      border-radius: 14px;
+      padding: 20px;
+      width: 280px;
+      aspect-ratio: 1 / 1;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .media-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(224, 194, 123, 0.5);
+    }
+
+    .media-card img {
+      width: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+      margin-bottom: 12px;
+      aspect-ratio: 1 / 1;
+    }
+    .media-card h4 {
+      font-size: 16px;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .media-card .label {
+      font-size: 11px;
+      color: #e0c27b;
+      border: 1px solid #e0c27b;
+      padding: 2px 6px;
+      border-radius: 999px;
     }
   </style>
 </head>
@@ -261,7 +318,8 @@
     <nav>
       <ul>
         <li><a href="#schedule">Schedule</a></li>
-        <li><a href="#contact">Contacto</a></li>
+        <li><a href="#discography">Discography</a></li>
+        <li><a href="#videos">Videos</a></li>
       </ul>
     </nav>
     <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
@@ -280,7 +338,6 @@
       <button>Lanzamientos</button>
       <button>Eventos</button>
     </nav>
-
     <div class="schedule-grid">
       <article class="main-news">
         <div class="date">08 JUL 2025</div>
@@ -289,7 +346,6 @@
         <p>El esperado concierto en el Nippon será el evento del año.</p>
         <span class="label new">NEW</span>
       </article>
-
       <div class="news-card">
         <img src="https://via.placeholder.com/200x200/ff69b4/000000?text=N2" />
         <div class="date">07 JUL 2025</div>
@@ -297,7 +353,6 @@
         <p>"Shinkai no Melody" disponible ya.</p>
         <span class="label">RELEASE</span>
       </div>
-
       <div class="news-card">
         <img src="https://via.placeholder.com/200x200/f6ad55/000000?text=N3" />
         <div class="date">05 JUL 2025</div>
@@ -305,7 +360,6 @@
         <p>Streaming con sorpresas.</p>
         <span class="label">EVENT</span>
       </div>
-
       <div class="news-card">
         <img src="https://via.placeholder.com/200x200/38a169/000000?text=N4" />
         <div class="date">03 JUL 2025</div>
@@ -313,7 +367,6 @@
         <p>Mejor artista emergente.</p>
         <span class="label">AWARD</span>
       </div>
-
       <div class="news-card">
         <img src="https://via.placeholder.com/200x200/63b3ed/000000?text=N5" />
         <div class="date">01 JUL 2025</div>
@@ -324,12 +377,53 @@
     </div>
   </section>
 
+  <section class="discography" id="discography">
+    <h2>DISCOGRAPHY <span>ディスコグラフィー</span></h2>
+    <div class="media-grid">
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/ff8c00/000000?text=Track+1" />
+        <h4>Shinkai no Melody</h4>
+        <span class="label">Single</span>
+      </div>
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/20b2aa/000000?text=Track+2" />
+        <h4>Yoru no Uta</h4>
+        <span class="label">Single</span>
+      </div>
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/8a2be2/ffffff?text=Track+3" />
+        <h4>Midnight Echo</h4>
+        <span class="label">Single</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="videos" id="videos">
+    <h2>VIDEOS <span>ビデオ</span></h2>
+    <div class="media-grid">
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/6495ed/000000?text=MV+1" />
+        <h4>Shinkai Visualizer</h4>
+        <span class="label">YouTube</span>
+      </div>
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/ff1493/000000?text=MV+2" />
+        <h4>Intro Cinemática</h4>
+        <span class="label">YouTube</span>
+      </div>
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/2e8b57/ffffff?text=MV+3" />
+        <h4>Opening Project</h4>
+        <span class="label">YouTube</span>
+      </div>
+    </div>
+  </section>
+
   <script>
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
       localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
     }
-
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-mode');
     }
