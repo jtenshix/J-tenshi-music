@@ -5,11 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tenshi | 幻想の響き</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       font-family: 'Helvetica Neue', sans-serif;
       background: #0b0b0b;
@@ -42,7 +38,6 @@
     body.light-mode .news {
       background-color: #f0f0f0;
       color: #111;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
     body.light-mode .discography,
     body.light-mode .videos {
@@ -131,7 +126,6 @@
       margin: 40px auto;
       border-radius: 12px;
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-      transition: background 0.3s ease;
     }
 
     .news h2 {
@@ -171,7 +165,6 @@
     .schedule-grid {
       display: grid;
       grid-template-columns: 420px 1fr 1fr;
-      grid-template-rows: auto auto;
       gap: 30px;
       justify-content: center;
       align-items: start;
@@ -188,10 +181,7 @@
       flex-direction: column;
       justify-content: space-between;
       aspect-ratio: 1 / 1;
-      max-height: 420px;
-      overflow: hidden;
     }
-
     .main-news img {
       width: 100%;
       border-radius: 12px;
@@ -209,11 +199,11 @@
       flex-direction: column;
       justify-content: space-between;
       aspect-ratio: 1 / 1;
-      max-height: 420px;
-      overflow: hidden;
       cursor: pointer;
     }
-
+    .news-card:hover {
+      box-shadow: 0 0 25px rgba(224, 194, 123, 0.4);
+    }
     .news-card img {
       width: 100%;
       border-radius: 10px;
@@ -221,7 +211,6 @@
       margin-bottom: 12px;
       aspect-ratio: 1 / 1;
     }
-
     .news-card h4 {
       font-size: 16px;
       font-weight: 700;
@@ -259,11 +248,6 @@
       color: #fff;
       text-align: center;
       margin-bottom: 30px;
-    }
-    .discography h2 span, .videos h2 span {
-      font-size: 14px;
-      color: #ccc;
-      margin-left: 10px;
     }
 
     .media-grid {
@@ -369,7 +353,7 @@
         <p>Mejor artista emergente.</p>
         <span class="label">AWARD</span>
       </div>
-      <div class="news-card" onclick="location.href='gallery.html'">
+      <div class="news-card" onclick="location.href='wallpapers.html'">
         <img src="https://via.placeholder.com/200x200/63b3ed/000000?text=Wallpaper" />
         <div class="date">09 JUL 2025</div>
         <h4>Nuevo Wallpaper</h4>
