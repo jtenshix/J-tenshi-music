@@ -16,7 +16,6 @@
       background: #0b0b0b;
       color: #f5f5f5;
       overflow-x: hidden;
-      width: 100%;
     }
 
     header {
@@ -112,7 +111,6 @@
     .schedule-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
       gap: 30px;
     }
 
@@ -135,7 +133,7 @@
     }
 
     .main-news h3 {
-      font-size: 18px;
+      font-size: 20px;
       margin-bottom: 10px;
     }
 
@@ -161,7 +159,6 @@
       flex-direction: column;
       justify-content: space-between;
       aspect-ratio: 1 / 1;
-      cursor: pointer;
     }
 
     .news-card .date {
@@ -190,55 +187,6 @@
       border-radius: 999px;
       width: fit-content;
     }
-
-    .discography, .videos {
-      padding: 100px 5% 80px;
-      background-color: #0f0f0f;
-      max-width: 1200px;
-      margin: 40px auto;
-      border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
-    }
-
-    .discography h2, .videos h2 {
-      font-size: 32px;
-      color: #fff;
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .media-grid {
-      display: flex;
-      gap: 30px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .media-card {
-      background: #222;
-      border-radius: 14px;
-      padding: 20px;
-      width: 280px;
-      aspect-ratio: 1 / 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .media-card h4 {
-      font-size: 16px;
-      text-align: center;
-      margin-bottom: 6px;
-    }
-
-    .media-card .label {
-      font-size: 11px;
-      color: #e0c27b;
-      border: 1px solid #e0c27b;
-      padding: 2px 6px;
-      border-radius: 999px;
-    }
   </style>
 </head>
 <body>
@@ -247,8 +195,6 @@
     <nav>
       <ul>
         <li><a href="#news">NEWS</a></li>
-        <li><a href="#discography">Discography</a></li>
-        <li><a href="#videos">Videos</a></li>
         <li><a href="wallpapers.html">Gallery</a></li>
         <li><a href="#mystudio">My Studio</a></li>
       </ul>
@@ -269,10 +215,10 @@
         <div class="date">08 JUL 2025</div>
         <h3>Gran Concierto de Tenshi en Tokio</h3>
         <p>El esperado concierto en el Nippon será el evento del año.</p>
-        <span class="label new">NEW</span>
+        <span class="label">NEW</span>
       </article>
 
-      <!-- Noticias secundarias -->
+      <!-- Noticias pequeñas -->
       <div class="news-card">
         <div class="date">07 JUL 2025</div>
         <h4>Nuevo sencillo</h4>
@@ -298,43 +244,7 @@
         <div class="date">09 JUL 2025</div>
         <h4>Nuevo Wallpaper</h4>
         <p>Descarga el nuevo wallpaper oficial.</p>
-        <span class="label new">NEW</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="discography" id="discography">
-    <h2>DISCOGRAPHY <span>ディスコグラフィー</span></h2>
-    <div class="media-grid">
-      <div class="media-card">
-        <h4>Shinkai no Melody</h4>
-        <span class="label">Single</span>
-      </div>
-      <div class="media-card">
-        <h4>Yoru no Uta</h4>
-        <span class="label">Single</span>
-      </div>
-      <div class="media-card">
-        <h4>Midnight Echo</h4>
-        <span class="label">Single</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="videos" id="videos">
-    <h2>VIDEOS <span>ビデオ</span></h2>
-    <div class="media-grid">
-      <div class="media-card">
-        <h4>Shinkai Visualizer</h4>
-        <span class="label">YouTube</span>
-      </div>
-      <div class="media-card">
-        <h4>Intro Cinemática</h4>
-        <span class="label">YouTube</span>
-      </div>
-      <div class="media-card">
-        <h4>Opening Project</h4>
-        <span class="label">YouTube</span>
+        <span class="label">NEW</span>
       </div>
     </div>
   </section>
