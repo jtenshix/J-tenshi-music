@@ -39,7 +39,7 @@
       border-color: #c59f3f;
       color: #c59f3f;
     }
-    body.light-mode .schedule {
+    body.light-mode .news {
       background-color: #f0f0f0;
       color: #111;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -124,8 +124,7 @@
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     }
 
-    /* Sección NEWS (antes Schedule) */
-    .schedule {
+    .news {
       padding: 100px 5% 80px;
       background-color: #1a1a1a;
       max-width: 1200px;
@@ -135,13 +134,13 @@
       transition: background 0.3s ease;
     }
 
-    .schedule h2 {
+    .news h2 {
       font-size: 32px;
       color: #fff;
       margin-bottom: 30px;
       text-align: center;
     }
-    .schedule h2 span {
+    .news h2 span {
       font-size: 14px;
       color: #ccc;
       margin-left: 10px;
@@ -191,7 +190,6 @@
       aspect-ratio: 1 / 1;
       max-height: 420px;
       overflow: hidden;
-      cursor: pointer;
     }
 
     .main-news img {
@@ -247,7 +245,6 @@
       width: fit-content;
     }
 
-    /* 🎵 DISCOS Y VIDEOS */
     .discography, .videos {
       padding: 100px 5% 80px;
       background-color: #0f0f0f;
@@ -288,7 +285,6 @@
       align-items: center;
       justify-content: space-between;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: default;
     }
     .media-card:hover {
       transform: scale(1.05);
@@ -324,7 +320,7 @@
         <li><a href="#news">NEWS</a></li>
         <li><a href="#discography">Discography</a></li>
         <li><a href="#videos">Videos</a></li>
-        <li><a href="gallery.html" target="_blank" rel="noopener noreferrer">Gallery</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
         <li><a href="#mystudio">My Studio</a></li>
       </ul>
     </nav>
@@ -336,7 +332,7 @@
     <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
   </div>
 
-  <section class="schedule" id="news">
+  <section class="news" id="news">
     <h2>NEWS <span>ニュース</span></h2>
     <nav class="schedule-filters">
       <button class="active">Todos</button>
@@ -345,23 +341,13 @@
       <button>Eventos</button>
     </nav>
     <div class="schedule-grid">
-
-      <article class="main-news" onclick="window.open('https://via.placeholder.com/400x400/4c51bf/ffffff?text=N1', '_blank')">
+      <article class="main-news">
         <div class="date">08 JUL 2025</div>
         <h3>Gran Concierto de Tenshi en Tokio</h3>
         <img src="https://via.placeholder.com/400x400/4c51bf/ffffff?text=N1" />
         <p>El esperado concierto en el Nippon será el evento del año.</p>
         <span class="label new">NEW</span>
       </article>
-
-      <div class="news-card" onclick="window.open('https://tupagina.com/gallery.html', '_blank')">
-        <img src="https://via.placeholder.com/200x200/ff69b4/000000?text=Wallpaper" />
-        <div class="date">09 JUL 2025</div>
-        <h4>Nuevo Wallpaper</h4>
-        <p>Descarga el nuevo wallpaper oficial.</p>
-        <span class="label new">NEW</span>
-      </div>
-
       <div class="news-card">
         <img src="https://via.placeholder.com/200x200/ff69b4/000000?text=N2" />
         <div class="date">07 JUL 2025</div>
@@ -383,12 +369,12 @@
         <p>Mejor artista emergente.</p>
         <span class="label">AWARD</span>
       </div>
-      <div class="news-card">
-        <img src="https://via.placeholder.com/200x200/63b3ed/000000?text=N5" />
-        <div class="date">01 JUL 2025</div>
-        <h4>Nuevo video</h4>
-        <p>Video oficial de “Shinkai no Melody”.</p>
-        <span class="label">VIDEO</span>
+      <div class="news-card" onclick="location.href='gallery.html'">
+        <img src="https://via.placeholder.com/200x200/63b3ed/000000?text=Wallpaper" />
+        <div class="date">09 JUL 2025</div>
+        <h4>Nuevo Wallpaper</h4>
+        <p>Descarga el nuevo wallpaper oficial.</p>
+        <span class="label new">NEW</span>
       </div>
     </div>
   </section>
@@ -433,11 +419,6 @@
         <span class="label">YouTube</span>
       </div>
     </div>
-  </section>
-
-  <section id="mystudio" style="padding:100px 5% 80px; max-width:1200px; margin:40px auto; border-radius:12px; background:#1a1a1a; color:#fff;">
-    <h2>MY STUDIO <span>マイスタジオ</span></h2>
-    <p style="text-align:center; font-size:18px; margin-top:20px;">Contenido próximamente...</p>
   </section>
 
   <script>
