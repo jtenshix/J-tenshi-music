@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ja">
->
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,7 +16,32 @@
       color: #f5f5f5;
       overflow-x: hidden;
       width: 100%;
+      transition: background 0.3s, color 0.3s;
     }
+
+    /* 🌗 MODO CLARO/OSCURO AQUÍ 🌗 */
+    body.light-mode {
+      background: #f5f5f5;
+      color: #111;
+    }
+    body.light-mode header,
+    body.light-mode .schedule,
+    body.light-mode .news-card,
+    body.light-mode .main-news {
+      background-color: #fff !important;
+      color: #111;
+    }
+    body.light-mode nav a {
+      color: #333;
+    }
+    body.light-mode nav a:hover {
+      color: #c59f3f;
+    }
+    body.light-mode .label {
+      border-color: #c59f3f;
+      color: #c59f3f;
+    }
+
     header {
       position: fixed;
       top: 0;
@@ -26,6 +50,7 @@
       padding: 20px 5%;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       z-index: 999;
     }
     header .logo {
@@ -46,6 +71,24 @@
     nav a:hover {
       color: #e0c27b;
     }
+
+    /* 🌗 BOTÓN DE TEMA */
+    .theme-toggle {
+      background: none;
+      border: 1px solid #777;
+      color: #ccc;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 12px;
+      margin-left: 20px;
+    }
+    .theme-toggle:hover {
+      background: #e0c27b;
+      color: #000;
+    }
+
     .hero-wrapper {
       position: relative;
       height: 75vh;
@@ -209,6 +252,8 @@
         <li><a href="#contact">Contacto</a></li>
       </ul>
     </nav>
+    <!-- 🌗 BOTÓN DE TEMA -->
+    <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
   </header>
 
   <div class="hero-wrapper">
@@ -267,5 +312,18 @@
       </div>
     </div>
   </section>
+
+  <!-- 🌗 SCRIPT DE TEMA -->
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+      localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+    }
+
+    // Cargar la preferencia al cargar
+    if (localStorage.getItem('theme') === 'light') {
+      document.body.classList.add('light-mode');
+    }
+  </script>
 </body>
 </html>
