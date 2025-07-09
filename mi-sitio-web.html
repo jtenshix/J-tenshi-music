@@ -19,13 +19,12 @@
       transition: background 0.3s, color 0.3s;
     }
 
-    /* 🌗 MODO CLARO/OSCURO AQUÍ 🌗 */
+    /* 🌗 MODO CLARO */
     body.light-mode {
       background: #f5f5f5;
       color: #111;
     }
     body.light-mode header,
-    body.light-mode .schedule,
     body.light-mode .news-card,
     body.light-mode .main-news {
       background-color: #fff !important;
@@ -40,6 +39,13 @@
     body.light-mode .label {
       border-color: #c59f3f;
       color: #c59f3f;
+    }
+
+    /* 🌗 MODO CLARO PARA SCHEDULE */
+    body.light-mode .schedule {
+      background-color: #f0f0f0;
+      color: #111;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
 
     header {
@@ -72,7 +78,6 @@
       color: #e0c27b;
     }
 
-    /* 🌗 BOTÓN DE TEMA */
     .theme-toggle {
       background: none;
       border: 1px solid #777;
@@ -116,12 +121,18 @@
       align-items: center;
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     }
+
+    /* 🔳 SCHEDULE ESTILO TARJETA */
     .schedule {
       padding: 100px 5% 80px;
-      background-color: #111;
+      background-color: #1a1a1a; /* más claro que fondo principal */
       max-width: 1200px;
-      margin: 0 auto;
+      margin: 40px auto;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+      transition: background 0.3s ease;
     }
+
     .schedule h2 {
       font-size: 32px;
       color: #fff;
@@ -133,6 +144,7 @@
       color: #ccc;
       margin-left: 10px;
     }
+
     .schedule-filters {
       margin-bottom: 40px;
       display: flex;
@@ -252,7 +264,6 @@
         <li><a href="#contact">Contacto</a></li>
       </ul>
     </nav>
-    <!-- 🌗 BOTÓN DE TEMA -->
     <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
   </header>
 
@@ -313,14 +324,12 @@
     </div>
   </section>
 
-  <!-- 🌗 SCRIPT DE TEMA -->
   <script>
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
       localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
     }
 
-    // Cargar la preferencia al cargar
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-mode');
     }
