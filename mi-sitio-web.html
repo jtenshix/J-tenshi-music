@@ -16,35 +16,10 @@
       color: #f5f5f5;
       overflow-x: hidden;
       width: 100%;
+      transition: background 0.3s, color 0.3s;
     }
-
     body.light-mode {
       background: #f5f5f5;
-      color: #111;
-    }
-    body.light-mode header,
-    body.light-mode .news-card,
-    body.light-mode .main-news {
-      background-color: #fff !important;
-      color: #111;
-    }
-    body.light-mode nav a {
-      color: #333;
-    }
-    body.light-mode nav a:hover {
-      color: #c59f3f;
-    }
-    body.light-mode .label {
-      border-color: #c59f3f;
-      color: #c59f3f;
-    }
-    body.light-mode .news {
-      background-color: #f0f0f0;
-      color: #111;
-    }
-    body.light-mode .discography,
-    body.light-mode .videos {
-      background-color: #f7f7f7;
       color: #111;
     }
 
@@ -162,11 +137,14 @@
 
     .schedule-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
       gap: 30px;
     }
 
     .main-news {
+      grid-column: 1 / 2;
+      grid-row: 1 / 3;
       background: linear-gradient(135deg, #1f2937, #4c51bf);
       border-radius: 16px;
       padding: 20px;
@@ -176,22 +154,11 @@
       flex-direction: column;
       justify-content: center;
       aspect-ratio: 1 / 1;
-      overflow: hidden;
     }
 
     .main-news h3 {
       font-size: 20px;
       margin-bottom: 10px;
-    }
-
-    .main-news p {
-      font-size: 14px;
-    }
-
-    .main-news .date {
-      font-weight: 700;
-      font-size: 14px;
-      margin-bottom: 8px;
     }
 
     .news-card {
@@ -211,18 +178,21 @@
       font-size: 16px;
       font-weight: 700;
       color: #fff;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
+
     .news-card .date {
       font-weight: 700;
       font-size: 14px;
       color: #ccc;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
+
     .news-card p {
       color: #ccc;
       font-size: 14px;
     }
+
     .news-card .label {
       font-size: 11px;
       color: #e0c27b;
@@ -230,7 +200,7 @@
       padding: 2px 6px;
       border-radius: 999px;
       width: fit-content;
-      margin-top: 10px;
+      margin-top: 8px;
     }
 
     .discography, .videos {
@@ -268,11 +238,13 @@
       align-items: center;
       justify-content: center;
     }
+
     .media-card h4 {
       font-size: 16px;
       text-align: center;
       margin-bottom: 6px;
     }
+
     .media-card .label {
       font-size: 11px;
       color: #e0c27b;
@@ -303,7 +275,7 @@
   </div>
 
   <section class="news" id="news">
-    <h2>NEWS</h2>
+    <h2>NEWS <span>ニュース</span></h2>
     <nav class="schedule-filters">
       <button class="active">Todos</button>
       <button>Conciertos</button>
@@ -317,24 +289,28 @@
         <p>El esperado concierto en el Nippon será el evento del año.</p>
         <span class="label">NEW</span>
       </article>
+
       <div class="news-card">
         <div class="date">07 JUL 2025</div>
         <h4>Nuevo sencillo</h4>
         <p>"Shinkai no Melody" disponible ya.</p>
         <span class="label">RELEASE</span>
       </div>
+
       <div class="news-card">
         <div class="date">05 JUL 2025</div>
         <h4>Evento online</h4>
         <p>Streaming con sorpresas.</p>
         <span class="label">EVENT</span>
       </div>
+
       <div class="news-card">
         <div class="date">03 JUL 2025</div>
         <h4>Premio ganado</h4>
         <p>Mejor artista emergente.</p>
         <span class="label">AWARD</span>
       </div>
+
       <div class="news-card" onclick="location.href='wallpapers.html'">
         <div class="date">09 JUL 2025</div>
         <h4>Nuevo Wallpaper</h4>
@@ -345,7 +321,7 @@
   </section>
 
   <section class="discography" id="discography">
-    <h2>DISCOGRAPHY</h2>
+    <h2>DISCOGRAPHY <span>ディスコグラフィー</span></h2>
     <div class="media-grid">
       <div class="media-card">
         <h4>Shinkai no Melody</h4>
@@ -363,7 +339,7 @@
   </section>
 
   <section class="videos" id="videos">
-    <h2>VIDEOS</h2>
+    <h2>VIDEOS <span>ビデオ</span></h2>
     <div class="media-grid">
       <div class="media-card">
         <h4>Shinkai Visualizer</h4>
