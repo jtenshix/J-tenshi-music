@@ -10,13 +10,42 @@
       padding: 0;
       box-sizing: border-box;
     }
-
     html, body {
       font-family: 'Helvetica Neue', sans-serif;
       background: #0b0b0b;
       color: #f5f5f5;
       overflow-x: hidden;
       width: 100%;
+    }
+
+    body.light-mode {
+      background: #f5f5f5;
+      color: #111;
+    }
+    body.light-mode header,
+    body.light-mode .news-card,
+    body.light-mode .main-news {
+      background-color: #fff !important;
+      color: #111;
+    }
+    body.light-mode nav a {
+      color: #333;
+    }
+    body.light-mode nav a:hover {
+      color: #c59f3f;
+    }
+    body.light-mode .label {
+      border-color: #c59f3f;
+      color: #c59f3f;
+    }
+    body.light-mode .news {
+      background-color: #f0f0f0;
+      color: #111;
+    }
+    body.light-mode .discography,
+    body.light-mode .videos {
+      background-color: #f7f7f7;
+      color: #111;
     }
 
     header {
@@ -30,25 +59,21 @@
       align-items: center;
       z-index: 999;
     }
-
     header .logo {
       color: #fff;
       font-size: 20px;
       letter-spacing: 2px;
     }
-
     nav ul {
       display: flex;
       gap: 25px;
       list-style: none;
     }
-
     nav a {
       color: #ccc;
       text-decoration: none;
       font-size: 14px;
     }
-
     nav a:hover {
       color: #e0c27b;
     }
@@ -64,7 +89,6 @@
       font-size: 12px;
       margin-left: 20px;
     }
-
     .theme-toggle:hover {
       background: #e0c27b;
       color: #000;
@@ -76,7 +100,6 @@
       overflow: hidden;
       margin-top: 70px;
     }
-
     .hero-bg {
       position: absolute;
       top: 0;
@@ -87,7 +110,6 @@
       background-size: cover;
       z-index: 0;
     }
-
     .hero-text {
       position: relative;
       z-index: 2;
@@ -116,15 +138,35 @@
       text-align: center;
     }
 
+    .schedule-filters {
+      margin-bottom: 40px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .schedule-filters button {
+      background: none;
+      border: 1px solid #555;
+      color: #ccc;
+      padding: 8px 18px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+    .schedule-filters button.active,
+    .schedule-filters button:hover {
+      color: #e0c27b;
+      border-color: #e0c27b;
+    }
+
     .schedule-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(2, 1fr);
       gap: 30px;
     }
 
     .main-news {
-      grid-row: 1 / span 2;
       background: linear-gradient(135deg, #1f2937, #4c51bf);
       border-radius: 16px;
       padding: 20px;
@@ -132,55 +174,63 @@
       box-shadow: 0 0 20px rgba(76, 81, 191, 0.8);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
       aspect-ratio: 1 / 1;
+      overflow: hidden;
     }
 
-    .main-news img {
-      width: 100%;
-      border-radius: 12px;
-      object-fit: cover;
-      margin: 15px 0;
-      aspect-ratio: 1 / 1;
+    .main-news h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .main-news p {
+      font-size: 14px;
+    }
+
+    .main-news .date {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 8px;
     }
 
     .news-card {
       background: #222;
       border-radius: 14px;
       padding: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: flex-start;
       aspect-ratio: 1 / 1;
+      overflow: hidden;
       cursor: pointer;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
     }
 
     .news-card h4 {
-      font-size: 18px;
-      font-weight: bold;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
       margin-bottom: 8px;
     }
-
     .news-card .date {
-      font-size: 13px;
-      color: #aaa;
-      margin-bottom: 6px;
-    }
-
-    .news-card p {
+      font-weight: 700;
       font-size: 14px;
       color: #ccc;
+      margin-bottom: 6px;
     }
-
+    .news-card p {
+      color: #ccc;
+      font-size: 14px;
+    }
     .news-card .label {
-      margin-top: 10px;
       font-size: 11px;
       color: #e0c27b;
       border: 1px solid #e0c27b;
       padding: 2px 6px;
       border-radius: 999px;
+      width: fit-content;
+      margin-top: 10px;
     }
 
     .discography, .videos {
@@ -216,23 +266,13 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
     }
-
-    .media-card img {
-      width: 100%;
-      border-radius: 10px;
-      object-fit: cover;
-      margin-bottom: 12px;
-      aspect-ratio: 1 / 1;
-    }
-
     .media-card h4 {
       font-size: 16px;
       text-align: center;
       margin-bottom: 6px;
     }
-
     .media-card .label {
       font-size: 11px;
       color: #e0c27b;
@@ -263,63 +303,78 @@
   </div>
 
   <section class="news" id="news">
-    <h2>NEWS <span>ニュース</span></h2>
+    <h2>NEWS</h2>
+    <nav class="schedule-filters">
+      <button class="active">Todos</button>
+      <button>Conciertos</button>
+      <button>Lanzamientos</button>
+      <button>Eventos</button>
+    </nav>
     <div class="schedule-grid">
       <article class="main-news">
         <div class="date">08 JUL 2025</div>
         <h3>Gran Concierto de Tenshi en Tokio</h3>
-        <img src="https://via.placeholder.com/400x400/4c51bf/ffffff?text=N1" />
         <p>El esperado concierto en el Nippon será el evento del año.</p>
-        <span class="label new">NEW</span>
+        <span class="label">NEW</span>
       </article>
-
       <div class="news-card">
         <div class="date">07 JUL 2025</div>
         <h4>Nuevo sencillo</h4>
         <p>"Shinkai no Melody" disponible ya.</p>
         <span class="label">RELEASE</span>
       </div>
-
       <div class="news-card">
         <div class="date">05 JUL 2025</div>
         <h4>Evento online</h4>
         <p>Streaming con sorpresas.</p>
         <span class="label">EVENT</span>
       </div>
-
       <div class="news-card">
         <div class="date">03 JUL 2025</div>
         <h4>Premio ganado</h4>
         <p>Mejor artista emergente.</p>
         <span class="label">AWARD</span>
       </div>
-
       <div class="news-card" onclick="location.href='wallpapers.html'">
         <div class="date">09 JUL 2025</div>
         <h4>Nuevo Wallpaper</h4>
         <p>Descarga el nuevo wallpaper oficial.</p>
-        <span class="label new">NEW</span>
+        <span class="label">NEW</span>
       </div>
     </div>
   </section>
 
   <section class="discography" id="discography">
-    <h2>DISCOGRAPHY <span>ディスコグラフィー</span></h2>
+    <h2>DISCOGRAPHY</h2>
     <div class="media-grid">
       <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/ff8c00/000000?text=Track+1" />
         <h4>Shinkai no Melody</h4>
+        <span class="label">Single</span>
+      </div>
+      <div class="media-card">
+        <h4>Yoru no Uta</h4>
+        <span class="label">Single</span>
+      </div>
+      <div class="media-card">
+        <h4>Midnight Echo</h4>
         <span class="label">Single</span>
       </div>
     </div>
   </section>
 
   <section class="videos" id="videos">
-    <h2>VIDEOS <span>ビデオ</span></h2>
+    <h2>VIDEOS</h2>
     <div class="media-grid">
       <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/6495ed/000000?text=MV+1" />
         <h4>Shinkai Visualizer</h4>
+        <span class="label">YouTube</span>
+      </div>
+      <div class="media-card">
+        <h4>Intro Cinemática</h4>
+        <span class="label">YouTube</span>
+      </div>
+      <div class="media-card">
+        <h4>Opening Project</h4>
         <span class="label">YouTube</span>
       </div>
     </div>
@@ -330,7 +385,6 @@
       document.body.classList.toggle('light-mode');
       localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
     }
-
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-mode');
     }
