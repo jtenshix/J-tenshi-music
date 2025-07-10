@@ -157,12 +157,11 @@
       color: #e0c27b;
       border-color: #e0c27b;
     }
-    /* Aquí va la corrección importante para el grid de noticias */
     .schedule-grid {
       display: grid;
-      grid-template-columns: 2fr 3fr;
+      grid-template-columns: 2.5fr 2fr;
       grid-template-rows: repeat(2, 1fr);
-      gap: 30px;
+      gap: 20px;
       max-width: 1200px;
       margin: 0 auto;
     }
@@ -179,12 +178,8 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      aspect-ratio: 1 / 1;
-    }
-    .main-news h3,
-    .main-news .date,
-    .main-news p {
-      margin-bottom: 8px;
+      max-height: 500px;
+      height: 100%;
     }
     .news-card {
       background: #222;
@@ -197,7 +192,8 @@
       align-items: center;
       text-align: center;
       cursor: pointer;
-      aspect-ratio: 1 / 1;
+      max-height: 240px;
+      height: 100%;
     }
     .news-card:nth-child(2) {
       grid-column: 2 / 3;
@@ -215,20 +211,17 @@
       grid-column: 3 / 4;
       grid-row: 2 / 3;
     }
-    .news-card h4,
-    .news-card .date,
-    .news-card p {
+    .news-card h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
       margin-bottom: 8px;
     }
     .news-card .date {
       font-weight: 700;
       font-size: 14px;
       color: #ccc;
-    }
-    .news-card h4 {
-      font-size: 16px;
-      font-weight: 700;
-      color: #fff;
+      margin-bottom: 10px;
     }
     .news-card p {
       color: #ccc;
@@ -244,88 +237,6 @@
       margin: 10px auto 0;
       display: block;
     }
-    /* Mantenemos lo demás intacto */
-    .discography, .videos {
-      padding: 40px 5% 80px;
-      background-color: #0f0f0f;
-      max-width: 1200px;
-      margin: 60px auto 40px;
-      border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
-    }
-    .discography h2, .videos h2 {
-      font-size: 32px;
-      color: #fff;
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .discography h2 span, .videos h2 span {
-      font-size: 14px;
-      color: #ccc;
-      margin-left: 10px;
-    }
-    .media-grid {
-      display: flex;
-      gap: 30px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .media-card {
-      background: #222;
-      border-radius: 14px;
-      padding: 20px;
-      width: 280px;
-      aspect-ratio: 1 / 1;
-      box-shadow: 0 0 15px rgba(0,0,0,0.4);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .media-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px rgba(224, 194, 123, 0.5);
-    }
-    .media-card img {
-      width: 100%;
-      border-radius: 10px;
-      object-fit: cover;
-      margin-bottom: 12px;
-      aspect-ratio: 1 / 1;
-    }
-    .media-card h4 {
-      font-size: 16px;
-      text-align: center;
-      margin-bottom: 6px;
-    }
-    .media-card .label {
-      font-size: 11px;
-      color: #e0c27b;
-      border: 1px solid #e0c27b;
-      padding: 2px 6px;
-      border-radius: 999px;
-    }
-    /* Nuevo banner para Discography y Videos */
-    .section-banner {
-      position: relative;
-      width: 50%;
-      height: 150px; /* la mitad del banner principal */
-      margin: 40px auto;
-      border-radius: 12px;
-      background: url('banner portada.png') center center no-repeat;
-      background-size: cover;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #e0c27b;
-      font-size: 3rem;
-      font-weight: 900;
-      font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
-      text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
-      user-select: none;
-    }
   </style>
 </head>
 <body>
@@ -333,17 +244,17 @@
     <div class="logo">Tenshi</div>
     <nav>
       <ul>
-        <li><a href="#news">News</a></li>
+        <li><a href="#news">NEWS</a></li>
         <li><a href="#discography">Discografía</a></li>
         <li><a href="#videos">Videos</a></li>
       </ul>
     </nav>
-    <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+    <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
   </header>
 
   <section class="hero-wrapper">
     <div class="hero-bg"></div>
-    <div class="hero-text">Bienvenido a Tenshi</div>
+    <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
   </section>
 
   <section class="news" id="news">
@@ -384,44 +295,6 @@
         <h4>Nuevo Wallpaper</h4>
         <p>Descarga el nuevo wallpaper oficial.</p>
         <span class="label new">NEW</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="discography" id="discography">
-    <div class="section-banner">Discografía</div>
-    <div class="media-grid">
-      <div class="media-card">
-        <img src="album1.jpg" alt="Album 1" />
-        <h4>Álbum 1</h4>
-        <span class="label new">NEW</span>
-      </div>
-      <div class="media-card">
-        <img src="album2.jpg" alt="Album 2" />
-        <h4>Álbum 2</h4>
-      </div>
-      <div class="media-card">
-        <img src="album3.jpg" alt="Album 3" />
-        <h4>Álbum 3</h4>
-      </div>
-    </div>
-  </section>
-
-  <section class="videos" id="videos">
-    <div class="section-banner">Videos</div>
-    <div class="media-grid">
-      <div class="media-card">
-        <img src="video1.jpg" alt="Video 1" />
-        <h4>Video 1</h4>
-        <span class="label">RELEASE</span>
-      </div>
-      <div class="media-card">
-        <img src="video2.jpg" alt="Video 2" />
-        <h4>Video 2</h4>
-      </div>
-      <div class="media-card">
-        <img src="video3.jpg" alt="Video 3" />
-        <h4>Video 3</h4>
       </div>
     </div>
   </section>
