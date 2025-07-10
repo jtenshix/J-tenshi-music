@@ -18,6 +18,7 @@
       width: 100%;
       transition: background 0.3s, color 0.3s;
     }
+
     body.light-mode {
       background: #f5f5f5;
       color: #111;
@@ -45,6 +46,7 @@
       color: #111;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
+
     header {
       position: fixed;
       top: 0;
@@ -74,6 +76,7 @@
     nav a:hover {
       color: #e0c27b;
     }
+
     .theme-toggle {
       background: none;
       border: 1px solid #777;
@@ -89,6 +92,7 @@
       background: #e0c27b;
       color: #000;
     }
+
     .hero-wrapper {
       position: relative;
       height: 75vh;
@@ -116,6 +120,7 @@
       align-items: center;
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     }
+
     .news {
       padding: 100px 5% 80px;
       background-color: #1a1a1a;
@@ -125,6 +130,7 @@
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
       transition: background 0.3s ease;
     }
+
     .news h2 {
       font-size: 32px;
       color: #fff;
@@ -136,6 +142,7 @@
       color: #ccc;
       margin-left: 10px;
     }
+
     .schedule-filters {
       margin-bottom: 40px;
       display: flex;
@@ -157,17 +164,19 @@
       color: #e0c27b;
       border-color: #e0c27b;
     }
+
+    /* Ajustamos la grid para la sección noticias */
     .schedule-grid {
       display: grid;
-      grid-template-columns: 2.5fr 2fr;
+      grid-template-columns: 2.5fr 1.5fr;
       grid-template-rows: repeat(2, 1fr);
       gap: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
     }
+
+    /* Principal nota grande a la izquierda */
     .main-news {
       grid-column: 1 / 2;
-      grid-row: 1 / span 2;
+      grid-row: 1 / 3;
       background: linear-gradient(135deg, #1f2937, #4c51bf);
       border-radius: 16px;
       padding: 20px;
@@ -178,9 +187,22 @@
       justify-content: center;
       align-items: center;
       text-align: center;
+      aspect-ratio: 1 / 1;
       max-height: 500px;
       height: 100%;
     }
+
+    /* Contenedor para las otras noticias */
+    .right-news {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 20px;
+      grid-column: 2 / 3;
+      grid-row: 1 / 3;
+    }
+
+    /* Cada news-card dentro del contenedor right-news */
     .news-card {
       background: #222;
       border-radius: 14px;
@@ -192,24 +214,10 @@
       align-items: center;
       text-align: center;
       cursor: pointer;
-      max-height: 240px;
+      aspect-ratio: 1 / 1;
+      max-height: 230px;
       height: 100%;
-    }
-    .news-card:nth-child(2) {
-      grid-column: 2 / 3;
-      grid-row: 1 / 2;
-    }
-    .news-card:nth-child(3) {
-      grid-column: 3 / 4;
-      grid-row: 1 / 2;
-    }
-    .news-card:nth-child(4) {
-      grid-column: 2 / 3;
-      grid-row: 2 / 3;
-    }
-    .news-card:nth-child(5) {
-      grid-column: 3 / 4;
-      grid-row: 2 / 3;
+      color: #ccc;
     }
     .news-card h4 {
       font-size: 16px;
@@ -220,11 +228,9 @@
     .news-card .date {
       font-weight: 700;
       font-size: 14px;
-      color: #ccc;
       margin-bottom: 10px;
     }
     .news-card p {
-      color: #ccc;
       font-size: 14px;
     }
     .news-card .label {
@@ -245,17 +251,19 @@
     <nav>
       <ul>
         <li><a href="#news">NEWS</a></li>
-        <li><a href="#discography">Discografía</a></li>
+        <li><a href="#discography">Discography</a></li>
         <li><a href="#videos">Videos</a></li>
+        <li><a href="wallpapers.html">Gallery</a></li>
+        <li><a href="#mystudio">My Studio</a></li>
       </ul>
     </nav>
     <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
   </header>
 
-  <section class="hero-wrapper">
+  <div class="hero-wrapper">
     <div class="hero-bg"></div>
     <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
-  </section>
+  </div>
 
   <section class="news" id="news">
     <h2>NEWS <span>ニュース</span></h2>
@@ -272,32 +280,37 @@
         <p>El esperado concierto en el Nippon será el evento del año.</p>
         <span class="label new">NEW</span>
       </article>
-      <div class="news-card">
-        <div class="date">07 JUL 2025</div>
-        <h4>Nuevo sencillo</h4>
-        <p>"Shinkai no Melody" disponible ya.</p>
-        <span class="label">RELEASE</span>
-      </div>
-      <div class="news-card">
-        <div class="date">05 JUL 2025</div>
-        <h4>Evento online</h4>
-        <p>Streaming con sorpresas.</p>
-        <span class="label">EVENT</span>
-      </div>
-      <div class="news-card">
-        <div class="date">03 JUL 2025</div>
-        <h4>Premio ganado</h4>
-        <p>Mejor artista emergente.</p>
-        <span class="label">AWARD</span>
-      </div>
-      <div class="news-card">
-        <div class="date">09 JUL 2025</div>
-        <h4>Nuevo Wallpaper</h4>
-        <p>Descarga el nuevo wallpaper oficial.</p>
-        <span class="label new">NEW</span>
+
+      <div class="right-news">
+        <div class="news-card">
+          <div class="date">07 JUL 2025</div>
+          <h4>Nuevo sencillo</h4>
+          <p>"Shinkai no Melody" disponible ya.</p>
+          <span class="label">RELEASE</span>
+        </div>
+        <div class="news-card">
+          <div class="date">05 JUL 2025</div>
+          <h4>Evento online</h4>
+          <p>Streaming con sorpresas.</p>
+          <span class="label">EVENT</span>
+        </div>
+        <div class="news-card">
+          <div class="date">03 JUL 2025</div>
+          <h4>Premio ganado</h4>
+          <p>Mejor artista emergente.</p>
+          <span class="label">AWARD</span>
+        </div>
+        <div class="news-card" onclick="location.href='gallery.html'">
+          <div class="date">09 JUL 2025</div>
+          <h4>Nuevo Wallpaper</h4>
+          <p>Descarga el nuevo wallpaper oficial.</p>
+          <span class="label new">NEW</span>
+        </div>
       </div>
     </div>
   </section>
+
+  <!-- Aquí puedes agregar las demás secciones tal como estaban: Discography, Videos, etc. -->
 
   <script>
     function toggleTheme() {
