@@ -44,11 +44,6 @@
       color: #111;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
-    body.light-mode .discography,
-    body.light-mode .videos {
-      background-color: #f7f7f7;
-      color: #111;
-    }
 
     header {
       position: fixed;
@@ -168,12 +163,13 @@
       border-color: #e0c27b;
     }
 
+    /* Ajustes solo para la cuadrícula de noticias: */
     .schedule-grid {
       display: grid;
       grid-template-columns: 2fr 1fr;
       grid-template-rows: repeat(2, 1fr);
-      gap: 30px;
-      height: 420px; /* altura fija para mantener proporción */
+      gap: 20px;
+      height: 400px;
     }
 
     .main-news {
@@ -215,6 +211,7 @@
       align-self: flex-start;
     }
 
+    /* Aquí hacemos que las noticias 2 y 3 estén arriba a la derecha (en una columna) y 4 y 5 abajo */
     .news-card {
       background: #222;
       border-radius: 14px;
@@ -225,6 +222,13 @@
       justify-content: center;
       cursor: pointer;
       text-align: center;
+      height: 48%; /* que entren dos en cada mitad de la derecha */
+    }
+    .news-card:nth-child(2) { /* noticia 2 */
+      margin-bottom: 4%;
+    }
+    .news-card:nth-child(3) { /* noticia 3 */
+      margin-bottom: 4%;
     }
     .news-card h4 {
       font-size: 16px;
@@ -252,113 +256,9 @@
       margin: 10px auto 0;
       display: block;
     }
-
-    /* Discography and Videos sections */
-    .discography, .videos {
-      padding: 40px 5% 80px;
-      background-color: #0f0f0f;
-      max-width: 1200px;
-      margin: 60px auto 40px;
-      border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
-    }
-    .discography h2, .videos h2 {
-      font-size: 32px;
-      color: #fff;
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .discography h2 span, .videos h2 span {
-      font-size: 14px;
-      color: #ccc;
-      margin-left: 10px;
-    }
-
-    .media-grid {
-      display: flex;
-      gap: 30px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .media-card {
-      background: #222;
-      border-radius: 14px;
-      padding: 20px;
-      width: 280px;
-      aspect-ratio: 1 / 1;
-      box-shadow: 0 0 15px rgba(0,0,0,0.4);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .media-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px rgba(224, 194, 123, 0.5);
-    }
-    .media-card img {
-      width: 100%;
-      border-radius: 10px;
-      object-fit: cover;
-      margin-bottom: 12px;
-      aspect-ratio: 1 / 1;
-    }
-    .media-card h4 {
-      font-size: 16px;
-      text-align: center;
-      margin-bottom: 6px;
-    }
-    .media-card .label {
-      font-size: 11px;
-      color: #e0c27b;
-      border: 1px solid #e0c27b;
-      padding: 2px 6px;
-      border-radius: 999px;
-    }
-
-    /* Section banners */
-    .section-banner {
-      position: relative;
-      width: 50%;
-      height: 150px;
-      margin: 40px auto;
-      border-radius: 12px;
-      background: url('banner portada.png') center center no-repeat;
-      background-size: cover;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #e0c27b;
-      font-size: 3rem;
-      font-weight: 900;
-      font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
-      text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
-      user-select: none;
-    }
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">Tenshi</div>
-    <nav>
-      <ul>
-        <li><a href="#news">NEWS</a></li>
-        <li><a href="#discography">Discography</a></li>
-        <li><a href="#videos">Videos</a></li>
-        <li><a href="wallpapers.html">Gallery</a></li>
-        <li><a href="#mystudio">My Studio</a></li>
-      </ul>
-    </nav>
-    <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
-  </header>
-
-  <div class="hero-wrapper">
-    <div class="hero-bg"></div>
-    <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
-  </div>
-
   <section class="news" id="news">
     <h2>NEWS <span>ニュース</span></h2>
     <nav class="schedule-filters">
@@ -392,7 +292,7 @@
         <p>Mejor artista emergente.</p>
         <span class="label">AWARD</span>
       </div>
-      <div class="news-card" onclick="location.href='gallery.html'">
+      <div class="news-card">
         <div class="date">09 JUL 2025</div>
         <h4>Nuevo Wallpaper</h4>
         <p>Descarga el nuevo wallpaper oficial.</p>
@@ -400,53 +300,6 @@
       </div>
     </div>
   </section>
-
-  <div class="section-banner">ディスコグラフィー</div>
-
-  <section class="discography" id="discography">
-    <h2>DISCOGRAPHY <span>ディスコグラフィー</span></h2>
-    <div class="media-grid">
-      <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/ff8c00/000000?text=Track+1" />
-        <h4>Shinkai no Melody</h4>
-        <span class="label">Single</span>
-      </div>
-      <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/20b2aa/000000?text=Track+2" />
-        <h4>Yoru no Uta</h4>
-        <span class="label">Single</span>
-      </div>
-      <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/8a2be2/ffffff?text=Track+3" />
-        <h4>Midnight Echo</h4>
-        <span class="label">Single</span>
-      </div>
-    </div>
-  </section>
-
-  <div class="section-banner">ビデオ</div>
-
-  <section class="videos" id="videos">
-    <h2>VIDEOS <span>ビデオ</span></h2>
-    <div class="media-grid">
-      <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/6495ed/000000?text=MV+1" />
-        <h4>Shinkai Visualizer</h4>
-        <span class="label">YouTube</span>
-      </div>
-      <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/ff1493/000000?text=MV+2" />
-        <h4>Intro Cinemática</h4>
-        <span class="label">YouTube</span>
-      </div>
-      <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/2e8b57/ffffff?text=MV+3" />
-        <h4>Opening Project</h4>
-        <span class="label">YouTube</span>
-      </div>
-    </div>
-  </section>
-
   <script>
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
