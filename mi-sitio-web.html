@@ -132,12 +132,53 @@
       border-radius: 12px;
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
       transition: background 0.3s ease;
+    }
+
+    .news h2 {
+      font-size: 32px;
+      color: #fff;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .news h2 span {
+      font-size: 14px;
+      color: #ccc;
+      margin-left: 10px;
+    }
+
+    .schedule-filters {
+      margin-bottom: 40px;
       display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .schedule-filters button {
+      background: none;
+      border: 1px solid #555;
+      color: #ccc;
+      padding: 8px 18px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+    .schedule-filters button.active,
+    .schedule-filters button:hover {
+      color: #e0c27b;
+      border-color: #e0c27b;
+    }
+
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: 420px 1fr 1fr;
+      grid-template-rows: auto auto;
       gap: 30px;
+      justify-content: center;
+      align-items: start;
     }
 
     .main-news {
-      flex: 1 1 420px;
+      grid-row: 1 / span 2;
       background: linear-gradient(135deg, #1f2937, #4c51bf);
       border-radius: 16px;
       padding: 20px;
@@ -145,78 +186,52 @@
       box-shadow: 0 0 20px rgba(76, 81, 191, 0.8);
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      justify-content: space-between;
       aspect-ratio: 1 / 1;
       max-height: 420px;
       overflow: hidden;
-      font-size: 1.1rem;
-      text-align: center;
-    }
-    .main-news .date {
-      font-weight: 700;
-      font-size: 14px;
-      margin-bottom: 10px;
-      color: #ccc;
-    }
-    .main-news h3 {
-      margin-bottom: 15px;
-    }
-    .main-news p {
-      color: #ccc;
-    }
-    .main-news .label {
-      font-size: 11px;
-      color: #e0c27b;
-      border: 1px solid #e0c27b;
-      padding: 4px 10px;
-      border-radius: 999px;
-      margin-top: 20px;
-      width: fit-content;
     }
 
-    .news-cards {
-      flex: 1 1 420px;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-auto-rows: 210px;
-      gap: 20px;
+    /* Quitamos la imagen de la noticia principal */
+    .main-news img {
+      display: none;
     }
 
     .news-card {
       background: #222;
       border-radius: 14px;
-      padding: 15px 12px;
+      padding: 20px;
       box-shadow: 0 0 15px rgba(0,0,0,0.5);
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      justify-content: space-between;
+      aspect-ratio: 1 / 1;
+      max-height: 420px;
+      overflow: hidden;
       cursor: pointer;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #ccc;
-      border: 2px solid transparent;
-      transition: border-color 0.3s;
     }
-    .news-card:hover {
-      border-color: #e0c27b;
+
+    .news-card img {
+      display: none; /* Quitamos las imágenes */
+    }
+
+    .news-card h4 {
+      font-size: 16px;
+      font-weight: 700;
       color: #fff;
+      margin-bottom: 10px;
     }
     .news-card .date {
       font-weight: 700;
-      font-size: 12px;
+      font-size: 14px;
+      color: #ccc;
       margin-bottom: 8px;
-      color: #999;
-    }
-    .news-card h4 {
-      font-weight: 700;
-      margin-bottom: 5px;
-      color: #e0c27b;
     }
     .news-card p {
-      font-size: 13px;
       color: #ccc;
+      font-size: 14px;
+      line-height: 1.3;
+      flex-grow: 1;
     }
     .news-card .label {
       font-size: 11px;
@@ -224,160 +239,130 @@
       border: 1px solid #e0c27b;
       padding: 2px 6px;
       border-radius: 999px;
-      margin-top: 8px;
       width: fit-content;
-      align-self: center;
+      margin-top: 10px;
     }
 
-    /* Banner Presentations */
-    .banner {
-      width: 100%;
-      height: 210px; /* half height of main banner */
-      border-radius: 12px;
-      margin: 40px auto 20px auto;
+    /* Banner pequeño para separar secciones */
+    .section-banner {
+      width: 600px;
+      max-width: 90vw;
+      height: 120px;
+      background: url('banner portada.png') center center no-repeat;
       background-size: cover;
-      background-position: center;
+      margin: 60px auto 40px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      color: #c59f3f;
-      font-size: 48px;
+      justify-content: center;
+      color: #e0c27b;
+      font-size: 2.5rem;
       font-weight: 900;
-      text-shadow: 0 0 10px rgba(0,0,0,0.6);
-      letter-spacing: 10px;
-      user-select: none;
-      font-family: 'Helvetica Neue', sans-serif;
+      letter-spacing: 6px;
+      text-shadow: 0 0 15px rgba(224, 194, 123, 0.9);
+      border-radius: 12px;
     }
 
-    .discography {
+    .discography, .videos {
       padding: 40px 5% 80px;
       background-color: #0f0f0f;
       max-width: 1200px;
-      margin: 0 auto 40px auto;
+      margin: 0 auto 40px;
       border-radius: 12px;
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
     }
 
-    .discography .media-grid {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      padding-bottom: 10px;
-      scroll-behavior: smooth;
+    .discography h2, .videos h2 {
+      display: none; /* Ocultamos títulos para dejar solo banner */
     }
 
-    .discography .media-card {
+    .media-grid {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Cuadros cuadrados para canciones */
+    .media-card {
       background: #222;
       border-radius: 14px;
-      padding: 15px;
-      width: 150px;
-      height: 150px;
+      padding: 20px;
+      width: 280px;
+      aspect-ratio: 1 / 1;
       box-shadow: 0 0 15px rgba(0,0,0,0.4);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: #ccc;
-      text-align: center;
-      user-select: none;
+      justify-content: space-between;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      flex-shrink: 0;
+      cursor: pointer;
     }
-    .discography .media-card:hover {
-      transform: scale(1.1);
+    .media-card:hover {
+      transform: scale(1.05);
       box-shadow: 0 0 25px rgba(224, 194, 123, 0.5);
-      color: #fff;
     }
 
-    .discography .media-card img {
-      width: 80px;
-      height: 80px;
-      object-fit: cover;
+    .media-card img {
+      width: 100%;
       border-radius: 10px;
-      margin-bottom: 8px;
+      object-fit: cover;
+      margin-bottom: 12px;
+      aspect-ratio: 1 / 1;
+      display: block;
     }
-    .discography .media-card h4 {
-      font-size: 14px;
-      margin: 0;
-      line-height: 1.1;
+    .media-card h4 {
+      font-size: 16px;
+      text-align: center;
+      margin-bottom: 6px;
+      color: #fff;
     }
-    .discography .media-card .label {
+    .media-card .label {
       font-size: 11px;
       color: #e0c27b;
       border: 1px solid #e0c27b;
       padding: 2px 6px;
       border-radius: 999px;
-      margin-top: 6px;
-      width: fit-content;
+      user-select: none;
     }
 
-    .videos {
-      padding: 40px 5% 80px;
-      background-color: #0f0f0f;
-      max-width: 1200px;
-      margin: 0 auto 60px auto;
-      border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
-    }
-
-    .videos .media-grid {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      padding-bottom: 10px;
-      scroll-behavior: smooth;
-    }
-
-    .videos .media-card {
+    /* Videos: tarjetas más alargadas */
+    .video-card {
       background: #222;
       border-radius: 14px;
-      padding: 10px;
-      width: 320px;
-      height: 180px;
+      padding: 20px;
+      width: 300px;
+      height: 170px;
       box-shadow: 0 0 15px rgba(0,0,0,0.4);
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
-      cursor: pointer;
-      color: #ccc;
-      text-align: center;
-      user-select: none;
+      align-items: center;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      flex-shrink: 0;
-      position: relative;
+      cursor: pointer;
     }
-    .videos .media-card:hover {
+    .video-card:hover {
       transform: scale(1.05);
       box-shadow: 0 0 25px rgba(224, 194, 123, 0.5);
+    }
+    .video-card img {
+      width: 100%;
+      height: 100px;
+      border-radius: 10px;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+    .video-card h4 {
+      font-size: 16px;
+      text-align: center;
       color: #fff;
     }
-
-    .videos .media-card iframe {
-      width: 100%;
-      height: 100%;
-      border-radius: 12px;
-      pointer-events: none; /* prevent accidental interaction */
-    }
-
-    /* Scrollbar styling */
-    .discography .media-grid::-webkit-scrollbar,
-    .videos .media-grid::-webkit-scrollbar {
-      height: 8px;
-    }
-    .discography .media-grid::-webkit-scrollbar-thumb,
-    .videos .media-grid::-webkit-scrollbar-thumb {
-      background: #e0c27b;
-      border-radius: 4px;
-    }
-    .discography .media-grid::-webkit-scrollbar-track,
-    .videos .media-grid::-webkit-scrollbar-track {
-      background: #1a1a1a;
+    .video-card .label {
+      font-size: 11px;
+      color: #e0c27b;
+      border: 1px solid #e0c27b;
+      padding: 2px 6px;
+      border-radius: 999px;
+      user-select: none;
     }
   </style>
 </head>
@@ -402,57 +387,86 @@
   </div>
 
   <section class="news" id="news">
-    <div class="main-news">
-      <div class="date">08 JUL 2025</div>
-      <h3>Gran Concierto de Tenshi en Tokio</h3>
-      <p>El esperado concierto en el Nippon será el evento del año.</p>
-      <span class="label new">NEW</span>
-    </div>
-    <div class="news-cards">
-      <article class="news-card">
+    <h2>NEWS <span>ニュース</span></h2>
+    <nav class="schedule-filters">
+      <button class="active">Todos</button>
+      <button>Conciertos</button>
+      <button>Lanzamientos</button>
+      <button>Eventos</button>
+    </nav>
+    <div class="schedule-grid">
+      <article class="main-news">
+        <div class="date">08 JUL 2025</div>
+        <h3>Gran Concierto de Tenshi en Tokio</h3>
+        <p>El esperado concierto en el Nippon será el evento del año.</p>
+        <span class="label new">NEW</span>
+      </article>
+      <div class="news-card">
         <div class="date">07 JUL 2025</div>
         <h4>Nuevo sencillo</h4>
         <p>"Shinkai no Melody" disponible ya.</p>
         <span class="label">RELEASE</span>
-      </article>
-      <article class="news-card">
+      </div>
+      <div class="news-card">
         <div class="date">05 JUL 2025</div>
         <h4>Evento online</h4>
         <p>Streaming con sorpresas.</p>
         <span class="label">EVENT</span>
-      </article>
-      <article class="news-card">
+      </div>
+      <div class="news-card">
         <div class="date">03 JUL 2025</div>
         <h4>Premio ganado</h4>
         <p>Mejor artista emergente.</p>
         <span class="label">AWARD</span>
-      </article>
-      <article class="news-card" onclick="location.href='gallery.html'">
+      </div>
+      <div class="news-card" onclick="location.href='gallery.html'">
         <div class="date">09 JUL 2025</div>
         <h4>Nuevo Wallpaper</h4>
         <p>Descarga el nuevo wallpaper oficial.</p>
         <span class="label new">NEW</span>
-      </article>
+      </div>
     </div>
   </section>
 
-  <div class="banner" style="background-image: url('banner portada.png');" id="discography-banner">
-    DISCOGRAPHY | ディスコグラフィー
-  </div>
-
+  <div class="section-banner">DISCOGRAPHY | ディスコグラフィー</div>
   <section class="discography" id="discography">
-    <div class="media-grid" id="spotify-carousel">
-      <!-- Spotify cards inserted by JS -->
+    <div class="media-grid">
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/ff8c00/000000?text=Track+1" alt="Track 1"/>
+        <h4>Shinkai no Melody</h4>
+        <span class="label">Single</span>
+      </div>
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/20b2aa/000000?text=Track+2" alt="Track 2"/>
+        <h4>Yoru no Uta</h4>
+        <span class="label">Single</span>
+      </div>
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/8a2be2/ffffff?text=Track+3" alt="Track 3"/>
+        <h4>Midnight Echo</h4>
+        <span class="label">Single</span>
+      </div>
     </div>
   </section>
 
-  <div class="banner" style="background-image: url('banner portada.png');" id="videos-banner">
-    VIDEOS | ビデオ
-  </div>
-
+  <div class="section-banner">VIDEOS | ビデオ</div>
   <section class="videos" id="videos">
-    <div class="media-grid" id="youtube-carousel">
-      <!-- YouTube cards inserted by JS -->
+    <div class="media-grid">
+      <div class="video-card">
+        <img src="https://via.placeholder.com/300x170/6495ed/000000?text=MV+1" alt="MV 1"/>
+        <h4>Shinkai Visualizer</h4>
+        <span class="label">YouTube</span>
+      </div>
+      <div class="video-card">
+        <img src="https://via.placeholder.com/300x170/ff1493/000000?text=MV+2" alt="MV 2"/>
+        <h4>Intro Cinemática</h4>
+        <span class="label">YouTube</span>
+      </div>
+      <div class="video-card">
+        <img src="https://via.placeholder.com/300x170/2e8b57/ffffff?text=MV+3" alt="MV 3"/>
+        <h4>Opening Project</h4>
+        <span class="label">YouTube</span>
+      </div>
     </div>
   </section>
 
@@ -464,73 +478,6 @@
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-mode');
     }
-
-    // Datos para Spotify: con imágenes y nombres
-    const spotifyTracks = [
-      {
-        title: "Shinkai no Melody",
-        url: "https://open.spotify.com/track/4xI4yEcv2PQWcmrl5Lq78X",
-        img: "https://i.scdn.co/image/ab67616d0000b273cf4c6e2ea9b4a14b70a9e0b2"
-      },
-      {
-        title: "Yoru no Uta",
-        url: "https://open.spotify.com/track/7fYhklZmV4aEqTysXz7Trf",
-        img: "https://i.scdn.co/image/ab67616d0000b2736d47a8b9fce92e1e8a2cddaa"
-      },
-      {
-        title: "Midnight Echo",
-        url: "https://open.spotify.com/track/2HXQplcNmxLlPo7oJlcQfj",
-        img: "https://i.scdn.co/image/ab67616d0000b27338ebce4093b064d66a3e5769"
-      }
-    ];
-
-    // Datos para YouTube: videos embed
-    const youtubeVideos = [
-      {
-        title: "Shinkai Visualizer",
-        url: "https://www.youtube.com/embed/UlmbQeY8X_A"
-      },
-      {
-        title: "Intro Cinemática",
-        url: "https://www.youtube.com/embed/YmRUrXTcw7E"
-      },
-      {
-        title: "Opening Project",
-        url: "https://www.youtube.com/embed/DkOeBNZDyms"
-      }
-    ];
-
-    // Crear carrusel Spotify
-    const spotifyContainer = document.getElementById("spotify-carousel");
-    spotifyTracks.forEach(track => {
-      const card = document.createElement("a");
-      card.className = "media-card";
-      card.href = track.url;
-      card.target = "_blank";
-      card.rel = "noopener noreferrer";
-      card.innerHTML = `
-        <img src="${track.img}" alt="${track.title}" />
-        <h4>${track.title}</h4>
-        <span class="label">Spotify</span>
-      `;
-      spotifyContainer.appendChild(card);
-    });
-
-    // Crear carrusel YouTube
-    const youtubeContainer = document.getElementById("youtube-carousel");
-    youtubeVideos.forEach(video => {
-      const card = document.createElement("div");
-      card.className = "media-card";
-      card.innerHTML = `
-        <iframe src="${video.url}" title="${video.title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        <h4>${video.title}</h4>
-      `;
-      youtubeContainer.appendChild(card);
-    });
-
   </script>
-
-  
-
 </body>
 </html>
