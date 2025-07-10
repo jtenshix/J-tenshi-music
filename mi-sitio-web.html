@@ -16,7 +16,7 @@
       color: #f5f5f5;
       overflow-x: hidden;
       width: 100%;
-      transition: background 0.4s, color 0.4s;
+      transition: background 0.3s, color 0.3s;
     }
 
     body.light-mode {
@@ -25,31 +25,26 @@
     }
     body.light-mode header,
     body.light-mode .news-card,
-    body.light-mode .main-news,
-    body.light-mode .hero-wrapper {
+    body.light-mode .main-news {
       background-color: #fff !important;
       color: #111;
     }
-    body.light-mode nav a { color: #333; }
-    body.light-mode nav a:hover { color: #c59f3f; }
+    body.light-mode nav a {
+      color: #333;
+    }
+    body.light-mode nav a:hover {
+      color: #c59f3f;
+    }
     body.light-mode .label {
       border-color: #c59f3f;
       color: #c59f3f;
     }
-    body.light-mode .news {
+    body.light-mode .news,
+    body.light-mode .discography,
+    body.light-mode .videos {
       background-color: #f0f0f0;
       color: #111;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    }
-    body.light-mode .discography,
-    body.light-mode .videos {
-      background-color: #f7f7f7;
-      color: #111;
-    }
-
-    /* Transiciones extra */
-    header, .news-card, .main-news, .hero-wrapper {
-      transition: background 0.4s, color 0.4s;
     }
 
     header {
@@ -63,10 +58,24 @@
       align-items: center;
       z-index: 999;
     }
-    header .logo { color: #fff; font-size: 20px; letter-spacing: 2px; }
-    nav ul { display: flex; gap: 25px; list-style: none; }
-    nav a { color: #ccc; text-decoration: none; font-size: 14px; }
-    nav a:hover { color: #e0c27b; }
+    header .logo {
+      color: #fff;
+      font-size: 20px;
+      letter-spacing: 2px;
+    }
+    nav ul {
+      display: flex;
+      gap: 25px;
+      list-style: none;
+    }
+    nav a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    nav a:hover {
+      color: #e0c27b;
+    }
 
     .theme-toggle {
       background: none;
@@ -79,7 +88,10 @@
       font-size: 12px;
       margin-left: 20px;
     }
-    .theme-toggle:hover { background: #e0c27b; color: #000; }
+    .theme-toggle:hover {
+      background: #e0c27b;
+      color: #000;
+    }
 
     .hero-wrapper {
       position: relative;
@@ -89,8 +101,12 @@
     }
     .hero-bg {
       position: absolute;
-      inset: 0;
-      background: url('banner portada.png') center/cover no-repeat;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 75vh;
+      background: url('banner portada.png') center center no-repeat;
+      background-size: cover;
       z-index: 0;
     }
     .hero-text {
@@ -102,7 +118,7 @@
       height: 75vh;
       display: flex;
       align-items: center;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     }
 
     .news {
@@ -115,10 +131,24 @@
       transition: background 0.3s ease;
     }
 
-    .news h2 { font-size: 32px; color: #fff; margin-bottom: 30px; text-align: center; }
-    .news h2 span { font-size: 14px; color: #ccc; margin-left: 10px; }
+    .news h2 {
+      font-size: 32px;
+      color: #fff;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .news h2 span {
+      font-size: 14px;
+      color: #ccc;
+      margin-left: 10px;
+    }
 
-    .schedule-filters { margin-bottom: 40px; display: flex; justify-content: center; gap: 20px; }
+    .schedule-filters {
+      margin-bottom: 40px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
     .schedule-filters button {
       background: none;
       border: 1px solid #555;
@@ -130,34 +160,35 @@
       transition: all 0.3s ease;
     }
     .schedule-filters button.active,
-    .schedule-filters button:hover { color: #e0c27b; border-color: #e0c27b; }
-
-    /* Nueva grilla cuadrada 2x3 donde la noticia principal ocupa 2x2 celdas */
-    .schedule-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-auto-rows: 1fr;
-      gap: 30px;
-      justify-content: center;
-      align-items: stretch;
+    .schedule-filters button:hover {
+      color: #e0c27b;
+      border-color: #e0c27b;
     }
 
+    /* Aquí está la modificación para el grid de noticias: */
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: 2fr 3fr;
+      grid-template-rows: repeat(3, 1fr);
+      gap: 30px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
     .main-news {
-      grid-column: 1 / span 2; /* ancho 2 celdas */
-      grid-row: 1 / span 2;   /* alto 2 celdas */
+      grid-column: 1 / 2;
+      grid-row: 1 / span 3;
       background: linear-gradient(135deg, #1f2937, #4c51bf);
       border-radius: 16px;
       padding: 20px;
       color: #fff;
-      box-shadow: 0 0 20px rgba(76,81,191,0.8);
+      box-shadow: 0 0 20px rgba(76, 81, 191, 0.8);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 1 / 2;
+      max-height: 600px;
       overflow: hidden;
     }
-    .main-news img { display: none; }
-
     .news-card {
       background: #222;
       border-radius: 14px;
@@ -166,19 +197,37 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      aspect-ratio: 1 / 1;
       cursor: pointer;
-      transition: background 0.4s, color 0.4s;
+      aspect-ratio: 1 / 1;
     }
-    .news-card h4 { font-size: 16px; font-weight: 700; margin-bottom: 8px; text-align: center; }
-    .news-card .date { font-weight: 700; font-size: 14px; text-align: center; margin-bottom: 10px; }
-    .news-card p { font-size: 14px; text-align: center; }
-    .news-card .label { font-size: 11px; border: 1px solid #e0c27b; padding: 2px 6px; border-radius: 999px; width: fit-content; margin: 10px auto 0; display: block; }
-
-    /* Media query para pantallas chicas */
-    @media (max-width: 900px) {
-      .schedule-grid { grid-template-columns: 1fr; }
-      .main-news { grid-column: 1 / -1; grid-row: 1 / span 1; }
+    .news-card h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .news-card .date {
+      font-weight: 700;
+      font-size: 14px;
+      color: #ccc;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .news-card p {
+      color: #ccc;
+      font-size: 14px;
+      text-align: center;
+    }
+    .news-card .label {
+      font-size: 11px;
+      color: #e0c27b;
+      border: 1px solid #e0c27b;
+      padding: 2px 6px;
+      border-radius: 999px;
+      width: fit-content;
+      margin: 10px auto 0;
+      display: block;
     }
 
     .discography, .videos {
@@ -190,7 +239,24 @@
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
     }
 
-    .media-grid { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; }
+    .discography h2, .videos h2 {
+      font-size: 32px;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .discography h2 span, .videos h2 span {
+      font-size: 14px;
+      color: #ccc;
+      margin-left: 10px;
+    }
+
+    .media-grid {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
 
     .media-card {
       background: #222;
@@ -205,20 +271,41 @@
       justify-content: space-between;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .media-card:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(224,194,123,0.5); }
-    .media-card img { width: 100%; border-radius: 10px; object-fit: cover; margin-bottom: 12px; aspect-ratio: 1 / 1; }
-    .media-card h4 { font-size: 16px; text-align: center; margin-bottom: 6px; }
-    .media-card .label { font-size: 11px; color: #e0c27b; border: 1px solid #e0c27b; padding: 2px 6px; border-radius: 999px; }
+    .media-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(224, 194, 123, 0.5);
+    }
 
-    /* Nuevo banner reducido con blur y fondo */
+    .media-card img {
+      width: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+      margin-bottom: 12px;
+      aspect-ratio: 1 / 1;
+    }
+    .media-card h4 {
+      font-size: 16px;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .media-card .label {
+      font-size: 11px;
+      color: #e0c27b;
+      border: 1px solid #e0c27b;
+      padding: 2px 6px;
+      border-radius: 999px;
+    }
+
+    /* Nuevo banner para Discography y Videos */
     .section-banner {
       position: relative;
       width: 50%;
-      height: 150px;
+      height: 150px; /* la mitad del banner principal */
       margin: 40px auto;
       border-radius: 12px;
-      background: url('banner portada.png') center/cover no-repeat;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      background: url('banner portada.png') center center no-repeat;
+      background-size: cover;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -226,10 +313,8 @@
       font-size: 3rem;
       font-weight: 900;
       font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
-      text-shadow: 0 0 15px rgba(224,194,123,0.7);
+      text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
       user-select: none;
-      backdrop-filter: blur(2px);
-      background-color: rgba(0,0,0,0.4);
     }
   </style>
 </head>
@@ -286,7 +371,7 @@
         <p>Mejor artista emergente.</p>
         <span class="label">AWARD</span>
       </div>
-      <div class="news-card" onclick="location.href='gallery.html'">
+      <div class="news-card">
         <div class="date">09 JUL 2025</div>
         <h4>Nuevo Wallpaper</h4>
         <p>Descarga el nuevo wallpaper oficial.</p>
@@ -298,19 +383,20 @@
   <div class="section-banner">ディスコグラフィー</div>
 
   <section class="discography" id="discography">
+    <h2>DISCOGRAPHY <span>ディスコグラフィー</span></h2>
     <div class="media-grid">
       <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/ff8c00/000000?text=Track+1" alt="Shinkai no Melody" loading="lazy" />
+        <img src="https://via.placeholder.com/300x300/ff8c00/000000?text=Track+1" />
         <h4>Shinkai no Melody</h4>
         <span class="label">Single</span>
       </div>
       <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/20b2aa/000000?text=Track+2" alt="Yoru no Uta" loading="lazy" />
+        <img src="https://via.placeholder.com/300x300/20b2aa/000000?text=Track+2" />
         <h4>Yoru no Uta</h4>
         <span class="label">Single</span>
       </div>
       <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/8a2be2/ffffff?text=Track+3" alt="Midnight Echo" loading="lazy" />
+        <img src="https://via.placeholder.com/300x300/8a2be2/ffffff?text=Track+3" />
         <h4>Midnight Echo</h4>
         <span class="label">Single</span>
       </div>
@@ -320,19 +406,20 @@
   <div class="section-banner">ビデオ</div>
 
   <section class="videos" id="videos">
+    <h2>VIDEOS <span>ビデオ</span></h2>
     <div class="media-grid">
       <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/6495ed/000000?text=MV+1" alt="Shinkai Visualizer" loading="lazy" />
+        <img src="https://via.placeholder.com/300x300/6495ed/000000?text=MV+1" />
         <h4>Shinkai Visualizer</h4>
         <span class="label">YouTube</span>
       </div>
       <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/ff1493/000000?text=MV+2" alt="Intro Cinemática" loading="lazy" />
+        <img src="https://via.placeholder.com/300x300/ff1493/000000?text=MV+2" />
         <h4>Intro Cinemática</h4>
         <span class="label">YouTube</span>
       </div>
       <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/2e8b57/ffffff?text=MV+3" alt="Opening Project" loading="lazy" />
+        <img src="https://via.placeholder.com/300x300/2e8b57/ffffff?text=MV+3" />
         <h4>Opening Project</h4>
         <span class="label">YouTube</span>
       </div>
