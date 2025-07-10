@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tenshi | 幻想の響き</title>
   <style>
     * {
@@ -124,8 +124,6 @@
       border-radius: 12px;
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
       transition: background 0.3s ease;
-      /* Ajuste para que las notas no sobresalgan */
-      overflow: hidden;
     }
     .news h2 {
       font-size: 32px;
@@ -161,10 +159,10 @@
     }
     .schedule-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 2fr 3fr;
       grid-template-rows: repeat(2, 1fr);
       gap: 30px;
-      max-height: 500px; /* Limita altura total para que no desborde */
+      height: 450px;
     }
     .main-news {
       grid-row: 1 / span 2;
@@ -177,7 +175,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      aspect-ratio: 2 / 2;
+      aspect-ratio: 1 / 2;
       overflow: hidden;
     }
     .news-card {
@@ -351,46 +349,49 @@
       </div>
     </div>
   </section>
+
   <div class="section-banner">ディスコグラフィー</div>
   <section class="discography" id="discography">
     <div class="media-grid">
       <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/ff8c00/000000?text=Track+1" />
+        <img src="https://via.placeholder.com/300x300/ff8c00/000000?text=Track+1" alt="Shinkai no Melody" />
         <h4>Shinkai no Melody</h4>
         <span class="label">Single</span>
       </div>
       <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/20b2aa/000000?text=Track+2" />
+        <img src="https://via.placeholder.com/300x300/20b2aa/000000?text=Track+2" alt="Yoru no Uta" />
         <h4>Yoru no Uta</h4>
         <span class="label">Single</span>
       </div>
       <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/8a2be2/ffffff?text=Track+3" />
+        <img src="https://via.placeholder.com/300x300/8a2be2/ffffff?text=Track+3" alt="Midnight Echo" />
         <h4>Midnight Echo</h4>
         <span class="label">Single</span>
       </div>
     </div>
   </section>
+
   <div class="section-banner">ビデオ</div>
   <section class="videos" id="videos">
     <div class="media-grid">
       <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/6495ed/000000?text=MV+1" />
+        <img src="https://via.placeholder.com/300x300/6495ed/000000?text=MV+1" alt="Shinkai Visualizer" />
         <h4>Shinkai Visualizer</h4>
         <span class="label">YouTube</span>
       </div>
       <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/ff1493/000000?text=MV+2" />
+        <img src="https://via.placeholder.com/300x300/ff1493/000000?text=MV+2" alt="Intro Cinemática" />
         <h4>Intro Cinemática</h4>
         <span class="label">YouTube</span>
       </div>
       <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/2e8b57/ffffff?text=MV+3" />
+        <img src="https://via.placeholder.com/300x300/2e8b57/ffffff?text=MV+3" alt="Opening Project" />
         <h4>Opening Project</h4>
         <span class="label">YouTube</span>
       </div>
     </div>
   </section>
+
   <script>
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
