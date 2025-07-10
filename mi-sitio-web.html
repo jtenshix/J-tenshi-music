@@ -220,7 +220,7 @@
       margin: 10px auto 0;
       display: block;
     }
-    /* Discography and Videos section */
+    /* Section banners */
     .section-banner {
       position: relative;
       width: 50%;
@@ -240,6 +240,7 @@
       text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
       user-select: none;
     }
+    /* Discography and Videos */
     .discography, .videos {
       padding: 40px 5% 80px;
       background-color: #0f0f0f;
@@ -306,10 +307,12 @@
     </nav>
     <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
   </header>
+
   <div class="hero-wrapper">
     <div class="hero-bg"></div>
     <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
   </div>
+
   <section class="news" id="news">
     <h2>NEWS <span>ニュース</span></h2>
     <nav class="schedule-filters">
@@ -351,6 +354,7 @@
       </div>
     </div>
   </section>
+
   <div class="section-banner">ディスコグラフィー</div>
   <section class="discography" id="discography">
     <div class="media-grid">
@@ -371,6 +375,7 @@
       </div>
     </div>
   </section>
+
   <div class="section-banner">ビデオ</div>
   <section class="videos" id="videos">
     <div class="media-grid">
@@ -391,6 +396,7 @@
       </div>
     </div>
   </section>
+
   <script>
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
