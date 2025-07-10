@@ -159,13 +159,13 @@
     }
     .schedule-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(2, 1fr);
       gap: 30px;
     }
     .main-news {
-      grid-column: 1 / 2;
       grid-row: 1 / span 2;
+      grid-column: 1 / 2;
       background: linear-gradient(135deg, #1f2937, #4c51bf);
       border-radius: 16px;
       padding: 20px;
@@ -174,7 +174,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 2 / 2;
     }
     .news-card {
       background: #222;
@@ -220,7 +220,7 @@
       position: relative;
       width: 50%;
       height: 150px;
-      margin: 40px auto;
+      margin: 60px auto;
       border-radius: 12px;
       background: url('banner portada.png') center center no-repeat;
       background-size: cover;
@@ -235,9 +235,76 @@
       text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
       user-select: none;
     }
+    .discography, .videos {
+      padding: 40px 5% 80px;
+      background-color: #0f0f0f;
+      max-width: 1200px;
+      margin: 60px auto 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+    }
+    .media-grid {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .media-card {
+      background: #222;
+      border-radius: 14px;
+      padding: 20px;
+      width: 280px;
+      aspect-ratio: 1 / 1;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .media-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(224, 194, 123, 0.5);
+    }
+    .media-card img {
+      width: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+      margin-bottom: 12px;
+      aspect-ratio: 1 / 1;
+    }
+    .media-card h4 {
+      font-size: 16px;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .media-card .label {
+      font-size: 11px;
+      color: #e0c27b;
+      border: 1px solid #e0c27b;
+      padding: 2px 6px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
+  <header>
+    <div class="logo">Tenshi</div>
+    <nav>
+      <ul>
+        <li><a href="#news">NEWS</a></li>
+        <li><a href="#discography">Discography</a></li>
+        <li><a href="#videos">Videos</a></li>
+        <li><a href="wallpapers.html">Gallery</a></li>
+        <li><a href="#mystudio">My Studio</a></li>
+      </ul>
+    </nav>
+    <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
+  </header>
+  <div class="hero-wrapper">
+    <div class="hero-bg"></div>
+    <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
+  </div>
   <section class="news" id="news">
     <h2>NEWS <span>ニュース</span></h2>
     <nav class="schedule-filters">
@@ -279,19 +346,46 @@
       </div>
     </div>
   </section>
-
   <div class="section-banner">ディスコグラフィー</div>
-
   <section class="discography" id="discography">
-    <!-- Contenido de discografía aquí -->
+    <div class="media-grid">
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/ff8c00/000000?text=Track+1" />
+        <h4>Shinkai no Melody</h4>
+        <span class="label">Single</span>
+      </div>
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/20b2aa/000000?text=Track+2" />
+        <h4>Yoru no Uta</h4>
+        <span class="label">Single</span>
+      </div>
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/8a2be2/ffffff?text=Track+3" />
+        <h4>Midnight Echo</h4>
+        <span class="label">Single</span>
+      </div>
+    </div>
   </section>
-
   <div class="section-banner">ビデオ</div>
-
   <section class="videos" id="videos">
-    <!-- Contenido de videos aquí -->
+    <div class="media-grid">
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/6495ed/000000?text=MV+1" />
+        <h4>Shinkai Visualizer</h4>
+        <span class="label">YouTube</span>
+      </div>
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/ff1493/000000?text=MV+2" />
+        <h4>Intro Cinemática</h4>
+        <span class="label">YouTube</span>
+      </div>
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/2e8b57/ffffff?text=MV+3" />
+        <h4>Opening Project</h4>
+        <span class="label">YouTube</span>
+      </div>
+    </div>
   </section>
-
   <script>
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
