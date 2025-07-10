@@ -124,6 +124,8 @@
       border-radius: 12px;
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
       transition: background 0.3s ease;
+      /* Ajuste para que las notas no sobresalgan */
+      overflow: hidden;
     }
     .news h2 {
       font-size: 32px;
@@ -162,6 +164,7 @@
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(2, 1fr);
       gap: 30px;
+      max-height: 500px; /* Limita altura total para que no desborde */
     }
     .main-news {
       grid-row: 1 / span 2;
@@ -175,6 +178,7 @@
       flex-direction: column;
       justify-content: space-between;
       aspect-ratio: 2 / 2;
+      overflow: hidden;
     }
     .news-card {
       background: #222;
@@ -186,6 +190,7 @@
       justify-content: center;
       cursor: pointer;
       aspect-ratio: 1 / 1;
+      overflow: hidden;
     }
     .news-card h4 {
       font-size: 16px;
