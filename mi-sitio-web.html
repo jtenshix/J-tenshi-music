@@ -273,7 +273,7 @@
     }
     .discography h2 {
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
       font-size: 32px;
     }
     .discography-list {
@@ -309,6 +309,37 @@
       font-size: 14px;
       color: #ccc;
     }
+    /* Banner Discografia */
+    .banner-discography {
+      max-width: 1200px;
+      margin: 20px auto 60px;
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      transition: background 0.3s ease;
+    }
+    .banner-discography .banner {
+      width: 280px;
+      height: 160px;
+      background-size: cover;
+      border-radius: 16px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .banner-discography .banner1 {
+      background-image: url('banner-disc1.png');
+    }
+    .banner-discography .banner2 {
+      background-image: url('banner-disc2.png');
+    }
+    .banner-discography .banner3 {
+      background-image: url('banner-disc3.png');
+    }
+    .banner-discography .banner:hover {
+      transform: scale(1.05);
+    }
 
     /* Videos */
     .videos {
@@ -323,7 +354,7 @@
     }
     .videos h2 {
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
       font-size: 32px;
     }
     .videos-list {
@@ -356,35 +387,38 @@
       padding: 12px;
     }
 
-    /* Banners */
-    .banner-section {
+    /* Banner Videos */
+    .banner-videos {
       max-width: 1200px;
-      margin: 40px auto;
+      margin: 20px auto 80px;
       display: flex;
       gap: 20px;
       justify-content: center;
       flex-wrap: wrap;
       transition: background 0.3s ease;
     }
-    .banner {
+    .banner-videos .banner {
       width: 280px;
       height: 160px;
-      background: url('banner1.png') center center no-repeat;
       background-size: cover;
       border-radius: 16px;
       box-shadow: 0 0 15px rgba(0,0,0,0.5);
       cursor: pointer;
       transition: transform 0.3s ease;
     }
-    .banner:hover {
+    .banner-videos .banner1 {
+      background-image: url('banner-video1.png');
+    }
+    .banner-videos .banner2 {
+      background-image: url('banner-video2.png');
+    }
+    .banner-videos .banner3 {
+      background-image: url('banner-video3.png');
+    }
+    .banner-videos .banner:hover {
       transform: scale(1.05);
     }
-    .banner.banner2 {
-      background-image: url('banner2.png');
-    }
-    .banner.banner3 {
-      background-image: url('banner3.png');
-    }
+
   </style>
 </head>
 <body>
@@ -470,6 +504,13 @@
     </div>
   </section>
 
+  <!-- Banner Discografia -->
+  <section class="banner-discography">
+    <div class="banner banner1"></div>
+    <div class="banner banner2"></div>
+    <div class="banner banner3"></div>
+  </section>
+
   <!-- Videos Section -->
   <section class="videos" id="videos">
     <h2>Videos</h2>
@@ -489,8 +530,8 @@
     </div>
   </section>
 
-  <!-- Banners Section -->
-  <section class="banner-section">
+  <!-- Banner Videos -->
+  <section class="banner-videos">
     <div class="banner banner1"></div>
     <div class="banner banner2"></div>
     <div class="banner banner3"></div>
