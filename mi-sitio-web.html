@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tenshi | 幻想の響き</title>
   <style>
     * {
@@ -60,59 +60,214 @@
       text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
     }
 
+    /* Sección News */
+    section.news {
+      max-width: 1200px;
+      background: #1a1a1a;
+      margin: 40px auto;
+      padding: 60px 5% 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    }
+    section.news h2 {
+      font-size: 32px;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    section.news h2 span {
+      font-size: 14px;
+      color: #ccc;
+      margin-left: 10px;
+    }
+
+    .schedule-filters {
+      margin-bottom: 40px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .schedule-filters button {
+      background: none;
+      border: 1px solid #555;
+      color: #ccc;
+      padding: 8px 18px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+    .schedule-filters button.active,
+    .schedule-filters button:hover {
+      color: #e0c27b;
+      border-color: #e0c27b;
+    }
+
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      grid-template-rows: auto auto;
+      gap: 30px;
+      justify-content: center;
+      align-items: start;
+    }
+
+    .main-news {
+      background: linear-gradient(135deg, #1f2937, #4c51bf);
+      border-radius: 16px;
+      padding: 20px;
+      color: #fff;
+      box-shadow: 0 0 20px rgba(76, 81, 191, 0.8);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      aspect-ratio: 1 / 1;
+      max-height: 420px;
+      overflow: hidden;
+      cursor: default;
+    }
+    .main-news .date {
+      font-weight: 700;
+      font-size: 14px;
+      color: #ccc;
+      margin-bottom: 8px;
+    }
+    .main-news h3 {
+      margin-bottom: 12px;
+    }
+    .main-news p {
+      color: #ccc;
+      font-size: 14px;
+      flex-grow: 1;
+    }
+    .main-news .label {
+      font-size: 11px;
+      color: #e0c27b;
+      border: 1px solid #e0c27b;
+      padding: 2px 6px;
+      border-radius: 999px;
+      width: fit-content;
+      align-self: flex-start;
+      margin-top: 10px;
+    }
+
+    .news-cards-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 30px;
+    }
+
+    .news-card {
+      background: #222;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      aspect-ratio: 1 / 1;
+      max-height: 210px;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .news-card .date {
+      font-weight: 700;
+      font-size: 14px;
+      color: #ccc;
+      margin-bottom: 6px;
+    }
+    .news-card h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .news-card p {
+      color: #ccc;
+      font-size: 14px;
+      flex-grow: 1;
+    }
+    .news-card .label {
+      font-size: 11px;
+      color: #e0c27b;
+      border: 1px solid #e0c27b;
+      padding: 2px 6px;
+      border-radius: 999px;
+      width: fit-content;
+      margin-top: 10px;
+    }
+
+    /* Banner separador para Discografía y Videos */
     .section-banner {
       height: 35vh;
       background: url('banner portada.png') center center / cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
+      margin: 60px 0 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(76, 81, 191, 0.6);
     }
     .section-banner h2 {
       font-size: 28px;
       color: white;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0,0,0,0.55);
       padding: 10px 20px;
       border-radius: 8px;
+      user-select: none;
     }
 
+    /* Carousel general */
     .carousel-container {
       max-width: 900px;
-      margin: 40px auto;
+      margin: 0 auto 40px;
       overflow: hidden;
       position: relative;
     }
     .carousel-track {
       display: flex;
       transition: transform 0.5s ease-in-out;
+      gap: 20px;
     }
-    .carousel-item {
-      min-width: 300px;
-      margin-right: 20px;
+
+    /* Items Discografía (cuadrados pequeños) */
+    #spotify-carousel .carousel-item {
+      min-width: 200px;
+      height: 200px;
       background: #222;
       border-radius: 10px;
       padding: 10px;
       flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-    .carousel-item iframe, .carousel-item img {
+    #spotify-carousel iframe {
+      border-radius: 12px;
       width: 100%;
-      border-radius: 8px;
+      height: 160px;
     }
 
-    /* Botones (por si quieres agregar manuales después) */
-    .carousel-controls {
-      position: absolute;
-      top: 50%;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      transform: translateY(-50%);
+    /* Items Videos (tipo video YouTube en tamaño natural) */
+    #youtube-carousel .carousel-item {
+      min-width: 320px;
+      height: 180px;
+      background: #222;
+      border-radius: 10px;
+      flex-shrink: 0;
+      overflow: hidden;
     }
-    .carousel-controls button {
-      background: rgba(0,0,0,0.5);
-      color: white;
-      border: none;
-      padding: 10px;
-      cursor: pointer;
+    #youtube-carousel iframe {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      display: block;
+    }
+
+    /* Scroll smooth para el body */
+    html {
+      scroll-behavior: smooth;
     }
 
   </style>
@@ -122,6 +277,7 @@
     <div class="logo">Tenshi</div>
     <nav>
       <ul>
+        <li><a href="#news">News</a></li>
         <li><a href="#discography">Discography</a></li>
         <li><a href="#videos">Videos</a></li>
       </ul>
@@ -132,6 +288,53 @@
     <h1>Bienvenido a Tenshi | 幻想の響き</h1>
   </div>
 
+  <section class="news" id="news">
+    <h2>NEWS <span>ニュース</span></h2>
+
+    <nav class="schedule-filters">
+      <button class="active">Todos</button>
+      <button>Conciertos</button>
+      <button>Lanzamientos</button>
+      <button>Eventos</button>
+    </nav>
+
+    <div class="schedule-grid">
+      <article class="main-news">
+        <div class="date">08 JUL 2025</div>
+        <h3>Gran Concierto de Tenshi en Tokio</h3>
+        <p>El esperado concierto en el Nippon será el evento del año.</p>
+        <span class="label new">NEW</span>
+      </article>
+
+      <div class="news-cards-container">
+        <div class="news-card" onclick="location.href='gallery.html'">
+          <div class="date">09 JUL 2025</div>
+          <h4>Nuevo Wallpaper</h4>
+          <p>Descarga el nuevo wallpaper oficial.</p>
+          <span class="label new">NEW</span>
+        </div>
+        <div class="news-card">
+          <div class="date">07 JUL 2025</div>
+          <h4>Nuevo sencillo</h4>
+          <p>"Shinkai no Melody" disponible ya.</p>
+          <span class="label">RELEASE</span>
+        </div>
+        <div class="news-card">
+          <div class="date">05 JUL 2025</div>
+          <h4>Evento online</h4>
+          <p>Streaming con sorpresas.</p>
+          <span class="label">EVENT</span>
+        </div>
+        <div class="news-card">
+          <div class="date">03 JUL 2025</div>
+          <h4>Premio ganado</h4>
+          <p>Mejor artista emergente.</p>
+          <span class="label">AWARD</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Banner Discografía -->
   <div class="section-banner">
     <h2>ディスコグラフィー</h2>
@@ -141,12 +344,12 @@
     <div class="carousel-container">
       <div class="carousel-track" id="spotify-carousel">
         <div class="carousel-item">
-          <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/4Mbd2IfrfAU4z0zQogU8XT?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+          <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/4Mbd2IfrfAU4z0zQogU8XT?utm_source=generator" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
         </div>
         <div class="carousel-item">
-          <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/2DMIoZBGsBU2M4kT7Udb2r?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+          <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/2DMIoZBGsBU2M4kT7Udb2r?utm_source=generator" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
         </div>
-        <!-- Puedes agregar más canciones aquí -->
+        <!-- Agrega más canciones si quieres -->
       </div>
     </div>
   </section>
@@ -160,10 +363,10 @@
     <div class="carousel-container">
       <div class="carousel-track" id="youtube-carousel">
         <div class="carousel-item">
-          <iframe width="100%" height="180" src="https://www.youtube.com/embed/TU8DWyt6QhI" title="Visualizer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe src="https://www.youtube.com/embed/TU8DWyt6QhI" title="Visualizer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
         </div>
         <div class="carousel-item">
-          <iframe width="100%" height="180" src="https://www.youtube.com/embed/FkUqzt45N8I" title="Intro" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe src="https://www.youtube.com/embed/FkUqzt45N8I" title="Intro" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
         </div>
         <!-- Agrega más videos si quieres -->
       </div>
@@ -174,7 +377,7 @@
     function autoSlide(id) {
       const track = document.getElementById(id);
       let offset = 0;
-      const itemWidth = 320;
+      const itemWidth = track.querySelector('.carousel-item').offsetWidth + 20; // ancho + gap
 
       setInterval(() => {
         offset += itemWidth;
@@ -185,8 +388,10 @@
       }, 5000);
     }
 
-    autoSlide('spotify-carousel');
-    autoSlide('youtube-carousel');
+    window.onload = () => {
+      autoSlide('spotify-carousel');
+      autoSlide('youtube-carousel');
+    };
   </script>
 </body>
 </html>
