@@ -159,47 +159,62 @@
       color: #e0c27b;
       border-color: #e0c27b;
     }
-.schedule-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr; /* 3 columnas iguales */
-  grid-template-rows: repeat(2, 1fr); /* 2 filas iguales */
-  gap: 20px;
-  max-height: 320px;
-}
 
+    /* INICIO DE CÓDIGO CSS MODIFICADO PARA EL DISEÑO DE NOTICIAS */
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr; /* 3 columnas: N1, N2/N4, N3/N5 */
+      grid-template-rows: repeat(2, 1fr); /* 2 filas */
+      gap: 20px;
+      max-height: 400px; /* Ajusta este valor si es necesario para el contenedor */
+    }
 
-.main-news {
-  grid-column: 1 / 2; /* ocupa la primera columna */
-  grid-row: 1 / 3;    /* ocupa las dos filas, para ser alta */
-  aspect-ratio: 1 / 2; /* alto, vertical */
-  background: linear-gradient(135deg, #1f2937, #4c51bf);
-  border-radius: 16px;
-  padding: 20px;
-  color: #fff;
-  box-shadow: 0 0 20px rgba(76, 81, 191, 0.8);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden;
-}
+    .main-news {
+      grid-column: 1 / 2; /* N1: Ocupa la primera columna */
+      grid-row: 1 / 3;    /* N1: Ocupa las dos filas */
+      aspect-ratio: 1 / 1.8; /* Ajustado para ser más vertical */
+      background: linear-gradient(135deg, #1f2937, #4c51bf);
+      border-radius: 16px;
+      padding: 20px;
+      color: #fff;
+      box-shadow: 0 0 20px rgba(76, 81, 191, 0.8);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
 
-.news-card {
-  background: #222;
-  border-radius: 14px;
-  padding: 20px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.5);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  cursor: pointer;
-  aspect-ratio: 4 / 3; /* rectangular horizontal */
-  overflow: hidden;
-}
+    .news-card {
+      background: #222;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      cursor: pointer;
+      aspect-ratio: 4 / 3; /* rectangular horizontal */
+      overflow: hidden;
+    }
 
-.news-card:nth-child(2) { grid-column: 2 / 3; grid-row: 1 / 2; } /* arriba izquierda */
-.news-card:nth-child(3) { grid-column: 3 / 4; grid-row: 1 / 2; } /* arriba derecha */
-.news-card:nth-child(4) { grid-column: 2 / 3; grid-row: 2 / 3; } /* abajo izquierda */
-.news-card:nth-child(5) { grid-column: 3 / 4; grid-row: 2 / 3; } /* abajo derecha */
+    /* Asignaciones de Grid para las news-card según el orden del HTML */
+    .news-card:nth-of-type(1) { /* Corresponde a "Nuevo sencillo" (N2) */
+      grid-column: 2 / 3; /* Segunda columna */
+      grid-row: 1 / 2;    /* Primera fila */
+    }
+    .news-card:nth-of-type(2) { /* Corresponde a "Evento online" (N3) */
+      grid-column: 3 / 4; /* Tercera columna */
+      grid-row: 1 / 2;    /* Primera fila */
+    }
+    .news-card:nth-of-type(3) { /* Corresponde a "Premio ganado" (N4) */
+      grid-column: 2 / 3; /* Segunda columna */
+      grid-row: 2 / 3;    /* Segunda fila */
+    }
+    .news-card:nth-of-type(4) { /* Corresponde a "Nuevo Wallpaper" (N5) */
+      grid-column: 3 / 4; /* Tercera columna */
+      grid-row: 2 / 3;    /* Segunda fila */
+    }
+    /* FIN DE CÓDIGO CSS MODIFICADO PARA EL DISEÑO DE NOTICIAS */
 
     .news-card h4 {
       font-size: 16px;
