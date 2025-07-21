@@ -160,19 +160,21 @@
       border-color: #e0c27b;
     }
 
-    /* INICIO DE CÓDIGO CSS MODIFICADO PARA EL DISEÑO DE NOTICIAS */
+    /* INICIO DE CÓDIGO CSS MODIFICADO PARA EL DISEÑO DE NOTICIAS (Con N1 del mismo ancho que N2+N3) */
     .schedule-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr; /* 3 columnas: N1, N2/N4, N3/N5 */
-      grid-template-rows: repeat(2, 1fr); /* 2 filas */
+      /* La primera columna (para N1) es el doble de ancho que las otras dos,
+         para que su ancho total sea igual a la suma de la segunda y tercera. */
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: repeat(2, 1fr); /* 2 filas iguales */
       gap: 20px;
       max-height: 400px; /* Ajusta este valor si es necesario para el contenedor */
     }
 
-    .main-news {
-      grid-column: 1 / 2; /* N1: Ocupa la primera columna */
-      grid-row: 1 / 3;    /* N1: Ocupa las dos filas */
-      aspect-ratio: 1 / 1.8; /* Ajustado para ser más vertical */
+    .main-news { /* Esto es N1 */
+      grid-column: 1 / 2; /* Ocupa la primera columna */
+      grid-row: 1 / 3;    /* Ocupa las dos filas, para ser alta */
+      aspect-ratio: 1 / 1.8; /* Ajustado para ser más vertical. Prueba 1/2 si quieres que N1 sea un cuadrado perfecto al lado de las 4. */
       background: linear-gradient(135deg, #1f2937, #4c51bf);
       border-radius: 16px;
       padding: 20px;
