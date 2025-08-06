@@ -334,7 +334,47 @@
   transform: scale(1.05);
   box-shadow: 0 0 25px rgba(224, 194, 123, 0.5);
 }
+/* Nuevos estilos para el carrusel */
+.carousel-container {
+  position: relative;
+  overflow: hidden;
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
+.carousel-track {
+  display: flex; /* Pone las tarjetas en una fila horizontal */
+  gap: 30px; /* Mantiene la separación entre las tarjetas */
+  transition: transform 0.5s ease-in-out; /* Animación de movimiento suave */
+}
+
+.media-card {
+  flex-shrink: 0; /* Evita que las tarjetas se encojan */
+  width: 280px; /* Asegura que cada tarjeta tenga un ancho fijo */
+  /* Mantén los demás estilos de .media-card */
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: #e0c27b;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 10;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.carousel-btn.prev {
+  left: 10px;
+}
+
+.carousel-btn.next {
+  right: 10px;
+}
   </style>
 </head>
 <body>
@@ -421,25 +461,14 @@
   </section>
 
   <div class="section-banner">ビデオ</div>
-  <section class="videos" id="videos">
-    <div class="media-grid">
-      <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/6495ed/000000?text=MV+1" />
-        <h4>Shinkai Visualizer</h4>
-        <span class="label">YouTube</span>
+<section class="videos" id="videos">
+  <div class="carousel-container">
+    <div class="carousel-track" id="videos-track">
       </div>
-      <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/ff1493/000000?text=MV+2" />
-        <h4>Intro Cinemática</h4>
-        <span class="label">YouTube</span>
-      </div>
-      <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/2e8b57/ffffff?text=MV+3" />
-        <h4>Opening Project</h4>
-        <span class="label">YouTube</span>
-      </div>
-    </div>
-  </section>
+    <button class="carousel-btn prev">‹</button>
+    <button class="carousel-btn next">›</button>
+  </div>
+</section>
 
   <script>
     function toggleTheme() {
