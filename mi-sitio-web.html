@@ -1,242 +1,453 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tenshi | 幻想の響き</title>
-  <style>
-    /* Estilos generales */
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html, body {
-      font-family: 'Helvetica Neue', sans-serif;
-      background:#0b0b0b; color:#f5f5f5;
-      overflow-x:hidden; transition:background .3s, color .3s;
-    }
-    body.light-mode {
-      background:#f5f5f5; color:#111;
-    }
-    /* Header */
-    header {
-      position:fixed; top:0; width:100%;
-      background:rgba(0,0,0,.8); padding:20px 5%;
-      display:flex; justify-content:space-between; align-items:center;
-      z-index:999; backdrop-filter:blur(8px);
-    }
-    .logo { color:#fff; font-size:20px; letter-spacing:2px; }
-    nav ul { display:flex; gap:25px; list-style:none; }
-    nav a { color:#ccc; text-decoration:none; font-size:14px; }
-    nav a:hover { color:#e0c27b; }
-    .theme-toggle {
-      background:none; border:1px solid#777; color:#ccc;
-      padding:6px 12px; border-radius:8px; cursor:pointer;
-      transition:all .3s;font-size:12px; margin-left:20px;
-    }
-    .theme-toggle:hover { background:#e0c27b; color:#000; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tenshi | 幻想の響き</title>
+  <style>
+    /* Estilos generales */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      font-family: 'Helvetica Neue', sans-serif;
+      background: #0b0b0b;
+      color: #f5f5f5;
+      overflow-x: hidden;
+      width: 100%;
+      transition: background 0.3s, color 0.3s;
+    }
 
-    /* Hero */
-    .hero-wrapper {
-      position:relative; height:75vh; overflow:hidden; margin-top:70px;
-    }
-    .hero-bg {
-      position:absolute; top:0; left:0; width:100%; height:75vh;
-      background:url('banner portada.png') center/cover no-repeat;
-      filter:brightness(.6);
-    }
-    .hero-text {
-      position:relative; z-index:2;
-      color:#fff; font-size:2rem; padding:60px 5%;
-      height:75vh; display:flex; align-items:center;
-      text-shadow:0 2px 10px rgba(0,0,0,.6);
-    }
+    /* Modo Claro / Oscuro */
+    body.light-mode {
+      background: #f5f5f5;
+      color: #111;
+    }
+    body.light-mode header,
+    body.light-mode .news-card,
+    body.light-mode .main-news {
+      background-color: #fff !important;
+      color: #111;
+    }
+    body.light-mode nav a {
+      color: #333;
+    }
+    body.light-mode nav a:hover {
+      color: #c59f3f;
+    }
+    body.light-mode .label {
+      border-color: #c59f3f;
+      color: #c59f3f;
+    }
+    body.light-mode .news,
+    body.light-mode .discography,
+    body.light-mode .videos {
+      background-color: #f0f0f0;
+      color: #111;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
 
-    /* NEWS section */
-    .news {
-      padding:100px 5% 80px; background:#1a1a1a;
-      max-width:1200px; margin:40px auto;
-      border-radius:12px; box-shadow:0 0 30px rgba(0,0,0,.3);
-    }
-    .news h2 {
-      font-size:32px; color:#fff; text-align:center;
-      margin-bottom:30px;
-    }
-    .news h2 span { font-size:14px; color:#ccc; margin-left:10px; }
-    .schedule-filters {
-      display:flex; justify-content:center; gap:20px;
-      margin-bottom:40px;
-    }
-    .schedule-filters button {
-      background:none; border:1px solid#555; color:#ccc;
-      padding:8px 18px; font-size:14px; cursor:pointer;
-      border-radius:20px; transition:all .3s;
-    }
-    .schedule-filters button.active,
-    .schedule-filters button:hover {
-      color:#e0c27b; border-color:#e0c27b;
-    }
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 20px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 999;
+    }
+    header .logo {
+      color: #fff;
+      font-size: 20px;
+      letter-spacing: 2px;
+    }
+    nav ul {
+      display: flex;
+      gap: 25px;
+      list-style: none;
+    }
+    nav a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    nav a:hover {
+      color: #e0c27b;
+    }
+    .theme-toggle {
+      background: none;
+      border: 1px solid #777;
+      color: #ccc;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 12px;
+      margin-left: 20px;
+    }
+    .theme-toggle:hover {
+      background: #e0c27b;
+      color: #000;
+    }
 
-    /* Grid ajustada (ahora Flexbox) */
-    .schedule-grid {
-      display: flex;
-      gap: 20px;
-      height: 480px;
-    }
+    /* Hero Section */
+    .hero-wrapper {
+      position: relative;
+      height: 75vh;
+      overflow: hidden;
+      margin-top: 70px;
+    }
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 75vh;
+      background: url('banner portada.png') center center no-repeat;
+      background-size: cover;
+      z-index: 0;
+    }
+    .hero-text {
+      position: relative;
+      z-index: 2;
+      color: white;
+      font-size: 2rem;
+      padding: 60px 5%;
+      height: 75vh;
+      display: flex;
+      align-items: center;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+    }
 
-    .main-news {
-      flex: 1;
-      background: linear-gradient(135deg,#1f2937,#4c51bf);
-      color:#fff; box-shadow:0 0 20px rgba(76,81,191,.8);
-      border-radius: 14px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      overflow: hidden;
-    }
+    /* NEWS section */
+    .news {
+      padding: 100px 5% 80px;
+      background-color: #1a1a1a;
+      max-width: 1200px;
+      margin: 40px auto;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+      transition: background 0.3s ease;
+    }
+    .news h2 {
+      font-size: 32px;
+      color: #fff;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .news h2 span {
+      font-size: 14px;
+      color: #ccc;
+      margin-left: 10px;
+    }
+    .schedule-filters {
+      margin-bottom: 40px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .schedule-filters button {
+      background: none;
+      border: 1px solid #555;
+      color: #ccc;
+      padding: 8px 18px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+    .schedule-filters button.active,
+    .schedule-filters button:hover {
+      color: #e0c27b;
+      border-color: #e0c27b;
+    }
 
-    .news-side {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
+    /* INICIO DE CÓDIGO CSS MODIFICADO PARA EL DISEÑO DE NOTICIAS (Finalizado) */
+    .schedule-grid {
+      display: grid;
+      /* La primera columna (para N1) es el doble de ancho (2fr) que las otras dos (1fr cada una).
+         Esto hace que el ancho de N1 sea igual al ancho combinado de N2+N3 y N4+N5. */
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: repeat(2, 1fr); /* Dos filas de igual altura */
+      gap: 20px;
+      /* Ajustar la altura máxima del grid para que N1 pueda formar un cuadrado
+         y las tarjetas a la derecha se alineen correctamente.
+         Este valor podría requerir un ajuste fino en tu entorno real para la perfección. */
+      max-height: 480px; /* Un buen valor de inicio para permitir proporciones cuadradas */
+      /* overflow: hidden; /* Considera descomentar si el contenido excede la altura en pantallas pequeñas */
+    }
 
-    .news-column {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: space-between;
-    }
+    .main-news { /* Esto es N1 */
+      grid-column: 1 / 2; /* Ocupa la primera columna */
+      grid-row: 1 / 3;    /* Ocupa las dos filas */
+      /* Forzar a N1 a tener una relación de aspecto 1:1 (cuadrado).
+         Con 2fr de ancho y 2fr de alto (cubriendo 2 filas), esto debería resultar en un cuadrado. */
+      aspect-ratio: 1 / 1;
+      background: linear-gradient(135deg, #1f2937, #4c51bf);
+      border-radius: 16px;
+      padding: 20px;
+      color: #fff;
+      box-shadow: 0 0 20px rgba(76, 81, 191, 0.8);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden; /* Para asegurar que el contenido no desborde si es muy grande */
+    }
 
-    .news-card {
-      background:#222; border-radius:14px; padding:20px;
-      box-shadow:0 0 15px rgba(0,0,0,.5);
-      display:flex; flex-direction:column;
-      justify-content:space-between; overflow:hidden;
-      flex-basis: calc(50% - 10px);
-      aspect-ratio: 4/3;
-      cursor: pointer;
-      transition: transform .3s ease, opacity .3s ease;
-    }
-    .news-card.hidden {
-      display: none;
-    }
+    .news-card {
+      background: #222;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      cursor: pointer;
+      aspect-ratio: 4 / 3; /* Mantiene la relación de aspecto horizontal para las tarjetas pequeñas */
+      overflow: hidden; /* Para asegurar que el contenido no desborde */
+    }
 
-    .main-news .date,
-    .news-card .date {
-      font-size:14px; color:#ccc; font-weight:700; text-align:center;
-      margin-bottom:10px;
-    }
-    .main-news h3 { color:#fff; text-align:center; }
-    .news-card h4 {
-      font-size:16px; color:#fff; font-weight:700; text-align:center;
-      margin-bottom:8px;
-    }
-    .main-news p,
-    .news-card p {
-      font-size:14px; color:#ccc; text-align:center;
-    }
-    .label {
-      font-size:11px; color:#e0c27b; border:1px solid#e0c27b;
-      padding:2px 6px; border-radius:999px; display:block;
-      width:fit-content; margin:10px auto 0;
-    }
-  </style>
+    /* Asignaciones de Grid para las news-card según el orden en el HTML
+       (N2, N3, N4, N5 se posicionan en las columnas 2 y 3, filas 1 y 2) */
+    .news-card:nth-of-type(1) { /* Corresponde a "Nuevo sencillo" (N2) */
+      grid-column: 2 / 3; /* Segunda columna */
+      grid-row: 1 / 2;    /* Primera fila */
+    }
+    .news-card:nth-of-type(2) { /* Corresponde a "Evento online" (N3) */
+      grid-column: 3 / 4; /* Tercera columna */
+      grid-row: 1 / 2;    /* Primera fila */
+    }
+    .news-card:nth-of-type(3) { /* Corresponde a "Premio ganado" (N4) */
+      grid-column: 2 / 3; /* Segunda columna */
+      grid-row: 2 / 3;    /* Segunda fila */
+    }
+    .news-card:nth-of-type(4) { /* Corresponde a "Nuevo Wallpaper" (N5) */
+      grid-column: 3 / 4; /* Tercera columna */
+      grid-row: 2 / 3;    /* Segunda fila */
+    }
+    /* FIN DE CÓDIGO CSS MODIFICADO PARA EL DISEÑO DE NOTICIAS */
+
+    .news-card h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .news-card .date {
+      font-weight: 700;
+      font-size: 14px;
+      color: #ccc;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .news-card p {
+      color: #ccc;
+      font-size: 14px;
+      text-align: center;
+    }
+    .news-card .label {
+      font-size: 11px;
+      color: #e0c27b;
+      border: 1px solid #e0c27b;
+      padding: 2px 6px;
+      border-radius: 999px;
+      width: fit-content;
+      margin: 10px auto 0;
+      display: block;
+    }
+
+    /* Section banners */
+    .section-banner {
+      position: relative;
+      width: 50%;
+      height: 150px;
+      margin: 60px auto;
+      border-radius: 12px;
+      background: url('banner portada.png') center center no-repeat;
+      background-size: cover;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #e0c27b;
+      font-size: 3rem;
+      font-weight: 900;
+      font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
+      text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
+      user-select: none;
+    }
+
+    /* Discography and Videos */
+    .discography, .videos {
+      padding: 40px 5% 80px;
+      background-color: #0f0f0f;
+      max-width: 1200px;
+      margin: 60px auto 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+    }
+    .media-grid {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .media-card {
+      background: #222;
+      border-radius: 14px;
+      padding: 20px;
+      width: 280px;
+      aspect-ratio: 1 / 1;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .media-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(224, 194, 123, 0.5);
+    }
+    .media-card img {
+      width: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+      margin-bottom: 12px;
+      aspect-ratio: 1 / 1;
+    }
+    .media-card h4 {
+      font-size: 16px;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .media-card .label {
+      font-size: 11px;
+      color: #e0c27b;
+      border: 1px solid #e0c27b;
+      padding: 2px 6px;
+      border-radius: 999px;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <div class="logo">Tenshi</div>
-    <nav>
-      <ul>
-        <li><a href="#news">NEWS</a></li>
-        <li><a href="#discography">Discography</a></li>
-        <li><a href="#videos">Videos</a></li>
-        <li><a href="wallpapers.html">Gallery</a></li>
-        <li><a href="#mystudio">My Studio</a></li>
-      </ul>
-    </nav>
-    <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
-  </header>
+  <header>
+    <div class="logo">Tenshi</div>
+    <nav>
+      <ul>
+        <li><a href="#news">NEWS</a></li>
+        <li><a href="#discography">Discography</a></li>
+        <li><a href="#videos">Videos</a></li>
+        <li><a href="wallpapers.html">Gallery</a></li>
+        <li><a href="#mystudio">My Studio</a></li>
+      </ul>
+    </nav>
+    <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
+  </header>
 
-  <div class="hero-wrapper">
-    <div class="hero-bg"></div>
-    <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
-  </div>
+  <div class="hero-wrapper">
+    <div class="hero-bg"></div>
+    <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
+  </div>
 
-  <section class="news" id="news">
-    <h2>NEWS <span>ニュース</span></h2>
-    <nav class="schedule-filters">
-      <button class="filter-btn active" data-filter="all">Todos</button>
-      <button class="filter-btn" data-filter="concert">Conciertos</button>
-      <button class="filter-btn" data-filter="release">Lanzamientos</button>
-      <button class="filter-btn" data-filter="event">Eventos</button>
-    </nav>
-    <div class="schedule-grid">
-      <article class="main-news" data-category="concert">
-        <div class="date">08 JUL 2025</div>
-        <h3>Gran Concierto de Tenshi en Tokio</h3>
-        <p>El esperado concierto en el Nippon será el evento del año.</p>
-        <span class="label">NEW</span>
-      </article>
-      <div class="news-side">
-        <div class="news-column">
-          <div class="news-card" data-category="release">
-            <div class="date">07 JUL 2025</div>
-            <h4>Nuevo sencillo</h4>
-            <p>"Shinkai no Melody" disponible ya.</p>
-          </div>
-          <div class="news-card" data-category="event">
-            <div class="date">05 JUL 2025</div>
-            <h4>Evento online</h4>
-            <p>Streaming con sorpresas.</p>
-          </div>
-        </div>
-        <div class="news-column">
-          <div class="news-card" data-category="award">
-            <div class="date">03 JUL 2025</div>
-            <h4>Premio ganado</h4>
-            <p>Mejor artista emergente.</p>
-          </div>
-          <div class="news-card" data-category="new">
-            <div class="date">09 JUL 2025</div>
-            <h4>Nuevo Wallpaper</h4>
-            <p>Descarga el nuevo wallpaper oficial.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <section class="news" id="news">
+    <h2>NEWS <span>ニュース</span></h2>
+    <nav class="schedule-filters">
+      <button class="active">Todos</button>
+      <button>Conciertos</button>
+      <button>Lanzamientos</button>
+      <button>Eventos</button>
+    </nav>
+    <div class="schedule-grid">
+      <article class="main-news">
+        <div class="date">08 JUL 2025</div>
+        <h3>Gran Concierto de Tenshi en Tokio</h3>
+        <p>El esperado concierto en el Nippon será el evento del año.</p>
+        <span class="label new">NEW</span>
+      </article>
+      <div class="news-card">
+        <div class="date">07 JUL 2025</div>
+        <h4>Nuevo sencillo</h4>
+        <p>"Shinkai no Melody" disponible ya.</p>
+        <span class="label">RELEASE</span>
+      </div>
+      <div class="news-card">
+        <div class="date">05 JUL 2025</div>
+        <h4>Evento online</h4>
+        <p>Streaming con sorpresas.</p>
+        <span class="label">EVENT</span>
+      </div>
+      <div class="news-card">
+        <div class="date">03 JUL 2025</div>
+        <h4>Premio ganado</h4>
+        <p>Mejor artista emergente.</p>
+        <span class="label">AWARD</span>
+      </div>
+      <div class="news-card">
+        <div class="date">09 JUL 2025</div>
+        <h4>Nuevo Wallpaper</h4>
+        <p>Descarga el nuevo wallpaper oficial.</p>
+        <span class="label new">NEW</span>
+      </div>
+    </div>
+  </section>
 
-  <script>
-    function toggleTheme() {
-      document.body.classList.toggle('light-mode');
-      localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
-    }
-    if (localStorage.getItem('theme') === 'light') {
-      document.body.classList.add('light-mode');
-    }
+  <div class="section-banner">ディスコグラフィー</div>
+  <section class="discography" id="discography">
+    <div class="media-grid">
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/ff8c00/000000?text=Track+1" />
+        <h4>Shinkai no Melody</h4>
+        <span class="label">Single</span>
+      </div>
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/20b2aa/000000?text=Track+2" />
+        <h4>Yoru no Uta</h4>
+        <span class="label">Single</span>
+      </div>
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/8a2be2/ffffff?text=Track+3" />
+        <h4>Midnight Echo</h4>
+        <span class="label">Single</span>
+      </div>
+    </div>
+  </section>
 
-    document.addEventListener('DOMContentLoaded', function() {
-      const filterButtons = document.querySelectorAll('.filter-btn');
-      const newsSide = document.querySelector('.news-side');
-      const newsCards = document.querySelectorAll('.news-card, .main-news');
+  <div class="section-banner">ビデオ</div>
+  <section class="videos" id="videos">
+    <div class="media-grid">
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/6495ed/000000?text=MV+1" />
+        <h4>Shinkai Visualizer</h4>
+        <span class="label">YouTube</span>
+      </div>
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/ff1493/000000?text=MV+2" />
+        <h4>Intro Cinemática</h4>
+        <span class="label">YouTube</span>
+      </div>
+      <div class="media-card">
+        <img src="https://via.placeholder.com/300x300/2e8b57/ffffff?text=MV+3" />
+        <h4>Opening Project</h4>
+        <span class="label">YouTube</span>
+      </div>
+    </div>
+  </section>
 
-      filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          const filter = button.getAttribute('data-filter');
-
-          filterButtons.forEach(btn => btn.classList.remove('active'));
-          button.classList.add('active');
-
-          newsCards.forEach(card => {
-            if (filter === 'all' || card.getAttribute('data-category') === filter) {
-              card.classList.remove('hidden');
-            } else {
-              card.classList.add('hidden');
-            }
-          });
-        });
-      });
-    });
-  </script>
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+      localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+    }
+    if (localStorage.getItem('theme') === 'light') {
+      document.body.classList.add('light-mode');
+    }
+  </script>
 </body>
 </html>
