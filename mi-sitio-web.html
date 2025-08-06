@@ -167,20 +167,14 @@
       border-color: #e0c27b;
     }
 
-    /* INICIO DE CÓDIGO CSS MODIFICADO PARA EL DISEÑO DE NOTICIAS (Finalizado) */
     .schedule-grid {
-      display: grid;
-      /* La primera columna (para N1) es el doble de ancho (2fr) que las otras dos (1fr cada una).
-         Esto hace que el ancho de N1 sea igual al ancho combinado de N2+N3 y N4+N5. */
-      grid-template-columns: 2fr 1fr 1fr;
-      grid-template-rows: repeat(2, 1fr); /* Dos filas de igual altura */
-      gap: 20px;
-      /* Ajustar la altura máxima del grid para que N1 pueda formar un cuadrado
-         y las tarjetas a la derecha se alineen correctamente.
-         Este valor podría requerir un ajuste fino en tu entorno real para la perfección. */
-      max-height: 500px; /* Un buen valor de inicio para permitir proporciones cuadradas */
-      /* overflow: hidden; /* Considera descomentar si el contenido excede la altura en pantallas pequeñas */
-    }
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 20px;
+  max-height: 500px;
+}
+
 
   .main-news {
   grid-column: 1 / 2;
