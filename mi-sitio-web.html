@@ -182,22 +182,22 @@
       /* overflow: hidden; /* Considera descomentar si el contenido excede la altura en pantallas pequeñas */
     }
 
-    .main-news { /* Esto es N1 */
-      grid-column: 1 / 2; /* Ocupa la primera columna */
-      grid-row: 1 / 3;    /* Ocupa las dos filas */
-      /* Forzar a N1 a tener una relación de aspecto 1:1 (cuadrado).
-         Con 2fr de ancho y 2fr de alto (cubriendo 2 filas), esto debería resultar en un cuadrado. */
-      height: 100%;
-      background: linear-gradient(135deg, #1f2937, #4c51bf);
-      border-radius: 16px;
-      padding: 20px;
-      color: #fff;
-      box-shadow: 0 0 20px rgba(76, 81, 191, 0.8);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      overflow: hidden; /* Para asegurar que el contenido no desborde si es muy grande */
-    }
+  .main-news {
+  grid-column: 1 / 2;
+  grid-row: 1 / 3;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: linear-gradient(135deg, #1f2937, #4c51bf);
+  border-radius: 16px;
+  padding: 20px;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(76, 81, 191, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
 
     .news-card {
       background: #222;
