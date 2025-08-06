@@ -478,6 +478,113 @@
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-mode');
     }
-  </script>
+    
+  // Tu clave de API de Google
+  const API_KEY = 'AIzaSyANEsoRuNgWcl25ldbuszn-vhCPIjs3NW0';
+  // El ID de tu playlist de música
+  const PLAYLIST_ID = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf';
+
+  async function fetchPlaylistVideos() {
+    try {
+      const response = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${PLAYLIST_ID}&key=${API_KEY}&maxResults=50`);
+      if (!response.ok) {
+        throw new Error('Error al obtener videos de YouTube');
+      }
+      const data = await response.json();
+      return data.items;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }
+
+  function renderVideos(videos) {
+    const videoTrack = document.getElementById('videos-track');
+    if (!videoTrack) return;
+    videoTrack.innerHTML = '';
+    videos.forEach(item => {
+      const video = item.snippet;
+      const videoId = video.resourceId.videoId;
+      const title = video.title;
+      const thumbnailUrl = video.thumbnails.high.url;
+
+      const card = document.createElement('div');
+      card.className = 'media-card card-hover';
+      card.innerHTML = `
+        <img src="${thumbnailUrl}" alt="${title}">
+        <h4>${title}</h4>
+        <span class="label">YouTube</span>
+      `;
+      card.onclick = () => window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
+      videoTrack.appendChild(card);
+    });
+  }
+
+  function setupCarousel(trackId) {
+    const track = document.getElementById(trackId);
+    const prevBtn = track.parentElement.querySelector('.prev');
+    const nextBtn = track.parentElement.querySelector('.next');
+    let position = 0;
+    const cardWidth = 310;
+    let autoScrollInterval;
+
+    function moveCarousel() {
+      position -= cardWidth;
+      const trackWidth = track.scrollWidth;
+      const containerWidth = track.parentElement.offsetWidth;
+      if (Math.abs(position) > (trackWidth - containerWidth)) {
+        position = 0;
+      }
+      track.style.transform = `translateX(${position}px)`;
+    }
+
+    function startAutoScroll() {
+      stopAutoScroll();
+      autoScrollInterval = setInterval(moveCarousel, 3000);
+    }
+
+    function stopAutoScroll() {
+      clearInterval(autoScrollInterval);
+    }
+
+    nextBtn.addEventListener('click', () => {
+      stopAutoScroll();
+      position -= cardWidth;
+      const trackWidth = track.scrollWidth;
+      const containerWidth = track.parentElement.offsetWidth;
+      if (Math.abs(position) > (trackWidth - containerWidth)) {
+        position = -(trackWidth - containerWidth);
+      }
+      track.style.transform = `translateX(${position}px)`;
+    });
+
+    prevBtn.addEventListener('click', () => {
+      stopAutoScroll();
+      position += cardWidth;
+      if (position > 0) {
+        position = 0;
+      }
+      track.style.transform = `translateX(${position}px)`;
+    });
+    
+    track.addEventListener('mouseenter', stopAutoScroll);
+    track.addEventListener('mouseleave', startAutoScroll);
+
+    startAutoScroll();
+  }
+
+  fetchPlaylistVideos().then(renderVideos).then(() => {
+    setupCarousel('videos-track');
+  });
+
+  // Script del modo claro/oscuro
+  function toggleTheme() {
+    document.body.classList.toggle('light-mode');
+    localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+  }
+  if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light-mode');
+  }
+</script>
 </body>
 </html>
