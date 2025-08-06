@@ -167,20 +167,17 @@
       border-color: #e0c27b;
     }
 
-    .schedule-grid {
+.schedule-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
-  grid-template-rows: auto auto;
+  grid-template-rows: 1fr 1fr;
   gap: 20px;
-  max-height: 500px;
+  height: 100%;
 }
 
-
-  .main-news {
+.main-news {
   grid-column: 1 / 2;
   grid-row: 1 / 3;
-  width: 100%;
-  aspect-ratio: 1 / 1;
   background: linear-gradient(135deg, #1f2937, #4c51bf);
   border-radius: 16px;
   padding: 20px;
@@ -191,6 +188,7 @@
   justify-content: space-between;
   overflow: hidden;
 }
+
 
 
     .news-card {
