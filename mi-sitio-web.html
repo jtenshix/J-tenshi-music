@@ -470,7 +470,7 @@
   </div>
 </section>
 
-  <script>
+ <script>
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
         localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
@@ -525,34 +525,43 @@
         const prevBtn = track.parentElement.querySelector('.prev');
         const nextBtn = track.parentElement.querySelector('.next');
         const cardWidth = 310;
+        const cardsToClone = 3;
         let position = 0;
         let autoScrollInterval;
 
         // Clonar las primeras tarjetas para crear el bucle infinito
-        const cardsToClone = 3;
         for (let i = 0; i < cardsToClone; i++) {
             const clone = track.children[i].cloneNode(true);
             track.appendChild(clone);
         }
 
-        // Función para mover el carrusel
-        function moveCarousel() {
-            position -= cardWidth;
-            track.style.transform = `translateX(${position}px)`;
-            track.style.transition = 'transform 0.5s ease-in-out';
-        }
-
-        // Listener para el final de la transición
+        // Listener para el final de la transición que resetea la posición
         track.addEventListener('transitionend', () => {
-            const totalWidth = track.scrollWidth;
+            const trackWidth = track.scrollWidth;
             const containerWidth = track.parentElement.offsetWidth;
-
-            if (position <= -(totalWidth - containerWidth - (cardWidth * cardsToClone))) {
+            
+            // Si la posición está en una de las tarjetas clonadas, reinicia instantáneamente
+            if (position <= -(trackWidth - containerWidth)) {
                 track.style.transition = 'none';
-                position = -((totalWidth - containerWidth - (cardWidth * cardsToClone)) / cardsToClone);
+                position = 0; // Vuelve al inicio
                 track.style.transform = `translateX(${position}px)`;
             }
         });
+
+        // Función para mover el carrusel
+        function moveCarousel() {
+            const trackWidth = track.scrollWidth;
+            const containerWidth = track.parentElement.offsetWidth;
+
+            if (position <= -(trackWidth - containerWidth)) {
+                position = 0;
+            } else {
+                position -= cardWidth;
+            }
+            
+            track.style.transition = 'transform 0.5s ease-in-out';
+            track.style.transform = `translateX(${position}px)`;
+        }
 
         // Botones de navegación
         nextBtn.addEventListener('click', () => {
@@ -562,13 +571,10 @@
 
         prevBtn.addEventListener('click', () => {
             stopAutoScroll();
-            // Lógica para ir hacia atrás
-            position += cardWidth;
-            if (position > 0) {
-                position = 0; // O la lógica para saltar al final
+            if (position < 0) {
+                position += cardWidth;
             }
             track.style.transform = `translateX(${position}px)`;
-            track.style.transition = 'transform 0.5s ease-in-out';
         });
 
         function startAutoScroll() {
