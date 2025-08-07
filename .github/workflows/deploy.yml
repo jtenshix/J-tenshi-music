@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Inject API Key
 
 on:
   push:
@@ -6,17 +6,20 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  inject-key:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Inject API Key
-        run: sed -i "s/TU_CLAVE_DE_API/${{ secrets.YOUTUBE_API_KEY }}/g" mi-sitio-web.html
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+      - name: Inject API Key into index.html
+        run: |
+          sed -i "s/TU_CLAVE_DE_API/${{ secrets.YOUTUBE_API_KEY }}/g" index.html
+      
+      - name: Commit changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "feat: Inject API Key" || echo "No changes to commit"
+          git push
