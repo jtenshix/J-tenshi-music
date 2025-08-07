@@ -535,51 +535,60 @@
             track.appendChild(clone);
         }
 
-        // Listener para el final de la transición que resetea la posición
+        // Clonar las últimas tarjetas para el desplazamiento hacia atrás
+        for (let i = 0; i < cardsToClone; i++) {
+            const clone = track.children[track.children.length - (cardsToClone * 2)].cloneNode(true);
+            track.insertBefore(clone, track.children[0]);
+        }
+        
+        // Mover la posición inicial para que el bucle comience correctamente
+        position = -(cardWidth * cardsToClone);
+        track.style.transform = `translateX(${position}px)`;
+
+        // Listener para el final de la transición
         track.addEventListener('transitionend', () => {
             const trackWidth = track.scrollWidth;
             const containerWidth = track.parentElement.offsetWidth;
-            
-            // Si la posición está en una de las tarjetas clonadas, reinicia instantáneamente
+
+            // Bucle hacia adelante
             if (position <= -(trackWidth - containerWidth)) {
                 track.style.transition = 'none';
-                position = 0; // Vuelve al inicio
+                position = -(cardWidth * cardsToClone);
+                track.style.transform = `translateX(${position}px)`;
+            }
+            // Bucle hacia atrás
+            if (position > 0) {
+                track.style.transition = 'none';
+                position = -(trackWidth - containerWidth - (cardWidth * cardsToClone));
                 track.style.transform = `translateX(${position}px)`;
             }
         });
 
         // Función para mover el carrusel
-        function moveCarousel() {
-            const trackWidth = track.scrollWidth;
-            const containerWidth = track.parentElement.offsetWidth;
-
-            if (position <= -(trackWidth - containerWidth)) {
-                position = 0;
-            } else {
-                position -= cardWidth;
-            }
-            
+        function moveCarousel(direction) {
             track.style.transition = 'transform 0.5s ease-in-out';
+            if (direction === 'next') {
+                position -= cardWidth;
+            } else if (direction === 'prev') {
+                position += cardWidth;
+            }
             track.style.transform = `translateX(${position}px)`;
         }
 
         // Botones de navegación
         nextBtn.addEventListener('click', () => {
             stopAutoScroll();
-            moveCarousel();
+            moveCarousel('next');
         });
 
         prevBtn.addEventListener('click', () => {
             stopAutoScroll();
-            if (position < 0) {
-                position += cardWidth;
-            }
-            track.style.transform = `translateX(${position}px)`;
+            moveCarousel('prev');
         });
 
         function startAutoScroll() {
             stopAutoScroll();
-            autoScrollInterval = setInterval(moveCarousel, 3000);
+            autoScrollInterval = setInterval(() => moveCarousel('next'), 3000);
         }
 
         function stopAutoScroll() {
@@ -595,15 +604,6 @@
     fetchPlaylistVideos().then(renderVideos).then(() => {
         setupCarousel('videos-track');
     });
-
-    // Script del modo claro/oscuro
-    function toggleTheme() {
-        document.body.classList.toggle('light-mode');
-        localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
-    }
-    if (localStorage.getItem('theme') === 'light') {
-        document.body.classList.add('light-mode');
-    }
 </script>
 </body>
 </html>
