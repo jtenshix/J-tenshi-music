@@ -291,29 +291,30 @@
       flex-wrap: wrap;
     }
     .media-card {
-      background: #222;
-      border-radius: 14px;
-      padding: 20px;
-      width: 280px;
-      aspect-ratio: 1 / 1;
-      box-shadow: 0 0 15px rgba(0,0,0,0.4);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+    background: #222;
+    border-radius: 14px;
+    padding: 10px; /* Reducimos el padding para un diseño más limpio */
+    width: 320px; /* Hacemos la tarjeta un poco más ancha */
+    box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.5s ease;
+    filter: grayscale(100%); /* Aplicamos el efecto de blanco y negro por defecto */
+    } 
+    
     .media-card:hover {
       transform: scale(1.05);
       box-shadow: 0 0 25px rgba(224, 194, 123, 0.5);
     }
     .media-card img {
-      width: 100%;
-      border-radius: 10px;
-      object-fit: cover;
-      margin-bottom: 12px;
-      aspect-ratio: 1 / 1;
-    }
+    width: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-bottom: 8px;
+    aspect-ratio: 16 / 9; /* Esto define la relación de aspecto de video de YouTube */
+}
     .media-card h4 {
       font-size: 16px;
       text-align: center;
@@ -374,6 +375,19 @@
 
 .carousel-btn.next {
   right: 10px;
+}
+    /* Nuevo estilo para el video destacado del centro */
+.media-card.center-card {
+    filter: grayscale(0%); /* Quita el blanco y negro al video central */
+    transform: scale(1.1); /* Lo hace un poco más grande */
+}
+
+/* Aseguramos que el carrusel se muestre centrado */
+.carousel-track {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    transition: transform 0.5s ease-in-out;
 }
   </style>
 </head>
