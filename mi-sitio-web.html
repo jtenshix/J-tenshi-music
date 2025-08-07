@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tenshi | 幻想の響き</title>
-  <style>
+ <style>
     /* Estilos generales */
     * {
         margin: 0;
@@ -284,7 +284,7 @@
         box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
     }
     
-    /* Nuevos estilos para el carrusel */
+    /* Estilos para el carrusel */
     .carousel-container {
         position: relative;
         overflow: hidden;
@@ -321,7 +321,7 @@
         right: 10px;
     }
 
-    /* Modificaciones para las tarjetas de video */
+    /* Estilos de las tarjetas para la sección de videos y discografía */
     .media-card {
         background: #222;
         border-radius: 14px;
@@ -360,11 +360,28 @@
         border-radius: 999px;
     }
     
-    /* Nuevo estilo para el video destacado del centro */
+    /* Estilo para el video destacado del centro */
     .media-card.center-card {
         filter: grayscale(0%);
         transform: scale(1.1);
         z-index: 5;
+    }
+
+    /* Estilo para las tarjetas en la grilla de discografía */
+    .discography .media-card {
+        width: 280px;
+        aspect-ratio: 1 / 1;
+        padding: 20px;
+        filter: none; /* Sin blanco y negro por defecto */
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .discography .media-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(224, 194, 123, 0.5);
+    }
+    .discography .media-card img {
+        aspect-ratio: 1 / 1;
+        margin-bottom: 12px;
     }
 </style>
 </head>
