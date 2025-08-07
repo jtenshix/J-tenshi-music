@@ -12,12 +12,13 @@
     <h1><b>¡Redireccionando ahora!</b></h1>
     <script>
         function detectDeviceAndRedirect() {
-            // Esta línea obtiene el nombre del repositorio de la URL.
-            // Por ejemplo, de "https://usuario.github.io/mi-sitio-web", obtendría "/mi-sitio-web".
-            const repoPath = window.location.pathname.split('/')[1] ? '/' + window.location.pathname.split('/')[1] : '';
-
-            const mobilePage = repoPath + "/tarjeta-movil.html";
-            const desktopPage = repoPath + "/mi-sitio-web.html";
+            // Usa el nombre del repositorio como base de la URL.
+            // Esto funciona tanto para sitios de usuario/organización como para sitios de proyecto.
+            const baseDir = window.location.pathname.split('/')[1];
+            const baseUrl = baseDir ? '/' + baseDir + '/' : '/';
+            
+            const mobilePage = baseUrl + "tarjeta-movil.html";
+            const desktopPage = baseUrl + "mi-sitio-web.html";
 
             const isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
