@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cargando tu contenido...</title>
-    <script>
-        function detectDeviceAndRedirect() {
-            const mobilePage = "tarjeta-movil.html";
-            const desktopPage = "mi-sitio-web.html";
-
-            const isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-            if (isMobile) {
-                window.location.href = mobilePage;
-            } else {
-                window.location.href = desktopPage;
-            }
-        }
-
-        detectDeviceAndRedirect();
-    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cargando...</title>
+    <style>
+        body { font-family: sans-serif; background: #1a1a1a; color: white; text-align: center; padding-top: 50px; }
+    </style>
 </head>
 <body>
-    <p>Cargando la versión correcta para tu dispositivo...</p>
+    <h1><b>¡Redireccionando ahora!</b></h1>
+    <script>
+        function detectDeviceAndRedirect() {
+            const mobilePage = "tarjeta-movil.html";
+            const desktopPage = "mi-sitio-web.html";
+
+            const isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+            if (isMobile) {
+                window.location.href = mobilePage;
+            } else {
+                window.location.href = desktopPage;
+            }
+        }
+        detectDeviceAndRedirect();
+    </script>
 </body>
 </html>
