@@ -470,7 +470,7 @@
   </div>
 </section>
 
- <script>
+<script>
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
         localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
@@ -529,16 +529,18 @@
         let position = 0;
         let autoScrollInterval;
 
-        // Clonar las primeras tarjetas y agregarlas al final
+        const originalCards = Array.from(track.children);
+        
+        // Clonar las últimas tarjetas para el desplazamiento hacia atrás
         for (let i = 0; i < cardsToClone; i++) {
-            const clone = track.children[i].cloneNode(true);
-            track.appendChild(clone);
-        }
-
-        // Clonar las últimas tarjetas y agregarlas al principio
-        for (let i = 0; i < cardsToClone; i++) {
-            const clone = track.children[track.children.length - cardsToClone - 1].cloneNode(true);
+            const clone = originalCards[originalCards.length - 1 - i].cloneNode(true);
             track.insertBefore(clone, track.children[0]);
+        }
+        
+        // Clonar las primeras tarjetas para el desplazamiento hacia adelante
+        for (let i = 0; i < cardsToClone; i++) {
+            const clone = originalCards[i].cloneNode(true);
+            track.appendChild(clone);
         }
         
         // Ajustar la posición inicial para que el carrusel muestre el primer video real
@@ -556,7 +558,7 @@
         }
 
         track.addEventListener('transitionend', () => {
-            const totalItems = track.children.length - (cardsToClone * 2);
+            const totalItems = originalCards.length;
 
             // Si llegamos a los clones del final, volvemos al inicio instantáneamente
             if (position <= -((totalItems + cardsToClone) * cardWidth)) {
