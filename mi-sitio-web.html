@@ -447,26 +447,30 @@
 </div>
   </section>
 
-  <div class="section-banner">ディスコグラフィー</div>
-  <section class="discography" id="discography">
-    <div class="media-grid">
-      <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/ff8c00/000000?text=Track+1" />
-        <h4>Shinkai no Melody</h4>
-        <span class="label">Single</span>
-      </div>
-      <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/20b2aa/000000?text=Track+2" />
-        <h4>Yoru no Uta</h4>
-        <span class="label">Single</span>
-      </div>
-      <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/8a2be2/ffffff?text=Track+3" />
-        <h4>Midnight Echo</h4>
-        <span class="label">Single</span>
-      </div>
+<div class="section-banner">ディスコグラフィー</div>
+<section class="discography" id="discography">
+    <div class="carousel-container">
+        <div class="carousel-track" id="discography-track">
+            <div class="media-card">
+                <img src="https://via.placeholder.com/300x300/ff8c00/000000?text=Track+1" />
+                <h4>Shinkai no Melody</h4>
+                <span class="label">Single</span>
+            </div>
+            <div class="media-card">
+                <img src="https://via.placeholder.com/300x300/20b2aa/000000?text=Track+2" />
+                <h4>Yoru no Uta</h4>
+                <span class="label">Single</span>
+            </div>
+            <div class="media-card">
+                <img src="https://via.placeholder.com/300x300/8a2be2/ffffff?text=Track+3" />
+                <h4>Midnight Echo</h4>
+                <span class="label">Single</span>
+            </div>
+        </div>
+        <button class="carousel-btn prev">‹</button>
+        <button class="carousel-btn next">›</button>
     </div>
-  </section>
+</section>
 
   <div class="section-banner">ビデオ</div>
 <section class="videos" id="videos">
@@ -636,6 +640,8 @@
     fetchPlaylistVideos().then(renderVideos).then(() => {
         setupCarousel('videos-track');
     });
+   // Nueva llamada para configurar el carrusel de la discografía
+    setupCarousel('discography-track');
 </script>
 </body>
 </html>
