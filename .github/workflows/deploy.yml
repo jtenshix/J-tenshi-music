@@ -12,14 +12,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Inject API Key into index.html
+      - name: Inject API Key into mi-sitio-web.html
         run: |
-          sed -i "s/TU_CLAVE_DE_API/${{ secrets.YOUTUBE_API_KEY }}/g" index.html
-      
-      - name: Commit changes
+          sed -i "s/TU_CLAVE_DE_API/${{ secrets.YOUTUBE_API_KEY }}/g" mi-sitio-web.html
+          
+      - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html
+          git add mi-sitio-web.html
           git commit -m "feat: Inject API Key" || echo "No changes to commit"
           git push
