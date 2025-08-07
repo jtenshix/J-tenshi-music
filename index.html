@@ -1,33 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cargando tu contenido...</title>
-    <script>
-        function detectDeviceAndRedirect() {
-            const mobilePage = "tarjeta-movil.html"; // Página para dispositivos móviles (la tarjeta)
-            const desktopPage = "mi-sitio-web.html"; // Página para dispositivos de escritorio (la web completa)
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cargando tu contenido...</title>
+    <script>
+        function detectDeviceAndRedirect() {
+            const mobilePage = "tarjeta-movil.html";
+            const desktopPage = "mi-sitio-web.html";
 
-            // Detección del tipo de dispositivo
-            // Utiliza el User Agent del navegador para saber si es un móvil
-            const isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-            // Redirección condicional
-            if (isMobile) {
-                // Si es un dispositivo móvil, redirige a la tarjeta
-                window.location.href = mobilePage;
-            } else {
-                // Si no es un dispositivo móvil (es un PC/escritorio), redirige a la web completa
-                window.location.href = desktopPage;
-            }
-        }
+            if (isMobile) {
+                window.location.href = mobilePage;
+            } else {
+                window.location.href = desktopPage;
+            }
+        }
 
-        // Ejecutar la función de detección y redirección inmediatamente al cargar la página
-        detectDeviceAndRedirect();
-    </script>
+        detectDeviceAndRedirect();
+    </script>
 </head>
 <body>
-    <p>Cargando la versión correcta para tu dispositivo...</p>
+    <p>Cargando la versión correcta para tu dispositivo...</p>
 </body>
 </html>
