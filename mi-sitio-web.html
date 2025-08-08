@@ -441,37 +441,48 @@ function initVideoCarousel(trackId, prevSelector, nextSelector) {
   let isTransitioning = false;
   const cardWidth = 200; // Ancho base de la tarjeta de video
   const gap = 30; // Valor del --card-gap
+  const visibleCards = 3;
   
   let cards = Array.from(track.children);
   const totalCards = cards.length;
-  if (totalCards < 3) return;
+  if (totalCards < visibleCards) return;
 
-  const startClones = cards.slice(0, 2).map(node => node.cloneNode(true));
-  const endClones = cards.slice(-2).map(node => node.cloneNode(true));
+  // Clona las tarjetas para el loop infinito
+  const startClones = cards.slice(0, visibleCards).map(node => node.cloneNode(true));
+  const endClones = cards.slice(-visibleCards).map(node => node.cloneNode(true));
   startClones.forEach(clone => track.appendChild(clone));
   endClones.reverse().forEach(clone => track.insertBefore(clone, track.firstChild));
   cards = Array.from(track.children);
 
-  let currentIndex = 2; // El índice de la primera tarjeta original
+  let currentIndex = visibleCards; // Empieza en la primera tarjeta original
 
+  // Centra la tarjeta
   function updateVideoCarousel(smoothTransition = true) {
+    if (isTransitioning) return;
     isTransitioning = true;
-    const newTransform = -(currentIndex * (cardWidth + gap));
+    
+    // Calcula el desplazamiento para centrar la tarjeta actual
+    const cardCenter = (cards[currentIndex].offsetLeft + (cards[currentIndex].offsetWidth / 2));
+    const containerCenter = container.offsetWidth / 2;
+    const newTransform = -(cardCenter - containerCenter);
+    
     track.style.transition = smoothTransition ? 'transform 0.5s ease-in-out' : 'none';
     track.style.transform = `translateX(${newTransform}px)`;
-    
+
     cards.forEach((card, index) => {
       card.classList.remove('center-card');
     });
+    // Agrega la clase de centrado solo a la tarjeta actual
     cards[currentIndex].classList.add('center-card');
   }
 
   track.addEventListener('transitionend', () => {
     isTransitioning = false;
-    if (currentIndex >= totalCards + 2) {
-      currentIndex = 2;
+    // Manejo de loop infinito
+    if (currentIndex >= totalCards + visibleCards) {
+      currentIndex = visibleCards;
       updateVideoCarousel(false);
-    } else if (currentIndex < 2) {
+    } else if (currentIndex < visibleCards) {
       currentIndex = totalCards + currentIndex;
       updateVideoCarousel(false);
     }
@@ -505,23 +516,14 @@ function initVideoCarousel(trackId, prevSelector, nextSelector) {
     }, 4000);
   });
   
+  // Llama a la función al inicio para centrar la primera tarjeta
   updateVideoCarousel();
-} 
-    
-window.addEventListener('DOMContentLoaded', () => {
-  const discographyTrack = document.getElementById('discography-track');
-  if (discographyTrack && discographyTrack.children.length >= 3) {
-    initDiscographyCarousel('discography-track', '.discography .carousel-btn.prev', '.discography .carousel-btn.next');
-  }
-
-  fetchPlaylistVideos().then(videos => {
-    renderVideos(videos);
-    const videosTrack = document.getElementById('videos-track');
-    if (videosTrack && videosTrack.children.length >= 3) {
-      initVideoCarousel('videos-track', '.videos .carousel-btn.prev', '.videos .carousel-btn.next');
-    }
+  
+  // Escucha cambios en el tamaño de la ventana para recalcular el centrado
+  window.addEventListener('resize', () => {
+    updateVideoCarousel(false);
   });
-});
+}
 </script>
 </body>
 </html>
