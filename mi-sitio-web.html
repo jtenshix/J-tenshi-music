@@ -340,28 +340,30 @@ function renderVideos(videos) {
 }
 
 /**
- * Inicia un carrusel simple (no infinito).
+ * Inicia un carrusel simple y no infinito para la discografía con autoplay.
  * @param {string} trackId - ID del contenedor de tarjetas.
  * @param {string} prevSelector - Selector para el botón "anterior".
  * @param {string} nextSelector - Selector para el botón "siguiente".
  */
-function initCarousel(trackId, prevSelector, nextSelector) {
+function initDiscographyCarousel(trackId, prevSelector, nextSelector) {
   const track = document.getElementById(trackId);
   const prevBtn = document.querySelector(prevSelector);
   const nextBtn = document.querySelector(nextSelector);
-  if (!track || !prevBtn || !nextBtn) return;
+  const container = track.parentElement;
+  if (!track || !prevBtn || !nextBtn || !container) return;
 
   let currentIndex = 0;
   const cards = Array.from(track.children);
   const totalCards = cards.length;
-  const cardWidth = 320; // Asegúrate de que este valor coincida con --card-width en tu CSS
-  const gap = 30; // Asegúrate de que este valor coincida con --card-gap
+  const visibleCards = 3; 
+  const cardWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width'));
+  const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-gap'));
   const step = cardWidth + gap;
 
   function updateCarousel() {
     track.style.transform = `translateX(${-currentIndex * step}px)`;
     prevBtn.disabled = currentIndex === 0;
-    nextBtn.disabled = currentIndex >= totalCards - 1;
+    nextBtn.disabled = currentIndex >= totalCards - visibleCards;
   }
 
   prevBtn.addEventListener('click', () => {
@@ -372,17 +374,39 @@ function initCarousel(trackId, prevSelector, nextSelector) {
   });
 
   nextBtn.addEventListener('click', () => {
-    if (currentIndex < totalCards - 1) {
+    if (currentIndex < totalCards - visibleCards) {
       currentIndex++;
       updateCarousel();
     }
   });
 
+  // Autoplay
+  let autoplayInterval = setInterval(() => {
+    if (currentIndex < totalCards - visibleCards) {
+      currentIndex++;
+    } else {
+      currentIndex = 0; // Vuelve al inicio
+    }
+    updateCarousel();
+  }, 4000); // Cambia cada 4 segundos
+
+  container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+  container.addEventListener('mouseleave', () => {
+    autoplayInterval = setInterval(() => {
+      if (currentIndex < totalCards - visibleCards) {
+        currentIndex++;
+      } else {
+        currentIndex = 0;
+      }
+      updateCarousel();
+    }, 4000);
+  });
+  
   updateCarousel();
 }
 
 /**
- * Inicia un carrusel de 3 videos con el central resaltado.
+ * Inicia un carrusel de 3 videos con el central resaltado y autoplay.
  * @param {string} trackId - ID del contenedor de tarjetas.
  * @param {string} prevSelector - Selector para el botón "anterior".
  * @param {string} nextSelector - Selector para el botón "siguiente".
@@ -391,34 +415,32 @@ function initVideoCarousel(trackId, prevSelector, nextSelector) {
   const track = document.getElementById(trackId);
   const prevBtn = document.querySelector(prevSelector);
   const nextBtn = document.querySelector(nextSelector);
-  if (!track || !prevBtn || !nextBtn) return;
+  const container = track.parentElement;
+  if (!track || !prevBtn || !nextBtn || !container) return;
 
   let currentIndex = 0;
   const cards = Array.from(track.children);
   const totalCards = cards.length;
 
   function updateVideoCarousel() {
-    // Escondemos todas las tarjetas y removemos la clase de central
     cards.forEach(card => {
-      card.style.display = 'none';
       card.classList.remove('center-card');
+      card.style.display = 'none';
     });
 
-    // Mostramos las 3 tarjetas visibles y marcamos la central
     if (totalCards > 0) {
-      let cardStart = currentIndex;
-      let cardEnd = Math.min(currentIndex + 3, totalCards);
-      for(let i = cardStart; i < cardEnd; i++) {
+      const start = currentIndex;
+      const end = Math.min(currentIndex + 3, totalCards);
+      for(let i = start; i < end; i++) {
         cards[i].style.display = 'flex';
-        if (i === currentIndex + 1) { // El del medio
+        if (i === currentIndex + 1) {
           cards[i].classList.add('center-card');
         }
       }
     }
     
-    // Deshabilitar botones al llegar a los extremos
     prevBtn.disabled = currentIndex === 0;
-    nextBtn.disabled = currentIndex >= totalCards - 3; // Deshabilitar cuando solo queden 3 videos o menos
+    nextBtn.disabled = currentIndex >= totalCards - 3;
   }
 
   prevBtn.addEventListener('click', () => {
@@ -435,18 +457,37 @@ function initVideoCarousel(trackId, prevSelector, nextSelector) {
     }
   });
 
+  // Autoplay
+  let autoplayInterval = setInterval(() => {
+    if (currentIndex < totalCards - 3) {
+      currentIndex++;
+    } else {
+      currentIndex = 0; // Vuelve al inicio
+    }
+    updateVideoCarousel();
+  }, 4000); // Cambia cada 4 segundos
+
+  container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+  container.addEventListener('mouseleave', () => {
+    autoplayInterval = setInterval(() => {
+      if (currentIndex < totalCards - 3) {
+        currentIndex++;
+      } else {
+        currentIndex = 0;
+      }
+      updateVideoCarousel();
+    }, 4000);
+  });
+
   updateVideoCarousel();
 }
 
-// Iniciar carruseles
 window.addEventListener('DOMContentLoaded', () => {
-  // Carrusel de Discografía (no infinito)
   const discographyTrack = document.getElementById('discography-track');
   if (discographyTrack && discographyTrack.children.length > 0) {
-    initCarousel('discography-track', '.discography .carousel-btn.prev', '.discography .carousel-btn.next');
+    initDiscographyCarousel('discography-track', '.discography .carousel-btn.prev', '.discography .carousel-btn.next');
   }
 
-  // Carrusel de Videos (con tarjeta central destacada)
   fetchPlaylistVideos().then(videos => {
     renderVideos(videos);
     const videosTrack = document.getElementById('videos-track');
