@@ -326,159 +326,63 @@
       // intenta leer style primero
       const style = el.style && el.style.transform;
       if (style && style.includes('translateX')) {
-        const m = style.match(/translateX\((-?\d+(?:\.\d+)?)px\)/);
-        if (m) return parseFloat(m[1]);
+        const match = style.match(/translateX\((-?\d+)px\)/);
+        return match ? parseInt(match[1]) : 0;
       }
-      // fallback a computed matrix
-      const comp = getComputedStyle(el).transform;
-      if (comp && comp !== 'none') {
-        const values = comp.match(/matrix.*\((.+)\)/);
-        if (values && values[1]) {
-          const parts = values[1].split(',').map(s => s.trim());
-          // matrix(a, b, c, d, tx, ty) => tx es index 4
-          const tx = parseFloat(parts[4]) || 0;
-          return tx;
-        }
+      // intenta computed style
+      const computed = window.getComputedStyle(el);
+      const matrix = computed.transform || computed.webkitTransform || computed.mozTransform;
+      if (matrix && matrix !== 'none') {
+        const values = matrix.match(/matrix.*\((.+)\)/)[1].split(', ');
+        return parseFloat(values[4]) || 0;
       }
       return 0;
     }
 
-    function highlightCenterCard(track) {
-      if (!track) return;
-      const cw = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width')) || 320;
-      const cg = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-gap')) || 30;
-      const totalCardWidth = cw + cg;
-
-      const trackPosition = Math.abs(getTranslateX(track));
-      const centerIndex = Math.round(trackPosition / totalCardWidth);
-
-      Array.from(track.children).forEach(card => card.classList.remove('center-card'));
-      // Asegurar que el índice esté dentro de bounds
-      const targetIndex = Math.min(Math.max(centerIndex + 1, 0), track.children.length - 1);
-      if (track.children[targetIndex]) track.children[targetIndex].classList.add('center-card');
-    }
-
-    /* Lógica de carrusel reutilizable */
-    function setupCarousel(trackId) {
+    /* Carrusel */
+    function initCarousel(trackId, prevBtnSelector, nextBtnSelector) {
       const track = document.getElementById(trackId);
-      if (!track) return;
+      const prevBtn = document.querySelector(prevBtnSelector);
+      const nextBtn = document.querySelector(nextBtnSelector);
+      if (!track || !prevBtn || !nextBtn) return;
 
-      const parent = track.parentElement;
-      if (!parent) return;
+      let currentIndex = 0;
+      const cards = track.children;
+      const cardWidth = cards.length ? cards[0].offsetWidth + 30 : 350; // ancho + gap
 
-      const prevBtn = parent.querySelector('.prev');
-      const nextBtn = parent.querySelector('.next');
+      function updateCarousel() {
+        const maxIndex = cards.length - 1;
+        if (currentIndex < 0) currentIndex = 0;
+        if (currentIndex > maxIndex) currentIndex = maxIndex;
 
-      const cw = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width')) || 320;
-      const cg = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-gap')) || 30;
-      const totalCardWidth = cw + cg;
-      const cardsToClone = 3;
+        const translateX = -currentIndex * cardWidth;
+        track.style.transform = `translateX(${translateX}px)`;
 
-      // Snapshot de los elementos originales
-      const originalCards = Array.from(track.children);
-      if (originalCards.length === 0) {
-        // nada que configurar aún
-        return;
+        // Actualiza clases para destacar card central
+        Array.from(cards).forEach((card, i) => {
+          card.classList.toggle('center-card', i === currentIndex);
+        });
       }
 
-      // Clonar últimas y primeras tarjetas
-      for (let i = 0; i < cardsToClone; i++) {
-        const clone = originalCards[originalCards.length - 1 - i].cloneNode(true);
-        track.insertBefore(clone, track.children[0]);
-      }
-      for (let i = 0; i < cardsToClone; i++) {
-        const clone = originalCards[i].cloneNode(true);
-        track.appendChild(clone);
-      }
-
-      let position = -(totalCardWidth * cardsToClone);
-      track.style.transform = `translateX(${position}px)`;
-      let autoScrollInterval = null;
-
-      // Pequeña espera para aplicar efecto
-      setTimeout(() => highlightCenterCard(track), 70);
-
-      function moveCarousel(direction) {
-        track.style.transition = 'transform 0.5s ease-in-out';
-        if (direction === 'next') {
-          position -= totalCardWidth;
-        } else if (direction === 'prev') {
-          position += totalCardWidth;
-        }
-        track.style.transform = `translateX(${position}px)`;
-        highlightCenterCard(track);
-      }
-
-      track.addEventListener('transitionend', () => {
-        const totalItems = originalCards.length;
-        // límites para el reseteo (con los clones)
-        const maxNegative = -((totalItems + cardsToClone) * totalCardWidth);
-        if (position <= maxNegative) {
-          track.style.transition = 'none';
-          position = -(cardsToClone * totalCardWidth);
-          track.style.transform = `translateX(${position}px)`;
-        }
-        if (position >= 0) {
-          track.style.transition = 'none';
-          position = -(totalItems * totalCardWidth);
-          track.style.transform = `translateX(${position}px)`;
-        }
-        // reaplicar highlight
-        setTimeout(() => highlightCenterCard(track), 20);
+      prevBtn.addEventListener('click', () => {
+        currentIndex--;
+        updateCarousel();
+      });
+      nextBtn.addEventListener('click', () => {
+        currentIndex++;
+        updateCarousel();
       });
 
-      // Eventos botones
-      if (nextBtn) nextBtn.addEventListener('click', () => { stopAutoScroll(); moveCarousel('next'); });
-      if (prevBtn) prevBtn.addEventListener('click', () => { stopAutoScroll(); moveCarousel('prev'); });
-
-      function startAutoScroll() {
-        stopAutoScroll();
-        autoScrollInterval = setInterval(() => moveCarousel('next'), 3000);
-      }
-      function stopAutoScroll() {
-        if (autoScrollInterval) clearInterval(autoScrollInterval);
-        autoScrollInterval = null;
-      }
-
-      track.addEventListener('mouseenter', stopAutoScroll);
-      track.addEventListener('mouseleave', startAutoScroll);
-
-      // Reiniciar si cambian tamaño de ventana (para recalcular medidas)
-      let resizeTimeout;
-      window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-          // recalcular variables (no hacemos reconstrucción completa para mantener clones)
-          // actualizar posición relativa para que no se desplace raro al cambiar --card-width
-          // For simplicity, reset transform to the nearest logical position
-          const cwNew = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width')) || cw;
-          const cgNew = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-gap')) || cg;
-          const totalNew = cwNew + cgNew;
-          // recompute approximate index
-          const currentPos = getTranslateX(track);
-          const approxIndex = Math.round(Math.abs(currentPos) / (totalNew || 1));
-          position = -approxIndex * totalNew;
-          track.style.transition = 'none';
-          track.style.transform = `translateX(${position}px)`;
-          setTimeout(()=>track.style.transition = 'transform 0.5s ease-in-out', 20);
-          highlightCenterCard(track);
-        }, 150);
-      });
-
-      startAutoScroll();
+      updateCarousel();
+      window.addEventListener('resize', updateCarousel);
     }
 
-    /* Inicialización: carrusel de discografía (tiene contenido estático) */
-    document.addEventListener('DOMContentLoaded', () => {
-      setupCarousel('discography-track');
-
-      // Obtener videos y luego inicializar su carrusel (si hay videos)
-      fetchPlaylistVideos().then(items => {
-        renderVideos(items);
-        // Espera muy corta a que DOM inserte elementos
-        setTimeout(() => setupCarousel('videos-track'), 100);
-      });
+    /* Iniciar todo */
+    fetchPlaylistVideos().then(videos => {
+      renderVideos(videos);
+      initCarousel('videos-track', '.videos .carousel-btn.prev', '.videos .carousel-btn.next');
     });
+    initCarousel('discography-track', '.discography .carousel-btn.prev', '.discography .carousel-btn.next');
   </script>
 </body>
 </html>
