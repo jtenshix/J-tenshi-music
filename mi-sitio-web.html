@@ -144,21 +144,19 @@
 /* ---------- VIDEO CAROUSEL ---------- */
 .videos .carousel-container {
   width: 100%;
-  max-width: 1000px; /* controla cuántos videos se ven */
-  margin: 0 auto;     /* mantiene el carrusel centrado */
-  padding: 0 14%;      /* recorta para mostrar solo mitades */
-  box-sizing: border-box;
+  max-width: 1000px; /* tamaño fijo para 3 tarjetas + espacio */
+  margin: 0 auto;
   overflow: hidden;
   position: relative;
+  padding: 0;
 }
-
 
 .videos .carousel-track {
   display: flex;
   align-items: center;
   transition: transform 0.5s ease-in-out;
 }
-    
+
 .videos .media-card {
   width: 300px;
   margin: 0 10px;
@@ -168,13 +166,11 @@
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-
 .videos .media-card.center-card {
   transform: scale(1.2);
   opacity: 1;
   z-index: 2;
 }
-
 
 /* Responsive simple */
 @media (max-width: 900px) {
