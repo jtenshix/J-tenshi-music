@@ -361,6 +361,8 @@ function initDiscographyCarousel(trackId, prevSelector, nextSelector) {
   // Clonar elementos para crear el loop
   let cards = Array.from(track.children);
   const totalCards = cards.length;
+  if (totalCards < visibleCards) return;
+
   const startClones = cards.slice(0, visibleCards).map(node => node.cloneNode(true));
   const endClones = cards.slice(-visibleCards).map(node => node.cloneNode(true));
 
@@ -370,14 +372,15 @@ function initDiscographyCarousel(trackId, prevSelector, nextSelector) {
   cards = Array.from(track.children);
   let currentIndex = visibleCards; // Empezamos en la primera tarjeta original
 
-  // Mover el carrusel a la posición inicial
+  // Mover el carrusel a la posición inicial sin transición
   track.style.transition = 'none';
   track.style.transform = `translateX(${-currentIndex * step}px)`;
+  track.offsetHeight; // Forzar un "repaint"
+  track.style.transition = 'transform 0.5s ease-in-out';
 
   function updateCarousel() {
     if (isTransitioning) return;
     isTransitioning = true;
-    track.style.transition = 'transform 0.5s ease-in-out';
     track.style.transform = `translateX(${-currentIndex * step}px)`;
   }
   
@@ -426,7 +429,7 @@ function initDiscographyCarousel(trackId, prevSelector, nextSelector) {
 }
 
 /**
- * Inicia un carrusel de 3 videos con el central resaltado y autoplay.
+ * Inicia un carrusel de videos con loop infinito y autoplay.
  * @param {string} trackId - ID del contenedor de tarjetas.
  * @param {string} prevSelector - Selector para el botón "anterior".
  * @param {string} nextSelector - Selector para el botón "siguiente".
@@ -438,80 +441,100 @@ function initVideoCarousel(trackId, prevSelector, nextSelector) {
   const container = track.parentElement;
   if (!track || !prevBtn || !nextBtn || !container) return;
 
-  let currentIndex = 0;
-  const cards = Array.from(track.children);
+  const visibleCards = 3;
+  const cardWidth = 200; // Ancho base de la tarjeta de video
+  const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-gap'));
+  const step = cardWidth + gap;
+  let isTransitioning = false;
+  
+  let cards = Array.from(track.children);
   const totalCards = cards.length;
+  if (totalCards < visibleCards) return;
+
+  const startClones = cards.slice(0, visibleCards).map(node => node.cloneNode(true));
+  const endClones = cards.slice(-visibleCards).map(node => node.cloneNode(true));
+
+  startClones.forEach(clone => track.appendChild(clone));
+  endClones.reverse().forEach(clone => track.insertBefore(clone, track.firstChild));
+  
+  cards = Array.from(track.children);
+  let currentIndex = visibleCards;
+  
+  track.style.transition = 'none';
+  track.style.transform = `translateX(${-currentIndex * step}px)`;
+  track.offsetHeight;
+  track.style.transition = 'transform 0.5s ease-in-out';
 
   function updateVideoCarousel() {
-    cards.forEach(card => {
-      card.classList.remove('center-card');
-      card.style.display = 'none';
-    });
-
-    if (totalCards > 0) {
-      const start = currentIndex;
-      const end = Math.min(currentIndex + 3, totalCards);
-      for(let i = start; i < end; i++) {
-        cards[i].style.display = 'flex';
-        if (i === currentIndex + 1) {
-          cards[i].classList.add('center-card');
-        }
-      }
-    }
+    if (isTransitioning) return;
+    isTransitioning = true;
+    track.style.transform = `translateX(${-currentIndex * step}px)`;
     
-    prevBtn.disabled = currentIndex === 0;
-    nextBtn.disabled = currentIndex >= totalCards - 3;
+    // Actualiza la clase 'center-card' para el efecto de escala
+    cards.forEach((card, index) => {
+      card.classList.remove('center-card');
+      if (index === currentIndex + 1) {
+        card.classList.add('center-card');
+      }
+    });
   }
 
-  prevBtn.addEventListener('click', () => {
-    if (currentIndex > 0) {
-      currentIndex--;
-      updateVideoCarousel();
+  track.addEventListener('transitionend', () => {
+    isTransitioning = false;
+    if (currentIndex >= totalCards + visibleCards) {
+      track.style.transition = 'none';
+      currentIndex = visibleCards;
+      track.style.transform = `translateX(${-currentIndex * step}px)`;
+    } else if (currentIndex < visibleCards) {
+      track.style.transition = 'none';
+      currentIndex = totalCards + currentIndex;
+      track.style.transform = `translateX(${-currentIndex * step}px)`;
     }
   });
 
+  prevBtn.addEventListener('click', () => {
+    if (isTransitioning) return;
+    currentIndex--;
+    updateVideoCarousel();
+  });
   nextBtn.addEventListener('click', () => {
-    if (currentIndex < totalCards - 3) {
-      currentIndex++;
-      updateVideoCarousel();
-    }
+    if (isTransitioning) return;
+    currentIndex++;
+    updateVideoCarousel();
   });
 
   // Autoplay
   let autoplayInterval = setInterval(() => {
-    if (currentIndex < totalCards - 3) {
+    if (!isTransitioning) {
       currentIndex++;
-    } else {
-      currentIndex = 0; // Vuelve al inicio
+      updateVideoCarousel();
     }
-    updateVideoCarousel();
-  }, 4000); // Cambia cada 4 segundos
+  }, 4000);
 
   container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
   container.addEventListener('mouseleave', () => {
     autoplayInterval = setInterval(() => {
-      if (currentIndex < totalCards - 3) {
+      if (!isTransitioning) {
         currentIndex++;
-      } else {
-        currentIndex = 0;
+        updateVideoCarousel();
       }
-      updateVideoCarousel();
     }, 4000);
   });
 
+  // Inicializar la clase para la tarjeta central al cargar
   updateVideoCarousel();
 }
 
 window.addEventListener('DOMContentLoaded', () => {
   const discographyTrack = document.getElementById('discography-track');
-  if (discographyTrack && discographyTrack.children.length > 0) {
+  if (discographyTrack && discographyTrack.children.length >= 3) {
     initDiscographyCarousel('discography-track', '.discography .carousel-btn.prev', '.discography .carousel-btn.next');
   }
 
   fetchPlaylistVideos().then(videos => {
     renderVideos(videos);
     const videosTrack = document.getElementById('videos-track');
-    if (videosTrack && videosTrack.children.length > 0) {
+    if (videosTrack && videosTrack.children.length >= 3) {
       initVideoCarousel('videos-track', '.videos .carousel-btn.prev', '.videos .carousel-btn.next');
     }
   });
