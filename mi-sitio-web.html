@@ -143,23 +143,36 @@
 
 /* ---------- VIDEO CAROUSEL ---------- */
 .videos .carousel-container {
-  max-width: 100%;
-  overflow: hidden; 
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 10%; /* para que se vean las mitades de los lados */
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
 }
+
 .videos .carousel-track {
+  display: flex;
   align-items: center;
+  transition: transform 0.5s ease-in-out;
 }
+
 .videos .media-card {
-  width: 200px;
-  opacity: 0.7;
+  width: 320px;
+  margin: 0 10px;
+  flex-shrink: 0;
+  opacity: 0.6;
   transform: scale(0.9);
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
+
 .videos .media-card.center-card {
   transform: scale(1.2);
   opacity: 1;
-  z-index: 1;
+  z-index: 2;
 }
+
 
 /* Responsive simple */
 @media (max-width: 900px) {
