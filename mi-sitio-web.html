@@ -102,16 +102,27 @@
     margin: 10px auto 0; display: block;
   }
 
-  /* ---------- SECTION BANNER ---------- */
-  .section-banner {
-    position: relative; width: 50%; height: 150px; margin: 60px auto;
-    border-radius: 12px; background: url('banner portada.png') center center no-repeat;
-    background-size: cover; box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    display: flex; justify-content: center; align-items: center;
-    color: #e0c27b; font-size: 3rem; font-weight: 900;
-    font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
-    text-shadow: 0 0 15px rgba(224, 194, 123, 0.7); user-select: none;
-  }
+ /* ---------- SECTION BANNER ---------- */
+.section-banner {
+  position: relative;
+  width: 80%; /* Aumentamos el ancho, puedes ajustarlo */
+  max-width: 1200px; /* Para que no se haga demasiado grande en monitores ultra-anchos */
+  height: 150px;
+  margin: 60px auto;
+  border-radius: 12px;
+  background: url('banner portada.png') center center no-repeat;
+  background-size: cover;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #e0c27b;
+  font-size: 3rem;
+  font-weight: 900;
+  font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
+  text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
+  user-select: none;
+}
 
   /* ---------- CAROUSEL ---------- */
   .carousel-container { position: relative; overflow: hidden; max-width: 1200px; margin: 0 auto; }
