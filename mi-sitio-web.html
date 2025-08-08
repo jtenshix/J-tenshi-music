@@ -34,8 +34,17 @@ header {
 }
 header .logo { color: #fff; font-size: 20px; letter-spacing: 2px; }
 nav ul { display: flex; gap: 25px; list-style: none; }
-nav a { color: #ccc; text-decoration: none; font-size: 14px; }
-nav a:hover { color: #e0c27b; }
+nav a {
+  color: #ccc;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s ease; /* Transición suave para todos los efectos */
+}
+
+nav a:hover {
+  color: #e0c27b;
+  transform: scale(1.15); /* Aumenta el tamaño un 15% al pasar el mouse */
+}
 .theme-toggle {
   background: none; border: 1px solid #777; color: #ccc;
   padding: 6px 12px; border-radius: 8px; cursor: pointer;
