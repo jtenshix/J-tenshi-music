@@ -340,7 +340,7 @@ function renderVideos(videos) {
 }
 
 /**
- * Inicia un carrusel simple y no infinito para la discografía con autoplay.
+ * Inicia un carrusel con loop infinito y autoplay para la discografía.
  * @param {string} trackId - ID del contenedor de tarjetas.
  * @param {string} prevSelector - Selector para el botón "anterior".
  * @param {string} nextSelector - Selector para el botón "siguiente".
@@ -352,57 +352,77 @@ function initDiscographyCarousel(trackId, prevSelector, nextSelector) {
   const container = track.parentElement;
   if (!track || !prevBtn || !nextBtn || !container) return;
 
-  let currentIndex = 0;
-  const cards = Array.from(track.children);
-  const totalCards = cards.length;
   const visibleCards = 3; 
   const cardWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width'));
   const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-gap'));
   const step = cardWidth + gap;
+  let isTransitioning = false;
+  
+  // Clonar elementos para crear el loop
+  let cards = Array.from(track.children);
+  const totalCards = cards.length;
+  const startClones = cards.slice(0, visibleCards).map(node => node.cloneNode(true));
+  const endClones = cards.slice(-visibleCards).map(node => node.cloneNode(true));
+
+  startClones.forEach(clone => track.appendChild(clone));
+  endClones.reverse().forEach(clone => track.insertBefore(clone, track.firstChild));
+
+  cards = Array.from(track.children);
+  let currentIndex = visibleCards; // Empezamos en la primera tarjeta original
+
+  // Mover el carrusel a la posición inicial
+  track.style.transition = 'none';
+  track.style.transform = `translateX(${-currentIndex * step}px)`;
 
   function updateCarousel() {
+    if (isTransitioning) return;
+    isTransitioning = true;
+    track.style.transition = 'transform 0.5s ease-in-out';
     track.style.transform = `translateX(${-currentIndex * step}px)`;
-    prevBtn.disabled = currentIndex === 0;
-    nextBtn.disabled = currentIndex >= totalCards - visibleCards;
   }
+  
+  track.addEventListener('transitionend', () => {
+    isTransitioning = false;
+    // Lógica para el "salto" invisible del loop
+    if (currentIndex >= totalCards + visibleCards) {
+      track.style.transition = 'none';
+      currentIndex = visibleCards;
+      track.style.transform = `translateX(${-currentIndex * step}px)`;
+    } else if (currentIndex < visibleCards) {
+      track.style.transition = 'none';
+      currentIndex = totalCards + currentIndex;
+      track.style.transform = `translateX(${-currentIndex * step}px)`;
+    }
+  });
 
   prevBtn.addEventListener('click', () => {
-    if (currentIndex > 0) {
-      currentIndex--;
-      updateCarousel();
-    }
-  });
-
-  nextBtn.addEventListener('click', () => {
-    if (currentIndex < totalCards - visibleCards) {
-      currentIndex++;
-      updateCarousel();
-    }
-  });
-
-  // Autoplay
-  let autoplayInterval = setInterval(() => {
-    if (currentIndex < totalCards - visibleCards) {
-      currentIndex++;
-    } else {
-      currentIndex = 0; // Vuelve al inicio
-    }
+    if (isTransitioning) return;
+    currentIndex--;
     updateCarousel();
-  }, 4000); // Cambia cada 4 segundos
+  });
+  nextBtn.addEventListener('click', () => {
+    if (isTransitioning) return;
+    currentIndex++;
+    updateCarousel();
+  });
+
+  // Autoplay con pausa al pasar el mouse
+  let autoplayInterval = setInterval(() => {
+    if (!isTransitioning) {
+      currentIndex++;
+      updateCarousel();
+    }
+  }, 4000);
 
   container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
   container.addEventListener('mouseleave', () => {
     autoplayInterval = setInterval(() => {
-      if (currentIndex < totalCards - visibleCards) {
+      if (!isTransitioning) {
         currentIndex++;
-      } else {
-        currentIndex = 0;
+        updateCarousel();
       }
-      updateCarousel();
     }, 4000);
   });
-  
-  updateCarousel();
 }
 
 /**
