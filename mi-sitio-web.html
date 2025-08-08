@@ -141,39 +141,35 @@
   .media-card .label { font-size: 11px; color: #e0c27b; border: 1px solid #e0c27b; padding: 2px 6px; border-radius: 999px; }
   .media-card.center-card { filter: grayscale(0%); transform: scale(1.1); z-index: 5; }
 
-  /* ---------- VIDEO CAROUSEL ---------- */
-  .videos .carousel-container {
-    max-width: calc(200px * 2 + 150px * 1.2 + 30px * 2); /* Tamaño de 3 tarjetas visibles */
-    margin: 0 auto;
-  }
-  .videos .carousel-track {
-    align-items: center;
-  }
+/* ---------- VIDEO CAROUSEL ---------- */
+.videos .carousel-container {
+  max-width: 100%;
+  overflow: hidden; 
+}
+.videos .carousel-track {
+  align-items: center;
+}
+.videos .media-card {
+  width: 200px;
+  opacity: 0.7;
+  transform: scale(0.9);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.videos .media-card.center-card {
+  transform: scale(1.2);
+  opacity: 1;
+  z-index: 1;
+}
+
+/* Responsive simple */
+@media (max-width: 900px) {
+  .schedule-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+  .section-banner { width: 90%; height: 120px; font-size: 2rem; }
+  :root { --card-width: 260px; }
   .videos .media-card {
-    width: 200px;
-    opacity: 0.7;
-    transform: scale(0.9);
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    width: 150px;
   }
-  .videos .media-card.center-card {
-    transform: scale(1.2);
-    opacity: 1;
-    z-index: 1;
-  }
-
-  /* Responsive simple */
-  @media (max-width: 900px) {
-    .schedule-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
-    .section-banner { width: 90%; height: 120px; font-size: 2rem; }
-    :root { --card-width: 260px; }
-    .videos .media-card {
-      width: 150px;
-    }
-    .videos .carousel-container {
-      max-width: calc(150px * 2 + 150px * 1.2 + 30px * 2);
-    }
-  }
-
+}
   </style>
 </head>
 <body>
@@ -442,56 +438,42 @@ function initVideoCarousel(trackId, prevSelector, nextSelector) {
   const container = track.parentElement;
   if (!track || !prevBtn || !nextBtn || !container) return;
 
-  const cardWidth = 200; // Ancho base de la tarjeta de video
-  const gap = 30; // El mismo valor de --card-gap
-  const visibleCards = 3;
   let isTransitioning = false;
+  const cardWidth = 200; // Ancho base de la tarjeta de video
+  const gap = 30; // Valor del --card-gap
   
   let cards = Array.from(track.children);
   const totalCards = cards.length;
-  if (totalCards < visibleCards) return;
+  if (totalCards < 3) return;
 
-  const startClones = cards.slice(0, visibleCards).map(node => node.cloneNode(true));
-  const endClones = cards.slice(-visibleCards).map(node => node.cloneNode(true));
+  const startClones = cards.slice(0, 2).map(node => node.cloneNode(true));
+  const endClones = cards.slice(-2).map(node => node.cloneNode(true));
   startClones.forEach(clone => track.appendChild(clone));
   endClones.reverse().forEach(clone => track.insertBefore(clone, track.firstChild));
   cards = Array.from(track.children);
 
-  let currentIndex = visibleCards;
+  let currentIndex = 2; // El índice de la primera tarjeta original
 
-  // Ajuste inicial de la posición
-  track.style.transition = 'none';
-  const offset = (container.offsetWidth - (cardWidth * 1.2 + gap * 2 + cardWidth * 0.9 * 2)) / 2 + (cardWidth * 0.9 + gap);
-  track.style.transform = `translateX(${-currentIndex * (cardWidth + gap) + offset}px)`;
-  track.offsetHeight;
-  track.style.transition = 'transform 0.5s ease-in-out';
-
-  function updateVideoCarousel() {
-    if (isTransitioning) return;
+  function updateVideoCarousel(smoothTransition = true) {
     isTransitioning = true;
-    const offset = (container.offsetWidth - (cardWidth * 1.2 + gap * 2 + cardWidth * 0.9 * 2)) / 2 + (cardWidth * 0.9 + gap);
-    track.style.transform = `translateX(${-currentIndex * (cardWidth + gap) + offset}px)`;
+    const newTransform = -(currentIndex * (cardWidth + gap));
+    track.style.transition = smoothTransition ? 'transform 0.5s ease-in-out' : 'none';
+    track.style.transform = `translateX(${newTransform}px)`;
     
     cards.forEach((card, index) => {
       card.classList.remove('center-card');
-      if (index === currentIndex + 1) {
-        card.classList.add('center-card');
-      }
     });
+    cards[currentIndex].classList.add('center-card');
   }
 
   track.addEventListener('transitionend', () => {
     isTransitioning = false;
-    if (currentIndex >= totalCards + visibleCards) {
-      track.style.transition = 'none';
-      currentIndex = visibleCards;
-      const offset = (container.offsetWidth - (cardWidth * 1.2 + gap * 2 + cardWidth * 0.9 * 2)) / 2 + (cardWidth * 0.9 + gap);
-      track.style.transform = `translateX(${-currentIndex * (cardWidth + gap) + offset}px)`;
-    } else if (currentIndex < visibleCards) {
-      track.style.transition = 'none';
+    if (currentIndex >= totalCards + 2) {
+      currentIndex = 2;
+      updateVideoCarousel(false);
+    } else if (currentIndex < 2) {
       currentIndex = totalCards + currentIndex;
-      const offset = (container.offsetWidth - (cardWidth * 1.2 + gap * 2 + cardWidth * 0.9 * 2)) / 2 + (cardWidth * 0.9 + gap);
-      track.style.transform = `translateX(${-currentIndex * (cardWidth + gap) + offset}px)`;
+      updateVideoCarousel(false);
     }
   });
 
@@ -524,8 +506,8 @@ function initVideoCarousel(trackId, prevSelector, nextSelector) {
   });
   
   updateVideoCarousel();
-}
-
+} 
+    
 window.addEventListener('DOMContentLoaded', () => {
   const discographyTrack = document.getElementById('discography-track');
   if (discographyTrack && discographyTrack.children.length >= 3) {
