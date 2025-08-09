@@ -362,7 +362,7 @@ const PLAYLIST_ID = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf';
 
 async function fetchPlaylistVideos() {
   try {
-    const response = await fetch(https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${PLAYLIST_ID}&key=${API_KEY}&maxResults=50);
+    const response = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${PLAYLIST_ID}&key=${API_KEY}&maxResults=50`);
     if (!response.ok) throw new Error('Error al obtener videos de YouTube');
     const data = await response.json();
     return data.items || [];
@@ -384,12 +384,12 @@ function renderVideos(videos) {
 
     const card = document.createElement('div');
     card.className = 'media-card';
-    card.innerHTML = 
+    card.innerHTML = `
       <img src="${thumbnailUrl}" alt="${title}">
       <h4>${title}</h4>
       <span class="label">YouTube</span>
-    ;
-    if (videoId) card.onclick = () => window.open(https://www.youtube.com/watch?v=${videoId}, '_blank');
+    `;
+    if (videoId) card.onclick = () => window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
     videoTrack.appendChild(card);
   });
 }
@@ -427,14 +427,14 @@ function initDiscographyCarousel(trackId, prevSelector, nextSelector) {
   let currentIndex = visibleCards;
 
   track.style.transition = 'none';
-  track.style.transform = translateX(${-currentIndex * step}px);
+  track.style.transform = `translateX(${-currentIndex * step}px)`;
   track.offsetHeight;
   track.style.transition = 'transform 0.5s ease-in-out';
 
   function updateCarousel() {
     if (isTransitioning) return;
     isTransitioning = true;
-    track.style.transform = translateX(${-currentIndex * step}px);
+    track.style.transform = `translateX(${-currentIndex * step}px)`;
   }
   
   track.addEventListener('transitionend', () => {
@@ -442,11 +442,11 @@ function initDiscographyCarousel(trackId, prevSelector, nextSelector) {
     if (currentIndex >= totalCards + visibleCards) {
       track.style.transition = 'none';
       currentIndex = visibleCards;
-      track.style.transform = translateX(${-currentIndex * step}px);
+      track.style.transform = `translateX(${-currentIndex * step}px)`;
     } else if (currentIndex < visibleCards) {
       track.style.transition = 'none';
       currentIndex = totalCards + currentIndex;
-      track.style.transform = translateX(${-currentIndex * step}px);
+      track.style.transform = `translateX(${-currentIndex * step}px)`;
     }
   });
 
@@ -519,7 +519,7 @@ function initVideoCarousel(trackId, prevSelector, nextSelector) {
     const newTransform = -(cardCenter - containerCenter);
    
     track.style.transition = smoothTransition ? 'transform 0.5s ease-in-out' : 'none';
-    track.style.transform = translateX(${newTransform}px);
+    track.style.transform = `translateX(${newTransform}px)`;
 
     cards.forEach((card, index) => {
       card.classList.remove('center-card');
