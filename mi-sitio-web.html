@@ -26,6 +26,18 @@ body.light-mode .discography,
 body.light-mode .videos { background-color: #f0f0f0; color: #111; box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); }
 
 /* ---------- HEADER ---------- */
+@keyframes shake {
+  0% { transform: translateX(0) scale(1.15); }
+  25% { transform: translateX(-1px) rotate(-1deg) scale(1.18); }
+  50% { transform: translateX(1px) rotate(1deg) scale(1.15); }
+  75% { transform: translateX(-1px) rotate(-1deg) scale(1.18); }
+  100% { transform: translateX(0) rotate(0deg) scale(1.15); }
+}
+
+header {
+  position: fixed; top: 0; width: 100%;
+  /* ... el resto de tu código de header ... */
+}
 header {
   position: fixed; top: 0; width: 100%;
   background: rgba(0, 0, 0, 0.8);
@@ -38,12 +50,12 @@ nav a {
   color: #ccc;
   text-decoration: none;
   font-size: 14px;
-  transition: all 0.3s ease; /* Transición suave para todos los efectos */
+  transition: all 0.3s ease;
 }
 
 nav a:hover {
   color: #e0c27b;
-  transform: scale(1.15); /* Aumenta el tamaño un 15% al pasar el mouse */
+  animation: shake 0.2s ease-in-out infinite alternate;
 }
 .theme-toggle {
   background: none; border: 1px solid #777; color: #ccc;
