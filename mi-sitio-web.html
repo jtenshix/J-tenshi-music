@@ -5,35 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tenshi | 幻想の響き</title>
   <style>
-    html {
+    html, body {
       height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
     }
 
     body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #0b0b0b;
+      color: #f5f5f5;
+      font-family: 'Helvetica Neue', sans-serif;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .scaled-container {
       transform: scale(0.8);
       transform-origin: center top;
       width: 125%;
       height: 125%;
-      margin: 0;
-      overflow-x: hidden;
     }
 
     * {
-      margin: 0;
-      padding: 0;
       box-sizing: border-box;
     }
 
     :root {
       --card-width: 320px;
       --card-gap: 30px;
-    }
-
-    body {
-      font-family: 'Helvetica Neue', sans-serif;
-      background: #0b0b0b;
-      color: #f5f5f5;
-      transition: background 0.3s, color 0.3s;
     }
 
     body.light-mode {
@@ -490,121 +492,123 @@
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">Tenshi</div>
-    <nav>
-      <ul>
-        <li><a href="#news">NEWS</a></li>
-        <li><a href="#discography">Discography</a></li>
-        <li><a href="#videos">Videos</a></li>
-        <li><a href="wallpapers.html">Gallery</a></li>
-        <li><a href="#mystudio">My Studio</a></li>
-      </ul>
-    </nav>
-    <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
-  </header>
-  <div class="hero-wrapper">
-    <div class="hero-bg"></div>
-    <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
-  </div>
-  <section class="news" id="news">
-    <h2>NEWS <span>ニュース</span></h2>
-    <nav class="schedule-filters">
-      <button class="active">Todos</button>
-      <button>Conciertos</button>
-      <button>Lanzamientos</button>
-      <button>Eventos</button>
-    </nav>
-    <div class="schedule-grid">
-      <article class="main-news">
-        <div class="date">08 JUL 2025</div>
-        <h3>Gran Concierto de Tenshi en Tokio</h3>
-        <p>El esperado concierto en el Nippon será el evento del año.</p>
-        <span class="label new">NEW</span>
-      </article>
-      <div class="news-card">
-        <div class="date">07 JUL 2025</div>
-        <h4>Nuevo sencillo</h4>
-        <p>"Shinkai no Melody" disponible ya.</p>
-        <span class="label">RELEASE</span>
+  <div class="scaled-container">
+    <header>
+      <div class="logo">Tenshi</div>
+      <nav>
+        <ul>
+          <li><a href="#news">NEWS</a></li>
+          <li><a href="#discography">Discography</a></li>
+          <li><a href="#videos">Videos</a></li>
+          <li><a href="wallpapers.html">Gallery</a></li>
+          <li><a href="#mystudio">My Studio</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
+    </header>
+    <div class="hero-wrapper">
+      <div class="hero-bg"></div>
+      <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
+    </div>
+    <section class="news" id="news">
+      <h2>NEWS <span>ニュース</span></h2>
+      <nav class="schedule-filters">
+        <button class="active">Todos</button>
+        <button>Conciertos</button>
+        <button>Lanzamientos</button>
+        <button>Eventos</button>
+      </nav>
+      <div class="schedule-grid">
+        <article class="main-news">
+          <div class="date">08 JUL 2025</div>
+          <h3>Gran Concierto de Tenshi en Tokio</h3>
+          <p>El esperado concierto en el Nippon será el evento del año.</p>
+          <span class="label new">NEW</span>
+        </article>
+        <div class="news-card">
+          <div class="date">07 JUL 2025</div>
+          <h4>Nuevo sencillo</h4>
+          <p>"Shinkai no Melody" disponible ya.</p>
+          <span class="label">RELEASE</span>
+        </div>
+        <div class="news-card">
+          <div class="date">05 JUL 2025</div>
+          <h4>Evento online</h4>
+          <p>Streaming con sorpresas.</p>
+          <span class="label">EVENT</span>
+        </div>
+        <div class="news-card">
+          <div class="date">03 JUL 2025</div>
+          <h4>Premio ganado</h4>
+          <p>Mejor artista emergente.</p>
+          <span class="label">AWARD</span>
+        </div>
+        <div class="news-card">
+          <div class="date">09 JUL 2025</div>
+          <h4>Nuevo Wallpaper</h4>
+          <p>Descarga el nuevo wallpaper oficial.</p>
+          <span class="label new">NEW</span>
+        </div>
       </div>
-      <div class="news-card">
-        <div class="date">05 JUL 2025</div>
-        <h4>Evento online</h4>
-        <p>Streaming con sorpresas.</p>
-        <span class="label">EVENT</span>
+    </section>
+    <div class="section-banner">ディスコグラフィー</div>
+    <section class="discography" id="discography">
+      <div class="carousel-container" aria-label="Discography carousel">
+        <div class="carousel-track" id="discography-track">
+          <div class="media-card">
+            <img src="https://via.placeholder.com/300x300/ff8c00/000000?text=Track+1" alt="Track 1">
+            <h4>Shinkai no Melody</h4>
+            <span class="label">Single</span>
+          </div>
+          <div class="media-card">
+            <img src="https://via.placeholder.com/300x300/20b2aa/000000?text=Track+2" alt="Track 2">
+            <h4>Yoru no Uta</h4>
+            <span class="label">Single</span>
+          </div>
+          <div class="media-card">
+            <img src="https://via.placeholder.com/300x300/8a2be2/ffffff?text=Track+3" alt="Track 3">
+            <h4>Midnight Echo</h4>
+            <span class="label">Single</span>
+          </div>
+          <div class="media-card">
+            <img src="https://via.placeholder.com/300x300/a0522d/ffffff?text=Album+A" alt="Album A">
+            <h4>Whispers of the Void</h4>
+            <span class="label">Album</span>
+          </div>
+          <div class="media-card">
+            <img src="https://via.placeholder.com/300x300/4682b4/ffffff?text=EP+B" alt="EP B">
+            <h4>Ephemeral Sounds</h4>
+            <span class="label">EP</span>
+          </div>
+          <div class="media-card">
+            <img src="https://via.placeholder.com/300x300/d2691e/ffffff?text=Single+C" alt="Single C">
+            <h4>Starlight Serenade</h4>
+            <span class="label">Single</span>
+          </div>
+        </div>
+        <button class="carousel-btn prev" aria-label="Anterior">‹</button>
+        <button class="carousel-btn next" aria-label="Siguiente">›</button>
       </div>
-      <div class="news-card">
-        <div class="date">03 JUL 2025</div>
-        <h4>Premio ganado</h4>
-        <p>Mejor artista emergente.</p>
-        <span class="label">AWARD</span>
+    </section>
+    <div class="section-banner">ビデオ</div>
+    <section class="videos" id="videos">
+      <div class="carousel-container" aria-label="Videos carousel">
+        <div class="carousel-track" id="videos-track">
+          <!-- Los videos se cargarán aquí -->
+        </div>
+        <button class="carousel-btn prev" aria-label="Anterior">‹</button>
+        <button class="carousel-btn next" aria-label="Siguiente">›</button>
       </div>
-      <div class="news-card">
-        <div class="date">09 JUL 2025</div>
-        <h4>Nuevo Wallpaper</h4>
-        <p>Descarga el nuevo wallpaper oficial.</p>
-        <span class="label new">NEW</span>
+    </section>
+    <div id="videoModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <iframe id="videoFrame" src="" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>
-  </section>
-  <div class="section-banner">ディスコグラフィー</div>
-  <section class="discography" id="discography">
-    <div class="carousel-container" aria-label="Discography carousel">
-      <div class="carousel-track" id="discography-track">
-        <div class="media-card">
-          <img src="https://via.placeholder.com/300x300/ff8c00/000000?text=Track+1" alt="Track 1">
-          <h4>Shinkai no Melody</h4>
-          <span class="label">Single</span>
-        </div>
-        <div class="media-card">
-          <img src="https://via.placeholder.com/300x300/20b2aa/000000?text=Track+2" alt="Track 2">
-          <h4>Yoru no Uta</h4>
-          <span class="label">Single</span>
-        </div>
-        <div class="media-card">
-          <img src="https://via.placeholder.com/300x300/8a2be2/ffffff?text=Track+3" alt="Track 3">
-          <h4>Midnight Echo</h4>
-          <span class="label">Single</span>
-        </div>
-        <div class="media-card">
-          <img src="https://via.placeholder.com/300x300/a0522d/ffffff?text=Album+A" alt="Album A">
-          <h4>Whispers of the Void</h4>
-          <span class="label">Album</span>
-        </div>
-        <div class="media-card">
-          <img src="https://via.placeholder.com/300x300/4682b4/ffffff?text=EP+B" alt="EP B">
-          <h4>Ephemeral Sounds</h4>
-          <span class="label">EP</span>
-        </div>
-        <div class="media-card">
-          <img src="https://via.placeholder.com/300x300/d2691e/ffffff?text=Single+C" alt="Single C">
-          <h4>Starlight Serenade</h4>
-          <span class="label">Single</span>
-        </div>
-      </div>
-      <button class="carousel-btn prev" aria-label="Anterior">‹</button>
-      <button class="carousel-btn next" aria-label="Siguiente">›</button>
+    <div class="footer-spacer">
+      <p>j-tenshiwebcomingsoon</p>
     </div>
-  </section>
-  <div class="section-banner">ビデオ</div>
-  <section class="videos" id="videos">
-    <div class="carousel-container" aria-label="Videos carousel">
-      <div class="carousel-track" id="videos-track">
-        <!-- Los videos se cargarán aquí -->
-      </div>
-      <button class="carousel-btn prev" aria-label="Anterior">‹</button>
-      <button class="carousel-btn next" aria-label="Siguiente">›</button>
-    </div>
-  </section>
-  <div id="videoModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <iframe id="videoFrame" src="" frameborder="0" allowfullscreen></iframe>
-    </div>
-  </div>
-  <div class="footer-spacer">
-    <p>j-tenshiwebcomingsoon</p>
   </div>
 
   <script>
