@@ -183,7 +183,7 @@
       transition: transform 0.5s ease-in-out;
     }
     .videos .media-card {
-      width: 400px; /* Aumentar el tamaño de los videos */
+      width: 400px;
       margin: 0 10px;
       flex-shrink: 0;
       opacity: 1;
@@ -195,15 +195,39 @@
       opacity: 1;
       z-index: 2;
     }
-    .video-container {
-      width: 100%;
-      height: 225px;
-      margin-top: 10px;
-    }
-    .video-container iframe {
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
       width: 100%;
       height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 800px;
+      text-align: center;
+    }
+    .modal-content iframe {
+      width: 100%;
+      height: 450px;
       border: none;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close:hover {
+      color: black;
     }
     @media (max-width: 900px) {
       .schedule-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
@@ -327,6 +351,12 @@
       <button class="carousel-btn next" aria-label="Siguiente">›</button>
     </div>
   </section>
+  <div id="videoModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <iframe id="videoFrame" src="" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
   <div class="footer-spacer">
     <p>j-tenshiwebcomingsoon</p>
   </div>
@@ -370,12 +400,30 @@
         card.className = 'media-card';
         card.innerHTML = `
           <img src="${thumbnailUrl}" alt="${title}">
-          <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          </div>
         `;
+        card.onclick = () => openVideoModal(videoId);
         videoTrack.appendChild(card);
       });
+    }
+
+    function openVideoModal(videoId) {
+      const modal = document.getElementById('videoModal');
+      const videoFrame = document.getElementById('videoFrame');
+      videoFrame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+      modal.style.display = 'block';
+    }
+
+    document.querySelector('.close').onclick = function() {
+      document.getElementById('videoModal').style.display = 'none';
+      document.getElementById('videoFrame').src = '';
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById('videoModal');
+      if (event.target == modal) {
+        modal.style.display = 'none';
+        document.getElementById('videoFrame').src = '';
+      }
     }
 
     function initDiscographyCarousel(trackId, prevSelector, nextSelector) {
