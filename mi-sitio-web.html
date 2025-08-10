@@ -2,71 +2,34 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.8" />
   <title>Tenshi | 幻想の響き</title>
   <style>
     html {
       transform: scale(0.8);
-      transform-origin: top left;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      --card-width: 320px;
-      --card-gap: 30px;
-    }
-
-    body {
-      font-family: 'Helvetica Neue', sans-serif;
-      background: #0b0b0b;
-      color: #f5f5f5;
-      overflow-x: hidden;
+      transform-origin: 0 0;
       width: 125%;
       height: 125%;
+    }
+    /* El resto de tus estilos CSS */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --card-width: 320px; --card-gap: 30px; }
+    html, body {
+      font-family: 'Helvetica Neue', sans-serif;
+      background: #0b0b0b; color: #f5f5f5;
+      overflow-x: hidden; width: 100%;
       transition: background 0.3s, color 0.3s;
     }
-
-    body.light-mode {
-      background: #f5f5f5;
-      color: #111;
-    }
-
+    body.light-mode { background: #f5f5f5; color: #111; }
     body.light-mode header,
     body.light-mode .news-card,
-    body.light-mode .main-news {
-      background-color: #fff !important;
-      color: #111;
-    }
-
-    body.light-mode nav a {
-      color: #333;
-    }
-
-    body.light-mode nav a:hover {
-      color: #c59f3f;
-    }
-
-    body.light-mode .label {
-      border-color: #c59f3f;
-      color: #c59f3f;
-    }
-
+    body.light-mode .main-news { background-color: #fff !important; color: #111; }
+    body.light-mode nav a { color: #333; }
+    body.light-mode nav a:hover { color: #c59f3f; }
+    body.light-mode .label { border-color: #c59f3f; color: #c59f3f; }
     body.light-mode .news,
     body.light-mode .discography,
-    body.light-mode .videos {
-      background-color: #f0f0f0;
-      color: #111;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    }
-
+    body.light-mode .videos { background-color: #f0f0f0; color: #111; box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); }
     @keyframes shake {
       0% { transform: translateX(0) scale(1.15); }
       2% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); }
@@ -74,211 +37,89 @@
       7% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); }
       100% { transform: translateX(0) rotate(0deg) scale(1.15); }
     }
-
     header {
-      position: fixed;
-      top: 0;
-      width: 100%;
+      position: fixed; top: 0; width: 100%;
       background: rgba(0, 0, 0, 0.8);
-      padding: 20px 5%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 999;
+      padding: 20px 5%; display: flex; justify-content: space-between;
+      align-items: center; z-index: 999;
     }
-
-    header .logo {
-      color: #fff;
-      font-size: 20px;
-      letter-spacing: 2px;
-    }
-
-    nav ul {
-      display: flex;
-      gap: 25px;
-      list-style: none;
-    }
-
+    header .logo { color: #fff; font-size: 20px; letter-spacing: 2px; }
+    nav ul { display: flex; gap: 25px; list-style: none; }
     nav a {
-      color: #ccc;
-      text-decoration: none;
-      font-size: 14px;
-      transition: all 0.3s ease;
+      color: #ccc; text-decoration: none;
+      font-size: 14px; transition: all 0.3s ease;
       display: inline-block;
     }
-
     nav a:hover {
       color: #e0c27b;
       animation: shake 0.2s ease-in-out infinite alternate;
     }
-
     .theme-toggle {
-      background: none;
-      border: 1px solid #777;
-      color: #ccc;
-      padding: 6px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-size: 12px;
-      margin-left: 20px;
+      background: none; border: 1px solid #777; color: #ccc;
+      padding: 6px 12px; border-radius: 8px; cursor: pointer;
+      transition: all 0.3s; font-size: 12px; margin-left: 20px;
     }
-
-    .theme-toggle:hover {
-      background: #e0c27b;
-      color: #000;
-    }
-
-    .hero-wrapper {
-      position: relative;
-      height: 75vh;
-      overflow: hidden;
-      margin-top: 70px;
-    }
-
+    .theme-toggle:hover { background: #e0c27b; color: #000; }
+    .hero-wrapper { position: relative; height: 75vh; overflow: hidden; margin-top: 70px; }
     .hero-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 75vh;
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 75vh;
       background: url('banner portada.png') center center no-repeat;
-      background-size: cover;
-      z-index: 0;
+      background-size: cover; z-index: 0;
     }
-
     .hero-text {
-      position: relative;
-      z-index: 2;
-      color: white;
-      font-size: 2rem;
-      padding: 60px 5%;
-      height: 75vh;
-      display: flex;
-      align-items: center;
+      position: relative; z-index: 2; color: white;
+      font-size: 2rem; padding: 60px 5%; height: 75vh;
+      display: flex; align-items: center;
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     }
-
     .news {
-      padding: 100px 5% 80px;
-      background-color: #1a1a1a;
-      max-width: 1200px;
-      margin: 40px auto;
-      border-radius: 12px;
+      padding: 100px 5% 80px; background-color: #1a1a1a;
+      max-width: 1200px; margin: 40px auto; border-radius: 12px;
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
       transition: background 0.3s ease;
     }
-
-    .news h2 {
-      font-size: 32px;
-      color: #fff;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-
-    .news h2 span {
-      font-size: 14px;
-      color: #ccc;
-      margin-left: 10px;
-    }
-
-    .schedule-filters {
-      margin-bottom: 40px;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-
+    .news h2 { font-size: 32px; color: #fff; margin-bottom: 30px; text-align: center; }
+    .news h2 span { font-size: 14px; color: #ccc; margin-left: 10px; }
+    .schedule-filters { margin-bottom: 40px; display: flex; justify-content: center; gap: 20px; }
     .schedule-filters button {
-      background: none;
-      border: 1px solid #555;
-      color: #ccc;
-      padding: 8px 18px;
-      font-size: 14px;
-      cursor: pointer;
-      border-radius: 20px;
-      transition: all 0.3s ease;
+      background: none; border: 1px solid #555; color: #ccc;
+      padding: 8px 18px; font-size: 14px; cursor: pointer;
+      border-radius: 20px; transition: all 0.3s ease;
     }
-
     .schedule-filters button.active,
-    .schedule-filters button:hover {
-      color: #e0c27b;
-      border-color: #e0c27b;
-    }
-
+    .schedule-filters button:hover { color: #e0c27b; border-color: #e0c27b; }
     .schedule-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      gap: 20px;
+      display: grid; grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr; gap: 20px;
     }
-
     .main-news {
-      grid-column: 1 / 2;
-      grid-row: 1 / 3;
+      grid-column: 1 / 2; grid-row: 1 / 3;
       background: linear-gradient(135deg, #4c51bf);
-      border-radius: 16px;
-      padding: 20px;
-      color: #fff;
+      border-radius: 16px; padding: 20px; color: #fff;
       box-shadow: 0 0 20px rgba(76, 81, 191, 0.8);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      overflow: hidden;
+      display: flex; flex-direction: column;
+      justify-content: space-between; overflow: hidden;
     }
-
     .news-card {
-      background: #222;
-      border-radius: 14px;
-      padding: 20px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      cursor: pointer;
-      aspect-ratio: 1 / 1;
-      overflow: hidden;
+      background: #222; border-radius: 14px; padding: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      display: flex; flex-direction: column; justify-content: center;
+      cursor: pointer; aspect-ratio: 1 / 1; overflow: hidden;
       transition: transform 0.3s ease;
     }
-
     .news-card:hover {
       transform: scale(1.05);
       animation: shake 0.2s ease-in-out infinite alternate;
     }
-
-    .news-card h4 {
-      font-size: 16px;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 8px;
-      text-align: center;
-    }
-
-    .news-card .date {
-      font-weight: 700;
-      font-size: 14px;
-      color: #ccc;
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    .news-card p {
-      color: #ccc;
-      font-size: 14px;
-      text-align: center;
-    }
-
+    .news-card h4 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; text-align: center; }
+    .news-card .date { font-weight: 700; font-size: 14px; color: #ccc; text-align: center; margin-bottom: 10px; }
+    .news-card p { color: #ccc; font-size: 14px; text-align: center; }
     .news-card .label {
-      font-size: 11px;
-      color: #e0c27b;
-      border: 1px solid #e0c27b;
-      padding: 2px 6px;
-      border-radius: 999px;
-      width: fit-content;
-      margin: 10px auto 0;
-      display: block;
+      font-size: 11px; color: #e0c27b; border: 1px solid #e0c27b;
+      padding: 2px 6px; border-radius: 999px; width: fit-content;
+      margin: 10px auto 0; display: block;
     }
-
     .section-banner {
       position: relative;
       width: 110%;
@@ -299,96 +140,35 @@
       text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
       user-select: none;
     }
-
-    .carousel-container {
-      position: relative;
-      overflow: hidden;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .carousel-track {
-      display: flex;
-      gap: var(--card-gap);
-      transition: transform 0.5s ease-in-out;
-    }
-
+    .carousel-container { position: relative; overflow: hidden; max-width: 1200px; margin: 0 auto; }
+    .carousel-track { display: flex; gap: var(--card-gap); transition: transform 0.5s ease-in-out; }
     .carousel-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0, 0, 0, 0.5);
-      border: none;
-      color: #e0c27b;
-      font-size: 2rem;
-      cursor: pointer;
-      z-index: 10;
-      padding: 10px;
-      border-radius: 50%;
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5); border: none; color: #e0c27b;
+      font-size: 2rem; cursor: pointer; z-index: 10; padding: 10px; border-radius: 50%;
       transition: all 0.3s;
     }
-
-    .carousel-btn:hover {
-      background: rgba(0, 0, 0, 0.8);
-    }
-
-    .carousel-btn.prev {
-      left: 10px;
-    }
-
-    .carousel-btn.next {
-      right: 10px;
-    }
-
+    .carousel-btn:hover { background: rgba(0, 0, 0, 0.8); }
+    .carousel-btn.prev { left: 10px; }
+    .carousel-btn.next { right: 10px; }
     .media-card {
-      background: #222;
-      border-radius: 14px;
-      padding: 10px;
-      width: var(--card-width);
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
+      background: #222; border-radius: 14px; padding: 10px;
+      width: var(--card-width); box-shadow: 0 0 15px rgba(0,0,0,0.4);
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: space-between; flex-shrink: 0;
       transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.5s ease;
-      filter: grayscale(100%);
-      cursor: pointer;
+      filter: grayscale(100%); cursor: pointer;
     }
-
     .media-card:hover {
       filter: grayscale(0%);
       animation: shake 0.2s ease-in-out infinite alternate;
     }
-
     .media-card img {
-      width: 100%;
-      border-radius: 8px;
-      object-fit: cover;
-      margin-bottom: 8px;
-      aspect-ratio: 16 / 9;
+      width: 100%; border-radius: 8px; object-fit: cover; margin-bottom: 8px; aspect-ratio: 16 / 9;
     }
-
-    .media-card h4 {
-      font-size: 16px;
-      text-align: center;
-      margin-bottom: 6px;
-    }
-
-    .media-card .label {
-      font-size: 11px;
-      color: #e0c27b;
-      border: 1px solid #e0c27b;
-      padding: 2px 6px;
-      border-radius: 999px;
-    }
-
-    .media-card.center-card {
-      filter: grayscale(0%);
-      transform: scale(1.1);
-      z-index: 5;
-    }
-
+    .media-card h4 { font-size: 16px; text-align: center; margin-bottom: 6px; }
+    .media-card .label { font-size: 11px; color: #e0c27b; border: 1px solid #e0c27b; padding: 2px 6px; border-radius: 999px; }
+    .media-card.center-card { filter: grayscale(0%); transform: scale(1.1); z-index: 5; }
     .videos .carousel-container {
       width: 100%;
       max-width: 1000px;
@@ -397,49 +177,40 @@
       position: relative;
       padding: 0;
     }
-
     .videos .carousel-track {
       display: flex;
       align-items: center;
       transition: transform 0.5s ease-in-out;
     }
-
     .videos .media-card {
-      width: 300px;
+      width: 400px; /* Aumentar el tamaño de los videos */
       margin: 0 10px;
       flex-shrink: 0;
-      opacity: 0.6;
-      transform: scale(0.9);
+      opacity: 1;
+      transform: scale(1);
       transition: transform 0.3s ease, opacity 0.3s ease;
     }
-
     .videos .media-card.center-card {
-      transform: scale(1.2);
+      transform: scale(1.05);
       opacity: 1;
       z-index: 2;
     }
-
-    @media (max-width: 900px) {
-      .schedule-grid {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-      }
-
-      .section-banner {
-        width: 90%;
-        height: 120px;
-        font-size: 2rem;
-      }
-
-      :root {
-        --card-width: 260px;
-      }
-
-      .videos .media-card {
-        width: 150px;
-      }
+    .video-container {
+      width: 100%;
+      height: 225px;
+      margin-top: 10px;
     }
-
+    .video-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    @media (max-width: 900px) {
+      .schedule-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+      .section-banner { width: 90%; height: 120px; font-size: 2rem; }
+      :root { --card-width: 260px; }
+      .videos .media-card { width: 300px; }
+    }
     .footer-spacer {
       padding: 100px 0 50px;
       text-align: center;
@@ -550,7 +321,7 @@
   <section class="videos" id="videos">
     <div class="carousel-container" aria-label="Videos carousel">
       <div class="carousel-track" id="videos-track">
-        <!-- Se llenará desde la API de YouTube -->
+        <!-- Los videos se cargarán aquí -->
       </div>
       <button class="carousel-btn prev" aria-label="Anterior">‹</button>
       <button class="carousel-btn next" aria-label="Siguiente">›</button>
@@ -566,7 +337,6 @@
       document.body.classList.toggle('light-mode');
       localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
     }
-
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-mode');
     }
@@ -600,10 +370,10 @@
         card.className = 'media-card';
         card.innerHTML = `
           <img src="${thumbnailUrl}" alt="${title}">
-          <h4>${title}</h4>
-          <span class="label">YouTube</span>
+          <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
         `;
-        if (videoId) card.onclick = () => window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
         videoTrack.appendChild(card);
       });
     }
