@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tenshi | 幻想の響き</title>
-  <style>
- /* ---------- ESTILOS GENERALES ---------- */
+<style>
+/* ---------- ESTILOS GENERALES ---------- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 :root { --card-width: 320px; --card-gap: 30px; }
 html, body {
@@ -27,11 +27,10 @@ body.light-mode .videos { background-color: #f0f0f0; color: #111; box-shadow: 0 
 /* ---------- HEADER ---------- */
 @keyframes shake {
   0% { transform: translateX(0) scale(1.15); }
-  2% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); } /* Más sutil */
-  5% { transform: translateX(0.5px) rotate(0.5deg) scale(1.15); } /* Más sutil */
-  7% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); } /* Más sutil */
+  25% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); }
+  50% { transform: translateX(0.5px) rotate(0.5deg) scale(1.16); }
+  75% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); }
   100% { transform: translateX(0) rotate(0deg) scale(1.15); }
-}
 }
 header {
   position: fixed; top: 0; width: 100%;
@@ -46,12 +45,12 @@ nav a {
   text-decoration: none;
   font-size: 14px;
   transition: all 0.3s ease;
-  display: inline-block; 
+  display: inline-block;
+  backface-visibility: hidden;
 }
-
 nav a:hover {
   color: #e0c27b;
-  animation: shake 0.2s ease-in-out infinite alternate;
+  animation: shake 0.8s ease-in-out infinite alternate;
 }
 .theme-toggle {
   background: none; border: 1px solid #777; color: #ccc;
@@ -109,12 +108,13 @@ nav a:hover {
   box-shadow: 0 0 15px rgba(0,0,0,0.5);
   display: flex; flex-direction: column; justify-content: center;
   cursor: pointer; aspect-ratio: 1 / 1; overflow: hidden;
-  transition: transform 0.3s ease; 
+  transition: transform 0.3s ease;
+  backface-visibility: hidden;
 }
-  .news-card:hover {
-  transform: scale(1.05); /* Esto hace un pequeño zoom */
-  animation: shake 0.2s ease-in-out infinite alternate; /* Esto hace que tiemble */
-}  
+.news-card:hover {
+  transform: scale(1.05);
+  animation: shake 0.8s ease-in-out infinite alternate;
+}
 .news-card h4 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; text-align: center; }
 .news-card .date { font-weight: 700; font-size: 14px; color: #ccc; text-align: center; margin-bottom: 10px; }
 .news-card p { color: #ccc; font-size: 14px; text-align: center; }
@@ -126,9 +126,9 @@ nav a:hover {
 /* ---------- SECTION BANNER ---------- */
 .section-banner {
   position: relative;
-  width: 110%; /* Ancho por defecto */
-  max-width: 1800px; /* Limite de ancho */
-  height: 370px;
+  width: 90%;
+  max-width: 1200px;
+  height: 150px;
   margin: 60px auto;
   border-radius: 12px;
   background: url('banner portada.png') center center no-repeat;
@@ -163,10 +163,11 @@ nav a:hover {
   justify-content: space-between; flex-shrink: 0;
   transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.5s ease;
   filter: grayscale(100%); cursor: pointer;
+  backface-visibility: hidden;
 }
 .media-card:hover {
   filter: grayscale(0%);
-  animation: shake 0.2s ease-in-out infinite alternate; /* ¡Añade esta línea! */
+  animation: shake 0.8s ease-in-out infinite alternate;
 }
 .media-card img {
   width: 100%; border-radius: 8px; object-fit: cover; margin-bottom: 8px; aspect-ratio: 16 / 9;
@@ -206,6 +207,7 @@ nav a:hover {
   z-index: 2;
 }
 
+/* Responsive simple */
 @media (max-width: 900px) {
   .schedule-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
   .section-banner { width: 90%; height: 120px; font-size: 2rem; }
@@ -214,137 +216,18 @@ nav a:hover {
     width: 150px;
   }
 }
-    .footer-spacer {
-  padding: 100px 0 50px; 
+.footer-spacer {
+  padding: 100px 0 50px;
   text-align: center;
-  color: #ccc; /* 
+  color: #ccc;
 }
 
+.footer-spacer p {
+  font-size: 12px;
   letter-spacing: 1px;
 }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="logo">Tenshi</div>
-    <nav>
-      <ul>
-        <li><a href="#news">NEWS</a></li>
-        <li><a href="#discography">Discography</a></li>
-        <li><a href="#videos">Videos</a></li>
-        <li><a href="wallpapers.html">Gallery</a></li>
-        <li><a href="#mystudio">My Studio</a></li>
-      </ul>
-    </nav>
-    <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
-  </header>
-
-  <div class="hero-wrapper">
-    <div class="hero-bg"></div>
-    <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
-  </div>
-
-  <section class="news" id="news">
-    <h2>NEWS <span>ニュース</span></h2>
-    <nav class="schedule-filters">
-      <button class="active">Todos</button>
-      <button>Conciertos</button>
-      <button>Lanzamientos</button>
-      <button>Eventos</button>
-    </nav>
-
-    <div class="schedule-grid">
-      <article class="main-news">
-        <div class="date">08 JUL 2025</div>
-        <h3>Gran Concierto de Tenshi en Tokio</h3>
-        <p>El esperado concierto en el Nippon será el evento del año.</p>
-        <span class="label new">NEW</span>
-      </article>
-
-      <div class="news-card">
-        <div class="date">07 JUL 2025</div>
-        <h4>Nuevo sencillo</h4>
-        <p>"Shinkai no Melody" disponible ya.</p>
-        <span class="label">RELEASE</span>
-      </div>
-
-      <div class="news-card">
-        <div class="date">05 JUL 2025</div>
-        <h4>Evento online</h4>
-        <p>Streaming con sorpresas.</p>
-        <span class="label">EVENT</span>
-      </div>
-
-      <div class="news-card">
-        <div class="date">03 JUL 2025</div>
-        <h4>Premio ganado</h4>
-        <p>Mejor artista emergente.</p>
-        <span class="label">AWARD</span>
-      </div>
-
-      <div class="news-card">
-        <div class="date">09 JUL 2025</div>
-        <h4>Nuevo Wallpaper</h4>
-        <p>Descarga el nuevo wallpaper oficial.</p>
-        <span class="label new">NEW</span>
-      </div>
-    </div>
-  </section>
-
-  <div class="section-banner">ディスコグラフィー</div>
-
-  <section class="discography" id="discography">
-    <div class="carousel-container" aria-label="Discography carousel">
-      <div class="carousel-track" id="discography-track">
-        <div class="media-card">
-          <img src="https://via.placeholder.com/300x300/ff8c00/000000?text=Track+1" alt="Track 1">
-          <h4>Shinkai no Melody</h4>
-          <span class="label">Single</span>
-        </div>
-        <div class="media-card">
-          <img src="https://via.placeholder.com/300x300/20b2aa/000000?text=Track+2" alt="Track 2">
-          <h4>Yoru no Uta</h4>
-          <span class="label">Single</span>
-        </div>
-        <div class="media-card">
-          <img src="https://via.placeholder.com/300x300/8a2be2/ffffff?text=Track+3" alt="Track 3">
-          <h4>Midnight Echo</h4>
-          <span class="label">Single</span>
-        </div>
-        <div class="media-card">
-          <img src="https://via.placeholder.com/300x300/a0522d/ffffff?text=Album+A" alt="Album A">
-          <h4>Whispers of the Void</h4>
-          <span class="label">Album</span>
-        </div>
-        <div class="media-card">
-          <img src="https://via.placeholder.com/300x300/4682b4/ffffff?text=EP+B" alt="EP B">
-          <h4>Ephemeral Sounds</h4>
-          <span class="label">EP</span>
-        </div>
-        <div class="media-card">
-          <img src="https://via.placeholder.com/300x300/d2691e/ffffff?text=Single+C" alt="Single C">
-          <h4>Starlight Serenade</h4>
-          <span class="label">Single</span>
-        </div>
-      </div>
-      <button class="carousel-btn prev" aria-label="Anterior">‹</button>
-      <button class="carousel-btn next" aria-label="Siguiente">›</button>
-    </div>
-  </section>
-
-  <div class="section-banner">ビデオ</div>
-
-  <section class="videos" id="videos">
-    <div class="carousel-container" aria-label="Videos carousel">
-      <div class="carousel-track" id="videos-track">
-        <!-- Se llenará desde la API de YouTube -->
-      </div>
-      <button class="carousel-btn prev" aria-label="Anterior">‹</button>
-      <button class="carousel-btn next" aria-label="Siguiente">›</button>
-    </div>
-  </section>
-
-  <script>
+</style>
+<script>
 // Tema
 function toggleTheme() {
   document.body.classList.toggle('light-mode');
@@ -502,12 +385,12 @@ function initVideoCarousel(trackId, prevSelector, nextSelector) {
   endClones.reverse().forEach(clone => track.insertBefore(clone, track.firstChild));
   cards = Array.from(track.children);
 
-  let currentIndex = visibleCards; 
+  let currentIndex = visibleCards; 
 
   function updateVideoCarousel(smoothTransition = true) {
     if (isTransitioning) return;
     isTransitioning = true;
-    
+   
     const cardCenter = cards[currentIndex].offsetLeft + (cards[currentIndex].offsetWidth / 2);
     const containerCenter = container.offsetWidth / 2;
     const newTransform = -(cardCenter - containerCenter);
@@ -576,9 +459,9 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-  <div class="footer-spacer">
-  <p>j-tenshiwebcomingsoon</p>
+  <div class="footer-spacer">
+  <p>j-tenshiwebcomingsoon</p>
 </div>
-  
+  
 </body>
 </html>
