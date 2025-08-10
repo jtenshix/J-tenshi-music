@@ -114,22 +114,23 @@
       background: #e0c27b;
       color: #000;
     }
-    .hero-wrapper {
-      position: relative;
-      height: 75vh;
-      overflow: hidden;
-      margin-top: 70px;
-    }
-    .hero-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 75vh;
-      background: url('banner portada.png') center center no-repeat;
-      background-size: cover;
-      z-index: 0;
-    }
+   .hero-wrapper {
+  position: relative;
+  height: 100vh; /* Ocupa el 100% de la altura del navegador */
+  width: 100%; /* Ocupa el 100% del ancho del navegador */
+  overflow: hidden;
+  margin-top: 0; /* Eliminamos el margen superior */
+}
+.hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* Ocupa el 100% de la altura de su contenedor padre */
+  background: url('banner portada.png') center center no-repeat;
+  background-size: cover;
+  z-index: 0;
+}
     .hero-text {
       position: relative;
       z-index: 2;
@@ -247,26 +248,26 @@
       margin: 10px auto 0;
       display: block;
     }
-    .section-banner {
-      position: relative;
-      width: 110%;
-      max-width: 1800px;
-      height: 370px;
-      margin: 60px auto;
-      border-radius: 12px;
-      background: url('banner portada.png') center center no-repeat;
-      background-size: cover;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #e0c27b;
-      font-size: 3rem;
-      font-weight: 900;
-      font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
-      text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
-      user-select: none;
-    }
+   .section-banner {
+  position: relative;
+  width: 100%; /* Ancho completo */
+  max-width: 1200px; /* Le ponemos un límite para que no sea muy grande */
+  height: 370px;
+  margin: 60px auto; /* Esto centra el banner horizontalmente */
+  border-radius: 12px;
+  background: url('banner portada.png') center center no-repeat;
+  background-size: cover;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #e0c27b;
+  font-size: 3rem;
+  font-weight: 900;
+  font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
+  text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
+  user-select: none;
+}
     .carousel-container {
       position: relative;
       overflow: hidden;
@@ -430,7 +431,7 @@
   </style>
 </head>
 <body>
-  <div class="scaled-container">
+  
     <header>
       <div class="logo">Tenshi</div>
       <nav>
@@ -547,8 +548,6 @@
     <div class="footer-spacer">
       <p>j-tenshiwebcomingsoon</p>
     </div>
-  </div>
-
   <script>
     // Tema
     function toggleTheme() {
