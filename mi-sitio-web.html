@@ -392,54 +392,7 @@
       letter-spacing: 1px;
     }
 
-    /* Estilos para el modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.8);
-      z-index: 1000;
-    }
-
-.modal-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  max-width: 880px;
-}
-
-    .close {
-      position: absolute;
-      top: -40px;
-      right: -40px;
-      color: #f5f5f5;
-      font-size: 35px;
-      font-weight: bold;
-      cursor: pointer;
-      z-index: 1001;
-    }
-
-    .video-container {
-      position: relative;
-      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-      height: 0;
-      overflow: hidden;
-      border-radius: 10px;
-    }
-
-    .video-container iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
+   
   </style>
 </head>
 <body>
@@ -554,17 +507,10 @@
     <p>j-tenshiwebcomingsoon</p>
   </div>
 
-  <!-- Modal para el reproductor de video -->
-  <div id="videoModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeVideoModal()">&times;</span>
-      <div class="video-container">
-        <iframe id="videoFrame" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-      </div>
-    </div>
-  </div>
+  <script src="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.css">
 
-  <script>
+  <script>   
     // Tema
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
@@ -590,26 +536,13 @@
       }
     }
 
-    function openVideoModal(videoId) {
-      const modal = document.getElementById('videoModal');
-      const videoFrame = document.getElementById('videoFrame');
-      videoFrame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-      modal.style.display = 'flex';
-    }
-
-    function closeVideoModal() {
-      const modal = document.getElementById('videoModal');
-      const videoFrame = document.getElementById('videoFrame');
-      videoFrame.src = '';
-      modal.style.display = 'none';
-    }
 
     function renderVideos(videos) {
-      const videoTrack = document.getElementById('videos-track');
-      if (!videoTrack) return;
+    const videoTrack = document.getElementById('videos-track');
+    if (!videoTrack) return;
 
-      videoTrack.innerHTML = '';
-      videos.forEach(item => {
+    videoTrack.innerHTML = '';
+    videos.forEach(item => {
         const video = item.snippet;
         const videoId = video && video.resourceId ? video.resourceId.videoId : null;
         const title = video.title || 'Video';
@@ -618,18 +551,22 @@
         const card = document.createElement('div');
         card.className = 'media-card';
         card.innerHTML = `
-          <img src="${thumbnailUrl}" alt="${title}">
-          <h4>${title}</h4>
-          <span class="label">YouTube</span>
+            <img src="${thumbnailUrl}" alt="${title}">
+            <h4>${title}</h4>
+            <span class="label">YouTube</span>
         `;
 
         if (videoId) {
-          card.onclick = () => openVideoModal(videoId);
+            card.onclick = () => {
+                basicLightbox.create(`
+                    <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" width="880" height="495" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+                `).show();
+            };
         }
 
         videoTrack.appendChild(card);
-      });
-    }
+    });
+}
 
     function initDiscographyCarousel(trackId, prevSelector, nextSelector) {
       const track = document.getElementById(trackId);
