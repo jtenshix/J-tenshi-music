@@ -546,24 +546,28 @@
         videoTrack.appendChild(card);
       });
     }
-    function initCarousel(trackId, prevSelector, nextSelector, isVideoCarousel = false) {
-      const track = document.getElementById(trackId);
-      const prevBtn = document.querySelector(prevSelector);
-      const nextBtn = document.querySelector(nextSelector);
+
+    function initCarousel(options) {
+      const track = document.getElementById(options.trackId);
+      const prevBtn = document.querySelector(options.prevSelector);
+      const nextBtn = document.querySelector(options.nextSelector);
       const container = track.parentElement;
       if (!track || !prevBtn || !nextBtn || !container) return;
+
       let isTransitioning = false;
       const visibleCards = 3;
       let cards = Array.from(track.children);
       const totalCards = cards.length;
       if (totalCards < visibleCards) return;
+
       const startClones = cards.slice(0, visibleCards).map(node => node.cloneNode(true));
       const endClones = cards.slice(-visibleCards).map(node => node.cloneNode(true));
       startClones.forEach(clone => track.appendChild(clone));
       endClones.reverse().forEach(clone => track.insertBefore(clone, track.firstChild));
       cards = Array.from(track.children);
       let currentIndex = visibleCards;
-      if (isVideoCarousel) {
+
+      if (options.type === 'center-focus') {
         function updateVideoCarousel(smoothTransition = true) {
           if (isTransitioning) return;
           isTransitioning = true;
@@ -577,6 +581,7 @@
           });
           cards[currentIndex].classList.add('center-card');
         }
+
         track.addEventListener('transitionend', () => {
           isTransitioning = false;
           if (currentIndex >= totalCards + visibleCards) {
@@ -587,22 +592,26 @@
             updateVideoCarousel(false);
           }
         });
+
         prevBtn.addEventListener('click', () => {
           if (isTransitioning) return;
           currentIndex--;
           updateVideoCarousel();
         });
+
         nextBtn.addEventListener('click', () => {
           if (isTransitioning) return;
           currentIndex++;
           updateVideoCarousel();
         });
+
         let autoplayInterval = setInterval(() => {
           if (!isTransitioning) {
             currentIndex++;
             updateVideoCarousel();
           }
         }, 4000);
+
         container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
         container.addEventListener('mouseleave', () => {
           autoplayInterval = setInterval(() => {
@@ -612,6 +621,7 @@
             }
           }, 4000);
         });
+
         updateVideoCarousel();
         window.addEventListener('resize', () => {
           updateVideoCarousel(false);
@@ -620,15 +630,18 @@
         const cardWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width'));
         const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-gap'));
         const step = cardWidth + gap;
+
         function updateCarousel() {
           if (isTransitioning) return;
           isTransitioning = true;
           track.style.transform = `translateX(${-currentIndex * step}px)`;
         }
+
         track.style.transition = 'none';
         track.style.transform = `translateX(${-currentIndex * step}px)`;
         track.offsetHeight;
         track.style.transition = 'transform 0.5s ease-in-out';
+
         track.addEventListener('transitionend', () => {
           isTransitioning = false;
           if (currentIndex >= totalCards + visibleCards) {
@@ -641,22 +654,26 @@
             track.style.transform = `translateX(${-currentIndex * step}px)`;
           }
         });
+
         prevBtn.addEventListener('click', () => {
           if (isTransitioning) return;
           currentIndex--;
           updateCarousel();
         });
+
         nextBtn.addEventListener('click', () => {
           if (isTransitioning) return;
           currentIndex++;
           updateCarousel();
         });
+
         let autoplayInterval = setInterval(() => {
           if (!isTransitioning) {
             currentIndex++;
             updateCarousel();
           }
         }, 4000);
+
         container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
         container.addEventListener('mouseleave', () => {
           autoplayInterval = setInterval(() => {
@@ -668,16 +685,28 @@
         });
       }
     }
+
     window.addEventListener('DOMContentLoaded', () => {
       const discographyTrack = document.getElementById('discography-track');
       if (discographyTrack && discographyTrack.children.length >= 3) {
-        initCarousel('discography-track', '.discography .carousel-btn.prev', '.discography .carousel-btn.next');
+        initCarousel({
+          trackId: 'discography-track',
+          prevSelector: '.discography .carousel-btn.prev',
+          nextSelector: '.discography .carousel-btn.next',
+          type: 'slide'
+        });
       }
+
       fetchPlaylistVideos().then(videos => {
         renderVideos(videos);
         const videosTrack = document.getElementById('videos-track');
         if (videosTrack && videosTrack.children.length >= 3) {
-          initCarousel('videos-track', '.videos .carousel-btn.prev', '.videos .carousel-btn.next', true);
+          initCarousel({
+            trackId: 'videos-track',
+            prevSelector: '.videos .carousel-btn.prev',
+            nextSelector: '.videos .carousel-btn.next',
+            type: 'center-focus'
+          });
         }
       });
     });
