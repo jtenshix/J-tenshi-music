@@ -546,17 +546,14 @@
         videoTrack.appendChild(card);
       });
     }
-    function initDiscographyCarousel(trackId, prevSelector, nextSelector) {
+    function initCarousel(trackId, prevSelector, nextSelector, isVideoCarousel = false) {
       const track = document.getElementById(trackId);
       const prevBtn = document.querySelector(prevSelector);
       const nextBtn = document.querySelector(nextSelector);
       const container = track.parentElement;
       if (!track || !prevBtn || !nextBtn || !container) return;
-      const visibleCards = 3;
-      const cardWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width'));
-      const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-gap'));
-      const step = cardWidth + gap;
       let isTransitioning = false;
+      const visibleCards = 3;
       let cards = Array.from(track.children);
       const totalCards = cards.length;
       if (totalCards < visibleCards) return;
@@ -566,133 +563,121 @@
       endClones.reverse().forEach(clone => track.insertBefore(clone, track.firstChild));
       cards = Array.from(track.children);
       let currentIndex = visibleCards;
-      track.style.transition = 'none';
-      track.style.transform = `translateX(${-currentIndex * step}px)`;
-      track.offsetHeight;
-      track.style.transition = 'transform 0.5s ease-in-out';
-      function updateCarousel() {
-        if (isTransitioning) return;
-        isTransitioning = true;
-        track.style.transform = `translateX(${-currentIndex * step}px)`;
-      }
-      track.addEventListener('transitionend', () => {
-        isTransitioning = false;
-        if (currentIndex >= totalCards + visibleCards) {
-          track.style.transition = 'none';
-          currentIndex = visibleCards;
-          track.style.transform = `translateX(${-currentIndex * step}px)`;
-        } else if (currentIndex < visibleCards) {
-          track.style.transition = 'none';
-          currentIndex = totalCards + currentIndex;
-          track.style.transform = `translateX(${-currentIndex * step}px)`;
+      if (isVideoCarousel) {
+        function updateVideoCarousel(smoothTransition = true) {
+          if (isTransitioning) return;
+          isTransitioning = true;
+          const cardCenter = cards[currentIndex].offsetLeft + (cards[currentIndex].offsetWidth / 2);
+          const containerCenter = container.offsetWidth / 2;
+          const newTransform = -(cardCenter - containerCenter);
+          track.style.transition = smoothTransition ? 'transform 0.5s ease-in-out' : 'none';
+          track.style.transform = `translateX(${newTransform}px)`;
+          cards.forEach((card, index) => {
+            card.classList.remove('center-card');
+          });
+          cards[currentIndex].classList.add('center-card');
         }
-      });
-      prevBtn.addEventListener('click', () => {
-        if (isTransitioning) return;
-        currentIndex--;
-        updateCarousel();
-      });
-      nextBtn.addEventListener('click', () => {
-        if (isTransitioning) return;
-        currentIndex++;
-        updateCarousel();
-      });
-      let autoplayInterval = setInterval(() => {
-        if (!isTransitioning) {
-          currentIndex++;
-          updateCarousel();
-        }
-      }, 4000);
-      container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
-      container.addEventListener('mouseleave', () => {
-        autoplayInterval = setInterval(() => {
-          if (!isTransitioning) {
-            currentIndex++;
-            updateCarousel();
+        track.addEventListener('transitionend', () => {
+          isTransitioning = false;
+          if (currentIndex >= totalCards + visibleCards) {
+            currentIndex = visibleCards;
+            updateVideoCarousel(false);
+          } else if (currentIndex < visibleCards) {
+            currentIndex = totalCards + currentIndex;
+            updateVideoCarousel(false);
           }
-        }, 4000);
-      });
-    }
-    function initVideoCarousel(trackId, prevSelector, nextSelector) {
-      const track = document.getElementById(trackId);
-      const prevBtn = document.querySelector(prevSelector);
-      const nextBtn = document.querySelector(nextSelector);
-      const container = track.parentElement;
-      if (!track || !prevBtn || !nextBtn || !container) return;
-      let isTransitioning = false;
-      const visibleCards = 3;
-      let cards = Array.from(track.children);
-      const totalCards = cards.length;
-      if (totalCards < visibleCards) return;
-      const startClones = cards.slice(0, visibleCards).map(node => node.cloneNode(true));
-      const endClones = cards.slice(-visibleCards).map(node => node.cloneNode(true));
-      startClones.forEach(clone => track.appendChild(clone));
-      endClones.reverse().forEach(clone => track.insertBefore(clone, track.firstChild));
-      cards = Array.from(track.children);
-      let currentIndex = visibleCards;
-      function updateVideoCarousel(smoothTransition = true) {
-        if (isTransitioning) return;
-        isTransitioning = true;
-        const cardCenter = cards[currentIndex].offsetLeft + (cards[currentIndex].offsetWidth / 2);
-        const containerCenter = container.offsetWidth / 2;
-        const newTransform = -(cardCenter - containerCenter);
-        track.style.transition = smoothTransition ? 'transform 0.5s ease-in-out' : 'none';
-        track.style.transform = `translateX(${newTransform}px)`;
-        cards.forEach((card, index) => {
-          card.classList.remove('center-card');
         });
-        cards[currentIndex].classList.add('center-card');
-      }
-      track.addEventListener('transitionend', () => {
-        isTransitioning = false;
-        if (currentIndex >= totalCards + visibleCards) {
-          currentIndex = visibleCards;
-          updateVideoCarousel(false);
-        } else if (currentIndex < visibleCards) {
-          currentIndex = totalCards + currentIndex;
-          updateVideoCarousel(false);
-        }
-      });
-      prevBtn.addEventListener('click', () => {
-        if (isTransitioning) return;
-        currentIndex--;
-        updateVideoCarousel();
-      });
-      nextBtn.addEventListener('click', () => {
-        if (isTransitioning) return;
-        currentIndex++;
-        updateVideoCarousel();
-      });
-      let autoplayInterval = setInterval(() => {
-        if (!isTransitioning) {
+        prevBtn.addEventListener('click', () => {
+          if (isTransitioning) return;
+          currentIndex--;
+          updateVideoCarousel();
+        });
+        nextBtn.addEventListener('click', () => {
+          if (isTransitioning) return;
           currentIndex++;
           updateVideoCarousel();
-        }
-      }, 4000);
-      container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
-      container.addEventListener('mouseleave', () => {
-        autoplayInterval = setInterval(() => {
+        });
+        let autoplayInterval = setInterval(() => {
           if (!isTransitioning) {
             currentIndex++;
             updateVideoCarousel();
           }
         }, 4000);
-      });
-      updateVideoCarousel();
-      window.addEventListener('resize', () => {
-        updateVideoCarousel(false);
-      });
+        container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+        container.addEventListener('mouseleave', () => {
+          autoplayInterval = setInterval(() => {
+            if (!isTransitioning) {
+              currentIndex++;
+              updateVideoCarousel();
+            }
+          }, 4000);
+        });
+        updateVideoCarousel();
+        window.addEventListener('resize', () => {
+          updateVideoCarousel(false);
+        });
+      } else {
+        const cardWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width'));
+        const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-gap'));
+        const step = cardWidth + gap;
+        function updateCarousel() {
+          if (isTransitioning) return;
+          isTransitioning = true;
+          track.style.transform = `translateX(${-currentIndex * step}px)`;
+        }
+        track.style.transition = 'none';
+        track.style.transform = `translateX(${-currentIndex * step}px)`;
+        track.offsetHeight;
+        track.style.transition = 'transform 0.5s ease-in-out';
+        track.addEventListener('transitionend', () => {
+          isTransitioning = false;
+          if (currentIndex >= totalCards + visibleCards) {
+            track.style.transition = 'none';
+            currentIndex = visibleCards;
+            track.style.transform = `translateX(${-currentIndex * step}px)`;
+          } else if (currentIndex < visibleCards) {
+            track.style.transition = 'none';
+            currentIndex = totalCards + currentIndex;
+            track.style.transform = `translateX(${-currentIndex * step}px)`;
+          }
+        });
+        prevBtn.addEventListener('click', () => {
+          if (isTransitioning) return;
+          currentIndex--;
+          updateCarousel();
+        });
+        nextBtn.addEventListener('click', () => {
+          if (isTransitioning) return;
+          currentIndex++;
+          updateCarousel();
+        });
+        let autoplayInterval = setInterval(() => {
+          if (!isTransitioning) {
+            currentIndex++;
+            updateCarousel();
+          }
+        }, 4000);
+        container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+        container.addEventListener('mouseleave', () => {
+          autoplayInterval = setInterval(() => {
+            if (!isTransitioning) {
+              currentIndex++;
+              updateCarousel();
+            }
+          }, 4000);
+        });
+      }
     }
     window.addEventListener('DOMContentLoaded', () => {
       const discographyTrack = document.getElementById('discography-track');
       if (discographyTrack && discographyTrack.children.length >= 3) {
-        initDiscographyCarousel('discography-track', '.discography .carousel-btn.prev', '.discography .carousel-btn.next');
+        initCarousel('discography-track', '.discography .carousel-btn.prev', '.discography .carousel-btn.next');
       }
       fetchPlaylistVideos().then(videos => {
         renderVideos(videos);
         const videosTrack = document.getElementById('videos-track');
         if (videosTrack && videosTrack.children.length >= 3) {
-          initVideoCarousel('videos-track', '.videos .carousel-btn.prev', '.videos .carousel-btn.next');
+          initCarousel('videos-track', '.videos .carousel-btn.prev', '.videos .carousel-btn.next', true);
         }
       });
     });
