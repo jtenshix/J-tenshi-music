@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Noticias</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f7f7f7;
+    }
+
+    header {
+      background: #222;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .news-container {
+      max-width: 900px;
+      margin: 20px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+
+    .news-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+
+    .news-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .news-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .news-card h3 {
+      padding: 10px;
+      margin: 0;
+      font-size: 1.1em;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      max-width: 600px;
+      padding: 20px;
+      border-radius: 8px;
+      position: relative;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px; right: 10px;
+      cursor: pointer;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Noticias</h1>
+</header>
+
+<section class="news-container">
+  <div class="news-card" data-id="noticia-1">
+    <img src="https://via.placeholder.com/300x150" alt="Noticia 1">
+    <h3>Título de la Noticia 1</h3>
+  </div>
+
+  <div class="news-card" data-id="noticia-2">
+    <img src="https://via.placeholder.com/300x150" alt="Noticia 2">
+    <h3>Título de la Noticia 2</h3>
+  </div>
+
+  <div class="news-card" data-id="noticia-3">
+    <img src="https://via.placeholder.com/300x150" alt="Noticia 3">
+    <h3>Título de la Noticia 3</h3>
+  </div>
+</section>
+
+<!-- Modal -->
+<div class="modal" id="newsModal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <h2 id="modalTitle"></h2>
+    <p id="modalContent">Aquí irá el texto de la noticia.</p>
+  </div>
+</div>
+
+<script>
+  const cards = document.querySelectorAll('.news-card');
+  const modal = document.getElementById('newsModal');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalContent = document.getElementById('modalContent');
+  const closeBtn = document.querySelector('.close-btn');
+
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      const title = card.querySelector('h3').textContent;
+      modalTitle.textContent = title;
+      modalContent.textContent = `Contenido completo de ${title}`;
+      modal.style.display = 'flex';
+    });
+  });
+
+  closeBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+</script>
+
+</body>
+</html>
