@@ -1,127 +1,268 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noticias</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: white;
-            color: #000;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            text-align: center;
-            padding: 20px;
-        }
-
-        nav {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: #000;
-            margin: 0 10px;
-            font-weight: bold;
-        }
-
-        nav a.active {
-            border-bottom: 2px solid black;
-            padding-bottom: 4px;
-        }
-
-        .news-container {
-            width: 80%;
-            margin: auto;
-            border-top: 1px solid #ccc;
-        }
-
-        .news-item {
-            display: flex;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #ccc;
-            gap: 15px;
-        }
-
-        .date {
-            white-space: nowrap;
-            font-weight: bold;
-        }
-
-        .tag {
-            border: 1px solid #000;
-            padding: 2px 6px;
-            font-size: 0.8rem;
-            margin-right: 5px;
-        }
-
-        .tag.new {
-            background: black;
-            color: white;
-            border: none;
-        }
-
-        .news-text {
-            flex: 1;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Noticias</title>
+  <style>
+    :root{--border:#d9d9d9;--ink:#111;--muted:#666;}
+    *{box-sizing:border-box}
+    body{margin:0;font:16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";color:var(--ink);background:#fff}
+    header{padding:28px 16px 10px;text-align:center}
+    header h1{font-size:28px;letter-spacing:.04em;margin:0 0 6px}
+    /* tabs */
+    .tabs{display:flex;gap:18px;justify-content:center;align-items:center;margin:0 0 18px}
+    .tabs a{color:var(--ink);text-decoration:none;font-weight:600;letter-spacing:.04em}
+    .tabs a.active{padding-bottom:6px;border-bottom:2px solid var(--ink)}
+    /* list */
+    .news-wrap{max-width:1100px;margin:0 auto;border-top:1px solid var(--border)}
+    .row{display:grid;grid-template-columns:auto 140px auto 1fr;gap:18px;align-items:center;padding:18px 16px;border-bottom:1px solid var(--border)}
+    .date{white-space:nowrap;font-weight:700;letter-spacing:.02em}
+    .badge{display:inline-block;border:1px solid #000;padding:2px 8px;font-size:12px;font-weight:700;letter-spacing:.06em}
+    .badge.fill{background:#000;color:#fff;border-color:#000}
+    .badge.round{border-radius:999px}
+    .title a{color:var(--ink);text-decoration:none}
+    .title a:hover{opacity:.7}
+    .muted{color:var(--muted)}
+    /* modal */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:20px;z-index:9999}
+    .overlay.open{display:flex}
+    .dialog{background:#fff;color:#111;max-width:820px;width:100%;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.25);overflow:hidden}
+    .dialog header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--border)}
+    .dialog header h3{margin:0;font-size:20px;letter-spacing:.02em}
+    .close{appearance:none;border:0;background:transparent;font-size:26px;line-height:1;cursor:pointer;padding:2px 8px}
+    .dialog .content{padding:18px 20px}
+    .dialog .meta{display:flex;gap:10px;align-items:center;margin:6px 0 14px}
+    .dialog img{max-width:100%;height:auto;border-radius:8px;margin:8px 0 14px}
+    .actions{display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border);padding:14px 20px}
+    .btn{border:1px solid #000;background:#000;color:#fff;padding:8px 12px;font-weight:700;cursor:pointer}
+    .btn.ghost{background:#fff;color:#000}
+    @media (max-width:760px){
+      .row{grid-template-columns:auto 120px auto 1fr;gap:12px}
+      .date{font-size:14px}
+      .badge{font-size:11px}
+    }
+  </style>
 </head>
 <body>
 
-<header>
-    <h1>Mi Sitio - Noticias</h1>
-</header>
+  <header>
+    <h1>Noticias</h1>
+    <nav class="tabs" aria-label="categorías">
+      <a class="active" href="#">ALL</a>
+      <a href="#">INFORMATION</a>
+      <a href="#">RELEASE</a>
+      <a href="#">LIVE</a>
+      <a href="#">MEDIA</a>
+      <a href="#">GOODS</a>
+    </nav>
+  </header>
 
-<nav>
-    <a href="#" class="active">ALL</a> |
-    <a href="#">INFORMATION</a> |
-    <a href="#">RELEASE</a> |
-    <a href="#">LIVE</a> |
-    <a href="#">MEDIA</a> |
-    <a href="#">GOODS</a>
-</nav>
-
-<div class="news-container">
-
-    <div class="news-item">
-        <span class="tag new">NEW</span>
-        <span class="date">25.07.16(WED)</span>
-        <span class="tag">RELEASE</span>
-        <div class="news-text">Lanzamiento del álbum "Historias del Mar".</div>
+  <main class="news-wrap" id="news-list">
+    <!-- Ejemplos (puedes duplicar/editar). data-id debe coincidir con el id del <template>. -->
+    <div class="row">
+      <span class="badge fill round">NEW</span>
+      <span class="date">25.07.16(WED)</span>
+      <span class="badge">RELEASE</span>
+      <div class="title">
+        <a href="#news/remix-album" data-id="remix-album" class="open-news">
+          Remix Album「寓話V」¡ya disponible!
+        </a>
+      </div>
     </div>
 
-    <div class="news-item">
-        <span class="date">25.07.03(THU)</span>
-        <span class="tag">INFORMATION</span>
-        <div class="news-text">Nueva colaboración anunciada con el ilustrador "SkyBrush".</div>
+    <div class="row">
+      <span></span>
+      <span class="date">25.07.03(THU)</span>
+      <span class="badge">INFORMATION</span>
+      <div class="title">
+        <a href="#news/anime-anuncio" data-id="anime-anuncio" class="open-news">
+          Anuncio de participación en el anime 「Kamisomething」 (Jueves 23:56)
+        </a>
+      </div>
     </div>
 
-    <div class="news-item">
-        <span class="date">25.06.23(MON)</span>
-        <span class="tag">INFORMATION</span>
-        <div class="news-text">Evento en vivo online el 1 de julio a las 20:00 hrs.</div>
+    <div class="row">
+      <span></span>
+      <span class="date">25.06.23(MON)</span>
+      <span class="badge">INFORMATION</span>
+      <div class="title">
+        <a href="#news/campana-sns" data-id="campana-sns" class="open-news">
+          Campaña de share en SNS por el W-Release
+        </a>
+      </div>
     </div>
 
-    <div class="news-item">
-        <span class="date">25.06.13(FRI)</span>
-        <span class="tag">INFORMATION</span>
-        <span class="tag">RELEASE</span>
-        <div class="news-text">Publicación de nuevo single "Luz y Sombras".</div>
+    <div class="row">
+      <span></span>
+      <span class="date">25.06.13(FRI)</span>
+      <span class="badge">INFORMATION</span>
+      <div class="title">
+        <a href="#news/wrelease" data-id="wrelease" class="open-news">
+          W-Release confirmado para 6/25(水)
+        </a>
+      </div>
     </div>
 
-    <div class="news-item">
-        <span class="date">25.04.29(TUE)</span>
-        <span class="tag">INFORMATION</span>
-        <div class="news-text">Se abre el registro para el club de fans oficial.</div>
+    <div class="row">
+      <span></span>
+      <span class="date">25.04.29(TUE)</span>
+      <span class="badge">INFORMATION</span>
+      <div class="title">
+        <a href="#news/collab-chico" data-id="collab-chico" class="open-news">
+          ¡Confirmada la colab con CHiCO!
+        </a>
+      </div>
     </div>
+  </main>
 
-</div>
+  <!-- MODAL -->
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlg-title">
+      <header>
+        <h3 id="dlg-title">Noticia</h3>
+        <button class="close" id="btn-close" aria-label="Cerrar">×</button>
+      </header>
+      <div class="content" id="dlg-content"></div>
+      <div class="actions">
+        <button class="btn ghost" id="btn-copy">Copiar enlace</button>
+        <button class="btn" id="btn-close-2">Cerrar</button>
+      </div>
+    </div>
+  </div>
 
+  <!-- CONTENIDOS (puedes editar libremente) -->
+  <template id="tpl-remix-album">
+    <div class="meta">
+      <span class="badge">RELEASE</span>
+      <span class="muted">Publicado el 25.07.16</span>
+    </div>
+    <img src="https://picsum.photos/seed/remix/900/450" alt="Arte del Remix Album">
+    <p>Presentamos el <strong>Remix Album「寓話V」</strong> con 10 pistas reimaginadas por productores invitados.
+       Disponible en plataformas digitales y edición física limitada.</p>
+    <ul>
+      <li>Edición limitada con libreto de 20 páginas.</li>
+      <li>Bonus track exclusivo para streaming.</li>
+    </ul>
+  </template>
+
+  <template id="tpl-anime-anuncio">
+    <div class="meta">
+      <span class="badge">INFORMATION</span>
+      <span class="muted">Publicado el 25.07.03</span>
+    </div>
+    <p>Confirmada la participación de Tenshi en el anime <em>「神椿市建設中。」</em>.
+       La serie se emite los jueves a las 23:56.</p>
+    <img src="https://picsum.photos/seed/anime/900/450" alt="Visual del anime">
+  </template>
+
+  <template id="tpl-campana-sns">
+    <div class="meta">
+      <span class="badge">INFORMATION</span>
+      <span class="muted">Publicado el 25.06.23</span>
+    </div>
+    <p>Lanzamos campaña de <strong>share en SNS</strong>: usa el hashtag <code>#TenshiWR</code>, etiqueta a tus amigos
+       y participa por merch firmada.</p>
+  </template>
+
+  <template id="tpl-wrelease">
+    <div class="meta">
+      <span class="badge">INFORMATION</span>
+      <span class="badge">RELEASE</span>
+      <span class="muted">Publicado el 25.06.13</span>
+    </div>
+    <p>El <strong>W-Release</strong> incluye dos singles simultáneos y un teaser visual.</p>
+    <img src="https://picsum.photos/seed/wrelease/900/450" alt="Preview W-Release">
+  </template>
+
+  <template id="tpl-collab-chico">
+    <div class="meta">
+      <span class="badge">INFORMATION</span>
+      <span class="muted">Publicado el 25.04.29</span>
+    </div>
+    <p>Se confirma la colaboración con <strong>CHiCO</strong>. Más detalles pronto.</p>
+  </template>
+
+  <script>
+    // ---------- helpers ----------
+    const $ = s => document.querySelector(s);
+    const overlay = $('#overlay');
+    const dlgTitle = $('#dlg-title');
+    const dlgContent = $('#dlg-content');
+    const closeButtons = ['#btn-close', '#btn-close-2'].map(sel => $(sel));
+
+    function openById(id) {
+      const tpl = document.getElementById('tpl-' + id);
+      if (!tpl) return;
+
+      // set title desde el link correspondiente
+      const trigger = document.querySelector(`a.open-news[data-id="${id}"]`);
+      dlgTitle.textContent = trigger ? trigger.textContent.trim() : 'Noticia';
+
+      dlgContent.innerHTML = '';
+      dlgContent.appendChild(tpl.content.cloneNode(true));
+      overlay.classList.add('open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+
+      // empujar hash para enlace compartible
+      if (!location.hash.startsWith('#news/')) {
+        history.pushState(null, '', '#news/' + id);
+      } else {
+        // si ya hay hash, reemplázalo (evita duplicados al clicar varias veces)
+        history.replaceState(null, '', '#news/' + id);
+      }
+      closeButtons[0].focus();
+    }
+
+    function closeModal({pop=false} = {}) {
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden', 'true');
+      dlgContent.innerHTML = '';
+      document.body.style.overflow = '';
+
+      // si el cierre viene del botón, limpia el hash; si viene del back, no toques la historia
+      if (!pop && location.hash.startsWith('#news/')) {
+        history.pushState(null, '', location.pathname + location.search);
+      }
+    }
+
+    // abrir desde clicks
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a.open-news');
+      if (!a) return;
+      e.preventDefault();
+      openById(a.dataset.id);
+    });
+
+    // cerrar (botones, overlay, Esc)
+    closeButtons.forEach(btn => btn.addEventListener('click', () => closeModal()));
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal(); });
+
+    // deep link: #news/<id>
+    function handleHash() {
+      const m = location.hash.match(/^#news\/([a-z0-9\-\_]+)$/i);
+      if (m) {
+        openById(m[1]);
+      } else if (overlay.classList.contains('open')) {
+        closeModal({pop:true});
+      }
+    }
+    window.addEventListener('hashchange', handleHash);
+    // abrir si viene con hash directo
+    handleHash();
+
+    // copiar enlace
+    $('#btn-copy').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(location.href);
+        const btn = $('#btn-copy');
+        const old = btn.textContent;
+        btn.textContent = 'Copiado ✓';
+        setTimeout(()=>btn.textContent = old, 1200);
+      } catch {}
+    });
+  </script>
 </body>
 </html>
