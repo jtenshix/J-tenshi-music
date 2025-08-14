@@ -1,209 +1,214 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Noticias</title>
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noticias</title>
+<style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: white;
-      color: #000;
+        font-family: Arial, sans-serif;
+        background-color: #121212;
+        color: #e0e0e0;
+        margin: 0;
+        padding: 0;
     }
     header {
-      text-align: center;
-      padding: 20px;
+        padding: 20px;
+        text-align: center;
+        background: #1e1e1e;
+        border-bottom: 1px solid #333;
     }
-    nav {
-      text-align: center;
-      margin-bottom: 20px;
+    header h1 {
+        margin: 0;
+        font-size: 2rem;
+        color: #fff;
     }
-    nav a {
-      text-decoration: none;
-      color: #000;
-      margin: 0 10px;
-      font-weight: bold;
-    }
-    nav a.active {
-      border-bottom: 2px solid black;
-      padding-bottom: 4px;
-    }
-    .news-container {
-      width: 80%;
-      margin: auto;
-      border-top: 1px solid #ccc;
+    .news-list {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 0 15px;
     }
     .news-item {
-      display: flex;
-      align-items: center;
-      padding: 15px 0;
-      border-bottom: 1px solid #ccc;
-      gap: 15px;
-      cursor: pointer;
+        padding: 15px 0;
+        border-bottom: 1px solid #333;
+        cursor: pointer;
+        transition: background 0.2s;
     }
-    .date {
-      white-space: nowrap;
-      font-weight: bold;
+    .news-item:hover {
+        background: #1e1e1e;
     }
-    .tag {
-      border: 1px solid #000;
-      padding: 2px 6px;
-      font-size: 0.8rem;
-      margin-right: 5px;
+    .news-date {
+        font-size: 0.9rem;
+        color: #bbb;
     }
-    .tag.new {
-      background: black;
-      color: white;
-      border: none;
+    .news-title {
+        font-size: 1.2rem;
+        margin: 5px 0;
+        color: #fff;
     }
-    .news-text {
-      flex: 1;
+    .news-desc {
+        font-size: 0.95rem;
+        color: #ccc;
     }
+
     /* Modal */
     .modal {
-      display: none;
-      position: fixed;
-      z-index: 10;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.6);
-      justify-content: center;
-      align-items: center;
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background: rgba(0, 0, 0, 0.85);
     }
     .modal-content {
-      background: white;
-      padding: 20px;
-      max-width: 600px;
-      width: 90%;
-      position: relative;
-      border-radius: 5px;
+        background: #1e1e1e;
+        margin: 10% auto;
+        padding: 20px;
+        border-radius: 8px;
+        max-width: 600px;
+        position: relative;
+        color: #fff;
     }
     .close {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      font-size: 1.5rem;
-      cursor: pointer;
+        color: #bbb;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 24px;
+        cursor: pointer;
+    }
+    .close:hover {
+        color: #fff;
     }
     .share-btn {
-      margin-top: 15px;
-      padding: 8px 12px;
-      background: black;
-      color: white;
-      border: none;
-      cursor: pointer;
+        margin-top: 15px;
+        background: #333;
+        color: #fff;
+        border: none;
+        padding: 8px 14px;
+        border-radius: 4px;
+        cursor: pointer;
     }
-  </style>
+    .share-btn:hover {
+        background: #444;
+    }
+</style>
 </head>
 <body>
 
 <header>
-  <h1>Mi Sitio - Noticias</h1>
+    <h1>Noticias</h1>
 </header>
 
-<nav>
-  <a href="#" class="active">ALL</a> |
-  <a href="#">INFORMATION</a> |
-  <a href="#">RELEASE</a> |
-  <a href="#">LIVE</a> |
-  <a href="#">MEDIA</a> |
-  <a href="#">GOODS</a>
-</nav>
-
-<div class="news-container">
-
-  <div class="news-item" data-id="1" data-title="Lanzamiento del álbum 'Historias del Mar'" data-content="Descripción completa del lanzamiento con todos los detalles y enlaces.">
-    <span class="tag new">NEW</span>
-    <span class="date">25.07.16(WED)</span>
-    <span class="tag">RELEASE</span>
-    <div class="news-text">Lanzamiento del álbum "Historias del Mar".</div>
-  </div>
-
-  <div class="news-item" data-id="2" data-title="Nueva colaboración con SkyBrush" data-content="El ilustrador SkyBrush ha creado la portada inspirada en la canción 'Brisas Nocturnas'.">
-    <span class="date">25.07.03(THU)</span>
-    <span class="tag">INFORMATION</span>
-    <div class="news-text">Nueva colaboración anunciada con el ilustrador "SkyBrush".</div>
-  </div>
-
-  <div class="news-item" data-id="3" data-title="Evento en vivo online" data-content="El evento será transmitido el 1 de julio a las 20:00 hrs con invitados especiales.">
-    <span class="date">25.06.23(MON)</span>
-    <span class="tag">INFORMATION</span>
-    <div class="news-text">Evento en vivo online el 1 de julio a las 20:00 hrs.</div>
-  </div>
-
+<div class="news-list">
+    <div class="news-item" data-id="noticia-1">
+        <div class="news-date">14 Ago 2025</div>
+        <div class="news-title">Colaboración especial con ilustrador X</div>
+        <div class="news-desc">Presentamos la nueva canción con una ilustración única creada en colaboración...</div>
+    </div>
+    <div class="news-item" data-id="noticia-2">
+        <div class="news-date">05 Ago 2025</div>
+        <div class="news-title">Lanzamiento del nuevo wallpaper</div>
+        <div class="news-desc">Un nuevo fondo de pantalla inspirado en nuestro último single ya está disponible...</div>
+    </div>
+    <div class="news-item" data-id="noticia-3">
+        <div class="news-date">30 Jul 2025</div>
+        <div class="news-title">Mini entrevista con artista invitado</div>
+        <div class="news-desc">Hablamos con el artista detrás de la portada de nuestra próxima canción...</div>
+    </div>
 </div>
 
 <!-- Modal -->
-<div class="modal" id="newsModal">
-  <div class="modal-content">
-    <span class="close" id="modalClose">&times;</span>
-    <h2 id="modalTitle"></h2>
-    <p id="modalBody"></p>
-    <button class="share-btn" id="shareBtn">Compartir</button>
-  </div>
+<div id="newsModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDate"></p>
+        <p id="modalText"></p>
+        <button class="share-btn" id="shareBtn">Compartir</button>
+    </div>
 </div>
 
 <script>
-  const modal = document.getElementById('newsModal');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalBody = document.getElementById('modalBody');
-  const shareBtn = document.getElementById('shareBtn');
-  const closeBtn = document.getElementById('modalClose');
+const modal = document.getElementById("newsModal");
+const modalTitle = document.getElementById("modalTitle");
+const modalDate = document.getElementById("modalDate");
+const modalText = document.getElementById("modalText");
+const shareBtn = document.getElementById("shareBtn");
 
-  function openModal(id, title, content, updateHistory = true) {
-    modalTitle.textContent = title;
-    modalBody.textContent = content;
-    modal.style.display = 'flex';
-
-    if (updateHistory) {
-      history.replaceState(null, "", `#news/${id}`);
+const newsData = {
+    "noticia-1": {
+        title: "Colaboración especial con ilustrador X",
+        date: "14 Ago 2025",
+        text: "Te contamos todos los detalles sobre la colaboración con el ilustrador X para nuestra nueva canción. Incluye inspiración, bocetos y arte final."
+    },
+    "noticia-2": {
+        title: "Lanzamiento del nuevo wallpaper",
+        date: "05 Ago 2025",
+        text: "Ya puedes descargar el nuevo fondo de pantalla inspirado en nuestro último single, disponible en varias resoluciones."
+    },
+    "noticia-3": {
+        title: "Mini entrevista con artista invitado",
+        date: "30 Jul 2025",
+        text: "El artista invitado nos comparte sus ideas y procesos creativos para la portada de nuestra próxima canción."
     }
+};
 
-    shareBtn.onclick = () => {
-      const url = window.location.href;
-      if (navigator.share) {
-        navigator.share({ title, text: content, url })
-          .catch(err => console.log("No se pudo compartir", err));
-      } else {
-        navigator.clipboard.writeText(url)
-          .then(() => alert("Enlace copiado al portapapeles"))
-          .catch(() => alert("No se pudo copiar el enlace"));
-      }
-    };
-  }
-
-  function closeModal() {
-    modal.style.display = 'none';
-    history.replaceState(null, "", window.location.pathname);
-  }
-
-  document.querySelectorAll('.news-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const id = item.dataset.id;
-      const title = item.dataset.title;
-      const content = item.dataset.content;
-      openModal(id, title, content);
+document.querySelectorAll(".news-item").forEach(item => {
+    item.addEventListener("click", () => {
+        const id = item.getAttribute("data-id");
+        openModal(id);
     });
-  });
+});
 
-  closeBtn.addEventListener('click', closeModal);
+function openModal(id) {
+    const data = newsData[id];
+    modalTitle.textContent = data.title;
+    modalDate.textContent = data.date;
+    modalText.textContent = data.text;
+    modal.style.display = "block";
+    history.replaceState(null, "", `#${id}`);
+}
 
-  window.addEventListener('click', e => {
-    if (e.target === modal) closeModal();
-  });
+document.querySelector(".close").addEventListener("click", closeModal);
 
-  window.addEventListener('load', () => {
-    if (window.location.hash.startsWith('#news/')) {
-      const id = window.location.hash.split('/')[1];
-      const newsItem = document.querySelector(`.news-item[data-id="${id}"]`);
-      if (newsItem) {
-        openModal(id, newsItem.dataset.title, newsItem.dataset.content, false);
-      }
+function closeModal() {
+    modal.style.display = "none";
+    history.replaceState(null, "", window.location.pathname);
+}
+
+window.addEventListener("click", e => {
+    if (e.target == modal) closeModal();
+});
+
+// Botón compartir
+shareBtn.addEventListener("click", () => {
+    const url = window.location.href;
+    if (navigator.share) {
+        navigator.share({
+            title: modalTitle.textContent,
+            text: "Mira esta noticia",
+            url: url
+        });
+    } else {
+        navigator.clipboard.writeText(url).then(() => {
+            alert("Enlace copiado al portapapeles");
+        });
     }
-  });
+});
+
+// Abrir modal si hay hash en URL
+window.addEventListener("load", () => {
+    if (window.location.hash) {
+        const id = window.location.hash.substring(1);
+        if (newsData[id]) {
+            openModal(id);
+        }
+    }
+});
 </script>
 
 </body>
