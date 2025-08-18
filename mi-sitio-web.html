@@ -262,7 +262,9 @@
       overflow: hidden;
       max-width: 1200px;
       margin: 0 auto;
-    }
+    padding-top: 40px;    
+  padding-bottom: 40px; 
+}
     .carousel-track {
       display: flex;
       gap: var(--card-gap);
@@ -356,6 +358,12 @@
       transform: scale(0.9);
       transition: transform 0.3s ease, opacity 0.3s ease;
     }
+
+.videos {
+  padding-top: 100px;    /* Espacio arriba */
+  padding-bottom: 100px; /* Espacio abajo */
+}
+
     .videos .media-card.center-card {
       transform: scale(1.2);
       opacity: 1;
@@ -567,7 +575,6 @@
         card.innerHTML = `
           <img src="${thumbnailUrl}" alt="${title}">
           <h4>${title}</h4>
-          <span class="label">YouTube</span>
         `;
         if (videoId) {
           card.onclick = () => {
