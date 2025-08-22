@@ -111,7 +111,7 @@
 
         .carousel-container {
             position: relative;
-            width: 900px;
+            width: 700px;
             height: 500px;
             display: flex;
             justify-content: center;
@@ -144,13 +144,13 @@
         }
 
         .card.left {
-            transform: translateX(-350px) translateY(0) translateZ(-100px) rotateY(-25deg);
+            transform: translateX(-200px) translateY(0) translateZ(-50px) rotateY(-15deg);
             z-index: 5;
             opacity: 0.6;
         }
 
         .card.right {
-            transform: translateX(350px) translateY(0) translateZ(-100px) rotateY(25deg);
+            transform: translateX(200px) translateY(0) translateZ(-50px) rotateY(15deg);
             z-index: 5;
             opacity: 0.6;
         }
@@ -240,7 +240,7 @@
                 height: 400px;
             }
             .card.left, .card.right {
-                transform: translateX(-200px) translateY(0) translateZ(-80px) rotateY(-15deg);
+                transform: translateX(-150px) translateY(0) translateZ(-40px) rotateY(-10deg);
                 opacity: 0.5;
             }
             .banner-content h1 {
@@ -320,7 +320,7 @@
             // Crear cartas
             cardsData.forEach((card, index) => {
                 const cardElement = document.createElement('div');
-                cardElement.className = `card ${index === currentCenterIndex ? 'center' : index < currentCenterIndex ? 'left' : 'right'}`;
+                cardElement.className = `card ${index === currentCenterIndex ? 'center' : 'hidden'}`;
                 cardElement.innerHTML = `
                     <div class="card-image-container">
                         <img src="${card.image}" alt="${card.name}">
@@ -335,6 +335,13 @@
                 carouselContainer.appendChild(cardElement);
             });
 
+            // Inicializar las tarjetas laterales
+            const cards = document.querySelectorAll('.card');
+            cards[1].classList.remove('hidden');
+            cards[1].classList.add('right');
+            cards[2].classList.remove('hidden');
+            cards[2].classList.add('left');
+
             // Cambiar tarjeta central cada 20 segundos
             setInterval(() => {
                 const cards = document.querySelectorAll('.card');
@@ -345,10 +352,10 @@
                 cards.forEach((card, index) => {
                     if (index === currentCenterIndex) {
                         card.classList.add('center');
-                    } else if (index === (currentCenterIndex - 1 + cardsData.length) % cardsData.length) {
-                        card.classList.add('left');
-                    } else {
+                    } else if (index === (currentCenterIndex + 1) % cardsData.length) {
                         card.classList.add('right');
+                    } else {
+                        card.classList.add('left');
                     }
                 });
             }, 20000);
