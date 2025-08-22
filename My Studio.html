@@ -1,145 +1,293 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Conócenos - Prueba</title>
-<style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #111;
-        color: #fff;
-    }
-
-    /* Banner fijo */
-    #banner-personaje {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 200px;
-        background: #222;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 10;
-        text-align: center;
-    }
-    #banner-personaje h1 {
-        margin: 0;
-    }
-
-    /* Main */
-    main {
-        margin-top: 220px; /* para que no tape el banner */
-        padding: 20px;
-    }
-
-    /* Carrusel */
-    .carrusel {
-        display: flex;
-        overflow-x: auto;
-        gap: 20px;
-        padding: 10px 0;
-    }
-    .personaje {
-        flex: 0 0 200px;
-        background: #333;
-        padding: 20px;
-        border-radius: 10px;
-        cursor: pointer;
-        text-align: center;
-    }
-    .personaje:hover {
-        background: #444;
-    }
-
-    /* Modal */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 50;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.8);
-        justify-content: center;
-        align-items: center;
-    }
-    .modal-content {
-        background: #222;
-        padding: 30px;
-        border-radius: 10px;
-        width: 80%;
-        max-width: 500px;
-        text-align: left;
-    }
-    .close-btn {
-        float: right;
-        cursor: pointer;
-        font-size: 20px;
-        color: #fff;
-    }
-</style>
-</head>
-<body>
-
-<!-- Banner fijo -->
-<header id="banner-personaje">
-    <h1>Chica de Sudadera Amarilla Produciendo Música</h1>
-</header>
-
-<main>
-    <h2>Carrusel de Personajes</h2>
-    <div class="carrusel">
-        <div class="personaje" data-nombre="Chica Amarilla" data-desc="Edad: 20 años. Productora musical.">
-            Chica Amarilla
-        </div>
-        <div class="personaje" data-nombre="Robot Futurista" data-desc="Origen: Futuro. Coproductor y asistente.">
-            Robot Futurista
-        </div>
-        <div class="personaje" data-nombre="Chica Misteriosa" data-desc="Edad: 18. Playlist de música electrónica.">
-            Chica Misteriosa
-        </div>
-    </div>
-</main>
-
-<!-- Modal -->
-<div class="modal" id="modal">
-    <div class="modal-content">
-        <span class="close-btn" id="closeModal">&times;</span>
-        <h3 id="modalNombre">Nombre</h3>
-        <p id="modalDescripcion">Descripción</p>
-    </div>
-</div>
-
-<script>
-    const personajes = document.querySelectorAll('.personaje');
-    const modal = document.getElementById('modal');
-    const modalNombre = document.getElementById('modalNombre');
-    const modalDescripcion = document.getElementById('modalDescripcion');
-    const closeModal = document.getElementById('closeModal');
-
-    personajes.forEach(personaje => {
-        personaje.addEventListener('click', () => {
-            modalNombre.textContent = personaje.dataset.nombre;
-            modalDescripcion.textContent = personaje.dataset.desc;
-            modal.style.display = 'flex';
-        });
-    });
-
-    closeModal.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
-
-    window.addEventListener('click', e => {
-        if(e.target === modal){
-            modal.style.display = 'none';
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Studio - Tenshi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-bg: #121212;
+            --secondary-bg: #1e1e1e;
+            --text-color: #ffffff;
+            --accent-color: #ff6b6b;
+            --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s ease;
         }
-    });
-</script>
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: var(--transition);
+        }
+
+        body.light-mode {
+            --primary-bg: #f5f5f5;
+            --secondary-bg: #e0e0e0;
+            --text-color: #333333;
+            --accent-color: #ff4757;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: var(--secondary-bg);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .nav a {
+            margin: 0 1rem;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .nav a:hover {
+            color: var(--accent-color);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .banner {
+            height: 70vh;
+            background: url('https://mistralaiblackforestprod.blob.core.windows.net/images/blackforest/5f62/1f17/-9b7/6-4f7d-bb56-3792f5d25fe3/image.jpg?se=2025-08-22T20%3A11%3A59Z&sp=r&sv=2025-07-05&sr=b&sig=DlOOxkzVAVuDQTjZ2tilVvtU2Hb9bAWo25V77Pfhwvk%3D') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--text-color);
+            margin-top: 80px;
+        }
+
+        .banner-content h1 {
+            font-size: 3rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .carousel-section {
+            padding: 2rem;
+            background-color: var(--primary-bg);
+        }
+
+        .carousel-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .carousel {
+            display: flex;
+            gap: 1rem;
+            overflow: hidden;
+        }
+
+        .carousel-card {
+            background-color: var(--secondary-bg);
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            transform: scale(0.9);
+            opacity: 0.7;
+            min-width: 200px;
+        }
+
+        .carousel-card.active {
+            transform: scale(1.1);
+            opacity: 1;
+            z-index: 10;
+        }
+
+        .carousel-card img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .carousel-card h3 {
+            margin: 0.5rem 0;
+            color: var(--accent-color);
+        }
+
+        .carousel-card .label {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .carousel-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin: 0 1rem;
+            transition: var(--transition);
+        }
+
+        .carousel-btn:hover {
+            background-color: #ff4757;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--secondary-bg);
+            margin-top: 2rem;
+        }
+
+        .social-links {
+            margin: 1rem 0;
+        }
+
+        .social-links a {
+            color: var(--text-color);
+            margin: 0 0.5rem;
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            .carousel {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .carousel-card {
+                min-width: 80%;
+            }
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <header class="header">
+        <div class="logo">Tenshi</div>
+        <nav class="nav">
+            <a href="#news">News</a>
+            <a href="#discography">Discography</a>
+            <a href="#videos">Videos</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#studio">My Studio</a>
+            <button id="theme-toggle" class="theme-toggle">🌙</button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="banner">
+            <div class="banner-content">
+                <h1>Welcome to My Studio</h1>
+            </div>
+        </section>
+
+        <section class="carousel-section">
+            <div class="carousel-container">
+                <button class="carousel-btn prev">❮</button>
+                <div class="carousel">
+                    <div class="carousel-card active">
+                        <img src="https://via.placeholder.com/300x400" alt="Character 1">
+                        <h3>Luna</h3>
+                        <span class="label">Vocalist</span>
+                    </div>
+                    <div class="carousel-card">
+                        <img src="https://via.placeholder.com/300x400" alt="Character 2">
+                        <h3>Kai</h3>
+                        <span class="label">Producer</span>
+                    </div>
+                    <div class="carousel-card">
+                        <img src="https://via.placeholder.com/300x400" alt="Character 3">
+                        <h3>Mira</h3>
+                        <span class="label">Designer</span>
+                    </div>
+                    <div class="carousel-card">
+                        <img src="https://via.placeholder.com/300x400" alt="Character 4">
+                        <h3>Rin</h3>
+                        <span class="label">Artist</span>
+                    </div>
+                </div>
+                <button class="carousel-btn next">❯</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="social-links">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-spotify"></i></a>
+        </div>
+        <p>&copy; 2025 My Studio. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Toggle dark/light mode
+            const themeToggle = document.getElementById('theme-toggle');
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('light-mode');
+                themeToggle.textContent = document.body.classList.contains('light-mode') ? '🌞' : '🌙';
+            });
+
+            // Carousel functionality
+            const carousel = document.querySelector('.carousel');
+            const cards = document.querySelectorAll('.carousel-card');
+            const prevBtn = document.querySelector('.prev');
+            const nextBtn = document.querySelector('.next');
+            let currentIndex = 0;
+
+            function updateCarousel() {
+                cards.forEach((card, index) => {
+                    card.classList.remove('active');
+                    if (index === currentIndex) {
+                        card.classList.add('active');
+                    }
+                });
+            }
+
+            prevBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+                updateCarousel();
+            });
+
+            nextBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % cards.length;
+                updateCarousel();
+            });
+
+            // Initialize carousel
+            updateCarousel();
+        });
+    </script>
 </body>
 </html>
