@@ -14,7 +14,7 @@
             --card-bg: #2a2a3a;
             --card-border: #ff6b6b;
             --card-shadow: 0 8px 16px rgba(255, 107, 107, 0.3);
-            --transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            --transition: all 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             --banner-height: 35vh;
         }
 
@@ -25,7 +25,7 @@
             margin: 0;
             padding: 0;
             transition: var(--transition);
-            perspective: 1000px;
+            perspective: 1500px;
             overflow-x: hidden;
         }
 
@@ -110,12 +110,12 @@
 
         .carousel-container {
             position: relative;
-            width: 300px;
-            height: 450px;
+            width: 800px;
+            height: 500px;
             display: flex;
             justify-content: center;
             align-items: center;
-            perspective: 1000px;
+            perspective: 1500px;
         }
 
         .card {
@@ -141,15 +141,15 @@
         }
 
         .card.left {
-            transform: translateX(-100px) translateY(20px) translateZ(-20px) rotateY(-15deg);
+            transform: translateX(-250px) translateY(50px) translateZ(-100px) rotateY(-25deg);
             z-index: 5;
-            opacity: 0.7;
+            opacity: 0.6;
         }
 
         .card.right {
-            transform: translateX(100px) translateY(20px) translateZ(-20px) rotateY(15deg);
+            transform: translateX(250px) translateY(50px) translateZ(-100px) rotateY(25deg);
             z-index: 5;
-            opacity: 0.7;
+            opacity: 0.6;
         }
 
         .card-image-container {
@@ -234,14 +234,11 @@
         @media (max-width: 768px) {
             .carousel-container {
                 width: 90%;
-            }
-            .card {
-                width: 220px;
-                height: 360px;
+                height: 400px;
             }
             .card.left, .card.right {
-                transform: translateX(-80px) translateY(20px) translateZ(-20px) rotateY(-10deg);
-                opacity: 0.6;
+                transform: translateX(-150px) translateY(30px) translateZ(-80px) rotateY(-15deg);
+                opacity: 0.5;
             }
             .banner-content h1 {
                 font-size: 2.5rem;
@@ -335,7 +332,7 @@
                 carouselContainer.appendChild(cardElement);
             });
 
-            // Cambiar tarjeta central cada 10 segundos
+            // Cambiar tarjeta central cada 20 segundos
             setInterval(() => {
                 const cards = document.querySelectorAll('.card');
                 cards.forEach(card => card.classList.remove('center', 'left', 'right'));
@@ -351,7 +348,7 @@
                         card.classList.add('right');
                     }
                 });
-            }, 10000);
+            }, 20000);
         });
     </script>
 </body>
