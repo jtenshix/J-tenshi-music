@@ -104,18 +104,20 @@
             min-height: 70vh;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-end;
             padding-top: calc(var(--banner-height) + 2rem);
+            padding-bottom: 5rem;
         }
 
         .carousel-container {
             position: relative;
-            width: 800px;
+            width: 900px;
             height: 500px;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-end;
             perspective: 1500px;
+            margin-bottom: 3rem;
         }
 
         .card {
@@ -132,22 +134,23 @@
             transition: var(--transition);
             backface-visibility: hidden;
             transform-style: preserve-3d;
+            bottom: 0;
         }
 
         .card.center {
-            transform: translateZ(50px) translateY(0);
+            transform: translateX(0) translateY(0) translateZ(50px);
             z-index: 10;
             opacity: 1;
         }
 
         .card.left {
-            transform: translateX(-250px) translateY(50px) translateZ(-100px) rotateY(-25deg);
+            transform: translateX(-350px) translateY(0) translateZ(-100px) rotateY(-25deg);
             z-index: 5;
             opacity: 0.6;
         }
 
         .card.right {
-            transform: translateX(250px) translateY(50px) translateZ(-100px) rotateY(25deg);
+            transform: translateX(350px) translateY(0) translateZ(-100px) rotateY(25deg);
             z-index: 5;
             opacity: 0.6;
         }
@@ -233,11 +236,11 @@
 
         @media (max-width: 768px) {
             .carousel-container {
-                width: 90%;
+                width: 100%;
                 height: 400px;
             }
             .card.left, .card.right {
-                transform: translateX(-150px) translateY(30px) translateZ(-80px) rotateY(-15deg);
+                transform: translateX(-200px) translateY(0) translateZ(-80px) rotateY(-15deg);
                 opacity: 0.5;
             }
             .banner-content h1 {
