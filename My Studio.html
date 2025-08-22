@@ -15,8 +15,8 @@
             --card-border: #ff6b6b;
             --card-shadow: 0 8px 16px rgba(255, 107, 107, 0.3);
             --transition: all 0.5s ease;
-            --banner-height: 35vh;
-            --carousel-radius: 300px;
+            --carousel-radius: 400px;
+            --rotation-speed: 20s;
         }
 
         body {
@@ -26,7 +26,7 @@
             margin: 0;
             padding: 0;
             transition: var(--transition);
-            perspective: 1000px;
+            perspective: 1500px;
         }
 
         body.light-mode {
@@ -79,7 +79,7 @@
         }
 
         .banner {
-            height: var(--banner-height);
+            height: 35vh;
             background: url('https://mistralaiblackforestprod.blob.core.windows.net/images/blackforest/5f62/1f17/-9b7/6-4f7d-bb56-3792f5d25fe3/image.jpg?se=2025-08-22T20%3A11%3A59Z&sp=r&sv=2025-07-05&sr=b&sig=DlOOxkzVAVuDQTjZ2tilVvtU2Hb9bAWo25V77Pfhwvk%3D') center/cover;
             display: flex;
             align-items: center;
@@ -101,20 +101,20 @@
         }
 
         .main-content {
-            margin-top: calc(var(--banner-height) + 80px);
+            margin-top: calc(35vh + 80px);
             padding: 2rem;
             background-color: var(--primary-bg);
-            min-height: 60vh;
+            min-height: 70vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .carousel-container {
             position: relative;
-            width: 100%;
-            height: 450px;
+            width: 800px;
+            height: 500px;
             margin: 0 auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         .carousel {
@@ -122,7 +122,12 @@
             width: 100%;
             height: 100%;
             transform-style: preserve-3d;
-            transition: transform 1s ease;
+            animation: rotate var(--rotation-speed) linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
         }
 
         .card {
@@ -137,8 +142,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow: hidden;
             backface-visibility: hidden;
+            transform-style: preserve-3d;
         }
 
         .card-image-container {
@@ -201,7 +206,6 @@
             text-align: center;
             padding: 2rem;
             background-color: var(--secondary-bg);
-            margin-top: 2rem;
         }
 
         .social-links {
@@ -221,6 +225,9 @@
         }
 
         @media (max-width: 768px) {
+            .carousel-container {
+                width: 95%;
+            }
             .banner-content h1 {
                 font-size: 2.5rem;
             }
@@ -272,7 +279,7 @@
                 themeToggle.textContent = document.body.classList.contains('light-mode') ? '🌞' : '🌙';
             });
 
-            // Carousel 3D
+            // Carousel 3D estático con rotación lenta
             const carousel = document.getElementById('carousel');
             const cardsData = [
                 {
@@ -295,11 +302,8 @@
                 }
             ];
 
-            const radius = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--carousel-radius'));
-            const cardWidth = 220;
-            const cardHeight = 380;
+            const radius = 400;
             const angleStep = (2 * Math.PI) / cardsData.length;
-            let currentAngle = 0;
 
             // Crear cartas
             cardsData.forEach((card, index) => {
@@ -317,38 +321,23 @@
                     <div class="card-footer">© 2025 My Studio</div>
                 `;
                 carousel.appendChild(cardElement);
-                positionCard(cardElement, index, angleStep, radius);
-            });
 
-            // Posicionar cartas en círculo
-            function positionCard(card, index, angleStep, radius) {
+                // Posicionar cartas en círculo
                 const angle = index * angleStep;
                 const x = radius * Math.sin(angle);
                 const z = radius * Math.cos(angle);
-                const scale = Math.cos(angle) * 0.5 + 0.8;
-                card.style.transform = `rotateY(${angle}rad) translateZ(${z}px) translateX(${x}px) scale(${scale})`;
-                card.style.zIndex = Math.round(scale * 100);
-                card.style.opacity = scale;
-            }
-
-            // Rotar automáticamente
-            function rotateCarousel() {
-                currentAngle += 0.005;
-                carousel.style.transform = `rotateY(${currentAngle}rad)`;
-                requestAnimationFrame(rotateCarousel);
-            }
-
-            // Iniciar rotación
-            rotateCarousel();
+                cardElement.style.transform = `rotateY(${angle}rad) translateZ(${z}px) translateX(${x}px)`;
+                cardElement.style.transition = 'transform 0.5s ease';
+            });
 
             // Ajustar tamaño de la carta central
             setInterval(() => {
                 const cards = document.querySelectorAll('.card');
-                cards.forEach((card, index) => {
+                cards.forEach(card => {
                     const rect = card.getBoundingClientRect();
                     const centerX = window.innerWidth / 2;
                     const distanceFromCenter = Math.abs(rect.left + rect.width / 2 - centerX);
-                    const scale = 1 - distanceFromCenter / window.innerWidth * 0.5;
+                    const scale = 1 - distanceFromCenter / window.innerWidth * 1.5;
                     card.style.transform = card.style.transform.replace(/scale\([^)]*\)/, '') + ` scale(${1 + scale * 0.5})`;
                     card.style.zIndex = Math.round((1 + scale * 0.5) * 100);
                 });
