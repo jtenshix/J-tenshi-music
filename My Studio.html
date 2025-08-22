@@ -26,6 +26,7 @@
             padding: 0;
             transition: var(--transition);
             perspective: 1000px;
+            overflow-x: hidden;
         }
 
         body.light-mode {
@@ -86,7 +87,6 @@
             text-align: center;
             color: var(--text-color);
             width: 100%;
-            position: relative;
             margin-top: 80px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
@@ -104,21 +104,22 @@
             min-height: 70vh;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
+            align-items: center;
             padding-top: calc(var(--banner-height) + 2rem);
         }
 
-        .card-container {
-            position: relative;
-            width: 250px;
-            height: 420px;
-            margin: 0 auto;
+        .carousel-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            perspective: 1000px;
+            height: 450px;
         }
 
         .card {
-            position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 220px;
+            height: 380px;
             background-color: var(--card-bg);
             border: 3px solid var(--card-border);
             border-radius: 15px;
@@ -126,24 +127,19 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            backface-visibility: hidden;
-            transform-style: preserve-3d;
             transition: var(--transition);
+            position: relative;
+            transform-style: preserve-3d;
         }
 
-        .card.hidden {
-            display: none;
-        }
-
-        .card.active {
-            transform: rotateY(0deg) scale(1);
-            opacity: 1;
+        .card.center {
+            transform: scale(1.2) translateY(-20px);
             z-index: 10;
         }
 
-        .card.inactive {
-            transform: rotateY(90deg) scale(0.8);
-            opacity: 0;
+        .card.left, .card.right {
+            transform: scale(0.9) translateY(20px);
+            opacity: 0.7;
             z-index: 5;
         }
 
@@ -160,6 +156,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.5s ease;
         }
 
         .card-info {
@@ -227,9 +224,15 @@
         }
 
         @media (max-width: 768px) {
-            .card-container {
+            .carousel-container {
+                flex-direction: column;
+                height: auto;
+                gap: 1rem;
+            }
+            .card {
                 width: 90%;
-                height: 380px;
+                transform: none !important;
+                opacity: 1 !important;
             }
             .banner-content h1 {
                 font-size: 2.5rem;
@@ -256,7 +259,7 @@
     </div>
 
     <main class="main-content">
-        <div class="card-container" id="cardContainer">
+        <div class="carousel-container" id="carouselContainer">
             <!-- Las cartas se generan con JavaScript -->
         </div>
     </main>
@@ -302,13 +305,13 @@
                 }
             ];
 
-            const cardContainer = document.getElementById('cardContainer');
-            let currentCardIndex = 0;
+            const carouselContainer = document.getElementById('carouselContainer');
+            let currentCenterIndex = 0;
 
             // Crear cartas
             cardsData.forEach((card, index) => {
                 const cardElement = document.createElement('div');
-                cardElement.className = `card ${index === 0 ? 'active' : 'inactive'}`;
+                cardElement.className = `card ${index === currentCenterIndex ? 'center' : index < currentCenterIndex ? 'left' : 'right'}`;
                 cardElement.innerHTML = `
                     <div class="card-image-container">
                         <img src="${card.image}" alt="${card.name}">
@@ -320,19 +323,25 @@
                     </div>
                     <div class="card-footer">© 2025 My Studio</div>
                 `;
-                cardContainer.appendChild(cardElement);
+                carouselContainer.appendChild(cardElement);
             });
 
-            // Cambiar tarjeta cada 10 segundos
+            // Cambiar tarjeta central cada 10 segundos
             setInterval(() => {
                 const cards = document.querySelectorAll('.card');
-                cards[currentCardIndex].classList.remove('active');
-                cards[currentCardIndex].classList.add('inactive');
+                cards.forEach(card => card.classList.remove('center', 'left', 'right'));
 
-                currentCardIndex = (currentCardIndex + 1) % cardsData.length;
+                currentCenterIndex = (currentCenterIndex + 1) % cardsData.length;
 
-                cards[currentCardIndex].classList.remove('inactive');
-                cards[currentCardIndex].classList.add('active');
+                cards.forEach((card, index) => {
+                    if (index === currentCenterIndex) {
+                        card.classList.add('center');
+                    } else if (index === (currentCenterIndex - 1 + cardsData.length) % cardsData.length) {
+                        card.classList.add('left');
+                    } else {
+                        card.classList.add('right');
+                    }
+                });
             }, 10000);
         });
     </script>
