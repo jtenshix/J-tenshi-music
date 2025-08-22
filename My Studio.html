@@ -15,6 +15,7 @@
             --card-border: #ff6b6b;
             --card-shadow: 0 8px 16px rgba(255, 107, 107, 0.3);
             --transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            --banner-height: 35vh;
         }
 
         body {
@@ -77,17 +78,16 @@
         }
 
         .banner {
-            height: 35vh;
+            height: var(--banner-height);
             background: url('https://mistralaiblackforestprod.blob.core.windows.net/images/blackforest/5f62/1f17/-9b7/6-4f7d-bb56-3792f5d25fe3/image.jpg?se=2025-08-22T20%3A11%3A59Z&sp=r&sv=2025-07-05&sr=b&sig=DlOOxkzVAVuDQTjZ2tilVvtU2Hb9bAWo25V77Pfhwvk%3D') center/cover;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             color: var(--text-color);
-            position: fixed;
             width: 100%;
-            top: 80px;
-            z-index: 999;
+            position: relative;
+            margin-top: 80px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
 
@@ -99,13 +99,13 @@
         }
 
         .main-content {
-            margin-top: calc(35vh + 80px);
             padding: 2rem;
             background-color: var(--primary-bg);
             min-height: 70vh;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
+            padding-top: calc(var(--banner-height) + 2rem);
         }
 
         .card-container {
@@ -207,6 +207,7 @@
             text-align: center;
             padding: 2rem;
             background-color: var(--secondary-bg);
+            margin-top: auto;
         }
 
         .social-links {
