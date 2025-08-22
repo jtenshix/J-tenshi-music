@@ -14,9 +14,7 @@
             --card-bg: #2a2a3a;
             --card-border: #ff6b6b;
             --card-shadow: 0 8px 16px rgba(255, 107, 107, 0.3);
-            --transition: all 0.5s ease;
-            --carousel-radius: 400px;
-            --rotation-speed: 20s;
+            --transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         }
 
         body {
@@ -26,7 +24,7 @@
             margin: 0;
             padding: 0;
             transition: var(--transition);
-            perspective: 1500px;
+            perspective: 1000px;
         }
 
         body.light-mode {
@@ -110,45 +108,48 @@
             align-items: center;
         }
 
-        .carousel-container {
+        .card-container {
             position: relative;
-            width: 800px;
-            height: 500px;
+            width: 250px;
+            height: 420px;
             margin: 0 auto;
-        }
-
-        .carousel {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-            animation: rotate var(--rotation-speed) linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotateY(0deg); }
-            to { transform: rotateY(360deg); }
         }
 
         .card {
             position: absolute;
-            width: 220px;
-            height: 380px;
+            width: 100%;
+            height: 100%;
             background-color: var(--card-bg);
             border: 3px solid var(--card-border);
             border-radius: 15px;
             box-shadow: var(--card-shadow);
-            transition: var(--transition);
             display: flex;
             flex-direction: column;
             align-items: center;
             backface-visibility: hidden;
             transform-style: preserve-3d;
+            transition: var(--transition);
+        }
+
+        .card.hidden {
+            display: none;
+        }
+
+        .card.active {
+            transform: rotateY(0deg) scale(1);
+            opacity: 1;
+            z-index: 10;
+        }
+
+        .card.inactive {
+            transform: rotateY(90deg) scale(0.8);
+            opacity: 0;
+            z-index: 5;
         }
 
         .card-image-container {
             width: 100%;
-            height: 220px;
+            height: 240px;
             overflow: hidden;
             border-radius: 10px;
             margin-bottom: 0.5rem;
@@ -225,8 +226,9 @@
         }
 
         @media (max-width: 768px) {
-            .carousel-container {
-                width: 95%;
+            .card-container {
+                width: 90%;
+                height: 380px;
             }
             .banner-content h1 {
                 font-size: 2.5rem;
@@ -253,10 +255,8 @@
     </div>
 
     <main class="main-content">
-        <div class="carousel-container">
-            <div class="carousel" id="carousel">
-                <!-- Las cartas se posicionan con JavaScript -->
-            </div>
+        <div class="card-container" id="cardContainer">
+            <!-- Las cartas se generan con JavaScript -->
         </div>
     </main>
 
@@ -279,8 +279,7 @@
                 themeToggle.textContent = document.body.classList.contains('light-mode') ? '🌞' : '🌙';
             });
 
-            // Carousel 3D estático con rotación lenta
-            const carousel = document.getElementById('carousel');
+            // Datos de las cartas
             const cardsData = [
                 {
                     name: "Luna",
@@ -302,13 +301,13 @@
                 }
             ];
 
-            const radius = 400;
-            const angleStep = (2 * Math.PI) / cardsData.length;
+            const cardContainer = document.getElementById('cardContainer');
+            let currentCardIndex = 0;
 
             // Crear cartas
             cardsData.forEach((card, index) => {
                 const cardElement = document.createElement('div');
-                cardElement.className = 'card';
+                cardElement.className = `card ${index === 0 ? 'active' : 'inactive'}`;
                 cardElement.innerHTML = `
                     <div class="card-image-container">
                         <img src="${card.image}" alt="${card.name}">
@@ -320,28 +319,20 @@
                     </div>
                     <div class="card-footer">© 2025 My Studio</div>
                 `;
-                carousel.appendChild(cardElement);
-
-                // Posicionar cartas en círculo
-                const angle = index * angleStep;
-                const x = radius * Math.sin(angle);
-                const z = radius * Math.cos(angle);
-                cardElement.style.transform = `rotateY(${angle}rad) translateZ(${z}px) translateX(${x}px)`;
-                cardElement.style.transition = 'transform 0.5s ease';
+                cardContainer.appendChild(cardElement);
             });
 
-            // Ajustar tamaño de la carta central
+            // Cambiar tarjeta cada 10 segundos
             setInterval(() => {
                 const cards = document.querySelectorAll('.card');
-                cards.forEach(card => {
-                    const rect = card.getBoundingClientRect();
-                    const centerX = window.innerWidth / 2;
-                    const distanceFromCenter = Math.abs(rect.left + rect.width / 2 - centerX);
-                    const scale = 1 - distanceFromCenter / window.innerWidth * 1.5;
-                    card.style.transform = card.style.transform.replace(/scale\([^)]*\)/, '') + ` scale(${1 + scale * 0.5})`;
-                    card.style.zIndex = Math.round((1 + scale * 0.5) * 100);
-                });
-            }, 100);
+                cards[currentCardIndex].classList.remove('active');
+                cards[currentCardIndex].classList.add('inactive');
+
+                currentCardIndex = (currentCardIndex + 1) % cardsData.length;
+
+                cards[currentCardIndex].classList.remove('inactive');
+                cards[currentCardIndex].classList.add('active');
+            }, 10000);
         });
     </script>
 </body>
