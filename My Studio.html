@@ -11,8 +11,11 @@
             --secondary-bg: #1e1e1e;
             --text-color: #ffffff;
             --accent-color: #ff6b6b;
-            --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            --card-bg: #2a2a3a;
+            --card-border: #ff6b6b;
+            --card-shadow: 0 8px 16px rgba(255, 107, 107, 0.3);
             --transition: all 0.3s ease;
+            --banner-height: 40vh;
         }
 
         body {
@@ -29,6 +32,8 @@
             --secondary-bg: #e0e0e0;
             --text-color: #333333;
             --accent-color: #ff4757;
+            --card-bg: #ffffff;
+            --card-border: #ff4757;
         }
 
         .header {
@@ -41,13 +46,14 @@
             width: 100%;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
             color: var(--accent-color);
+            font-style: italic;
         }
 
         .nav a {
@@ -55,6 +61,7 @@
             text-decoration: none;
             color: var(--text-color);
             transition: var(--transition);
+            font-weight: 500;
         }
 
         .nav a:hover {
@@ -65,100 +72,98 @@
             background: none;
             border: none;
             color: var(--text-color);
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             cursor: pointer;
+            transition: var(--transition);
         }
 
         .banner {
-            height: 70vh;
+            height: var(--banner-height);
             background: url('https://mistralaiblackforestprod.blob.core.windows.net/images/blackforest/5f62/1f17/-9b7/6-4f7d-bb56-3792f5d25fe3/image.jpg?se=2025-08-22T20%3A11%3A59Z&sp=r&sv=2025-07-05&sr=b&sig=DlOOxkzVAVuDQTjZ2tilVvtU2Hb9bAWo25V77Pfhwvk%3D') center/cover;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             color: var(--text-color);
-            margin-top: 80px;
+            position: fixed;
+            width: 100%;
+            top: 80px;
+            z-index: 999;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
 
         .banner-content h1 {
-            font-size: 3rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            font-size: 3.5rem;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+            font-weight: 700;
+            letter-spacing: 2px;
         }
 
-        .carousel-section {
+        .main-content {
+            margin-top: calc(var(--banner-height) + 80px);
             padding: 2rem;
             background-color: var(--primary-bg);
         }
 
-        .carousel-container {
+        .cards-section {
             display: flex;
-            align-items: center;
             justify-content: center;
-            position: relative;
+            gap: 2rem;
+            flex-wrap: wrap;
+            padding: 2rem 0;
         }
 
-        .carousel {
-            display: flex;
-            gap: 1rem;
-            overflow: hidden;
-        }
-
-        .carousel-card {
-            background-color: var(--secondary-bg);
-            border-radius: 10px;
+        .card {
+            background-color: var(--card-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 12px;
+            width: 300px;
             padding: 1rem;
             box-shadow: var(--card-shadow);
             transition: var(--transition);
-            transform: scale(0.9);
-            opacity: 0.7;
-            min-width: 200px;
+            transform: perspective(1000px) rotateY(0deg);
+            position: relative;
+            overflow: hidden;
         }
 
-        .carousel-card.active {
-            transform: scale(1.1);
-            opacity: 1;
-            z-index: 10;
+        .card:hover {
+            transform: perspective(1000px) rotateY(5deg) scale(1.03);
+            box-shadow: 0 12px 24px rgba(255, 107, 107, 0.5);
         }
 
-        .carousel-card img {
+        .card img {
             width: 100%;
+            height: 350px;
+            object-fit: cover;
             border-radius: 8px;
-            margin-bottom: 1rem;
+            border: 2px solid var(--card-border);
         }
 
-        .carousel-card h3 {
+        .card-info {
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .card h3 {
             margin: 0.5rem 0;
             color: var(--accent-color);
+            font-size: 1.6rem;
         }
 
-        .carousel-card .label {
+        .card .label {
             display: inline-block;
             background-color: var(--accent-color);
             color: white;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-        }
-
-        .carousel-btn {
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.2rem;
-            margin: 0 1rem;
-            transition: var(--transition);
-        }
-
-        .carousel-btn:hover {
-            background-color: #ff4757;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
         }
 
         .footer {
             text-align: center;
-            padding: 1rem;
+            padding: 2rem;
             background-color: var(--secondary-bg);
             margin-top: 2rem;
         }
@@ -169,23 +174,28 @@
 
         .social-links a {
             color: var(--text-color);
-            margin: 0 0.5rem;
-            font-size: 1.5rem;
+            margin: 0 1rem;
+            font-size: 1.8rem;
             transition: var(--transition);
         }
 
         .social-links a:hover {
             color: var(--accent-color);
+            transform: scale(1.2);
         }
 
         @media (max-width: 768px) {
-            .carousel {
+            .cards-section {
                 flex-direction: column;
                 align-items: center;
             }
 
-            .carousel-card {
-                min-width: 80%;
+            .card {
+                width: 90%;
+            }
+
+            .banner-content h1 {
+                font-size: 2.5rem;
             }
         }
     </style>
@@ -197,45 +207,39 @@
             <a href="#news">News</a>
             <a href="#discography">Discography</a>
             <a href="#videos">Videos</a>
-            <a href="#gallery">Gallery</a>
             <a href="#studio">My Studio</a>
             <button id="theme-toggle" class="theme-toggle">🌙</button>
         </nav>
     </header>
 
-    <main>
-        <section class="banner">
-            <div class="banner-content">
-                <h1>Welcome to My Studio</h1>
-            </div>
-        </section>
+    <div class="banner">
+        <div class="banner-content">
+            <h1>Welcome to My Studio</h1>
+        </div>
+    </div>
 
-        <section class="carousel-section">
-            <div class="carousel-container">
-                <button class="carousel-btn prev">❮</button>
-                <div class="carousel">
-                    <div class="carousel-card active">
-                        <img src="https://via.placeholder.com/300x400" alt="Character 1">
-                        <h3>Luna</h3>
-                        <span class="label">Vocalist</span>
-                    </div>
-                    <div class="carousel-card">
-                        <img src="https://via.placeholder.com/300x400" alt="Character 2">
-                        <h3>Kai</h3>
-                        <span class="label">Producer</span>
-                    </div>
-                    <div class="carousel-card">
-                        <img src="https://via.placeholder.com/300x400" alt="Character 3">
-                        <h3>Mira</h3>
-                        <span class="label">Designer</span>
-                    </div>
-                    <div class="carousel-card">
-                        <img src="https://via.placeholder.com/300x400" alt="Character 4">
-                        <h3>Rin</h3>
-                        <span class="label">Artist</span>
-                    </div>
+    <main class="main-content">
+        <section class="cards-section">
+            <div class="card">
+                <img src="https://via.placeholder.com/300x400/ff6b6b/ffffff?text=Luna" alt="Luna">
+                <div class="card-info">
+                    <h3>Luna</h3>
+                    <span class="label">Main Vocalist</span>
                 </div>
-                <button class="carousel-btn next">❯</button>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/300x400/4dabf7/ffffff?text=Kai" alt="Kai">
+                <div class="card-info">
+                    <h3>Kai</h3>
+                    <span class="label">Music Producer</span>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/300x400/7bed9f/ffffff?text=Mira" alt="Mira">
+                <div class="card-info">
+                    <h3>Mira</h3>
+                    <span class="label">Character Designer</span>
+                </div>
             </div>
         </section>
     </main>
@@ -245,48 +249,18 @@
             <a href="#"><i class="fab fa-twitter"></i></a>
             <a href="#"><i class="fab fa-instagram"></i></a>
             <a href="#"><i class="fab fa-youtube"></i></a>
-            <a href="#"><i class="fab fa-spotify"></i></a>
+            <a href="#"><i class="fab fa-tiktok"></i></a>
         </div>
         <p>&copy; 2025 My Studio. All rights reserved.</p>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Toggle dark/light mode
             const themeToggle = document.getElementById('theme-toggle');
             themeToggle.addEventListener('click', () => {
                 document.body.classList.toggle('light-mode');
                 themeToggle.textContent = document.body.classList.contains('light-mode') ? '🌞' : '🌙';
             });
-
-            // Carousel functionality
-            const carousel = document.querySelector('.carousel');
-            const cards = document.querySelectorAll('.carousel-card');
-            const prevBtn = document.querySelector('.prev');
-            const nextBtn = document.querySelector('.next');
-            let currentIndex = 0;
-
-            function updateCarousel() {
-                cards.forEach((card, index) => {
-                    card.classList.remove('active');
-                    if (index === currentIndex) {
-                        card.classList.add('active');
-                    }
-                });
-            }
-
-            prevBtn.addEventListener('click', () => {
-                currentIndex = (currentIndex - 1 + cards.length) % cards.length;
-                updateCarousel();
-            });
-
-            nextBtn.addEventListener('click', () => {
-                currentIndex = (currentIndex + 1) % cards.length;
-                updateCarousel();
-            });
-
-            // Initialize carousel
-            updateCarousel();
         });
     </script>
 </body>
