@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conócenos - Prueba</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #111;
+        color: #fff;
+    }
+
+    /* Banner fijo */
+    #banner-personaje {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 200px;
+        background: #222;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        text-align: center;
+    }
+    #banner-personaje h1 {
+        margin: 0;
+    }
+
+    /* Main */
+    main {
+        margin-top: 220px; /* para que no tape el banner */
+        padding: 20px;
+    }
+
+    /* Carrusel */
+    .carrusel {
+        display: flex;
+        overflow-x: auto;
+        gap: 20px;
+        padding: 10px 0;
+    }
+    .personaje {
+        flex: 0 0 200px;
+        background: #333;
+        padding: 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        text-align: center;
+    }
+    .personaje:hover {
+        background: #444;
+    }
+
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 50;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        justify-content: center;
+        align-items: center;
+    }
+    .modal-content {
+        background: #222;
+        padding: 30px;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 500px;
+        text-align: left;
+    }
+    .close-btn {
+        float: right;
+        cursor: pointer;
+        font-size: 20px;
+        color: #fff;
+    }
+</style>
+</head>
+<body>
+
+<!-- Banner fijo -->
+<header id="banner-personaje">
+    <h1>Chica de Sudadera Amarilla Produciendo Música</h1>
+</header>
+
+<main>
+    <h2>Carrusel de Personajes</h2>
+    <div class="carrusel">
+        <div class="personaje" data-nombre="Chica Amarilla" data-desc="Edad: 20 años. Productora musical.">
+            Chica Amarilla
+        </div>
+        <div class="personaje" data-nombre="Robot Futurista" data-desc="Origen: Futuro. Coproductor y asistente.">
+            Robot Futurista
+        </div>
+        <div class="personaje" data-nombre="Chica Misteriosa" data-desc="Edad: 18. Playlist de música electrónica.">
+            Chica Misteriosa
+        </div>
+    </div>
+</main>
+
+<!-- Modal -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeModal">&times;</span>
+        <h3 id="modalNombre">Nombre</h3>
+        <p id="modalDescripcion">Descripción</p>
+    </div>
+</div>
+
+<script>
+    const personajes = document.querySelectorAll('.personaje');
+    const modal = document.getElementById('modal');
+    const modalNombre = document.getElementById('modalNombre');
+    const modalDescripcion = document.getElementById('modalDescripcion');
+    const closeModal = document.getElementById('closeModal');
+
+    personajes.forEach(personaje => {
+        personaje.addEventListener('click', () => {
+            modalNombre.textContent = personaje.dataset.nombre;
+            modalDescripcion.textContent = personaje.dataset.desc;
+            modal.style.display = 'flex';
+        });
+    });
+
+    closeModal.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    window.addEventListener('click', e => {
+        if(e.target === modal){
+            modal.style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>
