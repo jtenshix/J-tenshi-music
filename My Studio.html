@@ -15,7 +15,7 @@
             --card-border: #ff6b6b;
             --card-shadow: 0 8px 16px rgba(255, 107, 107, 0.3);
             --transition: all 0.3s ease;
-            --banner-height: 40vh;
+            --banner-height: 35vh;
         }
 
         body {
@@ -74,7 +74,6 @@
             color: var(--text-color);
             font-size: 1.3rem;
             cursor: pointer;
-            transition: var(--transition);
         }
 
         .banner {
@@ -108,46 +107,64 @@
         .cards-section {
             display: flex;
             justify-content: center;
-            gap: 2rem;
+            gap: 1.5rem;
             flex-wrap: wrap;
             padding: 2rem 0;
         }
 
         .card {
             background-color: var(--card-bg);
-            border: 2px solid var(--card-border);
-            border-radius: 12px;
-            width: 300px;
-            padding: 1rem;
+            border: 3px solid var(--card-border);
+            border-radius: 15px;
+            width: 220px;
+            height: 380px;
+            padding: 0.5rem;
             box-shadow: var(--card-shadow);
             transition: var(--transition);
             transform: perspective(1000px) rotateY(0deg);
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .card:hover {
-            transform: perspective(1000px) rotateY(5deg) scale(1.03);
+            transform: perspective(1000px) rotateY(5deg) scale(1.05);
             box-shadow: 0 12px 24px rgba(255, 107, 107, 0.5);
+        }
+
+        .card-image-container {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            border: 2px solid var(--card-border);
         }
 
         .card img {
             width: 100%;
-            height: 350px;
+            height: 100%;
             object-fit: cover;
-            border-radius: 8px;
-            border: 2px solid var(--card-border);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover img {
+            transform: scale(1.05);
         }
 
         .card-info {
-            padding: 1rem;
+            padding: 0.8rem;
             text-align: center;
+            width: 100%;
         }
 
         .card h3 {
             margin: 0.5rem 0;
             color: var(--accent-color);
             font-size: 1.6rem;
+            font-weight: 700;
         }
 
         .card .label {
@@ -156,9 +173,26 @@
             color: white;
             padding: 0.3rem 0.8rem;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             font-weight: 600;
+            margin-top: 0.3rem;
+        }
+
+        .card-description {
+            font-size: 0.8rem;
             margin-top: 0.5rem;
+            line-height: 1.4;
+            color: #cccccc;
+        }
+
+        .card-footer {
+            width: 100%;
+            padding: 0.5rem;
+            margin-top: auto;
+            background: linear-gradient(to bottom, transparent, var(--card-border));
+            text-align: center;
+            font-size: 0.7rem;
+            color: #aaaaaa;
         }
 
         .footer {
@@ -190,10 +224,6 @@
                 align-items: center;
             }
 
-            .card {
-                width: 90%;
-            }
-
             .banner-content h1 {
                 font-size: 2.5rem;
             }
@@ -221,24 +251,48 @@
     <main class="main-content">
         <section class="cards-section">
             <div class="card">
-                <img src="https://via.placeholder.com/300x400/ff6b6b/ffffff?text=Luna" alt="Luna">
+                <div class="card-image-container">
+                    <img src="https://via.placeholder.com/300x400/ff6b6b/ffffff?text=Luna" alt="Luna">
+                </div>
                 <div class="card-info">
                     <h3>Luna</h3>
                     <span class="label">Main Vocalist</span>
+                    <p class="card-description">
+                        Luna es la voz principal del estudio. Su estilo único y versátil la destacan en cada canción.
+                    </p>
+                </div>
+                <div class="card-footer">
+                    © 2025 My Studio
                 </div>
             </div>
             <div class="card">
-                <img src="https://via.placeholder.com/300x400/4dabf7/ffffff?text=Kai" alt="Kai">
+                <div class="card-image-container">
+                    <img src="https://via.placeholder.com/300x400/4dabf7/ffffff?text=Kai" alt="Kai">
+                </div>
                 <div class="card-info">
                     <h3>Kai</h3>
                     <span class="label">Music Producer</span>
+                    <p class="card-description">
+                        Kai es el productor musical del equipo. Su creatividad y técnica dan vida a cada proyecto.
+                    </p>
+                </div>
+                <div class="card-footer">
+                    © 2025 My Studio
                 </div>
             </div>
             <div class="card">
-                <img src="https://via.placeholder.com/300x400/7bed9f/ffffff?text=Mira" alt="Mira">
+                <div class="card-image-container">
+                    <img src="https://via.placeholder.com/300x400/7bed9f/ffffff?text=Mira" alt="Mira">
+                </div>
                 <div class="card-info">
                     <h3>Mira</h3>
                     <span class="label">Character Designer</span>
+                    <p class="card-description">
+                        Mira diseña los personajes y el arte visual del estudio. Su estilo es reconocible y lleno de vida.
+                    </p>
+                </div>
+                <div class="card-footer">
+                    © 2025 My Studio
                 </div>
             </div>
         </section>
