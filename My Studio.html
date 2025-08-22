@@ -14,8 +14,9 @@
             --card-bg: #2a2a3a;
             --card-border: #ff6b6b;
             --card-shadow: 0 8px 16px rgba(255, 107, 107, 0.3);
-            --transition: all 0.3s ease;
+            --transition: all 0.5s ease;
             --banner-height: 35vh;
+            --carousel-radius: 300px;
         }
 
         body {
@@ -25,6 +26,7 @@
             margin: 0;
             padding: 0;
             transition: var(--transition);
+            perspective: 1000px;
         }
 
         body.light-mode {
@@ -102,36 +104,41 @@
             margin-top: calc(var(--banner-height) + 80px);
             padding: 2rem;
             background-color: var(--primary-bg);
+            min-height: 60vh;
         }
 
-        .cards-section {
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 450px;
+            margin: 0 auto;
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            padding: 2rem 0;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border: 3px solid var(--card-border);
-            border-radius: 15px;
-            width: 220px;
-            height: 380px;
-            padding: 0.5rem;
-            box-shadow: var(--card-shadow);
-            transition: var(--transition);
-            transform: perspective(1000px) rotateY(0deg);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
             align-items: center;
         }
 
-        .card:hover {
-            transform: perspective(1000px) rotateY(5deg) scale(1.05);
-            box-shadow: 0 12px 24px rgba(255, 107, 107, 0.5);
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 1s ease;
+        }
+
+        .card {
+            position: absolute;
+            width: 220px;
+            height: 380px;
+            background-color: var(--card-bg);
+            border: 3px solid var(--card-border);
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+            backface-visibility: hidden;
         }
 
         .card-image-container {
@@ -147,11 +154,6 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover img {
-            transform: scale(1.05);
         }
 
         .card-info {
@@ -219,11 +221,6 @@
         }
 
         @media (max-width: 768px) {
-            .cards-section {
-                flex-direction: column;
-                align-items: center;
-            }
-
             .banner-content h1 {
                 font-size: 2.5rem;
             }
@@ -249,53 +246,11 @@
     </div>
 
     <main class="main-content">
-        <section class="cards-section">
-            <div class="card">
-                <div class="card-image-container">
-                    <img src="https://via.placeholder.com/300x400/ff6b6b/ffffff?text=Luna" alt="Luna">
-                </div>
-                <div class="card-info">
-                    <h3>Luna</h3>
-                    <span class="label">Main Vocalist</span>
-                    <p class="card-description">
-                        Luna es la voz principal del estudio. Su estilo único y versátil la destacan en cada canción.
-                    </p>
-                </div>
-                <div class="card-footer">
-                    © 2025 My Studio
-                </div>
+        <div class="carousel-container">
+            <div class="carousel" id="carousel">
+                <!-- Las cartas se posicionan con JavaScript -->
             </div>
-            <div class="card">
-                <div class="card-image-container">
-                    <img src="https://via.placeholder.com/300x400/4dabf7/ffffff?text=Kai" alt="Kai">
-                </div>
-                <div class="card-info">
-                    <h3>Kai</h3>
-                    <span class="label">Music Producer</span>
-                    <p class="card-description">
-                        Kai es el productor musical del equipo. Su creatividad y técnica dan vida a cada proyecto.
-                    </p>
-                </div>
-                <div class="card-footer">
-                    © 2025 My Studio
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-image-container">
-                    <img src="https://via.placeholder.com/300x400/7bed9f/ffffff?text=Mira" alt="Mira">
-                </div>
-                <div class="card-info">
-                    <h3>Mira</h3>
-                    <span class="label">Character Designer</span>
-                    <p class="card-description">
-                        Mira diseña los personajes y el arte visual del estudio. Su estilo es reconocible y lleno de vida.
-                    </p>
-                </div>
-                <div class="card-footer">
-                    © 2025 My Studio
-                </div>
-            </div>
-        </section>
+        </div>
     </main>
 
     <footer class="footer">
@@ -310,11 +265,94 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Toggle dark/light mode
             const themeToggle = document.getElementById('theme-toggle');
             themeToggle.addEventListener('click', () => {
                 document.body.classList.toggle('light-mode');
                 themeToggle.textContent = document.body.classList.contains('light-mode') ? '🌞' : '🌙';
             });
+
+            // Carousel 3D
+            const carousel = document.getElementById('carousel');
+            const cardsData = [
+                {
+                    name: "Luna",
+                    role: "Main Vocalist",
+                    description: "Luna es la voz principal del estudio. Su estilo único y versátil la destacan en cada canción.",
+                    image: "https://via.placeholder.com/300x400/ff6b6b/ffffff?text=Luna"
+                },
+                {
+                    name: "Kai",
+                    role: "Music Producer",
+                    description: "Kai es el productor musical del equipo. Su creatividad y técnica dan vida a cada proyecto.",
+                    image: "https://via.placeholder.com/300x400/4dabf7/ffffff?text=Kai"
+                },
+                {
+                    name: "Mira",
+                    role: "Character Designer",
+                    description: "Mira diseña los personajes y el arte visual del estudio. Su estilo es reconocible y lleno de vida.",
+                    image: "https://via.placeholder.com/300x400/7bed9f/ffffff?text=Mira"
+                }
+            ];
+
+            const radius = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--carousel-radius'));
+            const cardWidth = 220;
+            const cardHeight = 380;
+            const angleStep = (2 * Math.PI) / cardsData.length;
+            let currentAngle = 0;
+
+            // Crear cartas
+            cardsData.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card';
+                cardElement.innerHTML = `
+                    <div class="card-image-container">
+                        <img src="${card.image}" alt="${card.name}">
+                    </div>
+                    <div class="card-info">
+                        <h3>${card.name}</h3>
+                        <span class="label">${card.role}</span>
+                        <p class="card-description">${card.description}</p>
+                    </div>
+                    <div class="card-footer">© 2025 My Studio</div>
+                `;
+                carousel.appendChild(cardElement);
+                positionCard(cardElement, index, angleStep, radius);
+            });
+
+            // Posicionar cartas en círculo
+            function positionCard(card, index, angleStep, radius) {
+                const angle = index * angleStep;
+                const x = radius * Math.sin(angle);
+                const z = radius * Math.cos(angle);
+                const scale = Math.cos(angle) * 0.5 + 0.8;
+                card.style.transform = `rotateY(${angle}rad) translateZ(${z}px) translateX(${x}px) scale(${scale})`;
+                card.style.zIndex = Math.round(scale * 100);
+                card.style.opacity = scale;
+            }
+
+            // Rotar automáticamente
+            function rotateCarousel() {
+                currentAngle += 0.005;
+                carousel.style.transform = `rotateY(${currentAngle}rad)`;
+                requestAnimationFrame(rotateCarousel);
+            }
+
+            // Iniciar rotación
+            rotateCarousel();
+
+            // Ajustar tamaño de la carta central
+            setInterval(() => {
+                const cards = document.querySelectorAll('.card');
+                cards.forEach((card, index) => {
+                    const rect = card.getBoundingClientRect();
+                    const centerX = window.innerWidth / 2;
+                    const distanceFromCenter = Math.abs(rect.left + rect.width / 2 - centerX);
+                    const scale = 1 - distanceFromCenter / window.innerWidth * 0.5;
+                    card.style.transform = card.style.transform.replace(/scale\([^)]*\)/, '') + ` scale(${1 + scale * 0.5})`;
+                    card.style.zIndex = Math.round((1 + scale * 0.5) * 100);
+                });
+            }, 100);
         });
     </script>
 </body>
