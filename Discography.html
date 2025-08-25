@@ -13,19 +13,18 @@
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Tipografía moderna y legible */
-      background: #121212; /* Fondo oscuro */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #121212;
       color: #333;
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      perspective: 1500px; /* Perspectiva 3D para el libro */
+      perspective: 1500px;
       overflow: hidden;
-      user-select: none; /* Evitar selección de texto accidental */
     }
 
-    /* ===== ESTILOS DE LA PORTADA ===== */
+    /* ===== PORTADA DEL LIBRO ===== */
     .book-cover {
       width: 300px;
       height: 400px;
@@ -54,7 +53,7 @@
       padding: 20px;
     }
 
-    /* ===== ESTILOS DEL LIBRO ABIERTO ===== */
+    /* ===== LIBRO ABIERTO ===== */
     .book-container {
       position: fixed;
       top: 0;
@@ -62,7 +61,7 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.8);
-      display: none; /* Oculto inicialmente */
+      display: none;
       justify-content: center;
       align-items: center;
       z-index: 1000;
@@ -78,12 +77,12 @@
       perspective: 1500px;
     }
 
-    /* ===== ESTILOS DE LAS PÁGINAS ===== */
+    /* ===== PÁGINAS DEL LIBRO ===== */
     .page {
       position: absolute;
       width: 50%;
       height: 100%;
-      background: #f9f5e7; /* Color página claro */
+      background: #f9f5e7;
       border-radius: 0 5px 5px 0;
       box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1), 5px 5px 10px rgba(0, 0, 0, 0.3);
       display: flex;
@@ -94,7 +93,8 @@
       box-sizing: border-box;
       transform-origin: left center;
       transition: transform 0.8s ease, box-shadow 0.8s ease;
-      backface-visibility: hidden; /* Ocultar el reverso de la página */
+      backface-visibility: hidden;
+      overflow: hidden;
     }
 
     .page.right {
@@ -105,14 +105,14 @@
 
     .page.flipped {
       transform: rotateY(-180deg);
-      box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.3); /* Sombra al girar */
+      box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.3);
     }
 
     .page-content {
       width: 100%;
       height: 100%;
       padding: 20px;
-      overflow: auto; /* Permitir scroll si el contenido es largo */
+      overflow: auto;
     }
 
     /* ===== BOTONES DE NAVEGACIÓN ===== */
@@ -132,7 +132,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      user-select: none;
     }
 
     .nav-button:hover {
@@ -202,7 +201,7 @@
       <div class="page" id="page1">
         <div class="page-content">
           <h2>Página 1</h2>
-          <p>Contenido de prueba para la página 1. Este es un libro digital interactivo con efecto 3D realista. Puedes pasar las páginas haciendo clic en los bordes o usando los botones.</p>
+          <p>Contenido de prueba para la página 1. Haz clic en el borde derecho para avanzar o usa el botón →.</p>
         </div>
       </div>
 
@@ -210,7 +209,7 @@
       <div class="page right" id="page2">
         <div class="page-content">
           <h2>Página 2</h2>
-          <p>Contenido de prueba para la página 2. El diseño es responsive y funciona en PC, tablet y móvil. Las páginas giran con un efecto suave.</p>
+          <p>Contenido de prueba para la página 2. Haz clic en el borde izquierdo para retroceder o usa el botón ←.</p>
         </div>
       </div>
 
@@ -218,7 +217,7 @@
       <div class="page" id="page3" style="display: none;">
         <div class="page-content">
           <h2>Página 3</h2>
-          <p>Contenido de prueba para la página 3. El libro simula el comportamiento de un libro físico, con sombras y perspectiva 3D.</p>
+          <p>Contenido de prueba para la página 3. El libro simula el comportamiento de un libro físico.</p>
         </div>
       </div>
 
@@ -226,7 +225,7 @@
       <div class="page right" id="page4" style="display: none;">
         <div class="page-content">
           <h2>Página 4</h2>
-          <p>Contenido de prueba para la página 4. Puedes personalizar el contenido de cada página reemplazando este texto o añadiendo imágenes.</p>
+          <p>Contenido de prueba para la página 4. Puedes personalizar el contenido de cada página.</p>
         </div>
       </div>
 
@@ -266,12 +265,9 @@
       });
 
       // Mostrar las páginas actuales
-      if (pageNum % 2 !== 0) {
-        document.getElementById(`page${pageNum}`).style.display = 'flex';
+      document.getElementById(`page${pageNum}`).style.display = 'flex';
+      if (pageNum < totalPages) {
         document.getElementById(`page${pageNum + 1}`).style.display = 'flex';
-      } else {
-        document.getElementById(`page${pageNum - 1}`).style.display = 'flex';
-        document.getElementById(`page${pageNum}`).style.display = 'flex';
       }
     }
 
@@ -286,10 +282,7 @@
     function nextPage() {
       if (currentPage < totalPages - 1) {
         const leftPage = document.getElementById(`page${currentPage}`);
-        const rightPage = document.getElementById(`page${currentPage + 1}`);
-
         leftPage.classList.add('flipped');
-        rightPage.classList.add('flipped');
 
         setTimeout(() => {
           currentPage += 2;
@@ -317,49 +310,14 @@
         const pageRect = page.getBoundingClientRect();
         const clickX = e.clientX - pageRect.left;
 
-        if (!page.classList.contains('right') && clickX > pageRect.width - 30 && currentPage < totalPages - 1) {
+        // Si es una página izquierda y hace clic en el borde derecho, avanzar
+        if (!page.classList.contains('right') && clickX > pageRect.width - 50 && currentPage < totalPages - 1) {
           nextPage();
-        } else if (page.classList.contains('right') && clickX < 30 && currentPage > 1) {
+        }
+        // Si es una página derecha y hace clic en el borde izquierdo, retroceder
+        else if (page.classList.contains('right') && clickX < 50 && currentPage > 1) {
           prevPage();
         }
-      });
-    });
-
-    // (Opcional) Arrastrar página con el mouse
-    let isDragging = false;
-    let startX;
-
-    document.querySelectorAll('.page').forEach(page => {
-      page.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        startX = e.clientX;
-      });
-
-      page.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        const moveX = e.clientX - startX;
-        const rotateDeg = (moveX / page.getBoundingClientRect().width) * 60;
-
-        if (!page.classList.contains('right') && moveX > 0 && currentPage < totalPages - 1) {
-          page.style.transform = `rotateY(${rotateDeg}deg)`;
-        } else if (page.classList.contains('right') && moveX < 0 && currentPage > 1) {
-          page.style.transform = `rotateY(${rotateDeg}deg)`;
-        }
-      });
-
-      page.addEventListener('mouseup', (e) => {
-        if (!isDragging) return;
-        isDragging = false;
-        const endX = e.clientX;
-        const moveX = endX - startX;
-
-        if (!page.classList.contains('right') && moveX > 50 && currentPage < totalPages - 1) {
-          nextPage();
-        } else if (page.classList.contains('right') && moveX < -50 && currentPage > 1) {
-          prevPage();
-        }
-
-        page.style.transform = ''; // Resetear transformación
       });
     });
   </script>
