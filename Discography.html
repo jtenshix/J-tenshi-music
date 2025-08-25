@@ -1,325 +1,151 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Libro Digital 3D | Tenshi</title>
-  <style>
-    /* ===== RESET Y ESTILOS BASE ===== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #121212;
-      color: #333;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      perspective: 1500px;
-      overflow: hidden;
-    }
-
-    /* ===== PORTADA DEL LIBRO ===== */
-    .book-cover {
-      width: 300px;
-      height: 400px;
-      background: linear-gradient(145deg, #3a3a3a, #1a1a1a);
-      border-radius: 5px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      position: relative;
-      transform-style: preserve-3d;
-    }
-
-    .book-cover:hover {
-      transform: scale(1.02);
-      box-shadow: 0 15px 35px rgba(224, 194, 123, 0.6);
-    }
-
-    .book-title {
-      color: #e0c27b;
-      font-size: 24px;
-      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-      text-align: center;
-      padding: 20px;
-    }
-
-    /* ===== LIBRO ABIERTO ===== */
-    .book-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .book {
-      width: 90%;
-      max-width: 800px;
-      height: 90%;
-      max-height: 600px;
-      position: relative;
-      transform-style: preserve-3d;
-      perspective: 1500px;
-    }
-
-    /* ===== PÁGINAS DEL LIBRO ===== */
-    .page {
-      position: absolute;
-      width: 50%;
-      height: 100%;
-      background: #f9f5e7;
-      border-radius: 0 5px 5px 0;
-      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1), 5px 5px 10px rgba(0, 0, 0, 0.3);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 18px;
-      padding: 20px;
-      box-sizing: border-box;
-      transform-origin: left center;
-      transition: transform 0.8s ease, box-shadow 0.8s ease;
-      backface-visibility: hidden;
-      overflow: hidden;
-    }
-
-    .page.right {
-      left: 50%;
-      border-radius: 5px 0 0 5px;
-      transform-origin: right center;
-    }
-
-    .page.flipped {
-      transform: rotateY(-180deg);
-      box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.3);
-    }
-
-    .page-content {
-      width: 100%;
-      height: 100%;
-      padding: 20px;
-      overflow: auto;
-    }
-
-    /* ===== BOTONES DE NAVEGACIÓN ===== */
-    .nav-button {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(224, 194, 123, 0.8);
-      border: none;
-      color: #121212;
-      font-size: 24px;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      cursor: pointer;
-      z-index: 1001;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .nav-button:hover {
-      background: rgba(224, 194, 123, 1);
-    }
-
-    #prevBtn {
-      left: 10px;
-    }
-
-    #nextBtn {
-      right: 10px;
-    }
-
-    /* ===== BOTÓN PARA CERRAR ===== */
-    .close-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: none;
-      border: none;
-      color: #e0c27b;
-      font-size: 36px;
-      cursor: pointer;
-      z-index: 1001;
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 768px) {
-      .book-cover {
-        width: 250px;
-        height: 350px;
-      }
-
-      .book {
-        width: 95%;
-        height: 95%;
-      }
-
-      .page {
-        font-size: 16px;
-        padding: 15px;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tenshi | 幻想の響き</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Helvetica Neue',sans-serif;background:#0b0b0b;color:#f5f5f5;}
+  header{position:fixed;top:0;width:100%;background:rgba(0,0,0,0.8);padding:20px 5%;display:flex;justify-content:space-between;align-items:center;z-index:999;}
+  header .logo{color:#fff;font-size:20px;}
+  nav ul{display:flex;gap:25px;list-style:none;}
+  nav a{text-decoration:none;color:#ccc;font-size:14px;}
+  nav a:hover{color:#e0c27b;}
+  .theme-toggle{background:none;border:1px solid #777;color:#ccc;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:12px;}
+  .hero-wrapper{position:relative;height:50vh;overflow:hidden;margin-top:70px;}
+  .hero-bg{position:absolute;top:0;left:0;width:100%;height:50vh;background:url('banner portada.png') center/cover no-repeat;z-index:0;}
+  .hero-text{position:relative;z-index:2;color:white;font-size:2rem;padding:60px 5%;height:50vh;display:flex;align-items:center;text-shadow:0 2px 10px rgba(0,0,0,0.6);}
+  .section-banner{position:relative;width:90%;max-width:1800px;margin:60px auto;padding:20px;text-align:center;color:#e0c27b;font-size:2rem;font-weight:900;}
+  .audio-player-list{display:flex;flex-direction:column;gap:20px;max-width:900px;margin:40px auto;}
+  .audio-card{display:flex;align-items:center;background:#222;padding:12px 20px;border-radius:12px;gap:15px;}
+  .audio-card img{width:80px;height:80px;object-fit:cover;border-radius:8px;}
+  .audio-info{flex:1;}
+  .audio-info h4{margin-bottom:6px;font-size:16px;}
+  .audio-info span{font-size:12px;color:#e0c27b;}
+  .play-btn{padding:8px 12px;border:none;border-radius:8px;background:#e0c27b;color:#000;cursor:pointer;font-weight:bold;}
+  .progress-bar{width:100%;height:4px;background:#555;border-radius:4px;overflow:hidden;margin-top:6px;}
+  .progress{width:0%;height:100%;background:#e0c27b;transition:width 0.2s;}
+</style>
 </head>
 <body>
-  <!-- Portada del libro -->
-  <div class="book-cover" id="bookCover">
-    <div class="book-title">
-      Libro Digital<br>Tenshi
-    </div>
-  </div>
 
-  <!-- Contenedor del libro abierto -->
-  <div class="book-container" id="bookContainer">
-    <!-- Botón para cerrar -->
-    <button class="close-btn" id="closeBtn">×</button>
+<header>
+  <div class="logo">Tenshi</div>
+  <nav>
+    <ul>
+      <li><a href="#news">News</a></li>
+      <li><a href="#discography">Discography</a></li>
+      <li><a href="#videos">Videos</a></li>
+    </ul>
+  </nav>
+  <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
+</header>
 
-    <!-- Botones de navegación -->
-    <button class="nav-button" id="prevBtn">←</button>
-    <button class="nav-button" id="nextBtn">→</button>
+<div class="hero-wrapper">
+  <div class="hero-bg"></div>
+  <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
+</div>
 
-    <!-- Páginas del libro -->
-    <div class="book" id="book">
-      <!-- Página 1 (izquierda) -->
-      <div class="page" id="page1">
-        <div class="page-content">
-          <h2>Página 1</h2>
-          <p>Contenido de prueba para la página 1. Haz clic en el borde derecho para avanzar o usa el botón →.</p>
-        </div>
+<div class="section-banner">ディスコグラフィー</div>
+<section id="discography">
+  <div class="audio-player-list" id="audio-player-list"></div>
+</section>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+const API_KEY = 'TU_CLAVE_DE_API';
+const PLAYLIST_ID = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf';
+let players = {};
+let currentPlaying = null;
+
+function toggleTheme() {
+  document.body.classList.toggle('light-mode');
+}
+
+// Trae videos de la playlist
+async function fetchPlaylistVideos() {
+  try {
+    const res = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${PLAYLIST_ID}&key=${API_KEY}&maxResults=50`);
+    if(!res.ok) throw new Error('Error al obtener videos de YouTube');
+    const data = await res.json();
+    return data.items || [];
+  } catch(e) {
+    console.error(e);
+    return [];
+  }
+}
+
+// Renderiza los tracks
+function renderAudioPlayers(videos) {
+  const list = document.getElementById('audio-player-list');
+  list.innerHTML = '';
+  videos.forEach((item, index) => {
+    const video = item.snippet;
+    const videoId = video.resourceId.videoId;
+    const title = video.title || 'Track ' + (index + 1);
+    const thumbnail = (video.thumbnails && (video.thumbnails.high || video.thumbnails.medium || video.thumbnails.default)).url;
+    
+    const card = document.createElement('div');
+    card.className = 'audio-card';
+    card.innerHTML = `
+      <img src="${thumbnail}" alt="${title}">
+      <div class="audio-info">
+        <h4>${title}</h4>
+        <span>Track ${index+1}</span>
+        <div class="progress-bar"><div class="progress"></div></div>
       </div>
+      <button class="play-btn">▶️</button>
+      <div id="player-${videoId}" style="display:none;"></div>
+    `;
+    list.appendChild(card);
 
-      <!-- Página 2 (derecha) -->
-      <div class="page right" id="page2">
-        <div class="page-content">
-          <h2>Página 2</h2>
-          <p>Contenido de prueba para la página 2. Haz clic en el borde izquierdo para retroceder o usa el botón ←.</p>
-        </div>
-      </div>
-
-      <!-- Página 3 (izquierda) -->
-      <div class="page" id="page3" style="display: none;">
-        <div class="page-content">
-          <h2>Página 3</h2>
-          <p>Contenido de prueba para la página 3. El libro simula el comportamiento de un libro físico.</p>
-        </div>
-      </div>
-
-      <!-- Página 4 (derecha) -->
-      <div class="page right" id="page4" style="display: none;">
-        <div class="page-content">
-          <h2>Página 4</h2>
-          <p>Contenido de prueba para la página 4. Puedes personalizar el contenido de cada página.</p>
-        </div>
-      </div>
-
-      <!-- Página 5 (izquierda) -->
-      <div class="page" id="page5" style="display: none;">
-        <div class="page-content">
-          <h2>Página 5</h2>
-          <p>Contenido de prueba para la página 5. Al cerrar el libro, todas las páginas vuelven a su estado inicial.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // ===== VARIABLES GLOBALES =====
-    let currentPage = 1;
-    const totalPages = 5;
-
-    // ===== FUNCIONES =====
-    function openBook() {
-      document.getElementById('bookCover').style.display = 'none';
-      document.getElementById('bookContainer').style.display = 'flex';
-      showPages(currentPage);
-    }
-
-    function closeBook() {
-      document.getElementById('bookCover').style.display = 'flex';
-      document.getElementById('bookContainer').style.display = 'none';
-      resetPages();
-    }
-
-    function showPages(pageNum) {
-      // Ocultar todas las páginas
-      document.querySelectorAll('.page').forEach(page => {
-        page.style.display = 'none';
-        page.classList.remove('flipped');
-      });
-
-      // Mostrar las páginas actuales
-      document.getElementById(`page${pageNum}`).style.display = 'flex';
-      if (pageNum < totalPages) {
-        document.getElementById(`page${pageNum + 1}`).style.display = 'flex';
-      }
-    }
-
-    function resetPages() {
-      currentPage = 1;
-      document.querySelectorAll('.page').forEach(page => {
-        page.style.display = 'none';
-        page.classList.remove('flipped');
-      });
-    }
-
-    function nextPage() {
-      if (currentPage < totalPages - 1) {
-        const leftPage = document.getElementById(`page${currentPage}`);
-        leftPage.classList.add('flipped');
-
-        setTimeout(() => {
-          currentPage += 2;
-          showPages(currentPage);
-        }, 800);
-      }
-    }
-
-    function prevPage() {
-      if (currentPage > 1) {
-        currentPage -= 2;
-        showPages(currentPage);
-      }
-    }
-
-    // ===== EVENT LISTENERS =====
-    document.getElementById('bookCover').addEventListener('click', openBook);
-    document.getElementById('closeBtn').addEventListener('click', closeBook);
-    document.getElementById('nextBtn').addEventListener('click', nextPage);
-    document.getElementById('prevBtn').addEventListener('click', prevPage);
-
-    // Pasar página al hacer clic en los bordes
-    document.querySelectorAll('.page').forEach(page => {
-      page.addEventListener('click', (e) => {
-        const pageRect = page.getBoundingClientRect();
-        const clickX = e.clientX - pageRect.left;
-
-        // Si es una página izquierda y hace clic en el borde derecho, avanzar
-        if (!page.classList.contains('right') && clickX > pageRect.width - 50 && currentPage < totalPages - 1) {
-          nextPage();
-        }
-        // Si es una página derecha y hace clic en el borde izquierdo, retroceder
-        else if (page.classList.contains('right') && clickX < 50 && currentPage > 1) {
-          prevPage();
-        }
-      });
+    // Crea reproductor oculto
+    players[videoId] = new YT.Player(`player-${videoId}`, {
+      height: '0',
+      width: '0',
+      videoId,
+      events: { 'onStateChange': (e)=>updateProgress(videoId) }
     });
-  </script>
+
+    const btn = card.querySelector('.play-btn');
+    const progressEl = card.querySelector('.progress');
+
+    btn.addEventListener('click', () => {
+      if(currentPlaying && currentPlaying !== videoId) {
+        players[currentPlaying].pauseVideo();
+        document.querySelector(`#player-${currentPlaying}`).closest('.audio-card').querySelector('.play-btn').textContent = '▶️';
+      }
+      if(players[videoId].getPlayerState() !== 1) {
+        players[videoId].playVideo();
+        btn.textContent = '⏸️';
+        currentPlaying = videoId;
+      } else {
+        players[videoId].pauseVideo();
+        btn.textContent = '▶️';
+        currentPlaying = null;
+      }
+    });
+
+    function updateProgress(id) {
+      const player = players[id];
+      const progress = card.querySelector('.progress');
+      if(player.getPlayerState() === YT.PlayerState.PLAYING) {
+        const interval = setInterval(()=>{
+          const dur = player.getDuration();
+          const cur = player.getCurrentTime();
+          if(dur>0) progress.style.width = (cur/dur*100)+'%';
+          if(player.getPlayerState() !== 1) clearInterval(interval);
+        },200);
+      }
+    }
+  });
+}
+
+function onYouTubeIframeAPIReady() {
+  fetchPlaylistVideos().then(videos => renderAudioPlayers(videos));
+}
+</script>
+
 </body>
 </html>
