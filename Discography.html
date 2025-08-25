@@ -1,161 +1,367 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Libro Digital | Tenshi</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Arial', sans-serif;
-    background: #0a0a0a;
-    color: #fff;
-    display: flex; justify-content: center; align-items: center;
-    height: 100vh; overflow: hidden; perspective: 1500px;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Libro Digital 3D | Tenshi</title>
+  <style>
+    /* ===== RESET Y ESTILOS BASE ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  .book-container { display: flex; justify-content: center; align-items: center; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Tipografía moderna y legible */
+      background: #121212; /* Fondo oscuro */
+      color: #333;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      perspective: 1500px; /* Perspectiva 3D para el libro */
+      overflow: hidden;
+      user-select: none; /* Evitar selección de texto accidental */
+    }
 
-  .book {
-    width: 250px; height: 350px; position: relative; cursor: pointer;
-    transform-style: preserve-3d; transition: transform 0.5s ease;
-  }
+    /* ===== ESTILOS DE LA PORTADA ===== */
+    .book-cover {
+      width: 300px;
+      height: 400px;
+      background: linear-gradient(145deg, #3a3a3a, #1a1a1a);
+      border-radius: 5px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      transform-style: preserve-3d;
+    }
 
-  .book-cover {
-    width: 100%; height: 100%; position: absolute;
-    backface-visibility: hidden; border-radius: 5px;
-    display: flex; justify-content: center; align-items: center;
-    font-size: 20px; font-weight: bold;
-    color: #e0c27b; text-shadow: 0 2px 5px rgba(0,0,0,0.5);
-    background: linear-gradient(135deg, #3a3a3a, #1a1a1a);
-  }
+    .book-cover:hover {
+      transform: scale(1.02);
+      box-shadow: 0 15px 35px rgba(224, 194, 123, 0.6);
+    }
 
-  .book-cover.back { transform: rotateY(180deg); }
+    .book-title {
+      color: #e0c27b;
+      font-size: 24px;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      padding: 20px;
+    }
 
-  .page-container {
-    position: fixed; top: 50%; left: 50%;
-    transform: translate(-50%, -50%) scale(1);
-    width: 600px; height: 840px; perspective: 1500px;
-    display: none; z-index: 999; border-radius: 5px;
-  }
+    /* ===== ESTILOS DEL LIBRO ABIERTO ===== */
+    .book-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none; /* Oculto inicialmente */
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
 
-  .page {
-    position: absolute; width: 48%; height: 95%;
-    background: #f5f1e8; box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
-    transform-origin: left center; transition: transform 0.8s ease;
-    display: flex; justify-content: center; align-items: center;
-    font-size: 18px; color: #333; padding: 20px; box-sizing: border-box;
-    border-radius: 0 5px 5px 0; top: 2.5%; left: 1%;
-  }
+    .book {
+      width: 90%;
+      max-width: 800px;
+      height: 90%;
+      max-height: 600px;
+      position: relative;
+      transform-style: preserve-3d;
+      perspective: 1500px;
+    }
 
-  .page.right {
-    right: 1%; left: auto; transform-origin: right center;
-    border-radius: 5px 0 0 5px;
-  }
+    /* ===== ESTILOS DE LAS PÁGINAS ===== */
+    .page {
+      position: absolute;
+      width: 50%;
+      height: 100%;
+      background: #f9f5e7; /* Color página claro */
+      border-radius: 0 5px 5px 0;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1), 5px 5px 10px rgba(0, 0, 0, 0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      padding: 20px;
+      box-sizing: border-box;
+      transform-origin: left center;
+      transition: transform 0.8s ease, box-shadow 0.8s ease;
+      backface-visibility: hidden; /* Ocultar el reverso de la página */
+    }
 
-  .page.flipped { transform: rotateY(-180deg); }
+    .page.right {
+      left: 50%;
+      border-radius: 5px 0 0 5px;
+      transform-origin: right center;
+    }
 
-  .close-btn {
-    position: fixed; top: 20px; right: 20px; font-size: 30px;
-    color: #e0c27b; cursor: pointer; z-index: 1001; display: none;
-  }
+    .page.flipped {
+      transform: rotateY(-180deg);
+      box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.3); /* Sombra al girar */
+    }
 
-  .nav-btn {
-    position: fixed; top: 50%; transform: translateY(-50%);
-    font-size: 50px; color: #e0c27b; cursor: pointer; z-index: 1002;
-    user-select: none;
-  }
+    .page-content {
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+      overflow: auto; /* Permitir scroll si el contenido es largo */
+    }
 
-  .nav-btn.left { left: 20px; }
-  .nav-btn.right { right: 20px; }
+    /* ===== BOTONES DE NAVEGACIÓN ===== */
+    .nav-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(224, 194, 123, 0.8);
+      border: none;
+      color: #121212;
+      font-size: 24px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 1001;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+    }
 
-  @media (max-width: 768px) {
-    .page-container { width: 400px; height: 560px; transform: translate(-50%, -50%) scale(0.8); }
-  }
-</style>
+    .nav-button:hover {
+      background: rgba(224, 194, 123, 1);
+    }
+
+    #prevBtn {
+      left: 10px;
+    }
+
+    #nextBtn {
+      right: 10px;
+    }
+
+    /* ===== BOTÓN PARA CERRAR ===== */
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: #e0c27b;
+      font-size: 36px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .book-cover {
+        width: 250px;
+        height: 350px;
+      }
+
+      .book {
+        width: 95%;
+        height: 95%;
+      }
+
+      .page {
+        font-size: 16px;
+        padding: 15px;
+      }
+    }
+  </style>
 </head>
 <body>
-
-<div class="book-container">
-  <div class="book" id="book1">
-    <div class="book-cover front">Libro Digital</div>
-    <div class="book-cover back"></div>
+  <!-- Portada del libro -->
+  <div class="book-cover" id="bookCover">
+    <div class="book-title">
+      Libro Digital<br>Tenshi
+    </div>
   </div>
-</div>
 
-<div class="page-container" id="pageContainer">
-  <div class="page" id="page1">Página 1: Introducción de prueba</div>
-  <div class="page right" id="page2">Página 2: Más contenido de prueba</div>
-  <div class="page" id="page3">Página 3: Texto adicional</div>
-  <div class="page right" id="page4">Página 4: Continuación de contenido</div>
-  <div class="page" id="page5">Página 5: Conclusión de prueba</div>
-</div>
+  <!-- Contenedor del libro abierto -->
+  <div class="book-container" id="bookContainer">
+    <!-- Botón para cerrar -->
+    <button class="close-btn" id="closeBtn">×</button>
 
-<div class="close-btn" id="closeBtn">×</div>
-<div class="nav-btn left" id="prevBtn">←</div>
-<div class="nav-btn right" id="nextBtn">→</div>
+    <!-- Botones de navegación -->
+    <button class="nav-button" id="prevBtn">←</button>
+    <button class="nav-button" id="nextBtn">→</button>
 
-<script>
-let currentBook = null;
-let currentPage = 1;
-const pages = [
-  document.getElementById('page1'),
-  document.getElementById('page2'),
-  document.getElementById('page3'),
-  document.getElementById('page4'),
-  document.getElementById('page5')
-];
-const totalPages = pages.length;
+    <!-- Páginas del libro -->
+    <div class="book" id="book">
+      <!-- Página 1 (izquierda) -->
+      <div class="page" id="page1">
+        <div class="page-content">
+          <h2>Página 1</h2>
+          <p>Contenido de prueba para la página 1. Este es un libro digital interactivo con efecto 3D realista. Puedes pasar las páginas haciendo clic en los bordes o usando los botones.</p>
+        </div>
+      </div>
 
-// Expandir libro
-document.getElementById('book1').addEventListener('click', () => {
-  if(currentBook) return;
-  currentBook = document.getElementById('book1');
-  document.getElementById('pageContainer').style.display = 'block';
-  document.getElementById('closeBtn').style.display = 'block';
-  document.getElementById('prevBtn').style.display = 'block';
-  document.getElementById('nextBtn').style.display = 'block';
-  showPages(currentPage);
-});
+      <!-- Página 2 (derecha) -->
+      <div class="page right" id="page2">
+        <div class="page-content">
+          <h2>Página 2</h2>
+          <p>Contenido de prueba para la página 2. El diseño es responsive y funciona en PC, tablet y móvil. Las páginas giran con un efecto suave.</p>
+        </div>
+      </div>
 
-// Cerrar libro
-document.getElementById('closeBtn').addEventListener('click', () => {
-  currentBook = null;
-  document.getElementById('pageContainer').style.display = 'none';
-  document.getElementById('closeBtn').style.display = 'none';
-  document.getElementById('prevBtn').style.display = 'none';
-  document.getElementById('nextBtn').style.display = 'none';
-  pages.forEach(p => p.classList.remove('flipped'));
-  currentPage = 1;
-});
+      <!-- Página 3 (izquierda) -->
+      <div class="page" id="page3" style="display: none;">
+        <div class="page-content">
+          <h2>Página 3</h2>
+          <p>Contenido de prueba para la página 3. El libro simula el comportamiento de un libro físico, con sombras y perspectiva 3D.</p>
+        </div>
+      </div>
 
-// Navegación
-document.getElementById('nextBtn').addEventListener('click', () => {
-  if(currentPage < totalPages) {
-    pages[currentPage-1].classList.add('flipped');
-    currentPage++;
-    showPages(currentPage);
-  }
-});
+      <!-- Página 4 (derecha) -->
+      <div class="page right" id="page4" style="display: none;">
+        <div class="page-content">
+          <h2>Página 4</h2>
+          <p>Contenido de prueba para la página 4. Puedes personalizar el contenido de cada página reemplazando este texto o añadiendo imágenes.</p>
+        </div>
+      </div>
 
-document.getElementById('prevBtn').addEventListener('click', () => {
-  if(currentPage > 1) {
-    currentPage--;
-    pages[currentPage-1].classList.remove('flipped');
-    showPages(currentPage);
-  }
-});
+      <!-- Página 5 (izquierda) -->
+      <div class="page" id="page5" style="display: none;">
+        <div class="page-content">
+          <h2>Página 5</h2>
+          <p>Contenido de prueba para la página 5. Al cerrar el libro, todas las páginas vuelven a su estado inicial.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-function showPages(pageNumber){
-  pages.forEach((p, i) => p.style.display = 'none');
-  if(pageNumber % 2 !== 0) {
-    pages[pageNumber-1].style.display = 'flex';
-    if(pageNumber < totalPages) pages[pageNumber].style.display = 'flex';
-  } else {
-    pages[pageNumber-1].style.display = 'flex';
-    pages[pageNumber-2].style.display = 'flex';
-  }
-}
-</script>
+  <script>
+    // ===== VARIABLES GLOBALES =====
+    let currentPage = 1;
+    const totalPages = 5;
+
+    // ===== FUNCIONES =====
+    function openBook() {
+      document.getElementById('bookCover').style.display = 'none';
+      document.getElementById('bookContainer').style.display = 'flex';
+      showPages(currentPage);
+    }
+
+    function closeBook() {
+      document.getElementById('bookCover').style.display = 'flex';
+      document.getElementById('bookContainer').style.display = 'none';
+      resetPages();
+    }
+
+    function showPages(pageNum) {
+      // Ocultar todas las páginas
+      document.querySelectorAll('.page').forEach(page => {
+        page.style.display = 'none';
+        page.classList.remove('flipped');
+      });
+
+      // Mostrar las páginas actuales
+      if (pageNum % 2 !== 0) {
+        document.getElementById(`page${pageNum}`).style.display = 'flex';
+        document.getElementById(`page${pageNum + 1}`).style.display = 'flex';
+      } else {
+        document.getElementById(`page${pageNum - 1}`).style.display = 'flex';
+        document.getElementById(`page${pageNum}`).style.display = 'flex';
+      }
+    }
+
+    function resetPages() {
+      currentPage = 1;
+      document.querySelectorAll('.page').forEach(page => {
+        page.style.display = 'none';
+        page.classList.remove('flipped');
+      });
+    }
+
+    function nextPage() {
+      if (currentPage < totalPages - 1) {
+        const leftPage = document.getElementById(`page${currentPage}`);
+        const rightPage = document.getElementById(`page${currentPage + 1}`);
+
+        leftPage.classList.add('flipped');
+        rightPage.classList.add('flipped');
+
+        setTimeout(() => {
+          currentPage += 2;
+          showPages(currentPage);
+        }, 800);
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage -= 2;
+        showPages(currentPage);
+      }
+    }
+
+    // ===== EVENT LISTENERS =====
+    document.getElementById('bookCover').addEventListener('click', openBook);
+    document.getElementById('closeBtn').addEventListener('click', closeBook);
+    document.getElementById('nextBtn').addEventListener('click', nextPage);
+    document.getElementById('prevBtn').addEventListener('click', prevPage);
+
+    // Pasar página al hacer clic en los bordes
+    document.querySelectorAll('.page').forEach(page => {
+      page.addEventListener('click', (e) => {
+        const pageRect = page.getBoundingClientRect();
+        const clickX = e.clientX - pageRect.left;
+
+        if (!page.classList.contains('right') && clickX > pageRect.width - 30 && currentPage < totalPages - 1) {
+          nextPage();
+        } else if (page.classList.contains('right') && clickX < 30 && currentPage > 1) {
+          prevPage();
+        }
+      });
+    });
+
+    // (Opcional) Arrastrar página con el mouse
+    let isDragging = false;
+    let startX;
+
+    document.querySelectorAll('.page').forEach(page => {
+      page.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+      });
+
+      page.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const moveX = e.clientX - startX;
+        const rotateDeg = (moveX / page.getBoundingClientRect().width) * 60;
+
+        if (!page.classList.contains('right') && moveX > 0 && currentPage < totalPages - 1) {
+          page.style.transform = `rotateY(${rotateDeg}deg)`;
+        } else if (page.classList.contains('right') && moveX < 0 && currentPage > 1) {
+          page.style.transform = `rotateY(${rotateDeg}deg)`;
+        }
+      });
+
+      page.addEventListener('mouseup', (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        const endX = e.clientX;
+        const moveX = endX - startX;
+
+        if (!page.classList.contains('right') && moveX > 50 && currentPage < totalPages - 1) {
+          nextPage();
+        } else if (page.classList.contains('right') && moveX < -50 && currentPage > 1) {
+          prevPage();
+        }
+
+        page.style.transform = ''; // Resetear transformación
+      });
+    });
+  </script>
 </body>
 </html>
