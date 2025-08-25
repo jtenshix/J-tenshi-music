@@ -52,15 +52,7 @@
     }
 
     .book.Expanded {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(3);
-      width: 600px;
-      height: 840px;
-      z-index: 1000;
-      cursor: default;
-      box-shadow: 0 0 50px rgba(224, 194, 123, 0.8);
+      display: none; /* Ocultamos el libro original al expandir */
     }
 
     .book-cover {
@@ -103,12 +95,16 @@
       position: fixed;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%) scale(3);
+      transform: translate(-50%, -50%) scale(1);
       width: 600px;
       height: 840px;
       display: none;
       z-index: 999;
       perspective: 1500px;
+      background: linear-gradient(135deg, #3a3a3a, #1a1a1a);
+      border-radius: 5px;
+      box-shadow: 0 0 50px rgba(224, 194, 123, 0.8);
+      overflow: hidden;
     }
 
     .page {
@@ -128,10 +124,13 @@
       box-sizing: border-box;
       overflow: hidden;
       border-radius: 0 5px 5px 0;
+      top: 2.5%;
+      left: 1%;
     }
 
     .page.right {
-      right: 0;
+      right: 1%;
+      left: auto;
       transform-origin: right center;
       border-radius: 5px 0 0 5px;
     }
@@ -162,13 +161,8 @@
     }
 
     @media (max-width: 768px) {
-      .book.Expanded {
-        transform: translate(-50%, -50%) scale(2);
-        width: 400px;
-        height: 560px;
-      }
       .page-container {
-        transform: translate(-50%, -50%) scale(2);
+        transform: translate(-50%, -50%) scale(0.8);
         width: 400px;
         height: 560px;
       }
@@ -196,7 +190,7 @@
     </div>
   </div>
 
-  <!-- Contenedor de páginas -->
+  <!-- Contenedor de páginas (ahora visible al expandir) -->
   <div class="page-container" id="pageContainer">
     <div class="page" id="page1">
       <img src="pagina1.jpg" alt="Página 1">
@@ -231,8 +225,8 @@
         document.getElementById('closeBtn').classList.add('show');
 
         // Mostrar las dos primeras páginas
-        document.getElementById('page1').style.display = 'block';
-        document.getElementById('page2').style.display = 'block';
+        document.getElementById('page1').style.display = 'flex';
+        document.getElementById('page2').style.display = 'flex';
       });
     });
 
@@ -288,11 +282,11 @@
       });
 
       if (currentPage === 1) {
-        document.getElementById('page1').style.display = 'block';
-        document.getElementById('page2').style.display = 'block';
+        document.getElementById('page1').style.display = 'flex';
+        document.getElementById('page2').style.display = 'flex';
       } else if (currentPage === 3) {
-        document.getElementById('page3').style.display = 'block';
-        document.getElementById('page4').style.display = 'block';
+        document.getElementById('page3').style.display = 'flex';
+        document.getElementById('page4').style.display = 'flex';
       }
     }
   </script>
