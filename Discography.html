@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Libros Flotantes | Tenshi</title>
+  <title>Libro Realista | Tenshi</title>
   <style>
     * {
       margin: 0;
@@ -20,7 +20,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      perspective: 1000px;
+      perspective: 1500px;
     }
 
     .book-container {
@@ -99,13 +99,24 @@
       padding: 8px;
     }
 
+    .page-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(3);
+      width: 600px;
+      height: 840px;
+      display: none;
+      z-index: 999;
+      perspective: 1500px;
+    }
+
     .page {
       position: absolute;
       width: 48%;
       height: 95%;
       background: #f5f1e8;
       box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
-      border-radius: 0 5px 5px 0;
       transform-origin: left center;
       transition: transform 0.8s ease;
       display: flex;
@@ -116,16 +127,23 @@
       padding: 20px;
       box-sizing: border-box;
       overflow: hidden;
+      border-radius: 0 5px 5px 0;
     }
 
     .page.right {
       right: 0;
-      border-radius: 5px 0 0 5px;
       transform-origin: right center;
+      border-radius: 5px 0 0 5px;
     }
 
     .page.flipped {
       transform: rotateY(-180deg);
+    }
+
+    .page img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .close-btn {
@@ -144,11 +162,12 @@
     }
 
     @media (max-width: 768px) {
-      .book-container {
-        flex-direction: column;
-        gap: 30px;
-      }
       .book.Expanded {
+        transform: translate(-50%, -50%) scale(2);
+        width: 400px;
+        height: 560px;
+      }
+      .page-container {
         transform: translate(-50%, -50%) scale(2);
         width: 400px;
         height: 560px;
@@ -161,35 +180,35 @@
     <!-- Libro 1 -->
     <div class="book" id="book1">
       <div class="book-cover front" style="background: linear-gradient(135deg, #4a4a4a, #2a2a2a);">
-        <span>Libro 1</span>
+        <span>Manga Tenshi Vol. 1</span>
       </div>
       <div class="book-cover back" style="background: linear-gradient(135deg, #4a4a4a, #2a2a2a);"></div>
-      <div class="book-title">Manga Tenshi Vol. 1</div>
+      <div class="book-title">Volumen 1</div>
     </div>
 
     <!-- Libro 2 -->
     <div class="book" id="book2">
       <div class="book-cover front" style="background: linear-gradient(135deg, #5a3a2a, #3a1a0a);">
-        <span>Libro 2</span>
+        <span>Manga Tenshi Vol. 2</span>
       </div>
       <div class="book-cover back" style="background: linear-gradient(135deg, #5a3a2a, #3a1a0a);"></div>
-      <div class="book-title">Manga Tenshi Vol. 2</div>
+      <div class="book-title">Volumen 2</div>
     </div>
   </div>
 
-  <!-- Páginas del libro (se muestran al expandir) -->
-  <div class="pages-container" id="pagesContainer" style="display: none;">
+  <!-- Contenedor de páginas -->
+  <div class="page-container" id="pageContainer">
     <div class="page" id="page1">
-      <img src="pagina1.jpg" alt="Página 1" style="width: 100%; height: 100%; object-fit: cover;">
+      <img src="pagina1.jpg" alt="Página 1">
     </div>
     <div class="page right" id="page2">
-      <img src="pagina2.jpg" alt="Página 2" style="width: 100%; height: 100%; object-fit: cover;">
+      <img src="pagina2.jpg" alt="Página 2">
     </div>
     <div class="page" id="page3" style="display: none;">
-      <img src="pagina3.jpg" alt="Página 3" style="width: 100%; height: 100%; object-fit: cover;">
+      <img src="pagina3.jpg" alt="Página 3">
     </div>
     <div class="page right" id="page4" style="display: none;">
-      <img src="pagina4.jpg" alt="Página 4" style="width: 100%; height: 100%; object-fit: cover;">
+      <img src="pagina4.jpg" alt="Página 4">
     </div>
   </div>
 
@@ -197,32 +216,23 @@
   <div class="close-btn" id="closeBtn">×</div>
 
   <script>
-    // Variables globales
     let currentBook = null;
     let currentPage = 1;
-    const totalPages = 4; // Número total de páginas (2 hojas = 4 páginas)
+    const totalPages = 4;
 
     // Expandir libro al hacer clic
     document.querySelectorAll('.book').forEach(book => {
       book.addEventListener('click', () => {
-        if (currentBook) return; // Evitar abrir dos libros a la vez
+        if (currentBook) return;
 
         currentBook = book;
         book.classList.add('Expanded');
-        document.getElementById('pagesContainer').style.display = 'block';
+        document.getElementById('pageContainer').style.display = 'block';
         document.getElementById('closeBtn').classList.add('show');
 
-        // Posicionar páginas en el libro expandido
-        const bookRect = book.getBoundingClientRect();
-        const pagesContainer = document.getElementById('pagesContainer');
-        pagesContainer.style.top = `${bookRect.top}px`;
-        pagesContainer.style.left = `${bookRect.left}px`;
-        pagesContainer.style.width = `${bookRect.width}px`;
-        pagesContainer.style.height = `${bookRect.height}px`;
-
         // Mostrar las dos primeras páginas
-        document.getElementById('page1').style.display = 'flex';
-        document.getElementById('page2').style.display = 'flex';
+        document.getElementById('page1').style.display = 'block';
+        document.getElementById('page2').style.display = 'block';
       });
     });
 
@@ -231,7 +241,7 @@
       if (!currentBook) return;
 
       currentBook.classList.remove('Expanded');
-      document.getElementById('pagesContainer').style.display = 'none';
+      document.getElementById('pageContainer').style.display = 'none';
       document.getElementById('closeBtn').classList.remove('show');
 
       // Reiniciar páginas
@@ -244,23 +254,30 @@
     });
 
     // Pasar páginas al hacer clic en los bordes
-    document.getElementById('pagesContainer').addEventListener('click', (e) => {
-      if (!currentBook) return;
+    document.querySelectorAll('.page').forEach(page => {
+      page.addEventListener('click', (e) => {
+        if (!currentBook) return;
 
-      const pagesContainer = document.getElementById('pagesContainer');
-      const rect = pagesContainer.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
+        const pageRect = page.getBoundingClientRect();
+        const clickX = e.clientX - pageRect.left;
 
-      // Si hace clic en el lado izquierdo, retroceder página
-      if (clickX < rect.width / 2 && currentPage > 1) {
-        currentPage -= 2;
-        updatePages();
-      }
-      // Si hace clic en el lado derecho, avanzar página
-      else if (clickX > rect.width / 2 && currentPage < totalPages - 1) {
-        currentPage += 2;
-        updatePages();
-      }
+        // Si es una página izquierda y hace clic en el borde derecho, pasar página
+        if (!page.classList.contains('right') && clickX > pageRect.width - 30 && currentPage < totalPages - 1) {
+          page.classList.add('flipped');
+          setTimeout(() => {
+            currentPage += 2;
+            updatePages();
+          }, 800);
+        }
+        // Si es una página derecha y hace clic en el borde izquierdo, retroceder página
+        else if (page.classList.contains('right') && clickX < 30 && currentPage > 1) {
+          page.classList.add('flipped');
+          setTimeout(() => {
+            currentPage -= 2;
+            updatePages();
+          }, 800);
+        }
+      });
     });
 
     // Función para actualizar las páginas visibles
@@ -271,40 +288,13 @@
       });
 
       if (currentPage === 1) {
-        document.getElementById('page1').style.display = 'flex';
-        document.getElementById('page2').style.display = 'flex';
+        document.getElementById('page1').style.display = 'block';
+        document.getElementById('page2').style.display = 'block';
       } else if (currentPage === 3) {
-        document.getElementById('page3').style.display = 'flex';
-        document.getElementById('page4').style.display = 'flex';
+        document.getElementById('page3').style.display = 'block';
+        document.getElementById('page4').style.display = 'block';
       }
     }
-
-    // Efecto de pasar página al hacer clic en el borde
-    document.querySelectorAll('.page').forEach(page => {
-      page.addEventListener('click', (e) => {
-        if (!currentBook) return;
-
-        const pageRect = page.getBoundingClientRect();
-        const clickX = e.clientX - pageRect.left;
-
-        // Si es una página izquierda y hace clic en el borde derecho, pasar página
-        if (!page.classList.contains('right') && clickX > pageRect.width - 30) {
-          page.classList.add('flipped');
-          setTimeout(() => {
-            currentPage += 1;
-            updatePages();
-          }, 800);
-        }
-        // Si es una página derecha y hace clic en el borde izquierdo, retroceder página
-        else if (page.classList.contains('right') && clickX < 30) {
-          page.classList.add('flipped');
-          setTimeout(() => {
-            currentPage -= 1;
-            updatePages();
-          }, 800);
-        }
-      });
-    });
   </script>
 </body>
 </html>
