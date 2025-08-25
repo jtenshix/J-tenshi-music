@@ -413,38 +413,6 @@
     body.light-mode .social-bar svg {
       fill: #555;
     }
-    #manga {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: #111;
-    }
-    #manga .book {
-      width: 600px;
-      height: 400px;
-      perspective: 1500px;
-      position: relative;
-    }
-    #manga .page {
-      width: 100%;
-      height: 100%;
-      background: white;
-      position: absolute;
-      top: 0;
-      left: 0;
-      transform-origin: left center;
-      transition: transform 1s;
-      box-shadow: 0 0 15px rgba(0,0,0,0.5);
-    }
-    #manga .page img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    #manga .flipped {
-      transform: rotateY(-180deg);
-    }
   </style>
 </head>
 <body>
@@ -453,7 +421,7 @@
     <nav>
       <ul>
         <li><a href="news.html">News</a></li>
-        <li><a href="#" id="link-discography">Discography</a></li>
+        <li><a href="Discography.html" id="link-discography">Discography</a></li>
         <li><a href="#videos">Videos</a></li>
         <li><a href="wallpapers.html">Gallery</a></li>
         <li><a href="My Studio.html">My Studio</a></li>
@@ -759,57 +727,6 @@
             type: 'center-focus'
           });
         }
-      });
-    });
-
-    // --- AQUÍ EL CÓDIGO ACTUALIZADO PARA EL BOTÓN DE DISCOGRAFÍA ---
-    document.getElementById('link-discography').addEventListener('click', (e) => {
-      e.preventDefault();
-      const discSection = document.querySelector('.discography');
-      const banner = document.querySelector('.section-banner');
-      const originalContent = discSection.innerHTML;
-
-      banner.style.display = 'none';
-      discSection.innerHTML = `
-        <button id="back-to-discography" style="
-          position: absolute;
-          top: 20px;
-          left: 20px;
-          padding: 8px 16px;
-          background: #e0c27b;
-          color: #000;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-          z-index: 1000;
-        ">Volver a Discografía</button>
-        <div id="manga">
-          <div class="book">
-            <div class="page"><img src="pagina1.jpg" alt="Página 1"></div>
-            <div class="page"><img src="pagina2.jpg" alt="Página 2"></div>
-            <div class="page"><img src="pagina3.jpg" alt="Página 3"></div>
-          </div>
-        </div>
-      `;
-
-      const pages = document.querySelectorAll('#manga .page');
-      let current = 0;
-      document.querySelector('#manga').addEventListener('click', () => {
-        if (current < pages.length) {
-          pages[current].classList.add('flipped');
-          current++;
-        }
-      });
-
-      document.getElementById('back-to-discography').addEventListener('click', () => {
-        banner.style.display = 'block';
-        discSection.innerHTML = originalContent;
-        initCarousel({
-          trackId: 'discography-track',
-          prevSelector: '.discography .carousel-btn.prev',
-          nextSelector: '.discography .carousel-btn.next',
-          type: 'slide'
-        });
       });
     });
   </script>
