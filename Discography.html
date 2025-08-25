@@ -10,161 +10,152 @@
     font-family: 'Arial', sans-serif;
     background: #0a0a0a;
     color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    perspective: 1500px;
+    display: flex; justify-content: center; align-items: center;
+    height: 100vh; overflow: hidden; perspective: 1500px;
   }
 
-  .book-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 50px;
-    flex-wrap: wrap;
-  }
+  .book-container { display: flex; justify-content: center; align-items: center; }
 
   .book {
-    width: 200px;
-    height: 280px;
-    cursor: pointer;
-    transform-style: preserve-3d;
-    transition: transform 0.5s;
-    border-radius: 5px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    background: linear-gradient(135deg,#3a3a3a,#1a1a1a);
-    position: relative;
+    width: 250px; height: 350px; position: relative; cursor: pointer;
+    transform-style: preserve-3d; transition: transform 0.5s ease;
   }
 
-  .book:hover { transform: scale(1.05); }
-
-  .book-title {
-    position: absolute;
-    bottom: 15px;
-    width: 100%;
-    text-align: center;
-    font-weight: bold;
-    color: #e0c27b;
+  .book-cover {
+    width: 100%; height: 100%; position: absolute;
+    backface-visibility: hidden; border-radius: 5px;
+    display: flex; justify-content: center; align-items: center;
+    font-size: 20px; font-weight: bold;
+    color: #e0c27b; text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    background: linear-gradient(135deg, #3a3a3a, #1a1a1a);
   }
+
+  .book-cover.back { transform: rotateY(180deg); }
 
   .page-container {
-    width: 600px;
-    height: 400px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    perspective: 1500px;
-    display: none;
-    z-index: 999;
-  }
-
-  .book-inner {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    transform-style: preserve-3d;
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    width: 600px; height: 840px; perspective: 1500px;
+    display: none; z-index: 999; border-radius: 5px;
   }
 
   .page {
-    width: 50%;
-    height: 100%;
-    position: absolute;
-    background: #f5f1e8;
-    overflow: hidden;
-    padding: 20px;
-    box-sizing: border-box;
-    transform-origin: left;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
-    transition: transform 0.8s ease;
+    position: absolute; width: 48%; height: 95%;
+    background: #f5f1e8; box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+    transform-origin: left center; transition: transform 0.8s ease;
+    display: flex; justify-content: center; align-items: center;
+    font-size: 18px; color: #333; padding: 20px; box-sizing: border-box;
+    border-radius: 0 5px 5px 0; top: 2.5%; left: 1%;
   }
 
-  .page.right { right:0; left:auto; transform-origin: right; }
+  .page.right {
+    right: 1%; left: auto; transform-origin: right center;
+    border-radius: 5px 0 0 5px;
+  }
 
   .page.flipped { transform: rotateY(-180deg); }
 
   .close-btn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    font-size: 30px;
-    color: #e0c27b;
-    cursor: pointer;
-    display: none;
-    z-index: 1001;
+    position: fixed; top: 20px; right: 20px; font-size: 30px;
+    color: #e0c27b; cursor: pointer; z-index: 1001; display: none;
   }
 
-  .close-btn.show { display: block; }
-
-  @media(max-width:768px) {
-    .page-container { width: 90%; height: 60%; }
+  .nav-btn {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    font-size: 50px; color: #e0c27b; cursor: pointer; z-index: 1002;
+    user-select: none;
   }
 
+  .nav-btn.left { left: 20px; }
+  .nav-btn.right { right: 20px; }
+
+  @media (max-width: 768px) {
+    .page-container { width: 400px; height: 560px; transform: translate(-50%, -50%) scale(0.8); }
+  }
 </style>
 </head>
 <body>
 
 <div class="book-container">
   <div class="book" id="book1">
-    <div class="book-title">Libro Demo</div>
+    <div class="book-cover front">Libro Digital</div>
+    <div class="book-cover back"></div>
   </div>
 </div>
 
 <div class="page-container" id="pageContainer">
-  <div class="book-inner" id="bookInner">
-    <div class="page" id="page1">Página 1: ¡Bienvenido a tu libro digital!</div>
-    <div class="page right" id="page2">Página 2: Aquí puedes poner contenido de prueba.</div>
-    <div class="page" id="page3">Página 3: Cada página gira como un libro real.</div>
-    <div class="page right" id="page4">Página 4: Puedes añadir imágenes o texto aquí.</div>
-    <div class="page" id="page5">Página 5: ¡Fin del libro demo!</div>
-  </div>
+  <div class="page" id="page1">Página 1: Introducción de prueba</div>
+  <div class="page right" id="page2">Página 2: Más contenido de prueba</div>
+  <div class="page" id="page3">Página 3: Texto adicional</div>
+  <div class="page right" id="page4">Página 4: Continuación de contenido</div>
+  <div class="page" id="page5">Página 5: Conclusión de prueba</div>
 </div>
 
 <div class="close-btn" id="closeBtn">×</div>
+<div class="nav-btn left" id="prevBtn">←</div>
+<div class="nav-btn right" id="nextBtn">→</div>
 
 <script>
-  const book = document.getElementById('book1');
-  const pageContainer = document.getElementById('pageContainer');
-  const closeBtn = document.getElementById('closeBtn');
-  const pages = document.querySelectorAll('.page');
-  let currentPage = 0;
+let currentBook = null;
+let currentPage = 1;
+const pages = [
+  document.getElementById('page1'),
+  document.getElementById('page2'),
+  document.getElementById('page3'),
+  document.getElementById('page4'),
+  document.getElementById('page5')
+];
+const totalPages = pages.length;
 
-  book.addEventListener('click', () => {
-    pageContainer.style.display = 'block';
-    closeBtn.classList.add('show');
+// Expandir libro
+document.getElementById('book1').addEventListener('click', () => {
+  if(currentBook) return;
+  currentBook = document.getElementById('book1');
+  document.getElementById('pageContainer').style.display = 'block';
+  document.getElementById('closeBtn').style.display = 'block';
+  document.getElementById('prevBtn').style.display = 'block';
+  document.getElementById('nextBtn').style.display = 'block';
+  showPages(currentPage);
+});
+
+// Cerrar libro
+document.getElementById('closeBtn').addEventListener('click', () => {
+  currentBook = null;
+  document.getElementById('pageContainer').style.display = 'none';
+  document.getElementById('closeBtn').style.display = 'none';
+  document.getElementById('prevBtn').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'none';
+  pages.forEach(p => p.classList.remove('flipped'));
+  currentPage = 1;
+});
+
+// Navegación
+document.getElementById('nextBtn').addEventListener('click', () => {
+  if(currentPage < totalPages) {
+    pages[currentPage-1].classList.add('flipped');
+    currentPage++;
     showPages(currentPage);
-  });
-
-  closeBtn.addEventListener('click', () => {
-    pageContainer.style.display = 'none';
-    closeBtn.classList.remove('show');
-    pages.forEach(p => p.classList.remove('flipped'));
-    currentPage = 0;
-  });
-
-  pages.forEach(page => {
-    page.addEventListener('click', (e) => {
-      const rect = page.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      if (!page.classList.contains('right') && x > rect.width-30 && currentPage < pages.length-1) {
-        page.classList.add('flipped');
-        currentPage++;
-        showPages(currentPage);
-      } else if (page.classList.contains('right') && x < 30 && currentPage > 0) {
-        page.classList.remove('flipped');
-        currentPage--;
-        showPages(currentPage);
-      }
-    });
-  });
-
-  function showPages(index) {
-    pages.forEach((p,i) => {
-      p.style.zIndex = pages.length - i;
-    });
   }
+});
 
+document.getElementById('prevBtn').addEventListener('click', () => {
+  if(currentPage > 1) {
+    currentPage--;
+    pages[currentPage-1].classList.remove('flipped');
+    showPages(currentPage);
+  }
+});
+
+function showPages(pageNumber){
+  pages.forEach((p, i) => p.style.display = 'none');
+  if(pageNumber % 2 !== 0) {
+    pages[pageNumber-1].style.display = 'flex';
+    if(pageNumber < totalPages) pages[pageNumber].style.display = 'flex';
+  } else {
+    pages[pageNumber-1].style.display = 'flex';
+    pages[pageNumber-2].style.display = 'flex';
+  }
+}
 </script>
 </body>
 </html>
