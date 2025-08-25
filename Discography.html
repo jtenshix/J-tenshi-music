@@ -1,151 +1,158 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Tenshi | 幻想の響き</title>
-<style>
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:'Helvetica Neue',sans-serif;background:#0b0b0b;color:#f5f5f5;}
-  header{position:fixed;top:0;width:100%;background:rgba(0,0,0,0.8);padding:20px 5%;display:flex;justify-content:space-between;align-items:center;z-index:999;}
-  header .logo{color:#fff;font-size:20px;}
-  nav ul{display:flex;gap:25px;list-style:none;}
-  nav a{text-decoration:none;color:#ccc;font-size:14px;}
-  nav a:hover{color:#e0c27b;}
-  .theme-toggle{background:none;border:1px solid #777;color:#ccc;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:12px;}
-  .hero-wrapper{position:relative;height:50vh;overflow:hidden;margin-top:70px;}
-  .hero-bg{position:absolute;top:0;left:0;width:100%;height:50vh;background:url('banner portada.png') center/cover no-repeat;z-index:0;}
-  .hero-text{position:relative;z-index:2;color:white;font-size:2rem;padding:60px 5%;height:50vh;display:flex;align-items:center;text-shadow:0 2px 10px rgba(0,0,0,0.6);}
-  .section-banner{position:relative;width:90%;max-width:1800px;margin:60px auto;padding:20px;text-align:center;color:#e0c27b;font-size:2rem;font-weight:900;}
-  .audio-player-list{display:flex;flex-direction:column;gap:20px;max-width:900px;margin:40px auto;}
-  .audio-card{display:flex;align-items:center;background:#222;padding:12px 20px;border-radius:12px;gap:15px;}
-  .audio-card img{width:80px;height:80px;object-fit:cover;border-radius:8px;}
-  .audio-info{flex:1;}
-  .audio-info h4{margin-bottom:6px;font-size:16px;}
-  .audio-info span{font-size:12px;color:#e0c27b;}
-  .play-btn{padding:8px 12px;border:none;border-radius:8px;background:#e0c27b;color:#000;cursor:pointer;font-weight:bold;}
-  .progress-bar{width:100%;height:4px;background:#555;border-radius:4px;overflow:hidden;margin-top:6px;}
-  .progress{width:0%;height:100%;background:#e0c27b;transition:width 0.2s;}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discografía - J-Tenshi</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #111;
+      color: #fff;
+    }
+    header {
+      padding: 20px;
+      text-align: center;
+      background: #222;
+    }
+    h1 {
+      margin: 0;
+      color: #fdd835;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .card {
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow: hidden;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    .card h3 {
+      margin: 10px 0;
+    }
+    .card button {
+      margin: 10px;
+      padding: 10px 15px;
+      border: none;
+      background: #fdd835;
+      color: #111;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+    footer.player {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #222;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      border-top: 2px solid #fdd835;
+    }
+    footer.player button {
+      background: none;
+      border: none;
+      color: #fdd835;
+      font-size: 20px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <h1>Discografía</h1>
+  </header>
 
-<header>
-  <div class="logo">Tenshi</div>
-  <nav>
-    <ul>
-      <li><a href="#news">News</a></li>
-      <li><a href="#discography">Discography</a></li>
-      <li><a href="#videos">Videos</a></li>
-    </ul>
-  </nav>
-  <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
-</header>
+  <main>
+    <div id="songs" class="grid"></div>
+  </main>
 
-<div class="hero-wrapper">
-  <div class="hero-bg"></div>
-  <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
-</div>
+  <!-- Reproductor -->
+  <footer class="player">
+    <button onclick="prevSong()">⏮</button>
+    <div>
+      <strong id="current-title">Selecciona una canción</strong>
+    </div>
+    <button onclick="togglePlay()">⏯</button>
+    <button onclick="nextSong()">⏭</button>
+  </footer>
 
-<div class="section-banner">ディスコグラフィー</div>
-<section id="discography">
-  <div class="audio-player-list" id="audio-player-list"></div>
-</section>
+  <audio id="audio" preload="metadata"></audio>
 
-<script src="https://www.youtube.com/iframe_api"></script>
-<script>
-const API_KEY = 'TU_CLAVE_DE_API';
-const PLAYLIST_ID = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf';
-let players = {};
-let currentPlaying = null;
+  <script>
+    const songs = [
+      {
+        title: "Temptation",
+        cover: "https://via.placeholder.com/300x300.png?text=Temptation",
+        url: "https://www.miservidor.com/musica/temptation.mp3"
+      },
+      {
+        title: "Eternal Flame",
+        cover: "https://via.placeholder.com/300x300.png?text=Eternal+Flame",
+        url: "https://www.miservidor.com/musica/eternalflame.mp3"
+      },
+      {
+        title: "Digital Soul",
+        cover: "https://via.placeholder.com/300x300.png?text=Digital+Soul",
+        url: "https://www.miservidor.com/musica/digitalsoul.mp3"
+      }
+    ];
 
-function toggleTheme() {
-  document.body.classList.toggle('light-mode');
-}
+    const songsContainer = document.getElementById("songs");
+    const audio = document.getElementById("audio");
+    const currentTitle = document.getElementById("current-title");
+    let currentIndex = 0;
 
-// Trae videos de la playlist
-async function fetchPlaylistVideos() {
-  try {
-    const res = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${PLAYLIST_ID}&key=${API_KEY}&maxResults=50`);
-    if(!res.ok) throw new Error('Error al obtener videos de YouTube');
-    const data = await res.json();
-    return data.items || [];
-  } catch(e) {
-    console.error(e);
-    return [];
-  }
-}
-
-// Renderiza los tracks
-function renderAudioPlayers(videos) {
-  const list = document.getElementById('audio-player-list');
-  list.innerHTML = '';
-  videos.forEach((item, index) => {
-    const video = item.snippet;
-    const videoId = video.resourceId.videoId;
-    const title = video.title || 'Track ' + (index + 1);
-    const thumbnail = (video.thumbnails && (video.thumbnails.high || video.thumbnails.medium || video.thumbnails.default)).url;
-    
-    const card = document.createElement('div');
-    card.className = 'audio-card';
-    card.innerHTML = `
-      <img src="${thumbnail}" alt="${title}">
-      <div class="audio-info">
-        <h4>${title}</h4>
-        <span>Track ${index+1}</span>
-        <div class="progress-bar"><div class="progress"></div></div>
-      </div>
-      <button class="play-btn">▶️</button>
-      <div id="player-${videoId}" style="display:none;"></div>
-    `;
-    list.appendChild(card);
-
-    // Crea reproductor oculto
-    players[videoId] = new YT.Player(`player-${videoId}`, {
-      height: '0',
-      width: '0',
-      videoId,
-      events: { 'onStateChange': (e)=>updateProgress(videoId) }
+    // Mostrar canciones
+    songs.forEach((song, index) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <img src="${song.cover}" alt="${song.title}">
+        <h3>${song.title}</h3>
+        <button onclick="playSong(${index})">▶ Reproducir</button>
+      `;
+      songsContainer.appendChild(card);
     });
 
-    const btn = card.querySelector('.play-btn');
-    const progressEl = card.querySelector('.progress');
+    function playSong(index) {
+      currentIndex = index;
+      audio.src = songs[index].url;
+      currentTitle.textContent = songs[index].title;
+      audio.play();
+    }
 
-    btn.addEventListener('click', () => {
-      if(currentPlaying && currentPlaying !== videoId) {
-        players[currentPlaying].pauseVideo();
-        document.querySelector(`#player-${currentPlaying}`).closest('.audio-card').querySelector('.play-btn').textContent = '▶️';
-      }
-      if(players[videoId].getPlayerState() !== 1) {
-        players[videoId].playVideo();
-        btn.textContent = '⏸️';
-        currentPlaying = videoId;
+    function togglePlay() {
+      if (audio.paused) {
+        audio.play();
       } else {
-        players[videoId].pauseVideo();
-        btn.textContent = '▶️';
-        currentPlaying = null;
-      }
-    });
-
-    function updateProgress(id) {
-      const player = players[id];
-      const progress = card.querySelector('.progress');
-      if(player.getPlayerState() === YT.PlayerState.PLAYING) {
-        const interval = setInterval(()=>{
-          const dur = player.getDuration();
-          const cur = player.getCurrentTime();
-          if(dur>0) progress.style.width = (cur/dur*100)+'%';
-          if(player.getPlayerState() !== 1) clearInterval(interval);
-        },200);
+        audio.pause();
       }
     }
-  });
-}
 
-function onYouTubeIframeAPIReady() {
-  fetchPlaylistVideos().then(videos => renderAudioPlayers(videos));
-}
-</script>
+    function prevSong() {
+      currentIndex = (currentIndex - 1 + songs.length) % songs.length;
+      playSong(currentIndex);
+    }
 
+    function nextSong() {
+      currentIndex = (currentIndex + 1) % songs.length;
+      playSong(currentIndex);
+    }
+  </script>
 </body>
 </html>
