@@ -13,12 +13,12 @@
     }
     header {
       text-align: center;
-      padding: 20px;
+      padding: 30px;
       border-bottom: 1px solid #333;
     }
     h1 {
       font-family: 'Times New Roman', serif;
-      font-size: 2.5em;
+      font-size: 2.2em;
       letter-spacing: 3px;
       margin: 0;
       color: #fff;
@@ -26,16 +26,19 @@
     nav {
       display: flex;
       justify-content: center;
-      background: #222;
-      padding: 10px;
+      background: #000;
+      padding: 15px;
+      border-bottom: 1px solid #333;
     }
     nav button {
       background: none;
       border: none;
-      color: #aaa;
-      padding: 10px 20px;
+      color: #888;
+      padding: 8px 20px;
+      margin: 0 10px;
       cursor: pointer;
-      font-size: 1em;
+      font-size: 0.9em;
+      border-radius: 0;
     }
     nav button.active {
       color: #fff;
@@ -43,30 +46,31 @@
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 20px;
-      padding: 20px;
+      padding: 30px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
     }
     .card {
-      background: #222;
-      border-radius: 8px;
+      background: #1a1a1a;
+      border-radius: 0;
       overflow: hidden;
       text-align: center;
-      transition: transform 0.3s;
-    }
-    .card:hover {
-      transform: scale(1.03);
+      transition: transform 0.2s;
     }
     .card img {
       width: 100%;
-      height: 200px;
+      height: 250px;
       object-fit: cover;
+      background: #222;
     }
     .card p {
-      padding: 10px;
+      padding: 12px;
       margin: 0;
       font-size: 0.9em;
-      color: #aaa;
+      color: #888;
+      background: #111;
     }
     footer.player {
       position: fixed;
@@ -77,14 +81,14 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 20px;
+      padding: 15px 30px;
       border-top: 1px solid #333;
     }
     footer.player button {
       background: none;
       border: none;
       color: #fdd835;
-      font-size: 1.5em;
+      font-size: 1.8em;
       cursor: pointer;
     }
     #current-title {
@@ -105,20 +109,45 @@
   </nav>
   <main>
     <div id="songs" class="grid">
-      <!-- Ejemplo de tarjetas con placeholders -->
+      <!-- Fila 1 -->
       <div class="card">
-        <img src="https://via.placeholder.com/300x300/333333/FFFFFF?text=Scenillo+Digital" alt="Ghost Avenue">
-        <p>Ghost Avenue<br><small>Scenillo digital</small></p>
+        <img src="https://via.placeholder.com/300x300/0066cc/FFFFFF?text=Scenillo+Digital" alt="Ghost Avenue">
+        <p>Scenillo digital<br><small>Ghost Avenue</small></p>
       </div>
       <div class="card">
-        <img src="https://via.placeholder.com/300x300/0066cc/FFFFFF?text=Eve+Under+Blue" alt="Eve Under Blue">
+        <img src="https://via.placeholder.com/300x300/ff3333/FFFFFF?text=Eve+Under+Blue" alt="Eve Under Blue">
         <p>Selección de Eve "Under Blue"<br><small>Banda sonora</small></p>
       </div>
       <div class="card">
-        <img src="https://via.placeholder.com/300x300/000000/FFFFFF?text=Eve+Piano" alt="Eve Piano">
+        <img src="https://via.placeholder.com/300x300/333333/FFFFFF?text=Eve+Piano" alt="Eve Piano">
         <p>La mejor selección de Eve<br><small>Pianísimo</small></p>
       </div>
-      <!-- Añade más tarjetas según necesites -->
+      <!-- Fila 2 -->
+      <div class="card">
+        <img src="https://via.placeholder.com/300x300/6600cc/FFFFFF?text=Ganas+de..." alt="Tener ganas de">
+        <p>Scenillo digital<br><small>Tener ganas de...</small></p>
+      </div>
+      <div class="card">
+        <img src="https://via.placeholder.com/300x300/1a1a2e/FFFFFF?text=Inochi+6" alt="Inochi 6">
+        <p>いのちの食べ方 6<br><small>コミックス</small></p>
+      </div>
+      <div class="card">
+        <img src="https://via.placeholder.com/300x300/cc0066/FFFFFF?text=Inochi+2" alt="Inochi 2">
+        <p>いのちの食べ方 2巻<br><small>コミックス</small></p>
+      </div>
+      <!-- Fila 3 -->
+      <div class="card">
+        <img src="https://via.placeholder.com/300x300/cc6600/FFFFFF?text=Kokoro+5" alt="Kokoro 5">
+        <p>「心の犯罪」5巻<br><small>コミックス</small></p>
+      </div>
+      <div class="card">
+        <img src="https://via.placeholder.com/300x300/006666/FFFFFF?text=Teen+Age+Blue" alt="Teen Age Blue">
+        <p>Teen Age Blue<br><small>Scenillo digital</small></p>
+      </div>
+      <div class="card">
+        <img src="https://via.placeholder.com/300x300/660033/FFFFFF?text=4th+Album" alt="4th Album">
+        <p>4º álbum completo principal<br><small>Bajo arnul</small></p>
+      </div>
     </div>
   </main>
   <footer class="player">
@@ -131,27 +160,18 @@
   </footer>
   <audio id="audio" preload="metadata"></audio>
   <script>
-    // Aquí puedes agregar la lógica para el reproductor si lo necesitas
-    // (similar a tu código anterior, pero adaptado a este diseño)
+    // Aquí puedes agregar la lógica del reproductor cuando lo necesites
     const songs = [
-      {
-        title: "Ghost Avenue",
-        cover: "https://via.placeholder.com/300x300/333333/FFFFFF?text=Scenillo+Digital",
-        url: "#"
-      },
-      {
-        title: "Eve Under Blue",
-        cover: "https://via.placeholder.com/300x300/0066cc/FFFFFF?text=Eve+Under+Blue",
-        url: "#"
-      },
-      {
-        title: "Eve Piano",
-        cover: "https://via.placeholder.com/300x300/000000/FFFFFF?text=Eve+Piano",
-        url: "#"
-      }
+      { title: "Ghost Avenue", cover: "https://via.placeholder.com/300x300/0066cc/FFFFFF?text=Scenillo+Digital", url: "#" },
+      { title: "Eve Under Blue", cover: "https://via.placeholder.com/300x300/ff3333/FFFFFF?text=Eve+Under+Blue", url: "#" },
+      { title: "Eve Piano", cover: "https://via.placeholder.com/300x300/333333/FFFFFF?text=Eve+Piano", url: "#" },
+      { title: "Tener ganas de...", cover: "https://via.placeholder.com/300x300/6600cc/FFFFFF?text=Ganas+de...", url: "#" },
+      { title: "Inochi 6", cover: "https://via.placeholder.com/300x300/1a1a2e/FFFFFF?text=Inochi+6", url: "#" },
+      { title: "Inochi 2", cover: "https://via.placeholder.com/300x300/cc0066/FFFFFF?text=Inochi+2", url: "#" },
+      { title: "Kokoro 5", cover: "https://via.placeholder.com/300x300/cc6600/FFFFFF?text=Kokoro+5", url: "#" },
+      { title: "Teen Age Blue", cover: "https://via.placeholder.com/300x300/006666/FFFFFF?text=Teen+Age+Blue", url: "#" },
+      { title: "4th Album", cover: "https://via.placeholder.com/300x300/660033/FFFFFF?text=4th+Album", url: "#" }
     ];
-
-    // Puedes mantener la misma lógica para el reproductor que tenías antes
   </script>
 </body>
 </html>
