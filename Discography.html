@@ -108,6 +108,8 @@
       max-width: 800px;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+      max-height: 90vh;
+      overflow: hidden;
     }
     .modal-header {
       display: flex;
@@ -120,6 +122,13 @@
     .modal-body {
       display: flex;
       gap: 20px;
+      height: 60vh;
+    }
+    .modal-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 280px;
     }
     .modal-cover {
       width: 250px;
@@ -131,6 +140,14 @@
       color: #fff;
       font-weight: bold;
       text-align: center;
+      margin-bottom: 15px;
+    }
+    .modal-description {
+      color: #aaa;
+      font-size: 0.9em;
+      text-align: center;
+      padding: 0 10px;
+      line-height: 1.5;
     }
     .modal-lyrics {
       flex: 1;
@@ -138,12 +155,16 @@
       font-size: 1em;
       line-height: 1.6;
       color: #ccc;
+      overflow-y: auto;
+      max-height: 100%;
     }
     .modal-platforms {
       margin-top: 20px;
       display: flex;
       justify-content: center;
       gap: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #333;
     }
     .modal-platforms a {
       color: #fff;
@@ -241,14 +262,54 @@
         <span class="close" onclick="closeModal()">&times;</span>
       </div>
       <div class="modal-body">
-        <div id="modal-cover" class="modal-cover cover-1"></div>
+        <div class="modal-left">
+          <div id="modal-cover" class="modal-cover cover-1"></div>
+          <div id="modal-description" class="modal-description">
+            Esta canción habla sobre el misterio y la nostalgia de los recuerdos perdidos en el tiempo.
+          </div>
+        </div>
         <div id="modal-lyrics" class="modal-lyrics">
           [Verso 1]<br>
-          Esto es un ejemplo de letra inventada,<br>
-          para mostrar cómo se vería en el modal.<br><br>
+          Caminando por Ghost Avenue,<br>
+          las luces se apagan al pasar.<br>
+          Las sombras susurran secretos,<br>
+          que solo el viento puede escuchar.<br><br>
+
+          [Pre-Coro]<br>
+          Cada paso es un eco,<br>
+          un fantasma del ayer.<br>
+          Nadie sabe dónde estás,<br>
+          pero siento que vuelves a mí.<br><br>
+
           [Coro]<br>
-          La música es el lenguaje del alma,<br>
-          y aquí solo es un demo visual.
+          Ghost Avenue,<br>
+          un lugar entre el tiempo y el olvido.<br>
+          Ghost Avenue,<br>
+          donde el amor y el miedo se han unido.<br><br>
+
+          [Verso 2]<br>
+          Las paredes guardan historias,<br>
+          de risas y de adiós.<br>
+          El reloj se detuvo esa noche,<br>
+          y el mundo giró al revés.<br><br>
+
+          [Puente]<br>
+          Si cierro los ojos,<br>
+          puedo verte sonreír.<br>
+          Pero al abrirlos,<br>
+          solo queda el porvenir.<br><br>
+
+          [Coro]<br>
+          Ghost Avenue,<br>
+          un lugar entre el tiempo y el olvido.<br>
+          Ghost Avenue,<br>
+          donde el amor y el miedo se han unido.<br><br>
+
+          [Outro]<br>
+          Y aunque el sol salga mañana,<br>
+          esta calle seguirá igual.<br>
+          Un suspiro en la oscuridad,<br>
+          un recuerdo sin final.
         </div>
       </div>
       <div class="modal-platforms">
@@ -273,47 +334,374 @@
       {
         title: "Ghost Avenue",
         cover: "cover-1",
-        lyrics: "[Verso 1]<br>Caminando por Ghost Avenue,<br>las luces se apagan al pasar.<br><br>[Coro]<br>Es solo un sueño, un eco en la noche,<br>nadie sabe dónde estás."
+        description: "Esta canción explora el misterio y la nostalgia de los recuerdos perdidos en una calle olvidada por el tiempo.",
+        lyrics: `
+          [Verso 1]<br>
+          Caminando por Ghost Avenue,<br>
+          las luces se apagan al pasar.<br>
+          Las sombras susurran secretos,<br>
+          que solo el viento puede escuchar.<br><br>
+
+          [Pre-Coro]<br>
+          Cada paso es un eco,<br>
+          un fantasma del ayer.<br>
+          Nadie sabe dónde estás,<br>
+          pero siento que vuelves a mí.<br><br>
+
+          [Coro]<br>
+          Ghost Avenue,<br>
+          un lugar entre el tiempo y el olvido.<br>
+          Ghost Avenue,<br>
+          donde el amor y el miedo se han unido.<br><br>
+
+          [Verso 2]<br>
+          Las paredes guardan historias,<br>
+          de risas y de adiós.<br>
+          El reloj se detuvo esa noche,<br>
+          y el mundo giró al revés.<br><br>
+
+          [Puente]<br>
+          Si cierro los ojos,<br>
+          puedo verte sonreír.<br>
+          Pero al abrirlos,<br>
+          solo queda el porvenir.<br><br>
+
+          [Coro]<br>
+          Ghost Avenue,<br>
+          un lugar entre el tiempo y el olvido.<br>
+          Ghost Avenue,<br>
+          donde el amor y el miedo se han unido.<br><br>
+
+          [Outro]<br>
+          Y aunque el sol salga mañana,<br>
+          esta calle seguirá igual.<br>
+          Un suspiro en la oscuridad,<br>
+          un recuerdo sin final.<br><br>
+
+          [Verso 3]<br>
+          El tiempo no perdona,<br>
+          pero el corazón sí.<br>
+          Aquí sigo, esperando,<br>
+          que vuelvas por mí.<br><br>
+
+          [Coro]<br>
+          Ghost Avenue,<br>
+          un lugar entre el tiempo y el olvido.<br>
+          Ghost Avenue,<br>
+          donde el amor y el miedo se han unido.
+        `
       },
       {
         title: "Eve Under Blue",
         cover: "cover-2",
-        lyrics: "[Verso 1]<br>Bajo el cielo azul de Eve,<br>todo parece posible hoy.<br><br>[Coro]<br>El viento susurra tu nombre,<br>y el mundo se detiene por ti."
+        description: "Una balada sobre el amor y la esperanza bajo un cielo azul eterno, inspirada en la dualidad de la vida.",
+        lyrics: `
+          [Verso 1]<br>
+          Bajo el cielo azul de Eve,<br>
+          todo parece posible hoy.<br>
+          Las nubes dibujan sueños,<br>
+          y el viento canta por los dos.<br><br>
+
+          [Pre-Coro]<br>
+          Tus ojos son dos luceros,<br>
+          que iluminan mi camino.<br>
+          Aunque el mundo se deshaga,<br>
+          contigo todo tiene sentido.<br><br>
+
+          [Coro]<br>
+          Eve Under Blue,<br>
+          un refugio en este caos.<br>
+          Eve Under Blue,<br>
+          donde el tiempo no existe más.<br><br>
+
+          [Verso 2]<br>
+          Las olas besan la orilla,<br>
+          como tú besas mi piel.<br>
+          El mar guarda nuestros juramentos,<br>
+          y el cielo es testigo de nuestra fe.<br><br>
+
+          [Puente]<br>
+          Si el mundo se acaba mañana,<br>
+          no cambiaría nada de hoy.<br>
+          Porque contigo, incluso el adiós,<br>
+          suena a eterno "te quiero".<br><br>
+
+          [Coro]<br>
+          Eve Under Blue,<br>
+          un refugio en este caos.<br>
+          Eve Under Blue,<br>
+          donde el tiempo no existe más.<br><br>
+
+          [Outro]<br>
+          Y si un día el azul se apaga,<br>
+          tu luz seguirá en mí.<br>
+          Como un faro en la tormenta,<br>
+          me guiarás hasta el fin.
+        `
       },
       {
         title: "Eve Piano",
         cover: "cover-3",
-        lyrics: "[Instrumental]<br>Notas que fluyen como un río,<br>el piano cuenta una historia sin fin."
+        description: "Una pieza instrumental que transmite la calma y la introspección, ideal para momentos de reflexión.",
+        lyrics: `
+          [Instrumental]<br>
+          (Notas suaves de piano que fluyen como un río,<br>
+          creando una atmósfera de paz y melancolía.<br>
+          Cada tecla es un suspiro,<br>
+          cada acorde un recuerdo.<br>
+          La música habla sin palabras,<br>
+          contando historias de amor y soledad.<br>
+          Cierra los ojos y déjate llevar,<br>
+          este viaje es solo para ti.)
+        `
       },
       {
         title: "Tener ganas de...",
         cover: "cover-4",
-        lyrics: "[Verso 1]<br>Tener ganas de volar,<br>de romper todas las reglas.<br><br>[Coro]<br>Pero al final, solo quiero<br>quedarme aquí, contigo."
+        description: "Una canción sobre el deseo de libertad y la rebeldía de romper con lo establecido.",
+        lyrics: `
+          [Verso 1]<br>
+          Tener ganas de volar,<br>
+          de romper todas las reglas.<br>
+          De gritar al mundo entero,<br>
+          que no me va a detener.<br><br>
+
+          [Pre-Coro]<br>
+          Las cadenas son invisibles,<br>
+          pero pesan más que el plomo.<br>
+          Quiero ser como el fuego,<br>
+          ardiente, libre y sin dueño.<br><br>
+
+          [Coro]<br>
+          Tener ganas de vivir,<br>
+          sin miedo y sin razón.<br>
+          De quemar este instante,<br>
+          y renacer del corazón.<br><br>
+
+          [Verso 2]<br>
+          La noche es mi cómplice,<br>
+          la luna mi testigo.<br>
+          No hay límites en el cielo,<br>
+          cuando el alma está contigo.<br><br>
+
+          [Puente]<br>
+          Y aunque el mundo diga "no",<br>
+          mi respuesta es "¡por qué no!".<br>
+          Si la vida es un juego,<br>
+          yo quiero jugar mi canción.<br><br>
+
+          [Coro]<br>
+          Tener ganas de vivir,<br>
+          sin miedo y sin razón.<br>
+          De quemar este instante,<br>
+          y renacer del corazón.<br><br>
+
+          [Outro]<br>
+          Al final, solo queda el eco,<br>
+          de lo que fuimos y seremos.<br>
+          Pero hoy, aquí y ahora,<br>
+          elijo ser quien siempre soñé.
+        `
       },
       {
         title: "いのちの食べ方 6",
         cover: "cover-5",
-        lyrics: "[Verso 1]<br>いのちの食べ方を知っている？<br>それは愛と勇気から始まる。<br><br>[Coro]<br>毎日の小さな幸せが、<br>明日への道しるべ。"
+        description: "Basada en el manga, esta canción habla sobre encontrar la felicidad en las pequeñas cosas de la vida.",
+        lyrics: `
+          [Verso 1]<br>
+          いのちの食べ方を知っている？<br>
+          それは愛と勇気から始まる。<br>
+          毎日の朝、目覚めるたび、<br>
+          新しい物語が待っている。<br><br>
+
+          [Pre-Coro]<br>
+          時には苦くて、<br>
+          時には甘い。<br>
+          それでも進むから、<br>
+          それが生きる意味。<br><br>
+
+          [Coro]<br>
+          いのちの食べ方、<br>
+          教えてくれたのは君だ。<br>
+          一緒に笑って、<br>
+          一緒に泣いて、<br>
+          この道を歩いていく。<br><br>
+
+          [Verso 2]<br>
+          失敗してもいい、<br>
+          それが成長の証。<br>
+          明日への希望を、<br>
+          今この手に握ろう。<br><br>
+
+          [Puente]<br>
+          もしも迷子になったら、<br>
+          声をかけてほしい。<br>
+          君がいるから、<br>
+          私は強くなれる。<br><br>
+
+          [Coro]<br>
+          いのちの食べ方、<br>
+          教えてくれたのは君だ。<br>
+          一緒に笑って、<br>
+          一緒に泣いて、<br>
+          この道を歩いていく。
+        `
       },
       {
         title: "いのちの食べ方 2",
         cover: "cover-6",
-        lyrics: "[Verso 1]<br>二巻目の物語、<br>新しい出会いと別れ。<br><br>[Coro]<br>でも、あなたがいるから、<br>私は強くなれる。"
+        description: "Segunda parte de la saga, enfocada en los nuevos desafíos y el crecimiento personal.",
+        lyrics: `
+          [Verso 1]<br>
+          二巻目の物語、<br>
+          新しい出会いと別れ。<br>
+          痛みも喜びも、<br>
+          全てが私を作る。<br><br>
+
+          [Pre-Coro]<br>
+          昨日の自分と、<br>
+          さよならを言おう。<br>
+          明日への一歩を、<br>
+          今踏み出そう。<br><br>
+
+          [Coro]<br>
+          いのちの食べ方、<br>
+          もう怖くない。<br>
+          君と出会って、<br>
+          私は変われた。<br><br>
+
+          [Verso 2]<br>
+          道はまだ遠くて、<br>
+          でも諦めない。<br>
+          因为你在身边，<br>
+          所以能勇敢前行。<br><br>
+
+          [Outro]<br>
+          この先に何があるのか、<br>
+          分からなくてもいい。<br>
+          君と一緒なら、<br>
+          どんな未来も輝いている。
+        `
       },
       {
         title: "「心の犯罪」 5",
         cover: "cover-7",
-        lyrics: "[Verso 1]<br>心の奥に隠した罪、<br>誰も知らない真実。<br><br>[Coro]<br>でも、今日も笑顔で<br>生きていくしかない。"
+        description: "Una canción oscura que explora los conflictos internos y los secretos que guardamos en el corazón.",
+        lyrics: `
+          [Verso 1]<br>
+          心の奥に隠した罪、<br>
+          誰も知らない真実。<br>
+          鏡の中の私は、<br>
+          今日も嘘をつく。<br><br>
+
+          [Pre-Coro]<br>
+          でも、本当の私は、<br>
+          どこにいるのだろう。<br>
+          この仮面の下、<br>
+          何があるの？<br><br>
+
+          [Coro]<br>
+          心の犯罪、<br>
+          許されない愛。<br>
+          それでも、<br>
+          君を想う。<br><br>
+
+          [Verso 2]<br>
+          夜が来るたび、<br>
+          過去が蘇る。<br>
+          逃げたくても、<br>
+          どこへも行けない。<br><br>
+
+          [Outro]<br>
+          でも、今日も笑顔で、<br>
+          生きていくしかない。<br>
+          因为爱情是唯一的救赎，<br>
+          即使在黑暗中。
+        `
       },
       {
         title: "Teen Age Blue",
         cover: "cover-8",
-        lyrics: "[Verso 1]<br>Teenage dreams in blue,<br>we were young and wild.<br><br>[Coro]<br>Now the memories fade,<br>but the music stays."
+        description: "Un himno a la juventud, los sueños y la melancolía de crecer.",
+        lyrics: `
+          [Verso 1]<br>
+          Teenage dreams in blue,<br>
+          we were young and wild.<br>
+          Running through the fields,<br>
+          like we'd live forever.<br><br>
+
+          [Pre-Coro]<br>
+          Now the memories fade,<br>
+          but the music stays.<br>
+          Those endless summer nights,<br>
+          still light up my days.<br><br>
+
+          [Coro]<br>
+          Teen Age Blue,<br>
+          a color of our own.<br>
+          Teen Age Blue,<br>
+          the place we call home.<br><br>
+
+          [Verso 2]<br>
+          We thought we knew it all,<br>
+          we thought we'd never fall.<br>
+          But life has its own plans,<br>
+          and time moves on.<br><br>
+
+          [Puente]<br>
+          If I could turn back time,<br>
+          I'd do it all again.<br>
+          The laughter and the tears,<br>
+          the joy and the pain.<br><br>
+
+          [Coro]<br>
+          Teen Age Blue,<br>
+          a color of our own.<br>
+          Teen Age Blue,<br>
+          the place we call home.<br><br>
+
+          [Outro]<br>
+          Now we're older, wiser,<br>
+          but still young at heart.<br>
+          Because some things never change,<br>
+          like the bonds we made from the start.
+        `
       },
       {
         title: "4th Album",
         cover: "cover-9",
-        lyrics: "[Verso 1]<br>Cuatro años de música,<br>cuatro años de sueños.<br><br>[Coro]<br>Este álbum es nuestro legado,<br>nuestra voz en el viento."
+        description: "Un álbum que celebra cuatro años de música, crecimiento y conexión con los fans.",
+        lyrics: `
+          [Verso 1]<br>
+          Cuatro años de música,<br>
+          cuatro años de sueños.<br>
+          Cada nota, cada palabra,<br>
+          es un pedazo de nosotros.<br><br>
+
+          [Pre-Coro]<br>
+          Hemos reído y llorado,<br>
+          pero nunca nos rendimos.<br>
+          Porque la música es nuestro lenguaje,<br>
+          y el escenario, nuestro hogar.<br><br>
+
+          [Coro]<br>
+          Este álbum es nuestro legado,<br>
+          nuestra voz en el viento.<br>
+          Gracias por estar aquí,<br>
+          en cada paso y cada momento.<br><br>
+
+          [Verso 2]<br>
+          Las canciones son historias,<br>
+          de amor, de lucha y pasión.<br>
+          Y aunque el camino sea largo,<br>
+          nunca caminamos solos.<br><br>
+
+          [Outro]<br>
+          Así que levanten las manos,<br>
+          y canten con el corazón.<br>
+          Porque esta noche es nuestra,<br>
+          y la música nunca se acabará.
+        `
       }
     ];
 
@@ -323,6 +711,7 @@
       document.getElementById("modal-title").textContent = song.title;
       document.getElementById("modal-cover").className = `modal-cover ${song.cover}`;
       document.getElementById("modal-cover").innerHTML = document.querySelector(`.${song.cover}`).innerHTML;
+      document.getElementById("modal-description").textContent = song.description;
       document.getElementById("modal-lyrics").innerHTML = song.lyrics;
       document.getElementById("songModal").style.display = "block";
     }
