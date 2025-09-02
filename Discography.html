@@ -13,6 +13,9 @@
       background: #111;
       color: #fff;
     }
+    body.modal-open {
+      overflow: hidden; /* Desactiva el scroll del fondo */
+    }
     header {
       text-align: center;
       padding: 30px;
@@ -88,7 +91,7 @@
       color: #888;
       background: #111;
     }
-    /* Estilos del reproductor */
+    /* Reproductor */
     footer.player {
       position: fixed;
       bottom: 0;
@@ -112,7 +115,7 @@
       color: #fff;
       font-size: 1em;
     }
-    /* Estilos del modal emergente */
+    /* Modal emergente */
     .modal {
       display: none;
       position: fixed;
@@ -120,9 +123,9 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.95);
+      background: rgba(0, 0, 0, 0.98); /* Fondo más oscuro */
       z-index: 1000;
-      overflow: auto;
+      overflow-y: auto; /* Scroll solo dentro del modal */
     }
     .modal-content {
       background: #111;
@@ -130,8 +133,9 @@
       width: 80%;
       max-width: 900px;
       border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.8); /* Sombra más pronunciada */
       overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      max-height: 95vh;
     }
     .modal-header {
       background: linear-gradient(135deg, #0066cc, #4a90e2);
@@ -491,6 +495,7 @@
 
     // Abrir modal
     function openModal(index) {
+      document.body.classList.add("modal-open"); // Desactiva scroll del fondo
       const song = songs[index];
       document.getElementById("modal-title").textContent = song.title;
       document.getElementById("modal-version").textContent = song.version;
@@ -504,6 +509,7 @@
 
     // Cerrar modal
     function closeModal() {
+      document.body.classList.remove("modal-open"); // Reactiva scroll del fondo
       document.getElementById("songModal").style.display = "none";
     }
 
