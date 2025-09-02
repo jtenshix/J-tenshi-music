@@ -38,7 +38,6 @@
       margin: 0 10px;
       cursor: pointer;
       font-size: 0.9em;
-      border-radius: 0;
     }
     nav button.active {
       color: #fff;
@@ -49,22 +48,37 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 20px;
       padding: 30px 20px;
-      max-width: 1000px;
+      max-width: 900px;
       margin: 0 auto;
     }
     .card {
       background: #1a1a1a;
-      border-radius: 0;
       overflow: hidden;
       text-align: center;
-      transition: transform 0.2s;
     }
-    .card img {
+    .card .cover {
       width: 100%;
       height: 250px;
-      object-fit: cover;
-      background: #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1em;
+      color: #fff;
+      font-weight: bold;
+      text-align: center;
+      padding: 10px;
+      box-sizing: border-box;
     }
+    /* Colores para cada portada */
+    .cover-1 { background: #0066cc; }
+    .cover-2 { background: #ff3333; }
+    .cover-3 { background: #333333; }
+    .cover-4 { background: #6600cc; }
+    .cover-5 { background: #1a1a2e; }
+    .cover-6 { background: #cc0066; }
+    .cover-7 { background: #cc6600; }
+    .cover-8 { background: #006666; }
+    .cover-9 { background: #660033; }
     .card p {
       padding: 12px;
       margin: 0;
@@ -111,42 +125,42 @@
     <div id="songs" class="grid">
       <!-- Fila 1 -->
       <div class="card">
-        <img src="https://via.placeholder.com/300x300/0066cc/FFFFFF?text=Scenillo+Digital" alt="Ghost Avenue">
-        <p>Scenillo digital<br><small>Ghost Avenue</small></p>
+        <div class="cover cover-1">Scenillo Digital<br><small>Ghost Avenue</small></div>
+        <p>Ghost Avenue</p>
       </div>
       <div class="card">
-        <img src="https://via.placeholder.com/300x300/ff3333/FFFFFF?text=Eve+Under+Blue" alt="Eve Under Blue">
-        <p>Selección de Eve "Under Blue"<br><small>Banda sonora</small></p>
+        <div class="cover cover-2">Eve<br><small>Under Blue</small></div>
+        <p>Selección de Eve "Under Blue"</p>
       </div>
       <div class="card">
-        <img src="https://via.placeholder.com/300x300/333333/FFFFFF?text=Eve+Piano" alt="Eve Piano">
-        <p>La mejor selección de Eve<br><small>Pianísimo</small></p>
+        <div class="cover cover-3">Eve<br><small>Piano Solo</small></div>
+        <p>La mejor selección de Eve</p>
       </div>
       <!-- Fila 2 -->
       <div class="card">
-        <img src="https://via.placeholder.com/300x300/6600cc/FFFFFF?text=Ganas+de..." alt="Tener ganas de">
-        <p>Scenillo digital<br><small>Tener ganas de...</small></p>
+        <div class="cover cover-4">Tener ganas de...</div>
+        <p>Scenillo digital</p>
       </div>
       <div class="card">
-        <img src="https://via.placeholder.com/300x300/1a1a2e/FFFFFF?text=Inochi+6" alt="Inochi 6">
-        <p>いのちの食べ方 6<br><small>コミックス</small></p>
+        <div class="cover cover-5">いのちの食べ方<br><small>6巻</small></div>
+        <p>コミックス</p>
       </div>
       <div class="card">
-        <img src="https://via.placeholder.com/300x300/cc0066/FFFFFF?text=Inochi+2" alt="Inochi 2">
-        <p>いのちの食べ方 2巻<br><small>コミックス</small></p>
+        <div class="cover cover-6">いのちの食べ方<br><small>2巻</small></div>
+        <p>コミックス</p>
       </div>
       <!-- Fila 3 -->
       <div class="card">
-        <img src="https://via.placeholder.com/300x300/cc6600/FFFFFF?text=Kokoro+5" alt="Kokoro 5">
-        <p>「心の犯罪」5巻<br><small>コミックス</small></p>
+        <div class="cover cover-7">「心の犯罪」<br><small>5巻</small></div>
+        <p>コミックス</p>
       </div>
       <div class="card">
-        <img src="https://via.placeholder.com/300x300/006666/FFFFFF?text=Teen+Age+Blue" alt="Teen Age Blue">
-        <p>Teen Age Blue<br><small>Scenillo digital</small></p>
+        <div class="cover cover-8">Teen Age Blue</div>
+        <p>Scenillo digital</p>
       </div>
       <div class="card">
-        <img src="https://via.placeholder.com/300x300/660033/FFFFFF?text=4th+Album" alt="4th Album">
-        <p>4º álbum completo principal<br><small>Bajo arnul</small></p>
+        <div class="cover cover-9">4th Album</div>
+        <p>Bajo arnul</p>
       </div>
     </div>
   </main>
@@ -160,17 +174,17 @@
   </footer>
   <audio id="audio" preload="metadata"></audio>
   <script>
-    // Aquí puedes agregar la lógica del reproductor cuando lo necesites
+    // Lógica básica del reproductor (puedes expandirla)
     const songs = [
-      { title: "Ghost Avenue", cover: "https://via.placeholder.com/300x300/0066cc/FFFFFF?text=Scenillo+Digital", url: "#" },
-      { title: "Eve Under Blue", cover: "https://via.placeholder.com/300x300/ff3333/FFFFFF?text=Eve+Under+Blue", url: "#" },
-      { title: "Eve Piano", cover: "https://via.placeholder.com/300x300/333333/FFFFFF?text=Eve+Piano", url: "#" },
-      { title: "Tener ganas de...", cover: "https://via.placeholder.com/300x300/6600cc/FFFFFF?text=Ganas+de...", url: "#" },
-      { title: "Inochi 6", cover: "https://via.placeholder.com/300x300/1a1a2e/FFFFFF?text=Inochi+6", url: "#" },
-      { title: "Inochi 2", cover: "https://via.placeholder.com/300x300/cc0066/FFFFFF?text=Inochi+2", url: "#" },
-      { title: "Kokoro 5", cover: "https://via.placeholder.com/300x300/cc6600/FFFFFF?text=Kokoro+5", url: "#" },
-      { title: "Teen Age Blue", cover: "https://via.placeholder.com/300x300/006666/FFFFFF?text=Teen+Age+Blue", url: "#" },
-      { title: "4th Album", cover: "https://via.placeholder.com/300x300/660033/FFFFFF?text=4th+Album", url: "#" }
+      { title: "Ghost Avenue", cover: ".cover-1", url: "#" },
+      { title: "Eve Under Blue", cover: ".cover-2", url: "#" },
+      { title: "Eve Piano", cover: ".cover-3", url: "#" },
+      { title: "Tener ganas de...", cover: ".cover-4", url: "#" },
+      { title: "いのちの食べ方 6", cover: ".cover-5", url: "#" },
+      { title: "いのちの食べ方 2", cover: ".cover-6", url: "#" },
+      { title: "「心の犯罪」 5", cover: ".cover-7", url: "#" },
+      { title: "Teen Age Blue", cover: ".cover-8", url: "#" },
+      { title: "4th Album", cover: ".cover-9", url: "#" }
     ];
   </script>
 </body>
