@@ -6,6 +6,7 @@
   <title>Discografía - J-Tenshi</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
+    /* Estilos generales (grid, tarjetas, reproductor) */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -87,95 +88,7 @@
       color: #888;
       background: #111;
     }
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.9);
-      z-index: 1000;
-      overflow: auto;
-    }
-    .modal-content {
-      background: #111;
-      margin: 5% auto;
-      padding: 20px;
-      border: 1px solid #333;
-      width: 80%;
-      max-width: 800px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-      max-height: 90vh;
-      overflow: hidden;
-    }
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #333;
-      padding-bottom: 10px;
-      margin-bottom: 20px;
-    }
-    .modal-body {
-      display: flex;
-      gap: 20px;
-      height: 60vh;
-    }
-    .modal-left {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 280px;
-    }
-    .modal-cover {
-      width: 250px;
-      height: 250px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2em;
-      color: #fff;
-      font-weight: bold;
-      text-align: center;
-      margin-bottom: 15px;
-    }
-    .modal-description {
-      color: #aaa;
-      font-size: 0.9em;
-      text-align: center;
-      padding: 0 10px;
-      line-height: 1.5;
-    }
-    .modal-lyrics {
-      flex: 1;
-      padding: 10px;
-      font-size: 1em;
-      line-height: 1.6;
-      color: #ccc;
-      overflow-y: auto;
-      max-height: 100%;
-    }
-    .modal-platforms {
-      margin-top: 20px;
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      padding-top: 15px;
-      border-top: 1px solid #333;
-    }
-    .modal-platforms a {
-      color: #fff;
-      font-size: 1.8em;
-      text-decoration: none;
-    }
-    .close {
-      color: #fdd835;
-      font-size: 2em;
-      cursor: pointer;
-    }
+    /* Estilos del reproductor */
     footer.player {
       position: fixed;
       bottom: 0;
@@ -199,6 +112,110 @@
       color: #fff;
       font-size: 1em;
     }
+    /* Estilos del modal emergente */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 1000;
+      overflow: auto;
+    }
+    .modal-content {
+      background: #111;
+      margin: 2% auto;
+      width: 80%;
+      max-width: 900px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    }
+    .modal-header {
+      background: linear-gradient(135deg, #0066cc, #4a90e2);
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+    .modal-platforms {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 10px;
+    }
+    .modal-platforms a {
+      color: #fff;
+      font-size: 1.8em;
+      text-decoration: none;
+    }
+    .modal-cover-container {
+      text-align: center;
+      padding: 20px;
+      background: #1a1a1a;
+    }
+    .modal-cover {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
+      background: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: bold;
+      border: 2px solid #333;
+    }
+    .modal-title {
+      font-size: 1.5em;
+      margin: 15px 0 5px 0;
+      color: #fff;
+    }
+    .modal-version {
+      color: #aaa;
+      font-size: 0.9em;
+    }
+    .modal-body {
+      display: flex;
+      padding: 20px;
+      background: #111;
+    }
+    .modal-credits {
+      width: 200px;
+      padding-right: 20px;
+      color: #aaa;
+      font-size: 0.9em;
+    }
+    .modal-credits h4 {
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .modal-lyrics {
+      flex: 1;
+      padding-left: 20px;
+      border-left: 1px solid #333;
+      font-size: 1em;
+      line-height: 1.8;
+      color: #ccc;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      color: #fff;
+      font-size: 1.8em;
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   </style>
 </head>
 <body>
@@ -215,7 +232,7 @@
     <div id="songs" class="grid">
       <!-- Fila 1 -->
       <div class="card" onclick="openModal(0)">
-        <div class="cover cover-1">Scenillo Digital<br><small>Ghost Avenue</small></div>
+        <div class="cover cover-1">ゴーストアベニュー</div>
         <p>Ghost Avenue</p>
       </div>
       <div class="card" onclick="openModal(1)">
@@ -254,72 +271,46 @@
       </div>
     </div>
   </main>
-  <!-- Modal -->
+  <!-- Modal emergente -->
   <div id="songModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 id="modal-title">Título de la Canción</h2>
+        <div class="modal-platforms">
+          <a href="#"><i class="fab fa-spotify"></i></a>
+          <a href="#"><i class="fab fa-apple"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-soundcloud"></i></a>
+        </div>
         <span class="close" onclick="closeModal()">&times;</span>
       </div>
+      <div class="modal-cover-container">
+        <div id="modal-cover" class="modal-cover cover-1">ゴーストアベニュー</div>
+        <h2 id="modal-title" class="modal-title">ゴーストアベニュー</h2>
+        <p id="modal-version" class="modal-version">Version 2025.7.11</p>
+      </div>
       <div class="modal-body">
-        <div class="modal-left">
-          <div id="modal-cover" class="modal-cover cover-1"></div>
-          <div id="modal-description" class="modal-description">
-            Esta canción habla sobre el misterio y la nostalgia de los recuerdos perdidos en el tiempo.
-          </div>
+        <div class="modal-credits">
+          <h4>作詞・作曲</h4>
+          <p id="modal-lyricist">J-Tenshi</p>
+          <h4>曲</h4>
+          <p id="modal-song-title">Ghost Avenue</p>
         </div>
         <div id="modal-lyrics" class="modal-lyrics">
           [Verso 1]<br>
-          Caminando por Ghost Avenue,<br>
-          las luces se apagan al pasar.<br>
-          Las sombras susurran secretos,<br>
-          que solo el viento puede escuchar.<br><br>
-
-          [Pre-Coro]<br>
-          Cada paso es un eco,<br>
-          un fantasma del ayer.<br>
-          Nadie sabe dónde estás,<br>
-          pero siento que vuelves a mí.<br><br>
-
+          この街は静かすぎて<br>
+          過去の声が聞こえる<br>
+          君の影を追いかけて<br>
+          もう何年も経つ<br><br>
           [Coro]<br>
-          Ghost Avenue,<br>
-          un lugar entre el tiempo y el olvido.<br>
-          Ghost Avenue,<br>
-          donde el amor y el miedo se han unido.<br><br>
-
-          [Verso 2]<br>
-          Las paredes guardan historias,<br>
-          de risas y de adiós.<br>
-          El reloj se detuvo esa noche,<br>
-          y el mundo giró al revés.<br><br>
-
-          [Puente]<br>
-          Si cierro los ojos,<br>
-          puedo verte sonreír.<br>
-          Pero al abrirlos,<br>
-          solo queda el porvenir.<br><br>
-
-          [Coro]<br>
-          Ghost Avenue,<br>
-          un lugar entre el tiempo y el olvido.<br>
-          Ghost Avenue,<br>
-          donde el amor y el miedo se han unido.<br><br>
-
-          [Outro]<br>
-          Y aunque el sol salga mañana,<br>
-          esta calle seguirá igual.<br>
-          Un suspiro en la oscuridad,<br>
-          un recuerdo sin final.
+          ゴーストアベニュー<br>
+          君の笑顔が残っていて<br>
+          ゴーストアベニュー<br>
+          もう二度と会えないのに
         </div>
-      </div>
-      <div class="modal-platforms">
-        <a href="#"><i class="fab fa-spotify"></i></a>
-        <a href="#"><i class="fab fa-apple"></i></a>
-        <a href="#"><i class="fab fa-youtube"></i></a>
-        <a href="#"><i class="fab fa-soundcloud"></i></a>
       </div>
     </div>
   </div>
+  <!-- Reproductor -->
   <footer class="player">
     <button onclick="prevSong()">⏮</button>
     <div>
@@ -328,379 +319,172 @@
     <button onclick="togglePlay()">⏯</button>
     <button onclick="nextSong()">⏭</button>
   </footer>
+  <audio id="audio" preload="metadata"></audio>
   <script>
-    // Datos de canciones (inventados)
+    // Datos de las canciones (inventados)
     const songs = [
       {
-        title: "Ghost Avenue",
+        title: "ゴーストアベニュー",
+        version: "Version 2025.7.11",
         cover: "cover-1",
-        description: "Esta canción explora el misterio y la nostalgia de los recuerdos perdidos en una calle olvidada por el tiempo.",
+        lyricist: "J-Tenshi",
+        songTitle: "Ghost Avenue",
         lyrics: `
           [Verso 1]<br>
-          Caminando por Ghost Avenue,<br>
-          las luces se apagan al pasar.<br>
-          Las sombras susurran secretos,<br>
-          que solo el viento puede escuchar.<br><br>
-
-          [Pre-Coro]<br>
-          Cada paso es un eco,<br>
-          un fantasma del ayer.<br>
-          Nadie sabe dónde estás,<br>
-          pero siento que vuelves a mí.<br><br>
-
+          この街は静かすぎて<br>
+          過去の声が聞こえる<br>
+          君の影を追いかけて<br>
+          もう何年も経つ<br><br>
           [Coro]<br>
-          Ghost Avenue,<br>
-          un lugar entre el tiempo y el olvido.<br>
-          Ghost Avenue,<br>
-          donde el amor y el miedo se han unido.<br><br>
-
+          ゴーストアベニュー<br>
+          君の笑顔が残っていて<br>
+          ゴーストアベニュー<br>
+          もう二度と会えないのに<br><br>
           [Verso 2]<br>
-          Las paredes guardan historias,<br>
-          de risas y de adiós.<br>
-          El reloj se detuvo esa noche,<br>
-          y el mundo giró al revés.<br><br>
-
-          [Puente]<br>
-          Si cierro los ojos,<br>
-          puedo verte sonreír.<br>
-          Pero al abrirlos,<br>
-          solo queda el porvenir.<br><br>
-
-          [Coro]<br>
-          Ghost Avenue,<br>
-          un lugar entre el tiempo y el olvido.<br>
-          Ghost Avenue,<br>
-          donde el amor y el miedo se han unido.<br><br>
-
+          街灯が点るたびに<br>
+          君の面影が浮かぶ<br>
+          この道を歩いても<br>
+          君はいないんだ<br><br>
           [Outro]<br>
-          Y aunque el sol salga mañana,<br>
-          esta calle seguirá igual.<br>
-          Un suspiro en la oscuridad,<br>
-          un recuerdo sin final.<br><br>
-
-          [Verso 3]<br>
-          El tiempo no perdona,<br>
-          pero el corazón sí.<br>
-          Aquí sigo, esperando,<br>
-          que vuelvas por mí.<br><br>
-
-          [Coro]<br>
-          Ghost Avenue,<br>
-          un lugar entre el tiempo y el olvido.<br>
-          Ghost Avenue,<br>
-          donde el amor y el miedo se han unido.
+          それでもこの街で<br>
+          君を待ち続ける<br>
+          ゴーストアベニュー<br>
+          君がいた証
         `
       },
       {
         title: "Eve Under Blue",
+        version: "Version 2024.10.5",
         cover: "cover-2",
-        description: "Una balada sobre el amor y la esperanza bajo un cielo azul eterno, inspirada en la dualidad de la vida.",
+        lyricist: "J-Tenshi",
+        songTitle: "Eve Under Blue",
         lyrics: `
           [Verso 1]<br>
           Bajo el cielo azul de Eve,<br>
           todo parece posible hoy.<br>
           Las nubes dibujan sueños,<br>
           y el viento canta por los dos.<br><br>
-
-          [Pre-Coro]<br>
-          Tus ojos son dos luceros,<br>
-          que iluminan mi camino.<br>
-          Aunque el mundo se deshaga,<br>
-          contigo todo tiene sentido.<br><br>
-
           [Coro]<br>
           Eve Under Blue,<br>
           un refugio en este caos.<br>
           Eve Under Blue,<br>
-          donde el tiempo no existe más.<br><br>
-
-          [Verso 2]<br>
-          Las olas besan la orilla,<br>
-          como tú besas mi piel.<br>
-          El mar guarda nuestros juramentos,<br>
-          y el cielo es testigo de nuestra fe.<br><br>
-
-          [Puente]<br>
-          Si el mundo se acaba mañana,<br>
-          no cambiaría nada de hoy.<br>
-          Porque contigo, incluso el adiós,<br>
-          suena a eterno "te quiero".<br><br>
-
-          [Coro]<br>
-          Eve Under Blue,<br>
-          un refugio en este caos.<br>
-          Eve Under Blue,<br>
-          donde el tiempo no existe más.<br><br>
-
-          [Outro]<br>
-          Y si un día el azul se apaga,<br>
-          tu luz seguirá en mí.<br>
-          Como un faro en la tormenta,<br>
-          me guiarás hasta el fin.
+          donde el tiempo no existe más.
         `
       },
       {
         title: "Eve Piano",
+        version: "Version 2024.9.12",
         cover: "cover-3",
-        description: "Una pieza instrumental que transmite la calma y la introspección, ideal para momentos de reflexión.",
+        lyricist: "J-Tenshi",
+        songTitle: "Eve Piano",
         lyrics: `
           [Instrumental]<br>
-          (Notas suaves de piano que fluyen como un río,<br>
-          creando una atmósfera de paz y melancolía.<br>
+          Notas suaves de piano,<br>
+          como un río en la noche.<br>
           Cada tecla es un suspiro,<br>
-          cada acorde un recuerdo.<br>
-          La música habla sin palabras,<br>
-          contando historias de amor y soledad.<br>
-          Cierra los ojos y déjate llevar,<br>
-          este viaje es solo para ti.)
+          cada acorde un recuerdo.
         `
       },
       {
         title: "Tener ganas de...",
+        version: "Version 2025.1.30",
         cover: "cover-4",
-        description: "Una canción sobre el deseo de libertad y la rebeldía de romper con lo establecido.",
+        lyricist: "J-Tenshi",
+        songTitle: "Tener ganas de...",
         lyrics: `
           [Verso 1]<br>
           Tener ganas de volar,<br>
           de romper todas las reglas.<br>
           De gritar al mundo entero,<br>
           que no me va a detener.<br><br>
-
-          [Pre-Coro]<br>
-          Las cadenas son invisibles,<br>
-          pero pesan más que el plomo.<br>
-          Quiero ser como el fuego,<br>
-          ardiente, libre y sin dueño.<br><br>
-
           [Coro]<br>
           Tener ganas de vivir,<br>
-          sin miedo y sin razón.<br>
-          De quemar este instante,<br>
-          y renacer del corazón.<br><br>
-
-          [Verso 2]<br>
-          La noche es mi cómplice,<br>
-          la luna mi testigo.<br>
-          No hay límites en el cielo,<br>
-          cuando el alma está contigo.<br><br>
-
-          [Puente]<br>
-          Y aunque el mundo diga "no",<br>
-          mi respuesta es "¡por qué no!".<br>
-          Si la vida es un juego,<br>
-          yo quiero jugar mi canción.<br><br>
-
-          [Coro]<br>
-          Tener ganas de vivir,<br>
-          sin miedo y sin razón.<br>
-          De quemar este instante,<br>
-          y renacer del corazón.<br><br>
-
-          [Outro]<br>
-          Al final, solo queda el eco,<br>
-          de lo que fuimos y seremos.<br>
-          Pero hoy, aquí y ahora,<br>
-          elijo ser quien siempre soñé.
+          sin miedo y sin razón.
         `
       },
       {
         title: "いのちの食べ方 6",
+        version: "Version 2025.3.18",
         cover: "cover-5",
-        description: "Basada en el manga, esta canción habla sobre encontrar la felicidad en las pequeñas cosas de la vida.",
+        lyricist: "J-Tenshi",
+        songTitle: "いのちの食べ方 6",
         lyrics: `
           [Verso 1]<br>
           いのちの食べ方を知っている？<br>
-          それは愛と勇気から始まる。<br>
+          それは愛と勇気から始まる.<br>
           毎日の朝、目覚めるたび、<br>
-          新しい物語が待っている。<br><br>
-
-          [Pre-Coro]<br>
-          時には苦くて、<br>
-          時には甘い。<br>
-          それでも進むから、<br>
-          それが生きる意味。<br><br>
-
+          新しい物語が待っている.<br><br>
           [Coro]<br>
           いのちの食べ方、<br>
-          教えてくれたのは君だ。<br>
-          一緒に笑って、<br>
-          一緒に泣いて、<br>
-          この道を歩いていく。<br><br>
-
-          [Verso 2]<br>
-          失敗してもいい、<br>
-          それが成長の証。<br>
-          明日への希望を、<br>
-          今この手に握ろう。<br><br>
-
-          [Puente]<br>
-          もしも迷子になったら、<br>
-          声をかけてほしい。<br>
-          君がいるから、<br>
-          私は強くなれる。<br><br>
-
-          [Coro]<br>
-          いのちの食べ方、<br>
-          教えてくれたのは君だ。<br>
-          一緒に笑って、<br>
-          一緒に泣いて、<br>
-          この道を歩いていく。
+          教えてくれたのは君だ.
         `
       },
       {
         title: "いのちの食べ方 2",
+        version: "Version 2024.8.22",
         cover: "cover-6",
-        description: "Segunda parte de la saga, enfocada en los nuevos desafíos y el crecimiento personal.",
+        lyricist: "J-Tenshi",
+        songTitle: "いのちの食べ方 2",
         lyrics: `
           [Verso 1]<br>
           二巻目の物語、<br>
-          新しい出会いと別れ。<br>
+          新しい出会いと別れ.<br>
           痛みも喜びも、<br>
-          全てが私を作る。<br><br>
-
-          [Pre-Coro]<br>
-          昨日の自分と、<br>
-          さよならを言おう。<br>
-          明日への一歩を、<br>
-          今踏み出そう。<br><br>
-
+          全てが私を作る.<br><br>
           [Coro]<br>
           いのちの食べ方、<br>
-          もう怖くない。<br>
-          君と出会って、<br>
-          私は変われた。<br><br>
-
-          [Verso 2]<br>
-          道はまだ遠くて、<br>
-          でも諦めない。<br>
-          因为你在身边，<br>
-          所以能勇敢前行。<br><br>
-
-          [Outro]<br>
-          この先に何があるのか、<br>
-          分からなくてもいい。<br>
-          君と一緒なら、<br>
-          どんな未来も輝いている。
+          もう怖くない.
         `
       },
       {
         title: "「心の犯罪」 5",
+        version: "Version 2025.5.10",
         cover: "cover-7",
-        description: "Una canción oscura que explora los conflictos internos y los secretos que guardamos en el corazón.",
+        lyricist: "J-Tenshi",
+        songTitle: "「心の犯罪」 5",
         lyrics: `
           [Verso 1]<br>
           心の奥に隠した罪、<br>
-          誰も知らない真実。<br>
+          誰も知らない真実.<br>
           鏡の中の私は、<br>
-          今日も嘘をつく。<br><br>
-
-          [Pre-Coro]<br>
-          でも、本当の私は、<br>
-          どこにいるのだろう。<br>
-          この仮面の下、<br>
-          何があるの？<br><br>
-
+          今日も嘘をつく.<br><br>
           [Coro]<br>
           心の犯罪、<br>
-          許されない愛。<br>
-          それでも、<br>
-          君を想う。<br><br>
-
-          [Verso 2]<br>
-          夜が来るたび、<br>
-          過去が蘇る。<br>
-          逃げたくても、<br>
-          どこへも行けない。<br><br>
-
-          [Outro]<br>
-          でも、今日も笑顔で、<br>
-          生きていくしかない。<br>
-          因为爱情是唯一的救赎，<br>
-          即使在黑暗中。
+          許されない愛.
         `
       },
       {
         title: "Teen Age Blue",
+        version: "Version 2024.11.15",
         cover: "cover-8",
-        description: "Un himno a la juventud, los sueños y la melancolía de crecer.",
+        lyricist: "J-Tenshi",
+        songTitle: "Teen Age Blue",
         lyrics: `
           [Verso 1]<br>
           Teenage dreams in blue,<br>
           we were young and wild.<br>
           Running through the fields,<br>
           like we'd live forever.<br><br>
-
-          [Pre-Coro]<br>
-          Now the memories fade,<br>
-          but the music stays.<br>
-          Those endless summer nights,<br>
-          still light up my days.<br><br>
-
           [Coro]<br>
           Teen Age Blue,<br>
-          a color of our own.<br>
-          Teen Age Blue,<br>
-          the place we call home.<br><br>
-
-          [Verso 2]<br>
-          We thought we knew it all,<br>
-          we thought we'd never fall.<br>
-          But life has its own plans,<br>
-          and time moves on.<br><br>
-
-          [Puente]<br>
-          If I could turn back time,<br>
-          I'd do it all again.<br>
-          The laughter and the tears,<br>
-          the joy and the pain.<br><br>
-
-          [Coro]<br>
-          Teen Age Blue,<br>
-          a color of our own.<br>
-          Teen Age Blue,<br>
-          the place we call home.<br><br>
-
-          [Outro]<br>
-          Now we're older, wiser,<br>
-          but still young at heart.<br>
-          Because some things never change,<br>
-          like the bonds we made from the start.
+          a color of our own.
         `
       },
       {
         title: "4th Album",
+        version: "Version 2025.6.20",
         cover: "cover-9",
-        description: "Un álbum que celebra cuatro años de música, crecimiento y conexión con los fans.",
+        lyricist: "J-Tenshi",
+        songTitle: "4th Album",
         lyrics: `
           [Verso 1]<br>
           Cuatro años de música,<br>
           cuatro años de sueños.<br>
           Cada nota, cada palabra,<br>
           es un pedazo de nosotros.<br><br>
-
-          [Pre-Coro]<br>
-          Hemos reído y llorado,<br>
-          pero nunca nos rendimos.<br>
-          Porque la música es nuestro lenguaje,<br>
-          y el escenario, nuestro hogar.<br><br>
-
           [Coro]<br>
           Este álbum es nuestro legado,<br>
-          nuestra voz en el viento.<br>
-          Gracias por estar aquí,<br>
-          en cada paso y cada momento.<br><br>
-
-          [Verso 2]<br>
-          Las canciones son historias,<br>
-          de amor, de lucha y pasión.<br>
-          Y aunque el camino sea largo,<br>
-          nunca caminamos solos.<br><br>
-
-          [Outro]<br>
-          Así que levanten las manos,<br>
-          y canten con el corazón.<br>
-          Porque esta noche es nuestra,<br>
-          y la música nunca se acabará.
+          nuestra voz en el viento.
         `
       }
     ];
@@ -709,9 +493,11 @@
     function openModal(index) {
       const song = songs[index];
       document.getElementById("modal-title").textContent = song.title;
+      document.getElementById("modal-version").textContent = song.version;
       document.getElementById("modal-cover").className = `modal-cover ${song.cover}`;
-      document.getElementById("modal-cover").innerHTML = document.querySelector(`.${song.cover}`).innerHTML;
-      document.getElementById("modal-description").textContent = song.description;
+      document.getElementById("modal-cover").textContent = song.title;
+      document.getElementById("modal-lyricist").textContent = song.lyricist;
+      document.getElementById("modal-song-title").textContent = song.songTitle;
       document.getElementById("modal-lyrics").innerHTML = song.lyrics;
       document.getElementById("songModal").style.display = "block";
     }
@@ -728,6 +514,22 @@
         closeModal();
       }
     };
+
+    // Funciones del reproductor (básicas)
+    function togglePlay() {
+      const audio = document.getElementById("audio");
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    }
+    function prevSong() {
+      alert("Función anterior (puedes implementarla según necesites)");
+    }
+    function nextSong() {
+      alert("Función siguiente (puedes implementarla según necesites)");
+    }
   </script>
 </body>
 </html>
