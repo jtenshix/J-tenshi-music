@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Discografía - J-Tenshi</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -55,6 +56,7 @@
       background: #1a1a1a;
       overflow: hidden;
       text-align: center;
+      cursor: pointer;
     }
     .card .cover {
       width: 100%;
@@ -69,7 +71,6 @@
       padding: 10px;
       box-sizing: border-box;
     }
-    /* Colores para cada portada */
     .cover-1 { background: #0066cc; }
     .cover-2 { background: #ff3333; }
     .cover-3 { background: #333333; }
@@ -85,6 +86,74 @@
       font-size: 0.9em;
       color: #888;
       background: #111;
+    }
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      overflow: auto;
+    }
+    .modal-content {
+      background: #111;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #333;
+      width: 80%;
+      max-width: 800px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #333;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    .modal-body {
+      display: flex;
+      gap: 20px;
+    }
+    .modal-cover {
+      width: 250px;
+      height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2em;
+      color: #fff;
+      font-weight: bold;
+      text-align: center;
+    }
+    .modal-lyrics {
+      flex: 1;
+      padding: 10px;
+      font-size: 1em;
+      line-height: 1.6;
+      color: #ccc;
+    }
+    .modal-platforms {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    .modal-platforms a {
+      color: #fff;
+      font-size: 1.8em;
+      text-decoration: none;
+    }
+    .close {
+      color: #fdd835;
+      font-size: 2em;
+      cursor: pointer;
     }
     footer.player {
       position: fixed;
@@ -124,46 +193,72 @@
   <main>
     <div id="songs" class="grid">
       <!-- Fila 1 -->
-      <div class="card">
+      <div class="card" onclick="openModal(0)">
         <div class="cover cover-1">Scenillo Digital<br><small>Ghost Avenue</small></div>
         <p>Ghost Avenue</p>
       </div>
-      <div class="card">
+      <div class="card" onclick="openModal(1)">
         <div class="cover cover-2">Eve<br><small>Under Blue</small></div>
         <p>Selección de Eve "Under Blue"</p>
       </div>
-      <div class="card">
+      <div class="card" onclick="openModal(2)">
         <div class="cover cover-3">Eve<br><small>Piano Solo</small></div>
         <p>La mejor selección de Eve</p>
       </div>
       <!-- Fila 2 -->
-      <div class="card">
+      <div class="card" onclick="openModal(3)">
         <div class="cover cover-4">Tener ganas de...</div>
         <p>Scenillo digital</p>
       </div>
-      <div class="card">
+      <div class="card" onclick="openModal(4)">
         <div class="cover cover-5">いのちの食べ方<br><small>6巻</small></div>
         <p>コミックス</p>
       </div>
-      <div class="card">
+      <div class="card" onclick="openModal(5)">
         <div class="cover cover-6">いのちの食べ方<br><small>2巻</small></div>
         <p>コミックス</p>
       </div>
       <!-- Fila 3 -->
-      <div class="card">
+      <div class="card" onclick="openModal(6)">
         <div class="cover cover-7">「心の犯罪」<br><small>5巻</small></div>
         <p>コミックス</p>
       </div>
-      <div class="card">
+      <div class="card" onclick="openModal(7)">
         <div class="cover cover-8">Teen Age Blue</div>
         <p>Scenillo digital</p>
       </div>
-      <div class="card">
+      <div class="card" onclick="openModal(8)">
         <div class="cover cover-9">4th Album</div>
         <p>Bajo arnul</p>
       </div>
     </div>
   </main>
+  <!-- Modal -->
+  <div id="songModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title">Título de la Canción</h2>
+        <span class="close" onclick="closeModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div id="modal-cover" class="modal-cover cover-1"></div>
+        <div id="modal-lyrics" class="modal-lyrics">
+          [Verso 1]<br>
+          Esto es un ejemplo de letra inventada,<br>
+          para mostrar cómo se vería en el modal.<br><br>
+          [Coro]<br>
+          La música es el lenguaje del alma,<br>
+          y aquí solo es un demo visual.
+        </div>
+      </div>
+      <div class="modal-platforms">
+        <a href="#"><i class="fab fa-spotify"></i></a>
+        <a href="#"><i class="fab fa-apple"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+        <a href="#"><i class="fab fa-soundcloud"></i></a>
+      </div>
+    </div>
+  </div>
   <footer class="player">
     <button onclick="prevSong()">⏮</button>
     <div>
@@ -172,20 +267,78 @@
     <button onclick="togglePlay()">⏯</button>
     <button onclick="nextSong()">⏭</button>
   </footer>
-  <audio id="audio" preload="metadata"></audio>
   <script>
-    // Lógica básica del reproductor (puedes expandirla)
+    // Datos de canciones (inventados)
     const songs = [
-      { title: "Ghost Avenue", cover: ".cover-1", url: "#" },
-      { title: "Eve Under Blue", cover: ".cover-2", url: "#" },
-      { title: "Eve Piano", cover: ".cover-3", url: "#" },
-      { title: "Tener ganas de...", cover: ".cover-4", url: "#" },
-      { title: "いのちの食べ方 6", cover: ".cover-5", url: "#" },
-      { title: "いのちの食べ方 2", cover: ".cover-6", url: "#" },
-      { title: "「心の犯罪」 5", cover: ".cover-7", url: "#" },
-      { title: "Teen Age Blue", cover: ".cover-8", url: "#" },
-      { title: "4th Album", cover: ".cover-9", url: "#" }
+      {
+        title: "Ghost Avenue",
+        cover: "cover-1",
+        lyrics: "[Verso 1]<br>Caminando por Ghost Avenue,<br>las luces se apagan al pasar.<br><br>[Coro]<br>Es solo un sueño, un eco en la noche,<br>nadie sabe dónde estás."
+      },
+      {
+        title: "Eve Under Blue",
+        cover: "cover-2",
+        lyrics: "[Verso 1]<br>Bajo el cielo azul de Eve,<br>todo parece posible hoy.<br><br>[Coro]<br>El viento susurra tu nombre,<br>y el mundo se detiene por ti."
+      },
+      {
+        title: "Eve Piano",
+        cover: "cover-3",
+        lyrics: "[Instrumental]<br>Notas que fluyen como un río,<br>el piano cuenta una historia sin fin."
+      },
+      {
+        title: "Tener ganas de...",
+        cover: "cover-4",
+        lyrics: "[Verso 1]<br>Tener ganas de volar,<br>de romper todas las reglas.<br><br>[Coro]<br>Pero al final, solo quiero<br>quedarme aquí, contigo."
+      },
+      {
+        title: "いのちの食べ方 6",
+        cover: "cover-5",
+        lyrics: "[Verso 1]<br>いのちの食べ方を知っている？<br>それは愛と勇気から始まる。<br><br>[Coro]<br>毎日の小さな幸せが、<br>明日への道しるべ。"
+      },
+      {
+        title: "いのちの食べ方 2",
+        cover: "cover-6",
+        lyrics: "[Verso 1]<br>二巻目の物語、<br>新しい出会いと別れ。<br><br>[Coro]<br>でも、あなたがいるから、<br>私は強くなれる。"
+      },
+      {
+        title: "「心の犯罪」 5",
+        cover: "cover-7",
+        lyrics: "[Verso 1]<br>心の奥に隠した罪、<br>誰も知らない真実。<br><br>[Coro]<br>でも、今日も笑顔で<br>生きていくしかない。"
+      },
+      {
+        title: "Teen Age Blue",
+        cover: "cover-8",
+        lyrics: "[Verso 1]<br>Teenage dreams in blue,<br>we were young and wild.<br><br>[Coro]<br>Now the memories fade,<br>but the music stays."
+      },
+      {
+        title: "4th Album",
+        cover: "cover-9",
+        lyrics: "[Verso 1]<br>Cuatro años de música,<br>cuatro años de sueños.<br><br>[Coro]<br>Este álbum es nuestro legado,<br>nuestra voz en el viento."
+      }
     ];
+
+    // Abrir modal
+    function openModal(index) {
+      const song = songs[index];
+      document.getElementById("modal-title").textContent = song.title;
+      document.getElementById("modal-cover").className = `modal-cover ${song.cover}`;
+      document.getElementById("modal-cover").innerHTML = document.querySelector(`.${song.cover}`).innerHTML;
+      document.getElementById("modal-lyrics").innerHTML = song.lyrics;
+      document.getElementById("songModal").style.display = "block";
+    }
+
+    // Cerrar modal
+    function closeModal() {
+      document.getElementById("songModal").style.display = "none";
+    }
+
+    // Cerrar modal al hacer clic fuera
+    window.onclick = function(event) {
+      const modal = document.getElementById("songModal");
+      if (event.target === modal) {
+        closeModal();
+      }
+    };
   </script>
 </body>
 </html>
