@@ -3,29 +3,119 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tenshi | Videos</title>
+  <title>Tenshi | Carrusel de Videos</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root { --card-width: 300px; --card-gap: 20px; }
-    body { font-family: 'Helvetica Neue', sans-serif; background: #0b0b0b; color: #f5f5f5; overflow-x: hidden; }
-    .videos { padding: 100px 0; }
-    .carousel-container { position: relative; overflow: hidden; max-width: 1000px; margin: 0 auto; }
-    .carousel-track { display: flex; align-items: center; transition: transform 0.5s ease-in-out; }
-    .media-card { width: var(--card-width); margin: 0 10px; flex-shrink: 0; opacity: 0.6; transform: scale(0.9); transition: transform 0.3s ease, opacity 0.3s ease; cursor: pointer; background: #222; border-radius: 14px; padding: 10px; display: flex; flex-direction: column; align-items: center; }
-    .media-card img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; aspect-ratio: 16/9; margin-bottom: 8px; }
-    .media-card h4 { font-size: 16px; text-align: center; margin-bottom: 6px; }
-    .media-card.center-card { transform: scale(1.2); opacity: 1; z-index: 2; }
-    .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); border: none; color: #e0c27b; font-size: 2rem; cursor: pointer; z-index: 10; padding: 10px; border-radius: 50%; transition: all 0.3s; }
-    .carousel-btn:hover { background: rgba(0,0,0,0.8); }
-    .carousel-btn.prev { left: 10px; }
-    .carousel-btn.next { right: 10px; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    :root {
+      --card-width: 320px;
+      --card-gap: 30px;
+    }
+    body {
+      font-family: 'Helvetica Neue', sans-serif;
+      background: #0b0b0b;
+      color: #f5f5f5;
+      overflow-x: hidden;
+      width: 100%;
+      height: 100%;
+      transition: background 0.3s, color 0.3s;
+    }
+    .videos {
+      padding: 100px 5%;
+      background-color: #1a1a1a;
+      max-width: 1200px;
+      margin: 40px auto;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+      transition: background 0.3s ease;
+    }
+    .videos .carousel-container {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+      padding: 0;
+    }
+    .videos .carousel-track {
+      display: flex;
+      align-items: center;
+      transition: transform 0.5s ease-in-out;
+    }
+    .videos .media-card {
+      width: 300px;
+      margin: 0 10px;
+      flex-shrink: 0;
+      opacity: 0.6;
+      transform: scale(0.9);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      background: #222;
+      border-radius: 14px;
+      padding: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+    .videos .media-card img {
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+      object-fit: cover;
+      margin-bottom: 8px;
+      aspect-ratio: 16 / 9;
+    }
+    .videos .media-card h4 {
+      font-size: 16px;
+      text-align: center;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+    .videos .media-card.center-card {
+      transform: scale(1.2);
+      opacity: 1;
+      z-index: 2;
+    }
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      color: #e0c27b;
+      font-size: 2rem;
+      cursor: pointer;
+      z-index: 10;
+      padding: 10px;
+      border-radius: 50%;
+      transition: all 0.3s;
+    }
+    .carousel-btn:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+    .carousel-btn.prev {
+      left: 10px;
+    }
+    .carousel-btn.next {
+      right: 10px;
+    }
+    @media (max-width: 900px) {
+      .videos .media-card {
+        width: 150px;
+      }
+    }
   </style>
 </head>
 <body>
   <section class="videos" id="videos">
     <div class="carousel-container" aria-label="Videos carousel">
       <div class="carousel-track" id="videos-track">
-        <!-- Se llenará desde la API de YouTube -->
+        <!-- Los videos se cargarán desde la API de YouTube -->
       </div>
       <button class="carousel-btn prev" aria-label="Anterior">‹</button>
       <button class="carousel-btn next" aria-label="Siguiente">›</button>
@@ -36,8 +126,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.css">
 
   <script>
-    const API_KEY = 'TU_CLAVE_DE_API';
-    const PLAYLIST_ID = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf';
+    const API_KEY = 'TU_CLAVE_DE_API'; // Reemplaza con tu clave de API de YouTube
+    const PLAYLIST_ID = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf'; // Reemplaza con el ID de tu playlist
 
     async function fetchPlaylistVideos() {
       try {
@@ -57,15 +147,20 @@
       videoTrack.innerHTML = '';
       videos.forEach(item => {
         const video = item.snippet;
-        const videoId = video && video.resourceId ? video.resourceId.videoId : null;
+        const videoId = video.resourceId?.videoId;
         const title = video.title || 'Video';
-        const thumbnailUrl = (video.thumbnails && (video.thumbnails.high || video.thumbnails.medium || video.thumbnails.default)) ? (video.thumbnails.high || video.thumbnails.medium || video.thumbnails.default).url : '';
+        const thumbnailUrl = video.thumbnails?.high?.url || video.thumbnails?.medium?.url || video.thumbnails?.default?.url || '';
         const card = document.createElement('div');
         card.className = 'media-card';
-        card.innerHTML = `<img src="${thumbnailUrl}" alt="${title}"><h4>${title}</h4>`;
+        card.innerHTML = `
+          <img src="${thumbnailUrl}" alt="${title}">
+          <h4>${title}</h4>
+        `;
         if (videoId) {
           card.onclick = () => {
-            basicLightbox.create(`<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" width="880" height="495" frameborder="0" allow="autoplay" allowfullscreen></iframe>`).show();
+            basicLightbox.create(`
+              <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" width="880" height="495" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+            `).show();
           };
         }
         videoTrack.appendChild(card);
@@ -82,15 +177,9 @@
       let isTransitioning = false;
       let cards = Array.from(track.children);
       const totalCards = cards.length;
-      const visibleCards = 3;
-      if (totalCards < visibleCards) return;
+      if (totalCards < 3) return;
 
-      const startClones = cards.slice(0, visibleCards).map(node => node.cloneNode(true));
-      const endClones = cards.slice(-visibleCards).map(node => node.cloneNode(true));
-      startClones.forEach(clone => track.appendChild(clone));
-      endClones.reverse().forEach(clone => track.insertBefore(clone, track.firstChild));
-      cards = Array.from(track.children);
-      let currentIndex = visibleCards;
+      let currentIndex = Math.floor(totalCards / 2);
 
       function updateVideoCarousel(smoothTransition = true) {
         if (isTransitioning) return;
@@ -106,25 +195,38 @@
 
       track.addEventListener('transitionend', () => {
         isTransitioning = false;
-        if (currentIndex >= totalCards + visibleCards) {
-          currentIndex = visibleCards;
-          updateVideoCarousel(false);
-        } else if (currentIndex < visibleCards) {
-          currentIndex = totalCards + currentIndex;
-          updateVideoCarousel(false);
-        }
       });
 
-      prevBtn.addEventListener('click', () => { if (!isTransitioning) { currentIndex--; updateVideoCarousel(); } });
-      nextBtn.addEventListener('click', () => { if (!isTransitioning) { currentIndex++; updateVideoCarousel(); } });
+      prevBtn.addEventListener('click', () => {
+        if (isTransitioning) return;
+        currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+        updateVideoCarousel();
+      });
 
-      let autoplayInterval = setInterval(() => { if (!isTransitioning) { currentIndex++; updateVideoCarousel(); } }, 4000);
+      nextBtn.addEventListener('click', () => {
+        if (isTransitioning) return;
+        currentIndex = (currentIndex + 1) % totalCards;
+        updateVideoCarousel();
+      });
+
+      let autoplayInterval = setInterval(() => {
+        if (!isTransitioning) {
+          currentIndex = (currentIndex + 1) % totalCards;
+          updateVideoCarousel();
+        }
+      }, 4000);
+
       container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
       container.addEventListener('mouseleave', () => {
-        autoplayInterval = setInterval(() => { if (!isTransitioning) { currentIndex++; updateVideoCarousel(); } }, 4000);
+        autoplayInterval = setInterval(() => {
+          if (!isTransitioning) {
+            currentIndex = (currentIndex + 1) % totalCards;
+            updateVideoCarousel();
+          }
+        }, 4000);
       });
 
-      updateVideoCarousel();
+      updateVideoCarousel(false);
       window.addEventListener('resize', () => updateVideoCarousel(false));
     }
 
@@ -136,7 +238,7 @@
           initCarousel({
             trackId: 'videos-track',
             prevSelector: '.videos .carousel-btn.prev',
-            nextSelector: '.videos .carousel-btn.next'
+            nextSelector: '.videos .carousel-btn.next',
           });
         }
       });
