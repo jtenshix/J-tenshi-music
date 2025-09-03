@@ -127,7 +127,7 @@
 
   <script>
     const API_KEY = 'TU_CLAVE_DE_API'; // Reemplaza con tu clave de API de YouTube
-    const PLAYLIST_ID = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf'; // Reemplaza con el ID de tu playlist
+    const PLAYLIST_ID = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf';
 
     async function fetchPlaylistVideos() {
       try {
@@ -175,11 +175,18 @@
       if (!track || !prevBtn || !nextBtn || !container) return;
 
       let isTransitioning = false;
+      const visibleCards = 3;
       let cards = Array.from(track.children);
       const totalCards = cards.length;
-      if (totalCards < 3) return;
+      if (totalCards < visibleCards) return;
 
-      let currentIndex = Math.floor(totalCards / 2);
+      // Clonar tarjetas para el efecto infinito
+      const startClones = cards.slice(0, visibleCards).map(node => node.cloneNode(true));
+      const endClones = cards.slice(-visibleCards).map(node => node.cloneNode(true));
+      startClones.forEach(clone => track.appendChild(clone));
+      endClones.reverse().forEach(clone => track.insertBefore(clone, track.firstChild));
+      cards = Array.from(track.children);
+      let currentIndex = visibleCards;
 
       function updateVideoCarousel(smoothTransition = true) {
         if (isTransitioning) return;
@@ -195,23 +202,31 @@
 
       track.addEventListener('transitionend', () => {
         isTransitioning = false;
+        if (currentIndex >= totalCards + visibleCards) {
+          currentIndex = visibleCards;
+          updateVideoCarousel(false);
+        } else if (currentIndex < visibleCards) {
+          currentIndex = totalCards + currentIndex;
+          updateVideoCarousel(false);
+        }
       });
 
       prevBtn.addEventListener('click', () => {
         if (isTransitioning) return;
-        currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+        currentIndex--;
         updateVideoCarousel();
       });
 
       nextBtn.addEventListener('click', () => {
         if (isTransitioning) return;
-        currentIndex = (currentIndex + 1) % totalCards;
+        currentIndex++;
         updateVideoCarousel();
       });
 
+      // Autoplay
       let autoplayInterval = setInterval(() => {
         if (!isTransitioning) {
-          currentIndex = (currentIndex + 1) % totalCards;
+          currentIndex++;
           updateVideoCarousel();
         }
       }, 4000);
@@ -220,7 +235,7 @@
       container.addEventListener('mouseleave', () => {
         autoplayInterval = setInterval(() => {
           if (!isTransitioning) {
-            currentIndex = (currentIndex + 1) % totalCards;
+            currentIndex++;
             updateVideoCarousel();
           }
         }, 4000);
@@ -239,6 +254,7 @@
             trackId: 'videos-track',
             prevSelector: '.videos .carousel-btn.prev',
             nextSelector: '.videos .carousel-btn.next',
+            type: 'center-focus'
           });
         }
       });
