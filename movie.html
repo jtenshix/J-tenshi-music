@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tenshi | Videos</title>
   <style>
     :root {
@@ -10,29 +10,64 @@
       --card-gap: 20px;
     }
     body {
+      margin: 0;
       font-family: 'Helvetica Neue', sans-serif;
       background: #0b0b0b;
       color: #f5f5f5;
-      margin: 0;
-      padding: 0;
+      overflow-x: hidden;
+    }
+    .section-banner {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      margin: 40px 0;
+      color: #e0c27b;
     }
     .videos {
-      padding: 80px 20px;
-      max-width: 1200px;
+      padding: 60px 0;
+      max-width: 1000px;
       margin: 0 auto;
-    }
-    .videos h2 {
-      text-align: center;
-      margin-bottom: 40px;
+      position: relative;
     }
     .carousel-container {
-      position: relative;
       overflow: hidden;
+      position: relative;
+      width: 100%;
     }
     .carousel-track {
       display: flex;
+      gap: var(--card-gap);
       transition: transform 0.5s ease-in-out;
+    }
+    .media-card {
+      background: #222;
+      border-radius: 12px;
+      width: var(--card-width);
+      flex-shrink: 0;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
       align-items: center;
+      opacity: 0.6;
+      transform: scale(0.9);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .media-card.center-card {
+      transform: scale(1.2);
+      opacity: 1;
+      z-index: 2;
+    }
+    .media-card img {
+      width: 100%;
+      border-radius: 8px;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      margin-bottom: 8px;
+    }
+    .media-card h4 {
+      font-size: 16px;
+      text-align: center;
+      margin-bottom: 8px;
     }
     .carousel-btn {
       position: absolute;
@@ -46,59 +81,37 @@
       padding: 10px;
       border-radius: 50%;
       z-index: 10;
+      transition: all 0.3s;
     }
     .carousel-btn.prev { left: 10px; }
     .carousel-btn.next { right: 10px; }
-    .media-card {
-      width: var(--card-width);
-      margin: 0 10px;
-      flex-shrink: 0;
-      background: #222;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: transform 0.3s ease, opacity 0.3s ease;
-      opacity: 0.6;
-    }
-    .media-card.center-card {
-      transform: scale(1.2);
-      opacity: 1;
-      z-index: 2;
-    }
-    .media-card img {
-      width: 100%;
-      border-radius: 12px;
-      aspect-ratio: 16 / 9;
-      object-fit: cover;
-    }
-    .media-card h4 {
-      text-align: center;
-      padding: 8px 0;
-      font-size: 14px;
-    }
+    .carousel-btn:hover { background: rgba(0,0,0,0.8); }
   </style>
 </head>
 <body>
+  <div class="section-banner">ビデオ | Videos</div>
   <section class="videos" id="videos">
-    <h2>ビデオ | Videos</h2>
     <div class="carousel-container" aria-label="Videos carousel">
-      <div class="carousel-track" id="videos-track"></div>
+      <div class="carousel-track" id="videos-track">
+        <!-- Se llenará desde la API de YouTube -->
+      </div>
       <button class="carousel-btn prev" aria-label="Anterior">‹</button>
       <button class="carousel-btn next" aria-label="Siguiente">›</button>
     </div>
   </section>
 
-  <script src="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js"></script>
+  <!-- BasicLightbox -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js"></script>
 
   <script>
-    // --- Configuración API ---
     const API_KEY = 'TU_CLAVE_DE_API';
     const PLAYLIST_ID = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf';
 
     async function fetchPlaylistVideos() {
       try {
         const response = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${PLAYLIST_ID}&key=${API_KEY}&maxResults=50`);
-        if (!response.ok) throw new Error('Error al obtener videos');
+        if (!response.ok) throw new Error('Error al obtener videos de YouTube');
         const data = await response.json();
         return data.items || [];
       } catch (error) {
@@ -108,76 +121,60 @@
     }
 
     function renderVideos(videos) {
-      const videoTrack = document.getElementById('videos-track');
-      videoTrack.innerHTML = '';
+      const track = document.getElementById('videos-track');
+      track.innerHTML = '';
       videos.forEach(item => {
         const video = item.snippet;
-        const videoId = video.resourceId.videoId;
+        const videoId = video?.resourceId?.videoId;
         const title = video.title || 'Video';
-        const thumbnailUrl = (video.thumbnails.high || video.thumbnails.medium || video.thumbnails.default).url;
+        const thumbnailUrl = video.thumbnails?.high?.url || video.thumbnails?.medium?.url || video.thumbnails?.default?.url || '';
         const card = document.createElement('div');
         card.className = 'media-card';
-        card.innerHTML = `
-          <img src="${thumbnailUrl}" alt="${title}">
-          <h4>${title}</h4>
-        `;
-        card.onclick = () => {
-          basicLightbox.create(`
-            <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" width="880" height="495" frameborder="0" allow="autoplay" allowfullscreen></iframe>
-          `).show();
-        };
-        videoTrack.appendChild(card);
+        card.innerHTML = `<img src="${thumbnailUrl}" alt="${title}"><h4>${title}</h4>`;
+        if (videoId) {
+          card.onclick = () => {
+            basicLightbox.create(`<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" width="880" height="495" frameborder="0" allow="autoplay" allowfullscreen></iframe>`).show();
+          };
+        }
+        track.appendChild(card);
       });
     }
 
-    // --- Carrusel ---
-    function initCarousel() {
-      const track = document.getElementById('videos-track');
-      const prevBtn = document.querySelector('.videos .carousel-btn.prev');
-      const nextBtn = document.querySelector('.videos .carousel-btn.next');
+    function initCarousel(options) {
+      const track = document.getElementById(options.trackId);
+      const prevBtn = document.querySelector(options.prevSelector);
+      const nextBtn = document.querySelector(options.nextSelector);
       const container = track.parentElement;
+      if (!track || !prevBtn || !nextBtn || !container) return;
 
       let cards = Array.from(track.children);
       let currentIndex = 0;
-      let isTransitioning = false;
-
       function updateCarousel() {
-        const centerIndex = currentIndex;
-        const centerCard = cards[centerIndex];
-        const containerCenter = container.offsetWidth / 2;
-        const cardCenter = centerCard.offsetLeft + centerCard.offsetWidth / 2;
-        const newTransform = -(cardCenter - containerCenter);
-        track.style.transform = `translateX(${newTransform}px)`;
-
-        cards.forEach(card => card.classList.remove('center-card'));
-        centerCard.classList.add('center-card');
+        const center = container.offsetWidth / 2;
+        const cardCenter = cards[currentIndex].offsetLeft + cards[currentIndex].offsetWidth / 2;
+        track.style.transform = `translateX(${center - cardCenter}px)`;
+        cards.forEach(c => c.classList.remove('center-card'));
+        cards[currentIndex].classList.add('center-card');
       }
 
-      prevBtn.addEventListener('click', () => {
-        if (isTransitioning) return;
-        currentIndex = (currentIndex - 1 + cards.length) % cards.length;
-        updateCarousel();
-      });
-      nextBtn.addEventListener('click', () => {
-        if (isTransitioning) return;
-        currentIndex = (currentIndex + 1) % cards.length;
-        updateCarousel();
-      });
+      prevBtn.onclick = () => { currentIndex = (currentIndex - 1 + cards.length) % cards.length; updateCarousel(); };
+      nextBtn.onclick = () => { currentIndex = (currentIndex + 1) % cards.length; updateCarousel(); };
 
-      // Autoplay
-      let autoplay = setInterval(() => { currentIndex = (currentIndex + 1) % cards.length; updateCarousel(); }, 4000);
-      container.addEventListener('mouseenter', () => clearInterval(autoplay));
-      container.addEventListener('mouseleave', () => autoplay = setInterval(() => { currentIndex = (currentIndex + 1) % cards.length; updateCarousel(); }, 4000));
-
-      window.addEventListener('resize', updateCarousel);
       updateCarousel();
+      window.addEventListener('resize', updateCarousel);
     }
 
-    // --- Inicialización ---
     window.addEventListener('DOMContentLoaded', async () => {
       const videos = await fetchPlaylistVideos();
       renderVideos(videos);
-      initCarousel();
+      const track = document.getElementById('videos-track');
+      if (track.children.length > 0) {
+        initCarousel({
+          trackId: 'videos-track',
+          prevSelector: '.videos .carousel-btn.prev',
+          nextSelector: '.videos .carousel-btn.next'
+        });
+      }
     });
   </script>
 </body>
