@@ -16,26 +16,26 @@
       padding: 20px;
     }
 
-    h1 {
+    h2 {
       font-size: 2rem;
       margin-bottom: 20px;
       color: #ffcc00;
     }
 
-    .carousel {
+    .carousel-videos {
       position: relative;
       width: 90%;
       max-width: 1200px;
       overflow: hidden;
     }
 
-    .carousel-track {
+    .track-videos {
       display: flex;
       gap: 16px;
       transition: transform 0.4s ease-in-out;
     }
 
-    .video-card {
+    .card-videos {
       flex: 0 0 300px;
       background: #1a1a1a;
       border-radius: 12px;
@@ -45,30 +45,30 @@
       transition: transform 0.2s;
     }
 
-    .video-card:hover {
+    .card-videos:hover {
       transform: scale(1.05);
     }
 
-    .video-card img {
+    .card-videos img {
       width: 100%;
       display: block;
     }
 
-    .video-title {
+    .card-videos h3 {
       padding: 10px;
       font-size: 0.9rem;
       text-align: center;
       color: #ddd;
     }
 
-    .carousel-buttons {
+    .buttons-videos {
       display: flex;
       justify-content: center;
       margin-top: 15px;
       gap: 10px;
     }
 
-    .carousel-buttons button {
+    .buttons-videos button {
       background: #ffcc00;
       border: none;
       padding: 10px 15px;
@@ -78,21 +78,21 @@
       transition: background 0.2s;
     }
 
-    .carousel-buttons button:hover {
+    .buttons-videos button:hover {
       background: #e6b800;
     }
   </style>
 </head>
 <body>
-  <h1>Videos</h1>
+  <h2>Videos</h2>
 
-  <div class="carousel">
-    <div class="carousel-track" id="videos-track"></div>
+  <div class="carousel-videos">
+    <div class="track-videos" id="videos-track"></div>
   </div>
 
-  <div class="carousel-buttons">
-    <button id="prev">&#10094;</button>
-    <button id="next">&#10095;</button>
+  <div class="buttons-videos">
+    <button id="prev-videos">&#10094;</button>
+    <button id="next-videos">&#10095;</button>
   </div>
 
   <script>
@@ -100,7 +100,7 @@
     const PLAYLIST_ID = "PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf";
     const track = document.getElementById("videos-track");
 
-    // Obtener videos de YouTube
+    // Obtener videos de la playlist
     async function fetchPlaylistVideos() {
       try {
         const response = await fetch(
@@ -114,7 +114,7 @@
       }
     }
 
-    // Renderizar videos
+    // Renderizar videos en el carrusel
     function renderVideos(videos) {
       track.innerHTML = "";
       videos.forEach(item => {
@@ -123,18 +123,18 @@
         const thumbnail = item.snippet.thumbnails.medium.url;
 
         const card = document.createElement("div");
-        card.className = "video-card";
+        card.className = "card-videos";
         card.innerHTML = `
           <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">
             <img src="${thumbnail}" alt="${title}">
-            <div class="video-title">${title}</div>
+            <h3>${title}</h3>
           </a>
         `;
         track.appendChild(card);
       });
     }
 
-    // Carrusel básico
+    // Carrusel
     let index = 0;
     function moveCarousel(direction) {
       const cardWidth = 316; // ancho tarjeta + gap
@@ -144,10 +144,10 @@
       track.style.transform = `translateX(${-index * cardWidth}px)`;
     }
 
-    document.getElementById("prev").addEventListener("click", () => moveCarousel(-1));
-    document.getElementById("next").addEventListener("click", () => moveCarousel(1));
+    document.getElementById("prev-videos").addEventListener("click", () => moveCarousel(-1));
+    document.getElementById("next-videos").addEventListener("click", () => moveCarousel(1));
 
-    // Cargar videos al abrir ventana
+    // Cargar videos
     fetchPlaylistVideos().then(renderVideos);
   </script>
 </body>
