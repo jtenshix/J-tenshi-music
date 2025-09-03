@@ -22,6 +22,7 @@
       background: var(--bg-dark);
       color: var(--text-light);
       transition: background 0.3s, color 0.3s;
+      overflow-x: hidden; /* Evita scroll horizontal innecesario */
     }
     body.light-mode {
       background: var(--bg-light);
@@ -118,7 +119,7 @@
     body.light-mode .main-video-player { background: #fff; }
     .main-video-player #main-player {
       width: 100%;
-      height: 506px;
+      height: 506px; /* Altura fija para el reproductor principal */
     }
     .main-video-player .video-info {
       padding: 20px;
@@ -159,7 +160,8 @@
     /* Video Blocks */
     .video-category-block {
       margin: 50px auto;
-      max-width: 1100px;
+      max-width: 1200px; /* Ajustado para un diseño más amplio de la cuadrícula */
+      padding: 0 20px; /* Añadido padding para los bordes */
     }
     .video-category-block h3 {
       font-size: 26px;
@@ -168,25 +170,25 @@
       margin-bottom: 25px;
     }
 
-    /* Carousel */
-    .carousel-container {
-      position: relative;
-      overflow: hidden;
+    /* Video Grid (reemplazo del carrusel) */
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Columnas responsivas */
+      gap: 20px; /* Espacio entre las tarjetas */
+      justify-items: center; /* Centra las tarjetas en la cuadrícula */
     }
-    .carousel-track {
-      display: flex;
-      transition: transform 0.5s ease;
-    }
+
     .media-card {
       background: #111;
       border-radius: 12px;
       padding: 8px;
-      width: 280px;
-      margin: 0 12px;
+      width: 100%; /* Ocupa todo el espacio de la columna */
+      max-width: 280px; /* Límite para el ancho de la tarjeta */
       text-align: center;
       cursor: pointer;
       flex-shrink: 0;
-      transition: transform 0.3s, box-shadow 0.3s;
+      transition: transform 0.3s, box-shadow 0.3s, filter 0.3s; /* Transición para el filtro grayscale */
+      filter: grayscale(100%); /* Efecto grayscale por defecto */
     }
     .media-card img {
       width: 100%;
@@ -199,28 +201,10 @@
       margin: 10px 0 5px 0;
     }
     .media-card:hover {
+      filter: grayscale(0%); /* Color al pasar el mouse */
       transform: scale(1.05);
       box-shadow: 0 0 15px rgba(94,255,72,0.4);
     }
-    .carousel-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0,0,0,0.5);
-      border: none;
-      color: #fff;
-      font-size: 28px;
-      cursor: pointer;
-      padding: 5px 12px;
-      border-radius: 50%;
-      transition: 0.3s;
-    }
-    .carousel-btn:hover {
-      background: var(--primary);
-      color: #000;
-    }
-    .carousel-btn.prev { left: 10px; }
-    .carousel-btn.next { right: 10px; }
 
     /* Footer */
     footer {
@@ -228,6 +212,26 @@
       padding: 30px 0;
       color: #777;
       font-size: 14px;
+    }
+
+    /* Media Queries para responsividad */
+    @media (max-width: 768px) {
+      .hero-text { font-size: 2.2rem; }
+      .main-video-player { margin-top: 40px; }
+      .main-video-player #main-player { height: 280px; } /* Ajuste de altura para pantallas pequeñas */
+      .video-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+      .media-card { max-width: none; } /* Permite que las tarjetas ocupen más espacio en móviles */
+    }
+
+    @media (max-width: 480px) {
+      header { padding: 10px 3%; }
+      nav ul { gap: 10px; }
+      nav a { font-size: 13px; }
+      .hero-text { font-size: 1.8rem; }
+      .main-video-player #main-player { height: 200px; }
+      .video-filters button { padding: 6px 12px; font-size: 12px; margin: 0 3px; }
+      .video-category-block h3 { font-size: 22px; }
+      .video-grid { grid-template-columns: 1fr; } /* Una columna en pantallas muy pequeñas */
     }
   </style>
 </head>
@@ -250,7 +254,7 @@
     <div class="hero-bg"></div>
     <div class="hero-text">Videos <span>ビデオ</span></div>
   </div>
-  
+
   <section class="videos" id="videos">
     <div class="main-video-player">
       <div id="main-player"></div>
@@ -270,35 +274,19 @@
     <div id="video-content-container">
       <div id="all-videos-block" class="video-category-block">
         <h3>Todos los Videos</h3>
-        <div class="carousel-container">
-          <div class="carousel-track" id="all-videos-track"></div>
-          <button class="carousel-btn prev">‹</button>
-          <button class="carousel-btn next">›</button>
-        </div>
+        <div class="video-grid" id="all-videos-grid"></div>
       </div>
       <div id="music-videos-block" class="video-category-block" style="display: none;">
         <h3>Música</h3>
-        <div class="carousel-container">
-          <div class="carousel-track" id="music-videos-track"></div>
-          <button class="carousel-btn prev">‹</button>
-          <button class="carousel-btn next">›</button>
-        </div>
+        <div class="video-grid" id="music-videos-grid"></div>
       </div>
       <div id="dance-videos-block" class="video-category-block" style="display: none;">
         <h3>Baile</h3>
-        <div class="carousel-container">
-          <div class="carousel-track" id="dance-videos-track"></div>
-          <button class="carousel-btn prev">‹</button>
-          <button class="carousel-btn next">›</button>
-        </div>
+        <div class="video-grid" id="dance-videos-grid"></div>
       </div>
       <div id="vlog-videos-block" class="video-category-block" style="display: none;">
         <h3>Vlogs</h3>
-        <div class="carousel-container">
-          <div class="carousel-track" id="vlog-videos-track"></div>
-          <button class="carousel-btn prev">‹</button>
-          <button class="carousel-btn next">›</button>
-        </div>
+        <div class="video-grid" id="vlog-videos-grid"></div>
       </div>
     </div>
   </section>
@@ -310,42 +298,67 @@
   <script src="https://www.youtube.com/iframe_api"></script>
   <script src="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js"></script>
   <script>
+    // Función para alternar el modo claro/oscuro
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
       localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
     }
+    // Cargar el tema guardado al cargar la página
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-mode');
     }
 
-    const API_KEY = 'TU_CLAVE_DE_API';
-    const PLAYLIST_ID = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf';
+    // Clave de API de YouTube y ID de la Playlist
+    const API_KEY = 'TU_CLAVE_DE_API'; // Esta clave se inyectará con tu workflow de GitHub
+    const PLAYLIST_ID = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf'; // ID de tu playlist de YouTube
 
+    // Función para obtener videos de la playlist de YouTube
     async function fetchPlaylistVideos() {
       try {
         const response = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${PLAYLIST_ID}&key=${API_KEY}&maxResults=50`);
-        if (!response.ok) throw new Error('Error al obtener videos de YouTube');
+        if (!response.ok) {
+          // Si hay un error en la respuesta HTTP
+          const errorData = await response.json();
+          throw new Error(`Error ${response.status}: ${errorData.error.message}`);
+        }
         const data = await response.json();
         return data.items || [];
       } catch (error) {
-        console.error(error);
+        console.error("Error al obtener videos de YouTube:", error);
+        // Mostrar un mensaje de error amigable en la UI
+        document.getElementById('main-video-title').textContent = "Error al cargar videos.";
+        document.getElementById('main-video-description').textContent = "Por favor, verifica tu clave de API y el ID de la playlist.";
         return [];
       }
     }
 
+    // Objeto del reproductor de YouTube
     var player;
+
+    // Función que se ejecuta cuando la API de YouTube está lista
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('main-player', {
-        height: '506',
+        height: '506', // Altura del reproductor
         width: '100%',
-        videoId: '',
-        playerVars: { 'playsinline': 1, 'rel': 0, 'modestbranding': 1 },
-        events: { 'onReady': onPlayerReady }
+        videoId: '', // El ID del video se cargará dinámicamente
+        playerVars: {
+          'playsinline': 1, // Reproducción en línea en iOS
+          'rel': 0, // No mostrar videos relacionados al final
+          'modestbranding': 1, // Ocultar logo de YouTube en la barra de control
+        },
+        events: {
+          'onReady': onPlayerReady // Llamar a onPlayerReady cuando el reproductor esté listo
+        }
       });
     }
+
+    // Función que se ejecuta cuando el reproductor de YouTube está listo
     function onPlayerReady() {
-      fetchAndRenderVideos();
+      console.log('Reproductor principal de YouTube listo.');
+      fetchAndRenderVideos(); // Iniciar la carga y renderizado de videos
     }
+
+    // Cargar un video específico en el reproductor principal
     function loadMainPlayer(videoId, title, description) {
       if (player && player.loadVideoById) {
         player.loadVideoById(videoId);
@@ -354,60 +367,101 @@
       }
     }
 
+    // Obtener videos y renderizarlos en las categorías y en el reproductor principal
     async function fetchAndRenderVideos() {
       const allVideos = await fetchPlaylistVideos();
-      const videosOrdenados = allVideos.sort((a, b) => new Date(b.snippet.publishedAt) - new Date(a.snippet.publishedAt));
 
+      // Ordenar videos por fecha de publicación (más recientes primero)
+      const videosOrdenados = allVideos.sort((a, b) => {
+        return new Date(b.snippet.publishedAt) - new Date(a.snippet.publishedAt);
+      });
+
+      // Cargar el video más reciente en el reproductor principal
       if (videosOrdenados.length > 0) {
         const mainVideo = videosOrdenados[0].snippet;
         const mainVideoId = mainVideo.resourceId?.videoId || null;
         loadMainPlayer(mainVideoId, mainVideo.title, mainVideo.description || '');
       }
 
-      const musicVideos = [], danceVideos = [], vlogVideos = [];
+      // Filtrar videos por categoría basándose en el título
+      const musicVideos = [];
+      const danceVideos = [];
+      const vlogVideos = [];
+
       videosOrdenados.forEach(item => {
         const title = item.snippet.title.toLowerCase();
-        if (title.includes('[music]')) musicVideos.push(item);
-        else if (title.includes('[dance]')) danceVideos.push(item);
-        else if (title.includes('[vlog]')) vlogVideos.push(item);
+        if (title.includes('[music]')) {
+          musicVideos.push(item);
+        } else if (title.includes('[dance]')) {
+          danceVideos.push(item);
+        } else if (title.includes('[vlog]')) {
+          vlogVideos.push(item);
+        }
+        // Puedes añadir más categorías aquí
       });
 
-      renderVideoCards(videosOrdenados, 'all-videos-track');
-      renderVideoCards(musicVideos, 'music-videos-track');
-      renderVideoCards(danceVideos, 'dance-videos-track');
-      renderVideoCards(vlogVideos, 'vlog-videos-track');
+      // Renderizar las tarjetas de video en sus respectivas cuadrículas
+      renderVideoCards(videosOrdenados, 'all-videos-grid');
+      renderVideoCards(musicVideos, 'music-videos-grid');
+      renderVideoCards(danceVideos, 'dance-videos-grid');
+      renderVideoCards(vlogVideos, 'vlog-videos-grid');
     }
 
-    function renderVideoCards(videos, targetTrackId) {
-      const videoTrack = document.getElementById(targetTrackId);
-      if (!videoTrack) return;
-      videoTrack.innerHTML = '';
+    // Renderizar las tarjetas de video en una cuadrícula (sin carrusel)
+    function renderVideoCards(videos, targetGridId) {
+      const videoGrid = document.getElementById(targetGridId);
+      if (!videoGrid) return;
+      videoGrid.innerHTML = ''; // Limpiar la cuadrícula antes de añadir videos
       videos.forEach(item => {
         const video = item.snippet;
         const videoId = video.resourceId?.videoId || null;
         const title = video.title || 'Video';
-        const thumbnailUrl = video.thumbnails.high.url;
+        const thumbnailUrl = video.thumbnails.high.url; // Usar miniatura de alta calidad
+
         const card = document.createElement('div');
         card.className = 'media-card';
-        card.innerHTML = `<img src="${thumbnailUrl}" alt="${title}"><h4>${title}</h4>`;
-        if (videoId) card.onclick = () => loadMainPlayer(videoId, title, video.description || '');
-        videoTrack.appendChild(card);
+        card.innerHTML = `
+          <img src="${thumbnailUrl}" alt="${title}">
+          <h4>${title}</h4>
+        `;
+        if (videoId) {
+          card.onclick = () => {
+            loadMainPlayer(videoId, title, video.description || '');
+          };
+        }
+        videoGrid.appendChild(card);
       });
     }
 
+    // Lógica para los botones de filtro de categoría
     const filterButtons = document.querySelectorAll('.filter-btn');
     const videoCategoryBlocks = document.querySelectorAll('.video-category-block');
+
     filterButtons.forEach(button => {
       button.addEventListener('click', () => {
+        // Eliminar la clase 'active' de todos los botones y añadirla al clicado
         filterButtons.forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
-        const category = button.dataset.category;
+
+        const category = button.dataset.category; // Obtener la categoría del botón
         videoCategoryBlocks.forEach(block => {
-          if (category === 'all') block.style.display = 'block';
-          else block.style.display = block.id.includes(category) ? 'block' : 'none';
+          // Mostrar u ocultar los bloques de categoría según el filtro seleccionado
+          if (category === 'all') {
+            block.style.display = 'block'; // Mostrar todos los bloques si el filtro es 'Todos'
+          } else if (block.id.includes(category)) {
+            block.style.display = 'block'; // Mostrar solo el bloque de la categoría seleccionada
+          } else {
+            block.style.display = 'none'; // Ocultar los demás bloques
+          }
         });
       });
     });
+
+    // Cargar la API de IFrame de YouTube
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   </script>
 </body>
 </html>
