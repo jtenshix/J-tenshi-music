@@ -486,44 +486,19 @@
     </div>
   </section>
   <div class="section-banner">ディスコグラフィー</div>
+
+  <!-- === DISCROGRAFÍA: sección reemplazada para cargar portadas desde la API === -->
   <section class="discography" id="discography">
     <div class="carousel-container" aria-label="Discography carousel">
       <div class="carousel-track" id="discography-track">
-        <div class="media-card">
-          <img src="https://via.placeholder.com/300x300/ff8c00/000000?text=Track+1" alt="Track 1">
-          <h4>Shinkai no Melody</h4>
-          <span class="label">Single</span>
-        </div>
-        <div class="media-card">
-          <img src="https://via.placeholder.com/300x300/20b2aa/000000?text=Track+2" alt="Track 2">
-          <h4>Yoru no Uta</h4>
-          <span class="label">Single</span>
-        </div>
-        <div class="media-card">
-          <img src="https://via.placeholder.com/300x300/8a2be2/ffffff?text=Track+3" alt="Track 3">
-          <h4>Midnight Echo</h4>
-          <span class="label">Single</span>
-        </div>
-        <div class="media-card">
-          <img src="https://via.placeholder.com/300x300/a0522d/ffffff?text=Album+A" alt="Album A">
-          <h4>Whispers of the Void</h4>
-          <span class="label">Album</span>
-        </div>
-        <div class="media-card">
-          <img src="https://via.placeholder.com/300x300/4682b4/ffffff?text=EP+B" alt="EP B">
-          <h4>Ephemeral Sounds</h4>
-          <span class="label">EP</span>
-        </div>
-        <div class="media-card">
-          <img src="https://via.placeholder.com/300x300/d2691e/ffffff?text=Single+C" alt="Single C">
-          <h4>Starlight Serenade</h4>
-          <span class="label">Single</span>
-        </div>
+        <!-- Antes había media-card estáticos; ahora se llenará desde JS -->
       </div>
       <button class="carousel-btn prev" aria-label="Anterior">‹</button>
       <button class="carousel-btn next" aria-label="Siguiente">›</button>
     </div>
   </section>
+  <!-- === fin discography === -->
+
   <div class="section-banner">ビデオ</div>
   <section class="videos" id="videos">
     <div class="carousel-container" aria-label="Videos carousel">
@@ -548,6 +523,7 @@
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-mode');
     }
+
     const API_KEY = 'TU_CLAVE_DE_API';
     const PLAYLIST_ID = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf';
     async function fetchPlaylistVideos() {
@@ -586,6 +562,46 @@
         videoTrack.appendChild(card);
       });
     }
+
+    // Nueva utilidad: elegir la mejor miniatura disponible (favorece la que subiste en Studio)
+    function getBestThumb(snippet) {
+      const t = (snippet && snippet.thumbnails) || {};
+      return (
+        (t.maxres && t.maxres.url) ||
+        (t.standard && t.standard.url) ||
+        (t.high && t.high.url) ||
+        (t.medium && t.medium.url) ||
+        (t.default && t.default.url) ||
+        ''
+      );
+    }
+
+    // Nueva función: renderizar discografía solo con portadas (click abre YouTube en nueva pestaña)
+    function renderDiscography(items) {
+      const track = document.getElementById('discography-track');
+      if (!track) return;
+      track.innerHTML = '';
+      items.forEach(item => {
+        const s = item.snippet || {};
+        const title = s.title || 'Track';
+        const videoId = s.resourceId ? s.resourceId.videoId : null;
+        const imgUrl = getBestThumb(s);
+        const card = document.createElement('div');
+        card.className = 'media-card';
+        // envolvemos en <a> para que abra en YouTube (opcional, si no querés esto sacalo)
+        if (videoId) {
+          card.innerHTML = `
+            <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" rel="noopener noreferrer">
+              <img src="${imgUrl}" alt="${title}" title="${title}">
+            </a>
+          `;
+        } else {
+          card.innerHTML = `<img src="${imgUrl}" alt="${title}" title="${title}">`;
+        }
+        track.appendChild(card);
+      });
+    }
+
     function initCarousel(options) {
       const track = document.getElementById(options.trackId);
       const prevBtn = document.querySelector(options.prevSelector);
@@ -708,17 +724,11 @@
         });
       }
     }
+
+    // Carga los videos y luego renderiza videos y discografía, e inicializa ambos carruseles
     window.addEventListener('DOMContentLoaded', () => {
-      const discographyTrack = document.getElementById('discography-track');
-      if (discographyTrack && discographyTrack.children.length >= 3) {
-        initCarousel({
-          trackId: 'discography-track',
-          prevSelector: '.discography .carousel-btn.prev',
-          nextSelector: '.discography .carousel-btn.next',
-          type: 'slide'
-        });
-      }
       fetchPlaylistVideos().then(videos => {
+        // Renderiza VIDEOS (thumbnails + modal)
         renderVideos(videos);
         const videosTrack = document.getElementById('videos-track');
         if (videosTrack && videosTrack.children.length >= 3) {
@@ -727,6 +737,18 @@
             prevSelector: '.videos .carousel-btn.prev',
             nextSelector: '.videos .carousel-btn.next',
             type: 'center-focus'
+          });
+        }
+
+        // Renderiza DISCOGRAFÍA (solo portadas)
+        renderDiscography(videos);
+        const discographyTrack = document.getElementById('discography-track');
+        if (discographyTrack && discographyTrack.children.length >= 3) {
+          initCarousel({
+            trackId: 'discography-track',
+            prevSelector: '.discography .carousel-btn.prev',
+            nextSelector: '.discography .carousel-btn.next',
+            type: 'slide'
           });
         }
       });
