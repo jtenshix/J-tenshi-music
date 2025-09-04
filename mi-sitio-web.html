@@ -732,6 +732,18 @@
     }
 
   window.addEventListener('DOMContentLoaded', () => {
+    async function fetchPlaylistVideos() {
+  try {
+    const response = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${VIDEOS_PLAYLIST_ID}&key=${API_KEY}&maxResults=50`);
+    if (!response.ok) throw new Error('Error al obtener videos');
+    const data = await response.json();
+    return data.items || [];
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
   // VIDEOS normales
   fetchPlaylistVideos().then(videos => {
     renderVideos(videos);
