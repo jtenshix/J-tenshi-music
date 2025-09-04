@@ -24,16 +24,24 @@
       font-size: 32px;
       color: #fff;
     }
-    .main-player-container {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 40px;
+    .main-player-wrapper {
+      position: relative;
+      width: 70%; /* Reproductor más pequeño */
+      max-width: 800px; /* Máximo para que no sea enorme */
+      margin: 0 auto 40px auto;
+      background: #1a1a1a; /* Fondo para que se integre */
       border-radius: 12px;
       overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+      aspect-ratio: 16 / 9; /* Mantiene la proporción del video */
     }
-    .main-player-container iframe {
+    .main-player-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      aspect-ratio: 16 / 9;
+      height: 100%;
+      border: none;
     }
     .video-grid {
       display: grid;
@@ -87,15 +95,15 @@
   <div class="main-container">
     <section class="videos">
       <h2>Videos Oficiales</h2>
-      <div class="main-player-container">
-        <iframe id="main-player" width="100%" height="auto" src="" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <div class="main-player-wrapper">
+        <iframe id="main-player" src="" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
       <div class="video-grid" id="video-grid">
         </div>
     </section>
   </div>
   <script>
-    const API_KEY = 'TU_CLAVE_DE_API';
+    const API_KEY = 'TU_CLAVE_DE_API'; // Tu bot inyectará la clave aquí
     const PLAYLIST_ID = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf';
     const mainPlayer = document.getElementById('main-player');
 
@@ -115,14 +123,18 @@
       const videoGrid = document.getElementById('video-grid');
       if (!videoGrid) return;
       videoGrid.innerHTML = '';
+
+      // Establece el primer video en el reproductor principal al cargar la página
       if (videos.length > 0) {
         setMainPlayer(videos[0].snippet.resourceId.videoId);
       }
+
       videos.forEach(item => {
         const video = item.snippet;
         const videoId = video.resourceId.videoId;
         const title = video.title || 'Video';
-        const thumbnailUrl = video.thumbnails.high.url;
+        const thumbnailUrl = video.thumbnails.high.url; // Usamos 'high' para mejor calidad
+
         const card = document.createElement('div');
         card.className = 'video-card';
         card.innerHTML = `
@@ -130,20 +142,22 @@
           <h4>${title}</h4>
         `;
         card.onclick = () => {
-          setMainPlayer(videoId);
+          setMainPlayer(videoId); // Reproduce el video en el reproductor principal
           window.scrollTo({
             top: 0,
             behavior: 'smooth'
-          });
+          }); // Desplaza hacia arriba para ver el reproductor
         };
         videoGrid.appendChild(card);
       });
     }
 
     function setMainPlayer(videoId) {
-      mainPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+      // Asegura que siempre se pueda reproducir y usar pantalla completa
+      mainPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&modestbranding=1&rel=0&showinfo=0`;
     }
 
+    // Cargar videos cuando el DOM esté listo
     window.addEventListener('DOMContentLoaded', () => {
       fetchPlaylistVideos().then(videos => {
         renderVideos(videos);
