@@ -13,7 +13,8 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Inject API Key into mi-sitio-web.html
-        run: sed -i 's/TU_CLAVE_DE_API/${{ secrets.YOUTUBE_API_KEY }}/g' index.html movie.html Discography.html
+        run: sed -i 's/TU_CLAVE_DE_API/${{ secrets.YOUTUBE_API_KEY }}/g' mi-sitio-web.html movie.html Discography.html
+
 
 
       - name: Deploy to GitHub Pages
