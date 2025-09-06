@@ -11,7 +11,7 @@
       box-sizing: border-box;
     }
     :root {
-      --card-width: 300px;
+      --card-width: 320px;
       --card-gap: 30px;
     }
     body {
@@ -87,7 +87,7 @@
     }
     nav a:hover {
       color: #e0c27b;
-      animation: shake 0.2s ease-in-out 2 alternate;
+      animation: shake 0.2s ease-in-out infinite alternate;
     }
     .theme-toggle {
       background: none;
@@ -129,8 +129,6 @@
       height: 75vh;
       display: flex;
       align-items: center;
-      justify-content: center;
-      text-align: center;
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     }
     .news {
@@ -158,7 +156,6 @@
       display: flex;
       justify-content: center;
       gap: 20px;
-      flex-wrap: wrap;
     }
     .schedule-filters button {
       background: none;
@@ -209,7 +206,7 @@
     }
     .news-card:hover {
       transform: scale(1.05);
-      animation: shake 0.2s ease-in-out 2 alternate;
+      animation: shake 0.2s ease-in-out infinite alternate;
     }
     .news-card h4 {
       font-size: 16px;
@@ -242,7 +239,7 @@
     }
     .section-banner {
       position: relative;
-      width: 100%;
+      width: 110%;
       max-width: 1800px;
       height: 370px;
       margin: 60px auto;
@@ -260,23 +257,19 @@
       text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
       user-select: none;
     }
-   .carousel-container {
-  display: flex;              
-  justify-content: center;     
-  overflow: hidden;
-  max-width: 1200px;
-  padding: 40px 60px;
-  position: relative;
-  margin: 0 auto;             
-}
-
+    .carousel-container {
+      position: relative;
+      overflow: hidden;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-top: 40px;
+      padding-bottom: 40px;
+    }
     .carousel-track {
-  display: flex;
-  justify-content: center;  
-  gap: var(--card-gap);
-  transition: transform 0.5s ease-in-out;
-}
-
+      display: flex;
+      gap: var(--card-gap);
+      transition: transform 0.5s ease-in-out;
+    }
     .carousel-btn {
       position: absolute;
       top: 50%;
@@ -287,7 +280,7 @@
       font-size: 2rem;
       cursor: pointer;
       z-index: 10;
-      padding: 10px 15px;
+      padding: 10px;
       border-radius: 50%;
       transition: all 0.3s;
     }
@@ -301,31 +294,32 @@
       right: 10px;
     }
     .media-card {
-      background: #222;
-      border-radius: 14px;
-      padding: 10px;
-      width: var(--card-width);
-      height: var(--card-width);
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-      transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.5s ease;
-      filter: grayscale(100%);
-      cursor: pointer;
-    }
+  background: #222;
+  border-radius: 14px;
+  padding: 10px;
+  width: 300px;       /* ANCHO FIJO */
+  height: 300px;      /* ALTO FIJO, cuadrado */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.5s ease;
+  filter: grayscale(100%);
+  cursor: pointer;
+}
     .media-card:hover {
       filter: grayscale(0%);
-      animation: shake 0.2s ease-in-out 2 alternate;
+      animation: shake 0.2s ease-in-out infinite alternate;
     }
     .media-card img {
       width: 100%;
-      height: 80%;
+      height: 100%;
       border-radius: 8px;
       object-fit: cover;
       margin-bottom: 8px;
+      aspect-ratio: 16 / 9;
     }
     .media-card h4 {
       font-size: 16px;
@@ -346,7 +340,6 @@
       filter: grayscale(0%);
       transform: scale(1.1);
       z-index: 5;
-      margin: 0 auto; 
     }
     .videos .carousel-container {
       width: 100%;
@@ -354,7 +347,7 @@
       margin: 0 auto;
       overflow: hidden;
       position: relative;
-      padding: 40px 60px;
+      padding: 0;
     }
     .videos .carousel-track {
       display: flex;
@@ -362,7 +355,7 @@
       transition: transform 0.5s ease-in-out;
     }
     .videos .media-card {
-      width: var(--card-width);
+      width: 300px;
       margin: 0 10px;
       flex-shrink: 0;
       opacity: 0.6;
@@ -392,11 +385,7 @@
         --card-width: 260px;
       }
       .videos .media-card {
-        width: 200px;
-        height: 200px;
-      }
-      .carousel-container {
-        padding: 40px 20px;
+        width: 150px;
       }
     }
     footer {
@@ -411,24 +400,22 @@
       gap: 30px;
       margin: 60px auto;
       width: 100%;
-      flex-wrap: wrap;
     }
     .social-bar a {
       display: inline-block;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, fill 0.3s ease;
     }
     .social-bar svg {
       width: 36px;
       height: 36px;
-      color: #fff;
-      transition: transform 0.3s ease, color 0.3s ease;
+      fill: #888;
     }
     .social-bar a:hover svg {
-      color: #e0c27b;
+      fill: #e0c27b;
       transform: scale(1.15);
     }
     body.light-mode .social-bar svg {
-      color: #555;
+      fill: #555;
     }
   </style>
 </head>
@@ -451,39 +438,28 @@
     <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
   </div>
   <div class="contenedor-centrado">
-    <div class="social-bar">
-      <!-- TUS ÍCONOS ORIGINALES (sin cambios) -->
-      <a href="https://twitter.com/TU_USUARIO" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M18.244 2H21.985L14.367 11.29L23 22H16.398L11.297 15.66L5.462 22H1.715L9.833 12.18L1.67 2H8.444L13.04 7.72L18.244 2ZM17.09 20.15H18.91L7.004 3.74H5.053L17.09 20.15Z" fill="currentColor"/>
-        </svg>
-      </a>
-      <a href="https://instagram.com/TU_USUARIO" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M7 2C4.2 2 2 4.2 2 7V17C2 19.8 4.2 22 7 22H17C19.8 22 22 19.8 22 17V7C22 4.2 19.8 2 17 2H7ZM12 7C14.8 7 17 9.2 17 12C17 14.8 14.8 17 12 17C9.2 17 7 14.8 7 12C7 9.2 9.2 7 12 7ZM18 6.5C18.6 6.5 19 6.9 19 7.5C19 8.1 18.6 8.5 18 8.5C17.4 8.5 17 8.1 17 7.5C17 6.9 17.4 6.5 18 6.5Z" fill="currentColor"/>
-        </svg>
-      </a>
-      <a href="https://youtube.com/@TU_CANAL" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M21.8 8.001C21.53 6.83 20.63 5.93 19.46 5.661C17.34 5.161 12 5.161 12 5.161C12 5.161 6.66 5.161 4.54 5.661C3.37 5.93 2.47 6.83 2.2 8.001C1.7 10.121 1.7 12.001 1.7 12.001C1.7 12.001 1.7 13.881 2.2 16.001C2.47 17.17 3.37 18.07 4.54 18.34C6.66 18.84 12 18.84 12 18.84C12 18.84 17.34 18.84 19.46 18.34C20.63 18.07 21.53 17.17 21.8 16.001C22.3 13.881 22.3 12.001 22.3 12.001C22.3 12.001 22.3 10.121 21.8 8.001ZM10 15.002V9.002L15.5 12.002L10 15.002Z" fill="currentColor"/>
-        </svg>
-      </a>
-      <a href="https://open.spotify.com/artist/TU_USUARIO" target="_blank" rel="noopener noreferrer" aria-label="Spotify">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.3 15.6c-.4-.24-1.1-.09-1.35.32-.42.7-.87 1.44-2.58 1.44-1.57 0-2.34-.73-2.94-1.74-.6-.99-.95-2.07-.95-3.3s.35-2.31.95-3.3c.6-.99 1.37-1.74 2.94-1.74 1.71 0 2.16.74 2.58 1.44.25.41.95.56 1.35.32.4-.24.55-.94.32-1.35C16.8 5.6 15.2 4.4 12 4.4c-4.22 0-7.2 3.14-7.2 7.6 0 4.47 2.98 7.6 7.2 7.6 3.2 0 4.8-1.2 5.1-1.9.23-.41.08-1.11-.32-1.35zM12 14c-1.3 0-2.2-.4-2.8-.9-.6-.5-.9-1.2-.9-2.1 0-1 .3-1.7.9-2.2.6-.5 1.5-.9 2.8-.9 1.3 0 2.2.4 2.8.9.6.5.9 1.2.9 2.2 0 1-.3 1.7-.9 2.2-.6.5-1.5.9-2.8.9z" fill="currentColor"/>
-        </svg>
-      </a>
-      <a href="https://music.apple.com/artist/TU_USUARIO" target="_blank" rel="noopener noreferrer" aria-label="Apple Music">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M12.2 2c-3.1 0-6.1 1.2-8.3 3.5C.3 7.8 0 11.2 1.3 14.6c.7 1.9 2.5 4.3 4.8 5.4 1.4.7 3 1 4.5 1 .7 0 1.5-.1 2.2-.4.4-.1.8-.3 1.2-.6.4.3.7.5 1.1.7.5.3 1.2.4 1.9.4 1.7 0 3.3-1.1 4.3-2.6 1.2-1.7 1.3-3.7.3-5.5-.6-1.1-1.6-2.2-2.9-2.2-1.2 0-2 .6-2.5 1.5-.4.8-.4 1.7-.4 2.6s.1 1.9.4 2.7c.3.8.8 1.4 1.5 1.9.8.5 1.8.8 2.8.8.7 0 1.4-.2 2.1-.5.7-.3 1.3-.8 1.8-1.4.5-.6.9-1.3 1.1-2.1.2-.8.3-1.7.3-2.6 0-1.8-.4-3.5-1.1-5.1-.7-1.5-1.8-2.9-3.2-4.1C16.9 2.9 14.6 2 12.2 2zm-1.8 12.9c.7-.6 1.2-1.4 1.2-2.3 0-.9-.5-1.7-1.2-2.3-.7-.6-1.6-1-2.6-1-1 0-1.9.4-2.6 1-.7.6-1.2 1.4-1.2 2.3 0 .9.5 1.7 1.2 2.3.7.6 1.6 1 2.6 1 1 0 1.9-.4 2.6-1z" fill="currentColor"/>
-        </svg>
-      </a>
-      <a href="https://facebook.com/TU_USUARIO" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3 8.2h-2.5v7.3H12V10.2H9.5V8h2.5V6.5c0-1.2.8-2.5 2.7-2.5h2.3v2.2h-1.5c-.7 0-.9.4-.9.9V8h2.4l-.4 2.2z" fill="currentColor"/>
-        </svg>
-      </a>
-    </div>
+   <div class="social-bar">
+  <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M18.901 1.127h3.763L14.475 12.18l8.23 10.743h-6.495l-4.707-6.195-6.04 6.195H.822l8.71-11.455L.234 1.127h6.635l4.382 5.765 5.56-5.765zm-2.007 19.522h2.296l-7.39-9.761-5.731 9.761h-2.316l8.03-13.38L16.894 1.127h-2.26L10.3 9.47l-4.103-5.385-2.067-2.678h-2.433l8.604 11.332L3.654 22.45h2.152l5.776-9.843L16.894 22.45z"/>
+    </svg>
+  </a>
+  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M12 2.163c3.204 0 3.58.016 4.845.071 1.17.054 1.83.245 2.228.39a3.79 3.79 0 011.696.938c.63.47 1.122 1.045 1.512 1.768.39.72.63 1.48.81 2.37.18.89.333 1.554.39 2.766.054 1.265.07 1.637.07 4.846v3.256c0 3.204-.016 3.58-.07 4.845-.054 1.17-.245 1.83-.39 2.228a3.79 3.79 0 01-.938 1.696c-.47.63-1.045 1.122-1.768 1.512-.72.39-1.48.63-2.37.81-.89.18-1.554.333-2.766.39-1.265.054-1.637.07-4.846.07h-3.256c-3.204 0-3.58-.016-4.845-.07-1.17-.054-1.83-.245-2.228-.39a3.79 3.79 0 01-1.696-.938c-.63-.47-1.122-1.045-1.512-1.768-.39-.72-.63-1.48-.81-2.37-.18-.89-.333-1.554-.39-2.766-.054-1.265-.07-1.637-.07-4.846v-3.256c0-3.204.016-3.58.07-4.845.054-1.17.245-1.83.39-2.228a3.79 3.79 0 01.938-1.696c.47-.63 1.045-1.122 1.768-1.512.72-.39 1.48-.63 2.37-.81.89-.18 1.554-.333 2.766-.39 1.265-.054 1.637-.07 4.846-.07h3.256zm0-1.875h-3.256c-3.266 0-3.666.015-4.945.07c-1.28.056-2.05.253-2.764.536a5.523 5.523 0 00-2.034 1.29c-.74.654-1.332 1.436-1.72 2.37-.386.93-.615 1.954-.78 3.123-.165 1.17-.282 1.874-.282 3.124v3.256c0 3.266.015 3.666.07 4.945.056 1.28.253 2.05.536 2.764a5.523 5.523 0 001.29 2.034c.654.74 1.436 1.332 2.37 1.72.93.386 1.954.615 3.123.78 1.17.165 1.874.282 3.124.282h3.256c3.266 0 3.666-.015 4.945-.07 1.28-.056 2.05-.253 2.764-.536a5.523 5.523 0 002.034-1.29c.74-.654 1.332-1.436 1.72-2.37.386-.93.615-1.954.78-3.123.165-1.17.282-1.874.282-3.124v-3.256c0-3.266-.015-3.666-.07-4.945-.056-1.28-.253-2.05-.536-2.764a5.523 5.523 0 00-1.29-2.034c-.654-.74-1.436-1.332-2.37-1.72-.93-.386-1.954-.615-3.123-.78-1.17-.165-1.874-.282-3.124-.282zm0 13.5c-2.485 0-4.5-2.015-4.5-4.5s2.015-4.5 4.5-4.5 4.5 2.015 4.5 4.5-2.015 4.5-4.5 4.5zm0-7.5c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm4.5-5.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/>
+    </svg>
+  </a>
+  <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M19.61 5.485a2.53 2.53 0 00-1.78-.506c-1.125-.194-4.22-.324-7.83-.324-3.61 0-6.705.13-7.83.324a2.53 2.53 0 00-1.78.506C.76 6.375 0 7.9 0 12c0 4.1.76 5.625 2.22 6.515a2.53 2.53 0 001.78.506c1.125.194 4.22.324 7.83.324 3.61 0 6.705-.13 7.83-.324a2.53 2.53 0 001.78-.506C23.24 17.625 24 16.1 24 12c0-4.1-.76-5.625-2.22-6.515zM9 16.5v-9l7.5 4.5-7.5 4.5z"/>
+    </svg>
+  </a>
+  <a href="https://discord.com" target="_blank" rel="noopener noreferrer">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M20.2 3.1c-1.6-1.5-3.3-2.2-5.1-2.2H8.9c-1.8 0-3.5.7-5.1 2.2C1.6 4.7.7 6.4.7 8.2v7.6c0 1.8.9 3.5 2.2 5.1 1.6 1.5 3.3 2.2 5.1 2.2h.5l.3-.4c1.1-1.3 2.2-2.5 3.5-3.7.8-.7 1.6-1.5 2.4-2.2.3-.3.6-.6.9-1-.1.2-.2.3-.3.5a1.1 1.1 0 01-.6.7l-.3.3-.2.2c-.3.2-.5.5-.8.7-.2.2-.4.4-.6.6a1.2 1.2 0 01-.3.3c-.2.2-.4.4-.6.6l-.3.3c-1.1 1.3-2.2 2.5-3.5 3.7l-.3.4h.5c1.8 0 3.5-.7 5.1-2.2 1.6-1.5 2.2-3.3 2.2-5.1V8.2c0-1.8-.7-3.5-2.2-5.1zM8.9 14.5c.8 0 1.5-.7 1.5-1.5s-.7-1.5-1.5-1.5c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5zM15.1 14.5c.8 0 1.5-.7 1.5-1.5s-.7-1.5-1.5-1.5c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5z"/>
+    </svg>
+  </a>
+</div>
   </div>
   <section class="news" id="news">
     <h2>NEWS <span>ニュース</span></h2>
@@ -527,28 +503,28 @@
     </div>
   </section>
   <div class="section-banner">ディスコグラフィー</div>
+  <!-- === DISCROGRAFÍA: sección reemplazada para cargar portadas desde la API === -->
   <section class="discography" id="discography">
     <div class="carousel-container" aria-label="Discography carousel">
       <div class="carousel-track" id="discography-track">
-        <!-- Contenido generado por JS -->
+        <!-- Antes había media-card estáticos; ahora se llenará desde JS -->
       </div>
       <button class="carousel-btn prev" aria-label="Anterior">‹</button>
       <button class="carousel-btn next" aria-label="Siguiente">›</button>
     </div>
   </section>
+  <!-- === fin discography === -->
   <div class="section-banner">ビデオ</div>
   <section class="videos" id="videos">
     <div class="carousel-container" aria-label="Videos carousel">
       <div class="carousel-track" id="videos-track">
-        <!-- Contenido generado por JS -->
-      </div>
+        </div>
       <button class="carousel-btn prev" aria-label="Anterior">‹</button>
       <button class="carousel-btn next" aria-label="Siguiente">›</button>
     </div>
   </section>
   <footer>
     <div class="social-bar">
-      <!-- Íconos duplicados (opcional) -->
     </div>
     <p>j-tenshiwebcomingsoon</p>
   </footer>
@@ -562,11 +538,9 @@
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-mode');
     }
-
-    // --- TU CÓDIGO ORIGINAL DE LA API DE YOUTUBE (SIN MODIFICAR) ---
-    const API_KEY = 'TU_CLAVE_DE_API'; // Reemplaza con tu clave real
-    const VIDEOS_PLAYLIST_ID = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf';
-    const DISCRO_PLAYLIST_ID = 'PLkcZMdABSTfh-9nA5PElNlK7GL2luMi6j';
+    const API_KEY = 'TU_CLAVE_DE_API';
+    const VIDEOS_PLAYLIST_ID = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf'; // playlist de videos normal
+    const DISCRO_PLAYLIST_ID = 'PLkcZMdABSTfh-9nA5PElNlK7GL2luMi6j'; // playlist de discografía
 
     async function fetchDiscographyVideos() {
       try {
@@ -654,78 +628,155 @@
       });
     }
 
-    // --- CAROUSEL CORREGIDO PARA TUS ESPECIFICACIONES ---
     function initCarousel(options) {
       const track = document.getElementById(options.trackId);
       const prevBtn = document.querySelector(options.prevSelector);
       const nextBtn = document.querySelector(options.nextSelector);
       const container = track.parentElement;
       if (!track || !prevBtn || !nextBtn || !container) return;
-
-      let currentIndex = 0;
-      const cards = Array.from(track.children);
-      const cardWidth = cards[0]?.offsetWidth || 300;
-      const gap = 30;
-      const visibleCards = options.trackId === 'discography-track' ? 5 : 3;
-
-      // Clonar tarjetas para efecto infinito
-      const clonesNeeded = Math.ceil(visibleCards / 2);
-      const startClones = cards.slice(0, clonesNeeded).map(node => node.cloneNode(true));
-      const endClones = cards.slice(-clonesNeeded).map(node => node.cloneNode(true));
+      let isTransitioning = false;
+      const visibleCards = 3;
+      let cards = Array.from(track.children);
+      const totalCards = cards.length;
+      if (totalCards < visibleCards) return;
+      const startClones = cards.slice(0, visibleCards).map(node => node.cloneNode(true));
+      const endClones = cards.slice(-visibleCards).map(node => node.cloneNode(true));
       startClones.forEach(clone => track.appendChild(clone));
       endClones.reverse().forEach(clone => track.insertBefore(clone, track.firstChild));
-
-      function updateCarousel() {
-        const offset = -currentIndex * (cardWidth + gap);
-        track.style.transition = 'transform 0.5s ease';
-        track.style.transform = `translateX(${offset}px)`;
-
-        // Resaltar tarjeta central
-        Array.from(track.children).forEach((card, index) => {
-          card.classList.remove('center-card');
-          if (index === currentIndex + clonesNeeded) {
-            card.classList.add('center-card');
+      cards = Array.from(track.children);
+      let currentIndex = visibleCards;
+      if (options.type === 'center-focus') {
+        function updateVideoCarousel(smoothTransition = true) {
+          if (isTransitioning) return;
+          isTransitioning = true;
+          const cardCenter = cards[currentIndex].offsetLeft + (cards[currentIndex].offsetWidth / 2);
+          const containerCenter = container.offsetWidth / 2;
+          const newTransform = -(cardCenter - containerCenter);
+          track.style.transition = smoothTransition ? 'transform 0.5s ease-in-out' : 'none';
+          track.style.transform = `translateX(${newTransform}px)`;
+          cards.forEach((card, index) => {
+            card.classList.remove('center-card');
+          });
+          cards[currentIndex].classList.add('center-card');
+        }
+        track.addEventListener('transitionend', () => {
+          isTransitioning = false;
+          if (currentIndex >= totalCards + visibleCards) {
+            currentIndex = visibleCards;
+            updateVideoCarousel(false);
+          } else if (currentIndex < visibleCards) {
+            currentIndex = totalCards + currentIndex;
+            updateVideoCarousel(false);
           }
         });
+        prevBtn.addEventListener('click', () => {
+          if (isTransitioning) return;
+          currentIndex--;
+          updateVideoCarousel();
+        });
+        nextBtn.addEventListener('click', () => {
+          if (isTransitioning) return;
+          currentIndex++;
+          updateVideoCarousel();
+        });
+        let autoplayInterval = setInterval(() => {
+          if (!isTransitioning) {
+            currentIndex++;
+            updateVideoCarousel();
+          }
+        }, 4000);
+        container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+        container.addEventListener('mouseleave', () => {
+          autoplayInterval = setInterval(() => {
+            if (!isTransitioning) {
+              currentIndex++;
+              updateVideoCarousel();
+            }
+          }, 4000);
+        });
+        updateVideoCarousel();
+        window.addEventListener('resize', () => {
+          updateVideoCarousel(false);
+        });
+      } else {
+        const cardWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width'));
+        const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-gap'));
+        const step = cardWidth + gap;
+        function updateCarousel() {
+          if (isTransitioning) return;
+          isTransitioning = true;
+          track.style.transform = `translateX(${-currentIndex * step}px)`;
+        }
+        track.style.transition = 'none';
+        track.style.transform = `translateX(${-currentIndex * step}px)`;
+        track.offsetHeight;
+        track.style.transition = 'transform 0.5s ease-in-out';
+        track.addEventListener('transitionend', () => {
+          isTransitioning = false;
+          if (currentIndex >= totalCards + visibleCards) {
+            track.style.transition = 'none';
+            currentIndex = visibleCards;
+            track.style.transform = `translateX(${-currentIndex * step}px)`;
+          } else if (currentIndex < visibleCards) {
+            track.style.transition = 'none';
+            currentIndex = totalCards + currentIndex;
+            track.style.transform = `translateX(${-currentIndex * step}px)`;
+          }
+        });
+        prevBtn.addEventListener('click', () => {
+          if (isTransitioning) return;
+          currentIndex--;
+          updateCarousel();
+        });
+        nextBtn.addEventListener('click', () => {
+          if (isTransitioning) return;
+          currentIndex++;
+          updateCarousel();
+        });
+        let autoplayInterval = setInterval(() => {
+          if (!isTransitioning) {
+            currentIndex++;
+            updateCarousel();
+          }
+        }, 4000);
+        container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+        container.addEventListener('mouseleave', () => {
+          autoplayInterval = setInterval(() => {
+            if (!isTransitioning) {
+              currentIndex++;
+              updateCarousel();
+            }
+          }, 4000);
+        });
       }
-
-      prevBtn.addEventListener('click', () => {
-        currentIndex = Math.max(0, currentIndex - 1);
-        updateCarousel();
-      });
-
-      nextBtn.addEventListener('click', () => {
-        currentIndex = Math.min(cards.length - 1, currentIndex + 1);
-        updateCarousel();
-      });
-
-      // Auto-play
-      let autoplay = setInterval(() => nextBtn.click(), 4000);
-      container.addEventListener('mouseenter', () => clearInterval(autoplay));
-      container.addEventListener('mouseleave', () => autoplay = setInterval(() => nextBtn.click(), 4000));
-
-      // Inicializar
-      updateCarousel();
-      window.addEventListener('resize', updateCarousel);
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      // VIDEOS normales
       fetchPlaylistVideos().then(videos => {
         renderVideos(videos);
-        initCarousel({
-          trackId: 'videos-track',
-          prevSelector: '.videos .carousel-btn.prev',
-          nextSelector: '.videos .carousel-btn.next'
-        });
+        const videosTrack = document.getElementById('videos-track');
+        if (videosTrack && videosTrack.children.length >= 3) {
+          initCarousel({
+            trackId: 'videos-track',
+            prevSelector: '.videos .carousel-btn.prev',
+            nextSelector: '.videos .carousel-btn.next',
+            type: 'center-focus'
+          });
+        }
       });
-
+      // DISCROGRAFÍA
       fetchDiscographyVideos().then(discoVideos => {
         renderDiscography(discoVideos);
-        initCarousel({
-          trackId: 'discography-track',
-          prevSelector: '.discography .carousel-btn.prev',
-          nextSelector: '.discography .carousel-btn.next'
-        });
+        const discographyTrack = document.getElementById('discography-track');
+        if (discographyTrack && discographyTrack.children.length >= 3) {
+          initCarousel({
+            trackId: 'discography-track',
+            prevSelector: '.discography .carousel-btn.prev',
+            nextSelector: '.discography .carousel-btn.next',
+            type: 'center-focus'
+          });
+        }
       });
     });
   </script>
