@@ -422,6 +422,9 @@
     body.light-mode .social-bar svg {
       fill: #555;
     }
+    .discography-card img {
+  aspect-ratio: 1 / 1;
+}
   </style>
 </head>
 <body>
@@ -618,7 +621,7 @@
         const videoId = s.resourceId ? s.resourceId.videoId : null;
         const imgUrl = getBestThumb(s);
         const card = document.createElement('div');
-        card.className = 'media-card';
+        card.className = 'media-card discography-card';
         if (videoId) {
           card.innerHTML = `
             <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" rel="noopener noreferrer">
