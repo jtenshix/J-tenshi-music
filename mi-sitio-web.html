@@ -349,28 +349,31 @@
       position: relative;
       padding: 0;
     }
-    .videos .carousel-track {
-      display: flex;
-      align-items: center;
-      transition: transform 0.5s ease-in-out;
-    }
-    .videos .media-card {
-      width: 300px;
-      margin: 0 10px;
-      flex-shrink: 0;
-      opacity: 0.6;
-      transform: scale(0.9);
-      transition: transform 0.3s ease, opacity 0.3s ease;
-    }
-    .videos {
-      padding-top: 100px;
-      padding-bottom: 100px;
-    }
-    .videos .media-card.center-card {
-      transform: scale(1.2);
-      opacity: 1;
-      z-index: 2;
-    }
+   .videos .media-card {
+  width: 400px;      /* aumenta el tamaño */
+  height: 225px;     /* mantiene proporción 16:9 */
+  margin: 0 15px;
+  flex-shrink: 0;
+  opacity: 0.6;
+  transform: scale(0.9);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.videos .media-card.center-card {
+  transform: scale(1.3);  /* aumenta el video seleccionado */
+  opacity: 1;
+  z-index: 2;
+}
+
+.videos .media-card h4 {
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 6px;
+  white-space: nowrap;       /* todo el texto en una línea */
+  overflow: hidden;          /* corta si no cabe */
+  text-overflow: ellipsis;   /* agrega "..." si sobra */
+}
+
     @media (max-width: 900px) {
       .schedule-grid {
         grid-template-columns: 1fr;
