@@ -14,11 +14,30 @@ jobs:
 
       - name: Inject API Keys into HTML
         run: |
-          sed -i 's/TU_CLAVE_DE_API_YOUTUBE/${{ secrets.YOUTUBE_API_KEY }}/g' index.html movie.html Discography.html
-          sed -i 's/TU_CLAVE_DE_API_DRIVE/${{ secrets.GOOGLE_DRIVE_API_KEY }}/g' index.html
+          # Reemplazar claves en index.html
+          sed -i "s|const YOUTUBE_API_KEY = '.*'|const YOUTUBE_API_KEY = '${{ secrets.YOUTUBE_API_KEY }}'|g" index.html
+          sed -i "s|const GOOGLE_DRIVE_API_KEY = '.*'|const GOOGLE_DRIVE_API_KEY = '${{ secrets.GOOGLE_DRIVE_API_KEY }}'|g" index.html
+
+          # Reemplazar claves en movie.html
+          sed -i "s|const YOUTUBE_API_KEY = '.*'|const YOUTUBE_API_KEY = '${{ secrets.YOUTUBE_API_KEY }}'|g" movie.html
+
+          # Reemplazar claves en Discography.html
+          sed -i "s|const YOUTUBE_API_KEY = '.*'|const YOUTUBE_API_KEY = '${{ secrets.YOUTUBE_API_KEY }}'|g" Discography.html
+
+      - name: Verify API Keys Injection
+        run: |
+          # Verificar que las claves se hayan inyectado correctamente
+          if ! grep -q "${{ secrets.YOUTUBE_API_KEY }}" index.html; then
+            echo "Error: YOUTUBE_API_KEY no se inyectó correctamente en index.html"
+            exit 1
+          fi
+          if ! grep -q "${{ secrets.GOOGLE_DRIVE_API_KEY }}" index.html; then
+            echo "Error: GOOGLE_DRIVE_API_KEY no se inyectó correctamente en index.html"
+            exit 1
+          fi
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+          publish_dir: ./  # Asegúrate de que esta ruta sea correcta
