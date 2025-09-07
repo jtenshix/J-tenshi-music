@@ -12,29 +12,25 @@
       margin: 0;
       padding: 0;
     }
-
     .main-container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
       padding-top: 60px;
     }
-
     h2 {
       text-align: center;
       margin: 40px 0;
       font-size: 32px;
       color: #fff;
     }
-
     .songs-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 20px;
       justify-items: center;
     }
-
-    .song-card, .add-song-card {
+    .song-card {
       background: #222;
       border-radius: 14px;
       padding: 10px;
@@ -42,24 +38,21 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      cursor: pointer;
       width: 100%;
       max-width: 320px;
       transition: transform 0.2s ease-in-out;
-      min-height: 350px;
     }
-
-    .song-card:hover, .add-song-card:hover {
+    .song-card:hover {
       transform: scale(1.05);
     }
-
-    .song-card img, .add-song-card img {
+    .song-card img {
       width: 100%;
       border-radius: 8px;
       object-fit: cover;
       aspect-ratio: 1 / 1;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
-
     .song-card h4 {
       font-size: 16px;
       text-align: center;
@@ -69,7 +62,6 @@
       word-wrap: break-word;
       width: 100%;
     }
-
     .label {
       font-size: 11px;
       color: #e0c27b;
@@ -78,36 +70,27 @@
       border-radius: 999px;
       margin-top: 5px;
     }
-
-    .add-song-card {
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+    .link-container {
+      background: #1a1a1a;
       padding: 20px;
-      background: #333;
-      border: 2px dashed #e0c27b;
+      margin: 40px auto;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
     }
-
-    .add-song-card h3 {
-      color: #e0c27b;
-      margin-bottom: 15px;
-      text-align: center;
-    }
-
-    .add-song-card input {
-      width: 90%;
-      padding: 8px;
-      margin-bottom: 10px;
-      border-radius: 6px;
-      border: 1px solid #555;
+    .link-container input {
+      width: 80%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #333;
       background: #0b0b0b;
       color: #f5f5f5;
-      font-size: 14px;
     }
-
-    .add-song-card button {
-      padding: 8px 15px;
-      border-radius: 6px;
+    .link-container button {
+      padding: 10px 20px;
+      border-radius: 8px;
       border: none;
       background: #e0c27b;
       color: #0b0b0b;
@@ -115,18 +98,28 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-
-    .add-song-card button:hover {
+    .link-container button:hover {
       background: #c59f3f;
     }
-
-    @media (max-width: 600px) {
-      .songs-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      }
-      .song-card, .add-song-card {
-        min-height: 280px;
-      }
+    /* Tarjeta de añadir portada */
+    .add-song-card {
+      background: #333;
+      border: 2px dashed #e0c27b;
+      border-radius: 14px;
+      width: 100%;
+      max-width: 320px;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e0c27b;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .add-song-card:hover {
+      background: #444;
+      transform: scale(1.05);
     }
   </style>
 </head>
@@ -134,25 +127,20 @@
   <div class="main-container">
     <h2>Discografía Oficial</h2>
     <div class="songs-grid" id="songs-grid">
-      <div class="add-song-card">
-        <h3>Añadir Portada (Prueba)</h3>
-        <input type="text" id="image-link-input" placeholder="Pega aquí el enlace de la imagen..." />
-        <button id="load-image-button">Cargar</button>
-      </div>
+      <!-- Tarjeta para añadir portada -->
+      <div class="add-song-card">+ Añadir Portada</div>
+    </div>
+
+    <div class="link-container">
+      <h3>Probar Enlace de Imagen</h3>
+      <input type="text" id="image-link-input" placeholder="Pega un enlace de imagen aquí..." />
+      <button id="load-image-button">Cargar Imagen</button>
     </div>
   </div>
 
   <script>
     const API_KEY = 'TU_CLAVE_DE_API';
     const PLAYLIST_ID = 'PLkcZMdABSTfh-9nA5PElNlK7GL2luMi6j';
-
-    function convertirDriveLink(urlOriginal) {
-      if (urlOriginal.includes('drive.google.com/file/d/')) {
-        const id = urlOriginal.split('/file/d/')[1].split('/view')[0];
-        return `https://drive.google.com/thumbnail?id=${id}&sz=w500`;
-      }
-      return urlOriginal;
-    }
 
     async function fetchPlaylistSongs() {
       try {
@@ -168,11 +156,10 @@
 
     function renderSongs(songs) {
       const songsGrid = document.getElementById('songs-grid');
-      if (!songsGrid) return;
-      
       const addCard = document.querySelector('.add-song-card');
-      songsGrid.innerHTML = ''; // limpiar primero
+      if (!songsGrid) return;
 
+      songsGrid.innerHTML = ''; // Limpiamos todo
       songs.forEach(item => {
         const song = item.snippet;
         const title = song.title || 'Canción sin título';
@@ -189,28 +176,27 @@
         songsGrid.appendChild(card);
       });
 
-      // Añadir la tarjeta de prueba al final
-      if (addCard) songsGrid.appendChild(addCard);
+      if (addCard) songsGrid.appendChild(addCard); // Siempre al final
     }
 
     function setupLinkTest() {
       const songsGrid = document.getElementById('songs-grid');
       const input = document.getElementById('image-link-input');
       const button = document.getElementById('load-image-button');
+      const addCard = document.querySelector('.add-song-card');
 
-      if (input && button && songsGrid) {
+      if (input && button && songsGrid && addCard) {
         button.addEventListener('click', () => {
           const link = input.value;
           if (link) {
-            const newLink = convertirDriveLink(link);
             const card = document.createElement('div');
             card.className = 'song-card';
             card.innerHTML = `
-              <img src="${newLink}" alt="Imagen de prueba">
-              <h4>Nueva portada de prueba</h4>
+              <img src="${link}" alt="Nueva Portada">
+              <h4>Nueva portada</h4>
               <span class="label">TEST</span>
             `;
-            songsGrid.appendChild(card);
+            songsGrid.insertBefore(card, addCard); // Inserta antes de addCard
             input.value = '';
           }
         });
@@ -218,7 +204,9 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      fetchPlaylistSongs().then(songs => renderSongs(songs));
+      fetchPlaylistSongs().then(songs => {
+        renderSongs(songs);
+      });
       setupLinkTest();
     });
   </script>
