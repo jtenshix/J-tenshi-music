@@ -12,10 +12,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Inject API Key into mi-sitio-web.html
-        run: sed -i 's/TU_CLAVE_DE_API/${{ secrets.YOUTUBE_API_KEY }}/g' mi-sitio-web.html movie.html Discography.html
-
-
+      - name: Inject API Keys into HTML
+        run: |
+          sed -i 's/TU_CLAVE_DE_API_YOUTUBE/${{ secrets.YOUTUBE_API_KEY }}/g' index.html movie.html Discography.html
+          sed -i 's/TU_CLAVE_DE_API_DRIVE/${{ secrets.GOOGLE_DRIVE_API_KEY }}/g' index.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
