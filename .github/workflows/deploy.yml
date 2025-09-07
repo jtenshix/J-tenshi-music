@@ -8,36 +8,41 @@ on:
 jobs:
   inject-key:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
 
-      - name: Inject API Keys into HTML
+    steps:
+      # 1. Descargar el código del repositorio
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Inyectar las claves API en los archivos HTML
+      - name: Inject API Keys into HTML files
         run: |
           # Reemplazar claves en index.html
           sed -i "s|const YOUTUBE_API_KEY = ''|const YOUTUBE_API_KEY = '${{ secrets.YOUTUBE_API_KEY }}'|g" index.html
           sed -i "s|const GOOGLE_DRIVE_API_KEY = ''|const GOOGLE_DRIVE_API_KEY = '${{ secrets.GOOGLE_DRIVE_API_KEY }}'|g" index.html
 
-          # Reemplazar claves en movie.html
+          # Reemplazar claves en movie.html (si existe)
           sed -i "s|const YOUTUBE_API_KEY = ''|const YOUTUBE_API_KEY = '${{ secrets.YOUTUBE_API_KEY }}'|g" movie.html
 
-          # Reemplazar claves en Discography.html
+          # Reemplazar claves en Discography.html (si existe)
           sed -i "s|const YOUTUBE_API_KEY = ''|const YOUTUBE_API_KEY = '${{ secrets.YOUTUBE_API_KEY }}'|g" Discography.html
 
+      # 3. Verificar que las claves se hayan inyectado correctamente
       - name: Verify API Keys Injection
         run: |
-          # Verificar que las claves se hayan inyectado correctamente
           if ! grep -q "${{ secrets.YOUTUBE_API_KEY }}" index.html; then
-            echo "Error: YOUTUBE_API_KEY no se inyectó correctamente en index.html"
+            echo "❌ Error: YOUTUBE_API_KEY no se inyectó correctamente en index.html"
             exit 1
           fi
           if ! grep -q "${{ secrets.GOOGLE_DRIVE_API_KEY }}" index.html; then
-            echo "Error: GOOGLE_DRIVE_API_KEY no se inyectó correctamente en index.html"
+            echo "❌ Error: GOOGLE_DRIVE_API_KEY no se inyectó correctamente en index.html"
             exit 1
           fi
 
+      # 4. Desplegar la página en GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./  # Asegúrate de que esta ruta sea correcta
+          publish_dir: ./  # Publica todo el contenido de la raíz
+          keep_files: false  # Elimina archivos antiguos antes de desplegar
