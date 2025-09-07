@@ -116,8 +116,8 @@
       left: 0;
       width: 100%;
       height: 75vh;
-      background: url('banner portada.png') center center no-repeat;
       background-size: cover;
+      background-position: center;
       z-index: 0;
     }
     .hero-text {
@@ -248,8 +248,8 @@
       height: 350px;
       margin: 170px auto;
       border-radius: 12px;
-      background: url('banner portada.png') center center no-repeat;
       background-size: cover;
+      background-position: center;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
       display: flex;
       justify-content: center;
@@ -486,7 +486,7 @@
     <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
   </header>
   <div class="hero-wrapper">
-    <div class="hero-bg"></div>
+    <div class="hero-bg" id="hero-bg"></div>
     <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
   </div>
   <div class="contenedor-centrado">
@@ -562,7 +562,7 @@
       </div>
     </div>
   </section>
-  <div class="section-banner">ディスコグラフィー</div>
+  <div class="section-banner" id="discography-banner">ディスコグラフィー</div>
   <section class="discography" id="discography">
     <div class="carousel-container" aria-label="Discography carousel">
       <div class="carousel-track" id="discography-track"></div>
@@ -583,6 +583,7 @@
     </div>
   </div>
 
+  <div class="section-banner" id="videos-banner">Videos</div>
   <section class="videos" id="videos">
     <div class="carousel-container" aria-label="Videos carousel">
       <div class="carousel-track" id="videos-track"></div>
@@ -601,13 +602,64 @@
       if (localStorage.getItem('theme') === 'light') {
         document.body.classList.add('light-mode');
       }
-      const API_KEY = 'TU_CLAVE_DE_API';
+
+      // Claves de API (serán inyectadas por GitHub Actions)
+      const YOUTUBE_API_KEY = 'TU_CLAVE_DE_API_YOUTUBE';
+      const GOOGLE_DRIVE_API_KEY = 'TU_CLAVE_DE_API_GOOGLE_DRIVE';
+
+      // IDs de listas de reproducción de YouTube
       const VIDEOS_PLAYLIST_ID = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf';
       const DISCRO_PLAYLIST_ID = 'PLkcZMdABSTfh-9nA5PElNlK7GL2luMi6j';
-      const VIDEO_BANNER_ID = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf';
+
+      // IDs de carpetas de Google Drive
+      const HERO_BANNER_FOLDER_ID = '1PKlntTvTkznJTYO717ZKFd8njMDQmlff';
+      const DISCOGRAPHY_BANNER_FOLDER_ID = '1MMaIJX-u0nt8C2EVLGN-ekUKUknS8J6X';
+      const VIDEOS_BANNER_FOLDER_ID = '1jKzx3yrIxx480VmH_avJ6UZxkgpiRsMD';
+
+      // Funciones para obtener imágenes de Google Drive
+      async function fetchGoogleDriveImages(folderId) {
+        try {
+          const response = await fetch(
+            `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${GOOGLE_DRIVE_API_KEY}&fields=files(id,name,webContentLink)`
+          );
+          if (!response.ok) throw new Error('Error al obtener imágenes de Google Drive');
+          const data = await response.json();
+          return data.files || [];
+        } catch (error) {
+          console.error('Error al cargar imágenes:', error);
+          return [];
+        }
+      }
+
+      // Función para cargar imágenes en los banners
+      async function loadBannerImages() {
+        const heroImages = await fetchGoogleDriveImages(HERO_BANNER_FOLDER_ID);
+        const discographyImages = await fetchGoogleDriveImages(DISCOGRAPHY_BANNER_FOLDER_ID);
+        const videosImages = await fetchGoogleDriveImages(VIDEOS_BANNER_FOLDER_ID);
+
+        // Cargar imagen del banner principal (hero)
+        if (heroImages.length > 0) {
+          const heroImageUrl = `https://drive.google.com/uc?id=${heroImages[0].id}`;
+          document.getElementById('hero-bg').style.backgroundImage = `url('${heroImageUrl}')`;
+        }
+
+        // Cargar imagen del banner de discografía
+        if (discographyImages.length > 0) {
+          const discographyImageUrl = `https://drive.google.com/uc?id=${discographyImages[0].id}`;
+          document.getElementById('discography-banner').style.backgroundImage = `url('${discographyImageUrl}')`;
+        }
+
+        // Cargar imagen del banner de videos
+        if (videosImages.length > 0) {
+          const videosImageUrl = `https://drive.google.com/uc?id=${videosImages[0].id}`;
+          document.getElementById('videos-banner').style.backgroundImage = `url('${videosImageUrl}')`;
+        }
+      }
+
+      // Funciones para obtener videos de YouTube
       async function fetchDiscographyVideos() {
         try {
-          const response = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${DISCRO_PLAYLIST_ID}&key=${API_KEY}&maxResults=50`);
+          const response = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${DISCRO_PLAYLIST_ID}&key=${YOUTUBE_API_KEY}&maxResults=50`);
           if (!response.ok) throw new Error('Error al obtener videos de la discografía');
           const data = await response.json();
           return data.items || [];
@@ -616,9 +668,10 @@
           return [];
         }
       }
+
       async function fetchPlaylistVideos() {
         try {
-          const response = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${VIDEOS_PLAYLIST_ID}&key=${API_KEY}&maxResults=50`);
+          const response = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${VIDEOS_PLAYLIST_ID}&key=${YOUTUBE_API_KEY}&maxResults=50`);
           if (!response.ok) throw new Error('Error al obtener videos');
           const data = await response.json();
           return data.items || [];
@@ -627,6 +680,7 @@
           return [];
         }
       }
+
       function renderVideos(videos) {
         const videoTrack = document.getElementById('videos-track');
         if (!videoTrack) return;
@@ -652,6 +706,7 @@
           videoTrack.appendChild(card);
         });
       }
+
       function getBestThumb(snippet) {
         const t = (snippet && snippet.thumbnails) || {};
         return (
@@ -663,6 +718,7 @@
           ''
         );
       }
+
       function renderDiscography(items) {
         const track = document.getElementById('discography-track');
         if (!track) return;
@@ -686,6 +742,7 @@
           track.appendChild(card);
         });
       }
+
       function initCarousel(options) {
         const track = document.getElementById(options.trackId);
         const prevBtn = document.querySelector(options.prevSelector);
@@ -808,7 +865,12 @@
           });
         }
       }
+
       window.addEventListener('DOMContentLoaded', () => {
+        // Cargar imágenes de los banners
+        loadBannerImages();
+
+        // Cargar videos de YouTube
         fetchPlaylistVideos().then(videos => {
           renderVideos(videos);
           const videosTrack = document.getElementById('videos-track');
@@ -821,6 +883,7 @@
             });
           }
         });
+
         fetchDiscographyVideos().then(discoVideos => {
           renderDiscography(discoVideos);
           const discographyTrack = document.getElementById('discography-track');
