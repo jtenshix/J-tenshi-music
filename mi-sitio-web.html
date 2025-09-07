@@ -297,12 +297,13 @@
     .carousel-btn.next {
       right: 10px;
     }
-    .media-card {
+/* Sección de Discografía y Videos */
+.media-card {
   background: #222;
   border-radius: 14px;
   padding: 10px;
-  width: 300px;       /* ANCHO FIJO */
-  height: 300px;      /* ALTO FIJO, cuadrado */
+  width: 300px; /* Ancho fijo */
+  height: 300px; /* Alto fijo, cuadrado */
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
@@ -312,18 +313,21 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.5s ease;
   filter: grayscale(100%);
   cursor: pointer;
+  overflow: hidden; /* ¡Añade esta línea para evitar que la imagen se desborde! */
 }
-    .media-card:hover {
-      filter: grayscale(0%);
-      animation: shake 0.2s ease-in-out infinite alternate;
-    }
-    .media-card img {
-      width: 100%;
-      height: 100%;
-      border-radius: 8px;
-      object-fit: cover;
-      margin-bottom: 8px;
-    }
+.media-card a {
+  display: block; /* Asegura que el enlace se comporte como un bloque y respete los tamaños */
+  width: 100%;
+  height: 100%;
+}
+.media-card img {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 8px; /* Mantén el espacio de la imagen con el texto */
+}
+
     .media-card h4 {
       font-size: 16px;
       text-align: center;
