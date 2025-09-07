@@ -610,29 +610,32 @@
     }
 
     function renderVideos(videos) {
-      const videoTrack = document.getElementById('videos-track');
-      if (!videoTrack) return;
-      videoTrack.innerHTML = '';
-      videos.forEach(item => {
-        const video = item.snippet;
-        const videoId = video && video.resourceId ? video.resourceId.videoId : null;
-        const title = video.title || 'Video';
-        const thumbnailUrl = (video.thumbnails && (video.thumbnails.high || video.thumbnails.medium || video.thumbnails.default)) ? (video.thumbnails.high || video.thumbnails.medium || video.thumbnails.default).url : '';
-        const card = document.createElement('div');
-        card.className = 'media-card';
-        card.innerHTML = `
-          <img src="${thumbnailUrl}" alt="${title}">
-        `;
-        if (videoId) {
-          card.onclick = () => {
-            basicLightbox.create(`
-              <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" width="880" height="495" frameborder="0" allow="autoplay" allowfullscreen></iframe>
-            `).show();
-          };
-        }
-        videoTrack.appendChild(card);
-      });
+  const videoTrack = document.getElementById('videos-track');
+  if (!videoTrack) return;
+  videoTrack.innerHTML = '';
+  videos.forEach(item => {
+    const video = item.snippet;
+    const videoId = video && video.resourceId ? video.resourceId.videoId : null;
+    const title = video.title || 'Video';
+
+    const thumbnailUrl = getBestThumb(video);
+
+    const card = document.createElement('div');
+    card.className = 'media-card video-card';
+    card.innerHTML = `
+      <img src="${thumbnailUrl}" alt="${title}">
+      <h4>${title}</h4>
+    `;
+    if (videoId) {
+      card.onclick = () => {
+        basicLightbox.create(`
+          <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" width="880" height="495" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+        `).show();
+      };
     }
+    videoTrack.appendChild(card);
+  });
+}
 
     function getBestThumb(snippet) {
       const t = (snippet && snippet.thumbnails) || {};
