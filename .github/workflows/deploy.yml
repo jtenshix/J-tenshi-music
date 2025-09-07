@@ -15,9 +15,8 @@ jobs:
 
       - name: Inject API Keys into HTML
         run: |
-          # Reemplazar claves en mi-sitio-web.html
-          sed -i "s|const YOUTUBE_API_KEY = ''|const YOUTUBE_API_KEY = '${{ secrets.YOUTUBE_API_KEY }}'|g" mi-sitio-web.html
-          sed -i "s|const GOOGLE_DRIVE_API_KEY = ''|const GOOGLE_DRIVE_API_KEY = '${{ secrets.GOOGLE_DRIVE_API_KEY }}'|g" mi-sitio-web.html
+          sed -i 's|TU_CLAVE_DE_API_YOUTUBE|${{ secrets.YOUTUBE_API_KEY }}|g' mi-sitio-web.html
+          sed -i 's|TU_CLAVE_DE_API_GOOGLE_DRIVE|${{ secrets.GOOGLE_DRIVE_API_KEY }}|g' mi-sitio-web.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
