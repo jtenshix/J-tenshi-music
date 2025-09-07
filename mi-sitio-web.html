@@ -442,18 +442,21 @@
     /* Contenedor para el video que está "vagando" */
     .video-banner-container {
       position: relative;
-      max-width: 1200px;
-      margin: 100px auto;
-      padding: 0;
+      width: 110%;
+      max-width: 1800px;
+      height: 350px;
+      margin: 170px auto;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .video-banner-container .video-container {
       position: relative;
       width: 100%;
-      height: 0;
-      padding-bottom: 56.25%; /* Relación de aspecto 16:9 */
+      height: 100%;
       overflow: hidden;
     }
     .video-banner-container iframe {
@@ -463,6 +466,7 @@
       width: 100%;
       height: 100%;
       border: none;
+      pointer-events: none;
     }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -571,7 +575,7 @@
   <div class="video-banner-container">
     <div class="video-container">
       <iframe
-        src="https://www.youtube.com/embed/videoseries?list=PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf&autoplay=1&mute=1&loop=1&controls=0&playlist=PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf"
+        src="https://www.youtube.com/embed/videoseries?list=PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf&autoplay=1&mute=1&loop=1&controls=0&playlist=PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf&disablekb=1&fs=0&rel=0"
         frameborder="0"
         allow="autoplay; encrypted-media"
         allowfullscreen
