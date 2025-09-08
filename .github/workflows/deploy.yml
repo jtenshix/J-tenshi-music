@@ -1,4 +1,4 @@
-name: Inject and Deploy API Key
+name: Inject and Deploy API Keys
 
 on:
   push:
@@ -6,19 +6,28 @@ on:
       - main
 
 jobs:
-  inject-key:
+  inject-keys:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4 # Usamos v4 que es la versión más reciente
 
-      - name: Inject API Key into mi-sitio-web.html
-        run: sed -i 's/TU_CLAVE_DE_API/${{ secrets.YOUTUBE_API_KEY }}/g' mi-sitio-web.html movie.html Discography.html
+      - name: Inject YouTube API Key
+        run: |
+          # Reemplaza el placeholder de YouTube en los archivos necesarios
+          sed -i 's/TU_CLAVE_DE_API_YOUTUBE/${{ secrets.YOUTUBE_API_KEY }}/g' index.html
+          sed -i 's/TU_CLAVE_DE_API_YOUTUBE/${{ secrets.YOUTUBE_API_KEY }}/g' discorgafia.html
+          sed -i 's/TU_CLAVE_DE_API_YOUTUBE/${{ secrets.YOUTUBE_API_KEY }}/g' movie.html
 
-
+      - name: Inject Google Drive API Key
+        run: |
+          # Reemplaza el placeholder de Google Drive solo en el archivo donde se usa
+          sed -i 's/TU_CLAVE_DE_API_GOOGLE_DRIVE/${{ secrets.GOOGLE_DRIVE_API_KEY }}/g' index.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
+          keep_files: false
