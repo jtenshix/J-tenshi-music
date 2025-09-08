@@ -1,5 +1,5 @@
 name: Inject and Deploy API Key
- 
+
 on:
   push:
     branches:
@@ -10,18 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
-      - name: Inject API Keys into HTML
-        env:
-          YOUTUBE_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-          DRIVE_KEY: ${{ secrets.GOOGLE_DRIVE_API_KEY }}
-        run: |
-          sed -i "s|TU_CLAVE_DE_API_YOUTUBE|$YOUTUBE_KEY|g" index.html
-          sed -i "s|TU_CLAVE_DE_API_GOOGLE_DRIVE|$DRIVE_KEY|g" index.html
-          sed -i "s|TU_CLAVE_DE_API_YOUTUBE|$YOUTUBE_KEY|g" news.html
-          sed -i "s|TU_CLAVE_DE_API_GOOGLE_DRIVE|$DRIVE_KEY|g" news.html
-          sed -i "s|TU_CLAVE_DE_API_YOUTUBE|$YOUTUBE_KEY|g" movie.html
+      - name: Inject API Key into mi-sitio-web.html
+        run: sed -i 's/TU_CLAVE_DE_API/${{ secrets.YOUTUBE_API_KEY }}/g' mi-sitio-web.html movie.html Discography.html
+
+
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
