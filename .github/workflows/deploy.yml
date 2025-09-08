@@ -3,7 +3,7 @@ name: Inject and Deploy API Key
 on:
   push:
     branches:
-      - main
+      - main 
 
 jobs:
   inject-key:
