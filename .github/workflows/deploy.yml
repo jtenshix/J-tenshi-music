@@ -1,4 +1,4 @@
-name: Inject and Deploy API Key (YouTube Only)
+name: Inject and Deploy API Key
 
 on:
   push:
@@ -11,14 +11,13 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4 # Usamos v4 por ser la última versión
+        uses: actions/checkout@v4
 
-      - name: Inject YouTube API Key into HTML
+      - name: Inject API Key into HTML
         run: |
-          # Reemplaza el placeholder de YouTube en todos los archivos
-          sed -i 's|TU_CLAVE_DE_API_YOUTUBE|${{ secrets.YOUTUBE_API_KEY }}|g' index.html
-          sed -i 's|TU_CLAVE_DE_API_YOUTUBE|${{ secrets.YOUTUBE_API_KEY }}|g' discorgafia.html
-          sed -i 's|TU_CLAVE_DE_API_YOUTUBE|${{ secrets.YOUTUBE_API_KEY }}|g' movie.html
+          sed -i "s|TU_CLAVE_DE_API|${{ secrets.YOUTUBE_API_KEY }}|g" index.html
+          sed -i "s|TU_CLAVE_DE_API|${{ secrets.YOUTUBE_API_KEY }}|g" movie.html
+          sed -i "s|TU_CLAVE_DE_API|${{ secrets.YOUTUBE_API_KEY }}|g" discorgafia.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
