@@ -1,6 +1,6 @@
 name: Inject and Deploy API Key
 
-on:
+on: 
   push:
     branches:
       - main
