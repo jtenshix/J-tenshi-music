@@ -8,20 +8,21 @@ on:
 jobs:
   inject-key:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Inject API Key into HTML
+      - name: Inject API Keys into HTML
         run: |
-          sed -i "s|TU_CLAVE_DE_API|${{ secrets.YOUTUBE_API_KEY }}|g" index.html
-          sed -i "s|TU_CLAVE_DE_API|${{ secrets.YOUTUBE_API_KEY }}|g" movie.html
-          sed -i "s|TU_CLAVE_DE_API|${{ secrets.YOUTUBE_API_KEY }}|g" discorgafia.html
+          # CORRECCIÓN: Se corrigió la sintaxis del comando 'sed'.
+          # Ahora usa el delimitador "|" en lugar de "/" para evitar errores.
+          sed -i "s|TU_CLAVE_DE_API_YOUTUBE|${{ secrets.YOUTUBE_API_KEY }}|g" index.html
+          sed -i "s|TU_CLAVE_DE_API_GOOGLE_DRIVE|${{ secrets.GOOGLE_DRIVE_API_KEY }}|g" index.html
+          sed -i "s|TU_CLAVE_DE_API_YOUTUBE|${{ secrets.YOUTUBE_API_KEY }}|g" news.html
+          sed -i "s|TU_CLAVE_DE_API_GOOGLE_DRIVE|${{ secrets.GOOGLE_DRIVE_API_KEY }}|g" news.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
-          keep_files: false
