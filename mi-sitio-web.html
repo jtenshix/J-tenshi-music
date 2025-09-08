@@ -404,6 +404,93 @@
             text-overflow: ellipsis;
         }
 
+        /* Estilo para el carrusel de discografía */
+        .discography .carousel-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .discography .carousel-track {
+            display: flex;
+            gap: 20px;
+            transition: transform 0.5s ease-in-out;
+            padding: 0 100px;
+        }
+
+        .discography .media-card {
+            width: 220px;
+            height: 300px;
+            flex-shrink: 0;
+            opacity: 0.6;
+            transform: scale(0.9);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            overflow: visible;
+        }
+
+        .discography .media-card.center-card {
+            transform: scale(1.1);
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .discography .media-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .discography .media-card h4 {
+            font-size: 16px;
+            text-align: center;
+            margin: 10px 0 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .discography .label {
+            font-size: 11px;
+            color: #e0c27b;
+            border: 1px solid #e0c27b;
+            padding: 2px 6px;
+            border-radius: 999px;
+            width: fit-content;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .discography .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: #e0c27b;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 10;
+            padding: 10px;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .discography .carousel-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .discography .carousel-btn.prev {
+            left: 10px;
+        }
+
+        .discography .carousel-btn.next {
+            right: 10px;
+        }
+
         @media (max-width: 900px) {
             .schedule-grid {
                 grid-template-columns: 1fr;
@@ -422,6 +509,15 @@
 
             .videos .media-card {
                 width: 150px;
+            }
+
+            .discography .media-card {
+                width: 150px;
+                height: 250px;
+            }
+
+            .discography .media-card img {
+                height: 150px;
             }
         }
 
@@ -460,10 +556,6 @@
             fill: #555;
         }
 
-        .discography-card img {
-            aspect-ratio: 1 / 1;
-        }
-
         .music-platforms {
             display: flex;
             gap: 10px;
@@ -476,52 +568,6 @@
             gap: 10px;
             align-items: center;
             margin-top: -70px;
-        }
-
-        .songs-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            justify-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .song-card {
-            background: #222;
-            border-radius: 14px;
-            padding: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            width: 100%;
-            max-width: 320px;
-            transition: transform 0.2s ease-in-out;
-        }
-
-        .song-card:hover {
-            transform: scale(1.05);
-        }
-
-        .song-card img {
-            width: 100%;
-            border-radius: 8px;
-            object-fit: cover;
-            aspect-ratio: 1 / 1;
-            margin-bottom: 8px;
-        }
-
-        .song-card h4 {
-            font-size: 16px;
-            text-align: center;
-            margin: 0;
-            padding: 0 5px;
-            color: #f5f5f5;
-            word-wrap: break-word;
-            width: 100%;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -621,7 +667,11 @@
 
     <div class="section-banner">ディスコグラフィー</div>
     <section class="discography" id="discography">
-        <div class="songs-grid" id="songs-grid"></div>
+        <div class="carousel-container" aria-label="Discography carousel">
+            <div class="carousel-track" id="discography-track"></div>
+            <button class="carousel-btn prev" aria-label="Anterior">‹</button>
+            <button class="carousel-btn next" aria-label="Siguiente">›</button>
+        </div>
     </section>
 
     <div class="section-banner">ビデオ</div>
@@ -698,11 +748,11 @@
         }
 
         function renderDiscography(songs) {
-            const songsGrid = document.getElementById('songs-grid');
-            if (!songsGrid) return;
-            songsGrid.innerHTML = '';
+            const discographyTrack = document.getElementById('discography-track');
+            if (!discographyTrack) return;
+            discographyTrack.innerHTML = '';
             if (!songs || songs.length === 0) {
-                songsGrid.innerHTML = '<p style="text-align:center;color:#ccc;">No hay canciones</p>';
+                discographyTrack.innerHTML = '<div class="media-card"><p style="text-align:center;color:#ccc;">No hay canciones</p></div>';
                 return;
             }
             songs.forEach(item => {
@@ -711,13 +761,13 @@
                 const thumbnailUrl = song.thumbnails?.high?.url || song.thumbnails?.medium?.url || 'https://via.placeholder.com/320x320';
                 const type = song.description.includes('Album') ? 'Album' : 'Single';
                 const card = document.createElement('div');
-                card.className = 'song-card';
+                card.className = 'media-card';
                 card.innerHTML = `
                     <img src="${thumbnailUrl}" alt="${title}">
                     <h4>${title}</h4>
                     <span class="label">${type}</span>
                 `;
-                songsGrid.appendChild(card);
+                discographyTrack.appendChild(card);
             });
         }
 
@@ -727,11 +777,14 @@
             const nextBtn = document.querySelector(options.nextSelector);
             const container = track ? track.parentElement : null;
             if (!track || !prevBtn || !nextBtn || !container) return;
+
             let isTransitioning = false;
-            const visibleCards = 3;
+            const visibleCards = options.visibleCards || 3;
             let cards = Array.from(track.children);
             const totalCards = cards.length;
-            if (totalCards < visibleCards) return;
+
+            if (totalCards <= visibleCards) return;
+
             const startClones = cards.slice(0, visibleCards).map(node => node.cloneNode(true));
             const endClones = cards.slice(-visibleCards).map(node => node.cloneNode(true));
             startClones.forEach(clone => track.appendChild(clone));
@@ -739,12 +792,17 @@
             cards = Array.from(track.children);
             let currentIndex = visibleCards;
 
-            if (options.type === 'center-focus') {
-                function updateVideoCarousel(smoothTransition = true) {
-                    if (isTransitioning) return;
-                    isTransitioning = true;
-                    const card = cards[currentIndex];
-                    if (!card) { isTransitioning = false; return; }
+            function updateCarousel(smoothTransition = true) {
+                if (isTransitioning) return;
+                isTransitioning = true;
+
+                const card = cards[currentIndex];
+                if (!card) {
+                    isTransitioning = false;
+                    return;
+                }
+
+                if (options.type === 'center-focus') {
                     const cardCenter = card.offsetLeft + (card.offsetWidth / 2);
                     const containerCenter = container.offsetWidth / 2;
                     const newTransform = -(cardCenter - containerCenter);
@@ -752,51 +810,57 @@
                     track.style.transform = `translateX(${newTransform}px)`;
                     cards.forEach(c => c.classList.remove('center-card'));
                     card.classList.add('center-card');
+                } else {
+                    const cardWidth = card.offsetWidth;
+                    const gap = 20;
+                    const step = cardWidth + gap;
+                    track.style.transition = smoothTransition ? 'transform 0.5s ease-in-out' : 'none';
+                    track.style.transform = `translateX(${-currentIndex * step}px)`;
                 }
+            }
 
-                track.addEventListener('transitionend', () => {
-                    isTransitioning = false;
-                    if (currentIndex >= totalCards + visibleCards) {
-                        currentIndex = visibleCards;
-                        updateVideoCarousel(false);
-                    } else if (currentIndex < visibleCards) {
-                        currentIndex = totalCards + currentIndex;
-                        updateVideoCarousel(false);
-                    }
-                });
+            track.addEventListener('transitionend', () => {
+                isTransitioning = false;
+                if (currentIndex >= totalCards + visibleCards) {
+                    currentIndex = visibleCards;
+                    updateCarousel(false);
+                } else if (currentIndex < visibleCards) {
+                    currentIndex = totalCards + currentIndex;
+                    updateCarousel(false);
+                }
+            });
 
-                prevBtn.addEventListener('click', () => {
-                    if (isTransitioning) return;
-                    currentIndex--;
-                    updateVideoCarousel();
-                });
+            prevBtn.addEventListener('click', () => {
+                if (isTransitioning) return;
+                currentIndex--;
+                updateCarousel();
+            });
 
-                nextBtn.addEventListener('click', () => {
-                    if (isTransitioning) return;
+            nextBtn.addEventListener('click', () => {
+                if (isTransitioning) return;
+                currentIndex++;
+                updateCarousel();
+            });
+
+            let autoplayInterval = setInterval(() => {
+                if (!isTransitioning) {
                     currentIndex++;
-                    updateVideoCarousel();
-                });
+                    updateCarousel();
+                }
+            }, 4000);
 
-                let autoplayInterval = setInterval(() => {
+            container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+            container.addEventListener('mouseleave', () => {
+                autoplayInterval = setInterval(() => {
                     if (!isTransitioning) {
                         currentIndex++;
-                        updateVideoCarousel();
+                        updateCarousel();
                     }
                 }, 4000);
+            });
 
-                container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
-                container.addEventListener('mouseleave', () => {
-                    autoplayInterval = setInterval(() => {
-                        if (!isTransitioning) {
-                            currentIndex++;
-                            updateVideoCarousel();
-                        }
-                    }, 4000);
-                });
-
-                updateVideoCarousel();
-                window.addEventListener('resize', () => updateVideoCarousel(false));
-            }
+            updateCarousel();
+            window.addEventListener('resize', () => updateCarousel(false));
         }
 
         window.addEventListener('DOMContentLoaded', async () => {
@@ -808,12 +872,23 @@
                     trackId: 'videos-track',
                     prevSelector: '.videos .carousel-btn.prev',
                     nextSelector: '.videos .carousel-btn.next',
-                    type: 'center-focus'
+                    type: 'center-focus',
+                    visibleCards: 3
                 });
             }
 
             const discographySongs = await fetchFromPlaylist(DISCRO_PLAYLIST_ID);
             renderDiscography(discographySongs);
+            const discographyTrack = document.getElementById('discography-track');
+            if (discographyTrack && discographyTrack.children.length >= 5) {
+                initCarousel({
+                    trackId: 'discography-track',
+                    prevSelector: '.discography .carousel-btn.prev',
+                    nextSelector: '.discography .carousel-btn.next',
+                    type: 'center-focus',
+                    visibleCards: 5
+                });
+            }
         });
     </script>
 </body>
