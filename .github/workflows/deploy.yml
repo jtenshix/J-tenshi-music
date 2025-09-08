@@ -13,23 +13,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Prepare API Keys
-        id: prep-keys
-        run: |
-          # Limpia saltos de línea y espacios al principio/final de las claves
-          YOUTUBE_KEY=$(echo "${{ secrets.YOUTUBE_API_KEY }}" | tr -d '\n' | xargs)
-          GOOGLE_DRIVE_KEY=$(echo "${{ secrets.GOOGLE_DRIVE_API_KEY }}" | tr -d '\n' | xargs)
-          echo "::set-output name=YOUTUBE_KEY::$YOUTUBE_KEY"
-          echo "::set-output name=GOOGLE_DRIVE_KEY::$GOOGLE_DRIVE_KEY"
-
       - name: Inject API Keys into HTML
         run: |
-          # Reemplaza los placeholders en todos los archivos que los necesitan
-          # Usando el símbolo '@' como separador, es muy raro que esté en una clave API
-          sed -i "s@TU_CLAVE_DE_API_YOUTUBE@${{ steps.prep-keys.outputs.YOUTUBE_KEY }}@g" index.html
-          sed -i "s@TU_CLAVE_DE_API_GOOGLE_DRIVE@${{ steps.prep-keys.outputs.GOOGLE_DRIVE_KEY }}@g" index.html
-          sed -i "s@TU_CLAVE_DE_API_YOUTUBE@${{ steps.prep-keys.outputs.YOUTUBE_KEY }}@g" discorgafia.html
-          sed -i "s@TU_CLAVE_DE_API_YOUTUBE@${{ steps.prep-keys.outputs.YOUTUBE_KEY }}@g" movie.html
+          # Las claves de API pueden contener caracteres especiales y saltos de línea.
+          # Usaremos variables de bash para manejar esto de forma segura.
+
+          # Obtener la clave de YouTube y eliminar posibles caracteres extraños al final
+          YOUTUBE_KEY="${{ secrets.YOUTUBE_API_KEY }}"
+          YOUTUBE_KEY=$(echo "$YOUTUBE_KEY" | tr -d '\r') # Elimina saltos de línea (Windows style)
+          YOUTUBE_KEY=$(echo "$YOUTUBE_KEY" | tr -d '\n')  # Elimina saltos de línea (Unix style)
+          # Escapa caracteres especiales de sed si es necesario, aunque la sustitución directa suele ser mejor
+          YOUTUBE_KEY_ESCAPED=$(echo "$YOUTUBE_KEY" | sed 's/[&/\]/\\&/g') # Escapa caracteres comunes problemáticos
+
+          # Obtener la clave de Google Drive y eliminar posibles caracteres extraños al final
+          GOOGLE_DRIVE_KEY="${{ secrets.GOOGLE_DRIVE_API_KEY }}"
+          GOOGLE_DRIVE_KEY=$(echo "$GOOGLE_DRIVE_KEY" | tr -d '\r')
+          GOOGLE_DRIVE_KEY=$(echo "$GOOGLE_DRIVE_KEY" | tr -d '\n')
+          GOOGLE_DRIVE_KEY_ESCAPED=$(echo "$GOOGLE_DRIVE_KEY" | sed 's/[&/\]/\\&/g')
+
+          # Usar las claves procesadas para reemplazar en los archivos
+          # Usamos un separador que no aparezca en las claves, como '@'
+          sed -i "s@TU_CLAVE_DE_API_YOUTUBE@${YOUTUBE_KEY_ESCAPED}@g" index.html
+          sed -i "s@TU_CLAVE_DE_API_GOOGLE_DRIVE@${GOOGLE_DRIVE_KEY_ESCAPED}@g" index.html
+          sed -i "s@TU_CLAVE_DE_API_YOUTUBE@${YOUTUBE_KEY_ESCAPED}@g" discorgafia.html
+          sed -i "s@TU_CLAVE_DE_API_YOUTUBE@${YOUTUBE_KEY_ESCAPED}@g" movie.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
