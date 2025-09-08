@@ -1,7 +1,7 @@
 name: Inject and Deploy API Key
 
-on:  
-  push: 
+on:
+  push:
     branches:
       - main
 
@@ -14,7 +14,8 @@ jobs:
 
       - name: Inject API Key into HTML
         run: |
-          sed -i 's|TU_CLAVE_DE_API|${{ secrets.YOUTUBE_API_KEY }}|g' mi-sitio-web.html movie.html Discography.html
+          # Reemplazar en TODOS los archivos .html del repo
+          find . -type f -name "*.html" -exec sed -i 's|TU_CLAVE_DE_API|${{ secrets.YOUTUBE_API_KEY }}|g' {} +
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
