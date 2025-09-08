@@ -11,11 +11,35 @@
       box-sizing: border-box;
     }
 
+    :root {
+      --card-width: 320px;
+      --card-gap: 20px;
+    }
+
     body {
       font-family: 'Helvetica Neue', sans-serif;
       background: #0b0b0b;
       color: #f5f5f5;
       overflow-x: hidden;
+    }
+
+    body.light-mode {
+      background: #f5f5f5;
+      color: #111;
+    }
+
+    body.light-mode .main-container,
+    body.light-mode .video-card {
+      background-color: #f0f0f0;
+      color: #111;
+    }
+
+    body.light-mode nav a {
+      color: #333;
+    }
+
+    body.light-mode nav a:hover {
+      color: #c59f3f;
     }
 
     header {
@@ -106,11 +130,46 @@
       border: none;
     }
 
-    .video-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-      justify-items: center;
+    .carousel-container {
+      position: relative;
+      overflow: hidden;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 0;
+    }
+
+    .carousel-track {
+      display: flex;
+      gap: var(--card-gap);
+      transition: transform 0.5s ease-in-out;
+      padding: 0 100px;
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      color: #e0c27b;
+      font-size: 2rem;
+      cursor: pointer;
+      z-index: 10;
+      padding: 10px;
+      border-radius: 50%;
+      transition: all 0.3s;
+    }
+
+    .carousel-btn:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .carousel-btn.prev {
+      left: 10px;
+    }
+
+    .carousel-btn.next {
+      right: 10px;
     }
 
     .video-card {
@@ -122,25 +181,31 @@
       flex-direction: column;
       align-items: center;
       cursor: pointer;
-      width: 100%;
-      max-width: 320px;
-      transition: transform 0.2s ease-in-out;
+      width: 280px;
+      height: 200px;
+      flex-shrink: 0;
+      opacity: 0.7;
+      transform: scale(0.9);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      overflow: hidden;
     }
 
-    .video-card:hover {
-      transform: scale(1.05);
+    .video-card.center-card {
+      transform: scale(1.1);
+      opacity: 1;
+      z-index: 2;
     }
 
     .video-card img {
       width: 100%;
-      border-radius: 8px;
+      height: 140px;
       object-fit: cover;
-      aspect-ratio: 16 / 9;
+      border-radius: 8px;
       margin-bottom: 8px;
     }
 
     .video-card h4 {
-      font-size: 16px;
+      font-size: 14px;
       text-align: center;
       margin: 0;
       padding: 0 5px;
@@ -170,6 +235,15 @@
       .main-player-wrapper {
         width: 90%;
       }
+
+      .video-card {
+        width: 220px;
+        height: 180px;
+      }
+
+      .video-card img {
+        height: 120px;
+      }
     }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -196,7 +270,11 @@
       <div class="main-player-wrapper">
         <iframe id="main-player" src="" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
-      <div class="video-grid" id="video-grid"></div>
+      <div class="carousel-container" aria-label="Videos carousel">
+        <div class="carousel-track" id="videos-track"></div>
+        <button class="carousel-btn prev" aria-label="Anterior">‹</button>
+        <button class="carousel-btn next" aria-label="Siguiente">›</button>
+      </div>
     </section>
   </div>
 
@@ -240,11 +318,11 @@
     }
 
     function renderVideos(videos) {
-      const videoGrid = document.getElementById('video-grid');
-      if (!videoGrid) return;
-      videoGrid.innerHTML = '';
-      if (videos.length === 0) {
-        videoGrid.innerHTML = '<p style="text-align:center;color:#ccc;">No hay videos para mostrar</p>';
+      const videoTrack = document.getElementById('videos-track');
+      if (!videoTrack) return;
+      videoTrack.innerHTML = '';
+      if (!videos || videos.length === 0) {
+        videoTrack.innerHTML = '<div class="video-card"><p style="text-align:center;color:#ccc;">No hay videos para mostrar</p></div>';
         return;
       }
       videos.forEach(item => {
@@ -263,7 +341,7 @@
           setMainPlayer(videoId);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         };
-        videoGrid.appendChild(card);
+        videoTrack.appendChild(card);
       });
       if (videos.length) setMainPlayer(videos[0].snippet.resourceId.videoId);
     }
@@ -272,8 +350,90 @@
       mainPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&modestbranding=1&rel=0&showinfo=0`;
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      fetchPlaylistVideos().then(renderVideos);
+    function initCarousel() {
+      const track = document.getElementById('videos-track');
+      const prevBtn = document.querySelector('.carousel-btn.prev');
+      const nextBtn = document.querySelector('.carousel-btn.next');
+      const container = track ? track.parentElement : null;
+
+      if (!track || !prevBtn || !nextBtn || !container) return;
+
+      let isTransitioning = false;
+      let cards = Array.from(track.children);
+      const totalCards = cards.length;
+
+      if (totalCards <= 1) return;
+
+      function updateCarousel(smoothTransition = true) {
+        if (isTransitioning) return;
+        isTransitioning = true;
+
+        const card = cards[Math.floor(cards.length / 2)];
+        if (!card) {
+          isTransitioning = false;
+          return;
+        }
+
+        const cardCenter = card.offsetLeft + (card.offsetWidth / 2);
+        const containerCenter = container.offsetWidth / 2;
+        const newTransform = -(cardCenter - containerCenter);
+
+        track.style.transition = smoothTransition ? 'transform 0.5s ease-in-out' : 'none';
+        track.style.transform = `translateX(${newTransform}px)`;
+
+        cards.forEach(c => c.classList.remove('center-card'));
+        card.classList.add('center-card');
+
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 500);
+      }
+
+      prevBtn.addEventListener('click', () => {
+        if (isTransitioning) return;
+        const firstCard = cards[0];
+        track.appendChild(firstCard);
+        cards = Array.from(track.children);
+        updateCarousel();
+      });
+
+      nextBtn.addEventListener('click', () => {
+        if (isTransitioning) return;
+        const lastCard = cards[cards.length - 1];
+        track.prepend(lastCard);
+        cards = Array.from(track.children);
+        updateCarousel();
+      });
+
+      let autoplayInterval = setInterval(() => {
+        if (!isTransitioning) {
+          const lastCard = cards[cards.length - 1];
+          track.prepend(lastCard);
+          cards = Array.from(track.children);
+          updateCarousel();
+        }
+      }, 4000);
+
+      container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+      container.addEventListener('mouseleave', () => {
+        autoplayInterval = setInterval(() => {
+          if (!isTransitioning) {
+            const lastCard = cards[cards.length - 1];
+            track.prepend(lastCard);
+            cards = Array.from(track.children);
+            updateCarousel();
+          }
+        }, 4000);
+      });
+
+      updateCarousel();
+      window.addEventListener('resize', () => updateCarousel(false));
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      const videos = await fetchPlaylistVideos();
+      renderVideos(videos);
+      initCarousel();
     });
   </script>
 </body>
