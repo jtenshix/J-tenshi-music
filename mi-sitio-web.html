@@ -318,8 +318,6 @@
             background: #222;
             border-radius: 14px;
             padding: 10px;
-            width: 350px;
-            height: 350px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
             display: flex;
             flex-direction: column;
@@ -404,26 +402,20 @@
             text-overflow: ellipsis;
         }
 
-        /* Estilo para el carrusel de discografía */
+        /* Estilo para el carrusel de discografía (igual al de videos) */
         .discography .carousel-container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
-            overflow: hidden;
+            overflow: visible;
             position: relative;
-            padding: 40px 0;
-        }
-
-        .discography .carousel-track {
-            display: flex;
-            gap: 20px;
-            transition: transform 0.5s ease-in-out;
-            padding: 0 100px;
+            padding-top: 80px;
         }
 
         .discography .media-card {
             width: 220px;
             height: 300px;
+            margin: 0 15px;
             flex-shrink: 0;
             opacity: 0.6;
             transform: scale(0.9);
@@ -447,48 +439,10 @@
         .discography .media-card h4 {
             font-size: 16px;
             text-align: center;
-            margin: 10px 0 5px;
+            margin-bottom: 6px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-        }
-
-        .discography .label {
-            font-size: 11px;
-            color: #e0c27b;
-            border: 1px solid #e0c27b;
-            padding: 2px 6px;
-            border-radius: 999px;
-            width: fit-content;
-            margin: 0 auto;
-            display: block;
-        }
-
-        .discography .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.5);
-            border: none;
-            color: #e0c27b;
-            font-size: 2rem;
-            cursor: pointer;
-            z-index: 10;
-            padding: 10px;
-            border-radius: 50%;
-            transition: all 0.3s;
-        }
-
-        .discography .carousel-btn:hover {
-            background: rgba(0, 0, 0, 0.8);
-        }
-
-        .discography .carousel-btn.prev {
-            left: 10px;
-        }
-
-        .discography .carousel-btn.next {
-            right: 10px;
         }
 
         @media (max-width: 900px) {
@@ -722,7 +676,7 @@
             if (!videoTrack) return;
             videoTrack.innerHTML = '';
             if (!videos || videos.length === 0) {
-                videoTrack.innerHTML = '<div class="news-card"><p style="text-align:center;color:#ccc;">No hay videos para mostrar</p></div>';
+                videoTrack.innerHTML = '<div class="media-card"><p style="text-align:center;color:#ccc;">No hay videos para mostrar</p></div>';
                 return;
             }
             videos.forEach(item => {
@@ -779,72 +733,57 @@
             if (!track || !prevBtn || !nextBtn || !container) return;
 
             let isTransitioning = false;
-            const visibleCards = options.visibleCards || 3;
             let cards = Array.from(track.children);
             const totalCards = cards.length;
 
-            if (totalCards <= visibleCards) return;
-
-            const startClones = cards.slice(0, visibleCards).map(node => node.cloneNode(true));
-            const endClones = cards.slice(-visibleCards).map(node => node.cloneNode(true));
-            startClones.forEach(clone => track.appendChild(clone));
-            endClones.reverse().forEach(clone => track.insertBefore(clone, track.firstChild));
-            cards = Array.from(track.children);
-            let currentIndex = visibleCards;
+            if (totalCards <= 1) return;
 
             function updateCarousel(smoothTransition = true) {
                 if (isTransitioning) return;
                 isTransitioning = true;
 
-                const card = cards[currentIndex];
+                const card = cards[Math.floor(cards.length / 2)];
                 if (!card) {
                     isTransitioning = false;
                     return;
                 }
 
-                if (options.type === 'center-focus') {
-                    const cardCenter = card.offsetLeft + (card.offsetWidth / 2);
-                    const containerCenter = container.offsetWidth / 2;
-                    const newTransform = -(cardCenter - containerCenter);
-                    track.style.transition = smoothTransition ? 'transform 0.5s ease-in-out' : 'none';
-                    track.style.transform = `translateX(${newTransform}px)`;
-                    cards.forEach(c => c.classList.remove('center-card'));
-                    card.classList.add('center-card');
-                } else {
-                    const cardWidth = card.offsetWidth;
-                    const gap = 20;
-                    const step = cardWidth + gap;
-                    track.style.transition = smoothTransition ? 'transform 0.5s ease-in-out' : 'none';
-                    track.style.transform = `translateX(${-currentIndex * step}px)`;
-                }
-            }
+                const cardCenter = card.offsetLeft + (card.offsetWidth / 2);
+                const containerCenter = container.offsetWidth / 2;
+                const newTransform = -(cardCenter - containerCenter);
 
-            track.addEventListener('transitionend', () => {
-                isTransitioning = false;
-                if (currentIndex >= totalCards + visibleCards) {
-                    currentIndex = visibleCards;
-                    updateCarousel(false);
-                } else if (currentIndex < visibleCards) {
-                    currentIndex = totalCards + currentIndex;
-                    updateCarousel(false);
-                }
-            });
+                track.style.transition = smoothTransition ? 'transform 0.5s ease-in-out' : 'none';
+                track.style.transform = `translateX(${newTransform}px)`;
+
+                cards.forEach(c => c.classList.remove('center-card'));
+                card.classList.add('center-card');
+
+                setTimeout(() => {
+                    isTransitioning = false;
+                }, 500);
+            }
 
             prevBtn.addEventListener('click', () => {
                 if (isTransitioning) return;
-                currentIndex--;
+                const firstCard = cards[0];
+                track.appendChild(firstCard);
+                cards = Array.from(track.children);
                 updateCarousel();
             });
 
             nextBtn.addEventListener('click', () => {
                 if (isTransitioning) return;
-                currentIndex++;
+                const lastCard = cards[cards.length - 1];
+                track.prepend(lastCard);
+                cards = Array.from(track.children);
                 updateCarousel();
             });
 
             let autoplayInterval = setInterval(() => {
                 if (!isTransitioning) {
-                    currentIndex++;
+                    const lastCard = cards[cards.length - 1];
+                    track.prepend(lastCard);
+                    cards = Array.from(track.children);
                     updateCarousel();
                 }
             }, 4000);
@@ -853,7 +792,9 @@
             container.addEventListener('mouseleave', () => {
                 autoplayInterval = setInterval(() => {
                     if (!isTransitioning) {
-                        currentIndex++;
+                        const lastCard = cards[cards.length - 1];
+                        track.prepend(lastCard);
+                        cards = Array.from(track.children);
                         updateCarousel();
                     }
                 }, 4000);
@@ -867,26 +808,22 @@
             const videos = await fetchFromPlaylist(VIDEOS_PLAYLIST_ID);
             renderVideos(videos);
             const videosTrack = document.getElementById('videos-track');
-            if (videosTrack && videosTrack.children.length >= 3) {
+            if (videosTrack && videosTrack.children.length >= 1) {
                 initCarousel({
                     trackId: 'videos-track',
                     prevSelector: '.videos .carousel-btn.prev',
-                    nextSelector: '.videos .carousel-btn.next',
-                    type: 'center-focus',
-                    visibleCards: 3
+                    nextSelector: '.videos .carousel-btn.next'
                 });
             }
 
             const discographySongs = await fetchFromPlaylist(DISCRO_PLAYLIST_ID);
             renderDiscography(discographySongs);
             const discographyTrack = document.getElementById('discography-track');
-            if (discographyTrack && discographyTrack.children.length >= 5) {
+            if (discographyTrack && discographyTrack.children.length >= 1) {
                 initCarousel({
                     trackId: 'discography-track',
                     prevSelector: '.discography .carousel-btn.prev',
-                    nextSelector: '.discography .carousel-btn.next',
-                    type: 'center-focus',
-                    visibleCards: 5
+                    nextSelector: '.discography .carousel-btn.next'
                 });
             }
         });
