@@ -477,6 +477,52 @@
             align-items: center;
             margin-top: -70px;
         }
+
+        .songs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            justify-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .song-card {
+            background: #222;
+            border-radius: 14px;
+            padding: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            width: 100%;
+            max-width: 320px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .song-card:hover {
+            transform: scale(1.05);
+        }
+
+        .song-card img {
+            width: 100%;
+            border-radius: 8px;
+            object-fit: cover;
+            aspect-ratio: 1 / 1;
+            margin-bottom: 8px;
+        }
+
+        .song-card h4 {
+            font-size: 16px;
+            text-align: center;
+            margin: 0;
+            padding: 0 5px;
+            color: #f5f5f5;
+            word-wrap: break-word;
+            width: 100%;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -575,11 +621,7 @@
 
     <div class="section-banner">ディスコグラフィー</div>
     <section class="discography" id="discography">
-        <div class="carousel-container" aria-label="Discography carousel">
-            <div class="carousel-track" id="discography-track"></div>
-            <button class="carousel-btn prev" aria-label="Anterior">‹</button>
-            <button class="carousel-btn next" aria-label="Siguiente">›</button>
-        </div>
+        <div class="songs-grid" id="songs-grid"></div>
     </section>
 
     <div class="section-banner">ビデオ</div>
@@ -608,45 +650,19 @@
             document.body.classList.add('light-mode');
         }
 
-        const API_KEY = '__YOUTUBE_API_KEY__';
+        const API_KEY = 'TU_CLAVE_DE_API'; // Reemplaza esto con tu clave real
         const VIDEOS_PLAYLIST_ID = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf';
         const DISCRO_PLAYLIST_ID = 'PLkcZMdABSTfh-9nA5PElNlK7GL2luMi6j';
 
-        console.log('DEBUG: API_KEY length ->', API_KEY ? API_KEY.length : 0);
-
-        function getBestThumb(snippet) {
-            const t = (snippet && snippet.thumbnails) || {};
-            return (
-                (t.maxres && t.maxres.url) ||
-                (t.standard && t.standard.url) ||
-                (t.high && t.high.url) ||
-                (t.medium && t.medium.url) ||
-                (t.default && t.default.url) ||
-                ''
-            );
-        }
-
         async function fetchFromPlaylist(playlistId) {
-            if (!API_KEY || API_KEY === '__YOUTUBE_API_KEY__') {
-                console.warn('API key missing or placeholder. Skipping fetch for', playlistId);
-                return [];
-            }
             const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&key=${API_KEY}&maxResults=50`;
             try {
                 const response = await fetch(url);
-                if (!response.ok) {
-                    const txt = await response.text();
-                    console.error('YouTube API returned non-OK status', response.status, txt);
-                    throw new Error(`YouTube API error ${response.status}`);
-                }
+                if (!response.ok) throw new Error('Error al obtener datos de YouTube');
                 const data = await response.json();
-                if (data.error) {
-                    console.error('YouTube API error object:', data.error);
-                    return [];
-                }
                 return data.items || [];
             } catch (error) {
-                console.error('Fetch playlist error:', error);
+                console.error(error);
                 return [];
             }
         }
@@ -663,7 +679,7 @@
                 const s = item.snippet || {};
                 const videoId = s.resourceId ? s.resourceId.videoId : null;
                 const title = s.title || 'Video';
-                const thumbnailUrl = getBestThumb(s) || ((s.thumbnails && (s.thumbnails.medium || s.thumbnails.default)) ? ((s.thumbnails.medium && s.thumbnails.medium.url) || (s.thumbnails.default && s.thumbnails.default.url)) : '');
+                const thumbnailUrl = s.thumbnails?.high?.url || s.thumbnails?.medium?.url || 'https://via.placeholder.com/320x320';
                 const card = document.createElement('div');
                 card.className = 'media-card';
                 card.innerHTML = `
@@ -681,31 +697,27 @@
             });
         }
 
-        function renderDiscography(items) {
-            const track = document.getElementById('discography-track');
-            if (!track) return;
-            track.innerHTML = '';
-            if (!items || items.length === 0) {
-                track.innerHTML = '<div class="news-card"><p style="text-align:center;color:#ccc;">No hay discografía para mostrar</p></div>';
+        function renderDiscography(songs) {
+            const songsGrid = document.getElementById('songs-grid');
+            if (!songsGrid) return;
+            songsGrid.innerHTML = '';
+            if (!songs || songs.length === 0) {
+                songsGrid.innerHTML = '<p style="text-align:center;color:#ccc;">No hay canciones</p>';
                 return;
             }
-            items.forEach(item => {
-                const s = item.snippet || {};
-                const title = s.title || 'Track';
-                const videoId = s.resourceId ? s.resourceId.videoId : null;
-                const imgUrl = getBestThumb(s) || '';
+            songs.forEach(item => {
+                const song = item.snippet;
+                const title = song.title || 'Canción sin título';
+                const thumbnailUrl = song.thumbnails?.high?.url || song.thumbnails?.medium?.url || 'https://via.placeholder.com/320x320';
+                const type = song.description.includes('Album') ? 'Album' : 'Single';
                 const card = document.createElement('div');
-                card.className = 'media-card discography-card';
-                if (videoId) {
-                    card.innerHTML = `
-                        <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" rel="noopener noreferrer">
-                            <img src="${imgUrl}" alt="${title}" title="${title}">
-                        </a>
-                    `;
-                } else {
-                    card.innerHTML = `<img src="${imgUrl}" alt="${title}" title="${title}">`;
-                }
-                track.appendChild(card);
+                card.className = 'song-card';
+                card.innerHTML = `
+                    <img src="${thumbnailUrl}" alt="${title}">
+                    <h4>${title}</h4>
+                    <span class="label">${type}</span>
+                `;
+                songsGrid.appendChild(card);
             });
         }
 
@@ -784,77 +796,10 @@
 
                 updateVideoCarousel();
                 window.addEventListener('resize', () => updateVideoCarousel(false));
-            } else {
-                const cardWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width')) || track.children[0].offsetWidth;
-                const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-gap')) || 30;
-                const step = cardWidth + gap;
-
-                function updateCarousel() {
-                    if (isTransitioning) return;
-                    isTransitioning = true;
-                    track.style.transform = `translateX(${-currentIndex * step}px)`;
-                }
-
-                track.style.transition = 'none';
-                track.style.transform = `translateX(${-currentIndex * step}px)`;
-                track.offsetHeight;
-                track.style.transition = 'transform 0.5s ease-in-out';
-
-                track.addEventListener('transitionend', () => {
-                    isTransitioning = false;
-                    if (currentIndex >= totalCards + visibleCards) {
-                        track.style.transition = 'none';
-                        currentIndex = visibleCards;
-                        track.style.transform = `translateX(${-currentIndex * step}px)`;
-                    } else if (currentIndex < visibleCards) {
-                        track.style.transition = 'none';
-                        currentIndex = totalCards + currentIndex;
-                        track.style.transform = `translateX(${-currentIndex * step}px)`;
-                    }
-                });
-
-                prevBtn.addEventListener('click', () => {
-                    if (isTransitioning) return;
-                    currentIndex--;
-                    updateCarousel();
-                });
-
-                nextBtn.addEventListener('click', () => {
-                    if (isTransitioning) return;
-                    currentIndex++;
-                    updateCarousel();
-                });
-
-                let autoplayInterval = setInterval(() => {
-                    if (!isTransitioning) {
-                        currentIndex++;
-                        updateCarousel();
-                    }
-                }, 4000);
-
-                container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
-                container.addEventListener('mouseleave', () => {
-                    autoplayInterval = setInterval(() => {
-                        if (!isTransitioning) {
-                            currentIndex++;
-                            updateCarousel();
-                        }
-                    }, 4000);
-                });
             }
         }
 
         window.addEventListener('DOMContentLoaded', async () => {
-            if (!API_KEY || API_KEY === '__YOUTUBE_API_KEY__') {
-                console.warn('API key no inyectada o vacía. Revisa tu GitHub Actions.');
-                const vTrack = document.getElementById('videos-track');
-                const dTrack = document.getElementById('discography-track');
-                const warningHtml = '<div class="news-card"><p style="text-align:center;color:#f0c27b;">API key no inyectada. Revisa GitHub Actions (secrets.YOUTUBE_API_KEY)</p></div>';
-                if (vTrack) vTrack.innerHTML = warningHtml;
-                if (dTrack) dTrack.innerHTML = warningHtml;
-                return;
-            }
-
             const videos = await fetchFromPlaylist(VIDEOS_PLAYLIST_ID);
             renderVideos(videos);
             const videosTrack = document.getElementById('videos-track');
@@ -867,17 +812,8 @@
                 });
             }
 
-            const discoVideos = await fetchFromPlaylist(DISCRO_PLAYLIST_ID);
-            renderDiscography(discoVideos);
-            const discographyTrack = document.getElementById('discography-track');
-            if (discographyTrack && discographyTrack.children.length >= 3) {
-                initCarousel({
-                    trackId: 'discography-track',
-                    prevSelector: '.discography .carousel-btn.prev',
-                    nextSelector: '.discography .carousel-btn.next',
-                    type: 'center-focus'
-                });
-            }
+            const discographySongs = await fetchFromPlaylist(DISCRO_PLAYLIST_ID);
+            renderDiscography(discographySongs);
         });
     </script>
 </body>
