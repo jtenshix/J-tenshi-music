@@ -1,6 +1,6 @@
-name: Deploy Tenshi Website 
+name: Deploy Tenshi Website
 
-on: 
+on:
   push:
     branches:
       - main
@@ -14,14 +14,41 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2️⃣ Inyectar API key en todos los HTML
+      # 2️⃣ Verificar que el secreto existe
+      - name: Check YouTube API key
+        run: |
+          if [ -z "${{ secrets.YOUTUBE_API_KEY }}" ]; then
+            echo "Error: YOUTUBE_API_KEY no está definido en los secretos de GitHub."
+            exit 1
+          else
+            echo "YOUTUBE_API_KEY está definido (longitud: ${#YOUTUBE_API_KEY} caracteres)."
+          fi
+
+      # 3️⃣ Mostrar contenido del archivo antes de la sustitución
+      - name: Debug before injection
+        run: |
+          echo "Archivos HTML antes de la sustitución:"
+          find . -type f -name "*.html" -exec cat {} \;
+
+      # 4️⃣ Inyectar API key en todos los HTML
       - name: Inject YouTube API key
         run: |
           find . -type f -name "*.html" -exec sed -i "s|TU_CLAVE_DE_API|${{ secrets.YOUTUBE_API_KEY }}|g" {} +
+          if [ $? -ne 0 ]; then
+            echo "Error al inyectar la clave de API."
+            exit 1
+          fi
 
-      # 3️⃣ Deploy a GitHub Pages
+      # 5️⃣ Mostrar contenido del archivo después de la sustitución
+      - name: Debug after injection
+        run: |
+          echo "Archivos HTML después de la sustitución:"
+          find . -type f -name "*.html" -exec cat {} \;
+
+      # 6️⃣ Deploy a GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .   # Si tu HTML está en la raíz del repo
+          publish_dir: .
+          force_orphan: true
