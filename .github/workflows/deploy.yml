@@ -17,7 +17,7 @@ jobs:
       # 2️⃣ Inyectar API key en todos los HTML
       - name: Inject YouTube API key
         run: |
-          find . -type f -name "*.html" -exec sed -i "s|TU_CLAVE_DE_API|${{ secrets.YOUTUBE_API_KEY }}|g" {} +
+          find . -type f -name "*.html" -exec sed -i "s|TU_CLAVE_DE_API|${{ secrets.TU_CLAVE_DE_API }}|g" {} +
 
       # 3️⃣ Deploy a GitHub Pages
       - name: Deploy to GitHub Pages
