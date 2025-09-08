@@ -1,4 +1,4 @@
-name: Deploy Tenshi Website
+name: Deploy Tenshi Website 
 
 on: 
   push:
