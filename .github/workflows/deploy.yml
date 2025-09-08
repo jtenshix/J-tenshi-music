@@ -15,9 +15,11 @@ jobs:
 
       - name: Inject API Keys into HTML
         run: |
-          # Reemplaza los placeholders con las claves reales
-          sed -i "s|TU_CLAVE_DE_API_YOUTUBE|${{ secrets.YOUTUBE_API_KEY }}|g" mi-sitio-web.html
-          sed -i "s|TU_CLAVE_DE_API_GOOGLE_DRIVE|${{ secrets.GOOGLE_DRIVE_API_KEY }}|g" mi-sitio-web.html
+          # Reemplaza los placeholders en todos los archivos que los necesitan
+          sed -i "s|TU_CLAVE_DE_API_YOUTUBE|${{ secrets.YOUTUBE_API_KEY }}|g" index.html
+          sed -i "s|TU_CLAVE_DE_API_GOOGLE_DRIVE|${{ secrets.GOOGLE_DRIVE_API_KEY }}|g" index.html
+          sed -i "s|TU_CLAVE_DE_API_YOUTUBE|${{ secrets.YOUTUBE_API_KEY }}|g" discorgafia.html
+          sed -i "s|TU_CLAVE_DE_API_YOUTUBE|${{ secrets.YOUTUBE_API_KEY }}|g" movie.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
