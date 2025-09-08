@@ -1,6 +1,6 @@
 name: Deploy Tenshi Website
 
-on:
+on: 
   push:
     branches:
       - main
