@@ -10,13 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
-      - name: Inject API Keys into HTML
+      - name: Inject API Key into HTML
         run: |
-          sed -i 's|TU_CLAVE_DE_API|${{ secrets.YOUTUBE_API_KEY }}|g' index.html
-          sed -i 's|TU_CLAVE_DE_API|${{ secrets.YOUTUBE_API_KEY }}|g' news.html
-          sed -i 's|TU_CLAVE_DE_API|${{ secrets.YOUTUBE_API_KEY }}|g' movie.html
+          # Se corrigió la sintaxis para evitar errores y se agregó el nombre de tu archivo.
+          # Se usará el secreto YOUTUBE_API_KEY para reemplazar el placeholder 'TU_CLAVE_DE_API' en tus tres archivos.
+          sed -i 's|TU_CLAVE_DE_API|${{ secrets.YOUTUBE_API_KEY }}|g' mi-sitio-web.html movie.html Discography.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
