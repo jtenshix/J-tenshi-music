@@ -75,13 +75,10 @@
 <body>
   <div class="main-container">
     <h2>Discografía Oficial</h2>
-    <div class="songs-grid" id="songs-grid">
-      </div>
+    <div class="songs-grid" id="songs-grid"></div>
   </div>
   <script>
-    // Tu bot de GitHub inyectará la clave aquí
     const API_KEY = 'TU_CLAVE_DE_API';
-    // ID de la playlist con tus canciones/álbumes en YouTube (ahora es la misma que en el primer código)
     const PLAYLIST_ID = 'PLkcZMdABSTfh-9nA5PElNlK7GL2luMi6j';
     async function fetchPlaylistSongs() {
       try {
@@ -98,11 +95,14 @@
       const songsGrid = document.getElementById('songs-grid');
       if (!songsGrid) return;
       songsGrid.innerHTML = '';
+      if (songs.length === 0) {
+        songsGrid.innerHTML = '<p style="text-align:center;color:#ccc;">No hay canciones</p>';
+        return;
+      }
       songs.forEach(item => {
         const song = item.snippet;
         const title = song.title || 'Canción sin título';
-        const thumbnailUrl = song.thumbnails.high.url;
-        // Asume que la descripción o tags del video indican si es un álbum, single, etc.
+        const thumbnailUrl = song.thumbnails?.high?.url || song.thumbnails?.medium?.url || 'https://via.placeholder.com/320x320';
         const type = song.description.includes('Album') ? 'Album' : 'Single';
         const card = document.createElement('div');
         card.className = 'song-card';
