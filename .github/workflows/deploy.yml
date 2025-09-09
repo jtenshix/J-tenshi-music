@@ -10,42 +10,48 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout del repositorio
+      # 1. Traer tu página
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2️⃣ Verificar que el secreto existe
+      # 2. Checar que la clave existe
       - name: Check YouTube API key
         run: |
           if [ -z "${{ secrets.YOUTUBE_API_KEY }}" ]; then
-            echo "Error: YOUTUBE_API_KEY no está definido en los secretos de GitHub."
+            echo "Error: La clave no está."
             exit 1
           else
-            echo "YOUTUBE_API_KEY está definido (longitud: ${#YOUTUBE_API_KEY} caracteres)."
+            echo "Clave encontrada (larga como debe ser)."
           fi
 
-      # 3️⃣ Mostrar contenido del archivo antes de la sustitución
+      # 3. Ver cómo está antes
       - name: Debug before injection
         run: |
-          echo "Archivos HTML antes de la sustitución:"
+          echo "Archivos antes:"
           find . -type f -name "*.html" -exec cat {} \;
 
-      # 4️⃣ Inyectar API key en todos los HTML
+      # 4. Poner la clave en los archivos
       - name: Inject YouTube API key
         run: |
-          find . -type f -name "*.html" -exec sed -i "s|TU_CLAVE_DE_API|${{ secrets.YOUTUBE_API_KEY }}|g" {} +
+          echo "Poniendo la clave..."
+          find . -type f -name "*.html" -exec sed -i "s|TU_CLAVE_DE_API|${{ secrets.YOUTUBE_API_KEY }}|g" {} \;
           if [ $? -ne 0 ]; then
-            echo "Error al inyectar la clave de API."
+            echo "Error al poner la clave."
+            exit 1
+          fi
+          echo "Checando..."
+          if ! find . -type f -name "*.html" -exec grep "${{ secrets.YOUTUBE_API_KEY }}" {} +; then
+            echo "Clave no entró en algún archivo."
             exit 1
           fi
 
-      # 5️⃣ Mostrar contenido del archivo después de la sustitución
+      # 5. Ver cómo quedó después
       - name: Debug after injection
         run: |
-          echo "Archivos HTML después de la sustitución:"
+          echo "Archivos después:"
           find . -type f -name "*.html" -exec cat {} \;
 
-      # 6️⃣ Deploy a GitHub Pages
+      # 6. Subir la página
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
