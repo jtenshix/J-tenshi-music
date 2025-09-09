@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noticias</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #121212;
+        color: #e0e0e0;
+        margin: 0;
+        padding: 0;
+    }
+    header {
+        padding: 20px;
+        text-align: center;
+        background: #1e1e1e;
+        border-bottom: 1px solid #333;
+    }
+    header h1 {
+        margin: 0;
+        font-size: 2rem;
+        color: #fff;
+    }
+    .news-list {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 0 15px;
+    }
+    .news-item {
+        padding: 15px 0;
+        border-bottom: 1px solid #333;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .news-item:hover {
+        background: #1e1e1e;
+    }
+    .news-date {
+        font-size: 0.9rem;
+        color: #bbb;
+    }
+    .news-title {
+        font-size: 1.2rem;
+        margin: 5px 0;
+        color: #fff;
+    }
+    .news-desc {
+        font-size: 0.95rem;
+        color: #ccc;
+    }
+
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background: rgba(0, 0, 0, 0.85);
+    }
+    .modal-content {
+        background: #1e1e1e;
+        margin: 10% auto;
+        padding: 20px;
+        border-radius: 8px;
+        max-width: 600px;
+        position: relative;
+        color: #fff;
+    }
+    .close {
+        color: #bbb;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 24px;
+        cursor: pointer;
+    }
+    .close:hover {
+        color: #fff;
+    }
+    .share-btn {
+        margin-top: 15px;
+        background: #333;
+        color: #fff;
+        border: none;
+        padding: 8px 14px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .share-btn:hover {
+        background: #444;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Noticias</h1>
+</header>
+
+<div class="news-list">
+    <div class="news-item" data-id="noticia-1">
+        <div class="news-date">14 Ago 2025</div>
+        <div class="news-title">Colaboración especial con ilustrador X</div>
+        <div class="news-desc">Presentamos la nueva canción con una ilustración única creada en colaboración...</div>
+    </div>
+    <div class="news-item" data-id="noticia-2">
+        <div class="news-date">05 Ago 2025</div>
+        <div class="news-title">Lanzamiento del nuevo wallpaper</div>
+        <div class="news-desc">Un nuevo fondo de pantalla inspirado en nuestro último single ya está disponible...</div>
+    </div>
+    <div class="news-item" data-id="noticia-3">
+        <div class="news-date">30 Jul 2025</div>
+        <div class="news-title">Mini entrevista con artista invitado</div>
+        <div class="news-desc">Hablamos con el artista detrás de la portada de nuestra próxima canción...</div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="newsModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDate"></p>
+        <p id="modalText"></p>
+        <button class="share-btn" id="shareBtn">Compartir</button>
+    </div>
+</div>
+
+<script>
+const modal = document.getElementById("newsModal");
+const modalTitle = document.getElementById("modalTitle");
+const modalDate = document.getElementById("modalDate");
+const modalText = document.getElementById("modalText");
+const shareBtn = document.getElementById("shareBtn");
+
+const newsData = {
+    "noticia-1": {
+        title: "Colaboración especial con ilustrador X",
+        date: "14 Ago 2025",
+        text: "Te contamos todos los detalles sobre la colaboración con el ilustrador X para nuestra nueva canción. Incluye inspiración, bocetos y arte final."
+    },
+    "noticia-2": {
+        title: "Lanzamiento del nuevo wallpaper",
+        date: "05 Ago 2025",
+        text: "Ya puedes descargar el nuevo fondo de pantalla inspirado en nuestro último single, disponible en varias resoluciones."
+    },
+    "noticia-3": {
+        title: "Mini entrevista con artista invitado",
+        date: "30 Jul 2025",
+        text: "El artista invitado nos comparte sus ideas y procesos creativos para la portada de nuestra próxima canción."
+    }
+};
+
+document.querySelectorAll(".news-item").forEach(item => {
+    item.addEventListener("click", () => {
+        const id = item.getAttribute("data-id");
+        openModal(id);
+    });
+});
+
+function openModal(id) {
+    const data = newsData[id];
+    modalTitle.textContent = data.title;
+    modalDate.textContent = data.date;
+    modalText.textContent = data.text;
+    modal.style.display = "block";
+    history.replaceState(null, "", `#${id}`);
+}
+
+document.querySelector(".close").addEventListener("click", closeModal);
+
+function closeModal() {
+    modal.style.display = "none";
+    history.replaceState(null, "", window.location.pathname);
+}
+
+window.addEventListener("click", e => {
+    if (e.target == modal) closeModal();
+});
+
+// Botón compartir
+shareBtn.addEventListener("click", () => {
+    const url = window.location.href;
+    if (navigator.share) {
+        navigator.share({
+            title: modalTitle.textContent,
+            text: "Mira esta noticia",
+            url: url
+        });
+    } else {
+        navigator.clipboard.writeText(url).then(() => {
+            alert("Enlace copiado al portapapeles");
+        });
+    }
+});
+
+// Abrir modal si hay hash en URL
+window.addEventListener("load", () => {
+    if (window.location.hash) {
+        const id = window.location.hash.substring(1);
+        if (newsData[id]) {
+            openModal(id);
+        }
+    }
+});
+</script>
+
+</body>
+</html>
