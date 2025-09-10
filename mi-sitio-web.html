@@ -134,6 +134,7 @@
             left: 0;
             width: 100%;
             height: 75vh;
+            /* background por defecto; luego lo sobreescribimos desde JS con tu banner principal de Drive */
             background: url('banner portada.png') center center no-repeat;
             background-size: cover;
             z-index: 0;
@@ -334,6 +335,16 @@
             display: block;
             width: 100%;
             height: 100%;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .media-card img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            object-fit: cover;
         }
 
         .media-card h4 {
@@ -503,6 +514,16 @@
             align-items: center;
             margin-top: -70px;
         }
+
+        /* imagen banner overlay para texto si quieres un overlay suave */
+        .section-banner::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.5));
+            pointer-events: none;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -522,7 +543,7 @@
     </header>
 
     <div class="hero-wrapper">
-        <div class="hero-bg"></div>
+        <div class="hero-bg" id="hero-bg"></div>
         <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
     </div>
 
@@ -595,10 +616,11 @@
                 <h4>Nuevo Wallpaper</h4>
                 <p>Descarga el nuevo wallpaper oficial.</p>
                 <span class="label new">NEW</span>
-            </article>
+            </div>
         </div>
     </section>
 
+    <!-- Banner Discografía (usaremos imagen desde Drive por JS) -->
     <div class="section-banner" id="discography-banner">ディスコグラフィー</div>
     <section class="discography" id="discography">
         <div class="carousel-container" aria-label="Discography carousel">
@@ -608,6 +630,7 @@
         </div>
     </section>
 
+    <!-- Banner Videos (imagen desde Drive) -->
     <div class="section-banner" id="videos-banner">ビデオ</div>
     <section class="videos" id="videos">
         <div class="carousel-container" aria-label="Videos carousel">
@@ -624,7 +647,22 @@
 
     <script src="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.css">
+
     <script>
+        // ---------- CONFIG: playlists y banners que me diste ----------
+        const PLAYLIST_VIDEOS = "PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf";
+        const PLAYLIST_DISCO = "PLkcZMdABSTfh-9nA5PElNlK7GL2luMi6j";
+
+        // Google Drive IDs -> enlaces directos para mostrar imagenes
+        const DRIVE_BANNER_PRINCIPAL = "1jKzx3yrIxx480VmH_avJ6UZxkgpiRsMD";
+        const DRIVE_BANNER_DISCO = "1MMaIJX-u0nt8C2EVLGN-ekUKUknS8J6X";
+        const DRIVE_BANNER_VIDEOS = "1PKlntTvTkznJTYO717ZKFd8njMDQmlff";
+
+        function driveViewUrl(id) {
+            return `https://drive.google.com/uc?export=view&id=${id}`;
+        }
+
+        // --------------- tema ---------------
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
             localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
@@ -634,21 +672,7 @@
             document.body.classList.add('light-mode');
         }
 
-        function createColorCards(containerId, width, height, colors) {
-            const track = document.getElementById(containerId);
-            if (!track) return;
-            track.innerHTML = '';
-            colors.forEach(color => {
-                const card = document.createElement('div');
-                card.className = 'media-card';
-                card.style.backgroundColor = color;
-                card.style.width = `${width}px`;
-                card.style.height = `${height}px`;
-                card.innerHTML = `<h4 style="color: white;">${color}</h4>`;
-                track.appendChild(card);
-            });
-        }
-
+        // --------------- Carrusel genérico ---------------
         function initCarousel(options) {
             const track = document.getElementById(options.trackId);
             const prevBtn = document.querySelector(options.prevSelector);
@@ -658,10 +682,17 @@
             let isTransitioning = false;
             let cards = Array.from(track.children);
             const totalCards = cards.length;
-            if (totalCards <= 1) return;
+            if (totalCards <= 1) {
+                // si hay 1 o 0, centraliza ese card
+                if (cards[0]) {
+                  cards[0].classList.add('center-card');
+                }
+                return;
+            }
             function updateCarousel(smoothTransition = true) {
                 if (isTransitioning) return;
                 isTransitioning = true;
+                cards = Array.from(track.children); // actualizar lista
                 const card = cards[Math.floor(cards.length / 2)];
                 if (!card) {
                     isTransitioning = false;
@@ -715,30 +746,127 @@
             window.addEventListener('resize', () => updateCarousel(false));
         }
 
+        // --------------- Función que carga una playlist en un track ---------------
+        /**
+         * loadPlaylistIntoCarousel
+         * @param {string} playlistId - ID de playlist de YouTube
+         * @param {string} trackId - id del elemento donde insertar cards
+         * @param {string} type - "video" o "disc" (para variantes de tamaño/clases)
+         */
+        async function loadPlaylistIntoCarousel(playlistId, trackId, type = "video") {
+            try {
+                const res = await fetch(`/.netlify/functions/youtube?playlistId=${encodeURIComponent(playlistId)}`);
+                if (!res.ok) {
+                    console.error("Error en la respuesta de la función:", res.statusText);
+                    return;
+                }
+                const items = await res.json();
+                const track = document.getElementById(trackId);
+                if (!track) return;
+                track.innerHTML = "";
+
+                // items es un array de playlistItems (cada uno tiene snippet)
+                items.forEach(item => {
+                    const snip = item.snippet || {};
+                    // thumbnail y videoId
+                    // playlistItems incluyen resourceId.videoId
+                    const videoId = snip.resourceId && snip.resourceId.videoId ? snip.resourceId.videoId : null;
+                    const title = snip.title || "Video";
+                    const thumb = (snip.thumbnails && (snip.thumbnails.medium || snip.thumbnails.default || snip.thumbnails.high)) ? (snip.thumbnails.medium ? snip.thumbnails.medium.url : (snip.thumbnails.default ? snip.thumbnails.default.url : snip.thumbnails.high.url)) : "";
+                    // crear card
+                    const card = document.createElement("div");
+                    card.className = "media-card";
+                    // clases específicas por tipo (para estilos)
+                    if (type === "disc") {
+                        card.style.width = ""; // deja que el css lo controle (220x300)
+                        card.style.height = "";
+                    } else {
+                        // video: se mantiene como en CSS (400px)
+                        card.style.width = "";
+                        card.style.height = "";
+                    }
+
+                    // Contenido: imagen + título (abrir en nueva pestaña al youtube.watch)
+                    const linkUrl = videoId ? `https://www.youtube.com/watch?v=${videoId}` : "#";
+                    card.innerHTML = `
+                        <a href="${linkUrl}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(title)}">
+                            ${ thumb ? `<img src="${escapeHtml(thumb)}" alt="${escapeHtml(title)}">` : '' }
+                            <h4 title="${escapeHtml(title)}">${truncateText(title, 60)}</h4>
+                        </a>
+                    `;
+                    track.appendChild(card);
+                });
+
+                // Iniciar/actualizar el carrusel para ese track
+                // Ajusta los selectores para el contenedor correcto (prev/next están presentes en ambos bloques)
+                const parentSection = document.getElementById(trackId).closest("section");
+                const prevSelector = parentSection ? `#${parentSection.id} .carousel-btn.prev` : '.carousel-btn.prev';
+                const nextSelector = parentSection ? `#${parentSection.id} .carousel-btn.next` : '.carousel-btn.next';
+
+                // Llamamos a initCarousel con los selectores relativos
+                initCarousel({
+                    trackId: trackId,
+                    prevSelector: prevSelector,
+                    nextSelector: nextSelector
+                });
+
+            } catch (err) {
+                console.error("Error cargando playlist:", err);
+            }
+        }
+
+        // ---------- utilidades ----------
+        function truncateText(text, max) {
+            if (!text) return "";
+            return text.length > max ? text.slice(0, max - 1) + "…" : text;
+        }
+
+        function escapeHtml(unsafe) {
+            if (!unsafe) return "";
+            return unsafe.replace(/[&<>"'`=\/]/g, function(s) {
+                return {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;',
+                    '/': '&#x2F;',
+                    '`': '&#x60;',
+                    '=': '&#x3D;'
+                }[s];
+            });
+        }
+
+        // --------------- DOMContentLoaded: cargar banners y playlists ---------------
         window.addEventListener('DOMContentLoaded', () => {
-            // Crear casillas de colores para videos
-            createColorCards('videos-track', 400, 300, ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD']);
-
-            // Crear casillas de colores para discografía
-            createColorCards('discography-track', 220, 300, ['#FF8787', '#45B7D1', '#96CEB4', '#F7D794', '#D4A5A5']);
-
-            const videosTrack = document.getElementById('videos-track');
-            if (videosTrack && videosTrack.children.length >= 1) {
-                initCarousel({
-                    trackId: 'videos-track',
-                    prevSelector: '.videos .carousel-btn.prev',
-                    nextSelector: '.videos .carousel-btn.next'
-                });
+            // PONER BANNERS desde Google Drive (usando tus IDs)
+            const heroBg = document.getElementById('hero-bg');
+            if (heroBg) {
+                heroBg.style.backgroundImage = `url('${driveViewUrl(DRIVE_BANNER_PRINCIPAL)}')`;
+                heroBg.style.backgroundSize = 'cover';
+                heroBg.style.backgroundPosition = 'center';
             }
 
-            const discographyTrack = document.getElementById('discography-track');
-            if (discographyTrack && discographyTrack.children.length >= 1) {
-                initCarousel({
-                    trackId: 'discography-track',
-                    prevSelector: '.discography .carousel-btn.prev',
-                    nextSelector: '.discography .carousel-btn.next'
-                });
+            const discBanner = document.getElementById('discography-banner');
+            if (discBanner) {
+                discBanner.style.backgroundImage = `url('${driveViewUrl(DRIVE_BANNER_DISCO)}')`;
+                discBanner.style.backgroundSize = 'cover';
+                discBanner.style.backgroundPosition = 'center';
             }
+
+            const videosBanner = document.getElementById('videos-banner');
+            if (videosBanner) {
+                videosBanner.style.backgroundImage = `url('${driveViewUrl(DRIVE_BANNER_VIDEOS)}')`;
+                videosBanner.style.backgroundSize = 'cover';
+                videosBanner.style.backgroundPosition = 'center';
+            }
+
+            // Cargar playlists reales en vez de tarjetas de color
+            loadPlaylistIntoCarousel(PLAYLIST_VIDEOS, 'videos-track', 'video');
+            loadPlaylistIntoCarousel(PLAYLIST_DISCO, 'discography-track', 'disc');
+
+            // --- Si quieres mantener un fallback de color-cards mientras falla la API, podrías activar createColorCards aquí ---
+            // pero por pedido tuyo, lo reemplazamos completamente por videos reales.
         });
     </script>
 </body>
