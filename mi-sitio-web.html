@@ -595,11 +595,11 @@
                 <h4>Nuevo Wallpaper</h4>
                 <p>Descarga el nuevo wallpaper oficial.</p>
                 <span class="label new">NEW</span>
-            </div>
+            </article>
         </div>
     </section>
 
-    <div class="section-banner">ディスコグラフィー</div>
+    <div class="section-banner" id="discography-banner">ディスコグラフィー</div>
     <section class="discography" id="discography">
         <div class="carousel-container" aria-label="Discography carousel">
             <div class="carousel-track" id="discography-track"></div>
@@ -608,7 +608,7 @@
         </div>
     </section>
 
-    <div class="section-banner">ビデオ</div>
+    <div class="section-banner" id="videos-banner">ビデオ</div>
     <section class="videos" id="videos">
         <div class="carousel-container" aria-label="Videos carousel">
             <div class="carousel-track" id="videos-track"></div>
@@ -655,38 +655,29 @@
             const nextBtn = document.querySelector(options.nextSelector);
             const container = track ? track.parentElement : null;
             if (!track || !prevBtn || !nextBtn || !container) return;
-
             let isTransitioning = false;
             let cards = Array.from(track.children);
             const totalCards = cards.length;
-
             if (totalCards <= 1) return;
-
             function updateCarousel(smoothTransition = true) {
                 if (isTransitioning) return;
                 isTransitioning = true;
-
                 const card = cards[Math.floor(cards.length / 2)];
                 if (!card) {
                     isTransitioning = false;
                     return;
                 }
-
                 const cardCenter = card.offsetLeft + (card.offsetWidth / 2);
                 const containerCenter = container.offsetWidth / 2;
                 const newTransform = -(cardCenter - containerCenter);
-
                 track.style.transition = smoothTransition ? 'transform 0.5s ease-in-out' : 'none';
                 track.style.transform = `translateX(${newTransform}px)`;
-
                 cards.forEach(c => c.classList.remove('center-card'));
                 card.classList.add('center-card');
-
                 setTimeout(() => {
                     isTransitioning = false;
                 }, 500);
             }
-
             prevBtn.addEventListener('click', () => {
                 if (isTransitioning) return;
                 const firstCard = cards[0];
@@ -694,7 +685,6 @@
                 cards = Array.from(track.children);
                 updateCarousel();
             });
-
             nextBtn.addEventListener('click', () => {
                 if (isTransitioning) return;
                 const lastCard = cards[cards.length - 1];
@@ -702,7 +692,6 @@
                 cards = Array.from(track.children);
                 updateCarousel();
             });
-
             let autoplayInterval = setInterval(() => {
                 if (!isTransitioning) {
                     const lastCard = cards[cards.length - 1];
@@ -711,7 +700,6 @@
                     updateCarousel();
                 }
             }, 4000);
-
             container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
             container.addEventListener('mouseleave', () => {
                 autoplayInterval = setInterval(() => {
@@ -723,7 +711,6 @@
                     }
                 }, 4000);
             });
-
             updateCarousel();
             window.addEventListener('resize', () => updateCarousel(false));
         }
