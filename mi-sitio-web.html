@@ -334,16 +334,6 @@
             display: block;
             width: 100%;
             height: 100%;
-            color: inherit;
-            text-decoration: none;
-        }
-
-        .media-card img {
-            display: block;
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            object-fit: cover;
         }
 
         .media-card h4 {
@@ -513,19 +503,8 @@
             align-items: center;
             margin-top: -70px;
         }
-
-        /* imagen banner overlay para texto si quieres un overlay suave */
-        .section-banner::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            border-radius: 12px;
-            background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.5));
-            pointer-events: none;
-        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <header>
@@ -543,7 +522,7 @@
     </header>
 
     <div class="hero-wrapper">
-        <div class="hero-bg" id="hero-bg"></div>
+        <div class="hero-bg"></div>
         <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
     </div>
 
@@ -620,7 +599,7 @@
         </div>
     </section>
 
-    <div class="section-banner" id="discography-banner">ディスコグラフィー</div>
+    <div class="section-banner">ディスコグラフィー</div>
     <section class="discography" id="discography">
         <div class="carousel-container" aria-label="Discography carousel">
             <div class="carousel-track" id="discography-track"></div>
@@ -629,7 +608,7 @@
         </div>
     </section>
 
-    <div class="section-banner" id="videos-banner">ビデオ</div>
+    <div class="section-banner">ビデオ</div>
     <section class="videos" id="videos">
         <div class="carousel-container" aria-label="Videos carousel">
             <div class="carousel-track" id="videos-track"></div>
@@ -645,53 +624,69 @@
 
     <script src="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.css">
-   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-</head>
-<body>
     <script>
-        // --------------- temas y carruseles ---------------
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
             localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
         }
+
         if (localStorage.getItem('theme') === 'light') {
             document.body.classList.add('light-mode');
         }
+
+        function createColorCards(containerId, width, height, colors) {
+            const track = document.getElementById(containerId);
+            if (!track) return;
+            track.innerHTML = '';
+            colors.forEach(color => {
+                const card = document.createElement('div');
+                card.className = 'media-card';
+                card.style.backgroundColor = color;
+                card.style.width = `${width}px`;
+                card.style.height = `${height}px`;
+                card.innerHTML = `<h4 style="color: white;">${color}</h4>`;
+                track.appendChild(card);
+            });
+        }
+
         function initCarousel(options) {
             const track = document.getElementById(options.trackId);
             const prevBtn = document.querySelector(options.prevSelector);
             const nextBtn = document.querySelector(options.nextSelector);
             const container = track ? track.parentElement : null;
             if (!track || !prevBtn || !nextBtn || !container) return;
+
             let isTransitioning = false;
             let cards = Array.from(track.children);
             const totalCards = cards.length;
-            if (totalCards <= 1) {
-                if (cards[0]) {
-                    cards[0].classList.add('center-card');
-                }
-                return;
-            }
+
+            if (totalCards <= 1) return;
+
             function updateCarousel(smoothTransition = true) {
                 if (isTransitioning) return;
                 isTransitioning = true;
-                cards = Array.from(track.children);
+
                 const card = cards[Math.floor(cards.length / 2)];
                 if (!card) {
                     isTransitioning = false;
                     return;
                 }
+
                 const cardCenter = card.offsetLeft + (card.offsetWidth / 2);
                 const containerCenter = container.offsetWidth / 2;
                 const newTransform = -(cardCenter - containerCenter);
+
                 track.style.transition = smoothTransition ? 'transform 0.5s ease-in-out' : 'none';
                 track.style.transform = `translateX(${newTransform}px)`;
+
                 cards.forEach(c => c.classList.remove('center-card'));
                 card.classList.add('center-card');
+
                 setTimeout(() => {
                     isTransitioning = false;
                 }, 500);
             }
+
             prevBtn.addEventListener('click', () => {
                 if (isTransitioning) return;
                 const firstCard = cards[0];
@@ -699,13 +694,15 @@
                 cards = Array.from(track.children);
                 updateCarousel();
             });
+
             nextBtn.addEventListener('click', () => {
                 if (isTransitioning) return;
                 const lastCard = cards[cards.length - 1];
                 track.prepend(lastCard);
                 cards = Array.from(track.children);
                 updateCarousel();
-            }
+            });
+
             let autoplayInterval = setInterval(() => {
                 if (!isTransitioning) {
                     const lastCard = cards[cards.length - 1];
@@ -714,6 +711,7 @@
                     updateCarousel();
                 }
             }, 4000);
+
             container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
             container.addEventListener('mouseleave', () => {
                 autoplayInterval = setInterval(() => {
@@ -725,76 +723,35 @@
                     }
                 }, 4000);
             });
+
             updateCarousel();
             window.addEventListener('resize', () => updateCarousel(false));
         }
 
-        // ---------- Funciones de API y lógica de carga ----------
+        window.addEventListener('DOMContentLoaded', () => {
+            // Crear casillas de colores para videos
+            createColorCards('videos-track', 400, 300, ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD']);
 
-        const PLAYLIST_VIDEOS = "PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf";
-        const PLAYLIST_DISCO = "PLkcZMdABSTfh-9nA5PElNlK7GL2luMi6j";
+            // Crear casillas de colores para discografía
+            createColorCards('discography-track', 220, 300, ['#FF8787', '#45B7D1', '#96CEB4', '#F7D794', '#D4A5A5']);
 
-        const DRIVE_BANNER_PRINCIPAL = "1jKzx3yrIxx480VmH_avJ6UZxkgpiRsMD";
-        const DRIVE_BANNER_DISCO = "1MMaIJX-u0nt8C2EVLGN-ekUKUknS8J6X";
-        const DRIVE_BANNER_VIDEOS = "1PKlntTvTkznJTYO717ZKFd8njMDQmlff";
-
-        async function loadYouTubePlaylist(playlistId, trackId, type) {
-            try {
-                const response = await axios.get(`/.netlify/functions/youtube?playlistId=${playlistId}`);
-                const videos = response.data;
-                const track = document.getElementById(trackId);
-                
-                if (track && videos) {
-                    track.innerHTML = ''; // Limpiar el carrusel
-                    videos.forEach(video => {
-                        const videoId = video.snippet.resourceId.videoId;
-                        const videoTitle = video.snippet.title;
-                        const thumbnailUrl = video.snippet.thumbnails.medium.url;
-                        
-                        const card = document.createElement('div');
-                        card.className = `media-card`;
-                        card.innerHTML = `
-                            <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" rel="noopener noreferrer">
-                                <img src="${thumbnailUrl}" alt="${videoTitle}">
-                                <h4>${videoTitle}</h4>
-                            </a>
-                        `;
-                        track.appendChild(card);
-                    });
-                    initCarousel({ trackId, prevSelector: `.${trackId.replace('-track', '')} .carousel-btn.prev`, nextSelector: `.${trackId.replace('-track', '')} .carousel-btn.next` });
-                }
-            } catch (error) {
-                    console.error("Error al cargar la playlist:", error);
+            const videosTrack = document.getElementById('videos-track');
+            if (videosTrack && videosTrack.children.length >= 1) {
+                initCarousel({
+                    trackId: 'videos-track',
+                    prevSelector: '.videos .carousel-btn.prev',
+                    nextSelector: '.videos .carousel-btn.next'
+                });
             }
-        }
 
-        async function loadDriveImage(functionName, folderId, elementId) {
-            try {
-                const response = await axios.get(`/.netlify/functions/${functionName}?folderId=${folderId}`);
-                const data = response.data;
-                const element = document.getElementById(elementId);
-                
-                if (element && response.ok && data.link) {
-                    element.style.backgroundImage = `url('${data.link}')`;
-                    element.style.backgroundSize = 'cover';
-                    element.style.backgroundPosition = 'center';
-                } else {
-                    console.error("Error al cargar la imagen de Drive:", data.error);
-                }
-            } catch (error) {
-                console.error("Error de red al cargar el banner:", error);
+            const discographyTrack = document.getElementById('discography-track');
+            if (discographyTrack && discographyTrack.children.length >= 1) {
+                initCarousel({
+                    trackId: 'discography-track',
+                    prevSelector: '.discography .carousel-btn.prev',
+                    nextSelector: '.discography .carousel-btn.next'
+                });
             }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // Cargar los banners desde Google Drive
-            loadDriveImage('gdrive_main_banner', DRIVE_BANNER_PRINCIPAL, 'hero-bg');
-            loadDriveImage('gdrive_discografia_banner', DRIVE_BANNER_DISCO, 'discography-banner');
-            loadDriveImage('gdrive_videos_banner', DRIVE_BANNER_VIDEOS, 'videos-banner');
-
-            // Cargar los carruseles de YouTube
-            loadYouTubePlaylist(PLAYLIST_VIDEOS, 'videos-track', 'video');
-            loadYouTubePlaylist(PLAYLIST_DISCO, 'discography-track', 'disc');
         });
     </script>
 </body>
