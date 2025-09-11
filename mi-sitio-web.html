@@ -134,7 +134,6 @@
             left: 0;
             width: 100%;
             height: 75vh;
-            /* background por defecto; luego lo sobreescribimos desde JS con tu banner principal de Drive */
             background: url('banner portada.png') center center no-repeat;
             background-size: cover;
             z-index: 0;
@@ -620,7 +619,6 @@
         </div>
     </section>
 
-    <!-- Banner Discografía (usaremos imagen desde Drive por JS) -->
     <div class="section-banner" id="discography-banner">ディスコグラフィー</div>
     <section class="discography" id="discography">
         <div class="carousel-container" aria-label="Discography carousel">
@@ -630,7 +628,6 @@
         </div>
     </section>
 
-    <!-- Banner Videos (imagen desde Drive) -->
     <div class="section-banner" id="videos-banner">ビデオ</div>
     <section class="videos" id="videos">
         <div class="carousel-container" aria-label="Videos carousel">
@@ -647,32 +644,15 @@
 
     <script src="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.css">
-
     <script>
-        // ---------- CONFIG: playlists y banners que me diste ----------
-        const PLAYLIST_VIDEOS = "PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf";
-        const PLAYLIST_DISCO = "PLkcZMdABSTfh-9nA5PElNlK7GL2luMi6j";
-
-        // Google Drive IDs -> enlaces directos para mostrar imagenes
-        const DRIVE_BANNER_PRINCIPAL = "1jKzx3yrIxx480VmH_avJ6UZxkgpiRsMD";
-        const DRIVE_BANNER_DISCO = "1MMaIJX-u0nt8C2EVLGN-ekUKUknS8J6X";
-        const DRIVE_BANNER_VIDEOS = "1PKlntTvTkznJTYO717ZKFd8njMDQmlff";
-
-        function driveViewUrl(id) {
-            return `https://drive.google.com/uc?export=view&id=${id}`;
-        }
-
-        // --------------- tema ---------------
+        // --------------- temas y carruseles ---------------
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
             localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
         }
-
         if (localStorage.getItem('theme') === 'light') {
             document.body.classList.add('light-mode');
         }
-
-        // --------------- Carrusel genérico ---------------
         function initCarousel(options) {
             const track = document.getElementById(options.trackId);
             const prevBtn = document.querySelector(options.prevSelector);
@@ -683,16 +663,15 @@
             let cards = Array.from(track.children);
             const totalCards = cards.length;
             if (totalCards <= 1) {
-                // si hay 1 o 0, centraliza ese card
                 if (cards[0]) {
-                  cards[0].classList.add('center-card');
+                    cards[0].classList.add('center-card');
                 }
                 return;
             }
             function updateCarousel(smoothTransition = true) {
                 if (isTransitioning) return;
                 isTransitioning = true;
-                cards = Array.from(track.children); // actualizar lista
+                cards = Array.from(track.children);
                 const card = cards[Math.floor(cards.length / 2)];
                 if (!card) {
                     isTransitioning = false;
@@ -746,127 +725,96 @@
             window.addEventListener('resize', () => updateCarousel(false));
         }
 
-        // --------------- Función que carga una playlist en un track ---------------
-        /**
-         * loadPlaylistIntoCarousel
-         * @param {string} playlistId - ID de playlist de YouTube
-         * @param {string} trackId - id del elemento donde insertar cards
-         * @param {string} type - "video" o "disc" (para variantes de tamaño/clases)
-         */
-        async function loadPlaylistIntoCarousel(playlistId, trackId, type = "video") {
+        // ---------- Funciones de API y lógica de carga ----------
+
+        const PLAYLIST_VIDEOS = "PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf";
+        const PLAYLIST_DISCO = "PLkcZMdABSTfh-9nA5PElNlK7GL2luMi6j";
+        
+        const DRIVE_BANNER_PRINCIPAL = "1jKzx3yrIxx480VmH_avJ6UZxkgpiRsMD";
+        const DRIVE_BANNER_DISCO = "1MMaIJX-u0nt8C2EVLGN-ekUKUknS8J6X";
+        const DRIVE_BANNER_VIDEOS = "1PKlntTvTkznJTYO717ZKFd8njMDQmlff";
+
+        async function loadYouTubePlaylist(playlistId, trackId, type) {
             try {
-                const res = await fetch(`/.netlify/functions/youtube?playlistId=${encodeURIComponent(playlistId)}`);
-                if (!res.ok) {
-                    console.error("Error en la respuesta de la función:", res.statusText);
-                    return;
-                }
-                const items = await res.json();
+                const response = await axios.get(`/.netlify/functions/youtube?playlistId=${playlistId}`);
+                const videos = response.data;
                 const track = document.getElementById(trackId);
-                if (!track) return;
-                track.innerHTML = "";
-
-                // items es un array de playlistItems (cada uno tiene snippet)
-                items.forEach(item => {
-                    const snip = item.snippet || {};
-                    // thumbnail y videoId
-                    // playlistItems incluyen resourceId.videoId
-                    const videoId = snip.resourceId && snip.resourceId.videoId ? snip.resourceId.videoId : null;
-                    const title = snip.title || "Video";
-                    const thumb = (snip.thumbnails && (snip.thumbnails.medium || snip.thumbnails.default || snip.thumbnails.high)) ? (snip.thumbnails.medium ? snip.thumbnails.medium.url : (snip.thumbnails.default ? snip.thumbnails.default.url : snip.thumbnails.high.url)) : "";
-                    // crear card
-                    const card = document.createElement("div");
-                    card.className = "media-card";
-                    // clases específicas por tipo (para estilos)
-                    if (type === "disc") {
-                        card.style.width = ""; // deja que el css lo controle (220x300)
-                        card.style.height = "";
-                    } else {
-                        // video: se mantiene como en CSS (400px)
-                        card.style.width = "";
-                        card.style.height = "";
-                    }
-
-                    // Contenido: imagen + título (abrir en nueva pestaña al youtube.watch)
-                    const linkUrl = videoId ? `https://www.youtube.com/watch?v=${videoId}` : "#";
-                    card.innerHTML = `
-                        <a href="${linkUrl}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(title)}">
-                            ${ thumb ? `<img src="${escapeHtml(thumb)}" alt="${escapeHtml(title)}">` : '' }
-                            <h4 title="${escapeHtml(title)}">${truncateText(title, 60)}</h4>
-                        </a>
-                    `;
-                    track.appendChild(card);
-                });
-
-                // Iniciar/actualizar el carrusel para ese track
-                // Ajusta los selectores para el contenedor correcto (prev/next están presentes en ambos bloques)
-                const parentSection = document.getElementById(trackId).closest("section");
-                const prevSelector = parentSection ? `#${parentSection.id} .carousel-btn.prev` : '.carousel-btn.prev';
-                const nextSelector = parentSection ? `#${parentSection.id} .carousel-btn.next` : '.carousel-btn.next';
-
-                // Llamamos a initCarousel con los selectores relativos
-                initCarousel({
-                    trackId: trackId,
-                    prevSelector: prevSelector,
-                    nextSelector: nextSelector
-                });
-
-            } catch (err) {
-                console.error("Error cargando playlist:", err);
+                
+                if (track && videos) {
+                    track.innerHTML = ''; // Limpiar el carrusel
+                    videos.forEach(video => {
+                        const videoId = video.snippet.resourceId.videoId;
+                        const videoTitle = video.snippet.title;
+                        const thumbnailUrl = video.snippet.thumbnails.medium.url;
+                        
+                        const card = document.createElement('div');
+                        card.className = `media-card`;
+                        card.innerHTML = `
+                            <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" rel="noopener noreferrer">
+                                <img src="${thumbnailUrl}" alt="${videoTitle}">
+                                <h4>${videoTitle}</h4>
+                            </a>
+                        `;
+                        track.appendChild(card);
+                    });
+                    initCarousel({ trackId, prevSelector: `.${trackId.replace('-track', '')} .carousel-btn.prev`, nextSelector: `.${trackId.replace('-track', '')} .carousel-btn.next` });
+                }
+            } catch (error) {
+                console.error("Error al cargar la playlist:", error);
+            }
+        }
+        
+        async function loadDriveImage(folderId, elementId) {
+            try {
+                const response = await axios.get(`/.netlify/functions/gdrive_banner?folderId=${folderId}`);
+                const data = response.data;
+                const element = document.getElementById(elementId);
+                
+                if (element && data.link) {
+                    element.style.backgroundImage = `url('${data.link}')`;
+                    element.style.backgroundSize = 'cover';
+                    element.style.backgroundPosition = 'center';
+                }
+            } catch (error) {
+                console.error("Error al cargar la imagen de Drive:", error);
             }
         }
 
-        // ---------- utilidades ----------
-        function truncateText(text, max) {
-            if (!text) return "";
-            return text.length > max ? text.slice(0, max - 1) + "…" : text;
+        async function loadDriveGallery(folderId, trackId) {
+            try {
+                const response = await axios.get(`/.netlify/functions/gdrive_gallery?folderId=${folderId}`);
+                const images = response.data;
+                const track = document.getElementById(trackId);
+
+                if (track && images) {
+                    track.innerHTML = '';
+                    images.forEach(image => {
+                        const card = document.createElement('div');
+                        card.className = `media-card`;
+                        card.innerHTML = `
+                            <a href="${image.link}" target="_blank" rel="noopener noreferrer">
+                                <img src="${image.link}" alt="${image.name}">
+                                <h4>${image.name}</h4>
+                            </a>
+                        `;
+                        track.appendChild(card);
+                    });
+                    initCarousel({ trackId, prevSelector: `.${trackId.replace('-track', '')} .carousel-btn.prev`, nextSelector: `.${trackId.replace('-track', '')} .carousel-btn.next` });
+                }
+            } catch (error) {
+                console.error("Error al cargar la galería de Drive:", error);
+            }
         }
-
-        function escapeHtml(unsafe) {
-            if (!unsafe) return "";
-            return unsafe.replace(/[&<>"'`=\/]/g, function(s) {
-                return {
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    '"': '&quot;',
-                    "'": '&#39;',
-                    '/': '&#x2F;',
-                    '`': '&#x60;',
-                    '=': '&#x3D;'
-                }[s];
-            });
-        }
-
-        // --------------- DOMContentLoaded: cargar banners y playlists ---------------
-        window.addEventListener('DOMContentLoaded', () => {
-            // PONER BANNERS desde Google Drive (usando tus IDs)
-            const heroBg = document.getElementById('hero-bg');
-            if (heroBg) {
-                heroBg.style.backgroundImage = `url('${driveViewUrl(DRIVE_BANNER_PRINCIPAL)}')`;
-                heroBg.style.backgroundSize = 'cover';
-                heroBg.style.backgroundPosition = 'center';
-            }
-
-            const discBanner = document.getElementById('discography-banner');
-            if (discBanner) {
-                discBanner.style.backgroundImage = `url('${driveViewUrl(DRIVE_BANNER_DISCO)}')`;
-                discBanner.style.backgroundSize = 'cover';
-                discBanner.style.backgroundPosition = 'center';
-            }
-
-            const videosBanner = document.getElementById('videos-banner');
-            if (videosBanner) {
-                videosBanner.style.backgroundImage = `url('${driveViewUrl(DRIVE_BANNER_VIDEOS)}')`;
-                videosBanner.style.backgroundSize = 'cover';
-                videosBanner.style.backgroundPosition = 'center';
-            }
-
-            // Cargar playlists reales en vez de tarjetas de color
-            loadPlaylistIntoCarousel(PLAYLIST_VIDEOS, 'videos-track', 'video');
-            loadPlaylistIntoCarousel(PLAYLIST_DISCO, 'discography-track', 'disc');
-
-            // --- Si quieres mantener un fallback de color-cards mientras falla la API, podrías activar createColorCards aquí ---
-            // pero por pedido tuyo, lo reemplazamos completamente por videos reales.
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Cargar los carruseles de YouTube
+            loadYouTubePlaylist(PLAYLIST_VIDEOS, 'videos-track', 'video');
+            loadYouTubePlaylist(PLAYLIST_DISCO, 'discography-track', 'disc');
+            
+            // Cargar las imágenes de los banners desde Google Drive
+            loadDriveImage(DRIVE_BANNER_PRINCIPAL, 'hero-bg');
+            loadDriveImage(DRIVE_BANNER_DISCO, 'discography-banner');
+            loadDriveImage(DRIVE_BANNER_VIDEOS, 'videos-banner');
         });
     </script>
 </body>
