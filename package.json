@@ -7,6 +7,7 @@
     "build": "echo 'Building static site...'"
   },
   "dependencies": {
-    "axios": "^1.6.0"
+    "axios": "^1.6.0",
+    "googleapis": "^85.0.0"
   }
 }
