@@ -645,6 +645,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.css">
+   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
     <script>
         // --------------- temas y carruseles ---------------
         function toggleTheme() {
@@ -702,7 +705,7 @@
                 track.prepend(lastCard);
                 cards = Array.from(track.children);
                 updateCarousel();
-            });
+            }
             let autoplayInterval = setInterval(() => {
                 if (!isTransitioning) {
                     const lastCard = cards[cards.length - 1];
@@ -761,7 +764,7 @@
                     initCarousel({ trackId, prevSelector: `.${trackId.replace('-track', '')} .carousel-btn.prev`, nextSelector: `.${trackId.replace('-track', '')} .carousel-btn.next` });
                 }
             } catch (error) {
-                console.error("Error al cargar la playlist:", error);
+                    console.error("Error al cargar la playlist:", error);
             }
         }
 
@@ -794,5 +797,7 @@
             loadYouTubePlaylist(PLAYLIST_DISCO, 'discography-track', 'disc');
         });
     </script>
+</body>
+</html>
 </body>
 </html>
