@@ -730,7 +730,7 @@
 
         const PLAYLIST_VIDEOS = "PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf";
         const PLAYLIST_DISCO = "PLkcZMdABSTfh-9nA5PElNlK7GL2luMi6j";
-        
+
         const DRIVE_BANNER_PRINCIPAL = "1jKzx3yrIxx480VmH_avJ6UZxkgpiRsMD";
         const DRIVE_BANNER_DISCO = "1MMaIJX-u0nt8C2EVLGN-ekUKUknS8J6X";
         const DRIVE_BANNER_VIDEOS = "1PKlntTvTkznJTYO717ZKFd8njMDQmlff";
@@ -764,58 +764,34 @@
                 console.error("Error al cargar la playlist:", error);
             }
         }
-        
-        async function loadDriveImage(folderId, elementId) {
+
+        async function loadDriveImage(functionName, folderId, elementId) {
             try {
-                const response = await axios.get(`/.netlify/functions/gdrive_banner?folderId=${folderId}`);
+                const response = await axios.get(`/.netlify/functions/${functionName}?folderId=${folderId}`);
                 const data = response.data;
                 const element = document.getElementById(elementId);
                 
-                if (element && data.link) {
+                if (element && response.ok && data.link) {
                     element.style.backgroundImage = `url('${data.link}')`;
                     element.style.backgroundSize = 'cover';
                     element.style.backgroundPosition = 'center';
+                } else {
+                    console.error("Error al cargar la imagen de Drive:", data.error);
                 }
             } catch (error) {
-                console.error("Error al cargar la imagen de Drive:", error);
+                console.error("Error de red al cargar el banner:", error);
             }
         }
 
-        async function loadDriveGallery(folderId, trackId) {
-            try {
-                const response = await axios.get(`/.netlify/functions/gdrive_gallery?folderId=${folderId}`);
-                const images = response.data;
-                const track = document.getElementById(trackId);
-
-                if (track && images) {
-                    track.innerHTML = '';
-                    images.forEach(image => {
-                        const card = document.createElement('div');
-                        card.className = `media-card`;
-                        card.innerHTML = `
-                            <a href="${image.link}" target="_blank" rel="noopener noreferrer">
-                                <img src="${image.link}" alt="${image.name}">
-                                <h4>${image.name}</h4>
-                            </a>
-                        `;
-                        track.appendChild(card);
-                    });
-                    initCarousel({ trackId, prevSelector: `.${trackId.replace('-track', '')} .carousel-btn.prev`, nextSelector: `.${trackId.replace('-track', '')} .carousel-btn.next` });
-                }
-            } catch (error) {
-                console.error("Error al cargar la galería de Drive:", error);
-            }
-        }
-        
         document.addEventListener('DOMContentLoaded', () => {
+            // Cargar los banners desde Google Drive
+            loadDriveImage('gdrive_main_banner', DRIVE_BANNER_PRINCIPAL, 'hero-bg');
+            loadDriveImage('gdrive_discografia_banner', DRIVE_BANNER_DISCO, 'discography-banner');
+            loadDriveImage('gdrive_videos_banner', DRIVE_BANNER_VIDEOS, 'videos-banner');
+
             // Cargar los carruseles de YouTube
             loadYouTubePlaylist(PLAYLIST_VIDEOS, 'videos-track', 'video');
             loadYouTubePlaylist(PLAYLIST_DISCO, 'discography-track', 'disc');
-            
-            // Cargar las imágenes de los banners desde Google Drive
-            loadDriveImage(DRIVE_BANNER_PRINCIPAL, 'hero-bg');
-            loadDriveImage(DRIVE_BANNER_DISCO, 'discography-banner');
-            loadDriveImage(DRIVE_BANNER_VIDEOS, 'videos-banner');
         });
     </script>
 </body>
