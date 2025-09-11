@@ -1,49 +1,42 @@
-// netlify/functions/youtube.js
 const axios = require('axios');
 
 exports.handler = async function(event, context) {
-  const apiKey = process.env.YOUTUBE_API_KEY;
+    const apiKey = process.env.GOOGLE_DRIVE_API_KEY;
+    const folderId = event.queryStringParameters.folderId;
 
-  // Obtener playlistId desde query string
-  const playlistId = event.queryStringParameters && event.queryStringParameters.playlistId;
+    if (!apiKey || !folderId) {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({ error: 'Faltan variables de entorno o parámetros.' })
+        };
+    }
 
-  if (!apiKey) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Falta la variable de entorno YOUTUBE_API_KEY" }),
-    };
-  }
+    const url = `https://www.googleapis.com/drive/v3/files?key=${apiKey}&q='${folderId}'+in+parents+and+trashed=false&orderBy=createdTime+desc&fields=files(webContentLink,name)`;
 
-  if (!playlistId) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: "Falta el parámetro playlistId en la query." }),
-    };
-  }
-
-  // Puedes ajustar maxResults si quieres traer más/menos
-  const maxResults = 12;
-  const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${encodeURIComponent(playlistId)}&maxResults=${maxResults}&key=${apiKey}`;
-
-  try {
-    const response = await axios.get(url);
-    // Devolvemos items como un array (misma forma que ya devolvías antes)
-    return {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-        // permite que tu frontend haga fetch sin problemas (si usas cors en otro dominio, ajustar)
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify(response.data.items || []),
-    };
-  } catch (error) {
-    console.error("Error al obtener videos desde YouTube API:", error && error.toString ? error.toString() : error);
-    // enviar mensaje útil al frontend
-    return {
-      statusCode: 500,
-      headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
-      body: JSON.stringify({ error: "Hubo un problema al cargar los videos desde YouTube." }),
-    };
-  }
+    try {
+        const response = await axios.get(url);
+        const files = response.data.files;
+        
+        if (files && files.length > 0) {
+            const latestFile = files[0];
+            return {
+                statusCode: 200,
+                body: JSON.stringify({
+                    link: latestFile.webContentLink,
+                    name: latestFile.name
+                })
+            };
+        } else {
+            return {
+                statusCode: 404,
+                body: JSON.stringify({ error: 'No se encontraron imágenes en la carpeta.' })
+            };
+        }
+    } catch (error) {
+        console.error('Error al obtener la imagen de Drive:', error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: 'Hubo un problema al cargar el banner.' })
+        };
+    }
 };
