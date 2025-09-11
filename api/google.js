@@ -1,8 +1,11 @@
+import fetch from 'node-fetch';
+
 export default async function handler(req, res) {
   try {
-    const q = req.query.q || "Tenshi"; // lo que quieres buscar
+    // ID de la playlist que me proporcionaste.
+    const playlistId = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf';
     const response = await fetch(
-      `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(q)}&key=${process.env.API_KEY}`
+      `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&playlistId=${playlistId}&maxResults=50&key=${process.env.API_KEY}`
     );
     const data = await response.json();
     res.status(200).json(data);
