@@ -348,12 +348,6 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        .discography .media-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 10px;
-        }
         .discography .carousel-container {
             width: 100%;
             max-width: 1000px;
@@ -568,11 +562,9 @@
         if (localStorage.getItem('theme') === 'light') {
             document.body.classList.add('light-mode');
         }
-
-        // Función para obtener los videos de la API de Vercel
         async function fetchVideos() {
             try {
-                // Reemplaza la URL de prueba con la URL real de tu función de Vercel
+                // **AQUÍ DEBES CAMBIAR LA URL SI ES NECESARIO**
                 const response = await fetch('https://j-tenshi-music.vercel.app/api/google');
                 const data = await response.json();
                 return data.items;
@@ -581,19 +573,15 @@
                 return [];
             }
         }
-
-        // Función para crear las tarjetas de video con datos reales
         function createVideoCards(videos) {
             const track = document.getElementById('videos-track');
             if (!track) return;
-
             track.innerHTML = '';
             videos.forEach(video => {
                 const videoId = video.snippet.resourceId.videoId;
                 const videoTitle = video.snippet.title;
                 const thumbnailUrl = video.snippet.thumbnails.medium.url;
                 const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
-
                 const card = document.createElement('div');
                 card.className = 'media-card';
                 card.innerHTML = `
@@ -607,47 +595,35 @@
                 track.appendChild(card);
             });
         }
-
-        // Función para inicializar el carrusel
         function initCarousel(options) {
             const track = document.getElementById(options.trackId);
             const prevBtn = document.querySelector(options.prevSelector);
             const nextBtn = document.querySelector(options.nextSelector);
             const container = track ? track.parentElement : null;
-
             if (!track || !prevBtn || !nextBtn || !container) return;
-
             let isTransitioning = false;
             let cards = Array.from(track.children);
             const totalCards = cards.length;
-
             if (totalCards <= 1) return;
-
             function updateCarousel(smoothTransition = true) {
                 if (isTransitioning) return;
                 isTransitioning = true;
-
                 const card = cards[Math.floor(cards.length / 2)];
                 if (!card) {
                     isTransitioning = false;
                     return;
                 }
-
                 const cardCenter = card.offsetLeft + (card.offsetWidth / 2);
                 const containerCenter = container.offsetWidth / 2;
                 const newTransform = -(cardCenter - containerCenter);
-
                 track.style.transition = smoothTransition ? 'transform 0.5s ease-in-out' : 'none';
                 track.style.transform = `translateX(${newTransform}px)`;
-
                 cards.forEach(c => c.classList.remove('center-card'));
                 card.classList.add('center-card');
-
                 setTimeout(() => {
                     isTransitioning = false;
                 }, 500);
             }
-
             prevBtn.addEventListener('click', () => {
                 if (isTransitioning) return;
                 const firstCard = cards[0];
@@ -655,7 +631,6 @@
                 cards = Array.from(track.children);
                 updateCarousel();
             });
-
             nextBtn.addEventListener('click', () => {
                 if (isTransitioning) return;
                 const lastCard = cards[cards.length - 1];
@@ -663,7 +638,6 @@
                 cards = Array.from(track.children);
                 updateCarousel();
             });
-
             let autoplayInterval = setInterval(() => {
                 if (!isTransitioning) {
                     const lastCard = cards[cards.length - 1];
@@ -672,7 +646,6 @@
                     updateCarousel();
                 }
             }, 4000);
-
             container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
             container.addEventListener('mouseleave', () => {
                 autoplayInterval = setInterval(() => {
@@ -684,16 +657,12 @@
                     }
                 }, 4000);
             });
-
             updateCarousel();
             window.addEventListener('resize', () => updateCarousel(false));
         }
-
-        // Función para crear las tarjetas de discografía
         function createColorCards(containerId, width, height, colors) {
             const track = document.getElementById(containerId);
             if (!track) return;
-
             track.innerHTML = '';
             colors.forEach(color => {
                 const card = document.createElement('div');
@@ -705,12 +674,10 @@
                 track.appendChild(card);
             });
         }
-
         window.addEventListener('DOMContentLoaded', async () => {
             // Secciones de video
             const videos = await fetchVideos();
             createVideoCards(videos);
-
             if (videos.length >= 1) {
                 initCarousel({
                     trackId: 'videos-track',
@@ -721,7 +688,6 @@
 
             // Secciones de discografía
             createColorCards('discography-track', 220, 300, ['#FF8787', '#45B7D1', '#96CEB4', '#F7D794', '#D4A5A5']);
-
             const discographyTrack = document.getElementById('discography-track');
             if (discographyTrack && discographyTrack.children.length >= 1) {
                 initCarousel({
