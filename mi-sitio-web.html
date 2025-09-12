@@ -304,9 +304,10 @@
             width: 100%;
             height: 100%;
         }
-        .media-card img {
+        .media-card iframe {
             width: 100%;
-            height: auto;
+            height: 225px; /* Ajusta según necesites */
+            border: none;
             border-radius: 8px;
         }
         .media-card h4 {
@@ -455,6 +456,10 @@
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Cargar Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
     <header>
@@ -509,6 +514,13 @@
                 <i class="fab fa-tiktok"></i>
             </a>
         </div>
+        <button id="addVideoButton" style="margin-top: 20px; padding: 10px 20px; background: #e0c27b; color: #000; border: none; border-radius: 8px; cursor: pointer;">Añadir Video</button>
+        <div id="videoInputArea" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #222; padding: 20px; border-radius: 8px; z-index: 1000;">
+            <input type="text" id="videoLink" placeholder="Pega el enlace de YouTube (ej: https://www.youtube.com/watch?v=ID)" style="width: 300px; padding: 8px; margin-bottom: 10px;">
+            <button id="saveVideoButton" style="padding: 8px 16px; background: #e0c27b; color: #000; border: none; border-radius: 8px; cursor: pointer;">Guardar</button>
+            <button id="cancelVideoButton" style="padding: 8px 16px; background: #777; color: #fff; border: none; border-radius: 8px; cursor: pointer; margin-left: 10px;">Cancelar</button>
+        </div>
+        <div id="blurBackground" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 999;"></div>
     </div>
     <section class="news" id="news">
         <h2>NEWS <span>ニュース</span></h2>
@@ -572,6 +584,119 @@
         if (localStorage.getItem('theme') === 'light') {
             document.body.classList.add('light-mode');
         }
+
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCHa373WgLLHsy8wZXK9zr_HVieQvlrhUs",
+            authDomain: "oasis-b036d.firebaseapp.com",
+            projectId: "oasis-b036d",
+            storageBucket: "oasis-b036d.appspot.com",
+            messagingSenderId: "141546637821",
+            appId: "1:141546637821:web:0a861aeb13831774ed3194",
+            measurementId: "G-HB2P17H5YL"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        let unsubscribeFirestore = null;
+
+        function extractVideoId(url) {
+            const regex = /(?:youtube\.com\/(?:[^\/]+\/[^\/]+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
+        }
+
+        function showVideoInput() {
+            const inputArea = document.getElementById('videoInputArea');
+            const blurBg = document.getElementById('blurBackground');
+            if (inputArea && blurBg) {
+                inputArea.style.display = 'block';
+                blurBg.style.display = 'block';
+            }
+        }
+
+        function hideVideoInput() {
+            const inputArea = document.getElementById('videoInputArea');
+            const blurBg = document.getElementById('blurBackground');
+            if (inputArea && blurBg) {
+                inputArea.style.display = 'none';
+                blurBg.style.display = 'none';
+                document.getElementById('videoLink').value = '';
+            }
+        }
+
+        function saveVideo() {
+            const videoLink = document.getElementById('videoLink').value.trim();
+            const videoId = extractVideoId(videoLink);
+            if (!videoId) {
+                alert('Por favor, introduce un enlace de YouTube válido.');
+                return;
+            }
+            const saveButton = document.getElementById('saveVideoButton');
+            if (saveButton) saveButton.disabled = true;
+
+            db.collection('videos').add({
+                videoId: videoId,
+                title: 'Video de Tenshi',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                type: 'video'
+            }).then(() => {
+                hideVideoInput();
+            }).catch((error) => {
+                console.error('Error al guardar video:', error);
+                alert('Error al guardar el video: ' + error.message);
+            }).finally(() => {
+                if (saveButton) saveButton.disabled = false;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const addVideoButton = document.getElementById('addVideoButton');
+            const saveVideoButton = document.getElementById('saveVideoButton');
+            const cancelVideoButton = document.getElementById('cancelVideoButton');
+            const blurBg = document.getElementById('blurBackground');
+
+            if (addVideoButton) addVideoButton.addEventListener('click', showVideoInput);
+            if (saveVideoButton) saveVideoButton.addEventListener('click', saveVideo);
+            if (cancelVideoButton) cancelVideoButton.addEventListener('click', hideVideoInput);
+            if (blurBg) blurBg.addEventListener('click', hideVideoInput);
+
+            auth.onAuthStateChanged(user => {
+                const videoTrack = document.getElementById('videos-track');
+                if (user && !unsubscribeFirestore && videoTrack) {
+                    unsubscribeFirestore = db.collection('videos')
+                        .onSnapshot(snapshot => {
+                            videoTrack.innerHTML = '';
+                            snapshot.forEach(doc => {
+                                const data = doc.data();
+                                const videoId = data.videoId;
+                                const card = document.createElement('div');
+                                card.className = 'media-card';
+                                card.innerHTML = `
+                                    <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+                                    <h4>${data.title}</h4>
+                                `;
+                                videoTrack.appendChild(card);
+                            });
+                            if (videoTrack.children.length >= 1) {
+                                initCarousel({
+                                    trackId: 'videos-track',
+                                    prevSelector: '.videos .carousel-btn.prev',
+                                    nextSelector: '.videos .carousel-btn.next'
+                                });
+                            }
+                        }, error => {
+                            console.error('Error en listener de videos:', error);
+                        });
+                } else if (!user && unsubscribeFirestore) {
+                    if (unsubscribeFirestore) unsubscribeFirestore();
+                    unsubscribeFirestore = null;
+                    if (videoTrack) videoTrack.innerHTML = '';
+                }
+            });
+        });
+
         async function fetchVideos() {
             try {
                 const response = await fetch('https://j-tenshi-music.vercel.app/api/google', { mode: 'cors' });
@@ -709,5 +834,3 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.css">
-</body>
-</html>
