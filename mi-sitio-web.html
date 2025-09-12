@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tenshi | 幻想の響き</title> 
+    <title>J -Tenshi music | 幻想の響き</title> 
     <style>
         * {
             margin: 0;
@@ -459,61 +459,12 @@
             align-items: center;
             margin-top: -70px;
         }
-        /* Estilos para el modal de agregar video/playlist */
-        #videoInputArea {
-            background: #222;
-            padding: 20px;
-            border-radius: 8px;
-            z-index: 1000;
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-        }
-        #videoInputArea input {
-            width: 300px;
-            padding: 8px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-        #videoInputArea button {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        #saveVideoButton {
-            background: #e0c27b;
-            color: #000;
-        }
-        #cancelVideoButton {
-            background: #777;
-            color: #fff;
-        }
-        #blurBackground {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 999;
-        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
     <header>
-        <div class="logo">Tenshi</div>
+        <div class="logo">J -Tenshi music</div>
         <nav>
             <ul>
                 <li><a href="news.html">News</a></li>
@@ -527,7 +478,7 @@
     </header>
     <div class="hero-wrapper">
         <div class="hero-bg"></div>
-        <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
+        <div class="hero-text">Bienvenido a J -Tenshi music | 幻想の響き</div>
     </div>
     <div class="contenedor-centrado">
         <div class="social-bar music-platforms">
@@ -564,17 +515,6 @@
                 <i class="fab fa-tiktok"></i>
             </a>
         </div>
-        <!-- Botón para agregar video/playlist -->
-        <button id="addVideoButton" style="margin-top: 20px; padding: 10px 20px; background: #e0c27b; color: #000; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">Añadir Video o Playlist</button>
-        <!-- Modal para input de video/playlist -->
-        <div id="videoInputArea">
-            <input type="text" id="videoLink" placeholder="Pega el enlace de YouTube (video o playlist)" style="width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 4px; border: 1px solid #ccc;">
-            <div style="display: flex; gap: 10px;">
-                <button id="saveVideoButton">Guardar</button>
-                <button id="cancelVideoButton">Cancelar</button>
-            </div>
-        </div>
-        <div id="blurBackground"></div>
     </div>
     <section class="news" id="news">
         <h2>NEWS <span>ニュース</span></h2>
@@ -621,7 +561,28 @@
     <div class="section-banner">ビデオ</div>
     <section class="videos" id="videos">
         <div class="carousel-container" aria-label="Videos carousel">
-            <div class="carousel-track" id="videos-track"></div>
+            <div class="carousel-track" id="videos-track">
+                <!-- Videos de la playlist PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf -->
+                <div class="media-card">
+                    <a href="https://www.youtube.com/watch?v=0_QHL7cDYno" target="_blank">
+                        <img src="https://img.youtube.com/vi/0_QHL7cDYno/mqdefault.jpg" alt="Video 1">
+                        <h4>Video 1 de la Playlist</h4>
+                    </a>
+                </div>
+                <div class="media-card">
+                    <a href="https://www.youtube.com/watch?v=ANOTHER_VIDEO_ID" target="_blank">
+                        <img src="https://img.youtube.com/vi/ANOTHER_VIDEO_ID/mqdefault.jpg" alt="Video 2">
+                        <h4>Video 2 de la Playlist</h4>
+                    </a>
+                </div>
+                <div class="media-card">
+                    <a href="https://www.youtube.com/watch?v=YET_ANOTHER_ID" target="_blank">
+                        <img src="https://img.youtube.com/vi/YET_ANOTHER_ID/mqdefault.jpg" alt="Video 3">
+                        <h4>Video 3 de la Playlist</h4>
+                    </a>
+                </div>
+                <!-- Agrega más videos según la playlist, reemplazando ANOTHER_VIDEO_ID y YET_ANOTHER_ID con IDs reales -->
+            </div>
             <button class="carousel-btn prev" aria-label="Anterior">‹</button>
             <button class="carousel-btn next" aria-label="Siguiente">›</button>
         </div>
@@ -639,145 +600,6 @@
             document.body.classList.add('light-mode');
         }
 
-        // Configuración de Firebase (usa la misma del código de notas)
-        const firebaseConfig = {
-            apiKey: "AIzaSyCHa373WgLLHsy8wZXK9zr_HVieQvlrhUs",
-            authDomain: "oasis-b036d.firebaseapp.com",
-            projectId: "oasis-b036d",
-            storageBucket: "oasis-b036d.appspot.com",
-            messagingSenderId: "141546637821",
-            appId: "1:141546637821:web:0a861aeb13831774ed3194",
-            measurementId: "G-HB2P17H5YL"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-
-        let unsubscribeFirestore = null;
-
-        // Función para extraer ID de video o playlist de URL de YouTube
-        function extractYouTubeId(url) {
-            const videoRegex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/;
-            const playlistRegex = /list=([a-zA-Z0-9_-]+)/;
-            const videoMatch = url.match(videoRegex);
-            const playlistMatch = url.match(playlistRegex);
-            if (playlistMatch) {
-                return { type: 'playlist', id: playlistMatch[1] };
-            } else if (videoMatch) {
-                return { type: 'video', id: videoMatch[1] };
-            }
-            return null;
-        }
-
-        // Función para mostrar/ocultar modal de agregar
-        function showVideoInput() {
-            document.getElementById('videoInputArea').style.display = 'block';
-            document.getElementById('blurBackground').style.display = 'block';
-        }
-
-        function hideVideoInput() {
-            document.getElementById('videoInputArea').style.display = 'none';
-            document.getElementById('blurBackground').style.display = 'none';
-            document.getElementById('videoLink').value = '';
-        }
-
-        // Función para guardar video/playlist
-        function saveVideo() {
-            const videoLink = document.getElementById('videoLink').value.trim();
-            const idData = extractYouTubeId(videoLink);
-            if (!idData) {
-                alert('Por favor, introduce un enlace de YouTube válido (video o playlist).');
-                return;
-            }
-            const saveButton = document.getElementById('saveVideoButton');
-            if (saveButton) saveButton.disabled = true;
-
-            db.collection('videos').add({
-                [idData.type + 'Id']: idData.id,
-                title: idData.type === 'video' ? 'Video de Tenshi' : 'Playlist de Tenshi',
-                type: idData.type,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                hideVideoInput();
-                alert('¡Guardado! Aparecerá en el carrusel.');
-            }).catch((error) => {
-                console.error('Error al guardar:', error);
-                alert('Error al guardar: ' + error.message);
-            }).finally(() => {
-                if (saveButton) saveButton.disabled = false;
-            });
-        }
-
-        // Lógica principal de carga y listener
-        document.addEventListener('DOMContentLoaded', () => {
-            const addVideoButton = document.getElementById('addVideoButton');
-            const saveVideoButton = document.getElementById('saveVideoButton');
-            const cancelVideoButton = document.getElementById('cancelVideoButton');
-            const blurBg = document.getElementById('blurBackground');
-            const videoTrack = document.getElementById('videos-track');
-
-            if (addVideoButton) addVideoButton.addEventListener('click', showVideoInput);
-            if (saveVideoButton) saveVideoButton.addEventListener('click', saveVideo);
-            if (cancelVideoButton) cancelVideoButton.addEventListener('click', hideVideoInput);
-            if (blurBg) blurBg.addEventListener('click', hideVideoInput);
-
-            // Listener de auth para cargar videos/playlists
-            auth.onAuthStateChanged(user => {
-                if (user && !unsubscribeFirestore && videoTrack) {
-                    unsubscribeFirestore = db.collection('videos').onSnapshot(snapshot => {
-                        videoTrack.innerHTML = '';
-                        snapshot.forEach(doc => {
-                            const data = doc.data();
-                            const card = document.createElement('div');
-                            card.className = 'media-card';
-                            let content = '';
-                            if (data.type === 'video') {
-                                content = `
-                                    <a href="https://www.youtube.com/watch?v=${data.videoId}" target="_blank">
-                                        <img src="https://img.youtube.com/vi/${data.videoId}/mqdefault.jpg" alt="${data.title}">
-                                        <h4>${data.title}</h4>
-                                    </a>
-                                `;
-                            } else if (data.type === 'playlist') {
-                                content = `
-                                    <iframe src="https://www.youtube.com/embed/videoseries?list=${data.playlistId}" frameborder="0" allowfullscreen></iframe>
-                                    <h4>${data.title}</h4>
-                                `;
-                            }
-                            card.innerHTML = content;
-                            videoTrack.appendChild(card);
-                        });
-                        // Reiniciar carrusel si hay elementos
-                        if (videoTrack.children.length >= 1) {
-                            initCarousel({
-                                trackId: 'videos-track',
-                                prevSelector: '.videos .carousel-btn.prev',
-                                nextSelector: '.videos .carousel-btn.next'
-                            });
-                        }
-                    }, error => {
-                        console.error('Error en listener de videos:', error);
-                    });
-                } else if (!user && unsubscribeFirestore) {
-                    unsubscribeFirestore();
-                    unsubscribeFirestore = null;
-                    if (videoTrack) videoTrack.innerHTML = '';
-                }
-            });
-
-            // Resto del código original (discografía, etc.)
-            createColorCards('discography-track', 220, 300, ['#FF8787', '#45B7D1', '#96CEB4', '#F7D794', '#D4A5A5']);
-            const discographyTrack = document.getElementById('discography-track');
-            if (discographyTrack && discographyTrack.children.length >= 1) {
-                initCarousel({
-                    trackId: 'discography-track',
-                    prevSelector: '.discography .carousel-btn.prev',
-                    nextSelector: '.discography .carousel-btn.next'
-                });
-            }
-        });
-
-        // Funciones del carrusel (sin cambios)
         function initCarousel(options) {
             const track = document.getElementById(options.trackId);
             const prevBtn = document.querySelector(options.prevSelector);
@@ -843,6 +665,7 @@
             updateCarousel();
             window.addEventListener('resize', () => updateCarousel(false));
         }
+
         function createColorCards(containerId, width, height, colors) {
             const track = document.getElementById(containerId);
             if (!track) return;
@@ -857,6 +680,26 @@
                 track.appendChild(card);
             });
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createColorCards('discography-track', 220, 300, ['#FF8787', '#45B7D1', '#96CEB4', '#F7D794', '#D4A5A5']);
+            const discographyTrack = document.getElementById('discography-track');
+            if (discographyTrack && discographyTrack.children.length >= 1) {
+                initCarousel({
+                    trackId: 'discography-track',
+                    prevSelector: '.discography .carousel-btn.prev',
+                    nextSelector: '.discography .carousel-btn.next'
+                });
+            }
+            const videosTrack = document.getElementById('videos-track');
+            if (videosTrack && videosTrack.children.length >= 1) {
+                initCarousel({
+                    trackId: 'videos-track',
+                    prevSelector: '.videos .carousel-btn.prev',
+                    nextSelector: '.videos .carousel-btn.next'
+                });
+            }
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.css">
