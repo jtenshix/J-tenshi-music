@@ -1,7 +1,7 @@
 {
   "name": "j-tenshi-music-website",
   "version": "1.0.0",
-  "description": "A website for J-tenshi's music.",
+  "description": "A website for J-tenshi's music.", 
   "scripts": {,
     "build": "echo 'Building static site...'"
   },
