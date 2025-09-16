@@ -11,7 +11,7 @@
             box-sizing: border-box;
         }
         :root {
-            --card-gap: 20px;
+            --card-gap: 30px;
         }
         body {
             font-family: 'Helvetica Neue', sans-serif;
@@ -252,7 +252,10 @@
             overflow: hidden;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 40px 0;
+            padding: 60px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .carousel-btn {
             position: absolute;
@@ -261,14 +264,14 @@
             background: rgba(0, 0, 0, 0.5);
             border: none;
             color: #e0c27b;
-            font-size: 2rem;
+            font-size: 2.5rem;
             cursor: pointer;
             z-index: 10;
-            padding: 10px;
+            padding: 15px;
             border-radius: 50%;
             transition: all 0.3s;
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -278,22 +281,23 @@
             transform: translateY(-50%) scale(1.1);
         }
         .carousel-btn.prev {
-            left: -25px;
+            left: 10px;
         }
         .carousel-btn.next {
-            right: -25px;
+            right: 10px;
         }
-
-        /* Estilos para el carrusel de discografía */
-        .discography .carousel-track {
+        .discography .carousel-track,
+        .videos .carousel-track {
             display: flex;
             gap: var(--card-gap);
             padding: 0;
-            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+            align-items: center;
+            justify-content: center;
         }
         .album-card {
-            flex: 0 0 200px;
-            height: 200px;
+            flex: 0 0 280px;
+            height: 280px;
             background: #2a2a2a;
             border-radius: 12px;
             overflow: hidden;
@@ -304,11 +308,11 @@
             position: relative;
         }
         .album-card.center-card {
-            flex: 0 0 260px;
-            height: 260px;
-            transform: scale(1.05);
+            flex: 0 0 360px;
+            height: 360px;
+            transform: scale(1.1);
             opacity: 1;
-            box-shadow: 0 12px 25px rgba(224, 194, 123, 0.3);
+            box-shadow: 0 12px 30px rgba(224, 194, 123, 0.4);
             z-index: 2;
         }
         .album-cover {
@@ -336,28 +340,20 @@
         .album-card h4 {
             text-align: center;
             margin: 10px 0 5px;
-            font-size: 16px;
+            font-size: 18px;
             color: #fff;
             padding: 0 10px;
         }
         .album-card .label {
             text-align: center;
-            font-size: 12px;
+            font-size: 13px;
             color: #e0c27b;
             margin-bottom: 10px;
             display: block;
         }
-
-        /* Estilos para el carrusel de videos (16:9) */
-        .videos .carousel-track {
-            display: flex;
-            gap: var(--card-gap);
-            padding: 0;
-            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
         .video-card {
-            flex: 0 0 280px;
-            height: 158px; /* 16:9 (280/16*9=157.5) */
+            flex: 0 0 400px;
+            height: 225px; /* 16:9 (400/16*9=225) */
             background: rgba(30, 30, 30, 0.7);
             border-radius: 12px;
             overflow: hidden;
@@ -369,11 +365,11 @@
             border: 1px solid rgba(224, 194, 123, 0.2);
         }
         .video-card.center-card {
-            flex: 0 0 340px;
-            height: 192px; /* 16:9 (340/16*9=191.25) */
-            transform: scale(1.05);
+            flex: 0 0 480px;
+            height: 270px; /* 16:9 (480/16*9=270) */
+            transform: scale(1.1);
             opacity: 1;
-            box-shadow: 0 12px 25px rgba(224, 194, 123, 0.3);
+            box-shadow: 0 12px 30px rgba(224, 194, 123, 0.4);
             z-index: 2;
         }
         .video-placeholder {
@@ -389,11 +385,11 @@
         }
         .video-placeholder::after {
             content: "▶";
-            font-size: 30px;
+            font-size: 40px;
             color: rgba(255, 255, 255, 0.7);
             background: rgba(0, 0, 0, 0.5);
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -412,7 +408,7 @@
             right: 0;
             text-align: center;
             margin: 0;
-            font-size: 16px;
+            font-size: 18px;
             color: #fff;
             background: rgba(0, 0, 0, 0.7);
             padding: 8px 0;
@@ -422,15 +418,14 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            font-size: 11px;
+            font-size: 12px;
             color: #e0c27b;
             border: 1px solid #e0c27b;
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 999px;
             background: rgba(0, 0, 0, 0.5);
             z-index: 1;
         }
-
         @media (max-width: 900px) {
             .schedule-grid {
                 grid-template-columns: 1fr;
@@ -441,20 +436,27 @@
                 height: 100px;
                 font-size: 2rem;
             }
-            .album-card, .album-card.center-card {
-                flex: 0 0 160px !important;
-                height: 160px !important;
+            .album-card {
+                flex: 0 0 220px !important;
+                height: 220px !important;
+            }
+            .album-card.center-card {
+                flex: 0 0 280px !important;
+                height: 280px !important;
             }
             .video-card {
-                flex: 0 0 220px !important;
-                height: 124px !important; /* 16:9 (220/16*9=123.75) */
+                flex: 0 0 300px !important;
+                height: 169px !important; /* 16:9 (300/16*9=168.75) */
             }
             .video-card.center-card {
-                flex: 0 0 250px !important;
-                height: 141px !important; /* 16:9 (250/16*9=140.625) */
+                flex: 0 0 360px !important;
+                height: 202px !important; /* 16:9 (360/16*9=202.5) */
             }
             .carousel-btn {
-                display: none; /* Ocultar botones en móvil (usar touch) */
+                font-size: 2rem;
+                width: 50px;
+                height: 50px;
+                padding: 10px;
             }
         }
         footer {
@@ -593,14 +595,11 @@
         </div>
     </section>
 
-    <!-- Banner de discografía -->
     <div class="section-banner">ディスコグラフィー</div>
 
-    <!-- Sección de discografía (carrusel) -->
     <section class="discography" id="discography">
         <div class="carousel-container" aria-label="Discography carousel">
             <div class="carousel-track" id="discography-track">
-                <!-- Tarjetas de álbumes (5 en total) -->
                 <div class="album-card">
                     <div class="album-cover" style="background-image: url('album1.jpg');"></div>
                     <h4>Shinkai no Melody</h4>
@@ -632,14 +631,11 @@
         </div>
     </section>
 
-    <!-- Banner de videos (solo 1 vez) -->
     <div class="section-banner">ビデオ</div>
 
-    <!-- Sección de videos (carrusel) -->
     <section class="videos" id="videos">
         <div class="carousel-container" aria-label="Videos carousel">
             <div class="carousel-track" id="videos-track">
-                <!-- Tarjetas de videos (3 en total) -->
                 <div class="video-card">
                     <div class="video-placeholder"></div>
                     <h4>Concierto en Tokio</h4>
@@ -675,7 +671,6 @@
             document.body.classList.add('light-mode');
         }
 
-        // Función del carrusel (mejorada para efecto de deslizamiento claro)
         function initCarousel(options) {
             const track = document.getElementById(options.trackId);
             const prevBtn = document.querySelector(options.prevSelector);
@@ -684,113 +679,79 @@
 
             if (!track || !prevBtn || !nextBtn || !container) return;
 
+            let currentIndex = Math.floor(track.children.length / 2);
             let isTransitioning = false;
             let cards = Array.from(track.children);
             const totalCards = cards.length;
 
             if (totalCards <= 1) return;
 
-            // Posicionar tarjetas inicialmente
-            function positionCards() {
-                const containerWidth = container.offsetWidth;
-                const cardWidth = cards[0].offsetWidth;
-                const gap = parseInt(getComputedStyle(track).gap) || 20;
-                let offset = (containerWidth - cardWidth) / 2 - gap;
-
-                track.style.transition = 'none';
-                track.style.transform = `translateX(${-offset}px)`;
-
-                // Centrar la tarjeta inicial (la del medio)
-                const centerIndex = Math.floor(cards.length / 2);
-                cards[centerIndex].classList.add('center-card');
-            }
-
-            // Actualizar carrusel con animación
             function updateCarousel(smoothTransition = true) {
                 if (isTransitioning) return;
                 isTransitioning = true;
 
-                const card = document.querySelector(`${options.prevSelector} ~ .carousel-track .center-card`) ||
-                             document.querySelector(`${options.nextSelector} ~ .carousel-track .center-card`);
-                if (!card) {
-                    isTransitioning = false;
-                    return;
-                }
-
-                const cardCenter = card.offsetLeft + (card.offsetWidth / 2);
-                const containerCenter = container.offsetWidth / 2;
+                const containerWidth = container.offsetWidth;
+                const cardWidth = cards[currentIndex].offsetWidth;
+                const gap = parseInt(getComputedStyle(track).gap) || 30;
+                const cardCenter = cards[currentIndex].offsetLeft + (cardWidth / 2);
+                const containerCenter = containerWidth / 2;
                 const newTransform = -(cardCenter - containerCenter);
 
-                track.style.transition = smoothTransition ? 'transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)' : 'none';
+                track.style.transition = smoothTransition ? 'transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1)' : 'none';
                 track.style.transform = `translateX(${newTransform}px)`;
 
-                // Efectos visuales para todas las tarjetas
-                cards.forEach(c => {
-                    c.classList.remove('center-card');
-                    c.style.transform = 'scale(0.9)';
-                    c.style.opacity = '0.85';
-                    c.style.zIndex = '1';
+                cards.forEach((card, index) => {
+                    card.classList.remove('center-card');
+                    card.style.transform = 'scale(0.9)';
+                    card.style.opacity = '0.85';
+                    card.style.zIndex = '1';
+                    const distance = Math.abs(index - currentIndex);
+                    if (distance > 0) {
+                        const offset = distance * 10;
+                        card.style.transform = `scale(${0.9 - distance * 0.05}) translateX(${index < currentIndex ? -offset : offset}px)`;
+                        card.style.opacity = `${0.85 - distance * 0.1}`;
+                    }
                 });
 
-                // Efectos para la tarjeta central
-                card.classList.add('center-card');
-                card.style.transform = 'scale(1.05)';
-                card.style.opacity = '1';
-                card.style.zIndex = '2';
+                cards[currentIndex].classList.add('center-card');
+                cards[currentIndex].style.transform = 'scale(1.1)';
+                cards[currentIndex].style.opacity = '1';
+                cards[currentIndex].style.zIndex = '2';
 
                 setTimeout(() => {
                     isTransitioning = false;
-                }, 600);
+                }, 800);
             }
 
-            // Navegación con botones
             prevBtn.addEventListener('click', () => {
                 if (isTransitioning) return;
-                const firstCard = cards[0];
-                track.appendChild(firstCard);
-                cards = Array.from(track.children);
+                currentIndex = (currentIndex - 1 + totalCards) % totalCards;
                 updateCarousel();
             });
 
             nextBtn.addEventListener('click', () => {
                 if (isTransitioning) return;
-                const lastCard = cards[cards.length - 1];
-                track.prepend(lastCard);
-                cards = Array.from(track.children);
+                currentIndex = (currentIndex + 1) % totalCards;
                 updateCarousel();
             });
 
-            // Autoplay (con pausa al hacer hover)
             let autoplayInterval = setInterval(() => {
                 if (!isTransitioning) {
-                    const lastCard = cards[cards.length - 1];
-                    track.prepend(lastCard);
-                    cards = Array.from(track.children);
+                    currentIndex = (currentIndex + 1) % totalCards;
                     updateCarousel();
                 }
-            }, 3000);
+            }, 4000);
 
             container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
             container.addEventListener('mouseleave', () => {
                 autoplayInterval = setInterval(() => {
                     if (!isTransitioning) {
-                        const lastCard = cards[cards.length - 1];
-                        track.prepend(lastCard);
-                        cards = Array.from(track.children);
+                        currentIndex = (currentIndex + 1) % totalCards;
                         updateCarousel();
                     }
-                }, 3000);
+                }, 4000);
             });
 
-            // Inicializar
-            positionCards();
-            updateCarousel(false);
-            window.addEventListener('resize', () => {
-                positionCards();
-                updateCarousel(false);
-            });
-
-            // Soporte para touch en móviles
             let touchStartX = 0;
             let touchEndX = 0;
 
@@ -800,22 +761,22 @@
 
             container.addEventListener('touchend', (e) => {
                 touchEndX = e.changedTouches[0].screenX;
-                if (touchStartX - touchEndX > 50 && !isTransitioning) { // Swipe left
-                    const lastCard = cards[cards.length - 1];
-                    track.prepend(lastCard);
-                    cards = Array.from(track.children);
+                if (touchStartX - touchEndX > 50 && !isTransitioning) {
+                    currentIndex = (currentIndex + 1) % totalCards;
                     updateCarousel();
                 }
-                if (touchEndX - touchStartX > 50 && !isTransitioning) { // Swipe right
-                    const firstCard = cards[0];
-                    track.appendChild(firstCard);
-                    cards = Array.from(track.children);
+                if (touchEndX - touchStartX > 50 && !isTransitioning) {
+                    currentIndex = (currentIndex - 1 + totalCards) % totalCards;
                     updateCarousel();
                 }
             }, {passive: true});
+
+            updateCarousel(false);
+            window.addEventListener('resize', () => {
+                updateCarousel(false);
+            });
         }
 
-        // Inicializar carruseles al cargar la página
         document.addEventListener('DOMContentLoaded', () => {
             initCarousel({
                 trackId: 'discography-track',
