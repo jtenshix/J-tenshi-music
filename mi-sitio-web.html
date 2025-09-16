@@ -353,7 +353,7 @@
         }
         .video-card {
             flex: 0 0 400px;
-            height: 225px; /* 16:9 (400/16*9=225) */
+            height: 225px;
             background: rgba(30, 30, 30, 0.7);
             border-radius: 12px;
             overflow: hidden;
@@ -366,7 +366,7 @@
         }
         .video-card.center-card {
             flex: 0 0 480px;
-            height: 270px; /* 16:9 (480/16*9=270) */
+            height: 270px;
             transform: scale(1.1);
             opacity: 1;
             box-shadow: 0 12px 30px rgba(224, 194, 123, 0.4);
@@ -446,11 +446,11 @@
             }
             .video-card {
                 flex: 0 0 300px !important;
-                height: 169px !important; /* 16:9 (300/16*9=168.75) */
+                height: 169px !important;
             }
             .video-card.center-card {
                 flex: 0 0 360px !important;
-                height: 202px !important; /* 16:9 (360/16*9=202.5) */
+                height: 202px !important;
             }
             .carousel-btn {
                 font-size: 2rem;
@@ -679,21 +679,28 @@
 
             if (!track || !prevBtn || !nextBtn || !container) return;
 
-            let currentIndex = Math.floor(track.children.length / 2);
+            let currentIndex = 0;
             let isTransitioning = false;
             let cards = Array.from(track.children);
             const totalCards = cards.length;
 
             if (totalCards <= 1) return;
 
+            // Clonar tarjetas para efecto infinito
+            const cloneFirst = cards.map(card => card.cloneNode(true));
+            const cloneLast = cards.map(card => card.cloneNode(true));
+            cloneFirst.forEach(clone => track.appendChild(clone));
+            cloneLast.forEach(clone => track.prepend(clone));
+            cards = Array.from(track.children);
+
             function updateCarousel(smoothTransition = true) {
                 if (isTransitioning) return;
                 isTransitioning = true;
 
                 const containerWidth = container.offsetWidth;
-                const cardWidth = cards[currentIndex].offsetWidth;
+                const cardWidth = cards[currentIndex + totalCards].offsetWidth;
                 const gap = parseInt(getComputedStyle(track).gap) || 30;
-                const cardCenter = cards[currentIndex].offsetLeft + (cardWidth / 2);
+                const cardCenter = cards[currentIndex + totalCards].offsetLeft + (cardWidth / 2);
                 const containerCenter = containerWidth / 2;
                 const newTransform = -(cardCenter - containerCenter);
 
@@ -705,39 +712,54 @@
                     card.style.transform = 'scale(0.9)';
                     card.style.opacity = '0.85';
                     card.style.zIndex = '1';
-                    const distance = Math.abs(index - currentIndex);
+                    const distance = Math.abs((index - (currentIndex + totalCards) + totalCards) % totalCards);
                     if (distance > 0) {
                         const offset = distance * 10;
-                        card.style.transform = `scale(${0.9 - distance * 0.05}) translateX(${index < currentIndex ? -offset : offset}px)`;
+                        card.style.transform = `scale(${0.9 - distance * 0.05}) translateX(${index < (currentIndex + totalCards) ? -offset : offset}px)`;
                         card.style.opacity = `${0.85 - distance * 0.1}`;
                     }
                 });
 
-                cards[currentIndex].classList.add('center-card');
-                cards[currentIndex].style.transform = 'scale(1.1)';
-                cards[currentIndex].style.opacity = '1';
-                cards[currentIndex].style.zIndex = '2';
+                cards[currentIndex + totalCards].classList.add('center-card');
+                cards[currentIndex + totalCards].style.transform = 'scale(1.1)';
+                cards[currentIndex + totalCards].style.opacity = '1';
+                cards[currentIndex + totalCards].style.zIndex = '2';
 
                 setTimeout(() => {
                     isTransitioning = false;
-                }, 800);
+
+                    // Reajustar para bucle infinito
+                    if (currentIndex >= totalCards) {
+                        currentIndex -= totalCards;
+                        track.style.transition = 'none';
+                        const cardCenter = cards[currentIndex + totalCards].offsetLeft + (cardWidth / 2);
+                        const newTransform = -(cardCenter - containerCenter);
+                        track.style.transform = `translateX(${newTransform}px)`;
+                    } else if (currentIndex < 0) {
+                        currentIndex += totalCards;
+                        track.style.transition = 'none';
+                        const cardCenter = cards[currentIndex + totalCards].offsetLeft + (cardWidth / 2);
+                        const newTransform = -(cardCenter - containerCenter);
+                        track.style.transform = `translateX(${newTransform}px)`;
+                    }
+                }, smoothTransition ? 800 : 0);
             }
 
             prevBtn.addEventListener('click', () => {
                 if (isTransitioning) return;
-                currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+                currentIndex--;
                 updateCarousel();
             });
 
             nextBtn.addEventListener('click', () => {
                 if (isTransitioning) return;
-                currentIndex = (currentIndex + 1) % totalCards;
+                currentIndex++;
                 updateCarousel();
             });
 
             let autoplayInterval = setInterval(() => {
                 if (!isTransitioning) {
-                    currentIndex = (currentIndex + 1) % totalCards;
+                    currentIndex++;
                     updateCarousel();
                 }
             }, 4000);
@@ -746,7 +768,7 @@
             container.addEventListener('mouseleave', () => {
                 autoplayInterval = setInterval(() => {
                     if (!isTransitioning) {
-                        currentIndex = (currentIndex + 1) % totalCards;
+                        currentIndex++;
                         updateCarousel();
                     }
                 }, 4000);
@@ -762,11 +784,11 @@
             container.addEventListener('touchend', (e) => {
                 touchEndX = e.changedTouches[0].screenX;
                 if (touchStartX - touchEndX > 50 && !isTransitioning) {
-                    currentIndex = (currentIndex + 1) % totalCards;
+                    currentIndex++;
                     updateCarousel();
                 }
                 if (touchEndX - touchStartX > 50 && !isTransitioning) {
-                    currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+                    currentIndex--;
                     updateCarousel();
                 }
             }, {passive: true});
