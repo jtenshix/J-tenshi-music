@@ -11,7 +11,7 @@
             box-sizing: border-box;
         }
         :root {
-            --card-gap: 30px;
+            --card-gap: 40px;
         }
         body {
             font-family: 'Helvetica Neue', sans-serif;
@@ -252,16 +252,17 @@
             overflow: hidden;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 60px 0;
+            padding: 80px 0;
             display: flex;
             justify-content: center;
             align-items: center;
+            perspective: 1000px;
         }
         .carousel-btn {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             border: none;
             color: #e0c27b;
             font-size: 2.5rem;
@@ -275,52 +276,77 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
         .carousel-btn:hover {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(224, 194, 123, 0.8);
+            color: #000;
             transform: translateY(-50%) scale(1.1);
         }
         .carousel-btn.prev {
-            left: 10px;
+            left: 20px;
         }
         .carousel-btn.next {
-            right: 10px;
+            right: 20px;
+        }
+        .carousel-indicators {
+            position: absolute;
+            bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            z-index: 10;
+        }
+        .carousel-indicator {
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .carousel-indicator.active {
+            background: #e0c27b;
+            transform: scale(1.4);
         }
         .discography .carousel-track,
         .videos .carousel-track {
             display: flex;
             gap: var(--card-gap);
             padding: 0;
-            transition: transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: transform 0.9s cubic-bezier(0.23, 1, 0.32, 1);
             align-items: center;
             justify-content: center;
+            width: max-content;
         }
         .album-card {
-            flex: 0 0 280px;
-            height: 280px;
+            flex: 0 0 300px;
+            height: 300px;
             background: #2a2a2a;
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            transform: scale(0.9);
-            opacity: 0.85;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            transform: scale(0.85) rotateY(10deg);
+            opacity: 0.7;
             position: relative;
+            border: 1px solid rgba(224, 194, 123, 0.2);
         }
         .album-card.center-card {
-            flex: 0 0 360px;
-            height: 360px;
-            transform: scale(1.1);
+            flex: 0 0 400px;
+            height: 400px;
+            transform: scale(1.15) rotateY(0deg);
             opacity: 1;
-            box-shadow: 0 12px 30px rgba(224, 194, 123, 0.4);
+            box-shadow: 0 15px 35px rgba(224, 194, 123, 0.5);
             z-index: 2;
         }
         .album-cover {
             width: 100%;
-            height: 85%;
+            height: 80%;
             background-size: cover;
             background-position: center;
-            border-radius: 8px 8px 0 0;
+            border-radius: 12px 12px 0 0;
             position: relative;
             overflow: hidden;
         }
@@ -331,52 +357,54 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.4));
             transition: all 0.3s;
         }
         .album-card:hover .album-cover::after {
-            background: linear-gradient(to bottom, rgba(224,194,123,0.1), rgba(224,194,123,0.2));
+            background: linear-gradient(to bottom, rgba(224,194,123,0.2), rgba(224,194,123,0.3));
         }
         .album-card h4 {
             text-align: center;
-            margin: 10px 0 5px;
-            font-size: 18px;
+            margin: 12px 0 6px;
+            font-size: 20px;
             color: #fff;
-            padding: 0 10px;
+            padding: 0 12px;
+            font-weight: 600;
         }
         .album-card .label {
             text-align: center;
-            font-size: 13px;
+            font-size: 14px;
             color: #e0c27b;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             display: block;
+            font-weight: 500;
         }
         .video-card {
-            flex: 0 0 400px;
-            height: 225px;
-            background: rgba(30, 30, 30, 0.7);
-            border-radius: 12px;
+            flex: 0 0 420px;
+            height: 236px;
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            transform: scale(0.9);
-            opacity: 0.85;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            transform: scale(0.85) rotateY(10deg);
+            opacity: 0.7;
             position: relative;
-            border: 1px solid rgba(224, 194, 123, 0.2);
+            border: 1px solid rgba(224, 194, 123, 0.3);
         }
         .video-card.center-card {
-            flex: 0 0 480px;
-            height: 270px;
-            transform: scale(1.1);
+            flex: 0 0 500px;
+            height: 281px;
+            transform: scale(1.15) rotateY(0deg);
             opacity: 1;
-            box-shadow: 0 12px 30px rgba(224, 194, 123, 0.4);
+            box-shadow: 0 15px 35px rgba(224, 194, 123, 0.5);
             z-index: 2;
         }
         .video-placeholder {
             width: 100%;
             height: 100%;
-            border-radius: 8px;
-            background: linear-gradient(135deg, rgba(224, 194, 123, 0.15), rgba(123, 224, 194, 0.15));
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(224, 194, 123, 0.2), rgba(123, 224, 194, 0.2));
             display: flex;
             align-items: center;
             justify-content: center;
@@ -385,11 +413,11 @@
         }
         .video-placeholder::after {
             content: "▶";
-            font-size: 40px;
-            color: rgba(255, 255, 255, 0.7);
-            background: rgba(0, 0, 0, 0.5);
-            width: 60px;
-            height: 60px;
+            font-size: 48px;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(0, 0, 0, 0.6);
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -397,34 +425,36 @@
             transition: all 0.3s;
         }
         .video-card:hover .video-placeholder::after {
-            transform: scale(1.1);
-            background: rgba(224, 194, 123, 0.8);
+            transform: scale(1.15);
+            background: rgba(224, 194, 123, 0.9);
             color: #000;
         }
         .video-card h4 {
             position: absolute;
-            bottom: 10px;
+            bottom: 12px;
             left: 0;
             right: 0;
             text-align: center;
             margin: 0;
-            font-size: 18px;
+            font-size: 20px;
             color: #fff;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 8px 0;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 0;
             z-index: 1;
+            font-weight: 600;
         }
         .video-card .label {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 12px;
+            top: 12px;
+            right: 12px;
+            font-size: 13px;
             color: #e0c27b;
             border: 1px solid #e0c27b;
-            padding: 3px 8px;
+            padding: 4px 10px;
             border-radius: 999px;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             z-index: 1;
+            font-weight: 500;
         }
         @media (max-width: 900px) {
             .schedule-grid {
@@ -437,26 +467,33 @@
                 font-size: 2rem;
             }
             .album-card {
-                flex: 0 0 220px !important;
-                height: 220px !important;
+                flex: 0 0 240px !important;
+                height: 240px !important;
             }
             .album-card.center-card {
-                flex: 0 0 280px !important;
-                height: 280px !important;
+                flex: 0 0 320px !important;
+                height: 320px !important;
             }
             .video-card {
-                flex: 0 0 300px !important;
-                height: 169px !important;
+                flex: 0 0 320px !important;
+                height: 180px !important;
             }
             .video-card.center-card {
-                flex: 0 0 360px !important;
-                height: 202px !important;
+                flex: 0 0 400px !important;
+                height: 225px !important;
             }
             .carousel-btn {
                 font-size: 2rem;
                 width: 50px;
                 height: 50px;
                 padding: 10px;
+            }
+            .carousel-indicator {
+                width: 8px;
+                height: 8px;
+            }
+            .carousel-indicator.active {
+                transform: scale(1.3);
             }
         }
         footer {
@@ -628,6 +665,7 @@
             </div>
             <button class="carousel-btn prev" aria-label="Anterior">‹</button>
             <button class="carousel-btn next" aria-label="Siguiente">›</button>
+            <div class="carousel-indicators" id="discography-indicators"></div>
         </div>
     </section>
 
@@ -654,6 +692,7 @@
             </div>
             <button class="carousel-btn prev" aria-label="Anterior">‹</button>
             <button class="carousel-btn next" aria-label="Siguiente">›</button>
+            <div class="carousel-indicators" id="videos-indicators"></div>
         </div>
     </section>
 
@@ -675,23 +714,39 @@
             const track = document.getElementById(options.trackId);
             const prevBtn = document.querySelector(options.prevSelector);
             const nextBtn = document.querySelector(options.nextSelector);
+            const indicatorsContainer = document.getElementById(options.indicatorsId);
             const container = track.parentElement;
 
-            if (!track || !prevBtn || !nextBtn || !container) return;
+            if (!track || !prevBtn || !nextBtn || !container || !indicatorsContainer) return;
 
             let currentIndex = 0;
             let isTransitioning = false;
-            let cards = Array.from(track.children);
-            const totalCards = cards.length;
+            let originalCards = Array.from(track.children);
+            const totalCards = originalCards.length;
 
             if (totalCards <= 1) return;
 
             // Clonar tarjetas para efecto infinito
-            const cloneFirst = cards.map(card => card.cloneNode(true));
-            const cloneLast = cards.map(card => card.cloneNode(true));
+            const cloneFirst = originalCards.map(card => card.cloneNode(true));
+            const cloneLast = originalCards.map(card => card.cloneNode(true));
             cloneFirst.forEach(clone => track.appendChild(clone));
             cloneLast.forEach(clone => track.prepend(clone));
-            cards = Array.from(track.children);
+            const cards = Array.from(track.children);
+
+            // Crear indicadores
+            for (let i = 0; i < totalCards; i++) {
+                const indicator = document.createElement('div');
+                indicator.classList.add('carousel-indicator');
+                if (i === 0) indicator.classList.add('active');
+                indicator.addEventListener('click', () => {
+                    if (!isTransitioning) {
+                        currentIndex = i;
+                        updateCarousel();
+                    }
+                });
+                indicatorsContainer.appendChild(indicator);
+            }
+            const indicators = Array.from(indicatorsContainer.children);
 
             function updateCarousel(smoothTransition = true) {
                 if (isTransitioning) return;
@@ -699,31 +754,33 @@
 
                 const containerWidth = container.offsetWidth;
                 const cardWidth = cards[currentIndex + totalCards].offsetWidth;
-                const gap = parseInt(getComputedStyle(track).gap) || 30;
+                const gap = parseInt(getComputedStyle(track).gap) || 40;
                 const cardCenter = cards[currentIndex + totalCards].offsetLeft + (cardWidth / 2);
                 const containerCenter = containerWidth / 2;
                 const newTransform = -(cardCenter - containerCenter);
 
-                track.style.transition = smoothTransition ? 'transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1)' : 'none';
+                track.style.transition = smoothTransition ? 'transform 0.9s cubic-bezier(0.23, 1, 0.32, 1)' : 'none';
                 track.style.transform = `translateX(${newTransform}px)`;
 
                 cards.forEach((card, index) => {
                     card.classList.remove('center-card');
-                    card.style.transform = 'scale(0.9)';
-                    card.style.opacity = '0.85';
-                    card.style.zIndex = '1';
-                    const distance = Math.abs((index - (currentIndex + totalCards) + totalCards) % totalCards);
-                    if (distance > 0) {
-                        const offset = distance * 10;
-                        card.style.transform = `scale(${0.9 - distance * 0.05}) translateX(${index < (currentIndex + totalCards) ? -offset : offset}px)`;
-                        card.style.opacity = `${0.85 - distance * 0.1}`;
-                    }
+                    const distance = Math.min(Math.abs((index - (currentIndex + totalCards) + totalCards) % totalCards), totalCards - Math.abs((index - (currentIndex + totalCards) + totalCards) % totalCards));
+                    const scale = 0.85 - distance * 0.07;
+                    const rotation = distance * 10 * (index < currentIndex + totalCards ? -1 : 1);
+                    const offset = distance * 15;
+                    card.style.transform = `scale(${scale}) rotateY(${rotation}deg) translateX(${index < currentIndex + totalCards ? -offset : offset}px)`;
+                    card.style.opacity = `${0.7 - distance * 0.15}`;
+                    card.style.zIndex = `${10 - distance}`;
                 });
 
                 cards[currentIndex + totalCards].classList.add('center-card');
-                cards[currentIndex + totalCards].style.transform = 'scale(1.1)';
+                cards[currentIndex + totalCards].style.transform = 'scale(1.15) rotateY(0deg)';
                 cards[currentIndex + totalCards].style.opacity = '1';
-                cards[currentIndex + totalCards].style.zIndex = '2';
+                cards[currentIndex + totalCards].style.zIndex = '10';
+
+                indicators.forEach((indicator, i) => {
+                    indicator.classList.toggle('active', i === currentIndex % totalCards);
+                });
 
                 setTimeout(() => {
                     isTransitioning = false;
@@ -742,7 +799,7 @@
                         const newTransform = -(cardCenter - containerCenter);
                         track.style.transform = `translateX(${newTransform}px)`;
                     }
-                }, smoothTransition ? 800 : 0);
+                }, smoothTransition ? 900 : 0);
             }
 
             prevBtn.addEventListener('click', () => {
@@ -762,7 +819,7 @@
                     currentIndex++;
                     updateCarousel();
                 }
-            }, 4000);
+            }, 5000);
 
             container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
             container.addEventListener('mouseleave', () => {
@@ -771,7 +828,7 @@
                         currentIndex++;
                         updateCarousel();
                     }
-                }, 4000);
+                }, 5000);
             });
 
             let touchStartX = 0;
@@ -803,13 +860,15 @@
             initCarousel({
                 trackId: 'discography-track',
                 prevSelector: '.discography .carousel-btn.prev',
-                nextSelector: '.discography .carousel-btn.next'
+                nextSelector: '.discography .carousel-btn.next',
+                indicatorsId: 'discography-indicators'
             });
 
             initCarousel({
                 trackId: 'videos-track',
                 prevSelector: '.videos .carousel-btn.prev',
-                nextSelector: '.videos .carousel-btn.next'
+                nextSelector: '.videos .carousel-btn.next',
+                indicatorsId: 'videos-indicators'
             });
         });
     </script>
