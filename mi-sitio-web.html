@@ -11,8 +11,7 @@
             box-sizing: border-box;
         }
         :root {
-            --card-width: 320px;
-            --card-gap: 30px;
+            --card-gap: 20px;
         }
         body {
             font-family: 'Helvetica Neue', sans-serif;
@@ -253,13 +252,7 @@
             overflow: hidden;
             max-width: 1400px;
             margin: 0 auto;
-            padding-top: 40px;
-            padding-bottom: 40px;
-        }
-        .carousel-track {
-            display: flex;
-            gap: var(--card-gap);
-            transition: transform 0.5s ease-in-out;
+            padding: 40px 0;
         }
         .carousel-btn {
             position: absolute;
@@ -274,113 +267,168 @@
             padding: 10px;
             border-radius: 50%;
             transition: all 0.3s;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .carousel-btn:hover {
             background: rgba(0, 0, 0, 0.8);
+            transform: translateY(-50%) scale(1.1);
         }
         .carousel-btn.prev {
-            left: 10px;
+            left: -25px;
         }
         .carousel-btn.next {
-            right: 10px;
+            right: -25px;
         }
 
         /* Estilos para el carrusel de discografía */
         .discography .carousel-track {
             display: flex;
-            gap: 20px;
-            padding: 20px 0;
-            justify-content: center;
-            align-items: center;
+            gap: var(--card-gap);
+            padding: 0;
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
         .album-card {
-            width: 180px;
-            height: 180px;
+            flex: 0 0 200px;
+            height: 200px;
             background: #2a2a2a;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform: scale(0.9);
+            opacity: 0.85;
+            position: relative;
         }
         .album-card.center-card {
-            width: 220px;
-            height: 220px;
-            transform: scale(1.1);
+            flex: 0 0 260px;
+            height: 260px;
+            transform: scale(1.05);
+            opacity: 1;
+            box-shadow: 0 12px 25px rgba(224, 194, 123, 0.3);
             z-index: 2;
         }
         .album-cover {
             width: 100%;
-            height: 80%;
+            height: 85%;
             background-size: cover;
             background-position: center;
             border-radius: 8px 8px 0 0;
-            background-color: #333; /* Fondo por defecto si no carga la imagen */
+            position: relative;
+            overflow: hidden;
+        }
+        .album-cover::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+            transition: all 0.3s;
+        }
+        .album-card:hover .album-cover::after {
+            background: linear-gradient(to bottom, rgba(224,194,123,0.1), rgba(224,194,123,0.2));
         }
         .album-card h4 {
             text-align: center;
             margin: 10px 0 5px;
             font-size: 16px;
             color: #fff;
+            padding: 0 10px;
         }
         .album-card .label {
             text-align: center;
             font-size: 12px;
             color: #e0c27b;
             margin-bottom: 10px;
+            display: block;
         }
 
-        /* Estilos para el carrusel de videos */
+        /* Estilos para el carrusel de videos (16:9) */
         .videos .carousel-track {
             display: flex;
-            gap: 20px;
-            padding: 40px 0;
-            justify-content: center;
-            align-items: center;
+            gap: var(--card-gap);
+            padding: 0;
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
         .video-card {
-            width: 160px;
-            height: 280px; /* Relación 9:16 */
+            flex: 0 0 280px;
+            height: 158px; /* 16:9 (280/16*9=157.5) */
             background: rgba(30, 30, 30, 0.7);
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform: scale(0.9);
+            opacity: 0.85;
+            position: relative;
             border: 1px solid rgba(224, 194, 123, 0.2);
         }
         .video-card.center-card {
-            width: 200px;
-            height: 350px;
-            transform: scale(1.1);
+            flex: 0 0 340px;
+            height: 192px; /* 16:9 (340/16*9=191.25) */
+            transform: scale(1.05);
+            opacity: 1;
+            box-shadow: 0 12px 25px rgba(224, 194, 123, 0.3);
             z-index: 2;
         }
         .video-placeholder {
             width: 100%;
-            height: 85%;
-            border-radius: 8px 8px 0 0;
+            height: 100%;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(224, 194, 123, 0.15), rgba(123, 224, 194, 0.15));
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #fff;
-            font-size: 24px;
-            background: linear-gradient(135deg, rgba(224, 194, 123, 0.2), rgba(123, 224, 194, 0.2));
+            position: relative;
+            overflow: hidden;
+        }
+        .video-placeholder::after {
+            content: "▶";
+            font-size: 30px;
+            color: rgba(255, 255, 255, 0.7);
+            background: rgba(0, 0, 0, 0.5);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        .video-card:hover .video-placeholder::after {
+            transform: scale(1.1);
+            background: rgba(224, 194, 123, 0.8);
+            color: #000;
         }
         .video-card h4 {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
             text-align: center;
-            margin: 10px 0 5px;
+            margin: 0;
             font-size: 16px;
             color: #fff;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px 0;
+            z-index: 1;
         }
         .video-card .label {
-            text-align: center;
-            font-size: 12px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 11px;
             color: #e0c27b;
-            margin-bottom: 10px;
+            border: 1px solid #e0c27b;
+            padding: 2px 6px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
         }
 
         @media (max-width: 900px) {
@@ -394,16 +442,19 @@
                 font-size: 2rem;
             }
             .album-card, .album-card.center-card {
-                width: 150px;
-                height: 150px;
+                flex: 0 0 160px !important;
+                height: 160px !important;
             }
             .video-card {
-                width: 120px;
-                height: 210px;
+                flex: 0 0 220px !important;
+                height: 124px !important; /* 16:9 (220/16*9=123.75) */
             }
             .video-card.center-card {
-                width: 150px;
-                height: 260px;
+                flex: 0 0 250px !important;
+                height: 141px !important; /* 16:9 (250/16*9=140.625) */
+            }
+            .carousel-btn {
+                display: none; /* Ocultar botones en móvil (usar touch) */
             }
         }
         footer {
@@ -624,7 +675,7 @@
             document.body.classList.add('light-mode');
         }
 
-        // Función del carrusel (optimizada para ambas secciones)
+        // Función del carrusel (mejorada para efecto de deslizamiento claro)
         function initCarousel(options) {
             const track = document.getElementById(options.trackId);
             const prevBtn = document.querySelector(options.prevSelector);
@@ -639,11 +690,28 @@
 
             if (totalCards <= 1) return;
 
+            // Posicionar tarjetas inicialmente
+            function positionCards() {
+                const containerWidth = container.offsetWidth;
+                const cardWidth = cards[0].offsetWidth;
+                const gap = parseInt(getComputedStyle(track).gap) || 20;
+                let offset = (containerWidth - cardWidth) / 2 - gap;
+
+                track.style.transition = 'none';
+                track.style.transform = `translateX(${-offset}px)`;
+
+                // Centrar la tarjeta inicial (la del medio)
+                const centerIndex = Math.floor(cards.length / 2);
+                cards[centerIndex].classList.add('center-card');
+            }
+
+            // Actualizar carrusel con animación
             function updateCarousel(smoothTransition = true) {
                 if (isTransitioning) return;
                 isTransitioning = true;
 
-                const card = cards[Math.floor(cards.length / 2)];
+                const card = document.querySelector(`${options.prevSelector} ~ .carousel-track .center-card`) ||
+                             document.querySelector(`${options.nextSelector} ~ .carousel-track .center-card`);
                 if (!card) {
                     isTransitioning = false;
                     return;
@@ -653,17 +721,29 @@
                 const containerCenter = container.offsetWidth / 2;
                 const newTransform = -(cardCenter - containerCenter);
 
-                track.style.transition = smoothTransition ? 'transform 0.5s ease-in-out' : 'none';
+                track.style.transition = smoothTransition ? 'transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)' : 'none';
                 track.style.transform = `translateX(${newTransform}px)`;
 
-                cards.forEach(c => c.classList.remove('center-card'));
+                // Efectos visuales para todas las tarjetas
+                cards.forEach(c => {
+                    c.classList.remove('center-card');
+                    c.style.transform = 'scale(0.9)';
+                    c.style.opacity = '0.85';
+                    c.style.zIndex = '1';
+                });
+
+                // Efectos para la tarjeta central
                 card.classList.add('center-card');
+                card.style.transform = 'scale(1.05)';
+                card.style.opacity = '1';
+                card.style.zIndex = '2';
 
                 setTimeout(() => {
                     isTransitioning = false;
-                }, 500);
+                }, 600);
             }
 
+            // Navegación con botones
             prevBtn.addEventListener('click', () => {
                 if (isTransitioning) return;
                 const firstCard = cards[0];
@@ -680,6 +760,7 @@
                 updateCarousel();
             });
 
+            // Autoplay (con pausa al hacer hover)
             let autoplayInterval = setInterval(() => {
                 if (!isTransitioning) {
                     const lastCard = cards[cards.length - 1];
@@ -687,7 +768,7 @@
                     cards = Array.from(track.children);
                     updateCarousel();
                 }
-            }, 4000);
+            }, 3000);
 
             container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
             container.addEventListener('mouseleave', () => {
@@ -698,11 +779,40 @@
                         cards = Array.from(track.children);
                         updateCarousel();
                     }
-                }, 4000);
+                }, 3000);
             });
 
-            updateCarousel();
-            window.addEventListener('resize', () => updateCarousel(false));
+            // Inicializar
+            positionCards();
+            updateCarousel(false);
+            window.addEventListener('resize', () => {
+                positionCards();
+                updateCarousel(false);
+            });
+
+            // Soporte para touch en móviles
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            container.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, {passive: true});
+
+            container.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                if (touchStartX - touchEndX > 50 && !isTransitioning) { // Swipe left
+                    const lastCard = cards[cards.length - 1];
+                    track.prepend(lastCard);
+                    cards = Array.from(track.children);
+                    updateCarousel();
+                }
+                if (touchEndX - touchStartX > 50 && !isTransitioning) { // Swipe right
+                    const firstCard = cards[0];
+                    track.appendChild(firstCard);
+                    cards = Array.from(track.children);
+                    updateCarousel();
+                }
+            }, {passive: true});
         }
 
         // Inicializar carruseles al cargar la página
