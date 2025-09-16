@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tenshi | 幻想の響き</title>
   <style>
-    /* Estilos generales */
     * {
       margin: 0;
       padding: 0;
@@ -19,8 +18,6 @@
       width: 100%;
       transition: background 0.3s, color 0.3s;
     }
-
-    /* Modo Claro / Oscuro */
     body.light-mode {
       background: #f5f5f5;
       color: #111;
@@ -48,8 +45,6 @@
       color: #111;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
-
-    /* Header */
     header {
       position: fixed;
       top: 0;
@@ -94,8 +89,6 @@
       background: #e0c27b;
       color: #000;
     }
-
-    /* Hero Section */
     .hero-wrapper {
       position: relative;
       height: 75vh;
@@ -166,28 +159,16 @@
       color: #e0c27b;
       border-color: #e0c27b;
     }
-
-    /* INICIO DE CÓDIGO CSS MODIFICADO PARA EL DISEÑO DE NOTICIAS (Finalizado) */
     .schedule-grid {
       display: grid;
-      /* La primera columna (para N1) es el doble de ancho (2fr) que las otras dos (1fr cada una).
-         Esto hace que el ancho de N1 sea igual al ancho combinado de N2+N3 y N4+N5. */
-      grid-template-columns: 2fr 1fr 1fr;
-      grid-template-rows: repeat(2, 1fr); /* Dos filas de igual altura */
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-template-rows: repeat(2, 1fr);
       gap: 20px;
-      /* Ajustar la altura máxima del grid para que N1 pueda formar un cuadrado
-         y las tarjetas a la derecha se alineen correctamente.
-         Este valor podría requerir un ajuste fino en tu entorno real para la perfección. */
-      max-height: 480px; /* Un buen valor de inicio para permitir proporciones cuadradas */
-      /* overflow: hidden; /* Considera descomentar si el contenido excede la altura en pantallas pequeñas */
+      height: 450px;
     }
-
-    .main-news { /* Esto es N1 */
-      grid-column: 1 / 2; /* Ocupa la primera columna */
-      grid-row: 1 / 3;    /* Ocupa las dos filas */
-      /* Forzar a N1 a tener una relación de aspecto 1:1 (cuadrado).
-         Con 2fr de ancho y 2fr de alto (cubriendo 2 filas), esto debería resultar en un cuadrado. */
-      aspect-ratio: 1 / 1;
+    .main-news {
+      grid-column: 1 / 3;
+      grid-row: 1 / 3;
       background: linear-gradient(135deg, #1f2937, #4c51bf);
       border-radius: 16px;
       padding: 20px;
@@ -196,9 +177,9 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      overflow: hidden; /* Para asegurar que el contenido no desborde si es muy grande */
+      aspect-ratio: 1 / 1; /* Aquí la noticia principal cuadrada */
+      overflow: hidden;
     }
-
     .news-card {
       background: #222;
       border-radius: 14px;
@@ -208,30 +189,9 @@
       flex-direction: column;
       justify-content: center;
       cursor: pointer;
-      aspect-ratio: 4 / 3; /* Mantiene la relación de aspecto horizontal para las tarjetas pequeñas */
-      overflow: hidden; /* Para asegurar que el contenido no desborde */
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
     }
-
-    /* Asignaciones de Grid para las news-card según el orden en el HTML
-       (N2, N3, N4, N5 se posicionan en las columnas 2 y 3, filas 1 y 2) */
-    .news-card:nth-of-type(1) { /* Corresponde a "Nuevo sencillo" (N2) */
-      grid-column: 2 / 3; /* Segunda columna */
-      grid-row: 1 / 2;    /* Primera fila */
-    }
-    .news-card:nth-of-type(2) { /* Corresponde a "Evento online" (N3) */
-      grid-column: 3 / 4; /* Tercera columna */
-      grid-row: 1 / 2;    /* Primera fila */
-    }
-    .news-card:nth-of-type(3) { /* Corresponde a "Premio ganado" (N4) */
-      grid-column: 2 / 3; /* Segunda columna */
-      grid-row: 2 / 3;    /* Segunda fila */
-    }
-    .news-card:nth-of-type(4) { /* Corresponde a "Nuevo Wallpaper" (N5) */
-      grid-column: 3 / 4; /* Tercera columna */
-      grid-row: 2 / 3;    /* Segunda fila */
-    }
-    /* FIN DE CÓDIGO CSS MODIFICADO PARA EL DISEÑO DE NOTICIAS */
-
     .news-card h4 {
       font-size: 16px;
       font-weight: 700;
