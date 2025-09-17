@@ -11,7 +11,7 @@
             box-sizing: border-box;
         }
         :root {
-            --card-gap: 40px;
+            --card-gap: 20px;
         }
         body {
             font-family: 'Helvetica Neue', sans-serif;
@@ -256,7 +256,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            perspective: 1200px;
         }
         .carousel-btn {
             position: absolute;
@@ -315,37 +314,43 @@
             display: flex;
             gap: var(--card-gap);
             padding: 0;
-            transition: transform 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
             align-items: center;
             justify-content: center;
-            width: max-content;
         }
         .album-card {
-            flex: 0 0 300px;
-            height: 300px;
+            flex: 0 0 200px;
+            height: 250px;
             background: #2a2a2a;
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-            transform: scale(0.85) rotateY(15deg);
+            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform: scale(0.8);
             opacity: 0.7;
             position: relative;
-            border: 1px solid rgba(224, 194, 123, 0.2);
-            filter: blur(1px);
         }
         .album-card.center-card {
-            flex: 0 0 400px;
-            height: 400px;
-            transform: scale(1.15) rotateY(0deg);
+            flex: 0 0 240px;
+            height: 300px;
+            transform: scale(1.1);
             opacity: 1;
-            box-shadow: 0 15px 35px rgba(224, 194, 123, 0.5);
             z-index: 2;
-            filter: blur(0);
+            box-shadow: 0 15px 35px rgba(224, 194, 123, 0.5);
+        }
+        .album-card.left-card {
+            transform: scale(0.9) translateX(-20px);
+            opacity: 0.8;
+            z-index: 1;
+        }
+        .album-card.right-card {
+            transform: scale(0.9) translateX(20px);
+            opacity: 0.8;
+            z-index: 1;
         }
         .album-cover {
             width: 100%;
-            height: 80%;
+            height: 70%;
             background-size: cover;
             background-position: center;
             border-radius: 12px 12px 0 0;
@@ -360,15 +365,11 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.4));
-            transition: all 0.3s;
-        }
-        .album-card:hover .album-cover::after {
-            background: linear-gradient(to bottom, rgba(224,194,123,0.2), rgba(224,194,123,0.3));
         }
         .album-card h4 {
             text-align: center;
             margin: 12px 0 6px;
-            font-size: 20px;
+            font-size: 16px;
             color: #fff;
             padding: 0 12px;
             font-weight: 600;
@@ -382,27 +383,34 @@
             font-weight: 500;
         }
         .video-card {
-            flex: 0 0 420px;
-            height: 236px;
+            flex: 0 0 280px;
+            height: 180px;
             background: rgba(30, 30, 30, 0.8);
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-            transform: scale(0.85) rotateY(15deg);
+            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform: scale(0.8);
             opacity: 0.7;
             position: relative;
-            border: 1px solid rgba(224, 194, 123, 0.3);
-            filter: blur(1px);
         }
         .video-card.center-card {
-            flex: 0 0 500px;
-            height: 281px;
-            transform: scale(1.15) rotateY(0deg);
+            flex: 0 0 320px;
+            height: 200px;
+            transform: scale(1.1);
             opacity: 1;
-            box-shadow: 0 15px 35px rgba(224, 194, 123, 0.5);
             z-index: 2;
-            filter: blur(0);
+            box-shadow: 0 15px 35px rgba(224, 194, 123, 0.5);
+        }
+        .video-card.left-card {
+            transform: scale(0.9) translateX(-20px);
+            opacity: 0.8;
+            z-index: 1;
+        }
+        .video-card.right-card {
+            transform: scale(0.9) translateX(20px);
+            opacity: 0.8;
+            z-index: 1;
         }
         .video-placeholder {
             width: 100%;
@@ -417,21 +425,15 @@
         }
         .video-placeholder::after {
             content: "▶";
-            font-size: 48px;
+            font-size: 36px;
             color: rgba(255, 255, 255, 0.8);
             background: rgba(0, 0, 0, 0.6);
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
-        }
-        .video-card:hover .video-placeholder::after {
-            transform: scale(1.15);
-            background: rgba(224, 194, 123, 0.9);
-            color: #000;
         }
         .video-card h4 {
             position: absolute;
@@ -440,10 +442,10 @@
             right: 0;
             text-align: center;
             margin: 0;
-            font-size: 20px;
+            font-size: 16px;
             color: #fff;
             background: rgba(0, 0, 0, 0.8);
-            padding: 10px 0;
+            padding: 8px 0;
             z-index: 1;
             font-weight: 600;
         }
@@ -451,10 +453,10 @@
             position: absolute;
             top: 12px;
             right: 12px;
-            font-size: 13px;
+            font-size: 12px;
             color: #e0c27b;
             border: 1px solid #e0c27b;
-            padding: 4px 10px;
+            padding: 4px 8px;
             border-radius: 999px;
             background: rgba(0, 0, 0, 0.6);
             z-index: 1;
@@ -471,20 +473,20 @@
                 font-size: 2rem;
             }
             .album-card {
-                flex: 0 0 240px !important;
-                height: 240px !important;
+                flex: 0 0 160px !important;
+                height: 200px !important;
             }
             .album-card.center-card {
-                flex: 0 0 320px !important;
-                height: 320px !important;
+                flex: 0 0 200px !important;
+                height: 240px !important;
             }
             .video-card {
-                flex: 0 0 320px !important;
-                height: 180px !important;
+                flex: 0 0 240px !important;
+                height: 140px !important;
             }
             .video-card.center-card {
-                flex: 0 0 400px !important;
-                height: 225px !important;
+                flex: 0 0 280px !important;
+                height: 160px !important;
             }
             .carousel-btn {
                 font-size: 2rem;
@@ -540,42 +542,6 @@
             gap: 10px;
             align-items: center;
             margin-top: -70px;
-        }
-        /* Efectos 3D para los carruseles */
-        .carousel-container {
-            perspective: 1200px;
-            transform-style: preserve-3d;
-        }
-        .album-card, .video-card {
-            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-            backface-visibility: hidden;
-            will-change: transform, opacity, filter;
-        }
-        .album-card.center-card, .video-card.center-card {
-            transform: scale(1.15) rotateY(0deg) translateZ(20px) !important;
-            opacity: 1 !important;
-            z-index: 3 !important;
-            filter: blur(0) !important;
-            box-shadow: 0 20px 40px rgba(224, 194, 123, 0.4) !important;
-        }
-        .album-card.left-card, .video-card.left-card {
-            transform: scale(0.9) rotateY(-15deg) translateZ(-10px) !important;
-            opacity: 0.8 !important;
-            z-index: 2 !important;
-            filter: blur(0.5px) !important;
-        }
-        .album-card.right-card, .video-card.right-card {
-            transform: scale(0.9) rotateY(15deg) translateZ(-10px) !important;
-            opacity: 0.8 !important;
-            z-index: 2 !important;
-            filter: blur(0.5px) !important;
-        }
-        .album-card:not(.center-card):not(.left-card):not(.right-card),
-        .video-card:not(.center-card):not(.left-card):not(.right-card) {
-            transform: scale(0.7) translateZ(-20px) !important;
-            opacity: 0.5 !important;
-            z-index: 1 !important;
-            filter: blur(1px) !important;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -741,8 +707,8 @@
             document.body.classList.add('light-mode');
         }
 
-        // Función para inicializar un carrusel simplificado
-        function initSimpleCarousel(options) {
+        // Función para inicializar un carrusel con rotación automática
+        function initCarousel(options) {
             const track = document.getElementById(options.trackId);
             if (!track) return;
             const container = track.parentElement;
@@ -754,6 +720,8 @@
             const cards = Array.from(track.children);
             const totalCards = cards.length;
             let currentIndex = Math.floor(totalCards / 2); // Empezar en el centro
+            let isTransitioning = false;
+            let autoplayInterval;
 
             // Crear indicadores
             indicatorsContainer.innerHTML = '';
@@ -762,8 +730,10 @@
                 dot.classList.add('carousel-indicator');
                 if (i === currentIndex) dot.classList.add('active');
                 dot.addEventListener('click', () => {
+                    if (isTransitioning) return;
                     currentIndex = i;
                     updateCarousel();
+                    resetAutoplay();
                 });
                 indicatorsContainer.appendChild(dot);
             }
@@ -771,6 +741,9 @@
 
             // Actualizar el carrusel
             function updateCarousel() {
+                if (isTransitioning) return;
+                isTransitioning = true;
+
                 // Remover clases anteriores
                 cards.forEach(card => {
                     card.classList.remove('center-card', 'left-card', 'right-card');
@@ -793,33 +766,64 @@
                 indicators.forEach((ind, i) => {
                     ind.classList.toggle('active', i === currentIndex);
                 });
+
+                // Permitir transiciones nuevamente después de un tiempo
+                setTimeout(() => { isTransitioning = false; }, 800);
             }
 
-            // Eventos de navegación
+            // Navegación manual
             if (prevBtn) {
                 prevBtn.addEventListener('click', () => {
+                    if (isTransitioning) return;
                     currentIndex = (currentIndex - 1 + totalCards) % totalCards;
                     updateCarousel();
+                    resetAutoplay();
                 });
             }
             if (nextBtn) {
                 nextBtn.addEventListener('click', () => {
+                    if (isTransitioning) return;
                     currentIndex = (currentIndex + 1) % totalCards;
                     updateCarousel();
+                    resetAutoplay();
                 });
             }
 
+            // Autoplay
+            function startAutoplay() {
+                autoplayInterval = setInterval(() => {
+                    if (!isTransitioning) {
+                        currentIndex = (currentIndex + 1) % totalCards;
+                        updateCarousel();
+                    }
+                }, 3000); // Rotar cada 3 segundos
+            }
+
+            function stopAutoplay() {
+                clearInterval(autoplayInterval);
+            }
+
+            function resetAutoplay() {
+                stopAutoplay();
+                startAutoplay();
+            }
+
+            // Pausar autoplay al hacer hover
+            container.addEventListener('mouseenter', stopAutoplay);
+            container.addEventListener('mouseleave', startAutoplay);
+
             // Inicializar
             updateCarousel();
+            startAutoplay();
         }
 
         // Inicializar carruseles al cargar la página
         document.addEventListener('DOMContentLoaded', () => {
-            initSimpleCarousel({
+            initCarousel({
                 trackId: 'discography-track',
                 indicatorsId: 'discography-indicators'
             });
-            initSimpleCarousel({
+            initCarousel({
                 trackId: 'videos-track',
                 indicatorsId: 'videos-indicators'
             });
