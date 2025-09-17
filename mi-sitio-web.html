@@ -339,12 +339,12 @@
             box-shadow: 0 15px 35px rgba(224, 194, 123, 0.5);
         }
         .album-card.left-card {
-            transform: scale(0.9) translateX(-20px);
+            transform: scale(0.9) translateX(-40px);
             opacity: 0.8;
             z-index: 1;
         }
         .album-card.right-card {
-            transform: scale(0.9) translateX(20px);
+            transform: scale(0.9) translateX(40px);
             opacity: 0.8;
             z-index: 1;
         }
@@ -403,12 +403,12 @@
             box-shadow: 0 15px 35px rgba(224, 194, 123, 0.5);
         }
         .video-card.left-card {
-            transform: scale(0.9) translateX(-20px);
+            transform: scale(0.9) translateX(-40px);
             opacity: 0.8;
             z-index: 1;
         }
         .video-card.right-card {
-            transform: scale(0.9) translateX(20px);
+            transform: scale(0.9) translateX(40px);
             opacity: 0.8;
             z-index: 1;
         }
@@ -707,8 +707,8 @@
             document.body.classList.add('light-mode');
         }
 
-        // Función para inicializar un carrusel con rotación automática
-        function initCarousel(options) {
+        // Función para inicializar un carrusel con rotación circular infinita
+        function initInfiniteCarousel(options) {
             const track = document.getElementById(options.trackId);
             if (!track) return;
             const container = track.parentElement;
@@ -723,15 +723,22 @@
             let isTransitioning = false;
             let autoplayInterval;
 
+            // Clonar las primeras y últimas tarjetas para simular un loop infinito
+            const firstClone = cards[0].cloneNode(true);
+            const lastClone = cards[totalCards - 1].cloneNode(true);
+            track.insertBefore(lastClone, track.firstChild);
+            track.appendChild(firstClone);
+            const allCards = Array.from(track.children);
+
             // Crear indicadores
             indicatorsContainer.innerHTML = '';
             for (let i = 0; i < totalCards; i++) {
                 const dot = document.createElement('div');
                 dot.classList.add('carousel-indicator');
-                if (i === currentIndex) dot.classList.add('active');
+                if (i === currentIndex % totalCards) dot.classList.add('active');
                 dot.addEventListener('click', () => {
                     if (isTransitioning) return;
-                    currentIndex = i;
+                    currentIndex = i + 1; // +1 por el clone al inicio
                     updateCarousel();
                     resetAutoplay();
                 });
@@ -745,26 +752,18 @@
                 isTransitioning = true;
 
                 // Remover clases anteriores
-                cards.forEach(card => {
+                allCards.forEach(card => {
                     card.classList.remove('center-card', 'left-card', 'right-card');
                 });
 
                 // Asignar clases según la posición
-                cards[currentIndex].classList.add('center-card');
-                if (currentIndex > 0) {
-                    cards[currentIndex - 1].classList.add('left-card');
-                } else {
-                    cards[totalCards - 1].classList.add('left-card');
-                }
-                if (currentIndex < totalCards - 1) {
-                    cards[currentIndex + 1].classList.add('right-card');
-                } else {
-                    cards[0].classList.add('right-card');
-                }
+                allCards[currentIndex].classList.add('center-card');
+                allCards[(currentIndex - 1 + allCards.length) % allCards.length].classList.add('left-card');
+                allCards[(currentIndex + 1) % allCards.length].classList.add('right-card');
 
                 // Actualizar indicadores
                 indicators.forEach((ind, i) => {
-                    ind.classList.toggle('active', i === currentIndex);
+                    ind.classList.toggle('active', i === (currentIndex - 1 + totalCards) % totalCards);
                 });
 
                 // Permitir transiciones nuevamente después de un tiempo
@@ -775,7 +774,7 @@
             if (prevBtn) {
                 prevBtn.addEventListener('click', () => {
                     if (isTransitioning) return;
-                    currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+                    currentIndex = (currentIndex - 1 + allCards.length) % allCards.length;
                     updateCarousel();
                     resetAutoplay();
                 });
@@ -783,7 +782,7 @@
             if (nextBtn) {
                 nextBtn.addEventListener('click', () => {
                     if (isTransitioning) return;
-                    currentIndex = (currentIndex + 1) % totalCards;
+                    currentIndex = (currentIndex + 1) % allCards.length;
                     updateCarousel();
                     resetAutoplay();
                 });
@@ -793,7 +792,7 @@
             function startAutoplay() {
                 autoplayInterval = setInterval(() => {
                     if (!isTransitioning) {
-                        currentIndex = (currentIndex + 1) % totalCards;
+                        currentIndex = (currentIndex + 1) % allCards.length;
                         updateCarousel();
                     }
                 }, 3000); // Rotar cada 3 segundos
@@ -819,11 +818,11 @@
 
         // Inicializar carruseles al cargar la página
         document.addEventListener('DOMContentLoaded', () => {
-            initCarousel({
+            initInfiniteCarousel({
                 trackId: 'discography-track',
                 indicatorsId: 'discography-indicators'
             });
-            initCarousel({
+            initInfiniteCarousel({
                 trackId: 'videos-track',
                 indicatorsId: 'videos-indicators'
             });
