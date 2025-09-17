@@ -742,85 +742,96 @@
         }
 
         /**
-         * initCarousel - función genérica para inicializar un carrusel con:
-         * - clones para infinito
-         * - centrado del elemento active
-         * - botones prev/next
-         * - indicadores (cantidad = tarjetas originales)
-         * - autoplay (interval en ms)
-         * - pausa on hover, resume on leave
-         * - soporte touch (swipe)
-         *
-         * options:
-         *  - trackId: id del elemento .carousel-track
-         *  - prevButton: selector para botón prev dentro del mismo contenedor (se buscará si selector vacío)
-         *  - nextButton: selector para botón next dentro del mismo contenedor
-         *  - indicatorsId: id contenedor de indicadores
-         *  - autoplay: boolean
-         *  - interval: ms (number) (ej: 5000)
+         * Helper: obtiene translateX actual (soporta matrix y matrix3d)
+         */
+        function getTranslateXFromComputed(el) {
+            const st = window.getComputedStyle(el).transform || window.getComputedStyle(el).webkitTransform;
+            if (!st || st === 'none') return 0;
+            const matrix3d = st.match(/^matrix3d\((.+)\)$/);
+            if (matrix3d) {
+                const vals = matrix3d[1].split(',').map(v => parseFloat(v));
+                // matrix3d: translateX is index 12
+                return vals[12] || 0;
+            }
+            const matrix = st.match(/^matrix\((.+)\)$/);
+            if (matrix) {
+                const vals = matrix[1].split(',').map(v => parseFloat(v));
+                // matrix(a, b, c, d, tx, ty) -> tx is index 4
+                return vals[4] || 0;
+            }
+            return 0;
+        }
+
+        /**
+         * Ajusta el translateX del track para centrar la card pasada,
+         * usando valores calculados por getBoundingClientRect (robusto frente a centrados y gaps).
+         */
+        function centerCardOnContainer(track, container, card, smooth = true, transitionDuration = 800) {
+            if (!card) return;
+            const cardRect = card.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+            const cardCenter = cardRect.left + cardRect.width / 2;
+            const containerCenter = containerRect.left + containerRect.width / 2;
+            const delta = containerCenter - cardCenter;
+
+            const currentTranslate = getTranslateXFromComputed(track);
+            const targetTranslate = currentTranslate + delta;
+
+            track.style.transition = smooth ? `transform ${transitionDuration}ms cubic-bezier(0.25, 0.8, 0.25, 1)` : 'none';
+            track.style.transform = `translateX(${targetTranslate}px)`;
+        }
+
+        /**
+         * initCarousel robusto
+         * options: { trackId, indicatorsId, autoplay (bool), interval (ms) }
          */
         function initCarousel(options) {
             const track = document.getElementById(options.trackId);
             if (!track) return;
             const container = track.parentElement;
-            // Buscar botones dentro del mismo container (prev/next)
-            const prevBtn = container.querySelector('.carousel-btn.prev') || container.querySelector(options.prevSelector);
-            const nextBtn = container.querySelector('.carousel-btn.next') || container.querySelector(options.nextSelector);
+            const prevBtn = container.querySelector('.carousel-btn.prev');
+            const nextBtn = container.querySelector('.carousel-btn.next');
             const indicatorsContainer = document.getElementById(options.indicatorsId);
-
             if (!indicatorsContainer) return;
 
+            // originales y total
             let originalCards = Array.from(track.children);
             const originalTotal = originalCards.length;
-
             if (originalTotal === 0) return;
 
-            // Clonar primer y ultimo para loop infinito (1 copia cada lado)
+            // clonar primero y ultimo (1 a cada lado) para loop infinito
             const firstClone = originalCards[0].cloneNode(true);
             const lastClone = originalCards[originalTotal - 1].cloneNode(true);
             track.insertBefore(lastClone, track.firstChild);
             track.appendChild(firstClone);
 
-            // Re-obtener todos los cards (ahora con clones)
+            // reobtener cards (incluidos clones)
             let cards = Array.from(track.children);
-            let currentIndex = 1; // start at first original (because we prepended lastClone)
+            let currentIndex = 1; // empezamos en la primera original
             let isTransitioning = false;
-            let autoplayTimer = null;
             const autoplay = options.autoplay === true;
-            const interval = options.interval || 5000; // default 5s
+            const interval = options.interval || 5000;
+            let autoplayTimer = null;
             let touchStartX = 0;
-            let touchEndX = 0;
 
-            // Crear indicadores (basados en originalTotal)
+            // crear indicadores (basados en originalTotal)
+            indicatorsContainer.innerHTML = '';
             for (let i = 0; i < originalTotal; i++) {
                 const dot = document.createElement('div');
                 dot.classList.add('carousel-indicator');
                 if (i === 0) dot.classList.add('active');
-                // cuando hacen click, saltar al indice correspondiente (i + 1 por clones)
                 dot.addEventListener('click', () => {
                     if (isTransitioning) return;
-                    currentIndex = i + 1;
-                    updateCarousel(true);
+                    currentIndex = i + 1; // +1 por el clone al inicio
+                    updateAndCenter(true);
+                    resetAutoplay();
                 });
                 indicatorsContainer.appendChild(dot);
             }
             const indicators = Array.from(indicatorsContainer.children);
 
-            // Función para centrar la tarjeta 'currentIndex'
-            function updateCarousel(smoothTransition = true) {
-                if (isTransitioning) return;
-                isTransitioning = true;
-
-                const card = cards[currentIndex];
-                // calcular centro de la tarjeta
-                const cardCenter = card.offsetLeft + (card.offsetWidth / 2);
-                const containerCenter = container.offsetWidth / 2;
-                const newTransform = -(cardCenter - containerCenter);
-
-                track.style.transition = smoothTransition ? 'transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1)' : 'none';
-                track.style.transform = `translateX(${newTransform}px)`;
-
-                // aplicar clases visuales (center, left, right)
+            // aplica clases visuales según currentIndex
+            function applyCardClasses() {
                 cards.forEach((c, idx) => {
                     c.classList.remove('center-card', 'left-card', 'right-card');
                     if (idx === currentIndex) {
@@ -831,54 +842,65 @@
                         c.classList.add('right-card');
                     }
                 });
-
-                // actualizar indicadores (originalIndex = currentIndex -1 modulo originalTotal)
-                const originalIndex = (currentIndex - 1 + originalTotal) % originalTotal;
-                indicators.forEach((ind, i) => {
-                    ind.classList.toggle('active', i === originalIndex);
-                });
-
-                // Esperar el fin de la transición para reajustar si estamos en clones
-                const transitionDuration = smoothTransition ? 800 : 0;
-                setTimeout(() => {
-                    // si estamos en el clone final (más a la derecha)
-                    if (currentIndex >= cards.length - 1) {
-                        currentIndex = 1;
-                        track.style.transition = 'none';
-                        const c = cards[currentIndex];
-                        const cardCenter2 = c.offsetLeft + (c.offsetWidth / 2);
-                        track.style.transform = `translateX(${-(cardCenter2 - container.offsetWidth / 2)}px)`;
-                    }
-                    // si estamos en el clone inicial (más a la izquierda)
-                    else if (currentIndex <= 0) {
-                        currentIndex = cards.length - 2;
-                        track.style.transition = 'none';
-                        const c = cards[currentIndex];
-                        const cardCenter2 = c.offsetLeft + (c.offsetWidth / 2);
-                        track.style.transform = `translateX(${-(cardCenter2 - container.offsetWidth / 2)}px)`;
-                    }
-                    // actualizar clases una vez más sin animacion
-                    cards.forEach((c, idx) => {
-                        c.classList.remove('center-card', 'left-card', 'right-card');
-                        if (idx === currentIndex) {
-                            c.classList.add('center-card');
-                        } else if (idx === currentIndex - 1 || (currentIndex === 1 && idx === cards.length - 2)) {
-                            c.classList.add('left-card');
-                        } else if (idx === currentIndex + 1 || (currentIndex === cards.length - 2 && idx === 0)) {
-                            c.classList.add('right-card');
-                        }
-                    });
-
-                    isTransitioning = false;
-                }, transitionDuration + 20);
             }
 
-            // Botones prev/next
+            // Actualiza indicadores según currentIndex
+            function updateIndicators() {
+                const originalIndex = (currentIndex - 1 + originalTotal) % originalTotal;
+                indicators.forEach((ind, i) => ind.classList.toggle('active', i === originalIndex));
+            }
+
+            // core: centra el slide actual y maneja loop (reseteo con transition none)
+            function updateAndCenter(smooth = true) {
+                if (isTransitioning) return;
+                isTransitioning = true;
+
+                // centrar la tarjeta currentIndex
+                const currentCard = cards[currentIndex];
+                if (!currentCard) {
+                    isTransitioning = false;
+                    return;
+                }
+                centerCardOnContainer(track, container, currentCard, smooth);
+
+                // aplicar clases e indicadores (inmediatamente)
+                applyCardClasses();
+                updateIndicators();
+
+                const transTime = smooth ? 820 : 20;
+                // tras la animación, si estamos en un clone, reajustamos sin animación
+                setTimeout(() => {
+                    // recomputar arrays porque layout pudo cambiar
+                    cards = Array.from(track.children);
+
+                    // si estamos en el clone final (a la derecha)
+                    if (currentIndex >= cards.length - 1) {
+                        // moverse al primer original (index 1)
+                        currentIndex = 1;
+                        // calcula desplazamiento necesario sin animación
+                        const targetCard = cards[currentIndex];
+                        centerCardOnContainer(track, container, targetCard, false);
+                        applyCardClasses();
+                        updateIndicators();
+                    } else if (currentIndex <= 0) {
+                        // si estamos en el clone inicio, mover al último original (cards.length - 2)
+                        currentIndex = cards.length - 2;
+                        const targetCard = cards[currentIndex];
+                        centerCardOnContainer(track, container, targetCard, false);
+                        applyCardClasses();
+                        updateIndicators();
+                    }
+                    // pequeño retardo para asegurar que no haya reentradas
+                    setTimeout(() => { isTransitioning = false; }, 30);
+                }, transTime);
+            }
+
+            // Prev / Next
             if (prevBtn) {
                 prevBtn.addEventListener('click', () => {
                     if (isTransitioning) return;
                     currentIndex--;
-                    updateCarousel(true);
+                    updateAndCenter(true);
                     resetAutoplay();
                 });
             }
@@ -886,19 +908,19 @@
                 nextBtn.addEventListener('click', () => {
                     if (isTransitioning) return;
                     currentIndex++;
-                    updateCarousel(true);
+                    updateAndCenter(true);
                     resetAutoplay();
                 });
             }
 
-            // Autoplay setup
+            // Autoplay
             function startAutoplay() {
                 if (!autoplay) return;
                 stopAutoplay();
                 autoplayTimer = setInterval(() => {
                     if (!isTransitioning) {
                         currentIndex++;
-                        updateCarousel(true);
+                        updateAndCenter(true);
                     }
                 }, interval);
             }
@@ -910,11 +932,11 @@
             }
             function resetAutoplay() {
                 stopAutoplay();
-                // restart after slight delay to avoid immediate jump
+                // re-empezar después de 2s para evitar saltos directos al click
                 setTimeout(() => startAutoplay(), 2000);
             }
 
-            // Pausar autoplay on hover
+            // Pause on hover
             container.addEventListener('mouseenter', () => {
                 stopAutoplay();
             });
@@ -922,43 +944,58 @@
                 startAutoplay();
             });
 
-            // Touch support (swipe)
+            // Touch (swipe)
             container.addEventListener('touchstart', (e) => {
                 touchStartX = e.changedTouches[0].screenX;
-            }, {passive: true});
+            }, { passive: true });
             container.addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
+                const touchEndX = e.changedTouches[0].screenX;
                 const diff = touchStartX - touchEndX;
                 if (Math.abs(diff) > 30 && !isTransitioning) {
-                    if (diff > 0) { // swipe left -> next
+                    if (diff > 0) {
                         currentIndex++;
-                        updateCarousel(true);
-                        resetAutoplay();
-                    } else { // swipe right -> prev
+                    } else {
                         currentIndex--;
-                        updateCarousel(true);
-                        resetAutoplay();
                     }
+                    updateAndCenter(true);
+                    resetAutoplay();
                 }
-            }, {passive: true});
+            }, { passive: true });
 
-            // Ajustar al resize sin animacion
+            // Resize => recalcular posición sin animación
+            let resizeTimeout = null;
             window.addEventListener('resize', () => {
-                // recalc transform con transition none
-                updateCarousel(false);
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    // recalcular tarjetas y centrar la actual sin animación
+                    cards = Array.from(track.children);
+                    updateAndCenter(false);
+                }, 120);
             });
 
-            // Inicializar posicion y clases
-            // recargar referencia cards (puede cambiar si CSS cambia)
-            cards = Array.from(track.children);
-            // espera microtick para que offsetWidth/offsetLeft estén calculados
-            setTimeout(() => {
-                updateCarousel(false);
-                startAutoplay();
-            }, 20);
+            // inicializar: esperar a que imágenes / estilos carguen
+            // start autplay
+            // for images, window load is safer; para layouts sencillos, un small timeout suele bastar
+            window.addEventListener('load', () => {
+                cards = Array.from(track.children);
+                // un pequeño delay para que todo esté renderizado
+                setTimeout(() => {
+                    updateAndCenter(false);
+                    startAutoplay();
+                }, 30);
+            });
+
+            // Si el sitio ya está cargado, inicializar ahora
+            if (document.readyState === 'complete') {
+                cards = Array.from(track.children);
+                setTimeout(() => {
+                    updateAndCenter(false);
+                    startAutoplay();
+                }, 30);
+            }
         }
 
-        // inicializar ambos carruseles con autoplay 5s
+        // Inicializar ambos carruseles con autoplay 5s
         document.addEventListener('DOMContentLoaded', () => {
             initCarousel({
                 trackId: 'discography-track',
