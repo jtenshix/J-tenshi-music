@@ -719,7 +719,7 @@
 
             const cards = Array.from(track.children);
             const totalCards = cards.length;
-            let currentIndex = Math.floor(totalCards / 2); // Empezar en el centro
+            let currentIndex = 0; // Índice de la tarjeta central
             let isTransitioning = false;
             let autoplayInterval;
 
@@ -730,12 +730,15 @@
             track.appendChild(firstClone);
             const allCards = Array.from(track.children);
 
+            // Posicionar la tarjeta central al inicio
+            currentIndex = 1; // Empezar en la primera tarjeta original (después del clone)
+
             // Crear indicadores
             indicatorsContainer.innerHTML = '';
             for (let i = 0; i < totalCards; i++) {
                 const dot = document.createElement('div');
                 dot.classList.add('carousel-indicator');
-                if (i === currentIndex % totalCards) dot.classList.add('active');
+                if (i === 0) dot.classList.add('active');
                 dot.addEventListener('click', () => {
                     if (isTransitioning) return;
                     currentIndex = i + 1; // +1 por el clone al inicio
