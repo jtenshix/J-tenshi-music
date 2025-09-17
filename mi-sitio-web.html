@@ -5,60 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tenshi | 幻想の響き</title>
   <style>
-    html {
-      transform: scale(0.8);
-      transform-origin: top left;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
     :root {
       --card-width: 320px;
       --card-gap: 30px;
     }
-
     body {
       font-family: 'Helvetica Neue', sans-serif;
       background: #0b0b0b;
       color: #f5f5f5;
       overflow-x: hidden;
-      width: 125%;
-      height: 125%;
+      width: 100%;
+      height: 100%;
       transition: background 0.3s, color 0.3s;
     }
-
     body.light-mode {
       background: #f5f5f5;
       color: #111;
     }
-
     body.light-mode header,
     body.light-mode .news-card,
     body.light-mode .main-news {
-      background-color: #fff !important;
+      background-color: #fff;
       color: #111;
     }
-
     body.light-mode nav a {
       color: #333;
     }
-
     body.light-mode nav a:hover {
       color: #c59f3f;
     }
-
     body.light-mode .label {
       border-color: #c59f3f;
       color: #c59f3f;
     }
-
     body.light-mode .news,
     body.light-mode .discography,
     body.light-mode .videos {
@@ -66,7 +50,6 @@
       color: #111;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
-
     @keyframes shake {
       0% { transform: translateX(0) scale(1.15); }
       2% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); }
@@ -74,7 +57,6 @@
       7% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); }
       100% { transform: translateX(0) rotate(0deg) scale(1.15); }
     }
-
     header {
       position: fixed;
       top: 0;
@@ -86,19 +68,16 @@
       align-items: center;
       z-index: 999;
     }
-
     header .logo {
       color: #fff;
       font-size: 20px;
       letter-spacing: 2px;
     }
-
     nav ul {
       display: flex;
       gap: 25px;
       list-style: none;
     }
-
     nav a {
       color: #ccc;
       text-decoration: none;
@@ -106,12 +85,10 @@
       transition: all 0.3s ease;
       display: inline-block;
     }
-
     nav a:hover {
       color: #e0c27b;
       animation: shake 0.2s ease-in-out infinite alternate;
     }
-
     .theme-toggle {
       background: none;
       border: 1px solid #777;
@@ -123,19 +100,16 @@
       font-size: 12px;
       margin-left: 20px;
     }
-
     .theme-toggle:hover {
       background: #e0c27b;
       color: #000;
     }
-
     .hero-wrapper {
       position: relative;
       height: 75vh;
       overflow: hidden;
       margin-top: 70px;
     }
-
     .hero-bg {
       position: absolute;
       top: 0;
@@ -146,7 +120,6 @@
       background-size: cover;
       z-index: 0;
     }
-
     .hero-text {
       position: relative;
       z-index: 2;
@@ -158,7 +131,6 @@
       align-items: center;
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     }
-
     .news {
       padding: 100px 5% 80px;
       background-color: #1a1a1a;
@@ -168,27 +140,23 @@
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
       transition: background 0.3s ease;
     }
-
     .news h2 {
       font-size: 32px;
       color: #fff;
       margin-bottom: 30px;
       text-align: center;
     }
-
     .news h2 span {
       font-size: 14px;
       color: #ccc;
       margin-left: 10px;
     }
-
     .schedule-filters {
       margin-bottom: 40px;
       display: flex;
       justify-content: center;
       gap: 20px;
     }
-
     .schedule-filters button {
       background: none;
       border: 1px solid #555;
@@ -199,20 +167,17 @@
       border-radius: 20px;
       transition: all 0.3s ease;
     }
-
     .schedule-filters button.active,
     .schedule-filters button:hover {
       color: #e0c27b;
       border-color: #e0c27b;
     }
-
     .schedule-grid {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr;
       grid-template-rows: 1fr 1fr;
       gap: 20px;
     }
-
     .main-news {
       grid-column: 1 / 2;
       grid-row: 1 / 3;
@@ -226,7 +191,6 @@
       justify-content: space-between;
       overflow: hidden;
     }
-
     .news-card {
       background: #222;
       border-radius: 14px;
@@ -240,12 +204,10 @@
       overflow: hidden;
       transition: transform 0.3s ease;
     }
-
     .news-card:hover {
       transform: scale(1.05);
       animation: shake 0.2s ease-in-out infinite alternate;
     }
-
     .news-card h4 {
       font-size: 16px;
       font-weight: 700;
@@ -253,7 +215,6 @@
       margin-bottom: 8px;
       text-align: center;
     }
-
     .news-card .date {
       font-weight: 700;
       font-size: 14px;
@@ -261,13 +222,11 @@
       text-align: center;
       margin-bottom: 10px;
     }
-
     .news-card p {
       color: #ccc;
       font-size: 14px;
       text-align: center;
     }
-
     .news-card .label {
       font-size: 11px;
       color: #e0c27b;
@@ -278,7 +237,6 @@
       margin: 10px auto 0;
       display: block;
     }
-
     .section-banner {
       position: relative;
       width: 110%;
@@ -299,20 +257,19 @@
       text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
       user-select: none;
     }
-
     .carousel-container {
       position: relative;
       overflow: hidden;
       max-width: 1200px;
       margin: 0 auto;
+      padding-top: 40px;
+      padding-bottom: 40px;
     }
-
     .carousel-track {
       display: flex;
       gap: var(--card-gap);
       transition: transform 0.5s ease-in-out;
     }
-
     .carousel-btn {
       position: absolute;
       top: 50%;
@@ -327,19 +284,15 @@
       border-radius: 50%;
       transition: all 0.3s;
     }
-
     .carousel-btn:hover {
       background: rgba(0, 0, 0, 0.8);
     }
-
     .carousel-btn.prev {
       left: 10px;
     }
-
     .carousel-btn.next {
       right: 10px;
     }
-
     .media-card {
       background: #222;
       border-radius: 14px;
@@ -355,26 +308,23 @@
       filter: grayscale(100%);
       cursor: pointer;
     }
-
     .media-card:hover {
       filter: grayscale(0%);
       animation: shake 0.2s ease-in-out infinite alternate;
     }
-
     .media-card img {
       width: 100%;
+      height: 100%;
       border-radius: 8px;
       object-fit: cover;
       margin-bottom: 8px;
       aspect-ratio: 16 / 9;
     }
-
     .media-card h4 {
       font-size: 16px;
       text-align: center;
       margin-bottom: 6px;
     }
-
     .media-card .label {
       font-size: 11px;
       color: #e0c27b;
@@ -382,13 +332,11 @@
       padding: 2px 6px;
       border-radius: 999px;
     }
-
     .media-card.center-card {
       filter: grayscale(0%);
       transform: scale(1.1);
       z-index: 5;
     }
-
     .videos .carousel-container {
       width: 100%;
       max-width: 1000px;
@@ -397,13 +345,11 @@
       position: relative;
       padding: 0;
     }
-
     .videos .carousel-track {
       display: flex;
       align-items: center;
       transition: transform 0.5s ease-in-out;
     }
-
     .videos .media-card {
       width: 300px;
       margin: 0 10px;
@@ -412,39 +358,60 @@
       transform: scale(0.9);
       transition: transform 0.3s ease, opacity 0.3s ease;
     }
-
+    .videos {
+      padding-top: 100px;
+      padding-bottom: 100px;
+    }
     .videos .media-card.center-card {
       transform: scale(1.2);
       opacity: 1;
       z-index: 2;
     }
-
     @media (max-width: 900px) {
       .schedule-grid {
         grid-template-columns: 1fr;
         grid-template-rows: auto;
       }
-
       .section-banner {
         width: 90%;
         height: 120px;
         font-size: 2rem;
       }
-
       :root {
         --card-width: 260px;
       }
-
       .videos .media-card {
         width: 150px;
       }
     }
-
-    .footer-spacer {
+    footer {
       padding: 100px 0 50px;
       text-align: center;
       color: #ccc;
       letter-spacing: 1px;
+    }
+    .social-bar {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 60px auto;
+      width: 100%;
+    }
+    .social-bar a {
+      display: inline-block;
+      transition: transform 0.3s ease, fill 0.3s ease;
+    }
+    .social-bar svg {
+      width: 36px;
+      height: 36px;
+      fill: #888;
+    }
+    .social-bar a:hover svg {
+      fill: #e0c27b;
+      transform: scale(1.15);
+    }
+    body.light-mode .social-bar svg {
+      fill: #555;
     }
   </style>
 </head>
@@ -453,11 +420,11 @@
     <div class="logo">Tenshi</div>
     <nav>
       <ul>
-        <li><a href="#news">NEWS</a></li>
-        <li><a href="#discography">Discography</a></li>
+        <li><a href="news.html">News</a></li>
+        <li><a href="Discography.html" id="link-discography">Discography</a></li>
         <li><a href="#videos">Videos</a></li>
         <li><a href="wallpapers.html">Gallery</a></li>
-        <li><a href="#mystudio">My Studio</a></li>
+        <li><a href="My Studio.html">My Studio</a></li>
       </ul>
     </nav>
     <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
@@ -465,6 +432,14 @@
   <div class="hero-wrapper">
     <div class="hero-bg"></div>
     <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
+  </div>
+  <div class="contenedor-centrado">
+    <div class="social-bar">
+      <a href="https://twitter.com" ...>...</a>
+      <a href="https://instagram.com" ...>...</a>
+      <a href="https://youtube.com" ...>...</a>
+      <a href="https://discord.com" ...>...</a>
+    </div>
   </div>
   <section class="news" id="news">
     <h2>NEWS <span>ニュース</span></h2>
@@ -556,24 +531,23 @@
       <button class="carousel-btn next" aria-label="Siguiente">›</button>
     </div>
   </section>
-  <div class="footer-spacer">
+  <footer>
+    <div class="social-bar">
+    </div>
     <p>j-tenshiwebcomingsoon</p>
-  </div>
-
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.css">
   <script>
-    // Tema
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
       localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
     }
-
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-mode');
     }
-    // YouTube API
-    const API_KEY = 'TU_CLAVE_DE_API'; // Reemplaza con tu clave de API
+    const API_KEY = 'TU_CLAVE_DE_API';
     const PLAYLIST_ID = 'PLkcZMdABSTfhe26NpsiFJev_0lCOcfCCf';
-
     async function fetchPlaylistVideos() {
       try {
         const response = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${PLAYLIST_ID}&key=${API_KEY}&maxResults=50`);
@@ -585,7 +559,6 @@
         return [];
       }
     }
-
     function renderVideos(videos) {
       const videoTrack = document.getElementById('videos-track');
       if (!videoTrack) return;
@@ -600,24 +573,25 @@
         card.innerHTML = `
           <img src="${thumbnailUrl}" alt="${title}">
           <h4>${title}</h4>
-          <span class="label">YouTube</span>
         `;
-        if (videoId) card.onclick = () => window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
+        if (videoId) {
+          card.onclick = () => {
+            basicLightbox.create(`
+              <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" width="880" height="495" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+            `).show();
+          };
+        }
         videoTrack.appendChild(card);
       });
     }
-    function initDiscographyCarousel(trackId, prevSelector, nextSelector) {
-      const track = document.getElementById(trackId);
-      const prevBtn = document.querySelector(prevSelector);
-      const nextBtn = document.querySelector(nextSelector);
+    function initCarousel(options) {
+      const track = document.getElementById(options.trackId);
+      const prevBtn = document.querySelector(options.prevSelector);
+      const nextBtn = document.querySelector(options.nextSelector);
       const container = track.parentElement;
       if (!track || !prevBtn || !nextBtn || !container) return;
-      const visibleCards = 3;
-      const cardWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width'));
-      const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-gap'));
-      const step = cardWidth + gap;
       let isTransitioning = false;
-
+      const visibleCards = 3;
       let cards = Array.from(track.children);
       const totalCards = cards.length;
       if (totalCards < visibleCards) return;
@@ -627,145 +601,131 @@
       endClones.reverse().forEach(clone => track.insertBefore(clone, track.firstChild));
       cards = Array.from(track.children);
       let currentIndex = visibleCards;
-      track.style.transition = 'none';
-      track.style.transform = `translateX(${-currentIndex * step}px)`;
-      track.offsetHeight;
-      track.style.transition = 'transform 0.5s ease-in-out';
-
-      function updateCarousel() {
-        if (isTransitioning) return;
-        isTransitioning = true;
-        track.style.transform = `translateX(${-currentIndex * step}px)`;
-      }
-
-      track.addEventListener('transitionend', () => {
-        isTransitioning = false;
-        if (currentIndex >= totalCards + visibleCards) {
-          track.style.transition = 'none';
-          currentIndex = visibleCards;
-          track.style.transform = `translateX(${-currentIndex * step}px)`;
-        } else if (currentIndex < visibleCards) {
-          track.style.transition = 'none';
-          currentIndex = totalCards + currentIndex;
-          track.style.transform = `translateX(${-currentIndex * step}px)`;
+      if (options.type === 'center-focus') {
+        function updateVideoCarousel(smoothTransition = true) {
+          if (isTransitioning) return;
+          isTransitioning = true;
+          const cardCenter = cards[currentIndex].offsetLeft + (cards[currentIndex].offsetWidth / 2);
+          const containerCenter = container.offsetWidth / 2;
+          const newTransform = -(cardCenter - containerCenter);
+          track.style.transition = smoothTransition ? 'transform 0.5s ease-in-out' : 'none';
+          track.style.transform = `translateX(${newTransform}px)`;
+          cards.forEach((card, index) => {
+            card.classList.remove('center-card');
+          });
+          cards[currentIndex].classList.add('center-card');
         }
-      });
-
-      prevBtn.addEventListener('click', () => {
-        if (isTransitioning) return;
-        currentIndex--;
-        updateCarousel();
-      });
-
-      nextBtn.addEventListener('click', () => {
-        if (isTransitioning) return;
-        currentIndex++;
-        updateCarousel();
-      });
-
-      let autoplayInterval = setInterval(() => {
-        if (!isTransitioning) {
-          currentIndex++;
-          updateCarousel();
-        }
-      }, 4000);
-
-      container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
-      container.addEventListener('mouseleave', () => {
-        autoplayInterval = setInterval(() => {
-          if (!isTransitioning) {
-            currentIndex++;
-            updateCarousel();
+        track.addEventListener('transitionend', () => {
+          isTransitioning = false;
+          if (currentIndex >= totalCards + visibleCards) {
+            currentIndex = visibleCards;
+            updateVideoCarousel(false);
+          } else if (currentIndex < visibleCards) {
+            currentIndex = totalCards + currentIndex;
+            updateVideoCarousel(false);
           }
-        }, 4000);
-      });
-    }
-
-    function initVideoCarousel(trackId, prevSelector, nextSelector) {
-      const track = document.getElementById(trackId);
-      const prevBtn = document.querySelector(prevSelector);
-      const nextBtn = document.querySelector(nextSelector);
-      const container = track.parentElement;
-      if (!track || !prevBtn || !nextBtn || !container) return;
-      let isTransitioning = false;
-      const visibleCards = 3;
-
-      let cards = Array.from(track.children);
-      const totalCards = cards.length;
-      if (totalCards < visibleCards) return;
-      const startClones = cards.slice(0, visibleCards).map(node => node.cloneNode(true));
-      const endClones = cards.slice(-visibleCards).map(node => node.cloneNode(true));
-      startClones.forEach(clone => track.appendChild(clone));
-      endClones.reverse().forEach(clone => track.insertBefore(clone, track.firstChild));
-      cards = Array.from(track.children);
-      let currentIndex = visibleCards;
-
-      function updateVideoCarousel(smoothTransition = true) {
-        if (isTransitioning) return;
-        isTransitioning = true;
-
-        const cardCenter = cards[currentIndex].offsetLeft + (cards[currentIndex].offsetWidth / 2);
-        const containerCenter = container.offsetWidth / 2;
-        const newTransform = -(cardCenter - containerCenter);
-
-        track.style.transition = smoothTransition ? 'transform 0.5s ease-in-out' : 'none';
-        track.style.transform = `translateX(${newTransform}px)`;
-        cards.forEach((card, index) => {
-          card.classList.remove('center-card');
         });
-        cards[currentIndex].classList.add('center-card');
-      }
-      track.addEventListener('transitionend', () => {
-        isTransitioning = false;
-        if (currentIndex >= totalCards + visibleCards) {
-          currentIndex = visibleCards;
-          updateVideoCarousel(false);
-        } else if (currentIndex < visibleCards) {
-          currentIndex = totalCards + currentIndex;
-          updateVideoCarousel(false);
-        }
-      });
-      prevBtn.addEventListener('click', () => {
-        if (isTransitioning) return;
-        currentIndex--;
-        updateVideoCarousel();
-      });
-      nextBtn.addEventListener('click', () => {
-        if (isTransitioning) return;
-        currentIndex++;
-        updateVideoCarousel();
-      });
-      let autoplayInterval = setInterval(() => {
-        if (!isTransitioning) {
+        prevBtn.addEventListener('click', () => {
+          if (isTransitioning) return;
+          currentIndex--;
+          updateVideoCarousel();
+        });
+        nextBtn.addEventListener('click', () => {
+          if (isTransitioning) return;
           currentIndex++;
           updateVideoCarousel();
-        }
-      }, 4000);
-
-      container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
-      container.addEventListener('mouseleave', () => {
-        autoplayInterval = setInterval(() => {
+        });
+        let autoplayInterval = setInterval(() => {
           if (!isTransitioning) {
             currentIndex++;
             updateVideoCarousel();
           }
         }, 4000);
-      });
-      updateVideoCarousel();
-      window.addEventListener('resize', () => {
-        updateVideoCarousel(false);
-      });
+        container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+        container.addEventListener('mouseleave', () => {
+          autoplayInterval = setInterval(() => {
+            if (!isTransitioning) {
+              currentIndex++;
+              updateVideoCarousel();
+            }
+          }, 4000);
+        });
+        updateVideoCarousel();
+        window.addEventListener('resize', () => {
+          updateVideoCarousel(false);
+        });
+      } else {
+        const cardWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width'));
+        const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-gap'));
+        const step = cardWidth + gap;
+        function updateCarousel() {
+          if (isTransitioning) return;
+          isTransitioning = true;
+          track.style.transform = `translateX(${-currentIndex * step}px)`;
+        }
+        track.style.transition = 'none';
+        track.style.transform = `translateX(${-currentIndex * step}px)`;
+        track.offsetHeight;
+        track.style.transition = 'transform 0.5s ease-in-out';
+        track.addEventListener('transitionend', () => {
+          isTransitioning = false;
+          if (currentIndex >= totalCards + visibleCards) {
+            track.style.transition = 'none';
+            currentIndex = visibleCards;
+            track.style.transform = `translateX(${-currentIndex * step}px)`;
+          } else if (currentIndex < visibleCards) {
+            track.style.transition = 'none';
+            currentIndex = totalCards + currentIndex;
+            track.style.transform = `translateX(${-currentIndex * step}px)`;
+          }
+        });
+        prevBtn.addEventListener('click', () => {
+          if (isTransitioning) return;
+          currentIndex--;
+          updateCarousel();
+        });
+        nextBtn.addEventListener('click', () => {
+          if (isTransitioning) return;
+          currentIndex++;
+          updateCarousel();
+        });
+        let autoplayInterval = setInterval(() => {
+          if (!isTransitioning) {
+            currentIndex++;
+            updateCarousel();
+          }
+        }, 4000);
+        container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+        container.addEventListener('mouseleave', () => {
+          autoplayInterval = setInterval(() => {
+            if (!isTransitioning) {
+              currentIndex++;
+              updateCarousel();
+            }
+          }, 4000);
+        });
+      }
     }
     window.addEventListener('DOMContentLoaded', () => {
       const discographyTrack = document.getElementById('discography-track');
       if (discographyTrack && discographyTrack.children.length >= 3) {
-        initDiscographyCarousel('discography-track', '.discography .carousel-btn.prev', '.discography .carousel-btn.next');
+        initCarousel({
+          trackId: 'discography-track',
+          prevSelector: '.discography .carousel-btn.prev',
+          nextSelector: '.discography .carousel-btn.next',
+          type: 'slide'
+        });
       }
       fetchPlaylistVideos().then(videos => {
         renderVideos(videos);
         const videosTrack = document.getElementById('videos-track');
         if (videosTrack && videosTrack.children.length >= 3) {
-          initVideoCarousel('videos-track', '.videos .carousel-btn.prev', '.videos .carousel-btn.next');
+          initCarousel({
+            trackId: 'videos-track',
+            prevSelector: '.videos .carousel-btn.prev',
+            nextSelector: '.videos .carousel-btn.next',
+            type: 'center-focus'
+          });
         }
       });
     });
