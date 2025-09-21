@@ -271,6 +271,8 @@
       display: flex;
       gap: var(--card-gap);
       transition: transform 0.5s ease-in-out;
+      justify-content: center;
+      align-items: center;
     }
     .carousel-btn {
       position: absolute;
@@ -457,6 +459,28 @@
     .color-card.videos {
       height: 200px;
     }
+    /* === ESTILOS PARA EL CARRUSEL DE DISCOGRAFÍA === */
+.media-card.center-card {
+  transform: scale(1.3); /* Más grande en el centro */
+  opacity: 1;
+  z-index: 3;
+  filter: grayscale(0%);
+}
+
+.media-card.left-card,
+.media-card.right-card {
+  transform: scale(0.9); /* Más chicas a los lados */
+  opacity: 0.7;
+  z-index: 2;
+  filter: grayscale(50%);
+}
+
+.media-card.hidden-card {
+  transform: scale(0.5); /* Muy chiquitas o invisibles */
+  opacity: 0;
+  z-index: 1;
+}
+
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -646,7 +670,6 @@
       const cards = Array.from(track.children);
       const totalCards = cards.length;
       let currentIndex = Math.floor(totalCards / 2); // Empezar en el centro
-      let isTransitioning = false;
       let autoplayInterval;
 
       // Clonar las primeras y últimas tarjetas para simular un loop infinito
@@ -659,24 +682,21 @@
       // Posicionar la tarjeta central al inicio
       currentIndex = 1; // Empezar en la primera tarjeta original (después del clone)
 
-      // Actualizar el carrusel
       function updateCarousel() {
-        if (isTransitioning) return;
-        isTransitioning = true;
+  allCards.forEach((card, idx) => {
+    card.classList.remove('center-card', 'left-card', 'right-card', 'hidden-card');
+    if (idx === currentIndex) {
+      card.classList.add('center-card'); // el que está al medio
+    } else if (idx === (currentIndex - 1 + allCards.length) % allCards.length) {
+      card.classList.add('left-card'); // el que queda a la izquierda
+    } else if (idx === (currentIndex + 1) % allCards.length) {
+      card.classList.add('right-card'); // el que queda a la derecha
+    } else {
+      card.classList.add('hidden-card'); // los demás quedan ocultos
+    }
+  });
+}
 
-        // Remover clases anteriores
-        allCards.forEach(card => {
-          card.classList.remove('center-card', 'left-card', 'right-card');
-        });
-
-        // Asignar clases según la posición
-        allCards[currentIndex].classList.add('center-card');
-        allCards[(currentIndex - 1 + allCards.length) % allCards.length].classList.add('left-card');
-        allCards[(currentIndex + 1) % allCards.length].classList.add('right-card');
-
-        // Permitir transiciones nuevamente después de un tiempo
-        setTimeout(() => { isTransitioning = false; }, 800);
-      }
 
       // Navegación manual
       if (prevBtn) {
