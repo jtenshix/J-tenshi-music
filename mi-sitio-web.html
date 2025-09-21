@@ -416,23 +416,23 @@
       padding: 5px 10px;
     }
     
-    /* === VIDEOS - TAMAÑO EXACTO DE YOUTUBE EMBEDDED === */
+    /* === VIDEOS - PROPORCIÓN 19:9 EXACTA === */
     .videos-grid {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 30px;
-      max-width: 2000px;
+      max-width: 1800px;
       margin: 60px auto;
-      padding: 0 100px;
-      height: 350px;
+      padding: 0 80px;
+      height: 450px;
       overflow: hidden;
       position: relative;
     }
     
     .video-card {
-      width: 560px; /* ANCHO EXACTO DE YOUTUBE EMBED */
-      height: 315px; /* ALTURA EXACTA DE YOUTUBE EMBED (16:9) */
+      width: 400px;
+      height: 380px; /* 19:9 exacto = width * (9/19) ≈ 400 * 0.4737 */
       background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
       border-radius: 24px;
       position: relative;
@@ -450,10 +450,10 @@
       z-index: 1;
     }
     
-    /* Tarjeta de video del medio MÁS GRANDE */
+    /* Tarjeta de video del medio MÁS GRANDE (19:9 escalado) */
     .video-card.center {
-      width: 720px; /* Más grande que YouTube estándar */
-      height: 405px; /* Mantiene proporción 16:9 */
+      width: 500px;
+      height: 475px; /* 19:9 exacto = 500 * (9/19) ≈ 500 * 0.4737 */
       transform: scale(1.1);
       z-index: 3;
       box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
@@ -565,20 +565,20 @@
       transform: translate(-50%, -50%) scale(1.2);
     }
     
-    /* === RESPONSIVE === */
+    /* === RESPONSIVE - MANTIENE 19:9 === */
     @media (max-width: 1400px) {
       .videos-grid {
         padding: 0 60px;
       }
       
       .video-card {
-        width: 480px;
-        height: 270px; /* 16:9 */
+        width: 350px;
+        height: 332px; /* 19:9 = 350 * (9/19) ≈ 332 */
       }
       
       .video-card.center {
-        width: 600px;
-        height: 337px; /* 16:9 */
+        width: 430px;
+        height: 408px; /* 19:9 = 430 * (9/19) ≈ 408 */
       }
     }
     
@@ -592,13 +592,13 @@
       }
       
       .video-card {
-        width: 400px;
-        height: 225px; /* 16:9 */
+        width: 300px;
+        height: 284px; /* 19:9 = 300 * (9/19) ≈ 284 */
       }
       
       .video-card.center {
-        width: 500px;
-        height: 281px; /* 16:9 */
+        width: 370px;
+        height: 351px; /* 19:9 = 370 * (9/19) ≈ 351 */
       }
     }
     
@@ -632,17 +632,17 @@
       .videos-grid {
         gap: 20px;
         padding: 0 30px;
-        height: 280px;
+        height: 350px;
       }
       
       .video-card {
-        width: 320px;
-        height: 180px; /* 16:9 */
+        width: 280px;
+        height: 266px; /* 19:9 = 280 * (9/19) ≈ 266 */
       }
       
       .video-card.center {
-        width: 400px;
-        height: 225px; /* 16:9 */
+        width: 340px;
+        height: 322px; /* 19:9 = 340 * (9/19) ≈ 322 */
       }
       
       .video-card h4 {
@@ -682,13 +682,13 @@
       
       .video-card {
         width: 100%;
-        max-width: 300px;
-        height: 169px; /* 16:9 */
+        max-width: 280px;
+        height: 266px; /* 19:9 */
       }
       
       .video-card.center {
-        max-width: 340px;
-        height: 191px; /* 16:9 */
+        max-width: 320px;
+        height: 304px; /* 19:9 = 320 * (9/19) ≈ 304 */
       }
       
       .video-card h4 {
@@ -884,7 +884,7 @@
         </button>
       </div>
       
-      <!-- Video 3 - CENTRO (MÁS GRANDE - TAMAÑO YOUTUBE MAX) -->
+      <!-- Video 3 - CENTRO (MÁS GRANDE - 19:9) -->
       <div class="video-card center">
         <div class="video-content">
           <h4>光 (Hikari)</h4>
