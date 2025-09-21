@@ -10,14 +10,10 @@
       padding: 0;
       box-sizing: border-box;
     }
-    
     :root {
-      --card-width: 400px;
-      --card-height: 240px;
-      --card-gap: 40px;
-      --main-card-scale: 1.0;
+      --card-width: 320px;
+      --card-gap: 30px;
     }
-    
     body {
       font-family: 'Helvetica Neue', sans-serif;
       background: #0b0b0b;
@@ -27,32 +23,26 @@
       height: 100%;
       transition: background 0.3s, color 0.3s;
     }
-    
     body.light-mode {
       background: #f5f5f5;
       color: #111;
     }
-    
     body.light-mode header,
     body.light-mode .news-card,
     body.light-mode .main-news {
       background-color: #fff;
       color: #111;
     }
-    
     body.light-mode nav a {
       color: #333;
     }
-    
     body.light-mode nav a:hover {
       color: #c59f3f;
     }
-    
     body.light-mode .label {
       border-color: #c59f3f;
       color: #c59f3f;
     }
-    
     body.light-mode .news,
     body.light-mode .discography,
     body.light-mode .videos {
@@ -60,7 +50,6 @@
       color: #111;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
-    
     @keyframes shake {
       0% { transform: translateX(0) scale(1.15); }
       2% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); }
@@ -68,7 +57,6 @@
       7% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); }
       100% { transform: translateX(0) rotate(0deg) scale(1.15); }
     }
-    
     header {
       position: fixed;
       top: 0;
@@ -80,19 +68,16 @@
       align-items: center;
       z-index: 999;
     }
-    
     header .logo {
       color: #fff;
       font-size: 20px;
       letter-spacing: 2px;
     }
-    
     nav ul {
       display: flex;
       gap: 25px;
       list-style: none;
     }
-    
     nav a {
       color: #ccc;
       text-decoration: none;
@@ -100,12 +85,10 @@
       transition: all 0.3s ease;
       display: inline-block;
     }
-    
     nav a:hover {
       color: #e0c27b;
       animation: shake 0.2s ease-in-out infinite alternate;
     }
-    
     .theme-toggle {
       background: none;
       border: 1px solid #777;
@@ -117,19 +100,16 @@
       font-size: 12px;
       margin-left: 20px;
     }
-    
     .theme-toggle:hover {
       background: #e0c27b;
       color: #000;
     }
-    
     .hero-wrapper {
       position: relative;
       height: 70vh;
       overflow: hidden;
       margin-top: 70px;
     }
-    
     .hero-bg {
       position: absolute;
       top: 0;
@@ -140,7 +120,6 @@
       background-size: cover;
       z-index: 0;
     }
-    
     .hero-text {
       position: relative;
       z-index: 2;
@@ -152,7 +131,6 @@
       align-items: center;
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     }
-    
     .news {
       padding: 100px 5% 80px;
       background-color: #1a1a1a;
@@ -162,27 +140,23 @@
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
       transition: background 0.3s ease;
     }
-    
     .news h2 {
       font-size: 32px;
       color: #fff;
       margin-bottom: 30px;
       text-align: center;
     }
-    
     .news h2 span {
       font-size: 14px;
       color: #ccc;
       margin-left: 10px;
     }
-    
     .schedule-filters {
       margin-bottom: 40px;
       display: flex;
       justify-content: center;
       gap: 20px;
     }
-    
     .schedule-filters button {
       background: none;
       border: 1px solid #555;
@@ -193,20 +167,17 @@
       border-radius: 20px;
       transition: all 0.3s ease;
     }
-    
     .schedule-filters button.active,
     .schedule-filters button:hover {
       color: #e0c27b;
       border-color: #e0c27b;
     }
-    
     .schedule-grid {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr;
       grid-template-rows: 1fr 1fr;
       gap: 20px;
     }
-    
     .main-news {
       grid-column: 1 / 2;
       grid-row: 1 / 3;
@@ -220,7 +191,6 @@
       justify-content: space-between;
       overflow: hidden;
     }
-    
     .news-card {
       background: #222;
       border-radius: 14px;
@@ -236,12 +206,10 @@
       width: 250px;
       height: 200px;
     }
-    
     .news-card:hover {
       transform: scale(1.05);
       animation: shake 0.2s ease-in-out infinite alternate;
     }
-    
     .news-card h4 {
       font-size: 16px;
       font-weight: 700;
@@ -249,7 +217,6 @@
       margin-bottom: 8px;
       text-align: center;
     }
-    
     .news-card .date {
       font-weight: 700;
       font-size: 14px;
@@ -257,13 +224,11 @@
       text-align: center;
       margin-bottom: 10px;
     }
-    
     .news-card p {
       color: #ccc;
       font-size: 14px;
       text-align: center;
     }
-    
     .news-card .label {
       font-size: 11px;
       color: #e0c27b;
@@ -274,7 +239,6 @@
       margin: 10px auto 0;
       display: block;
     }
-    
     .section-banner {
       position: relative;
       width: 110%;
@@ -295,303 +259,168 @@
       text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
       user-select: none;
     }
-    
-    /* === CARRUSEL TIPO KAFU - UNA TARJETA CENTRADA === */
+    /* Asegúrate de que el contenedor del carrusel ocupe el ancho completo y esté centrado */
     .carousel-container {
       position: relative;
       width: 100%;
-      max-width: 1000px;
-      margin: 60px auto;
-      padding: 0 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 0;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
-    
+    /* La pista del carrusel debe tener un ancho definido y estar centrada */
     .carousel-track {
       display: flex;
+      justify-content: center;
       align-items: center;
       gap: var(--card-gap);
-      height: var(--card-height);
-      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      will-change: transform;
+      width: 100%;
+      margin: 0 auto;
+      transition: transform 0.5s ease-in-out;
     }
-    
+    /* Asegúrate de que las tarjetas no se salgan del contenedor */
     .media-card {
       flex-shrink: 0;
-      width: var(--card-width);
-      height: var(--card-height);
-      background: #1a1a1a;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: #fff;
-      font-weight: 600;
-      cursor: pointer;
-      position: relative;
-      transition: all 0.3s ease;
-      border: 2px solid transparent;
-      overflow: hidden;
+      margin: 0 10px;
+      transition: transform 0.3s ease, opacity 0.3s ease, filter 0.5s ease;
     }
-    
-    .media-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(224, 194, 123, 0.1), transparent);
-      transition: left 0.5s;
-    }
-    
-    .media-card:hover::before {
-      left: 100%;
-    }
-    
-    .media-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 16px 48px rgba(224, 194, 123, 0.2);
-      border-color: #e0c27b;
-    }
-    
-    .media-card h4 {
-      font-size: 18px;
-      margin-bottom: 12px;
-      color: #e0c27b;
-      font-weight: 700;
-      line-height: 1.3;
-      max-width: 90%;
-    }
-    
-    .media-card .label {
-      font-size: 12px;
-      color: #888;
-      border: 1px solid #555;
-      padding: 4px 8px;
-      border-radius: 12px;
-      background: rgba(0, 0, 0, 0.3);
-    }
-    
-    .media-card .play-btn {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 60px;
-      height: 60px;
-      background: rgba(224, 194, 123, 0.9);
-      border: none;
-      border-radius: 50%;
-      color: #000;
-      font-size: 20px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      opacity: 0;
-      z-index: 2;
-    }
-    
-    .media-card:hover .play-btn {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1.1);
-    }
-    
-    .play-btn:hover {
-      background: #e0c27b;
-      transform: translate(-50%, -50%) scale(1.2);
-    }
-    
-    /* === ESTADOS DEL CARRUSEL === */
-    .carousel-track {
-      transform: translateX(0);
-    }
-    
-    /* Solo la tarjeta central es visible */
-    .carousel-container {
-      mask-image: linear-gradient(
-        to right,
-        transparent 0%,
-        black 10%,
-        black 90%,
-        transparent 100%
-      );
-      -webkit-mask-image: linear-gradient(
-        to right,
-        transparent 0%,
-        black 10%,
-        black 90%,
-        transparent 100%
-      );
-    }
-    
-    /* Botones del carrusel */
     .carousel-btn {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background: rgba(26, 26, 26, 0.8);
-      border: 1px solid #555;
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
       color: #e0c27b;
-      font-size: 18px;
+      font-size: 2rem;
       cursor: pointer;
       z-index: 10;
-      padding: 12px 16px;
+      padding: 10px;
       border-radius: 50%;
-      transition: all 0.3s ease;
-      width: 48px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(10px);
+      transition: all 0.3s;
     }
-    
     .carousel-btn:hover {
-      background: rgba(224, 194, 123, 0.2);
-      border-color: #e0c27b;
-      color: #fff;
-      transform: translateY(-50%) scale(1.1);
+      background: rgba(0, 0, 0, 0.8);
     }
-    
     .carousel-btn.prev {
       left: 10px;
     }
-    
     .carousel-btn.next {
       right: 10px;
     }
-    
-    /* === ESPECÍFICO PARA VIDEOS === */
-    .videos .carousel-container {
-      max-width: 800px;
-    }
-    
-    .videos .media-card h4 {
-      font-size: 16px;
-      margin-bottom: 8px;
-    }
-    
-    .videos .media-card .label {
-      font-size: 11px;
-    }
-    
-    /* === TARJETAS DE COLOR === */
-    .color-card {
-      width: 100%;
-      height: 100%;
-      border-radius: 12px;
+    .media-card {
+      background: #222;
+      border-radius: 14px;
+      padding: 10px;
+      width: 300px;
+      height: 300px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;
+      justify-content: space-between;
+      flex-shrink: 0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.5s ease;
+      filter: grayscale(100%);
+      cursor: pointer;
+    }
+    .media-card:hover {
+      filter: grayscale(0%);
+      animation: shake 0.2s ease-in-out infinite alternate;
+    }
+    .media-card img {
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+      object-fit: cover;
+      margin-bottom: 8px;
+    }
+    .media-card h4 {
+      font-size: 16px;
       text-align: center;
-      padding: 20px;
-      box-sizing: border-box;
+      margin-bottom: 6px;
+    }
+    .media-card .label {
+      font-size: 11px;
+      color: #e0c27b;
+      border: 1px solid #e0c27b;
+      padding: 2px 6px;
+      border-radius: 999px;
+      width: fit-content;
+      margin: 10px auto 0;
+      display: block;
+    }
+    .media-card.center-card {
+      transform: scale(1.3);
+      opacity: 1;
+      z-index: 3;
+      filter: grayscale(0%);
+    }
+    .media-card.left-card,
+    .media-card.right-card {
+      transform: scale(0.9);
+      opacity: 0.7;
+      z-index: 2;
+      filter: grayscale(50%);
+    }
+    .media-card.hidden-card {
+      transform: scale(0.5);
+      opacity: 0;
+      z-index: 1;
+    }
+    .videos .carousel-container {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      overflow: visible;
       position: relative;
+      padding-top: 80px;
+    }
+    .videos .media-card {
+      width: 400px;
+      height: auto;
+      margin: 0 15px;
+      flex-shrink: 0;
+      opacity: 0.6;
+      transform: scale(0.9);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      overflow: visible;
+    }
+    .videos .media-card.center-card {
+      transform: scale(1.3);
+      opacity: 1;
+      z-index: 2;
+    }
+    .videos .media-card h4 {
+      font-size: 18px;
+      text-align: center;
+      margin-bottom: 6px;
+      white-space: nowrap;
       overflow: hidden;
+      text-overflow: ellipsis;
     }
-    
-    .color-card::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: inherit;
-      filter: brightness(0.8);
-      z-index: -1;
-    }
-    
-    .color-card h4 {
-      position: relative;
-      z-index: 2;
-      font-size: inherit;
-    }
-    
-    .color-card .label {
-      position: relative;
-      z-index: 2;
-    }
-    
-    /* === RESPONSIVE === */
     @media (max-width: 900px) {
-      :root {
-        --card-width: 320px;
-        --card-height: 200px;
-        --card-gap: 30px;
-      }
-      
       .schedule-grid {
         grid-template-columns: 1fr;
         grid-template-rows: auto;
       }
-      
       .section-banner {
         width: 90%;
         height: 100px;
         font-size: 2rem;
       }
-      
-      .carousel-container {
-        padding: 0 15px;
-        margin: 40px auto;
-      }
-      
-      .videos .carousel-container {
-        max-width: 600px;
-      }
-      
-      .carousel-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 16px;
-        padding: 8px;
-      }
-    }
-    
-    @media (max-width: 600px) {
       :root {
-        --card-width: 280px;
-        --card-height: 180px;
-        --card-gap: 20px;
+        --card-width: 260px;
       }
-      
-      .carousel-container {
-        padding: 0 10px;
-      }
-      
-      .videos .carousel-container {
-        max-width: 500px;
-      }
-      
-      .media-card h4 {
-        font-size: 16px;
-      }
-      
-      .media-card .label {
-        font-size: 10px;
+      .videos .media-card {
+        width: 150px;
       }
     }
-    
     footer {
       padding: 100px 0 50px;
       text-align: center;
       color: #ccc;
       letter-spacing: 1px;
     }
-    
     .social-bar {
       display: flex;
       justify-content: center;
@@ -599,44 +428,63 @@
       margin: 60px auto;
       width: 100%;
     }
-    
     .social-bar a {
       display: inline-block;
       transition: transform 0.3s ease, fill 0.3s ease;
     }
-    
     .social-bar svg {
       width: 36px;
       height: 36px;
       fill: #888;
     }
-    
     .social-bar a:hover svg {
       fill: #e0c27b;
       transform: scale(1.15);
     }
-    
     body.light-mode .social-bar svg {
       fill: #555;
     }
-    
     .music-platforms {
       display: flex;
       gap: 10px;
       align-items: center;
       margin-top: 10px;
     }
-    
     .social-networks {
       display: flex;
       gap: 10px;
       align-items: center;
       margin-top: -70px;
     }
+    /* Estilos para las tarjetas de colores */
+    .color-card {
+      width: 100%;
+      height: 250px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+      padding: 10px;
+      box-sizing: border-box;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .color-card:hover {
+      transform: scale(1.05);
+    }
+    .color-card.discography {
+      height: 300px;
+    }
+    .color-card.videos {
+      height: 200px;
+    }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
 <body>
   <header>
     <div class="logo">Tenshi</div>
@@ -651,12 +499,10 @@
     </nav>
     <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
   </header>
-  
   <div class="hero-wrapper">
     <div class="hero-bg"></div>
     <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
   </div>
-  
   <div class="contenedor-centrado">
     <div class="social-bar music-platforms">
       <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" style="color: #1DB954; font-size: 40px;">
@@ -693,7 +539,6 @@
       </a>
     </div>
   </div>
-  
   <section class="news" id="news">
     <h2>NEWS <span>ニュース</span></h2>
     <nav class="schedule-filters">
@@ -735,294 +580,180 @@
       </div>
     </div>
   </section>
-  
   <div class="section-banner">ディスコグラフィー</div>
   <section class="discography" id="discography">
     <div class="carousel-container" aria-label="Discography carousel">
       <div class="carousel-track" id="discography-track">
-        <!-- Tarjetas de discografía -->
+        <!-- Tarjetas de colores para discografía -->
         <div class="media-card">
           <div class="color-card discography" style="background: linear-gradient(135deg, #FF6B6B, #FF8E8E);">
             <h4>Álbum Rojo</h4>
             <span class="label">Single</span>
           </div>
-          <button class="play-btn" title="Play">
-            <i class="fas fa-play"></i>
-          </button>
         </div>
         <div class="media-card">
           <div class="color-card discography" style="background: linear-gradient(135deg, #4ECDC4, #A1FFE6);">
             <h4>Álbum Verde</h4>
             <span class="label">EP</span>
           </div>
-          <button class="play-btn" title="Play">
-            <i class="fas fa-play"></i>
-          </button>
         </div>
         <div class="media-card">
           <div class="color-card discography" style="background: linear-gradient(135deg, #45B7D1, #B3E5FC);">
             <h4>Álbum Azul</h4>
             <span class="label">Álbum</span>
           </div>
-          <button class="play-btn" title="Play">
-            <i class="fas fa-play"></i>
-          </button>
         </div>
         <div class="media-card">
           <div class="color-card discography" style="background: linear-gradient(135deg, #FFA07A, #FFDAB9);">
             <h4>Álbum Naranja</h4>
             <span class="label">Single</span>
           </div>
-          <button class="play-btn" title="Play">
-            <i class="fas fa-play"></i>
-          </button>
         </div>
         <div class="media-card">
           <div class="color-card discography" style="background: linear-gradient(135deg, #E91E63, #F8BBD9);">
             <h4>Álbum Rosa</h4>
             <span class="label">EP</span>
           </div>
-          <button class="play-btn" title="Play">
-            <i class="fas fa-play"></i>
-          </button>
         </div>
       </div>
       <button class="carousel-btn prev" aria-label="Anterior">‹</button>
       <button class="carousel-btn next" aria-label="Siguiente">›</button>
     </div>
   </section>
-  
   <div class="section-banner">ビデオ</div>
   <section class="videos" id="videos">
     <div class="carousel-container" aria-label="Videos carousel">
       <div class="carousel-track" id="videos-track">
-        <!-- Tarjetas de videos - inspiradas en Kafu -->
+        <!-- Tarjetas de colores para videos -->
         <div class="media-card">
           <div class="color-card videos" style="background: linear-gradient(135deg, #9C27B0, #E1BEE7);">
-            <h4>光 (Hikari)</h4>
-            <span class="label">MV</span>
+            <h4>Concierto en Tokio</h4>
+            <span class="label">LIVE</span>
           </div>
-          <button class="play-btn" title="Play">
-            <i class="fas fa-play"></i>
-          </button>
         </div>
         <div class="media-card">
           <div class="color-card videos" style="background: linear-gradient(135deg, #673AB7, #D1C4E9);">
-            <h4>糸 (Ito)</h4>
-            <span class="label">LIVE</span>
+            <h4>Behind the Scenes</h4>
+            <span class="label">BTS</span>
           </div>
-          <button class="play-btn" title="Play">
-            <i class="fas fa-play"></i>
-          </button>
         </div>
         <div class="media-card">
           <div class="color-card videos" style="background: linear-gradient(135deg, #3F51B5, #C5CAE9);">
-            <h4>心臓と絡繰</h4>
+            <h4>Nuevo MV</h4>
             <span class="label">MV</span>
           </div>
-          <button class="play-btn" title="Play">
-            <i class="fas fa-play"></i>
-          </button>
-        </div>
-        <div class="media-card">
-          <div class="color-card videos" style="background: linear-gradient(135deg, #FF9800, #FFE0B2);">
-            <h4>魔女 (Majo)</h4>
-            <span class="label">LIVE</span>
-          </div>
-          <button class="play-btn" title="Play">
-            <i class="fas fa-play"></i>
-          </button>
-        </div>
-        <div class="media-card">
-          <div class="color-card videos" style="background: linear-gradient(135deg, #F44336, #FFCDD2);">
-            <h4>忘れてしまえ</h4>
-            <span class="label">MV</span>
-          </div>
-          <button class="play-btn" title="Play">
-            <i class="fas fa-play"></i>
-          </button>
-        </div>
-        <div class="media-card">
-          <div class="color-card videos" style="background: linear-gradient(135deg, #4CAF50, #C8E6C9);">
-            <h4>雛鳥 (Hinadori)</h4>
-            <span class="label">LIVE</span>
-          </div>
-          <button class="play-btn" title="Play">
-            <i class="fas fa-play"></i>
-          </button>
-        </div>
-        <div class="media-card">
-          <div class="color-card videos" style="background: linear-gradient(135deg, #2196F3, #BBDEFB);">
-            <h4>過去を喰らう</h4>
-            <span class="label">MV</span>
-          </div>
-          <button class="play-btn" title="Play">
-            <i class="fas fa-play"></i>
-          </button>
         </div>
       </div>
       <button class="carousel-btn prev" aria-label="Anterior">‹</button>
       <button class="carousel-btn next" aria-label="Siguiente">›</button>
     </div>
   </section>
-  
   <footer>
     <div class="social-bar"></div>
     <p>j-tenshiwebcomingsoon</p>
   </footer>
-
   <script>
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
       localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
     }
-    
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-mode');
     }
-    
-    // === CARRUSEL TIPO KAFU - UNA TARJETA CENTRADA ===
-    function initKafuCarousel(options) {
+
+    function initInfiniteCarousel(options) {
       const track = document.getElementById(options.trackId);
       if (!track) return;
-      
       const container = track.parentElement;
       const prevBtn = container.querySelector('.carousel-btn.prev');
       const nextBtn = container.querySelector('.carousel-btn.next');
       const cards = Array.from(track.children);
       const totalCards = cards.length;
-      
-      let currentIndex = 0;
+      let currentIndex = 2; // Empezar en la tercera tarjeta (centro)
       let autoplayInterval;
       let isTransitioning = false;
-      
-      // Calcular el ancho total de una tarjeta + gap
-      function getCardTotalWidth() {
-        const cardWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width'));
-        const cardGap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-gap'));
-        return cardWidth + cardGap;
-      }
-      
-      // Actualizar posición del carrusel
-      function updateCarouselPosition() {
-        const cardTotalWidth = getCardTotalWidth();
-        const translateX = -(currentIndex * cardTotalWidth);
-        track.style.transform = `translateX(${translateX}px)`;
-      }
-      
-      // Función principal de actualización
+
+      // Clonar las primeras y últimas tarjetas para simular un loop infinito
+      const firstClone = cards[0].cloneNode(true);
+      const secondClone = cards[1].cloneNode(true);
+      const lastClone = cards[totalCards - 1].cloneNode(true);
+      const secondLastClone = cards[totalCards - 2].cloneNode(true);
+
+      track.insertBefore(secondLastClone, track.firstChild);
+      track.insertBefore(lastClone, track.firstChild);
+      track.appendChild(firstClone);
+      track.appendChild(secondClone);
+
+      const allCards = Array.from(track.children);
+
       function updateCarousel() {
-        if (isTransitioning) return;
         isTransitioning = true;
-        
-        updateCarouselPosition();
-        
-        setTimeout(() => {
-          isTransitioning = false;
-        }, 600);
-      }
-      
-      // Navegación anterior
-      if (prevBtn) {
-        prevBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          if (isTransitioning) return;
-          currentIndex = (currentIndex - 1 + totalCards) % totalCards;
-          updateCarousel();
-          resetAutoplay();
-        });
-      }
-      
-      // Navegación siguiente
-      if (nextBtn) {
-        nextBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          if (isTransitioning) return;
-          currentIndex = (currentIndex + 1) % totalCards;
-          updateCarousel();
-          resetAutoplay();
-        });
-      }
-      
-      // Navegación con teclado
-      document.addEventListener('keydown', (e) => {
-        if (container.contains(document.activeElement)) {
-          if (e.key === 'ArrowLeft' && !isTransitioning) {
-            currentIndex = (currentIndex - 1 + totalCards) % totalCards;
-            updateCarousel();
-          } else if (e.key === 'ArrowRight' && !isTransitioning) {
-            currentIndex = (currentIndex + 1) % totalCards;
-            updateCarousel();
+        allCards.forEach((card, idx) => {
+          card.classList.remove('center-card', 'left-card', 'right-card', 'hidden-card');
+          if (idx === currentIndex) {
+            card.classList.add('center-card');
+          } else if (idx === (currentIndex - 1 + allCards.length) % allCards.length) {
+            card.classList.add('left-card');
+          } else if (idx === (currentIndex + 1) % allCards.length) {
+            card.classList.add('right-card');
+          } else if (idx === (currentIndex - 2 + allCards.length) % allCards.length) {
+            card.classList.add('left-card');
+          } else if (idx === (currentIndex + 2) % allCards.length) {
+            card.classList.add('right-card');
+          } else {
+            card.classList.add('hidden-card');
           }
-        }
-      });
-      
-      // Autoplay
+        });
+        setTimeout(() => { isTransitioning = false; }, 300);
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          if (isTransitioning) return;
+          currentIndex = (currentIndex - 1 + allCards.length) % allCards.length;
+          updateCarousel();
+          resetAutoplay();
+        });
+      }
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          if (isTransitioning) return;
+          currentIndex = (currentIndex + 1) % allCards.length;
+          updateCarousel();
+          resetAutoplay();
+        });
+      }
+
       function startAutoplay() {
         autoplayInterval = setInterval(() => {
           if (!isTransitioning) {
-            currentIndex = (currentIndex + 1) % totalCards;
+            currentIndex = (currentIndex + 1) % allCards.length;
             updateCarousel();
           }
-        }, 5000); // Cambia cada 5 segundos
+        }, 3000);
       }
-      
+
       function stopAutoplay() {
         clearInterval(autoplayInterval);
       }
-      
+
       function resetAutoplay() {
         stopAutoplay();
-        setTimeout(startAutoplay, 3000);
+        startAutoplay();
       }
-      
-      // Pause en hover
+
       container.addEventListener('mouseenter', stopAutoplay);
       container.addEventListener('mouseleave', startAutoplay);
-      
-      // Navegación táctil/swipe para móviles
-      let startX = 0;
-      let currentX = 0;
-      
-      container.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
-        stopAutoplay();
-      });
-      
-      container.addEventListener('touchmove', (e) => {
-        currentX = e.touches[0].clientX;
-      });
-      
-      container.addEventListener('touchend', (e) => {
-        const diffX = startX - currentX;
-        if (Math.abs(diffX) > 50) { // Umbral de swipe
-          if (diffX > 0 && !isTransitioning) {
-            currentIndex = (currentIndex + 1) % totalCards;
-          } else if (diffX < 0 && !isTransitioning) {
-            currentIndex = (currentIndex - 1 + totalCards) % totalCards;
-          }
-          updateCarousel();
-        }
-        startAutoplay();
-      });
-      
-      // Inicializar
+
       updateCarousel();
       startAutoplay();
-      
-      // Recalcular en resize
-      window.addEventListener('resize', () => {
-        if (!isTransitioning) {
-          updateCarouselPosition();
-        }
-      });
     }
-    
-    // Inicializar carruseles cuando el DOM esté listo
+
     document.addEventListener('DOMContentLoaded', () => {
-      initKafuCarousel({ trackId: 'discography-track' });
-      initKafuCarousel({ trackId: 'videos-track' });
+      initInfiniteCarousel({ trackId: 'discography-track' });
+      initInfiniteCarousel({ trackId: 'videos-track' });
     });
   </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.css">
 </body>
 </html>
