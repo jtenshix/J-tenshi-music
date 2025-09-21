@@ -416,154 +416,141 @@
       padding: 5px 10px;
     }
     
-    /* === VIDEOS - PROPORCIÓN 19:9 EXACTA === */
-    .videos-grid {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 30px;
-      max-width: 1800px;
-      margin: 60px auto;
-      padding: 0 80px;
-      height: 450px;
-      overflow: hidden;
-      position: relative;
-    }
-    
-    .video-card {
-      width: 400px;
-      aspect-ratio: 6 / 19; /* ← Esto reemplaza al height */
-      background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-      border-radius: 24px;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: #fff;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: 2px solid rgba(224, 194, 123, 0.2);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-      overflow: hidden;
-      z-index: 1;
-    }
-    
-    /* Tarjeta de video del medio MÁS GRANDE (19:9 escalado) */
-    .video-card.center {
-      width: 500px;
-      aspect-ratio: 6 / 19; /* ← Esto reemplaza al height */
-      transform: scale(1.1);
-      z-index: 3;
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-      border: 2px solid rgba(224, 194, 123, 0.4);
-    }
-    
-    .video-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 25px 60px rgba(224, 194, 123, 0.2);
-      border-color: #e0c27b;
-      z-index: 4;
-    }
-    
-    .video-card.center:hover {
-      transform: translateY(-8px) scale(1.08);
-    }
-    
-    .video-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(224, 194, 123, 0.1), transparent);
-      transition: left 0.6s;
-    }
-    
-    .video-card:hover::before {
-      left: 100%;
-    }
-    
-    .video-content {
-      position: relative;
-      z-index: 2;
-      padding: 30px;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .video-card h4 {
-      font-size: 20px;
-      margin-bottom: 12px;
-      color: #e0c27b;
-      font-weight: 900;
-      line-height: 1.2;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    }
-    
-    .video-card.center h4 {
-      font-size: 28px;
-      margin-bottom: 16px;
-    }
-    
-    .video-card .label {
-      font-size: 12px;
-      color: #fff;
-      background: rgba(224, 194, 123, 0.2);
-      border: 1px solid #e0c27b;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-weight: 600;
-    }
-    
-    .video-card.center .label {
-      font-size: 14px;
-      padding: 8px 16px;
-    }
-    
-    .video-card .play-btn {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 60px;
-      height: 60px;
-      background: rgba(224, 194, 123, 0.9);
-      border: none;
-      border-radius: 50%;
-      color: #000;
-      font-size: 20px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      opacity: 0.8;
-      z-index: 3;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    }
-    
-    .video-card.center .play-btn {
-      width: 80px;
-      height: 80px;
-      font-size: 28px;
-    }
-    
-    .video-card:hover .play-btn {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1.1);
-      background: #e0c27b;
-    }
-    
-    .play-btn:hover {
-      transform: translate(-50%, -50%) scale(1.2);
-    }
+    /* === VIDEOS - PROPORCIÓN 16:9 === */
+.videos-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  max-width: 1800px;
+  margin: 60px auto;
+  padding: 0 80px;
+  height: auto; /* Eliminamos la altura fija */
+  overflow: hidden;
+  position: relative;
+}
+
+.video-card {
+  width: 400px;
+  aspect-ratio: 16 / 9; /* Relación de aspecto 16:9 */
+  background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+  border-radius: 12px; /* Esquinas menos redondeadas */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(224, 194, 123, 0.2);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Tarjeta de video del medio MÁS GRANDE */
+.video-card.center {
+  width: 500px;
+  aspect-ratio: 16 / 9; /* Relación de aspecto 16:9 */
+  transform: scale(1.1);
+  z-index: 3;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(224, 194, 123, 0.4);
+}
+
+.video-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 60px rgba(224, 194, 123, 0.2);
+  border-color: #e0c27b;
+  z-index: 4;
+}
+
+.video-card.center:hover {
+  transform: translateY(-8px) scale(1.08);
+}
+
+.video-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 20px;
+}
+
+.video-card h4 {
+  font-size: 18px;
+  margin-bottom: 12px;
+  color: #fff;
+  font-weight: 700;
+  line-height: 1.2;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  align-self: flex-start;
+}
+
+.video-card.center h4 {
+  font-size: 22px;
+}
+
+.video-card .label {
+  font-size: 12px;
+  color: #fff;
+  background: rgba(224, 194, 123, 0.2);
+  border: 1px solid #e0c27b;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  align-self: flex-start;
+}
+
+.video-card.center .label {
+  font-size: 14px;
+  padding: 8px 16px;
+}
+
+.video-card .play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: rgba(224, 194, 123, 0.9);
+  border: none;
+  border-radius: 50%;
+  color: #000;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.8;
+  z-index: 3;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.video-card.center .play-btn {
+  width: 80px;
+  height: 80px;
+  font-size: 28px;
+}
+
+.video-card:hover .play-btn {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.1);
+  background: #e0c27b;
+}
+
+.play-btn:hover {
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
     
     /* === RESPONSIVE - MANTIENE 19:9 === */
     @media (max-width: 1400px) {
