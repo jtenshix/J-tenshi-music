@@ -416,23 +416,23 @@
       padding: 5px 10px;
     }
     
-    /* === VIDEOS - 5 TARJETAS CON LA DEL MEDIO MÁS GRANDE === */
+    /* === VIDEOS - 5 TARJETAS CON PROPORCIÓN 16:9 COMO YOUTUBE === */
     .videos-grid {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 30px;
-      max-width: 1400px;
+      max-width: 1600px;
       margin: 60px auto;
       padding: 0 60px;
-      height: 500px;
+      height: 420px;
       overflow: hidden;
       position: relative;
     }
     
     .video-card {
-      width: 300px;
-      height: 400px;
+      width: 560px;
+      height: 315px; /* Proporción 16:9 exacta */
       background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
       border-radius: 24px;
       position: relative;
@@ -450,10 +450,10 @@
       z-index: 1;
     }
     
-    /* Tarjeta de video del medio más grande */
+    /* Tarjeta de video del medio más grande (16:9 escalado) */
     .video-card.center {
-      width: 400px;
-      height: 500px;
+      width: 720px;
+      height: 405px; /* Mantiene proporción 16:9 */
       transform: scale(1.1);
       z-index: 3;
       box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
@@ -566,6 +566,22 @@
     }
     
     /* === RESPONSIVE === */
+    @media (max-width: 1400px) {
+      .videos-grid {
+        padding: 0 40px;
+      }
+      
+      .video-card {
+        width: 480px;
+        height: 270px; /* 16:9 */
+      }
+      
+      .video-card.center {
+        width: 600px;
+        height: 337.5px; /* 16:9 */
+      }
+    }
+    
     @media (max-width: 1200px) {
       .discography-grid {
         padding: 0 20px;
@@ -576,13 +592,13 @@
       }
       
       .video-card {
-        width: 250px;
-        height: 350px;
+        width: 400px;
+        height: 225px; /* 16:9 */
       }
       
       .video-card.center {
-        width: 320px;
-        height: 420px;
+        width: 500px;
+        height: 281.25px; /* 16:9 */
       }
     }
     
@@ -616,17 +632,17 @@
       .videos-grid {
         gap: 20px;
         padding: 0 40px;
-        height: 400px;
+        height: 350px;
       }
       
       .video-card {
-        width: 200px;
-        height: 280px;
+        width: 320px;
+        height: 180px; /* 16:9 */
       }
       
       .video-card.center {
-        width: 260px;
-        height: 350px;
+        width: 400px;
+        height: 225px; /* 16:9 */
       }
       
       .video-card h4 {
@@ -665,13 +681,14 @@
       }
       
       .video-card {
-        width: 300px;
-        height: 200px;
+        width: 100%;
+        max-width: 300px;
+        height: 169px; /* 16:9 */
       }
       
       .video-card.center {
-        width: 340px;
-        height: 240px;
+        max-width: 340px;
+        height: 191px; /* 16:9 */
       }
       
       .video-card h4 {
