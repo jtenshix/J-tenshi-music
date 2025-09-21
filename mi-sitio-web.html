@@ -416,23 +416,23 @@
       padding: 5px 10px;
     }
     
-    /* === VIDEOS - 5 TARJETAS CON PROPORCIÓN 16:9 COMO YOUTUBE === */
+    /* === VIDEOS - TAMAÑO EXACTO DE YOUTUBE EMBEDDED === */
     .videos-grid {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 30px;
-      max-width: 1600px;
+      max-width: 2000px;
       margin: 60px auto;
-      padding: 0 60px;
-      height: 420px;
+      padding: 0 100px;
+      height: 350px;
       overflow: hidden;
       position: relative;
     }
     
     .video-card {
-      width: 560px;
-      height: 315px; /* Proporción 16:9 exacta */
+      width: 560px; /* ANCHO EXACTO DE YOUTUBE EMBED */
+      height: 315px; /* ALTURA EXACTA DE YOUTUBE EMBED (16:9) */
       background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
       border-radius: 24px;
       position: relative;
@@ -450,9 +450,9 @@
       z-index: 1;
     }
     
-    /* Tarjeta de video del medio más grande (16:9 escalado) */
+    /* Tarjeta de video del medio MÁS GRANDE */
     .video-card.center {
-      width: 720px;
+      width: 720px; /* Más grande que YouTube estándar */
       height: 405px; /* Mantiene proporción 16:9 */
       transform: scale(1.1);
       z-index: 3;
@@ -568,7 +568,7 @@
     /* === RESPONSIVE === */
     @media (max-width: 1400px) {
       .videos-grid {
-        padding: 0 40px;
+        padding: 0 60px;
       }
       
       .video-card {
@@ -578,7 +578,7 @@
       
       .video-card.center {
         width: 600px;
-        height: 337.5px; /* 16:9 */
+        height: 337px; /* 16:9 */
       }
     }
     
@@ -588,7 +588,7 @@
       }
       
       .videos-grid {
-        padding: 0 30px;
+        padding: 0 40px;
       }
       
       .video-card {
@@ -598,7 +598,7 @@
       
       .video-card.center {
         width: 500px;
-        height: 281.25px; /* 16:9 */
+        height: 281px; /* 16:9 */
       }
     }
     
@@ -631,8 +631,8 @@
       
       .videos-grid {
         gap: 20px;
-        padding: 0 40px;
-        height: 350px;
+        padding: 0 30px;
+        height: 280px;
       }
       
       .video-card {
@@ -884,7 +884,7 @@
         </button>
       </div>
       
-      <!-- Video 3 - CENTRO (MÁS GRANDE) -->
+      <!-- Video 3 - CENTRO (MÁS GRANDE - TAMAÑO YOUTUBE MAX) -->
       <div class="video-card center">
         <div class="video-content">
           <h4>光 (Hikari)</h4>
