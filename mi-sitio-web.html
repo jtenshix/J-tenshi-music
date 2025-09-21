@@ -259,7 +259,6 @@
       text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
       user-select: none;
     }
-    /* Asegúrate de que el contenedor del carrusel ocupe el ancho completo y esté centrado */
     .carousel-container {
       position: relative;
       width: 100%;
@@ -268,21 +267,19 @@
       padding: 40px 0;
       overflow: hidden;
     }
-    /* La pista del carrusel debe tener un ancho definido y estar centrada */
     .carousel-track {
       display: flex;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       gap: var(--card-gap);
       width: 100%;
-      margin: 0 auto;
       transition: transform 0.5s ease-in-out;
     }
-    /* Asegúrate de que las tarjetas no se salgan del contenedor */
     .media-card {
       flex-shrink: 0;
       margin: 0 10px;
       transition: transform 0.3s ease, opacity 0.3s ease, filter 0.5s ease;
+      width: var(--card-width);
     }
     .carousel-btn {
       position: absolute;
@@ -311,17 +308,14 @@
       background: #222;
       border-radius: 14px;
       padding: 10px;
-      width: 300px;
       height: 300px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      flex-shrink: 0;
-      transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.5s ease;
-      filter: grayscale(100%);
       cursor: pointer;
+      filter: grayscale(100%);
     }
     .media-card:hover {
       filter: grayscale(0%);
@@ -456,7 +450,6 @@
       align-items: center;
       margin-top: -70px;
     }
-    /* Estilos para las tarjetas de colores */
     .color-card {
       width: 100%;
       height: 250px;
@@ -669,20 +662,15 @@
       const nextBtn = container.querySelector('.carousel-btn.next');
       const cards = Array.from(track.children);
       const totalCards = cards.length;
-      let currentIndex = 2; // Empezar en la tercera tarjeta (centro)
+      let currentIndex = 1; // Empezar en la segunda tarjeta (la primera visible real)
       let autoplayInterval;
       let isTransitioning = false;
 
-      // Clonar las primeras y últimas tarjetas para simular un loop infinito
+      // Clonar solo la primera y última tarjeta para el efecto infinito
       const firstClone = cards[0].cloneNode(true);
-      const secondClone = cards[1].cloneNode(true);
       const lastClone = cards[totalCards - 1].cloneNode(true);
-      const secondLastClone = cards[totalCards - 2].cloneNode(true);
-
-      track.insertBefore(secondLastClone, track.firstChild);
       track.insertBefore(lastClone, track.firstChild);
       track.appendChild(firstClone);
-      track.appendChild(secondClone);
 
       const allCards = Array.from(track.children);
 
@@ -695,10 +683,6 @@
           } else if (idx === (currentIndex - 1 + allCards.length) % allCards.length) {
             card.classList.add('left-card');
           } else if (idx === (currentIndex + 1) % allCards.length) {
-            card.classList.add('right-card');
-          } else if (idx === (currentIndex - 2 + allCards.length) % allCards.length) {
-            card.classList.add('left-card');
-          } else if (idx === (currentIndex + 2) % allCards.length) {
             card.classList.add('right-card');
           } else {
             card.classList.add('hidden-card');
@@ -745,6 +729,7 @@
       container.addEventListener('mouseenter', stopAutoplay);
       container.addEventListener('mouseleave', startAutoplay);
 
+      // Posicionar el carrusel al inicio (sin mostrar clones)
       updateCarousel();
       startAutoplay();
     }
