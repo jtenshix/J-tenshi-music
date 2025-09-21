@@ -480,6 +480,25 @@
   opacity: 0;
   z-index: 1;
 }
+    /* --- AJUSTE NUEVO PARA CENTRAR EL CARRUSEL --- */
+.carousel-track {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--card-gap);
+  width: 100%;
+}
+
+.carousel-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.discography .media-card {
+  margin: 0 auto;
+}
+
 
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -754,7 +773,102 @@
       });
     });
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js"></script>
+  <script>
+  function toggleTheme() {
+    document.body.classList.toggle('light-mode');
+    localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+  }
+  if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light-mode');
+  }
+
+  // Función para inicializar el carrusel con rotación circular infinita
+  function initInfiniteCarousel(options) {
+    const track = document.getElementById(options.trackId);
+    if (!track) return;
+    const container = track.parentElement;
+    const prevBtn = container.querySelector('.carousel-btn.prev');
+    const nextBtn = container.querySelector('.carousel-btn.next');
+    const cards = Array.from(track.children);
+    const totalCards = cards.length;
+    let currentIndex = Math.floor(totalCards / 2); 
+    let autoplayInterval;
+    let isTransitioning = false; // 🔹 Variable agregada
+
+    // Clonar las primeras y últimas tarjetas para simular un loop infinito
+    const firstClone = cards[0].cloneNode(true);
+    const lastClone = cards[totalCards - 1].cloneNode(true);
+    track.insertBefore(lastClone, track.firstChild);
+    track.appendChild(firstClone);
+    const allCards = Array.from(track.children);
+
+    currentIndex = 1; // Empezar en la primera tarjeta original
+
+    function updateCarousel() {
+      isTransitioning = true;
+      allCards.forEach((card, idx) => {
+        card.classList.remove('center-card', 'left-card', 'right-card', 'hidden-card');
+        if (idx === currentIndex) {
+          card.classList.add('center-card');
+        } else if (idx === (currentIndex - 1 + allCards.length) % allCards.length) {
+          card.classList.add('left-card');
+        } else if (idx === (currentIndex + 1) % allCards.length) {
+          card.classList.add('right-card');
+        } else {
+          card.classList.add('hidden-card');
+        }
+      });
+      setTimeout(() => { isTransitioning = false; }, 300); // 🔹 Fin de transición
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        if (isTransitioning) return;
+        currentIndex = (currentIndex - 1 + allCards.length) % allCards.length;
+        updateCarousel();
+        resetAutoplay();
+      });
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        if (isTransitioning) return;
+        currentIndex = (currentIndex + 1) % allCards.length;
+        updateCarousel();
+        resetAutoplay();
+      });
+    }
+
+    function startAutoplay() {
+      autoplayInterval = setInterval(() => {
+        if (!isTransitioning) {
+          currentIndex = (currentIndex + 1) % allCards.length;
+          updateCarousel();
+        }
+      }, 3000);
+    }
+
+    function stopAutoplay() {
+      clearInterval(autoplayInterval);
+    }
+
+    function resetAutoplay() {
+      stopAutoplay();
+      startAutoplay();
+    }
+
+    container.addEventListener('mouseenter', stopAutoplay);
+    container.addEventListener('mouseleave', startAutoplay);
+
+    updateCarousel();
+    startAutoplay();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initInfiniteCarousel({ trackId: 'discography-track' });
+    initInfiniteCarousel({ trackId: 'videos-track' });
+  });
+</script>
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.css">
 </body>
 </html>
