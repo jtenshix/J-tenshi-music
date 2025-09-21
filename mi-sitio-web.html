@@ -12,9 +12,10 @@
     }
     
     :root {
-      --card-width: 320px;
-      --card-gap: 30px;
-      --main-card-scale: 1.3;
+      --card-width: 400px;
+      --card-height: 240px;
+      --card-gap: 40px;
+      --main-card-scale: 1.0;
     }
     
     body {
@@ -295,141 +296,199 @@
       user-select: none;
     }
     
-    /* Contenedor del carrusel - centrado y con control de ancho */
+    /* === CARRUSEL TIPO KAFU - UNA TARJETA CENTRADA === */
     .carousel-container {
       position: relative;
       width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 40px 20px;
+      max-width: 1000px;
+      margin: 60px auto;
+      padding: 0 20px;
       overflow: hidden;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
     }
     
-    /* Track del carrusel - ancho calculado dinámicamente */
     .carousel-track {
       display: flex;
       align-items: center;
-      gap: 0;
-      width: fit-content;
-      margin: 0 auto;
-      transition: transform 0.5s ease-in-out;
-      transform: translateX(0);
+      gap: var(--card-gap);
+      height: var(--card-height);
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform;
     }
     
-    /* Tarjeta principal del carrusel */
     .media-card {
       flex-shrink: 0;
       width: var(--card-width);
-      height: 300px;
-      margin: 0 calc(var(--card-gap) / 2);
-      background: #222;
-      border-radius: 14px;
-      padding: 10px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+      height: var(--card-height);
+      background: #1a1a1a;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      transition: all 0.3s ease;
-      filter: grayscale(100%);
+      justify-content: center;
+      text-align: center;
+      color: #fff;
+      font-weight: 600;
       cursor: pointer;
       position: relative;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      overflow: hidden;
     }
     
-    /* Contenido de la tarjeta */
-    .media-card img,
-    .color-card {
+    .media-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
       width: 100%;
       height: 100%;
-      border-radius: 8px;
-      object-fit: cover;
-      margin-bottom: 8px;
+      background: linear-gradient(90deg, transparent, rgba(224, 194, 123, 0.1), transparent);
+      transition: left 0.5s;
+    }
+    
+    .media-card:hover::before {
+      left: 100%;
+    }
+    
+    .media-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 48px rgba(224, 194, 123, 0.2);
+      border-color: #e0c27b;
     }
     
     .media-card h4 {
-      font-size: 16px;
-      text-align: center;
-      margin-bottom: 6px;
-      width: 100%;
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: #e0c27b;
+      font-weight: 700;
+      line-height: 1.3;
+      max-width: 90%;
     }
     
     .media-card .label {
-      font-size: 11px;
-      color: #e0c27b;
-      border: 1px solid #e0c27b;
-      padding: 2px 6px;
-      border-radius: 999px;
-      width: fit-content;
-      margin: 10px auto 0;
-      display: block;
+      font-size: 12px;
+      color: #888;
+      border: 1px solid #555;
+      padding: 4px 8px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.3);
     }
     
-    /* Estados de las tarjetas */
-    .media-card.center-card {
-      filter: grayscale(0%);
-      transform: scale(var(--main-card-scale));
-      z-index: 5;
-      margin: 0 calc((var(--card-gap) * var(--main-card-scale)) / 2);
-    }
-    
-    .media-card.left-card,
-    .media-card.right-card {
-      transform: scale(0.8);
-      opacity: 0.6;
+    .media-card .play-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      background: rgba(224, 194, 123, 0.9);
+      border: none;
+      border-radius: 50%;
+      color: #000;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      opacity: 0;
       z-index: 2;
-      filter: grayscale(50%);
     }
     
-    .media-card.hidden-card {
-      transform: scale(0.6);
-      opacity: 0.2;
-      z-index: 1;
-      visibility: hidden;
+    .media-card:hover .play-btn {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.1);
     }
     
-    /* Botones del carrusel posicionados correctamente */
+    .play-btn:hover {
+      background: #e0c27b;
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+    
+    /* === ESTADOS DEL CARRUSEL === */
+    .carousel-track {
+      transform: translateX(0);
+    }
+    
+    /* Solo la tarjeta central es visible */
+    .carousel-container {
+      mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        black 10%,
+        black 90%,
+        transparent 100%
+      );
+      -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        black 10%,
+        black 90%,
+        transparent 100%
+      );
+    }
+    
+    /* Botones del carrusel */
     .carousel-btn {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background: rgba(0, 0, 0, 0.7);
-      border: none;
+      background: rgba(26, 26, 26, 0.8);
+      border: 1px solid #555;
       color: #e0c27b;
-      font-size: 1.5rem;
+      font-size: 18px;
       cursor: pointer;
       z-index: 10;
       padding: 12px 16px;
       border-radius: 50%;
-      transition: all 0.3s;
-      width: 50px;
-      height: 50px;
+      transition: all 0.3s ease;
+      width: 48px;
+      height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
+      backdrop-filter: blur(10px);
     }
     
     .carousel-btn:hover {
-      background: rgba(224, 194, 123, 0.9);
-      color: #000;
+      background: rgba(224, 194, 123, 0.2);
+      border-color: #e0c27b;
+      color: #fff;
       transform: translateY(-50%) scale(1.1);
     }
     
     .carousel-btn.prev {
-      left: 20px;
+      left: 10px;
     }
     
     .carousel-btn.next {
-      right: 20px;
+      right: 10px;
     }
     
-    /* Estilos para las tarjetas de colores */
+    /* === ESPECÍFICO PARA VIDEOS === */
+    .videos .carousel-container {
+      max-width: 800px;
+    }
+    
+    .videos .media-card h4 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    
+    .videos .media-card .label {
+      font-size: 11px;
+    }
+    
+    /* === TARJETAS DE COLOR === */
     .color-card {
       width: 100%;
-      height: 250px;
-      border-radius: 8px;
+      height: 100%;
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -437,54 +496,43 @@
       color: white;
       font-weight: bold;
       text-align: center;
-      padding: 10px;
+      padding: 20px;
       box-sizing: border-box;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-    
-    .color-card:hover {
-      transform: scale(1.05);
-    }
-    
-    .color-card.discography {
-      height: 300px;
-    }
-    
-    .color-card.videos {
-      height: 200px;
-    }
-    
-    /* Ajustes específicos para videos */
-    .videos .carousel-container {
-      max-width: 1000px;
-      padding: 40px 20px;
-    }
-    
-    .videos .media-card {
-      width: 350px;
-      height: 250px;
-    }
-    
-    .videos .media-card.center-card {
-      transform: scale(1.2);
-    }
-    
-    .videos .color-card.videos {
-      height: 100%;
-    }
-    
-    .videos .media-card h4 {
-      font-size: 18px;
-      text-align: center;
-      margin-bottom: 6px;
-      white-space: nowrap;
+      position: relative;
       overflow: hidden;
-      text-overflow: ellipsis;
     }
     
-    /* Responsive */
+    .color-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: inherit;
+      filter: brightness(0.8);
+      z-index: -1;
+    }
+    
+    .color-card h4 {
+      position: relative;
+      z-index: 2;
+      font-size: inherit;
+    }
+    
+    .color-card .label {
+      position: relative;
+      z-index: 2;
+    }
+    
+    /* === RESPONSIVE === */
     @media (max-width: 900px) {
+      :root {
+        --card-width: 320px;
+        --card-height: 200px;
+        --card-gap: 30px;
+      }
+      
       .schedule-grid {
         grid-template-columns: 1fr;
         grid-template-rows: auto;
@@ -496,49 +544,44 @@
         font-size: 2rem;
       }
       
-      :root {
-        --card-width: 280px;
-      }
-      
       .carousel-container {
-        padding: 30px 15px;
+        padding: 0 15px;
+        margin: 40px auto;
       }
       
-      .videos .media-card {
-        width: 250px;
+      .videos .carousel-container {
+        max-width: 600px;
       }
       
       .carousel-btn {
         width: 40px;
         height: 40px;
-        font-size: 1.2rem;
+        font-size: 16px;
         padding: 8px;
-      }
-      
-      .carousel-btn.prev {
-        left: 10px;
-      }
-      
-      .carousel-btn.next {
-        right: 10px;
       }
     }
     
     @media (max-width: 600px) {
       :root {
-        --card-width: 240px;
-      }
-      
-      .videos .media-card {
-        width: 200px;
-      }
-      
-      .media-card.center-card {
-        transform: scale(1.1);
+        --card-width: 280px;
+        --card-height: 180px;
+        --card-gap: 20px;
       }
       
       .carousel-container {
-        padding: 20px 10px;
+        padding: 0 10px;
+      }
+      
+      .videos .carousel-container {
+        max-width: 500px;
+      }
+      
+      .media-card h4 {
+        font-size: 16px;
+      }
+      
+      .media-card .label {
+        font-size: 10px;
       }
     }
     
@@ -697,36 +740,51 @@
   <section class="discography" id="discography">
     <div class="carousel-container" aria-label="Discography carousel">
       <div class="carousel-track" id="discography-track">
-        <!-- Tarjetas de colores para discografía -->
+        <!-- Tarjetas de discografía -->
         <div class="media-card">
           <div class="color-card discography" style="background: linear-gradient(135deg, #FF6B6B, #FF8E8E);">
             <h4>Álbum Rojo</h4>
             <span class="label">Single</span>
           </div>
+          <button class="play-btn" title="Play">
+            <i class="fas fa-play"></i>
+          </button>
         </div>
         <div class="media-card">
           <div class="color-card discography" style="background: linear-gradient(135deg, #4ECDC4, #A1FFE6);">
             <h4>Álbum Verde</h4>
             <span class="label">EP</span>
           </div>
+          <button class="play-btn" title="Play">
+            <i class="fas fa-play"></i>
+          </button>
         </div>
         <div class="media-card">
           <div class="color-card discography" style="background: linear-gradient(135deg, #45B7D1, #B3E5FC);">
             <h4>Álbum Azul</h4>
             <span class="label">Álbum</span>
           </div>
+          <button class="play-btn" title="Play">
+            <i class="fas fa-play"></i>
+          </button>
         </div>
         <div class="media-card">
           <div class="color-card discography" style="background: linear-gradient(135deg, #FFA07A, #FFDAB9);">
             <h4>Álbum Naranja</h4>
             <span class="label">Single</span>
           </div>
+          <button class="play-btn" title="Play">
+            <i class="fas fa-play"></i>
+          </button>
         </div>
         <div class="media-card">
           <div class="color-card discography" style="background: linear-gradient(135deg, #E91E63, #F8BBD9);">
             <h4>Álbum Rosa</h4>
             <span class="label">EP</span>
           </div>
+          <button class="play-btn" title="Play">
+            <i class="fas fa-play"></i>
+          </button>
         </div>
       </div>
       <button class="carousel-btn prev" aria-label="Anterior">‹</button>
@@ -738,24 +796,69 @@
   <section class="videos" id="videos">
     <div class="carousel-container" aria-label="Videos carousel">
       <div class="carousel-track" id="videos-track">
-        <!-- Tarjetas de colores para videos -->
+        <!-- Tarjetas de videos - inspiradas en Kafu -->
         <div class="media-card">
           <div class="color-card videos" style="background: linear-gradient(135deg, #9C27B0, #E1BEE7);">
-            <h4>Concierto en Tokio</h4>
-            <span class="label">LIVE</span>
+            <h4>光 (Hikari)</h4>
+            <span class="label">MV</span>
           </div>
+          <button class="play-btn" title="Play">
+            <i class="fas fa-play"></i>
+          </button>
         </div>
         <div class="media-card">
           <div class="color-card videos" style="background: linear-gradient(135deg, #673AB7, #D1C4E9);">
-            <h4>Behind the Scenes</h4>
-            <span class="label">BTS</span>
+            <h4>糸 (Ito)</h4>
+            <span class="label">LIVE</span>
           </div>
+          <button class="play-btn" title="Play">
+            <i class="fas fa-play"></i>
+          </button>
         </div>
         <div class="media-card">
           <div class="color-card videos" style="background: linear-gradient(135deg, #3F51B5, #C5CAE9);">
-            <h4>Nuevo MV</h4>
+            <h4>心臓と絡繰</h4>
             <span class="label">MV</span>
           </div>
+          <button class="play-btn" title="Play">
+            <i class="fas fa-play"></i>
+          </button>
+        </div>
+        <div class="media-card">
+          <div class="color-card videos" style="background: linear-gradient(135deg, #FF9800, #FFE0B2);">
+            <h4>魔女 (Majo)</h4>
+            <span class="label">LIVE</span>
+          </div>
+          <button class="play-btn" title="Play">
+            <i class="fas fa-play"></i>
+          </button>
+        </div>
+        <div class="media-card">
+          <div class="color-card videos" style="background: linear-gradient(135deg, #F44336, #FFCDD2);">
+            <h4>忘れてしまえ</h4>
+            <span class="label">MV</span>
+          </div>
+          <button class="play-btn" title="Play">
+            <i class="fas fa-play"></i>
+          </button>
+        </div>
+        <div class="media-card">
+          <div class="color-card videos" style="background: linear-gradient(135deg, #4CAF50, #C8E6C9);">
+            <h4>雛鳥 (Hinadori)</h4>
+            <span class="label">LIVE</span>
+          </div>
+          <button class="play-btn" title="Play">
+            <i class="fas fa-play"></i>
+          </button>
+        </div>
+        <div class="media-card">
+          <div class="color-card videos" style="background: linear-gradient(135deg, #2196F3, #BBDEFB);">
+            <h4>過去を喰らう</h4>
+            <span class="label">MV</span>
+          </div>
+          <button class="play-btn" title="Play">
+            <i class="fas fa-play"></i>
+          </button>
         </div>
       </div>
       <button class="carousel-btn prev" aria-label="Anterior">‹</button>
@@ -778,8 +881,8 @@
       document.body.classList.add('light-mode');
     }
     
-    // Función para inicializar el carrusel con rotación circular infinita
-    function initInfiniteCarousel(options) {
+    // === CARRUSEL TIPO KAFU - UNA TARJETA CENTRADA ===
+    function initKafuCarousel(options) {
       const track = document.getElementById(options.trackId);
       if (!track) return;
       
@@ -789,96 +892,79 @@
       const cards = Array.from(track.children);
       const totalCards = cards.length;
       
-      let currentIndex = Math.floor(totalCards / 2);
+      let currentIndex = 0;
       let autoplayInterval;
       let isTransitioning = false;
       
-      // Clonar las primeras y últimas tarjetas para simular un loop infinito
-      const firstClone = cards[0].cloneNode(true);
-      const lastClone = cards[totalCards - 1].cloneNode(true);
-      
-      track.insertBefore(lastClone, track.firstChild);
-      track.appendChild(firstClone);
-      
-      const allCards = Array.from(track.children);
-      currentIndex = 1; // Empezar en la primera tarjeta original
-      
-      // Función para actualizar la posición del track
-      function updateTrackPosition() {
+      // Calcular el ancho total de una tarjeta + gap
+      function getCardTotalWidth() {
         const cardWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width'));
         const cardGap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-gap'));
-        const mainScale = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--main-card-scale'));
-        
-        // Calcular el ancho total de una tarjeta con margen
-        const cardTotalWidth = cardWidth + cardGap;
-        
-        // Posición del track para centrar la tarjeta actual
-        const trackOffset = -(currentIndex * cardTotalWidth) + (container.offsetWidth / 2) - (cardWidth * mainScale / 2);
-        
-        track.style.transform = `translateX(${trackOffset}px)`;
+        return cardWidth + cardGap;
       }
       
+      // Actualizar posición del carrusel
+      function updateCarouselPosition() {
+        const cardTotalWidth = getCardTotalWidth();
+        const translateX = -(currentIndex * cardTotalWidth);
+        track.style.transform = `translateX(${translateX}px)`;
+      }
+      
+      // Función principal de actualización
       function updateCarousel() {
+        if (isTransitioning) return;
         isTransitioning = true;
         
-        // Limpiar clases anteriores
-        allCards.forEach((card) => {
-          card.classList.remove('center-card', 'left-card', 'right-card', 'hidden-card');
-        });
+        updateCarouselPosition();
         
-        // Aplicar clases según la posición
-        const centerIdx = currentIndex;
-        const leftIdx = (currentIndex - 1 + allCards.length) % allCards.length;
-        const rightIdx = (currentIndex + 1) % allCards.length;
-        
-        allCards[centerIdx].classList.add('center-card');
-        allCards[leftIdx].classList.add('left-card');
-        allCards[rightIdx].classList.add('right-card');
-        
-        // Las demás tarjetas se ocultan por defecto
-        for (let i = 0; i < allCards.length; i++) {
-          if (i !== centerIdx && i !== leftIdx && i !== rightIdx) {
-            allCards[i].classList.add('hidden-card');
-          }
-        }
-        
-        // Actualizar posición del track
-        setTimeout(updateTrackPosition, 10);
-        
-        setTimeout(() => { 
-          isTransitioning = false; 
-        }, 500);
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 600);
       }
       
-      // Event listeners para los botones
+      // Navegación anterior
       if (prevBtn) {
         prevBtn.addEventListener('click', (e) => {
           e.preventDefault();
           if (isTransitioning) return;
-          currentIndex = (currentIndex - 1 + allCards.length) % allCards.length;
+          currentIndex = (currentIndex - 1 + totalCards) % totalCards;
           updateCarousel();
           resetAutoplay();
         });
       }
       
+      // Navegación siguiente
       if (nextBtn) {
         nextBtn.addEventListener('click', (e) => {
           e.preventDefault();
           if (isTransitioning) return;
-          currentIndex = (currentIndex + 1) % allCards.length;
+          currentIndex = (currentIndex + 1) % totalCards;
           updateCarousel();
           resetAutoplay();
         });
       }
+      
+      // Navegación con teclado
+      document.addEventListener('keydown', (e) => {
+        if (container.contains(document.activeElement)) {
+          if (e.key === 'ArrowLeft' && !isTransitioning) {
+            currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+            updateCarousel();
+          } else if (e.key === 'ArrowRight' && !isTransitioning) {
+            currentIndex = (currentIndex + 1) % totalCards;
+            updateCarousel();
+          }
+        }
+      });
       
       // Autoplay
       function startAutoplay() {
         autoplayInterval = setInterval(() => {
           if (!isTransitioning) {
-            currentIndex = (currentIndex + 1) % allCards.length;
+            currentIndex = (currentIndex + 1) % totalCards;
             updateCarousel();
           }
-        }, 4000);
+        }, 5000); // Cambia cada 5 segundos
       }
       
       function stopAutoplay() {
@@ -890,25 +976,52 @@
         setTimeout(startAutoplay, 3000);
       }
       
-      // Eventos de hover
+      // Pause en hover
       container.addEventListener('mouseenter', stopAutoplay);
       container.addEventListener('mouseleave', startAutoplay);
+      
+      // Navegación táctil/swipe para móviles
+      let startX = 0;
+      let currentX = 0;
+      
+      container.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        stopAutoplay();
+      });
+      
+      container.addEventListener('touchmove', (e) => {
+        currentX = e.touches[0].clientX;
+      });
+      
+      container.addEventListener('touchend', (e) => {
+        const diffX = startX - currentX;
+        if (Math.abs(diffX) > 50) { // Umbral de swipe
+          if (diffX > 0 && !isTransitioning) {
+            currentIndex = (currentIndex + 1) % totalCards;
+          } else if (diffX < 0 && !isTransitioning) {
+            currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+          }
+          updateCarousel();
+        }
+        startAutoplay();
+      });
       
       // Inicializar
       updateCarousel();
       startAutoplay();
       
-      // Re-calcular posición en resize
+      // Recalcular en resize
       window.addEventListener('resize', () => {
         if (!isTransitioning) {
-          updateTrackPosition();
+          updateCarouselPosition();
         }
       });
     }
     
+    // Inicializar carruseles cuando el DOM esté listo
     document.addEventListener('DOMContentLoaded', () => {
-      initInfiniteCarousel({ trackId: 'discography-track' });
-      initInfiniteCarousel({ trackId: 'videos-track' });
+      initKafuCarousel({ trackId: 'discography-track' });
+      initKafuCarousel({ trackId: 'videos-track' });
     });
   </script>
 </body>
