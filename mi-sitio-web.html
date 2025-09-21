@@ -26,34 +26,6 @@
       color: #111;
     }
     
-    body.light-mode header,
-    body.light-mode .news-card,
-    body.light-mode .main-news {
-      background-color: #fff;
-      color: #111;
-    }
-    
-    body.light-mode nav a {
-      color: #333;
-    }
-    
-    body.light-mode nav a:hover {
-      color: #c59f3f;
-    }
-    
-    body.light-mode .label {
-      border-color: #c59f3f;
-      color: #c59f3f;
-    }
-    
-    body.light-mode .news,
-    body.light-mode .discography,
-    body.light-mode .videos {
-      background-color: #f0f0f0;
-      color: #111;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    }
-    
     @keyframes shake {
       0% { transform: translateX(0) scale(1.15); }
       2% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); }
@@ -147,11 +119,61 @@
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     }
     
+    .contenedor-centrado {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      margin-top: 20px;
+    }
+    
+    .social-bar {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 20px 0;
+      width: 100%;
+      max-width: 800px;
+    }
+    
+    .social-bar a {
+      display: inline-block;
+      transition: transform 0.3s ease, fill 0.3s ease;
+    }
+    
+    .social-bar svg {
+      width: 36px;
+      height: 36px;
+      fill: #888;
+    }
+    
+    .social-bar a:hover svg {
+      fill: #e0c27b;
+      transform: scale(1.15);
+    }
+    
+    .music-platforms {
+      gap: 20px;
+    }
+    
+    .music-platforms a {
+      font-size: 40px;
+    }
+    
+    .social-networks {
+      gap: 15px;
+      margin-top: 10px;
+    }
+    
+    .social-networks a {
+      font-size: 32px;
+    }
+    
     .news {
       padding: 100px 5% 80px;
       background-color: #1a1a1a;
       max-width: 1200px;
-      margin: -50px auto;
+      margin: -50px auto 80px;
       border-radius: 12px;
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
       transition: background 0.3s ease;
@@ -199,6 +221,8 @@
       grid-template-columns: 2fr 1fr 1fr;
       grid-template-rows: 1fr 1fr;
       gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
     
     .main-news {
@@ -227,8 +251,7 @@
       aspect-ratio: 1 / 1;
       overflow: hidden;
       transition: transform 0.3s ease;
-      width: 250px;
-      height: 200px;
+      width: 100%;
     }
     
     .news-card:hover {
@@ -271,9 +294,8 @@
     
     .section-banner {
       position: relative;
-      width: 110%;
-      max-width: 1800px;
-      height: 370px;
+      width: 100%;
+      height: 300px;
       margin: 60px auto;
       border-radius: 12px;
       background: url('banner portada.png') center center no-repeat;
@@ -290,37 +312,24 @@
       user-select: none;
     }
     
-    /* === GRID ESTÁTICO PARA DISCOGRAFÍA - 3 COLUMNAS === */
+    /* === DISCOGRAFÍA - GRID DE 3 TARJETAS CUADRADAS === */
     .discography-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      display: flex;
+      justify-content: center;
+      align-items: center;
       gap: 30px;
       max-width: 1000px;
       margin: 60px auto;
       padding: 0 20px;
-      justify-content: center;
+      flex-wrap: wrap;
+      height: 350px;
     }
     
-    /* === GRID ESTÁTICO PARA VIDEOS - 1 COLUMNA CENTRADA === */
-    .videos-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 40px;
-      max-width: 500px;
-      margin: 60px auto;
-      padding: 0 20px;
-      justify-content: center;
-    }
-    
-    /* === ESTILOS COMUNES PARA LAS TARJETAS === */
-    .media-card {
-      position: relative;
-      width: 100%;
-      height: 240px;
+    .discography-card {
+      width: 220px;
+      height: 220px;
       background: #1a1a1a;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border-radius: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -329,25 +338,94 @@
       color: #fff;
       font-weight: 600;
       cursor: pointer;
+      position: relative;
       transition: all 0.3s ease;
       border: 2px solid transparent;
       overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
     
-    /* === TARJETAS DE DISCOGRAFÍA === */
-    .discography .media-card {
-      height: 280px;
+    .discography-card:hover {
+      transform: translateY(-10px) scale(1.05);
+      box-shadow: 0 20px 40px rgba(224, 194, 123, 0.2);
+      border-color: #e0c27b;
     }
     
-    /* === TARJETAS DE VIDEO (ESTILO KAFU) === */
-    .videos .media-card {
-      height: 300px;
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
+    .discography-card .color-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 18px;
+      z-index: 1;
     }
     
-    .media-card::before {
+    .discography-card .content {
+      position: relative;
+      z-index: 2;
+      padding: 20px;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .discography-card h4 {
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #fff;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    
+    .discography-card .label {
+      font-size: 11px;
+      color: #e0c27b;
+      border: 1px solid #e0c27b;
+      padding: 4px 8px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.5);
+    }
+    
+    /* === VIDEO - UNA SOLA TARJETA GRANDE CENTRADA COMO KAFU === */
+    .videos-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 500px;
+      padding: 60px 20px;
+      margin: 60px 0;
+    }
+    
+    .video-card {
+      width: 600px;
+      height: 400px;
+      background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+      border-radius: 24px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid rgba(224, 194, 123, 0.3);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+    
+    .video-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 30px 80px rgba(224, 194, 123, 0.2);
+      border-color: #e0c27b;
+    }
+    
+    .video-card::before {
       content: '';
       position: absolute;
       top: 0;
@@ -355,126 +433,88 @@
       width: 100%;
       height: 100%;
       background: linear-gradient(90deg, transparent, rgba(224, 194, 123, 0.1), transparent);
-      transition: left 0.5s;
+      transition: left 0.6s;
     }
     
-    .media-card:hover::before {
+    .video-card:hover::before {
       left: 100%;
     }
     
-    .media-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 16px 48px rgba(224, 194, 123, 0.2);
-      border-color: #e0c27b;
+    .video-content {
+      position: relative;
+      z-index: 2;
+      padding: 40px;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
     
-    .media-card h4 {
-      font-size: 18px;
+    .video-card h4 {
+      font-size: 28px;
       margin-bottom: 12px;
       color: #e0c27b;
-      font-weight: 700;
-      line-height: 1.3;
-      max-width: 90%;
-      position: relative;
-      z-index: 2;
+      font-weight: 900;
+      line-height: 1.2;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     }
     
-    .discography .media-card h4 {
-      font-size: 20px;
-    }
-    
-    .videos .media-card h4 {
-      font-size: 22px;
-      margin-bottom: 8px;
+    .video-card .label {
+      font-size: 14px;
       color: #fff;
+      background: rgba(224, 194, 123, 0.2);
+      border: 1px solid #e0c27b;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 600;
     }
     
-    .media-card .label {
-      font-size: 12px;
-      color: #888;
-      border: 1px solid #555;
-      padding: 4px 8px;
-      border-radius: 12px;
-      background: rgba(0, 0, 0, 0.3);
-      position: relative;
-      z-index: 2;
-    }
-    
-    .videos .media-card .label {
-      color: #e0c27b;
-      border-color: #e0c27b;
-      background: rgba(224, 194, 123, 0.1);
-      font-size: 11px;
-    }
-    
-    .media-card .play-btn {
+    .video-card .play-btn {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 60px;
-      height: 60px;
+      width: 80px;
+      height: 80px;
       background: rgba(224, 194, 123, 0.9);
       border: none;
       border-radius: 50%;
       color: #000;
-      font-size: 20px;
+      font-size: 28px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
-      opacity: 0;
+      opacity: 0.8;
       z-index: 3;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     }
     
-    .media-card:hover .play-btn {
+    .video-card:hover .play-btn {
       opacity: 1;
       transform: translate(-50%, -50%) scale(1.1);
+      background: #e0c27b;
     }
     
     .play-btn:hover {
-      background: #e0c27b;
       transform: translate(-50%, -50%) scale(1.2);
     }
     
-    /* === TARJETAS DE COLOR === */
-    .color-card {
-      width: 100%;
-      height: 100%;
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;
-      text-align: center;
-      padding: 20px;
-      box-sizing: border-box;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .color-card::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: inherit;
-      filter: brightness(0.8);
-      z-index: -1;
-    }
-    
-    .color-card h4,
-    .color-card .label {
-      position: relative;
-      z-index: 2;
-    }
-    
     /* === RESPONSIVE === */
+    @media (max-width: 1200px) {
+      .video-card {
+        width: 500px;
+        height: 350px;
+      }
+      
+      .video-card h4 {
+        font-size: 24px;
+      }
+    }
+    
     @media (max-width: 900px) {
       .schedule-grid {
         grid-template-columns: 1fr;
@@ -482,66 +522,63 @@
       }
       
       .section-banner {
-        width: 90%;
-        height: 100px;
+        height: 200px;
         font-size: 2rem;
       }
       
       .discography-grid {
-        grid-template-columns: repeat(2, 1fr);
         gap: 20px;
-        padding: 0 15px;
+        height: 300px;
       }
       
-      .videos-grid {
-        gap: 30px;
-        padding: 0 15px;
+      .discography-card {
+        width: 180px;
+        height: 180px;
       }
       
-      .media-card {
-        height: 220px;
+      .discography-card h4 {
+        font-size: 14px;
       }
       
-      .discography .media-card {
-        height: 250px;
+      .video-card {
+        width: 400px;
+        height: 300px;
       }
       
-      .videos .media-card {
-        height: 280px;
+      .video-card h4 {
+        font-size: 20px;
+      }
+      
+      .video-content {
+        padding: 30px;
       }
     }
     
     @media (max-width: 600px) {
       .discography-grid {
-        grid-template-columns: 1fr;
+        flex-direction: column;
         gap: 20px;
-        padding: 0 10px;
+        height: auto;
+        margin: 40px auto;
       }
       
-      .videos-grid {
-        gap: 25px;
-        padding: 0 10px;
-        max-width: 400px;
-      }
-      
-      .media-card {
+      .discography-card {
+        width: 200px;
         height: 200px;
       }
       
-      .discography .media-card {
-        height: 240px;
+      .video-card {
+        width: 90%;
+        max-width: 350px;
+        height: 250px;
       }
       
-      .videos .media-card {
-        height: 260px;
-      }
-      
-      .media-card h4 {
-        font-size: 16px;
-      }
-      
-      .videos .media-card h4 {
+      .video-card h4 {
         font-size: 18px;
+      }
+      
+      .video-content {
+        padding: 20px;
       }
     }
     
@@ -550,48 +587,6 @@
       text-align: center;
       color: #ccc;
       letter-spacing: 1px;
-    }
-    
-    .social-bar {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      margin: 60px auto;
-      width: 100%;
-    }
-    
-    .social-bar a {
-      display: inline-block;
-      transition: transform 0.3s ease, fill 0.3s ease;
-    }
-    
-    .social-bar svg {
-      width: 36px;
-      height: 36px;
-      fill: #888;
-    }
-    
-    .social-bar a:hover svg {
-      fill: #e0c27b;
-      transform: scale(1.15);
-    }
-    
-    body.light-mode .social-bar svg {
-      fill: #555;
-    }
-    
-    .music-platforms {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-top: 10px;
-    }
-    
-    .social-networks {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-top: -70px;
     }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -619,36 +614,36 @@
   
   <div class="contenedor-centrado">
     <div class="social-bar music-platforms">
-      <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" style="color: #1DB954; font-size: 40px;">
+      <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" style="color: #1DB954;">
         <i class="fab fa-spotify"></i>
       </a>
-      <a href="https://music.apple.com" target="_blank" rel="noopener noreferrer" style="color: #FA57C1; font-size: 40px;">
+      <a href="https://music.apple.com" target="_blank" rel="noopener noreferrer" style="color: #FA57C1;">
         <i class="fab fa-apple"></i>
       </a>
-      <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" style="color: #FF0000; font-size: 40px;">
+      <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" style="color: #FF0000;">
         <i class="fab fa-youtube"></i>
       </a>
-      <a href="https://www.deezer.com" target="_blank" rel="noopener noreferrer" style="color: #FF0000; font-size: 40px;">
+      <a href="https://www.deezer.com" target="_blank" rel="noopener noreferrer" style="color: #FF0000;">
         <i class="fab fa-deezer"></i>
       </a>
-      <a href="https://music.amazon.com" target="_blank" rel="noopener noreferrer" style="color: #FF9900; font-size: 40px;">
+      <a href="https://music.amazon.com" target="_blank" rel="noopener noreferrer" style="color: #FF9900;">
         <i class="fab fa-amazon"></i>
       </a>
-      <a href="https://tidal.com" target="_blank" rel="noopener noreferrer" style="color: #000000; font-size: 40px;">
+      <a href="https://tidal.com" target="_blank" rel="noopener noreferrer" style="color: #000000;">
         <i class="fab fa-tidal"></i>
       </a>
     </div>
-    <div class="social-bar social-networks" style="display:flex; gap:12px; align-items:center;">
-      <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" style="color: #E1306C; font-size: 32px;">
+    <div class="social-bar social-networks">
+      <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" style="color: #E1306C;">
         <i class="fab fa-instagram"></i>
       </a>
-      <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" style="color: #1877F2; font-size: 32px;">
+      <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" style="color: #1877F2;">
         <i class="fab fa-facebook"></i>
       </a>
-      <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" style="color: #1DA1F2; font-size: 32px;">
+      <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" style="color: #1DA1F2;">
         <i class="fab fa-twitter"></i>
       </a>
-      <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" style="color: #FE2C55; font-size: 32px;">
+      <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" style="color: #FE2C55;">
         <i class="fab fa-tiktok"></i>
       </a>
     </div>
@@ -699,137 +694,42 @@
   <div class="section-banner">ディスコグラフィー</div>
   <section class="discography" id="discography">
     <div class="discography-grid">
-      <!-- Tarjeta 1 - Álbum Rojo -->
-      <div class="media-card">
-        <div class="color-card" style="background: linear-gradient(135deg, #FF6B6B, #FF8E8E);">
-          <h4>Álbum Rojo</h4>
-          <span class="label">Single</span>
-        </div>
-        <button class="play-btn" title="Play">
-          <i class="fas fa-play"></i>
-        </button>
-      </div>
-      
-      <!-- Tarjeta 2 - Álbum Verde -->
-      <div class="media-card">
-        <div class="color-card" style="background: linear-gradient(135deg, #4ECDC4, #A1FFE6);">
+      <!-- Tarjeta 1 - Álbum Verde -->
+      <div class="discography-card">
+        <div class="color-overlay" style="background: linear-gradient(135deg, #4ECDC4, #A1FFE6);"></div>
+        <div class="content">
           <h4>Álbum Verde</h4>
           <span class="label">EP</span>
         </div>
-        <button class="play-btn" title="Play">
-          <i class="fas fa-play"></i>
-        </button>
       </div>
       
-      <!-- Tarjeta 3 - Álbum Azul -->
-      <div class="media-card">
-        <div class="color-card" style="background: linear-gradient(135deg, #45B7D1, #B3E5FC);">
+      <!-- Tarjeta 2 - Álbum Azul (CENTRADA) -->
+      <div class="discography-card" style="transform: scale(1.1); z-index: 2; box-shadow: 0 15px 40px rgba(69, 183, 209, 0.3);">
+        <div class="color-overlay" style="background: linear-gradient(135deg, #45B7D1, #B3E5FC);"></div>
+        <div class="content">
           <h4>Álbum Azul</h4>
           <span class="label">Álbum</span>
         </div>
-        <button class="play-btn" title="Play">
-          <i class="fas fa-play"></i>
-        </button>
       </div>
       
-      <!-- Tarjeta 4 - Álbum Naranja -->
-      <div class="media-card">
-        <div class="color-card" style="background: linear-gradient(135deg, #FFA07A, #FFDAB9);">
+      <!-- Tarjeta 3 - Álbum Naranja -->
+      <div class="discography-card">
+        <div class="color-overlay" style="background: linear-gradient(135deg, #FFA07A, #FFDAB9);"></div>
+        <div class="content">
           <h4>Álbum Naranja</h4>
           <span class="label">Single</span>
         </div>
-        <button class="play-btn" title="Play">
-          <i class="fas fa-play"></i>
-        </button>
-      </div>
-      
-      <!-- Tarjeta 5 - Álbum Rosa -->
-      <div class="media-card">
-        <div class="color-card" style="background: linear-gradient(135deg, #E91E63, #F8BBD9);">
-          <h4>Álbum Rosa</h4>
-          <span class="label">EP</span>
-        </div>
-        <button class="play-btn" title="Play">
-          <i class="fas fa-play"></i>
-        </button>
       </div>
     </div>
   </section>
   
   <div class="section-banner">ビデオ</div>
   <section class="videos" id="videos">
-    <div class="videos-grid">
-      <!-- Video 1 - 光 (Hikari) -->
-      <div class="media-card">
-        <div class="color-card" style="background: linear-gradient(135deg, #9C27B0, #E1BEE7);">
+    <div class="videos-section">
+      <div class="video-card">
+        <div class="video-content">
           <h4>光 (Hikari)</h4>
-          <span class="label">MV</span>
-        </div>
-        <button class="play-btn" title="Play Movie">
-          <i class="fas fa-play"></i>
-        </button>
-      </div>
-      
-      <!-- Video 2 - 糸 (Ito) -->
-      <div class="media-card">
-        <div class="color-card" style="background: linear-gradient(135deg, #673AB7, #D1C4E9);">
-          <h4>糸 (Ito)</h4>
-          <span class="label">LIVE</span>
-        </div>
-        <button class="play-btn" title="Play Movie">
-          <i class="fas fa-play"></i>
-        </button>
-      </div>
-      
-      <!-- Video 3 - 心臓と絡繰 -->
-      <div class="media-card">
-        <div class="color-card" style="background: linear-gradient(135deg, #3F51B5, #C5CAE9);">
-          <h4>心臓と絡繰</h4>
-          <span class="label">MV</span>
-        </div>
-        <button class="play-btn" title="Play Movie">
-          <i class="fas fa-play"></i>
-        </button>
-      </div>
-      
-      <!-- Video 4 - 魔女 (Majo) -->
-      <div class="media-card">
-        <div class="color-card" style="background: linear-gradient(135deg, #FF9800, #FFE0B2);">
-          <h4>魔女 (Majo)</h4>
-          <span class="label">LIVE</span>
-        </div>
-        <button class="play-btn" title="Play Movie">
-          <i class="fas fa-play"></i>
-        </button>
-      </div>
-      
-      <!-- Video 5 - 忘れてしまえ -->
-      <div class="media-card">
-        <div class="color-card" style="background: linear-gradient(135deg, #F44336, #FFCDD2);">
-          <h4>忘れてしまえ</h4>
-          <span class="label">MV</span>
-        </div>
-        <button class="play-btn" title="Play Movie">
-          <i class="fas fa-play"></i>
-        </button>
-      </div>
-      
-      <!-- Video 6 - 雛鳥 (Hinadori) -->
-      <div class="media-card">
-        <div class="color-card" style="background: linear-gradient(135deg, #4CAF50, #C8E6C9);">
-          <h4>雛鳥 (Hinadori)</h4>
-          <span class="label">LIVE</span>
-        </div>
-        <button class="play-btn" title="Play Movie">
-          <i class="fas fa-play"></i>
-        </button>
-      </div>
-      
-      <!-- Video 7 - 過去を喰らう -->
-      <div class="media-card">
-        <div class="color-card" style="background: linear-gradient(135deg, #2196F3, #BBDEFB);">
-          <h4>過去を喰らう</h4>
-          <span class="label">MV</span>
+          <span class="label">PLAY MOVIE</span>
         </div>
         <button class="play-btn" title="Play Movie">
           <i class="fas fa-play"></i>
@@ -853,36 +753,43 @@
       document.body.classList.add('light-mode');
     }
     
-    // Efectos de hover para las tarjetas
+    // Efectos de hover
     document.addEventListener('DOMContentLoaded', () => {
-      const mediaCards = document.querySelectorAll('.media-card');
-      
-      mediaCards.forEach(card => {
+      // Discography cards
+      const discographyCards = document.querySelectorAll('.discography-card');
+      discographyCards.forEach(card => {
         card.addEventListener('mouseenter', () => {
-          const playBtn = card.querySelector('.play-btn');
-          if (playBtn) {
-            playBtn.style.opacity = '1';
-          }
+          card.style.transform = 'translateY(-10px) scale(1.05)';
         });
         
         card.addEventListener('mouseleave', () => {
-          const playBtn = card.querySelector('.play-btn');
-          if (playBtn) {
-            playBtn.style.opacity = '0';
+          const isCenterCard = card.style.transform && card.style.transform.includes('scale(1.1)');
+          if (!isCenterCard) {
+            card.style.transform = 'translateY(0) scale(1)';
           }
         });
-        
-        // Efecto click en play button
-        const playBtn = card.querySelector('.play-btn');
-        if (playBtn) {
-          playBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            // Aquí puedes agregar la lógica para reproducir el video
-            alert('Reproduciendo video...');
-          });
-        }
       });
+      
+      // Video card
+      const videoCard = document.querySelector('.video-card');
+      const playBtn = document.querySelector('.play-btn');
+      
+      if (videoCard && playBtn) {
+        videoCard.addEventListener('mouseenter', () => {
+          playBtn.style.opacity = '1';
+        });
+        
+        videoCard.addEventListener('mouseleave', () => {
+          playBtn.style.opacity = '0.8';
+        });
+        
+        playBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          // Aquí puedes agregar la lógica para reproducir el video
+          window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank');
+        });
+      }
     });
   </script>
 </body>
