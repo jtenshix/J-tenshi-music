@@ -5,624 +5,150 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tenshi | 幻想の響き</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: 'Helvetica Neue', sans-serif;
-      background: #0b0b0b;
-      color: #f5f5f5;
-      overflow-x: hidden;
-      width: 100%;
-      height: 100%;
-      transition: background 0.3s, color 0.3s;
-    }
-    
-    body.light-mode {
-      background: #f5f5f5;
-      color: #111;
-    }
-    
-    @keyframes shake {
-      0% { transform: translateX(0) scale(1.15); }
-      2% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); }
-      5% { transform: translateX(0.5px) rotate(0.5deg) scale(1.15); }
-      7% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); }
-      100% { transform: translateX(0) rotate(0deg) scale(1.15); }
-    }
-    
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      padding: 20px 5%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 999;
-      backdrop-filter: blur(10px);
-    }
-    
-    header .logo {
-      color: #fff;
-      font-size: 20px;
-      letter-spacing: 2px;
-    }
-    
-    nav ul {
-      display: flex;
-      gap: 25px;
-      list-style: none;
-    }
-    
-    nav a {
-      color: #ccc;
-      text-decoration: none;
-      font-size: 14px;
-      transition: all 0.3s ease;
-      display: inline-block;
-    }
-    
-    nav a:hover {
-      color: #e0c27b;
-      animation: shake 0.2s ease-in-out infinite alternate;
-    }
-    
-    .theme-toggle {
-      background: none;
-      border: 1px solid #777;
-      color: #ccc;
-      padding: 6px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-size: 12px;
-      margin-left: 20px;
-    }
-    
-    .theme-toggle:hover {
-      background: #e0c27b;
-      color: #000;
-    }
-    
-    .hero-wrapper {
-      position: relative;
-      height: 70vh;
-      overflow: hidden;
-      margin-top: 70px;
-    }
-    
-    .hero-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 75vh;
-      background: url('banner portada.png') center center no-repeat;
-      background-size: cover;
-      z-index: 0;
-    }
-    
-    .hero-text {
-      position: relative;
-      z-index: 2;
-      color: white;
-      font-size: 2rem;
-      padding: 60px 5%;
-      height: 75vh;
-      display: flex;
-      align-items: center;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-    }
-    
-    .contenedor-centrado {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px 0;
-      margin-top: 20px;
-    }
-    
-    .social-bar {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      margin: 20px 0;
-      width: 100%;
-      max-width: 800px;
-    }
-    
-    .social-bar a {
-      display: inline-block;
-      transition: transform 0.3s ease, fill 0.3s ease;
-    }
-    
-    .social-bar svg {
-      width: 36px;
-      height: 36px;
-      fill: #888;
-    }
-    
-    .social-bar a:hover svg {
-      fill: #e0c27b;
-      transform: scale(1.15);
-    }
-    
-    .music-platforms {
-      gap: 20px;
-    }
-    
-    .music-platforms a {
-      font-size: 40px;
-    }
-    
-    .social-networks {
-      gap: 15px;
-      margin-top: 10px;
-    }
-    
-    .social-networks a {
-      font-size: 32px;
-    }
-    
-    .news {
-      padding: 100px 5% 80px;
-      background-color: #1a1a1a;
-      max-width: 1200px;
-      margin: -50px auto 80px;
-      border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-      transition: background 0.3s ease;
-    }
-    
-    .news h2 {
-      font-size: 32px;
-      color: #fff;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-    
-    .news h2 span {
-      font-size: 14px;
-      color: #ccc;
-      margin-left: 10px;
-    }
-    
-    .schedule-filters {
-      margin-bottom: 40px;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-    
-    .schedule-filters button {
-      background: none;
-      border: 1px solid #555;
-      color: #ccc;
-      padding: 8px 18px;
-      font-size: 14px;
-      cursor: pointer;
-      border-radius: 20px;
-      transition: all 0.3s ease;
-    }
-    
-    .schedule-filters button.active,
-    .schedule-filters button:hover {
-      color: #e0c27b;
-      border-color: #e0c27b;
-    }
-    
-    .schedule-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      gap: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    
-    .main-news {
-      grid-column: 1 / 2;
-      grid-row: 1 / 3;
-      background: linear-gradient(135deg, #4c51bf);
-      border-radius: 16px;
-      padding: 20px;
-      color: #fff;
-      box-shadow: 0 0 20px rgba(76, 81, 191, 0.8);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      overflow: hidden;
-    }
-    
-    .news-card {
-      background: #222;
-      border-radius: 14px;
-      padding: 20px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      cursor: pointer;
-      aspect-ratio: 1 / 1;
-      overflow: hidden;
-      transition: transform 0.3s ease;
-      width: 100%;
-    }
-    
-    .news-card:hover {
-      transform: scale(1.05);
-      animation: shake 0.2s ease-in-out infinite alternate;
-    }
-    
-    .news-card h4 {
-      font-size: 16px;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 8px;
-      text-align: center;
-    }
-    
-    .news-card .date {
-      font-weight: 700;
-      font-size: 14px;
-      color: #ccc;
-      text-align: center;
-      margin-bottom: 10px;
-    }
-    
-    .news-card p {
-      color: #ccc;
-      font-size: 14px;
-      text-align: center;
-    }
-    
-    .news-card .label {
-      font-size: 11px;
-      color: #e0c27b;
-      border: 1px solid #e0c27b;
-      padding: 2px 6px;
-      border-radius: 999px;
-      width: fit-content;
-      margin: 10px auto 0;
-      display: block;
-    }
-    
-    .section-banner {
-      position: relative;
-      width: 100%;
-      height: 300px;
-      margin: 60px auto;
-      border-radius: 12px;
-      background: url('banner portada.png') center center no-repeat;
-      background-size: cover;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #e0c27b;
-      font-size: 3rem;
-      font-weight: 900;
-      font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
-      text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
-      user-select: none;
-    }
-    
+   /* === DISCOGRAFÍA - 5 TARJETAS CON LA DEL MEDIO MÁS GRANDE === */
+.discography-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 40px;
+    height: auto; /* IMPORTANTE: Cambiado a "auto" */
+    overflow: hidden;
+    position: relative;
+}
+
+.discography-card {
+    width: 200px; 
+    height: 200px;
+    background: #1a1a1a;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+}
+
+/* Tarjeta del medio más grande */
+.discography-card.center {
+    width: 220px;
+    height: 220px;
+    transform: scale(1.1);
+    z-index: 3;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+.discography-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(224, 194, 123, 0.2);
+    border-color: #e0c27b;
+    z-index: 4;
+}
+
+.discography-card.center:hover {
+    transform: translateY(-10px) scale(1.08);
+}
+
+.discography-card .color-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 18px;
+    z-index: 1;
+    opacity: 0.8;
+}
+
+.discography-card .content {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.discography-card h4 {
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #fff;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.discography-card.center h4 {
+    font-size: 18px;
+}
+
+.discography-card .label {
+    font-size: 11px;
+    color: #e0c27b;
+    border: 1px solid #e0c27b;
+    padding: 4px 8px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.discography-card.center .label {
+    font-size: 12px;
+    padding: 5px 10px;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 1200px) {
     .discography-grid {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-      max-width: 1200px;
-      margin: 60px auto;
-      padding: 0 40px;
-      overflow: hidden;
-      position: relative;
-    }
-    
-    .discography-card {
-      width: 220px;
-      height: 220px;
-      ...otros estilos...
-    }
-    
-    .discography-card.center {
-      width: 280px;
-      height: 280px;
-      ...otros estilos...
-    }
-    
-    .discography-card:hover {
-      transform: translateY(-10px) scale(1.02);
-      box-shadow: 0 20px 40px rgba(224, 194, 123, 0.2);
-      border-color: #e0c27b;
-      z-index: 4;
-    }
-    
-    .discography-card.center:hover {
-      transform: translateY(-10px) scale(1.08);
-    }
-    
-    .discography-card .color-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      border-radius: 18px;
-      z-index: 1;
-      opacity: 0.8;
-    }
-    
-    .discography-card .content {
-      position: relative;
-      z-index: 2;
-      padding: 20px;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .discography-card h4 {
-      font-size: 16px;
-      margin-bottom: 8px;
-      color: #fff;
-      font-weight: 700;
-      line-height: 1.3;
-    }
-    
-    .discography-card.center h4 {
-      font-size: 18px;
-    }
-    
-    .discography-card .label {
-      font-size: 11px;
-      color: #e0c27b;
-      border: 1px solid #e0c27b;
-      padding: 4px 8px;
-      border-radius: 12px;
-      background: rgba(0, 0, 0, 0.5);
-    }
-    
-    .discography-card.center .label {
-      font-size: 12px;
-      padding: 5px 10px;
-    }
-    
-    /* === VIDEOS - PROPORCIÓN 16:9 === */
-    .videos-grid {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 30px;
-      max-width: 1800px;
-      margin: 60px auto;
-      padding: 0 80px;
-      height: auto; /* Eliminamos la altura fija */
-      overflow: hidden;
-      position: relative;
-    }
-
-    /* Un solo bloque .video-card limpio — mantiene tu estilo pero prepara el iframe */
-    .video-card {
-      position: relative;
-      width: 400px;                     /* ancho base (se ajusta por responsive) */
-      aspect-ratio: 16 / 9;             /* forma 16:9 como YouTube */
-      background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-      border-radius: 12px;
-      display: flex;
-      align-items: flex-end;            /* el texto queda abajo */
-      justify-content: flex-start;
-      text-align: left;
-      color: #fff;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: 2px solid rgba(224, 194, 123, 0.2);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-      overflow: hidden;
-      z-index: 1;
-    }
-
-    /* Variante centro más grande (mantengo la escala visual) */
-    .video-card.center {
-      width: 500px;
-      transform: scale(1.05);
-      z-index: 3;
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-      border: 2px solid rgba(224, 194, 123, 0.4);
-    }
-
-    /* iframe ocupa TODO el contenedor sin salirse */
-    .video-card iframe {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-      z-index: 1;
-    }
-
-    /* overlay de texto (no bloquea clicks al iframe) */
-    .video-content {
-      position: relative;
-      z-index: 2;
-      padding: 12px 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: flex-end;
-      pointer-events: none; /* permite click en iframe a pesar del overlay visual */
-    }
-
-    .video-card h4 {
-      font-size: 18px;
-      margin-bottom: 6px;
-      color: #fff;
-      font-weight: 700;
-      line-height: 1.2;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    }
-
-    .video-card.center h4 {
-      font-size: 22px;
-    }
-
-    .video-card .label {
-      font-size: 12px;
-      color: #fff;
-      background: rgba(224, 194, 123, 0.2);
-      border: 1px solid #e0c27b;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-weight: 600;
-    }
-
-    .video-card.center .label {
-      font-size: 14px;
-      padding: 8px 16px;
-    }
-
-    /* quité play-btn porque el iframe trae controles reales de YouTube */
-
-    /* === RESPONSIVE - MANTIENE 16:9 === */
-    @media (max-width: 1400px) {
-      .videos-grid {
-        padding: 0 60px;
-      }
-      
-      .video-card {
-        width: 350px;
-      }
-      
-      .video-card.center {
-        width: 430px;
-      }
-    }
-    
-    @media (max-width: 1200px) {
-      .discography-grid {
         padding: 0 20px;
-      }
-      
-      .videos-grid {
-        padding: 0 40px;
-      }
-      
-      .video-card {
-        width: 300px;
-      }
-      
-      .video-card.center {
-        width: 370px;
-      }
     }
-    
-    @media (max-width: 900px) {
-      .schedule-grid {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-      }
-      
-      .section-banner {
-        height: 200px;
-        font-size: 2rem;
-      }
-      
-      .discography-grid {
+}
+
+@media (max-width: 900px) {
+    .discography-grid {
         gap: 15px;
         padding: 0 30px;
-        height: 300px;
-      }
-      
-      .discography-card {
+        height: auto; /* IMPORTANTE: Cambiado a "auto" */
+    }
+    .discography-card {
         width: 160px;
         height: 160px;
-      }
-      
-      .discography-card.center {
+    }
+    .discography-card.center {
         width: 190px;
         height: 190px;
-      }
-      
-      .videos-grid {
-        gap: 20px;
-        padding: 0 30px;
-        height: auto;
-      }
-      
-      .video-card {
-        width: 280px;
-      }
-      
-      .video-card.center {
-        width: 340px;
-      }
-      
-      .video-card h4 {
-        font-size: 16px;
-      }
-      
-      .video-card.center h4 {
-        font-size: 20px;
-      }
     }
-    
-    @media (max-width: 600px) {
-      .discography-grid {
+}
+
+@media (max-width: 600px) {
+    .discography-grid {
+        /* Quita la línea de "flex-direction: column;" para mantener la fila */
+        gap: 20px;
         height: auto;
         padding: 0 10px;
         margin: 40px auto;
-      }
-      
-      .discography-card {
-        width: 200px;
-        height: 200px;
-      }
-      
-      .discography-card.center {
-        width: 220px;
-        height: 220px;
-      }
-      
-      .videos-grid {
-        flex-direction: column;
-        gap: 30px;
-        height: auto;
-        padding: 0 10px;
-      }
-      
-      .video-card {
-        width: 100%;
-        max-width: 320px;
-      }
-      
-      .video-card.center {
-        max-width: 360px;
-      }
-      
-      .video-card h4 {
-        font-size: 18px;
-      }
-      
-      .video-card.center h4 {
-        font-size: 22px;
-      }
     }
-    
-    footer {
-      padding: 100px 0 50px;
-      text-align: center;
-      color: #ccc;
-      letter-spacing: 1px;
+    .discography-card {
+        width: 120px;
+        height: 120px;
     }
+    .discography-card.center {
+        width: 150px;
+        height: 150px;
+    }
+}
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
