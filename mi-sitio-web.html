@@ -327,11 +327,11 @@
     }
     
 
-/* Tarjetas cuadradas */
+/* Tarjetas normales */
 .discography-card {
-  flex: 0 0 auto; /* evita que se estiren */
-  width: 250px;
-  aspect-ratio: 1 / 1;
+  flex: 0 0 auto;
+  width: 220px;             /* tamaño base de las normales */
+  aspect-ratio: 1/1;
   background: #1a1a1a;
   border-radius: 20px;
   display: flex;
@@ -343,27 +343,25 @@
   font-weight: 600;
   cursor: pointer;
   position: relative;
-  transition: all 0.4s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 2px solid transparent;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  z-index: 1;
 }
 
-/* Tarjeta central mucho más grande */
+/* Tarjeta central (siempre más grande) */
 .discography-card.center {
-  width: 345px;          /* el doble desde el inicio */
-  aspect-ratio: 1/1;     /* sigue cuadrado */
+  width: 300px;   /* siempre más grande */
+  aspect-ratio: 1/1;
 }
 
+/* Efecto hover en todas */
+.discography-card:hover {
+  transform: scale(1.1);   /* crece un 10% */
+  z-index: 2;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+}
 
-    
-    .discography-card:hover {
-      transform: translateY(-10px) scale(1.02);
-      box-shadow: 0 20px 40px rgba(224, 194, 123, 0.2);
-      border-color: #e0c27b;
-      z-index: 4;
-    }
     
     .discography-card.center:hover {
       transform: translateY(-10px) scale(1.08);
