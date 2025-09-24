@@ -10,7 +10,6 @@
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
       font-family: 'Helvetica Neue', sans-serif;
       background: #0b0b0b;
@@ -20,12 +19,10 @@
       height: 100%;
       transition: background 0.3s, color 0.3s;
     }
-
     body.light-mode {
       background: #f5f5f5;
       color: #111;
     }
-
     @keyframes shake {
       0% { transform: translateX(0) scale(1.15); }
       2% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); }
@@ -33,7 +30,6 @@
       7% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); }
       100% { transform: translateX(0) rotate(0deg) scale(1.15); }
     }
-
     header {
       position: fixed;
       top: 0;
@@ -46,19 +42,16 @@
       z-index: 999;
       backdrop-filter: blur(10px);
     }
-
     header .logo {
       color: #fff;
       font-size: 20px;
       letter-spacing: 2px;
     }
-
     nav ul {
       display: flex;
       gap: 25px;
       list-style: none;
     }
-
     nav a {
       color: #ccc;
       text-decoration: none;
@@ -66,12 +59,10 @@
       transition: all 0.3s ease;
       display: inline-block;
     }
-
     nav a:hover {
       color: #e0c27b;
       animation: shake 0.2s ease-in-out infinite alternate;
     }
-
     .theme-toggle {
       background: none;
       border: 1px solid #777;
@@ -83,19 +74,16 @@
       font-size: 12px;
       margin-left: 20px;
     }
-
     .theme-toggle:hover {
       background: #e0c27b;
       color: #000;
     }
-
     .hero-wrapper {
       position: relative;
       height: 70vh;
       overflow: hidden;
       margin-top: 70px;
     }
-
     .hero-bg {
       position: absolute;
       top: 0;
@@ -106,7 +94,6 @@
       background-size: cover;
       z-index: 0;
     }
-
     .hero-text {
       position: relative;
       z-index: 2;
@@ -118,7 +105,6 @@
       align-items: center;
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     }
-
     .contenedor-centrado {
       display: flex;
       flex-direction: column;
@@ -126,7 +112,6 @@
       padding: 20px 0;
       margin-top: 20px;
     }
-
     .social-bar {
       display: flex;
       justify-content: center;
@@ -135,40 +120,32 @@
       width: 100%;
       max-width: 800px;
     }
-
     .social-bar a {
       display: inline-block;
       transition: transform 0.3s ease, fill 0.3s ease;
     }
-
     .social-bar svg {
       width: 36px;
       height: 36px;
       fill: #888;
     }
-
     .social-bar a:hover svg {
       fill: #e0c27b;
       transform: scale(1.15);
     }
-
     .music-platforms {
       gap: 20px;
     }
-
     .music-platforms a {
       font-size: 40px;
     }
-
     .social-networks {
       gap: 15px;
       margin-top: 10px;
     }
-
     .social-networks a {
       font-size: 32px;
     }
-
     .news {
       padding: 100px 5% 80px;
       background-color: #1a1a1a;
@@ -178,27 +155,23 @@
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
       transition: background 0.3s ease;
     }
-
     .news h2 {
       font-size: 32px;
       color: #fff;
       margin-bottom: 30px;
       text-align: center;
     }
-
     .news h2 span {
       font-size: 14px;
       color: #ccc;
       margin-left: 10px;
     }
-
     .schedule-filters {
       margin-bottom: 40px;
       display: flex;
       justify-content: center;
       gap: 20px;
     }
-
     .schedule-filters button {
       background: none;
       border: 1px solid #555;
@@ -209,13 +182,11 @@
       border-radius: 20px;
       transition: all 0.3s ease;
     }
-
     .schedule-filters button.active,
     .schedule-filters button:hover {
       color: #e0c27b;
       border-color: #e0c27b;
     }
-
     .schedule-grid {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr;
@@ -224,7 +195,6 @@
       max-width: 1200px;
       margin: 0 auto;
     }
-
     .main-news {
       grid-column: 1 / 2;
       grid-row: 1 / 3;
@@ -238,7 +208,6 @@
       justify-content: space-between;
       overflow: hidden;
     }
-
     .news-card {
       background: #222;
       border-radius: 14px;
@@ -253,12 +222,10 @@
       transition: transform 0.3s ease;
       width: 100%;
     }
-
     .news-card:hover {
       transform: scale(1.05);
       animation: shake 0.2s ease-in-out infinite alternate;
     }
-
     .news-card h4 {
       font-size: 16px;
       font-weight: 700;
@@ -266,7 +233,6 @@
       margin-bottom: 8px;
       text-align: center;
     }
-
     .news-card .date {
       font-weight: 700;
       font-size: 14px;
@@ -274,13 +240,11 @@
       text-align: center;
       margin-bottom: 10px;
     }
-
     .news-card p {
       color: #ccc;
       font-size: 14px;
       text-align: center;
     }
-
     .news-card .label {
       font-size: 11px;
       color: #e0c27b;
@@ -291,7 +255,6 @@
       margin: 10px auto 0;
       display: block;
     }
-
     .section-banner {
       position: relative;
       width: 100%;
@@ -311,7 +274,6 @@
       text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
       user-select: none;
     }
-
     /* === DISCOGRAFÍA - 5 TARJETAS CON LA DEL MEDIO MÁS GRANDE === */
     .discography-grid {
       display: flex;
@@ -325,7 +287,6 @@
       overflow: hidden;
       position: relative;
     }
-
     /* Tarjetas normales */
     .discography-card {
       flex: 0 0 auto;
@@ -348,24 +309,20 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       transform: scale(1);
     }
-
     /* Tarjeta central (siempre más grande) */
     .discography-card.center {
       width: 300px;
       transform: scale(1.05);
     }
-
     /* Efecto hover en todas */
     .discography-card:hover {
       transform: scale(1.15);
       z-index: 2;
       box-shadow: 0 12px 40px rgba(0,0,0,0.5);
     }
-
     .discography-card.center:hover {
       transform: scale(1.2);
     }
-
     .discography-card .color-overlay {
       position: absolute;
       top: 0;
@@ -376,7 +333,6 @@
       z-index: 1;
       opacity: 0.8;
     }
-
     .discography-card .content {
       position: relative;
       z-index: 2;
@@ -388,7 +344,6 @@
       align-items: center;
       justify-content: center;
     }
-
     .discography-card h4 {
       font-size: 16px;
       margin-bottom: 8px;
@@ -396,11 +351,9 @@
       font-weight: 700;
       line-height: 1.3;
     }
-
     .discography-card.center h4 {
       font-size: 18px;
     }
-
     .discography-card .label {
       font-size: 11px;
       color: #e0c27b;
@@ -409,17 +362,15 @@
       border-radius: 12px;
       background: rgba(0, 0, 0, 0.5);
     }
-
     .discography-card.center .label {
       font-size: 12px;
       padding: 5px 10px;
     }
-
     /* === VIDEOS - PROPORCIÓN 16:9 === */
     .videos-grid {
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       gap: 30px;
       max-width: 1800px;
       margin: 100px auto;
@@ -428,10 +379,9 @@
       overflow: hidden;
       position: relative;
     }
-
     .video-card {
       position: relative;
-      width: 500px;
+      width: 400px;
       aspect-ratio: 16 / 9;
       background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
       border-radius: 12px;
@@ -448,7 +398,6 @@
       overflow: hidden;
       z-index: 1;
     }
-
     .video-card.center {
       width: 500px;
       transform: scale(1.05);
@@ -456,7 +405,6 @@
       box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
       border: 2px solid rgba(224, 194, 123, 0.4);
     }
-
     .video-card iframe {
       position: absolute;
       inset: 0;
@@ -465,7 +413,6 @@
       border: 0;
       z-index: 1;
     }
-
     .video-content {
       position: relative;
       z-index: 2;
@@ -476,7 +423,6 @@
       justify-content: flex-end;
       pointer-events: none;
     }
-
     .video-card h4 {
       font-size: 18px;
       margin-bottom: 6px;
@@ -485,11 +431,9 @@
       line-height: 1.2;
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     }
-
     .video-card.center h4 {
       font-size: 22px;
     }
-
     .video-card .label {
       font-size: 12px;
       color: #fff;
@@ -499,94 +443,77 @@
       border-radius: 20px;
       font-weight: 600;
     }
-
     .video-card.center .label {
       font-size: 14px;
       padding: 8px 16px;
     }
-
     @media (max-width: 1400px) {
       .videos-grid {
         padding: 0 60px;
       }
-
       .video-card {
         width: 350px;
       }
-
       .video-card.center {
         width: 430px;
       }
     }
-
     @media (max-width: 1200px) {
       .discography-grid {
         padding: 0 20px;
       }
-
       .videos-grid {
         padding: 0 40px;
       }
-
       .video-card {
         width: 300px;
       }
-
       .video-card.center {
         width: 370px;
       }
     }
-
     @media (max-width: 900px) {
       .schedule-grid {
         grid-template-columns: 1fr;
         grid-template-rows: auto;
       }
-
       .section-banner {
         height: 200px;
         font-size: 2rem;
       }
-
       .discography-grid {
         gap: 15px;
         padding: 0 30px;
         height: 300px;
       }
-
       .discography-card {
         width: 160px;
         height: 160px;
       }
-
       .discography-card.center {
         width: 190px;
         height: 190px;
       }
-
       .videos-grid {
-        gap: 20px;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
         padding: 0 30px;
-        height: auto;
       }
-
       .video-card {
-        width: 280px;
+        width: 100%;
+        max-width: 320px;
       }
-
       .video-card.center {
-        width: 340px;
+        max-width: 360px;
       }
-
       .video-card h4 {
         font-size: 16px;
       }
-
       .video-card.center h4 {
         font-size: 20px;
       }
     }
-
     @media (max-width: 600px) {
       .discography-grid {
         flex-direction: column;
@@ -595,42 +522,34 @@
         padding: 0 10px;
         margin: 40px auto;
       }
-
       .discography-card {
         width: 200px;
         height: 200px;
       }
-
       .discography-card.center {
         width: 220px;
         height: 220px;
       }
-
       .videos-grid {
         flex-direction: column;
         gap: 30px;
         height: auto;
         padding: 0 10px;
       }
-
       .video-card {
         width: 100%;
         max-width: 320px;
       }
-
       .video-card.center {
         max-width: 360px;
       }
-
       .video-card h4 {
         font-size: 18px;
       }
-
       .video-card.center h4 {
         font-size: 22px;
       }
     }
-
     footer {
       padding: 100px 0 50px;
       text-align: center;
@@ -654,12 +573,10 @@
     </nav>
     <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
   </header>
-
   <div class="hero-wrapper">
     <div class="hero-bg"></div>
     <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
   </div>
-
   <div class="contenedor-centrado">
     <div class="social-bar music-platforms">
       <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" style="color: #1DB954;">
@@ -696,7 +613,6 @@
       </a>
     </div>
   </div>
-
   <section class="news" id="news">
     <h2>NEWS <span>ニュース</span></h2>
     <nav class="schedule-filters">
@@ -738,7 +654,6 @@
       </div>
     </div>
   </section>
-
   <div class="section-banner">ディスコグラフィー</div>
   <section class="discography" id="discography">
     <div class="discography-grid">
@@ -750,7 +665,6 @@
           <span class="label">Single</span>
         </div>
       </div>
-
       <!-- Tarjeta 2 - IZQUIERDA CENTRADA -->
       <div class="discography-card">
         <div class="color-overlay" style="background: linear-gradient(135deg, #4ECDC4, #A1FFE6);"></div>
@@ -759,7 +673,6 @@
           <span class="label">EP</span>
         </div>
       </div>
-
       <!-- Tarjeta 3 - CENTRO (MÁS GRANDE) -->
       <div class="discography-card center">
         <div class="color-overlay" style="background: linear-gradient(135deg, #45B7D1, #B3E5FC);"></div>
@@ -768,7 +681,6 @@
           <span class="label">Álbum</span>
         </div>
       </div>
-
       <!-- Tarjeta 4 - DERECHA CENTRADA -->
       <div class="discography-card">
         <div class="color-overlay" style="background: linear-gradient(135deg, #FFA07A, #FFDAB9);"></div>
@@ -777,7 +689,6 @@
           <span class="label">Single</span>
         </div>
       </div>
-
       <!-- Tarjeta 5 - DERECHA -->
       <div class="discography-card">
         <div class="color-overlay" style="background: linear-gradient(135deg, #E91E63, #F8BBD9);"></div>
@@ -788,19 +699,32 @@
       </div>
     </div>
   </section>
-
   <div class="section-banner">ビデオ</div>
   <section class="videos" id="videos">
     <div class="videos-grid">
       <div class="video-card">
+        <iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe>
+        <div class="video-content">
+          <h4>Video 1</h4>
+          <span class="label">LIVE</span>
+        </div>
       </div>
       <div class="video-card center">
+        <iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe>
+        <div class="video-content">
+          <h4>Video Principal</h4>
+          <span class="label">NEW</span>
+        </div>
       </div>
       <div class="video-card">
+        <iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe>
+        <div class="video-content">
+          <h4>Video 3</h4>
+          <span class="label">CLIP</span>
+        </div>
       </div>
     </div>
   </section>
-
   <footer>
     <div class="social-bar"></div>
     <p>j-tenshiwebcomingsoon</p>
@@ -810,14 +734,10 @@
       document.body.classList.toggle('light-mode');
       localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
     }
-
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-mode');
     }
-
-    // Efectos de hover para discografía (solo si necesitas algo adicional)
     document.addEventListener('DOMContentLoaded', () => {
-      // Filtros de noticias (opcional)
       document.querySelectorAll('.schedule-filters button').forEach(button => {
         button.addEventListener('click', () => {
           document.querySelectorAll('.schedule-filters button').forEach(b => b.classList.remove('active'));
