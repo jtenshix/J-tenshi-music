@@ -274,7 +274,7 @@
       text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
       user-select: none;
     }
-    /* === DISCOGRAFÍA - 5 TARJETAS CON LA DEL MEDIO MÁS GRANDE === */
+    /* === DISCOGRAFÍA === */
     .discography-grid {
       display: flex;
       justify-content: center;
@@ -287,7 +287,6 @@
       overflow: hidden;
       position: relative;
     }
-    /* Tarjetas normales */
     .discography-card {
       flex: 0 0 auto;
       width: 220px;
@@ -309,12 +308,10 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       transform: scale(1);
     }
-    /* Tarjeta central (siempre más grande) */
     .discography-card.center {
       width: 300px;
       transform: scale(1.05);
     }
-    /* Efecto hover en todas */
     .discography-card:hover {
       transform: scale(1.15);
       z-index: 2;
@@ -376,7 +373,6 @@
       margin: 100px auto;
       padding: 0 80px;
       height: auto;
-      overflow: visible;
     }
     .video-card {
       position: relative;
@@ -388,6 +384,7 @@
       z-index: 1;
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
       border: 2px solid rgba(224, 194, 123, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     .video-card.center {
       width: 560px;
@@ -395,6 +392,14 @@
       z-index: 3;
       box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
       border: 2px solid rgba(224, 194, 123, 0.4);
+    }
+    .video-card:hover {
+      transform: scale(1.05);
+      z-index: 2;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    }
+    .video-card.center:hover {
+      transform: scale(1.07);
     }
     .video-card iframe {
       position: absolute;
@@ -418,9 +423,6 @@
       }
     }
     @media (max-width: 1200px) {
-      .discography-grid {
-        padding: 0 20px;
-      }
       .videos-grid {
         padding: 0 40px;
       }
@@ -434,34 +436,13 @@
       }
     }
     @media (max-width: 900px) {
-      .schedule-grid {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-      }
-      .section-banner {
-        height: 200px;
-        font-size: 2rem;
-      }
-      .discography-grid {
-        gap: 15px;
-        padding: 0 30px;
-        height: 300px;
-      }
-      .discography-card {
-        width: 160px;
-        height: 160px;
-      }
-      .discography-card.center {
-        width: 190px;
-        height: 190px;
-      }
       .videos-grid {
         flex-direction: column;
         align-items: center;
         gap: 30px;
         padding: 0 30px;
       }
-      .video-card {
+      .video-card, .video-card.center {
         width: 100%;
         max-width: 320px;
         height: 180px;
@@ -472,33 +453,10 @@
       }
     }
     @media (max-width: 600px) {
-      .discography-grid {
-        flex-direction: column;
-        gap: 20px;
-        height: auto;
-        padding: 0 10px;
-        margin: 40px auto;
-      }
-      .discography-card {
-        width: 200px;
-        height: 200px;
-      }
-      .discography-card.center {
-        width: 220px;
-        height: 220px;
-      }
       .videos-grid {
-        flex-direction: column;
-        gap: 30px;
-        height: auto;
         padding: 0 10px;
       }
-      .video-card {
-        width: 100%;
-        max-width: 320px;
-        height: 180px;
-      }
-      .video-card.center {
+      .video-card, .video-card.center {
         max-width: 360px;
         height: 202px;
       }
@@ -610,7 +568,6 @@
   <div class="section-banner">ディスコグラフィー</div>
   <section class="discography" id="discography">
     <div class="discography-grid">
-      <!-- Tarjeta 1 - IZQUIERDA -->
       <div class="discography-card">
         <div class="color-overlay" style="background: linear-gradient(135deg, #FF6B6B, #FF8E8E);"></div>
         <div class="content">
@@ -618,7 +575,6 @@
           <span class="label">Single</span>
         </div>
       </div>
-      <!-- Tarjeta 2 - IZQUIERDA CENTRADA -->
       <div class="discography-card">
         <div class="color-overlay" style="background: linear-gradient(135deg, #4ECDC4, #A1FFE6);"></div>
         <div class="content">
@@ -626,7 +582,6 @@
           <span class="label">EP</span>
         </div>
       </div>
-      <!-- Tarjeta 3 - CENTRO (MÁS GRANDE) -->
       <div class="discography-card center">
         <div class="color-overlay" style="background: linear-gradient(135deg, #45B7D1, #B3E5FC);"></div>
         <div class="content">
@@ -634,7 +589,6 @@
           <span class="label">Álbum</span>
         </div>
       </div>
-      <!-- Tarjeta 4 - DERECHA CENTRADA -->
       <div class="discography-card">
         <div class="color-overlay" style="background: linear-gradient(135deg, #FFA07A, #FFDAB9);"></div>
         <div class="content">
@@ -642,7 +596,6 @@
           <span class="label">Single</span>
         </div>
       </div>
-      <!-- Tarjeta 5 - DERECHA -->
       <div class="discography-card">
         <div class="color-overlay" style="background: linear-gradient(135deg, #E91E63, #F8BBD9);"></div>
         <div class="content">
