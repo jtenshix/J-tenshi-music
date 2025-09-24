@@ -376,76 +376,33 @@
       margin: 100px auto;
       padding: 0 80px;
       height: auto;
-      overflow: hidden;
-      position: relative;
+      overflow: visible;
     }
     .video-card {
       position: relative;
       width: 400px;
-      aspect-ratio: 16 / 9;
+      height: 225px;
       background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
       border-radius: 12px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: flex-start;
-      text-align: left;
-      color: #fff;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: 2px solid rgba(224, 194, 123, 0.2);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
       overflow: hidden;
       z-index: 1;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(224, 194, 123, 0.2);
     }
     .video-card.center {
-      width: 500px;
-      transform: scale(1.05);
+      width: 560px;
+      height: 315px;
       z-index: 3;
       box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
       border: 2px solid rgba(224, 194, 123, 0.4);
     }
     .video-card iframe {
       position: absolute;
-      inset: 0;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       border: 0;
-      z-index: 1;
-    }
-    .video-content {
-      position: relative;
-      z-index: 2;
-      padding: 12px 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: flex-end;
-      pointer-events: none;
-    }
-    .video-card h4 {
-      font-size: 18px;
-      margin-bottom: 6px;
-      color: #fff;
-      font-weight: 700;
-      line-height: 1.2;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    }
-    .video-card.center h4 {
-      font-size: 22px;
-    }
-    .video-card .label {
-      font-size: 12px;
-      color: #fff;
-      background: rgba(224, 194, 123, 0.2);
-      border: 1px solid #e0c27b;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-weight: 600;
-    }
-    .video-card.center .label {
-      font-size: 14px;
-      padding: 8px 16px;
     }
     @media (max-width: 1400px) {
       .videos-grid {
@@ -453,9 +410,11 @@
       }
       .video-card {
         width: 350px;
+        height: 197px;
       }
       .video-card.center {
-        width: 430px;
+        width: 455px;
+        height: 256px;
       }
     }
     @media (max-width: 1200px) {
@@ -467,9 +426,11 @@
       }
       .video-card {
         width: 300px;
+        height: 169px;
       }
       .video-card.center {
-        width: 370px;
+        width: 390px;
+        height: 219px;
       }
     }
     @media (max-width: 900px) {
@@ -503,15 +464,11 @@
       .video-card {
         width: 100%;
         max-width: 320px;
+        height: 180px;
       }
       .video-card.center {
         max-width: 360px;
-      }
-      .video-card h4 {
-        font-size: 16px;
-      }
-      .video-card.center h4 {
-        font-size: 20px;
+        height: 202px;
       }
     }
     @media (max-width: 600px) {
@@ -539,15 +496,11 @@
       .video-card {
         width: 100%;
         max-width: 320px;
+        height: 180px;
       }
       .video-card.center {
         max-width: 360px;
-      }
-      .video-card h4 {
-        font-size: 18px;
-      }
-      .video-card.center h4 {
-        font-size: 22px;
+        height: 202px;
       }
     }
     footer {
@@ -704,24 +657,12 @@
     <div class="videos-grid">
       <div class="video-card">
         <iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe>
-        <div class="video-content">
-          <h4>Video 1</h4>
-          <span class="label">LIVE</span>
-        </div>
       </div>
       <div class="video-card center">
         <iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe>
-        <div class="video-content">
-          <h4>Video Principal</h4>
-          <span class="label">NEW</span>
-        </div>
       </div>
       <div class="video-card">
         <iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe>
-        <div class="video-content">
-          <h4>Video 3</h4>
-          <span class="label">CLIP</span>
-        </div>
       </div>
     </div>
   </section>
