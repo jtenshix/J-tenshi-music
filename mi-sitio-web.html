@@ -363,19 +363,18 @@
       font-size: 12px;
       padding: 5px 10px;
     }
-    /* === VIDEOS - PROPORCIÓN 16:9 === */
+    /* === VIDEOS === */
     .videos-grid {
       display: flex;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;
       gap: 30px;
       max-width: 1800px;
       margin: 100px auto;
       padding: 0 80px;
-      height: auto;
+      height: 400px;
     }
     .video-card {
-      position: relative;
       width: 400px;
       height: 225px;
       background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
@@ -394,12 +393,12 @@
       border: 2px solid rgba(224, 194, 123, 0.4);
     }
     .video-card:hover {
-      transform: scale(1.05);
+      transform: scale(1.07);
       z-index: 2;
       box-shadow: 0 12px 40px rgba(0,0,0,0.5);
     }
     .video-card.center:hover {
-      transform: scale(1.07);
+      transform: scale(1.1);
     }
     .video-card iframe {
       position: absolute;
@@ -441,6 +440,7 @@
         align-items: center;
         gap: 30px;
         padding: 0 30px;
+        height: auto;
       }
       .video-card, .video-card.center {
         width: 100%;
