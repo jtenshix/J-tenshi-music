@@ -1,211 +1,244 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tenshi | Noticias</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tenshi | 幻想の響き</title>
   <style>
-    body {
-      font-family: 'Helvetica Neue', sans-serif;
-      background: #0b0b0b;
-      color: #f5f5f5;
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
 
-    /* === HERO / BANNER PRINCIPAL === */
-    .hero-wrapper {
-      position: relative;
-      height: 70vh;
-      overflow: hidden;
-    }
-    .hero-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      background-position: center;
-      z-index: 0;
-    }
-    .hero-text {
-      position: relative;
-      z-index: 2;
-      color: white;
-      font-size: 2rem;
-      padding: 60px 5%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-    }
-
-    /* === SECCIÓN NOTICIAS === */
-    .news {
-      padding: 100px 5% 80px;
-      background-color: #1a1a1a;
-      max-width: 1200px;
-      margin: -50px auto 80px;
-      border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-    }
-    .news h2 {
-      font-size: 32px;
+    body {
+      font-family: Arial, sans-serif;
+      background: #000;
       color: #fff;
-      margin-bottom: 30px;
-      text-align: center;
+      line-height: 1.6;
     }
+
+    header {
+      text-align: center;
+      padding: 20px;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    section {
+      margin: 40px auto;
+      max-width: 1200px;
+      padding: 0 20px;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #fff;
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+
+    /* NEWS */
     .schedule-grid {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 20px;
     }
-    .main-news {
-      grid-column: 1 / 2;
-      grid-row: 1 / 3;
-      background: #222;
-      border-radius: 16px;
-      padding: 8px;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      overflow: hidden;
-    }
-    .news-card {
-      background: #222;
-      border-radius: 14px;
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      cursor: pointer;
-      aspect-ratio: 1 / 1;
-      overflow: hidden;
-      transition: transform 0.3s ease;
-    }
-    .news-card:hover {
-      transform: scale(1.05);
-    }
-    .news-card img, .main-news img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+
+    .news-item {
+      background: #111;
       border-radius: 10px;
-      margin-bottom: 10px;
+      overflow: hidden;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    .news-item img {
+      width: 100%;
+      height: auto;
       display: block;
     }
 
-    /* === SECCIÓN VIDEOS === */
-    .videos {
-      padding: 100px 5% 80px;
-      background-color: #1a1a1a;
-      max-width: 1200px;
-      margin: 0 auto 80px;
-      border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+    .news-item h3 {
+      font-size: 1rem;
+      margin: 10px 0;
     }
-    .videos h2 {
-      font-size: 32px;
-      color: #fff;
-      margin-bottom: 30px;
-      text-align: center;
-    }
+
+    /* NEWS VIDEOS */
     .video-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 20px 0;
+    }
+
+    .video-item {
+      background: #111;
+      border-radius: 10px;
+      overflow: hidden;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    .video-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .video-item h3 {
+      font-size: 1rem;
+      margin: 10px 0;
+    }
+
+    .video-item a {
+      color: #fff;
+      text-decoration: none;
+      display: block;
+    }
+
+    /* DISCOGRAFÍA */
+    .disc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
       gap: 20px;
     }
-    .video-wrapper {
-      position: relative;
-      width: 100%;
-      padding-top: 56.25%; /* 16:9 */
+
+    .disc-item {
+      background: #111;
+      border-radius: 10px;
       overflow: hidden;
-      border-radius: 12px;
+      text-align: center;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
-    .video-wrapper iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
+
+    .disc-item img {
       width: 100%;
-      height: 100%;
-      border: 0;
+      height: auto;
+      display: block;
     }
+
+    .disc-item h3 {
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    /* VIDEOS */
+    .yt-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .yt-grid iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: none;
+      border-radius: 10px;
+    }
+
   </style>
 </head>
 <body>
-  <!-- Banner dinámico -->
-  <div class="hero-wrapper">
-    <div class="hero-bg" id="banner"></div>
-    <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
-  </div>
+  <header>
+    <h1>Tenshi | 幻想の響き</h1>
+  </header>
 
-  <!-- Noticias -->
+  <!-- NEWS -->
   <section class="news">
     <h2>NEWS</h2>
     <div class="schedule-grid" id="news-grid"></div>
   </section>
 
-  <!-- News Videos dinámicos -->
+  <!-- NEWS VIDEOS -->
   <section class="videos">
     <h2>NEWS VIDEOS</h2>
     <div class="video-grid" id="news-videos-grid"></div>
   </section>
 
-  <!-- Discografía -->
-  <section class="news">
+  <!-- DISCOGRAFÍA -->
+  <section class="discografia">
     <h2>ディスコグラフィー</h2>
-    <!-- contenido discografía -->
+    <div class="disc-grid" id="disc-grid"></div>
+  </section>
+
+  <!-- VIDEOS -->
+  <section class="yt-videos">
+    <h2>VIDEOS</h2>
+    <div class="yt-grid" id="yt-grid"></div>
   </section>
 
   <script>
-    async function cargarCatalogo() {
-      try {
-        const response = await fetch("data/catalogo.json");
-        const data = await response.json();
+    const data = {
+      news: [
+        { title: "Noticia 1", img: "img/news1.jpg" },
+        { title: "Noticia 2", img: "img/news2.jpg" }
+      ],
+      news_videos: [
+        { title: "Video 1", img: "img/video1.jpg", url: "https://youtu.be/xxxxx" },
+        { title: "Video 2", img: "img/video2.jpg", url: "https://youtu.be/yyyyy" }
+      ],
+      discografia: [
+        { title: "Álbum 1", img: "img/album1.jpg" },
+        { title: "Álbum 2", img: "img/album2.jpg" }
+      ],
+      videos: [
+        { url: "https://www.youtube.com/embed/ScMzIvxBSi4" },
+        { url: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+      ]
+    };
 
-        // Banner principal
-        const banner = document.getElementById("banner");
-        banner.style.backgroundImage = `url('${data.banner_principal}')`;
+    // NEWS
+    const newsGrid = document.getElementById("news-grid");
+    data.news.forEach(item => {
+      const div = document.createElement("div");
+      div.classList.add("news-item");
+      div.innerHTML = `
+        <img src="${item.img}" alt="${item.title}">
+        <h3>${item.title}</h3>
+      `;
+      newsGrid.appendChild(div);
+    });
 
-        // Noticias
-        const grid = document.getElementById("news-grid");
-        grid.innerHTML = "";
+    // NEWS VIDEOS
+    const videoGrid = document.getElementById("news-videos-grid");
+    data.news_videos.forEach(video => {
+      const div = document.createElement("div");
+      div.classList.add("video-item");
+      div.innerHTML = `
+        <a href="${video.url}" target="_blank">
+          <img src="${video.img}" alt="${video.title}">
+          <h3>${video.title}</h3>
+        </a>
+      `;
+      videoGrid.appendChild(div);
+    });
 
-        let i = 0;
-        data.news.forEach(nota => {
-          const card = document.createElement("div");
-          card.className = i === 0 ? "main-news" : "news-card";
-          card.innerHTML = `<img src="${nota.imagen}" alt="Noticia">`;
-          grid.appendChild(card);
-          i++;
-        });
+    // DISCOGRAFÍA
+    const discGrid = document.getElementById("disc-grid");
+    data.discografia.forEach(item => {
+      const div = document.createElement("div");
+      div.classList.add("disc-item");
+      div.innerHTML = `
+        <img src="${item.img}" alt="${item.title}">
+        <h3>${item.title}</h3>
+      `;
+      discGrid.appendChild(div);
+    });
 
-        // News Videos
-        const videoGrid = document.getElementById("news-videos-grid");
-        videoGrid.innerHTML = "";
-
-        data.news_videos.forEach(video => {
-          const wrapper = document.createElement("div");
-          wrapper.className = "video-wrapper";
-          wrapper.innerHTML = `
-            <iframe src="https://www.youtube.com/embed/${video.youtube_id}"
-              title="News Video"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen></iframe>
-          `;
-          videoGrid.appendChild(wrapper);
-        });
-
-      } catch (e) {
-        console.error("Error cargando catálogo:", e);
-      }
-    }
-
-    cargarCatalogo();
+    // VIDEOS
+    const ytGrid = document.getElementById("yt-grid");
+    data.videos.forEach(video => {
+      const iframe = document.createElement("iframe");
+      iframe.src = video.url;
+      iframe.allowFullscreen = true;
+      ytGrid.appendChild(iframe);
+    });
   </script>
 </body>
 </html>
