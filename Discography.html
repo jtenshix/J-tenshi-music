@@ -41,7 +41,7 @@
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     }
 
-    /* === SECCIÓN NOTICIAS === */
+    /* === SECCIÓN NOTICIAS (igual al código prueba) === */
     .news {
       padding: 100px 5% 80px;
       background-color: #1a1a1a;
@@ -98,7 +98,7 @@
       display: block;
     }
 
-    /* === SECCIÓN VIDEOS === */
+    /* === SECCIÓN VIDEOS (integrada del código final) === */
     .videos {
       padding: 100px 5% 80px;
       background-color: #1a1a1a;
@@ -166,7 +166,7 @@
         const banner = document.getElementById("banner");
         banner.style.backgroundImage = `url('${data.banner_principal}')`;
 
-        // Noticias
+        // Noticias (SIN CAMBIOS)
         const grid = document.getElementById("news-grid");
         grid.innerHTML = "";
         let i = 0;
@@ -178,12 +178,13 @@
           i++;
         });
 
-        // Videos
+        // Videos (ADAPTADO)
         const videoGrid = document.getElementById("video-grid");
         videoGrid.innerHTML = "";
         data.videos.forEach(video => {
-          // convertir URL normal de YouTube en embed
-          const embedUrl = video.url.replace("watch?v=", "embed/").replace("youtu.be/", "www.youtube.com/embed/");
+          const embedUrl = video.url
+            .replace("watch?v=", "embed/")
+            .replace("youtu.be/", "www.youtube.com/embed/");
           const card = document.createElement("div");
           card.className = "video-card";
           card.innerHTML = `
