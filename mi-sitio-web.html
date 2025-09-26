@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
@@ -274,7 +274,7 @@
       text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
       user-select: none;
     }
-    /* === DISCOS === */
+    /* === DISCOGRAFÍA === */
     .discography-grid {
       display: flex;
       justify-content: center;
@@ -364,27 +364,16 @@
       padding: 5px 10px;
     }
     /* === VIDEOS === */
-    .videos {
-      padding: 80px 5%;
-      background-color: #1a1a1a;
-      max-width: 1200px;
-      margin: 0 auto 80px;
-      border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-      transition: background 0.3s ease;
-    }
-    .videos h2 {
-      font-size: 32px;
-      color: #fff;
-      margin-bottom: 30px;
-      text-align: center;
-    }
     .videos-grid {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 30px;
-      flex-wrap: wrap;
+      max-width: 1800px;
+      margin: 100px auto;
+      padding: 0 80px;
+      height: 400px;
+      position: relative;
     }
     .video-card {
       width: 400px;
@@ -395,9 +384,10 @@
       z-index: 1;
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
       border: 2px solid rgba(224, 194, 123, 0.2);
-      position: relative;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative; 
     }
+  
     .video-card.center {
       width: 560px;
       height: 315px;
@@ -422,6 +412,9 @@
       border: 0;
     }
     @media (max-width: 1400px) {
+      .videos-grid {
+        padding: 0 60px;
+      }
       .video-card {
         width: 350px;
         height: 197px;
@@ -431,7 +424,7 @@
         height: 256px;
       }
     }
-    @media (max-width: 900px) {
+    @media (max-width: 1200px) {
       .videos-grid {
         padding: 0 40px;
       }
@@ -442,6 +435,24 @@
       .video-card.center {
         width: 390px;
         height: 219px;
+      }
+    }
+    @media (max-width: 900px) {
+      .videos-grid {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        padding: 0 30px;
+        height: auto;
+      }
+      .video-card, .video-card.center {
+        width: 100%;
+        max-width: 320px;
+        height: 180px;
+      }
+      .video-card.center {
+        max-width: 360px;
+        height: 202px;
       }
     }
     @media (max-width: 600px) {
@@ -476,12 +487,10 @@
     </nav>
     <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
   </header>
-
   <div class="hero-wrapper">
     <div class="hero-bg"></div>
     <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
   </div>
-
   <div class="contenedor-centrado">
     <div class="social-bar music-platforms">
       <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" style="color: #1DB954;">
@@ -518,7 +527,6 @@
       </a>
     </div>
   </div>
-
   <section class="news" id="news">
     <h2>NEWS <span>ニュース</span></h2>
     <nav class="schedule-filters">
@@ -527,11 +535,39 @@
       <button>Lanzamientos</button>
       <button>Eventos</button>
     </nav>
-    <div class="schedule-grid" id="news-grid">
-      <!-- Aquí se cargarán las noticias dinámicamente desde catalogo.json -->
+    <div class="schedule-grid">
+      <article class="main-news">
+        <div class="date">08 JUL 2025</div>
+        <h3>Gran Concierto de Tenshi en Tokio</h3>
+        <p>El esperado concierto en el Nippon será el evento del año.</p>
+        <span class="label new">NEW</span>
+      </article>
+      <div class="news-card">
+        <div class="date">07 JUL 2025</div>
+        <h4>Nuevo sencillo</h4>
+        <p>"Shinkai no Melody" disponible ya.</p>
+        <span class="label">RELEASE</span>
+      </div>
+      <div class="news-card">
+        <div class="date">05 JUL 2025</div>
+        <h4>Evento online</h4>
+        <p>Streaming con sorpresas.</p>
+        <span class="label">EVENT</span>
+      </div>
+      <div class="news-card">
+        <div class="date">03 JUL 2025</div>
+        <h4>Premio ganado</h4>
+        <p>Mejor artista emergente.</p>
+        <span class="label">AWARD</span>
+      </div>
+      <div class="news-card">
+        <div class="date">09 JUL 2025</div>
+        <h4>Nuevo Wallpaper</h4>
+        <p>Descarga el nuevo wallpaper oficial.</p>
+        <span class="label new">NEW</span>
+      </div>
     </div>
   </section>
-
   <div class="section-banner">ディスコグラフィー</div>
   <section class="discography" id="discography">
     <div class="discography-grid">
@@ -547,7 +583,7 @@
         <div class="content">
           <h4>Álbum Verde</h4>
           <span class="label">EP</span>
-        </div> 
+        </div>
       </div>
       <div class="discography-card center">
         <div class="color-overlay" style="background: linear-gradient(135deg, #45B7D1, #B3E5FC);"></div>
@@ -572,22 +608,25 @@
       </div>
     </div>
   </section>
-
   <div class="section-banner">ビデオ</div>
   <section class="videos" id="videos">
-    <h2>Videos</h2>
-    <div class="videos-grid" id="videos-grid">
-      <!-- Videos dinámicos desde catalogo.json -->
+    <div class="videos-grid">
+      <div class="video-card">
+        <iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe>
+      </div>
+      <div class="video-card center">
+        <iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe>
+      </div>
+      <div class="video-card">
+        <iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe>
+      </div>
     </div>
   </section>
-
   <footer>
     <div class="social-bar"></div>
     <p>j-tenshiwebcomingsoon</p>
   </footer>
-
   <script>
-    // Manejo de tema claro / oscuro
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
       localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
@@ -595,74 +634,14 @@
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-mode');
     }
-
     document.addEventListener('DOMContentLoaded', () => {
-      // Filtros de noticias (sin lógica adicional por ahora)
       document.querySelectorAll('.schedule-filters button').forEach(button => {
         button.addEventListener('click', () => {
           document.querySelectorAll('.schedule-filters button').forEach(b => b.classList.remove('active'));
           button.classList.add('active');
         });
       });
-
-      // Cargar catálogo (banner, noticias, videos) desde JSON
-      cargarCatalogo();
     });
-
-    async function cargarCatalogo() {
-      try {
-        const response = await fetch("data/catalogo.json");
-        const data = await response.json();
-
-        // Banner principal (si lo tienes definido en el JSON)
-        const heroBg = document.querySelector('.hero-bg');
-        if (data.banner_principal) {
-          heroBg.style.backgroundImage = `url('${data.banner_principal}')`;
-        }
-
-        // Noticias
-        const newsGrid = document.getElementById("news-grid");
-        newsGrid.innerHTML = "";
-        let i = 0;
-        if (data.news) {
-          Object.values(data.news).forEach(nota => {
-            const card = document.createElement("div");
-            card.className = (i === 0 ? "main-news" : "news-card");
-            // Puedes adaptar para que tengan título, fecha, etc., si los agregas al JSON
-            card.innerHTML = `
-              ${ nota.imagen ? `<img src="${nota.imagen}" alt="Noticia">` : "" }
-              ${ nota.date ? `<div class="date">${nota.date}</div>` : "" }
-              ${ nota.title ? `<h4>${nota.title}</h4>` : "" }
-              ${ nota.text ? `<p>${nota.text}</p>` : "" }
-              ${ nota.label ? `<span class="label ${nota.labelClass || ""}">${nota.label}</span>` : "" }
-            `;
-            newsGrid.appendChild(card);
-            i++;
-          });
-        }
-
-        // Videos dinámicos
-        const videosGrid = document.getElementById("videos-grid");
-        videosGrid.innerHTML = "";
-        if (data.videos) {
-          data.videos.forEach((video, idx) => {
-            const wrapper = document.createElement("div");
-            wrapper.className = "video-card";
-            // Puedes definir un “center” si quieres destacar alguno, por ej. el del medio
-            // if (idx === Math.floor(data.videos.length / 2)) {
-            //   wrapper.classList.add("center");
-            // }
-            wrapper.innerHTML = `
-              <iframe src="${video.link}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            `;
-            videosGrid.appendChild(wrapper);
-          });
-        }
-
-      } catch (e) {
-        console.error("Error cargando catálogo:", e);
-      }
-    }
   </script>
 </body>
 </html>
