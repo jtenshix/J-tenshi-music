@@ -16,5 +16,16 @@
     "n5": {
       "imagen": "https://lh3.googleusercontent.com/d/120H84Gd9y5BeR_Pt6a2_Q13wkPy1tdHd"
     }
-  }
+  },
+  "videos": [
+    {
+      "url": "https://www.youtube.com/embed/XXXXXXXXXXX"
+    },
+    {
+      "url": "https://www.youtube.com/embed/YYYYYYYYYYY"
+    },
+    {
+      "url": "https://www.youtube.com/embed/ZZZZZZZZZZZ"
+    }
+  ]
 }
