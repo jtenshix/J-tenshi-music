@@ -92,46 +92,9 @@
     .news-card img, .main-news img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: cover; /* Ajusta la imagen al contenedor */
       border-radius: 10px;
       margin-bottom: 10px;
-      display: block;
-    }
-
-    /* === SECCIÓN VIDEOS === */
-    .videos {
-      padding: 100px 5% 80px;
-      background-color: #111;
-      max-width: 1200px;
-      margin: 0 auto 80px;
-      border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-    }
-    .videos h2 {
-      font-size: 32px;
-      color: #fff;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-    .video-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-    .video-card {
-      background: #222;
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 0 15px rgba(0,0,0,0.4);
-      aspect-ratio: 16 / 9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .video-card iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
       display: block;
     }
   </style>
@@ -148,14 +111,6 @@
     <h2>NEWS</h2>
     <div class="schedule-grid" id="news-grid">
       <!-- Noticias dinámicas desde catalogo.json -->
-    </div>
-  </section>
-
-  <!-- Videos -->
-  <section class="videos">
-    <h2>VIDEOS</h2>
-    <div class="video-grid" id="video-grid">
-      <!-- Videos dinámicos desde catalogo.json -->
     </div>
   </section>
 
@@ -183,22 +138,6 @@
           grid.appendChild(card);
           i++;
         });
-
-        // Videos
-        const videoGrid = document.getElementById("video-grid");
-        videoGrid.innerHTML = "";
-
-        if (data.videos) {
-          data.videos.forEach(video => {
-            const videoCard = document.createElement("div");
-            videoCard.className = "video-card";
-            videoCard.innerHTML = `
-              <iframe src="${video.url}" allowfullscreen></iframe>
-            `;
-            videoGrid.appendChild(videoCard);
-          });
-        }
-
       } catch (e) {
         console.error("Error cargando catálogo:", e);
       }
