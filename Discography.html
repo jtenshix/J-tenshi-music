@@ -56,12 +56,14 @@
       margin-bottom: 30px;
       text-align: center;
     }
+
     .schedule-grid {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr;
       grid-template-rows: 1fr 1fr;
       gap: 20px;
     }
+
     .main-news {
       grid-column: 1 / 2;
       grid-row: 1 / 3;
@@ -74,6 +76,7 @@
       justify-content: space-between;
       overflow: hidden;
     }
+
     .news-card {
       background: #222;
       border-radius: 14px;
@@ -89,54 +92,20 @@
     .news-card:hover {
       transform: scale(1.05);
     }
-    .news-card img, .main-news img {
+
+    .news-card img,
+    .main-news img {
       width: 100%;
       height: 100%;
-      object-fit: cover; 
+      object-fit: cover; /* Ajusta la imagen al contenedor */
       border-radius: 10px;
       margin-bottom: 10px;
       display: block;
     }
-
-    /* === SECCIÓN VIDEOS === */
-    .videos {
-      padding: 100px 5% 80px;
-      background-color: #1a1a1a;
-      max-width: 1200px;
-      margin: -50px auto 80px;
-      border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-    }
-    .videos h2 {
-      font-size: 32px;
-      color: #fff;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-    .video-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-    .video-card {
-      position: relative;
-      padding-bottom: 56.25%;
-      height: 0;
-      overflow: hidden;
-      border-radius: 14px;
-      background: #222;
-    }
-    .video-card iframe {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-      border-radius: 14px;
-    }
   </style>
 </head>
 <body>
+
   <!-- Banner dinámico -->
   <div class="hero-wrapper">
     <div class="hero-bg" id="banner"></div>
@@ -146,13 +115,9 @@
   <!-- Noticias -->
   <section class="news">
     <h2>NEWS</h2>
-    <div class="schedule-grid" id="news-grid"></div>
-  </section>
-
-  <!-- Videos -->
-  <section class="videos">
-    <h2>VIDEOS</h2>
-    <div class="video-grid" id="video-grid"></div>
+    <div class="schedule-grid" id="news-grid">
+      <!-- Noticias dinámicas desde catalogo.json -->
+    </div>
   </section>
 
   <script>
@@ -168,6 +133,7 @@
         // Noticias
         const grid = document.getElementById("news-grid");
         grid.innerHTML = "";
+
         let i = 0;
         Object.values(data.news).forEach(nota => {
           const card = document.createElement("div");
@@ -175,23 +141,6 @@
           card.innerHTML = `<img src="${nota.imagen}" alt="Noticia">`;
           grid.appendChild(card);
           i++;
-        });
-
-        // Videos
-        const videoGrid = document.getElementById("video-grid");
-        videoGrid.innerHTML = "";
-        data.videos.forEach(video => {
-          const videoCard = document.createElement("div");
-          videoCard.className = "video-card";
-          const videoId = video.url.split("v=")[1]?.split("&")[0] || video.url.split("/").pop();
-          videoCard.innerHTML = `
-            <iframe 
-              src="https://www.youtube.com/embed/${videoId}" 
-              frameborder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowfullscreen>
-            </iframe>`;
-          videoGrid.appendChild(videoCard);
         });
       } catch (e) {
         console.error("Error cargando catálogo:", e);
