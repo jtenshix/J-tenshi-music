@@ -505,6 +505,82 @@
       color: #ccc;
       letter-spacing: 1px;
     }
+/* === FIX CARRUSELES: pegar AL FINAL del <style> === */
+
+/* suaviza transiciones y asegura z-index base */
+.discography-card,
+.video-card {
+  transition: transform 0.5s ease, opacity 0.5s ease, box-shadow 0.3s ease;
+  z-index: 1;
+}
+
+/* 1) Evitar transparencias incómodas: mostrar laterales opacos */
+.discography-card.left-2,
+.discography-card.left-1,
+.discography-card.right-1,
+.discography-card.right-2,
+.video-card.left,
+.video-card.right {
+  opacity: 1 !important;
+}
+
+/* 2) Mantener la tarjeta central siempre por delante */
+.discography-card.center,
+.video-card.center {
+  z-index: 100 !important;
+}
+
+/* 3) NO sobrescribas transform del card en :hover (evita saltos).
+   En vez de eso, escalamos el contenido interno (.content) o el iframe. */
+.discography-card .content {
+  transition: transform 0.35s ease;
+  transform-origin: center center;
+}
+
+/* elimina el transform global en hover (solo sombra y escala interna) */
+.discography-card:hover {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  /* NO poner transform ni z-index aquí para no romper la posición */
+}
+
+/* escala solo el contenido interno para efecto hover */
+.discography-card:hover .content {
+  transform: scale(1.06);
+}
+
+/* efecto un poco mayor si la central está hover */
+.discography-card.center:hover .content {
+  transform: scale(1.10);
+}
+
+/* === Video cards: mismo enfoque (no sobreescribir transform del card) === */
+.video-card iframe {
+  transition: transform 0.35s ease;
+  transform-origin: center center;
+}
+
+.video-card:hover {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  /* NO cambiar transform del card */
+}
+
+/* escala el iframe dentro (suavemente) */
+.video-card:hover iframe {
+  transform: scale(1.02);
+}
+
+/* escala un poco más si la central está hover */
+.video-card.center:hover iframe {
+  transform: scale(1.04);
+}
+
+/* opcional: evita que elementos ocultos interfieran */
+.discography-card.right-2,
+.discography-card.left-2 {
+  pointer-events: none; /* si quieres que los extremos no sean clicables */
+}
+
+    
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
