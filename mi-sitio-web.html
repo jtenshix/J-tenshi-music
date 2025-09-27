@@ -459,6 +459,35 @@
     .video-card.center:hover iframe {
       transform: scale(1.04);
     }
+    /* === Flechas de navegación === */
+    .carousel-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      color: #e0c27b;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      transition: all 0.3s ease;
+    }
+    .carousel-nav:hover {
+      background: rgba(224, 194, 123, 0.8);
+      color: #000;
+    }
+    .carousel-nav.prev {
+      left: 10px;
+    }
+    .carousel-nav.next {
+      right: 10px;
+    }
     @media (max-width: 1400px) {
       .videos-grid {
         padding: 0 60px;
@@ -622,6 +651,7 @@
   <div class="section-banner">ディスコグラフィー</div>
   <section class="discography" id="discography">
     <div class="discography-grid" id="discographyCarousel">
+      <button class="carousel-nav prev" onclick="moveDiscographyCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
       <div class="discography-card left-2">
         <div class="color-overlay" style="background: linear-gradient(135deg, #FF6B6B, #FF8E8E);"></div>
         <div class="content">
@@ -657,11 +687,13 @@
           <span class="label">EP</span>
         </div>
       </div>
+      <button class="carousel-nav next" onclick="moveDiscographyCarousel(1)"><i class="fas fa-chevron-right"></i></button>
     </div>
   </section>
   <div class="section-banner">ビデオ</div>
   <section class="videos" id="videos">
     <div class="videos-grid" id="videosCarousel">
+      <button class="carousel-nav prev" onclick="moveVideosCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
       <div class="video-card left">
         <iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe>
       </div>
@@ -671,6 +703,7 @@
       <div class="video-card right">
         <iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe>
       </div>
+      <button class="carousel-nav next" onclick="moveVideosCarousel(1)"><i class="fas fa-chevron-right"></i></button>
     </div>
   </section>
   <footer>
@@ -766,6 +799,54 @@
       initDiscographyCarousel();
       initVideosCarousel();
     });
+    // Función para mover carrusel de discografía manualmente
+    function moveDiscographyCarousel(direction) {
+      const carousel = document.getElementById('discographyCarousel');
+      const cards = carousel.querySelectorAll('.discography-card');
+      let currentCenterIndex = 0;
+      cards.forEach((card, index) => {
+        if (card.classList.contains('center')) {
+          currentCenterIndex = index;
+        }
+      });
+      currentCenterIndex = (currentCenterIndex + direction + cards.length) % cards.length;
+      cards.forEach((card, index) => {
+        card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2');
+        if (index === currentCenterIndex) {
+          card.classList.add('center');
+        } else if (index === (currentCenterIndex - 1 + cards.length) % cards.length) {
+          card.classList.add('left-1');
+        } else if (index === (currentCenterIndex - 2 + cards.length) % cards.length) {
+          card.classList.add('left-2');
+        } else if (index === (currentCenterIndex + 1) % cards.length) {
+          card.classList.add('right-1');
+        } else {
+          card.classList.add('right-2');
+        }
+      });
+    }
+    // Función para mover carrusel de videos manualmente
+    function moveVideosCarousel(direction) {
+      const carousel = document.getElementById('videosCarousel');
+      const cards = carousel.querySelectorAll('.video-card');
+      let currentCenterIndex = 0;
+      cards.forEach((card, index) => {
+        if (card.classList.contains('center')) {
+          currentCenterIndex = index;
+        }
+      });
+      currentCenterIndex = (currentCenterIndex + direction + cards.length) % cards.length;
+      cards.forEach((card, index) => {
+        card.classList.remove('center', 'left', 'right');
+        if (index === currentCenterIndex) {
+          card.classList.add('center');
+        } else if (index === (currentCenterIndex + 1) % cards.length) {
+          card.classList.add('right');
+        } else {
+          card.classList.add('left');
+        }
+      });
+    }
   </script>
 </body>
 </html>
