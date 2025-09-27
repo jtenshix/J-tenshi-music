@@ -1,328 +1,133 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tenshi | 幻想の響き</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discografía | Prueba con Catálogo</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Helvetica Neue', sans-serif;
+      font-family: Arial, sans-serif;
       background: #0b0b0b;
       color: #f5f5f5;
-      overflow-x: hidden;
-      width: 100%;
-      height: 100%;
-      transition: background 0.3s, color 0.3s;
-    }
-    body.light-mode { background: #f5f5f5; color: #111; }
-    @keyframes shake {
-      0% { transform: translateX(0) scale(1.15); }
-      2% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); }
-      5% { transform: translateX(0.5px) rotate(0.5deg) scale(1.15); }
-      7% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); }
-      100% { transform: translateX(0) rotate(0deg) scale(1.15); }
+      margin: 0;
+      padding: 0;
     }
     header {
-      position: fixed; top: 0; width: 100%;
-      background: rgba(0,0,0,0.8); padding: 20px 5%;
-      display: flex; justify-content: space-between; align-items: center;
-      z-index: 999; backdrop-filter: blur(10px);
+      text-align: center;
+      padding: 20px;
+      background: #111;
     }
-    header .logo { color: #fff; font-size: 20px; letter-spacing: 2px; }
-    nav ul { display: flex; gap: 25px; list-style: none; }
-    nav a { color: #ccc; text-decoration: none; font-size: 14px; transition: all 0.3s ease; display: inline-block; }
-    nav a:hover { color: #e0c27b; animation: shake 0.2s ease-in-out infinite alternate; }
-    .theme-toggle {
-      background: none; border: 1px solid #777; color: #ccc; padding: 6px 12px;
-      border-radius: 8px; cursor: pointer; transition: all 0.3s; font-size: 12px; margin-left: 20px;
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+      color: #e0c27b;
     }
-    .theme-toggle:hover { background: #e0c27b; color: #000; }
-    .hero-wrapper { position: relative; height: 70vh; overflow: hidden; margin-top: 70px; }
-    .hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 75vh; background-size: cover; background-position: center; z-index: 0; }
-    .hero-text {
-      position: relative; z-index: 2; color: white; font-size: 2rem; padding: 60px 5%;
-      height: 75vh; display: flex; align-items: center; text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    .banner {
+      width: 100%;
+      height: 300px;
+      background-size: cover;
+      background-position: center;
     }
-    .contenedor-centrado { display: flex; flex-direction: column; align-items: center; padding: 20px 0; margin-top: 20px; }
-    .social-bar { display: flex; justify-content: center; gap: 30px; margin: 20px 0; width: 100%; max-width: 800px; }
-    .social-bar a { display: inline-block; transition: transform 0.3s ease, fill 0.3s ease; }
-    .social-bar svg, .social-bar i { width: 36px; height: 36px; }
-    .news {
-      padding: 100px 5% 80px; background-color: #1a1a1a; max-width: 1200px;
-      margin: -50px auto 80px; border-radius: 12px; box-shadow: 0 0 30px rgba(0,0,0,0.3);
-      transition: background 0.3s ease;
+    section.news {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
     }
-    .news h2 { font-size: 32px; color: #fff; margin-bottom: 30px; text-align: center; }
-    .news h2 span { font-size: 14px; color: #ccc; margin-left: 10px; }
-    .schedule-filters { margin-bottom: 40px; display: flex; justify-content: center; gap: 20px; }
-    .schedule-filters button {
-      background: none; border: 1px solid #555; color: #ccc; padding: 8px 18px; font-size: 14px;
-      cursor: pointer; border-radius: 20px; transition: all 0.3s ease;
+    section.news h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 22px;
+      color: #e0c27b;
     }
-    .schedule-filters button.active, .schedule-filters button:hover { color: #e0c27b; border-color: #e0c27b; }
-    .schedule-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 20px; max-width: 1200px; margin: 0 auto; }
-    .main-news { grid-column: 1 / 2; grid-row: 1 / 3; background: linear-gradient(135deg, #4c51bf); border-radius: 16px; padding: 20px; color: #fff; box-shadow: 0 0 20px rgba(76,81,191,0.8); display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; }
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
     .news-card {
-      background: #222; border-radius: 14px; padding: 20px; box-shadow: 0 0 15px rgba(0,0,0,0.5);
-      display: flex; flex-direction: column; justify-content: center; cursor: pointer; aspect-ratio: 1 / 1; overflow: hidden; transition: transform 0.3s ease; width: 100%;
+      background: #222;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+      transition: transform 0.2s;
     }
-    .news-card:hover { transform: scale(1.05); animation: shake 0.2s ease-in-out infinite alternate; }
-    .news-card h4 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; text-align: center; }
-    .news-card .date { font-weight: 700; font-size: 14px; color: #ccc; text-align: center; margin-bottom: 10px; }
-    .news-card p { color: #ccc; font-size: 14px; text-align: center; }
-    .news-card .label { font-size: 11px; color: #e0c27b; border: 1px solid #e0c27b; padding: 2px 6px; border-radius: 999px; width: fit-content; margin: 10px auto 0; display: block; }
-    .section-banner {
-      position: relative; width: 100%; height: 300px; margin: 60px auto; border-radius: 12px;
-      background: url('banner portada.png') center center no-repeat; background-size: cover;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;
-      color: #e0c27b; font-size: 3rem; font-weight: 900; font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
-      text-shadow: 0 0 15px rgba(224,194,123,0.7); user-select: none;
+    .news-card:hover {
+      transform: scale(1.05);
     }
-    .discography-grid { display: flex; justify-content: center; align-items: center; gap: 30px; max-width: 1200px; margin: 60px auto; padding: 0 40px; height: 400px; overflow: hidden; position: relative; }
-    .discography-card { flex: 0 0 auto; width: 220px; aspect-ratio: 1/1; background: #1a1a1a; border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #fff; font-weight: 600; cursor: pointer; position: relative; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 2px solid transparent; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.3); transform: scale(1); }
-    .discography-card.center { width: 300px; transform: scale(1.05); }
-    .discography-card:hover { transform: scale(1.15); z-index: 2; box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
-    .discography-card.center:hover { transform: scale(1.2); }
-    .discography-card .color-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 18px; z-index: 1; opacity: 0.8; }
-    .discography-card .content { position: relative; z-index: 2; padding: 20px; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .videos-grid { display: flex; justify-content: center; align-items: center; gap: 30px; max-width: 1800px; margin: 100px auto; padding: 0 80px; height: 400px; position: relative; }
-    .video-card { width: 400px; height: 225px; background: linear-gradient(135deg, #1a1a1a, #2d2d2d); border-radius: 12px; overflow: hidden; z-index: 1; box-shadow: 0 15px 40px rgba(0,0,0,0.4); border: 2px solid rgba(224,194,123,0.2); transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; }
-    .video-card.center { width: 560px; height: 315px; z-index: 3; box-shadow: 0 30px 80px rgba(0,0,0,0.5); border: 2px solid rgba(224,194,123,0.4); }
-    .video-card iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-    @media (max-width: 1400px) {
-      .videos-grid { padding: 0 60px; }
-      .video-card { width: 350px; height: 197px; }
-      .video-card.center { width: 455px; height: 256px; }
+    .news-card img {
+      max-width: 100%;
+      border-radius: 6px;
+      margin-bottom: 10px;
     }
-    @media (max-width: 1200px) {
-      .videos-grid { padding: 0 40px; }
-      .video-card { width: 300px; height: 169px; }
-      .video-card.center { width: 390px; height: 219px; }
+    .news-card h4 {
+      margin: 10px 0 5px;
+      font-size: 16px;
+      color: #fff;
     }
-    @media (max-width: 900px) {
-      .videos-grid { flex-direction: column; align-items: center; gap: 30px; padding: 0 30px; height: auto; }
-      .video-card, .video-card.center { width: 100%; max-width: 320px; height: 180px; }
-      .video-card.center { max-width: 360px; height: 202px; }
+    .news-card p {
+      font-size: 14px;
+      color: #ccc;
     }
-    @media (max-width: 600px) {
-      .videos-grid { padding: 0 10px; }
-      .video-card, .video-card.center { max-width: 360px; height: 202px; }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #111;
+      margin-top: 40px;
+      color: #aaa;
     }
-    footer { padding: 100px 0 50px; text-align: center; color: #ccc; letter-spacing: 1px; }
   </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
   <header>
-    <div class="logo">Tenshi</div>
-    <nav>
-      <ul>
-        <li><a href="#news">News</a></li>
-        <li><a href="#discography" id="link-discography">Discography</a></li>
-        <li><a href="#videos">Videos</a></li>
-        <li><a href="#gallery">Gallery</a></li>
-        <li><a href="#studio">My Studio</a></li>
-      </ul>
-    </nav>
-    <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
+    <h1>Discografía (Prueba con Catálogo)</h1>
   </header>
 
-  <div class="hero-wrapper">
-    <div class="hero-bg"></div>
-    <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
-  </div>
+  <!-- Banner dinámico -->
+  <div class="banner" id="banner"></div>
 
-  <div class="contenedor-centrado">
-    <div class="social-bar music-platforms">
-      <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" style="color: #1DB954;"><i class="fab fa-spotify"></i></a>
-      <a href="https://music.apple.com" target="_blank" rel="noopener noreferrer" style="color: #FA57C1;"><i class="fab fa-apple"></i></a>
-      <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" style="color: #FF0000;"><i class="fab fa-youtube"></i></a>
-      <a href="https://www.deezer.com" target="_blank" rel="noopener noreferrer" style="color: #FF0000;"><i class="fab fa-deezer"></i></a>
-      <a href="https://music.amazon.com" target="_blank" rel="noopener noreferrer" style="color: #FF9900;"><i class="fab fa-amazon"></i></a>
-      <a href="https://tidal.com" target="_blank" rel="noopener noreferrer" style="color: #000000;"><i class="fab fa-tidal"></i></a>
-    </div>
-    <div class="social-bar social-networks">
-      <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" style="color: #E1306C;"><i class="fab fa-instagram"></i></a>
-      <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" style="color: #1877F2;"><i class="fab fa-facebook"></i></a>
-      <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" style="color: #1DA1F2;"><i class="fab fa-twitter"></i></a>
-      <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" style="color: #FE2C55;"><i class="fab fa-tiktok"></i></a>
-    </div>
-  </div>
-
-  <section class="news" id="news">
-    <h2>NEWS <span>ニュース</span></h2>
-    <nav class="schedule-filters">
-      <button class="active">Todos</button>
-      <button>Conciertos</button>
-      <button>Lanzamientos</button>
-      <button>Eventos</button>
-    </nav>
-
-    <div class="schedule-grid">
-      <article class="main-news" id="main-news">
-        <div class="date">08 JUL 2025</div>
-        <h3>Gran Concierto de Tenshi en Tokio</h3>
-        <p>El esperado concierto en el Nippon será el evento del año.</p>
-        <span class="label new">NEW</span>
-        <!-- img dinámico se insertará aquí si existe -->
-      </article>
-
-      <div class="news-card" id="news-1">
-        <div class="date">07 JUL 2025</div>
-        <h4>Nuevo sencillo</h4>
-        <p>"Shinkai no Melody" disponible ya.</p>
-        <span class="label">RELEASE</span>
-        <!-- img dinámico se insertará aquí si existe -->
-      </div>
-
-      <div class="news-card" id="news-2">
-        <div class="date">05 JUL 2025</div>
-        <h4>Evento online</h4>
-        <p>Streaming con sorpresas.</p>
-        <span class="label">EVENT</span>
-        <!-- img dinámico se insertará aquí si existe -->
-      </div>
-
-      <div class="news-card" id="news-3">
-        <div class="date">03 JUL 2025</div>
-        <h4>Premio ganado</h4>
-        <p>Mejor artista emergente.</p>
-        <span class="label">AWARD</span>
-        <!-- img dinámico se insertará aquí si existe -->
-      </div>
-
-      <div class="news-card" id="news-4">
-        <div class="date">09 JUL 2025</div>
-        <h4>Nuevo Wallpaper</h4>
-        <p>Descarga el nuevo wallpaper oficial.</p>
-        <span class="label new">NEW</span>
-        <!-- img dinámico se insertará aquí si existe -->
-      </div>
-    </div>
-  </section>
-
-  <div class="section-banner">ディスコグラフィー</div>
-  <section class="discography" id="discography">
-    <div class="discography-grid">
-      <div class="discography-card">
-        <div class="color-overlay" style="background: linear-gradient(135deg, #FF6B6B, #FF8E8E);"></div>
-        <div class="content"><h4>Álbum Rojo</h4><span class="label">Single</span></div>
-      </div>
-      <div class="discography-card">
-        <div class="color-overlay" style="background: linear-gradient(135deg, #4ECDC4, #A1FFE6);"></div>
-        <div class="content"><h4>Álbum Verde</h4><span class="label">EP</span></div>
-      </div>
-      <div class="discography-card center">
-        <div class="color-overlay" style="background: linear-gradient(135deg, #45B7D1, #B3E5FC);"></div>
-        <div class="content"><h4>Álbum Azul</h4><span class="label">Álbum</span></div>
-      </div>
-      <div class="discography-card">
-        <div class="color-overlay" style="background: linear-gradient(135deg, #FFA07A, #FFDAB9);"></div>
-        <div class="content"><h4>Álbum Naranja</h4><span class="label">Single</span></div>
-      </div>
-      <div class="discography-card">
-        <div class="color-overlay" style="background: linear-gradient(135deg, #E91E63, #F8BBD9);"></div>
-        <div class="content"><h4>Álbum Rosa</h4><span class="label">EP</span></div>
-      </div>
-    </div>
-  </section>
-
-  <div class="section-banner">ビデオ</div>
-  <section class="videos" id="videos">
-    <div class="videos-grid">
-      <!-- videos dinámicos: el script los reemplazará -->
+  <!-- Noticias dinámicas -->
+  <section class="news">
+    <h2>Noticias</h2>
+    <div class="news-grid" id="news-grid">
+      <!-- Aquí se insertan las noticias desde catalogo.json -->
     </div>
   </section>
 
   <footer>
-    <div class="social-bar"></div>
-    <p>j-tenshiwebcomingsoon</p>
+    <p>Versión de prueba cargando catálogo.json</p>
   </footer>
 
   <script>
-    function toggleTheme() {
-      document.body.classList.toggle('light-mode');
-      localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
-    }
-    if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
+    async function cargarCatalogo() {
+      try {
+        // Cargar el JSON desde la carpeta data
+        const response = await fetch("data/catalogo.json");
+        const data = await response.json();
 
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.schedule-filters button').forEach(button => {
-        button.addEventListener('click', () => {
-          document.querySelectorAll('.schedule-filters button').forEach(b => b.classList.remove('active'));
-          button.classList.add('active');
+        // Banner principal
+        const banner = document.getElementById("banner");
+        banner.style.backgroundImage = `url('${data.banner_principal}')`;
+
+        // Noticias
+        const grid = document.getElementById("news-grid");
+        grid.innerHTML = ""; // limpiar
+
+        Object.values(data.news).forEach(nota => {
+          const card = document.createElement("div");
+          card.className = "news-card";
+          card.innerHTML = `
+            <img src="${nota.imagen}" alt="Noticia">
+            <h4>${nota.titulo || "Sin título"}</h4>
+            <p>${nota.descripcion || ""}</p>
+          `;
+          grid.appendChild(card);
         });
-      });
-
-      async function cargarContenido() {
-        try {
-          const response = await fetch("data/catalogo.json");
-          if (!response.ok) throw new Error('No se pudo cargar catalogo.json');
-          const data = await response.json();
-
-          // Banner principal
-          if (data.banner_principal) {
-            document.querySelector(".hero-bg").style.backgroundImage = `url('${data.banner_principal}')`;
-          }
-
-          // Noticias: mapeo explícito para evitar dependencias frágiles
-          const noticiasMap = [
-            { elId: "main-news", key: "n1", alto: "200px" },
-            { elId: "news-1", key: "n2", alto: "120px" },
-            { elId: "news-2", key: "n3", alto: "120px" },
-            { elId: "news-3", key: "n4", alto: "120px" },
-            { elId: "news-4", key: "n5", alto: "120px" }
-          ];
-
-          noticiasMap.forEach(item => {
-            const container = document.getElementById(item.elId);
-            if (!container) return;
-            const info = data.news && data.news[item.key];
-            if (!info || !info.imagen) return;
-
-            // Si ya existe una img, no la duplicamos
-            if (!container.querySelector('img[data-dynamic="true"]')) {
-              const img = document.createElement('img');
-              img.dataset.dynamic = "true";
-              img.src = info.imagen;
-              img.alt = `Imagen ${item.key}`;
-              img.style.width = "100%";
-              img.style.height = item.alto;
-              img.style.objectFit = "cover";
-              img.style.borderRadius = "10px";
-              img.style.marginTop = "10px";
-              container.appendChild(img);
-            }
-          });
-
-          // Videos: reemplazar el grid por los videos del JSON
-          const videosGrid = document.querySelector('.videos-grid');
-          if (videosGrid && Array.isArray(data.videos)) {
-            // Limpiar cualquier contenido previo
-            videosGrid.innerHTML = '';
-
-            data.videos.forEach((v, idx) => {
-              if (!v || !v.url) return;
-              const card = document.createElement('div');
-              card.className = 'video-card' + (idx === 1 ? ' center' : '');
-              // Aseguramos que el src sea seguro para iframe embed
-              const iframe = document.createElement('iframe');
-              iframe.src = v.url;
-              iframe.allowFullscreen = true;
-              iframe.setAttribute('loading', 'lazy');
-              card.appendChild(iframe);
-              videosGrid.appendChild(card);
-            });
-          }
-
-        } catch (err) {
-          console.error('Error cargando contenido dinámico:', err);
-        }
+      } catch (e) {
+        console.error("Error cargando catálogo:", e);
       }
+    }
 
-      cargarContenido();
-    });
+    cargarCatalogo();
   </script>
 </body>
 </html>
