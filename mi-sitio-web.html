@@ -274,60 +274,64 @@
       text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
       user-select: none;
     }
-  /* === DISCOGRAFÍA - CSS MEJORADO === */
+  /* === DISCOGRAFÍA - CSS CORREGIDO === */
 .discography-grid {
     display: flex;
     justify-content: center;
     align-items: center;
-    max-width: 1000px; /* Tamaño máximo para el carrusel */
+    max-width: 1000px;
     margin: 60px auto;
-    padding: 0; 
+    padding: 0;
     height: 400px;
     overflow: hidden;
     position: relative;
-    perspective: 1000px; /* Necesario para el efecto 3D (translateZ) */
+    perspective: 1000px;
 }
 .discography-track {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    /* El track ya no necesita centrar su contenido si las tarjetas son absolutas */
     width: 100%;
-    /* ¡IMPORTANTE! El track ya no se mueve. */
-    position: relative; 
+    height: 100%; /* El track debe tener altura */
+    position: relative;
 }
+
 .discography-card {
-    position: absolute; /* Permite superposición y movimiento 3D individual */
+    position: absolute; /* Mantenemos todas como absolutas */
+    /* Nueva línea para centrarlas: */
+    top: 50%;
+    left: 50%;
+    /* Corrección de la posición inicial (basada en el ancho de 220px) */
+    transform: translate(-50%, -50%) scale(0.5); /* Centra y esconde por defecto */
+
     width: 220px;
     aspect-ratio: 1/1;
     background: #1a1a1a;
     border-radius: 20px;
-    /* ... el resto de estilos ... */
     cursor: pointer;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    margin: 0; /* Quitamos márgenes, la posición es por transform */
-    opacity: 0; /* Por defecto, la mayoría de tarjetas están ocultas */
-    /* La transición debe ser fluida */
-    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease, box-shadow 0.3s ease, width 0.5s ease, z-index 0.5s step-end;
+    margin: 0;
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease, box-shadow 0.3s ease, width 0.5s ease;
     will-change: transform, opacity;
 }
 
-/* Redefinimos las posiciones: Transformaciones relativas al centro */
+/* La tarjeta central ya NO lleva position: relative; */
 .discography-card.center {
-    position: relative; /* Vuelve al flujo para definir la altura del track */
     width: 300px; /* Más grande en el centro */
-    transform: translateZ(100px) scale(1.1); /* Hacia el usuario */
+    /* Centra + Empuja hacia adelante */
+    transform: translate(-50%, -50%) translateZ(100px) scale(1.1);
     z-index: 100;
     opacity: 1;
 }
 
 /* Izquierda */
 .discography-card.left-1 {
-    transform: translateX(-280px) translateZ(-30px) rotateY(10deg) scale(0.85);
+    /* Centra + Posiciona en X + Retrocede + Rota */
+    transform: translate(-50%, -50%) translateX(-280px) translateZ(-30px) rotateY(10deg) scale(0.85);
     z-index: 50;
     opacity: 1;
 }
 .discography-card.left-2 {
-    transform: translateX(-480px) translateZ(-50px) rotateY(20deg) scale(0.7);
+    transform: translate(-50%, -50%) translateX(-480px) translateZ(-50px) rotateY(20deg) scale(0.7);
     z-index: 10;
     opacity: 0.6;
     pointer-events: none;
@@ -335,22 +339,24 @@
 
 /* Derecha */
 .discography-card.right-1 {
-    transform: translateX(280px) translateZ(-30px) rotateY(-10deg) scale(0.85);
+    transform: translate(-50%, -50%) translateX(280px) translateZ(-30px) rotateY(-10deg) scale(0.85);
     z-index: 50;
     opacity: 1;
 }
 .discography-card.right-2 {
-    transform: translateX(480px) translateZ(-50px) rotateY(-20deg) scale(0.7);
+    transform: translate(-50%, -50%) translateX(480px) translateZ(-50px) rotateY(-20deg) scale(0.7);
     z-index: 10;
     opacity: 0.6;
     pointer-events: none;
 }
 .discography-card.hidden {
-    transform: scale(0.5); /* Simplemente reducir y esconder */
+    transform: translate(-50%, -50%) scale(0.5); /* Simplemente reducir y esconder */
     opacity: 0;
     pointer-events: none;
     z-index: 1;
 }
+
+/* Las Media Queries deben funcionar sin cambios si usas el código anterior. */
 
 /* Media Query para móviles: desactivar el 3D */
 @media (max-width: 768px) {
