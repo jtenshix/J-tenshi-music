@@ -653,35 +653,35 @@
   <section class="discography" id="discography">
     <div class="discography-grid" id="discographyCarousel">
       <button class="carousel-nav prev" onclick="moveDiscographyCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
-      <div class="discography-card">
+      <div class="discography-card left-2">
         <div class="color-overlay" style="background: linear-gradient(135deg, #FF6B6B, #FF8E8E);"></div>
         <div class="content">
           <h4>Álbum Rojo</h4>
           <span class="label">Single</span>
         </div>
       </div>
-      <div class="discography-card">
+      <div class="discography-card left-1">
         <div class="color-overlay" style="background: linear-gradient(135deg, #4ECDC4, #A1FFE6);"></div>
         <div class="content">
           <h4>Álbum Verde</h4>
           <span class="label">EP</span>
         </div>
       </div>
-      <div class="discography-card">
+      <div class="discography-card center">
         <div class="color-overlay" style="background: linear-gradient(135deg, #45B7D1, #B3E5FC);"></div>
         <div class="content">
           <h4>Álbum Azul</h4>
           <span class="label">Álbum</span>
         </div>
       </div>
-      <div class="discography-card">
+      <div class="discography-card right-1">
         <div class="color-overlay" style="background: linear-gradient(135deg, #FFA07A, #FFDAB9);"></div>
         <div class="content">
           <h4>Álbum Naranja</h4>
           <span class="label">Single</span>
         </div>
       </div>
-      <div class="discography-card">
+      <div class="discography-card right-2">
         <div class="color-overlay" style="background: linear-gradient(135deg, #E91E63, #F8BBD9);"></div>
         <div class="content">
           <h4>Álbum Rosa</h4>
@@ -727,59 +727,60 @@
         });
       });
 
-      // Inicializar el carrusel de discografía
-      function initDiscographyCarousel() {
+      // Función para clonar tarjetas y lograr efecto infinito
+      function cloneCardsForInfiniteCarousel() {
         const carousel = document.getElementById('discographyCarousel');
-        const cards = carousel.querySelectorAll('.discography-card');
-        // Posicionar las tarjetas inicialmente
-        cards[0].classList.add('left-2');
-        cards[1].classList.add('left-1');
-        cards[2].classList.add('center');
-        cards[3].classList.add('right-1');
-        cards[4].classList.add('right-2');
+        const cards = carousel.querySelectorAll('.discography-card:not(.cloned)');
+
+        // Clonar las primeras y últimas tarjetas
+        const firstCardClone = cards[0].cloneNode(true);
+        firstCardClone.classList.add('cloned');
+        carousel.appendChild(firstCardClone);
+
+        const secondCardClone = cards[1].cloneNode(true);
+        secondCardClone.classList.add('cloned');
+        carousel.appendChild(secondCardClone);
+
+        const lastCardClone = cards[cards.length - 1].cloneNode(true);
+        lastCardClone.classList.add('cloned');
+        carousel.insertBefore(lastCardClone, cards[0]);
+
+        const secondLastCardClone = cards[cards.length - 2].cloneNode(true);
+        secondLastCardClone.classList.add('cloned');
+        carousel.insertBefore(secondLastCardClone, cards[0]);
       }
 
-      // Mover el carrusel de discografía
-      function moveDiscographyCarousel(direction) {
+      // Función para inicializar carrusel de discografía (5 tarjetas)
+      function initDiscographyCarousel() {
+        cloneCardsForInfiniteCarousel();
         const carousel = document.getElementById('discographyCarousel');
-        const cards = carousel.querySelectorAll('.discography-card');
-        let currentCenterIndex = -1;
+        const cards = carousel.querySelectorAll('.discography-card:not(.cloned)');
+        let currentCenterIndex = 2; // Índice central para 5 tarjetas
 
-        // Encontrar la tarjeta central actual
+        // Posicionar tarjetas inicialmente
         cards.forEach((card, index) => {
-          if (card.classList.contains('center')) {
-            currentCenterIndex = index;
+          card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2');
+          if (index === currentCenterIndex) {
+            card.classList.add('center');
+          } else if (index === currentCenterIndex - 1) {
+            card.classList.add('left-1');
+          } else if (index === currentCenterIndex - 2) {
+            card.classList.add('left-2');
+          } else if (index === currentCenterIndex + 1) {
+            card.classList.add('right-1');
+          } else {
+            card.classList.add('right-2');
           }
         });
-
-        // Remover todas las clases de posición
-        cards.forEach(card => {
-          card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2');
-        });
-
-        // Calcular el nuevo índice central
-        let newCenterIndex = currentCenterIndex + direction;
-
-        // Manejar el bucle infinito
-        if (newCenterIndex < 0) {
-          newCenterIndex = cards.length - 1;
-        } else if (newCenterIndex >= cards.length) {
-          newCenterIndex = 0;
-        }
-
-        // Asignar las nuevas clases de posición
-        cards[(newCenterIndex - 2 + cards.length) % cards.length].classList.add('left-2');
-        cards[(newCenterIndex - 1 + cards.length) % cards.length].classList.add('left-1');
-        cards[newCenterIndex].classList.add('center');
-        cards[(newCenterIndex + 1) % cards.length].classList.add('right-1');
-        cards[(newCenterIndex + 2) % cards.length].classList.add('right-2');
       }
 
-      // Inicializar carrusel de videos
+      // Función para inicializar carrusel de videos (3 tarjetas)
       function initVideosCarousel() {
         const carousel = document.getElementById('videosCarousel');
         const cards = carousel.querySelectorAll('.video-card');
-        let currentCenterIndex = 1;
+        let currentCenterIndex = 1; // Índice central para 3 tarjetas
+
+        // Posicionar tarjetas inicialmente
         cards.forEach((card, index) => {
           card.classList.remove('center', 'left', 'right');
           if (index === currentCenterIndex) {
@@ -790,6 +791,8 @@
             card.classList.add('right');
           }
         });
+
+        // Rotar tarjetas cada 20 segundos
         setInterval(() => {
           currentCenterIndex = (currentCenterIndex + 1) % cards.length;
           cards.forEach((card, index) => {
@@ -809,6 +812,65 @@
       initDiscographyCarousel();
       initVideosCarousel();
     });
+
+    // Función para mover carrusel de discografía manualmente (bucle infinito)
+    function moveDiscographyCarousel(direction) {
+      const carousel = document.getElementById('discographyCarousel');
+      const cards = carousel.querySelectorAll('.discography-card:not(.cloned)');
+      const allCards = carousel.querySelectorAll('.discography-card');
+      let currentCenterIndex = 0;
+
+      // Encontrar la tarjeta central actual (ignorando clones)
+      allCards.forEach((card, index) => {
+        if (card.classList.contains('center') && !card.classList.contains('cloned')) {
+          currentCenterIndex = Array.from(cards).indexOf(card);
+        }
+      });
+
+      // Remover clases actuales
+      allCards.forEach(card => {
+        card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2');
+      });
+
+      // Calcular nuevo índice central
+      let newCenterIndex = currentCenterIndex + direction;
+
+      // Manejar el bucle infinito
+      if (newCenterIndex < 0) {
+        newCenterIndex = cards.length - 1;
+        // Restablecer posición sin animación
+        setTimeout(() => {
+          allCards.forEach(card => {
+            card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2');
+          });
+          cards[newCenterIndex].classList.add('center');
+          cards[(newCenterIndex - 1 + cards.length) % cards.length].classList.add('left-1');
+          cards[(newCenterIndex - 2 + cards.length) % cards.length].classList.add('left-2');
+          cards[(newCenterIndex + 1) % cards.length].classList.add('right-1');
+          cards[(newCenterIndex + 2) % cards.length].classList.add('right-2');
+        }, 300);
+      } else if (newCenterIndex >= cards.length) {
+        newCenterIndex = 0;
+        // Restablecer posición sin animación
+        setTimeout(() => {
+          allCards.forEach(card => {
+            card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2');
+          });
+          cards[newCenterIndex].classList.add('center');
+          cards[(newCenterIndex - 1 + cards.length) % cards.length].classList.add('left-1');
+          cards[(newCenterIndex - 2 + cards.length) % cards.length].classList.add('left-2');
+          cards[(newCenterIndex + 1) % cards.length].classList.add('right-1');
+          cards[(newCenterIndex + 2) % cards.length].classList.add('right-2');
+        }, 300);
+      } else {
+        // Asignar nuevas clases
+        cards[newCenterIndex].classList.add('center');
+        cards[(newCenterIndex - 1 + cards.length) % cards.length].classList.add('left-1');
+        cards[(newCenterIndex - 2 + cards.length) % cards.length].classList.add('left-2');
+        cards[(newCenterIndex + 1) % cards.length].classList.add('right-1');
+        cards[(newCenterIndex + 2) % cards.length].classList.add('right-2');
+      }
+    }
 
     // Función para mover carrusel de videos manualmente
     function moveVideosCarousel(direction) {
