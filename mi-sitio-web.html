@@ -315,11 +315,6 @@
       z-index: 100 !important;
       opacity: 1;
     }
-    .discography-card.left-2 {
-      transform: translateX(-300px) translateY(0) translateZ(-50px) rotateY(-20deg) scale(0.7);
-      z-index: 3;
-      opacity: 1 !important;
-    }
     .discography-card.left-1 {
       transform: translateX(-150px) translateY(0) translateZ(-30px) rotateY(-10deg) scale(0.8);
       z-index: 5;
@@ -330,11 +325,19 @@
       z-index: 5;
       opacity: 1 !important;
     }
-    .discography-card.right-2 {
-      transform: translateX(300px) translateY(0) translateZ(-50px) rotateY(20deg) scale(0.7);
-      z-index: 3;
+    .discography-card.corner {
+      transform: translateX(0) translateY(0) translateZ(-50px) scale(0.7);
+      z-index: 1;
       opacity: 1 !important;
       pointer-events: none;
+    }
+    .discography-card.left-corner {
+      left: 0;
+      transform: translateX(-300px) translateY(0) translateZ(-50px) rotateY(-20deg) scale(0.7);
+    }
+    .discography-card.right-corner {
+      right: 0;
+      transform: translateX(300px) translateY(0) translateZ(-50px) rotateY(20deg) scale(0.7);
     }
     .discography-card:hover {
       box-shadow: 0 12px 40px rgba(0,0,0,0.5);
@@ -652,13 +655,22 @@
   <section class="discography" id="discography">
     <div class="discography-grid" id="discographyCarousel">
       <button class="carousel-nav prev" onclick="moveDiscographyCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
-      <div class="discography-card left-2">
+      <!-- Tarjetas de esquina (fijas) -->
+      <div class="discography-card left-corner corner">
         <div class="color-overlay" style="background: linear-gradient(135deg, #FF6B6B, #FF8E8E);"></div>
         <div class="content">
           <h4>Álbum Rojo</h4>
           <span class="label">Single</span>
         </div>
       </div>
+      <div class="discography-card right-corner corner">
+        <div class="color-overlay" style="background: linear-gradient(135deg, #E91E63, #F8BBD9);"></div>
+        <div class="content">
+          <h4>Álbum Rosa</h4>
+          <span class="label">EP</span>
+        </div>
+      </div>
+      <!-- Tarjetas móviles -->
       <div class="discography-card left-1">
         <div class="color-overlay" style="background: linear-gradient(135deg, #4ECDC4, #A1FFE6);"></div>
         <div class="content">
@@ -678,13 +690,6 @@
         <div class="content">
           <h4>Álbum Naranja</h4>
           <span class="label">Single</span>
-        </div>
-      </div>
-      <div class="discography-card right-2">
-        <div class="color-overlay" style="background: linear-gradient(135deg, #E91E63, #F8BBD9);"></div>
-        <div class="content">
-          <h4>Álbum Rosa</h4>
-          <span class="label">EP</span>
         </div>
       </div>
       <button class="carousel-nav next" onclick="moveDiscographyCarousel(1)"><i class="fas fa-chevron-right"></i></button>
@@ -725,41 +730,33 @@
           button.classList.add('active');
         });
       });
-      // Función para inicializar carrusel de discografía (5 tarjetas)
+      // Función para inicializar carrusel de discografía (3 tarjetas móviles + 2 fijas)
       function initDiscographyCarousel() {
         const carousel = document.getElementById('discographyCarousel');
-        const cards = carousel.querySelectorAll('.discography-card');
-        let currentCenterIndex = 2; // Índice central para 5 tarjetas
+        const cards = carousel.querySelectorAll('.discography-card:not(.corner)');
+        let currentCenterIndex = 1; // Índice central para 3 tarjetas móviles
         // Posicionar tarjetas inicialmente
         cards.forEach((card, index) => {
-          card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2');
+          card.classList.remove('center', 'left-1', 'right-1');
           if (index === currentCenterIndex) {
             card.classList.add('center');
-          } else if (index === currentCenterIndex - 1) {
+          } else if (index < currentCenterIndex) {
             card.classList.add('left-1');
-          } else if (index === currentCenterIndex - 2) {
-            card.classList.add('left-2');
-          } else if (index === currentCenterIndex + 1) {
-            card.classList.add('right-1');
           } else {
-            card.classList.add('right-2');
+            card.classList.add('right-1');
           }
         });
         // Rotar tarjetas cada 20 segundos
         setInterval(() => {
           currentCenterIndex = (currentCenterIndex + 1) % cards.length;
           cards.forEach((card, index) => {
-            card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2');
+            card.classList.remove('center', 'left-1', 'right-1');
             if (index === currentCenterIndex) {
               card.classList.add('center');
-            } else if (index === (currentCenterIndex - 1 + cards.length) % cards.length) {
-              card.classList.add('left-1');
-            } else if (index === (currentCenterIndex - 2 + cards.length) % cards.length) {
-              card.classList.add('left-2');
             } else if (index === (currentCenterIndex + 1) % cards.length) {
               card.classList.add('right-1');
             } else {
-              card.classList.add('right-2');
+              card.classList.add('left-1');
             }
           });
         }, 20000);
@@ -802,7 +799,7 @@
     // Función para mover carrusel de discografía manualmente
     function moveDiscographyCarousel(direction) {
       const carousel = document.getElementById('discographyCarousel');
-      const cards = carousel.querySelectorAll('.discography-card');
+      const cards = carousel.querySelectorAll('.discography-card:not(.corner)');
       let currentCenterIndex = 0;
       cards.forEach((card, index) => {
         if (card.classList.contains('center')) {
@@ -811,17 +808,13 @@
       });
       currentCenterIndex = (currentCenterIndex + direction + cards.length) % cards.length;
       cards.forEach((card, index) => {
-        card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2');
+        card.classList.remove('center', 'left-1', 'right-1');
         if (index === currentCenterIndex) {
           card.classList.add('center');
-        } else if (index === (currentCenterIndex - 1 + cards.length) % cards.length) {
-          card.classList.add('left-1');
-        } else if (index === (currentCenterIndex - 2 + cards.length) % cards.length) {
-          card.classList.add('left-2');
         } else if (index === (currentCenterIndex + 1) % cards.length) {
           card.classList.add('right-1');
         } else {
-          card.classList.add('right-2');
+          card.classList.add('left-1');
         }
       });
     }
