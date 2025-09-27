@@ -306,36 +306,37 @@
       overflow: hidden;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       transform: scale(1);
+      will-change: transform;
+      z-index: 1;
     }
     .discography-card.center {
       width: 300px;
       transform: translateX(0) translateY(0) translateZ(50px) scale(1.1);
-      z-index: 10;
+      z-index: 100 !important;
       opacity: 1;
     }
     .discography-card.left-2 {
       transform: translateX(-300px) translateY(0) translateZ(-50px) rotateY(-20deg) scale(0.7);
       z-index: 3;
-      opacity: 1;
+      opacity: 1 !important;
     }
     .discography-card.left-1 {
       transform: translateX(-150px) translateY(0) translateZ(-30px) rotateY(-10deg) scale(0.8);
       z-index: 5;
-      opacity: 1;
+      opacity: 1 !important;
     }
     .discography-card.right-1 {
       transform: translateX(150px) translateY(0) translateZ(-30px) rotateY(10deg) scale(0.8);
       z-index: 5;
-      opacity: 1;
+      opacity: 1 !important;
     }
     .discography-card.right-2 {
       transform: translateX(300px) translateY(0) translateZ(-50px) rotateY(20deg) scale(0.7);
       z-index: 3;
-      opacity: 1;
+      opacity: 1 !important;
+      pointer-events: none;
     }
     .discography-card:hover {
-      transform: scale(1.15);
-      z-index: 2;
       box-shadow: 0 12px 40px rgba(0,0,0,0.5);
     }
     .discography-card.center:hover {
@@ -361,6 +362,14 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      transition: transform 0.35s ease;
+      transform-origin: center center;
+    }
+    .discography-card:hover .content {
+      transform: scale(1.06);
+    }
+    .discography-card.center:hover .content {
+      transform: scale(1.10);
     }
     .discography-card h4 {
       font-size: 16px;
@@ -407,12 +416,13 @@
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
       border: 2px solid rgba(224, 194, 123, 0.2);
       transition: transform 0.5s ease, opacity 0.5s ease, box-shadow 0.3s ease;
+      will-change: transform;
     }
     .video-card.center {
       width: 560px;
       height: 315px;
       transform: translateX(0) translateY(0) translateZ(50px) scale(1.05);
-      z-index: 10;
+      z-index: 100 !important;
       opacity: 1;
       box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
       border: 2px solid rgba(224, 194, 123, 0.4);
@@ -420,16 +430,14 @@
     .video-card.left {
       transform: translateX(-200px) translateY(0) translateZ(-50px) rotateY(-15deg) scale(0.8);
       z-index: 5;
-      opacity: 0.6;
+      opacity: 1 !important;
     }
     .video-card.right {
       transform: translateX(200px) translateY(0) translateZ(-50px) rotateY(15deg) scale(0.8);
       z-index: 5;
-      opacity: 0.6;
+      opacity: 1 !important;
     }
     .video-card:hover {
-      transform: scale(1.07);
-      z-index: 2;
       box-shadow: 0 12px 40px rgba(0,0,0,0.5);
     }
     .video-card.center:hover {
@@ -442,6 +450,14 @@
       width: 100%;
       height: 100%;
       border: 0;
+      transition: transform 0.35s ease;
+      transform-origin: center center;
+    }
+    .video-card:hover iframe {
+      transform: scale(1.02);
+    }
+    .video-card.center:hover iframe {
+      transform: scale(1.04);
     }
     @media (max-width: 1400px) {
       .videos-grid {
@@ -505,82 +521,6 @@
       color: #ccc;
       letter-spacing: 1px;
     }
-/* === FIX CARRUSELES: pegar AL FINAL del <style> === */
-
-/* suaviza transiciones y asegura z-index base */
-.discography-card,
-.video-card {
-  transition: transform 0.5s ease, opacity 0.5s ease, box-shadow 0.3s ease;
-  z-index: 1;
-}
-
-/* 1) Evitar transparencias incómodas: mostrar laterales opacos */
-.discography-card.left-2,
-.discography-card.left-1,
-.discography-card.right-1,
-.discography-card.right-2,
-.video-card.left,
-.video-card.right {
-  opacity: 1 !important;
-}
-
-/* 2) Mantener la tarjeta central siempre por delante */
-.discography-card.center,
-.video-card.center {
-  z-index: 100 !important;
-}
-
-/* 3) NO sobrescribas transform del card en :hover (evita saltos).
-   En vez de eso, escalamos el contenido interno (.content) o el iframe. */
-.discography-card .content {
-  transition: transform 0.35s ease;
-  transform-origin: center center;
-}
-
-/* elimina el transform global en hover (solo sombra y escala interna) */
-.discography-card:hover {
-  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-  /* NO poner transform ni z-index aquí para no romper la posición */
-}
-
-/* escala solo el contenido interno para efecto hover */
-.discography-card:hover .content {
-  transform: scale(1.06);
-}
-
-/* efecto un poco mayor si la central está hover */
-.discography-card.center:hover .content {
-  transform: scale(1.10);
-}
-
-/* === Video cards: mismo enfoque (no sobreescribir transform del card) === */
-.video-card iframe {
-  transition: transform 0.35s ease;
-  transform-origin: center center;
-}
-
-.video-card:hover {
-  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-  /* NO cambiar transform del card */
-}
-
-/* escala el iframe dentro (suavemente) */
-.video-card:hover iframe {
-  transform: scale(1.02);
-}
-
-/* escala un poco más si la central está hover */
-.video-card.center:hover iframe {
-  transform: scale(1.04);
-}
-
-/* opcional: evita que elementos ocultos interfieran */
-.discography-card.right-2,
-.discography-card.left-2 {
-  pointer-events: none; /* si quieres que los extremos no sean clicables */
-}
-
-    
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -752,13 +692,11 @@
           button.classList.add('active');
         });
       });
-
       // Función para inicializar carrusel de discografía (5 tarjetas)
       function initDiscographyCarousel() {
         const carousel = document.getElementById('discographyCarousel');
         const cards = carousel.querySelectorAll('.discography-card');
         let currentCenterIndex = 2; // Índice central para 5 tarjetas
-
         // Posicionar tarjetas inicialmente
         cards.forEach((card, index) => {
           card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2');
@@ -774,7 +712,6 @@
             card.classList.add('right-2');
           }
         });
-
         // Rotar tarjetas cada 20 segundos
         setInterval(() => {
           currentCenterIndex = (currentCenterIndex + 1) % cards.length;
@@ -794,13 +731,11 @@
           });
         }, 20000);
       }
-
       // Función para inicializar carrusel de videos (3 tarjetas)
       function initVideosCarousel() {
         const carousel = document.getElementById('videosCarousel');
         const cards = carousel.querySelectorAll('.video-card');
         let currentCenterIndex = 1; // Índice central para 3 tarjetas
-
         // Posicionar tarjetas inicialmente
         cards.forEach((card, index) => {
           card.classList.remove('center', 'left', 'right');
@@ -812,7 +747,6 @@
             card.classList.add('right');
           }
         });
-
         // Rotar tarjetas cada 20 segundos
         setInterval(() => {
           currentCenterIndex = (currentCenterIndex + 1) % cards.length;
@@ -828,7 +762,6 @@
           });
         }, 20000);
       }
-
       // Inicializar carruseles
       initDiscographyCarousel();
       initVideosCarousel();
