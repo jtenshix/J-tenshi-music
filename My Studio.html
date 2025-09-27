@@ -17,7 +17,6 @@
             --transition: all 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             --banner-height: 35vh;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--primary-bg);
@@ -28,7 +27,6 @@
             perspective: 1500px;
             overflow-x: hidden;
         }
-
         body.light-mode {
             --primary-bg: #f5f5f5;
             --secondary-bg: #e0e0e0;
@@ -37,7 +35,6 @@
             --card-bg: #ffffff;
             --card-border: #ff4757;
         }
-
         .header {
             display: flex;
             justify-content: space-between;
@@ -50,14 +47,12 @@
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
-
         .logo {
             font-size: 1.8rem;
             font-weight: bold;
             color: var(--accent-color);
             font-style: italic;
         }
-
         .nav a {
             margin: 0 1rem;
             text-decoration: none;
@@ -65,11 +60,9 @@
             transition: var(--transition);
             font-weight: 500;
         }
-
         .nav a:hover {
             color: var(--accent-color);
         }
-
         .theme-toggle {
             background: none;
             border: none;
@@ -77,7 +70,6 @@
             font-size: 1.3rem;
             cursor: pointer;
         }
-
         .banner {
             height: var(--banner-height);
             background: url('https://mistralaiblackforestprod.blob.core.windows.net/images/blackforest/5f62/1f17/-9b7/6-4f7d-bb56-3792f5d25fe3/image.jpg?se=2025-08-22T20%3A11%3A59Z&sp=r&sv=2025-07-05&sr=b&sig=DlOOxkzVAVuDQTjZ2tilVvtU2Hb9bAWo25V77Pfhwvk%3D') center/cover;
@@ -90,25 +82,34 @@
             margin-top: 80px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
-
         .banner-content h1 {
             font-size: 3.5rem;
             text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
             font-weight: 700;
             letter-spacing: 2px;
         }
-
         .main-content {
             padding: 2rem;
             background-color: var(--primary-bg);
             min-height: 70vh;
             display: flex;
-            justify-content: center;
-            align-items: flex-end;
+            flex-direction: column;
+            align-items: center;
             padding-top: calc(var(--banner-height) + 2rem);
             padding-bottom: 5rem;
         }
-
+        .section {
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 4rem;
+            text-align: center;
+        }
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
         .carousel-container {
             position: relative;
             width: 700px;
@@ -117,9 +118,8 @@
             justify-content: center;
             align-items: flex-end;
             perspective: 1500px;
-            margin-bottom: 3rem;
+            margin: 0 auto 3rem;
         }
-
         .card {
             position: absolute;
             width: 250px;
@@ -136,25 +136,21 @@
             transform-style: preserve-3d;
             bottom: 0;
         }
-
         .card.center {
             transform: translateX(0) translateY(0) translateZ(50px);
             z-index: 10;
             opacity: 1;
         }
-
         .card.left {
             transform: translateX(-200px) translateY(0) translateZ(-50px) rotateY(-15deg);
             z-index: 5;
             opacity: 0.6;
         }
-
         .card.right {
             transform: translateX(200px) translateY(0) translateZ(-50px) rotateY(15deg);
             z-index: 5;
             opacity: 0.6;
         }
-
         .card-image-container {
             width: 100%;
             height: 240px;
@@ -163,26 +159,22 @@
             margin-bottom: 0.5rem;
             border: 2px solid var(--card-border);
         }
-
         .card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
         .card-info {
             padding: 0.8rem;
             text-align: center;
             width: 100%;
         }
-
         .card h3 {
             margin: 0.5rem 0;
             color: var(--accent-color);
             font-size: 1.6rem;
             font-weight: 700;
         }
-
         .card .label {
             display: inline-block;
             background-color: var(--accent-color);
@@ -193,14 +185,12 @@
             font-weight: 600;
             margin-top: 0.3rem;
         }
-
         .card-description {
             font-size: 0.8rem;
             margin-top: 0.5rem;
             line-height: 1.4;
             color: #cccccc;
         }
-
         .card-footer {
             width: 100%;
             padding: 0.5rem;
@@ -210,30 +200,25 @@
             font-size: 0.7rem;
             color: #aaaaaa;
         }
-
         .footer {
             text-align: center;
             padding: 2rem;
             background-color: var(--secondary-bg);
             margin-top: auto;
         }
-
         .social-links {
             margin: 1rem 0;
         }
-
         .social-links a {
             color: var(--text-color);
             margin: 0 1rem;
             font-size: 1.8rem;
             transition: var(--transition);
         }
-
         .social-links a:hover {
             color: var(--accent-color);
             transform: scale(1.2);
         }
-
         @media (max-width: 768px) {
             .carousel-container {
                 width: 100%;
@@ -260,19 +245,36 @@
             <button id="theme-toggle" class="theme-toggle">🌙</button>
         </nav>
     </header>
-
     <div class="banner">
         <div class="banner-content">
             <h1>Welcome to My Studio</h1>
         </div>
     </div>
-
     <main class="main-content">
-        <div class="carousel-container" id="carouselContainer">
-            <!-- Las cartas se generan con JavaScript -->
-        </div>
-    </main>
+        <!-- Sección de Miembros del Equipo -->
+        <section class="section" id="studio">
+            <h2 class="section-title">My Studio</h2>
+            <div class="carousel-container" id="teamCarousel">
+                <!-- Las cartas se generan con JavaScript -->
+            </div>
+        </section>
 
+        <!-- Sección de Discografía -->
+        <section class="section" id="discography">
+            <h2 class="section-title">Discography</h2>
+            <div class="carousel-container" id="discographyCarousel">
+                <!-- Las cartas se generan con JavaScript -->
+            </div>
+        </section>
+
+        <!-- Sección de Videos -->
+        <section class="section" id="videos">
+            <h2 class="section-title">Videos</h2>
+            <div class="carousel-container" id="videosCarousel">
+                <!-- Las cartas se generan con JavaScript -->
+            </div>
+        </section>
+    </main>
     <footer class="footer">
         <div class="social-links">
             <a href="#"><i class="fab fa-twitter"></i></a>
@@ -282,7 +284,6 @@
         </div>
         <p>&copy; 2025 My Studio. All rights reserved.</p>
     </footer>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Toggle dark/light mode
@@ -292,8 +293,8 @@
                 themeToggle.textContent = document.body.classList.contains('light-mode') ? '🌞' : '🌙';
             });
 
-            // Datos de las cartas
-            const cardsData = [
+            // Datos de las cartas de miembros del equipo
+            const teamCardsData = [
                 {
                     name: "Luna",
                     role: "Main Vocalist",
@@ -314,51 +315,102 @@
                 }
             ];
 
-            const carouselContainer = document.getElementById('carouselContainer');
-            let currentCenterIndex = 0;
+            // Datos de las cartas de discografía
+            const discographyCardsData = [
+                {
+                    name: "Eclipse",
+                    role: "Album",
+                    description: "El primer álbum de estudio, con 12 canciones que mezclan pop y electrónica.",
+                    image: "https://via.placeholder.com/300x400/ff9ff3/ffffff?text=Eclipse"
+                },
+                {
+                    name: "Starlight",
+                    role: "Single",
+                    description: "El sencillo más exitoso del estudio, con más de 10 millones de reproducciones.",
+                    image: "https://via.placeholder.com/300x400/feca57/ffffff?text=Starlight"
+                },
+                {
+                    name: "Neon Dreams",
+                    role: "EP",
+                    description: "Un EP experimental con colaboraciones internacionales y sonidos futuristas.",
+                    image: "https://via.placeholder.com/300x400/54a0ff/ffffff?text=Neon+Dreams"
+                }
+            ];
 
-            // Crear cartas
-            cardsData.forEach((card, index) => {
-                const cardElement = document.createElement('div');
-                cardElement.className = `card ${index === currentCenterIndex ? 'center' : 'hidden'}`;
-                cardElement.innerHTML = `
-                    <div class="card-image-container">
-                        <img src="${card.image}" alt="${card.name}">
-                    </div>
-                    <div class="card-info">
-                        <h3>${card.name}</h3>
-                        <span class="label">${card.role}</span>
-                        <p class="card-description">${card.description}</p>
-                    </div>
-                    <div class="card-footer">© 2025 My Studio</div>
-                `;
-                carouselContainer.appendChild(cardElement);
-            });
+            // Datos de las cartas de videos
+            const videosCardsData = [
+                {
+                    name: "Eclipse Tour",
+                    role: "Live",
+                    description: "Grabación en vivo del concierto en Tokyo Dome, 2024.",
+                    image: "https://via.placeholder.com/300x400/ff6b6b/ffffff?text=Eclipse+Tour"
+                },
+                {
+                    name: "Starlight MV",
+                    role: "Music Video",
+                    description: "Video oficial de 'Starlight', dirigido por Akira Takahashi.",
+                    image: "https://via.placeholder.com/300x400/54a0ff/ffffff?text=Starlight+MV"
+                },
+                {
+                    name: "Behind the Scenes",
+                    role: "Documentary",
+                    description: "Documental sobre la creación del álbum 'Neon Dreams'.",
+                    image: "https://via.placeholder.com/300x400/feca57/ffffff?text=Behind+Scenes"
+                }
+            ];
 
-            // Inicializar las tarjetas laterales
-            const cards = document.querySelectorAll('.card');
-            cards[1].classList.remove('hidden');
-            cards[1].classList.add('right');
-            cards[2].classList.remove('hidden');
-            cards[2].classList.add('left');
+            // Función para crear carrusel
+            function createCarousel(containerId, cardsData) {
+                const carouselContainer = document.getElementById(containerId);
+                let currentCenterIndex = 0;
 
-            // Cambiar tarjeta central cada 20 segundos
-            setInterval(() => {
-                const cards = document.querySelectorAll('.card');
-                cards.forEach(card => card.classList.remove('center', 'left', 'right'));
-
-                currentCenterIndex = (currentCenterIndex + 1) % cardsData.length;
-
-                cards.forEach((card, index) => {
-                    if (index === currentCenterIndex) {
-                        card.classList.add('center');
-                    } else if (index === (currentCenterIndex + 1) % cardsData.length) {
-                        card.classList.add('right');
-                    } else {
-                        card.classList.add('left');
-                    }
+                cardsData.forEach((card, index) => {
+                    const cardElement = document.createElement('div');
+                    cardElement.className = `card ${index === currentCenterIndex ? 'center' : 'hidden'}`;
+                    cardElement.innerHTML = `
+                        <div class="card-image-container">
+                            <img src="${card.image}" alt="${card.name}">
+                        </div>
+                        <div class="card-info">
+                            <h3>${card.name}</h3>
+                            <span class="label">${card.role}</span>
+                            <p class="card-description">${card.description}</p>
+                        </div>
+                        <div class="card-footer">© 2025 My Studio</div>
+                    `;
+                    carouselContainer.appendChild(cardElement);
                 });
-            }, 20000);
+
+                const cards = document.querySelectorAll(`#${containerId} .card`);
+                if (cards.length > 1) {
+                    cards[1].classList.remove('hidden');
+                    cards[1].classList.add('right');
+                }
+                if (cards.length > 2) {
+                    cards[2].classList.remove('hidden');
+                    cards[2].classList.add('left');
+                }
+
+                setInterval(() => {
+                    const cards = document.querySelectorAll(`#${containerId} .card`);
+                    cards.forEach(card => card.classList.remove('center', 'left', 'right'));
+                    currentCenterIndex = (currentCenterIndex + 1) % cardsData.length;
+                    cards.forEach((card, index) => {
+                        if (index === currentCenterIndex) {
+                            card.classList.add('center');
+                        } else if (index === (currentCenterIndex + 1) % cardsData.length) {
+                            card.classList.add('right');
+                        } else {
+                            card.classList.add('left');
+                        }
+                    });
+                }, 20000);
+            }
+
+            // Inicializar carruseles
+            createCarousel('teamCarousel', teamCardsData);
+            createCarousel('discographyCarousel', discographyCardsData);
+            createCarousel('videosCarousel', videosCardsData);
         });
     </script>
 </body>
