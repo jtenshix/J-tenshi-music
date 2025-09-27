@@ -313,15 +313,25 @@
       z-index: 10;
       opacity: 1;
     }
-    .discography-card.left {
-      transform: translateX(-200px) translateY(0) translateZ(-50px) rotateY(-15deg) scale(0.8);
+    .discography-card.left-2 {
+      transform: translateX(-300px) translateY(0) translateZ(-50px) rotateY(-20deg) scale(0.7);
+      z-index: 3;
+      opacity: 0.4;
+    }
+    .discography-card.left-1 {
+      transform: translateX(-150px) translateY(0) translateZ(-30px) rotateY(-10deg) scale(0.8);
       z-index: 5;
       opacity: 0.6;
     }
-    .discography-card.right {
-      transform: translateX(200px) translateY(0) translateZ(-50px) rotateY(15deg) scale(0.8);
+    .discography-card.right-1 {
+      transform: translateX(150px) translateY(0) translateZ(-30px) rotateY(10deg) scale(0.8);
       z-index: 5;
       opacity: 0.6;
+    }
+    .discography-card.right-2 {
+      transform: translateX(300px) translateY(0) translateZ(-50px) rotateY(20deg) scale(0.7);
+      z-index: 3;
+      opacity: 0.4;
     }
     .discography-card:hover {
       transform: scale(1.15);
@@ -596,14 +606,14 @@
   <div class="section-banner">ディスコグラフィー</div>
   <section class="discography" id="discography">
     <div class="discography-grid" id="discographyCarousel">
-      <div class="discography-card">
+      <div class="discography-card left-2">
         <div class="color-overlay" style="background: linear-gradient(135deg, #FF6B6B, #FF8E8E);"></div>
         <div class="content">
           <h4>Álbum Rojo</h4>
           <span class="label">Single</span>
         </div>
       </div>
-      <div class="discography-card">
+      <div class="discography-card left-1">
         <div class="color-overlay" style="background: linear-gradient(135deg, #4ECDC4, #A1FFE6);"></div>
         <div class="content">
           <h4>Álbum Verde</h4>
@@ -617,14 +627,14 @@
           <span class="label">Álbum</span>
         </div>
       </div>
-      <div class="discography-card">
+      <div class="discography-card right-1">
         <div class="color-overlay" style="background: linear-gradient(135deg, #FFA07A, #FFDAB9);"></div>
         <div class="content">
           <h4>Álbum Naranja</h4>
           <span class="label">Single</span>
         </div>
       </div>
-      <div class="discography-card">
+      <div class="discography-card right-2">
         <div class="color-overlay" style="background: linear-gradient(135deg, #E91E63, #F8BBD9);"></div>
         <div class="content">
           <h4>Álbum Rosa</h4>
@@ -636,13 +646,13 @@
   <div class="section-banner">ビデオ</div>
   <section class="videos" id="videos">
     <div class="videos-grid" id="videosCarousel">
-      <div class="video-card">
+      <div class="video-card left">
         <iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe>
       </div>
       <div class="video-card center">
         <iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe>
       </div>
-      <div class="video-card">
+      <div class="video-card right">
         <iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe>
       </div>
     </div>
@@ -667,11 +677,53 @@
         });
       });
 
-      // Función para inicializar carrusel
-      function initCarousel(containerId, cardClass) {
-        const carousel = document.getElementById(containerId);
-        const cards = carousel.querySelectorAll(`.${cardClass}`);
-        let currentCenterIndex = Math.floor(cards.length / 2);
+      // Función para inicializar carrusel de discografía (5 tarjetas)
+      function initDiscographyCarousel() {
+        const carousel = document.getElementById('discographyCarousel');
+        const cards = carousel.querySelectorAll('.discography-card');
+        let currentCenterIndex = 2; // Índice central para 5 tarjetas
+
+        // Posicionar tarjetas inicialmente
+        cards.forEach((card, index) => {
+          card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2');
+          if (index === currentCenterIndex) {
+            card.classList.add('center');
+          } else if (index === currentCenterIndex - 1) {
+            card.classList.add('left-1');
+          } else if (index === currentCenterIndex - 2) {
+            card.classList.add('left-2');
+          } else if (index === currentCenterIndex + 1) {
+            card.classList.add('right-1');
+          } else {
+            card.classList.add('right-2');
+          }
+        });
+
+        // Rotar tarjetas cada 20 segundos
+        setInterval(() => {
+          currentCenterIndex = (currentCenterIndex + 1) % cards.length;
+          cards.forEach((card, index) => {
+            card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2');
+            if (index === currentCenterIndex) {
+              card.classList.add('center');
+            } else if (index === (currentCenterIndex - 1 + cards.length) % cards.length) {
+              card.classList.add('left-1');
+            } else if (index === (currentCenterIndex - 2 + cards.length) % cards.length) {
+              card.classList.add('left-2');
+            } else if (index === (currentCenterIndex + 1) % cards.length) {
+              card.classList.add('right-1');
+            } else {
+              card.classList.add('right-2');
+            }
+          });
+        }, 20000);
+      }
+
+      // Función para inicializar carrusel de videos (3 tarjetas)
+      function initVideosCarousel() {
+        const carousel = document.getElementById('videosCarousel');
+        const cards = carousel.querySelectorAll('.video-card');
+        let currentCenterIndex = 1; // Índice central para 3 tarjetas
 
         // Posicionar tarjetas inicialmente
         cards.forEach((card, index) => {
@@ -702,8 +754,8 @@
       }
 
       // Inicializar carruseles
-      initCarousel('discographyCarousel', 'discography-card');
-      initCarousel('videosCarousel', 'video-card');
+      initDiscographyCarousel();
+      initVideosCarousel();
     });
   </script>
 </body>
