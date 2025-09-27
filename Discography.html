@@ -57,16 +57,6 @@
     .news-card img {
       max-width: 100%;
       border-radius: 6px;
-      margin-bottom: 10px;
-    }
-    .news-card h4 {
-      margin: 10px 0 5px;
-      font-size: 16px;
-      color: #fff;
-    }
-    .news-card p {
-      font-size: 14px;
-      color: #ccc;
     }
     footer {
       text-align: center;
@@ -100,7 +90,6 @@
   <script>
     async function cargarCatalogo() {
       try {
-        // Cargar el JSON desde la carpeta data
         const response = await fetch("data/catalogo.json");
         const data = await response.json();
 
@@ -108,17 +97,15 @@
         const banner = document.getElementById("banner");
         banner.style.backgroundImage = `url('${data.banner_principal}')`;
 
-        // Noticias
+        // Noticias (solo imágenes)
         const grid = document.getElementById("news-grid");
-        grid.innerHTML = ""; // limpiar
+        grid.innerHTML = ""; 
 
         Object.values(data.news).forEach(nota => {
           const card = document.createElement("div");
           card.className = "news-card";
           card.innerHTML = `
             <img src="${nota.imagen}" alt="Noticia">
-            <h4>${nota.titulo || "Sin título"}</h4>
-            <p>${nota.descripcion || ""}</p>
           `;
           grid.appendChild(card);
         });
