@@ -1,5 +1,5 @@
-<!DOCTYPE html> 
-<html lang="ja"> 
+<!DOCTYPE html>
+<html lang="ja">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -288,7 +288,7 @@
       position: relative;
     }
     .discography-card {
-      flex: 0 0 auto;
+      position: absolute;
       width: 220px;
       aspect-ratio: 1/1;
       background: #1a1a1a;
@@ -301,8 +301,7 @@
       color: #fff;
       font-weight: 600;
       cursor: pointer;
-      position: relative;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.5s ease, opacity 0.5s ease, box-shadow 0.3s ease;
       border: 2px solid transparent;
       overflow: hidden;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
@@ -310,7 +309,19 @@
     }
     .discography-card.center {
       width: 300px;
-      transform: scale(1.05);
+      transform: translateX(0) translateY(0) translateZ(50px) scale(1.1);
+      z-index: 10;
+      opacity: 1;
+    }
+    .discography-card.left {
+      transform: translateX(-200px) translateY(0) translateZ(-50px) rotateY(-15deg) scale(0.8);
+      z-index: 5;
+      opacity: 0.6;
+    }
+    .discography-card.right {
+      transform: translateX(200px) translateY(0) translateZ(-50px) rotateY(15deg) scale(0.8);
+      z-index: 5;
+      opacity: 0.6;
     }
     .discography-card:hover {
       transform: scale(1.15);
@@ -318,7 +329,7 @@
       box-shadow: 0 12px 40px rgba(0,0,0,0.5);
     }
     .discography-card.center:hover {
-      transform: scale(1.2);
+      transform: translateX(0) translateY(0) translateZ(50px) scale(1.2);
     }
     .discography-card .color-overlay {
       position: absolute;
@@ -376,6 +387,7 @@
       position: relative;
     }
     .video-card {
+      position: absolute;
       width: 400px;
       height: 225px;
       background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
@@ -384,16 +396,26 @@
       z-index: 1;
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
       border: 2px solid rgba(224, 194, 123, 0.2);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      position: relative; 
+      transition: transform 0.5s ease, opacity 0.5s ease, box-shadow 0.3s ease;
     }
-  
     .video-card.center {
       width: 560px;
       height: 315px;
-      z-index: 3;
+      transform: translateX(0) translateY(0) translateZ(50px) scale(1.05);
+      z-index: 10;
+      opacity: 1;
       box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
       border: 2px solid rgba(224, 194, 123, 0.4);
+    }
+    .video-card.left {
+      transform: translateX(-200px) translateY(0) translateZ(-50px) rotateY(-15deg) scale(0.8);
+      z-index: 5;
+      opacity: 0.6;
+    }
+    .video-card.right {
+      transform: translateX(200px) translateY(0) translateZ(-50px) rotateY(15deg) scale(0.8);
+      z-index: 5;
+      opacity: 0.6;
     }
     .video-card:hover {
       transform: scale(1.07);
@@ -401,7 +423,7 @@
       box-shadow: 0 12px 40px rgba(0,0,0,0.5);
     }
     .video-card.center:hover {
-      transform: scale(1.1);
+      transform: translateX(0) translateY(0) translateZ(50px) scale(1.1);
     }
     .video-card iframe {
       position: absolute;
@@ -446,9 +468,12 @@
         height: auto;
       }
       .video-card, .video-card.center {
+        position: relative;
         width: 100%;
         max-width: 320px;
         height: 180px;
+        transform: none;
+        opacity: 1;
       }
       .video-card.center {
         max-width: 360px;
@@ -570,7 +595,7 @@
   </section>
   <div class="section-banner">ディスコグラフィー</div>
   <section class="discography" id="discography">
-    <div class="discography-grid">
+    <div class="discography-grid" id="discographyCarousel">
       <div class="discography-card">
         <div class="color-overlay" style="background: linear-gradient(135deg, #FF6B6B, #FF8E8E);"></div>
         <div class="content">
@@ -610,7 +635,7 @@
   </section>
   <div class="section-banner">ビデオ</div>
   <section class="videos" id="videos">
-    <div class="videos-grid">
+    <div class="videos-grid" id="videosCarousel">
       <div class="video-card">
         <iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe>
       </div>
@@ -641,6 +666,44 @@
           button.classList.add('active');
         });
       });
+
+      // Función para inicializar carrusel
+      function initCarousel(containerId, cardClass) {
+        const carousel = document.getElementById(containerId);
+        const cards = carousel.querySelectorAll(`.${cardClass}`);
+        let currentCenterIndex = Math.floor(cards.length / 2);
+
+        // Posicionar tarjetas inicialmente
+        cards.forEach((card, index) => {
+          card.classList.remove('center', 'left', 'right');
+          if (index === currentCenterIndex) {
+            card.classList.add('center');
+          } else if (index < currentCenterIndex) {
+            card.classList.add('left');
+          } else {
+            card.classList.add('right');
+          }
+        });
+
+        // Rotar tarjetas cada 20 segundos
+        setInterval(() => {
+          currentCenterIndex = (currentCenterIndex + 1) % cards.length;
+          cards.forEach((card, index) => {
+            card.classList.remove('center', 'left', 'right');
+            if (index === currentCenterIndex) {
+              card.classList.add('center');
+            } else if (index === (currentCenterIndex + 1) % cards.length) {
+              card.classList.add('right');
+            } else {
+              card.classList.add('left');
+            }
+          });
+        }, 20000);
+      }
+
+      // Inicializar carruseles
+      initCarousel('discographyCarousel', 'discography-card');
+      initCarousel('videosCarousel', 'video-card');
     });
   </script>
 </body>
