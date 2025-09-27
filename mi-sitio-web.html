@@ -275,13 +275,44 @@
       user-select: none;
     }
     /* === DISCOGRAFÍA === */
+    .carousel-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 60px auto;
+    }
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+    .carousel-arrow:hover {
+      background: rgba(224, 194, 123, 0.8);
+      color: #000;
+    }
+    .carousel-arrow.left {
+      left: -60px;
+    }
+    .carousel-arrow.right {
+      right: -60px;
+    }
     .discography-grid {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 30px;
       max-width: 1200px;
-      margin: 60px auto;
       padding: 0 40px;
       height: 400px;
       overflow: hidden;
@@ -394,13 +425,19 @@
       padding: 5px 10px;
     }
     /* === VIDEOS === */
+    .videos-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 100px auto;
+    }
     .videos-grid {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 30px;
       max-width: 1800px;
-      margin: 100px auto;
       padding: 0 80px;
       height: 400px;
       position: relative;
@@ -620,59 +657,67 @@
     </div>
   </section>
   <div class="section-banner">ディスコグラフィー</div>
-  <section class="discography" id="discography">
-    <div class="discography-grid" id="discographyCarousel">
-      <div class="discography-card left-2">
-        <div class="color-overlay" style="background: linear-gradient(135deg, #FF6B6B, #FF8E8E);"></div>
-        <div class="content">
-          <h4>Álbum Rojo</h4>
-          <span class="label">Single</span>
+  <div class="carousel-container">
+    <button class="carousel-arrow left" id="discographyLeftArrow"><i class="fas fa-chevron-left"></i></button>
+    <section class="discography" id="discography">
+      <div class="discography-grid" id="discographyCarousel">
+        <div class="discography-card left-2">
+          <div class="color-overlay" style="background: linear-gradient(135deg, #FF6B6B, #FF8E8E);"></div>
+          <div class="content">
+            <h4>Álbum Rojo</h4>
+            <span class="label">Single</span>
+          </div>
+        </div>
+        <div class="discography-card left-1">
+          <div class="color-overlay" style="background: linear-gradient(135deg, #4ECDC4, #A1FFE6);"></div>
+          <div class="content">
+            <h4>Álbum Verde</h4>
+            <span class="label">EP</span>
+          </div>
+        </div>
+        <div class="discography-card center">
+          <div class="color-overlay" style="background: linear-gradient(135deg, #45B7D1, #B3E5FC);"></div>
+          <div class="content">
+            <h4>Álbum Azul</h4>
+            <span class="label">Álbum</span>
+          </div>
+        </div>
+        <div class="discography-card right-1">
+          <div class="color-overlay" style="background: linear-gradient(135deg, #FFA07A, #FFDAB9);"></div>
+          <div class="content">
+            <h4>Álbum Naranja</h4>
+            <span class="label">Single</span>
+          </div>
+        </div>
+        <div class="discography-card right-2">
+          <div class="color-overlay" style="background: linear-gradient(135deg, #E91E63, #F8BBD9);"></div>
+          <div class="content">
+            <h4>Álbum Rosa</h4>
+            <span class="label">EP</span>
+          </div>
         </div>
       </div>
-      <div class="discography-card left-1">
-        <div class="color-overlay" style="background: linear-gradient(135deg, #4ECDC4, #A1FFE6);"></div>
-        <div class="content">
-          <h4>Álbum Verde</h4>
-          <span class="label">EP</span>
-        </div>
-      </div>
-      <div class="discography-card center">
-        <div class="color-overlay" style="background: linear-gradient(135deg, #45B7D1, #B3E5FC);"></div>
-        <div class="content">
-          <h4>Álbum Azul</h4>
-          <span class="label">Álbum</span>
-        </div>
-      </div>
-      <div class="discography-card right-1">
-        <div class="color-overlay" style="background: linear-gradient(135deg, #FFA07A, #FFDAB9);"></div>
-        <div class="content">
-          <h4>Álbum Naranja</h4>
-          <span class="label">Single</span>
-        </div>
-      </div>
-      <div class="discography-card right-2">
-        <div class="color-overlay" style="background: linear-gradient(135deg, #E91E63, #F8BBD9);"></div>
-        <div class="content">
-          <h4>Álbum Rosa</h4>
-          <span class="label">EP</span>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
+    <button class="carousel-arrow right" id="discographyRightArrow"><i class="fas fa-chevron-right"></i></button>
+  </div>
   <div class="section-banner">ビデオ</div>
-  <section class="videos" id="videos">
-    <div class="videos-grid" id="videosCarousel">
-      <div class="video-card left">
-        <iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe>
+  <div class="videos-container">
+    <button class="carousel-arrow left" id="videosLeftArrow"><i class="fas fa-chevron-left"></i></button>
+    <section class="videos" id="videos">
+      <div class="videos-grid" id="videosCarousel">
+        <div class="video-card left">
+          <iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe>
+        </div>
+        <div class="video-card center">
+          <iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe>
+        </div>
+        <div class="video-card right">
+          <iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe>
+        </div>
       </div>
-      <div class="video-card center">
-        <iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe>
-      </div>
-      <div class="video-card right">
-        <iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe>
-      </div>
-    </div>
-  </section>
+    </section>
+    <button class="carousel-arrow right" id="videosRightArrow"><i class="fas fa-chevron-right"></i></button>
+  </div>
   <footer>
     <div class="social-bar"></div>
     <p>j-tenshiwebcomingsoon</p>
@@ -692,29 +737,15 @@
           button.classList.add('active');
         });
       });
+
       // Función para inicializar carrusel de discografía (5 tarjetas)
       function initDiscographyCarousel() {
         const carousel = document.getElementById('discographyCarousel');
         const cards = carousel.querySelectorAll('.discography-card');
-        let currentCenterIndex = 2; // Índice central para 5 tarjetas
+        let currentCenterIndex = 2;
+
         // Posicionar tarjetas inicialmente
-        cards.forEach((card, index) => {
-          card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2');
-          if (index === currentCenterIndex) {
-            card.classList.add('center');
-          } else if (index === currentCenterIndex - 1) {
-            card.classList.add('left-1');
-          } else if (index === currentCenterIndex - 2) {
-            card.classList.add('left-2');
-          } else if (index === currentCenterIndex + 1) {
-            card.classList.add('right-1');
-          } else {
-            card.classList.add('right-2');
-          }
-        });
-        // Rotar tarjetas cada 20 segundos
-        setInterval(() => {
-          currentCenterIndex = (currentCenterIndex + 1) % cards.length;
+        function updateDiscographyCards() {
           cards.forEach((card, index) => {
             card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2');
             if (index === currentCenterIndex) {
@@ -729,27 +760,30 @@
               card.classList.add('right-2');
             }
           });
-        }, 20000);
+        }
+
+        // Event listeners para las flechas
+        document.getElementById('discographyLeftArrow').addEventListener('click', () => {
+          currentCenterIndex = (currentCenterIndex - 1 + cards.length) % cards.length;
+          updateDiscographyCards();
+        });
+
+        document.getElementById('discographyRightArrow').addEventListener('click', () => {
+          currentCenterIndex = (currentCenterIndex + 1) % cards.length;
+          updateDiscographyCards();
+        });
+
+        updateDiscographyCards();
       }
+
       // Función para inicializar carrusel de videos (3 tarjetas)
       function initVideosCarousel() {
         const carousel = document.getElementById('videosCarousel');
         const cards = carousel.querySelectorAll('.video-card');
-        let currentCenterIndex = 1; // Índice central para 3 tarjetas
+        let currentCenterIndex = 1;
+
         // Posicionar tarjetas inicialmente
-        cards.forEach((card, index) => {
-          card.classList.remove('center', 'left', 'right');
-          if (index === currentCenterIndex) {
-            card.classList.add('center');
-          } else if (index < currentCenterIndex) {
-            card.classList.add('left');
-          } else {
-            card.classList.add('right');
-          }
-        });
-        // Rotar tarjetas cada 20 segundos
-        setInterval(() => {
-          currentCenterIndex = (currentCenterIndex + 1) % cards.length;
+        function updateVideosCards() {
           cards.forEach((card, index) => {
             card.classList.remove('center', 'left', 'right');
             if (index === currentCenterIndex) {
@@ -760,8 +794,22 @@
               card.classList.add('left');
             }
           });
-        }, 20000);
+        }
+
+        // Event listeners para las flechas
+        document.getElementById('videosLeftArrow').addEventListener('click', () => {
+          currentCenterIndex = (currentCenterIndex - 1 + cards.length) % cards.length;
+          updateVideosCards();
+        });
+
+        document.getElementById('videosRightArrow').addEventListener('click', () => {
+          currentCenterIndex = (currentCenterIndex + 1) % cards.length;
+          updateVideosCards();
+        });
+
+        updateVideosCards();
       }
+
       // Inicializar carruseles
       initDiscographyCarousel();
       initVideosCarousel();
