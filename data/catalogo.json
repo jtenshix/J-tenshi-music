@@ -17,14 +17,15 @@
       "imagen": "https://lh3.googleusercontent.com/d/120H84Gd9y5BeR_Pt6a2_Q13wkPy1tdHd"
     }
   },
-"videos": [
-  {
-    "url": "https://www.youtube.com/embed/0_QHL7cDYno"
-  },
-  {
-    "url": "https://www.youtube.com/embed/Ulj3sX_jJ7g"
-  },
-  {
-    "url": "https://www.youtube.com/embed/yXtg79kJHr8"
-  }
-]
+  "videos": [
+    {
+      "url": "https://www.youtube.com/embed/0_QHL7cDYno"
+    },
+    {
+      "url": "https://www.youtube.com/embed/Ulj3sX_jJ7g"
+    },
+    {
+      "url": "https://www.youtube.com/embed/yXtg79kJHr8"
+    }
+  ]
+}
