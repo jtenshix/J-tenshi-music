@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tenshi | 幻想の響き</title>
   <style>
-    /* Estilos generales */
     * {
       margin: 0;
       padding: 0;
@@ -20,7 +19,6 @@
       transition: background 0.3s, color 0.3s;
     }
 
-    /* Modo Claro / Oscuro */
     body.light-mode {
       background: #f5f5f5;
       color: #111;
@@ -41,15 +39,17 @@
       border-color: #c59f3f;
       color: #c59f3f;
     }
-    body.light-mode .news,
-    body.light-mode .discography,
-    body.light-mode .videos {
+    body.light-mode .news {
       background-color: #f0f0f0;
       color: #111;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
+    body.light-mode .discography,
+    body.light-mode .videos {
+      background-color: #f7f7f7;
+      color: #111;
+    }
 
-    /* Header */
     header {
       position: fixed;
       top: 0;
@@ -79,6 +79,7 @@
     nav a:hover {
       color: #e0c27b;
     }
+
     .theme-toggle {
       background: none;
       border: 1px solid #777;
@@ -95,7 +96,6 @@
       color: #000;
     }
 
-    /* Hero Section */
     .hero-wrapper {
       position: relative;
       height: 75vh;
@@ -124,7 +124,6 @@
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     }
 
-    /* NEWS section */
     .news {
       padding: 100px 5% 80px;
       background-color: #1a1a1a;
@@ -134,6 +133,7 @@
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
       transition: background 0.3s ease;
     }
+
     .news h2 {
       font-size: 32px;
       color: #fff;
@@ -145,6 +145,7 @@
       color: #ccc;
       margin-left: 10px;
     }
+
     .schedule-filters {
       margin-bottom: 40px;
       display: flex;
@@ -167,27 +168,17 @@
       border-color: #e0c27b;
     }
 
-    /* INICIO DE CÓDIGO CSS MODIFICADO PARA EL DISEÑO DE NOTICIAS (Finalizado) */
     .schedule-grid {
       display: grid;
-      /* La primera columna (para N1) es el doble de ancho (2fr) que las otras dos (1fr cada una).
-         Esto hace que el ancho de N1 sea igual al ancho combinado de N2+N3 y N4+N5. */
-      grid-template-columns: 2fr 1fr 1fr;
-      grid-template-rows: repeat(2, 1fr); /* Dos filas de igual altura */
-      gap: 20px;
-      /* Ajustar la altura máxima del grid para que N1 pueda formar un cuadrado
-         y las tarjetas a la derecha se alineen correctamente.
-         Este valor podría requerir un ajuste fino en tu entorno real para la perfección. */
-      max-height: 480px; /* Un buen valor de inicio para permitir proporciones cuadradas */
-      /* overflow: hidden; /* Considera descomentar si el contenido excede la altura en pantallas pequeñas */
+      grid-template-columns: 420px 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 30px;
+      justify-content: center;
+      align-items: start;
     }
 
-    .main-news { /* Esto es N1 */
-      grid-column: 1 / 2; /* Ocupa la primera columna */
-      grid-row: 1 / 3;    /* Ocupa las dos filas */
-      /* Forzar a N1 a tener una relación de aspecto 1:1 (cuadrado).
-         Con 2fr de ancho y 2fr de alto (cubriendo 2 filas), esto debería resultar en un cuadrado. */
-      aspect-ratio: 1 / 1;
+    .main-news {
+      grid-row: 1 / span 2;
       background: linear-gradient(135deg, #1f2937, #4c51bf);
       border-radius: 16px;
       padding: 20px;
@@ -196,7 +187,14 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      overflow: hidden; /* Para asegurar que el contenido no desborde si es muy grande */
+      aspect-ratio: 1 / 1;
+      max-height: 420px;
+      overflow: hidden;
+    }
+
+    /* Quitamos la imagen de la noticia principal */
+    .main-news img {
+      display: none;
     }
 
     .news-card {
@@ -206,50 +204,34 @@
       box-shadow: 0 0 15px rgba(0,0,0,0.5);
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: space-between;
+      aspect-ratio: 1 / 1;
+      max-height: 420px;
+      overflow: hidden;
       cursor: pointer;
-      aspect-ratio: 4 / 3; /* Mantiene la relación de aspecto horizontal para las tarjetas pequeñas */
-      overflow: hidden; /* Para asegurar que el contenido no desborde */
     }
 
-    /* Asignaciones de Grid para las news-card según el orden en el HTML
-       (N2, N3, N4, N5 se posicionan en las columnas 2 y 3, filas 1 y 2) */
-    .news-card:nth-of-type(1) { /* Corresponde a "Nuevo sencillo" (N2) */
-      grid-column: 2 / 3; /* Segunda columna */
-      grid-row: 1 / 2;    /* Primera fila */
+    .news-card img {
+      display: none; /* Quitamos las imágenes */
     }
-    .news-card:nth-of-type(2) { /* Corresponde a "Evento online" (N3) */
-      grid-column: 3 / 4; /* Tercera columna */
-      grid-row: 1 / 2;    /* Primera fila */
-    }
-    .news-card:nth-of-type(3) { /* Corresponde a "Premio ganado" (N4) */
-      grid-column: 2 / 3; /* Segunda columna */
-      grid-row: 2 / 3;    /* Segunda fila */
-    }
-    .news-card:nth-of-type(4) { /* Corresponde a "Nuevo Wallpaper" (N5) */
-      grid-column: 3 / 4; /* Tercera columna */
-      grid-row: 2 / 3;    /* Segunda fila */
-    }
-    /* FIN DE CÓDIGO CSS MODIFICADO PARA EL DISEÑO DE NOTICIAS */
 
     .news-card h4 {
       font-size: 16px;
       font-weight: 700;
       color: #fff;
-      margin-bottom: 8px;
-      text-align: center;
+      margin-bottom: 10px;
     }
     .news-card .date {
       font-weight: 700;
       font-size: 14px;
       color: #ccc;
-      text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .news-card p {
       color: #ccc;
       font-size: 14px;
-      text-align: center;
+      line-height: 1.3;
+      flex-grow: 1;
     }
     .news-card .label {
       font-size: 11px;
@@ -258,46 +240,49 @@
       padding: 2px 6px;
       border-radius: 999px;
       width: fit-content;
-      margin: 10px auto 0;
-      display: block;
+      margin-top: 10px;
     }
 
-    /* Section banners */
+    /* Banner pequeño para separar secciones */
     .section-banner {
-      position: relative;
-      width: 50%;
-      height: 150px;
-      margin: 60px auto;
-      border-radius: 12px;
+      width: 600px;
+      max-width: 90vw;
+      height: 120px;
       background: url('banner portada.png') center center no-repeat;
       background-size: cover;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      margin: 60px auto 40px;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       color: #e0c27b;
-      font-size: 3rem;
+      font-size: 2.5rem;
       font-weight: 900;
-      font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
-      text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
-      user-select: none;
+      letter-spacing: 6px;
+      text-shadow: 0 0 15px rgba(224, 194, 123, 0.9);
+      border-radius: 12px;
     }
 
-    /* Discography and Videos */
     .discography, .videos {
       padding: 40px 5% 80px;
       background-color: #0f0f0f;
       max-width: 1200px;
-      margin: 60px auto 40px;
+      margin: 0 auto 40px;
       border-radius: 12px;
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
     }
+
+    .discography h2, .videos h2 {
+      display: none; /* Ocultamos títulos para dejar solo banner */
+    }
+
     .media-grid {
       display: flex;
       gap: 30px;
       justify-content: center;
       flex-wrap: wrap;
     }
+
+    /* Cuadros cuadrados para canciones */
     .media-card {
       background: #222;
       border-radius: 14px;
@@ -310,22 +295,26 @@
       align-items: center;
       justify-content: space-between;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
     }
     .media-card:hover {
       transform: scale(1.05);
       box-shadow: 0 0 25px rgba(224, 194, 123, 0.5);
     }
+
     .media-card img {
       width: 100%;
       border-radius: 10px;
       object-fit: cover;
       margin-bottom: 12px;
       aspect-ratio: 1 / 1;
+      display: block;
     }
     .media-card h4 {
       font-size: 16px;
       text-align: center;
       margin-bottom: 6px;
+      color: #fff;
     }
     .media-card .label {
       font-size: 11px;
@@ -333,6 +322,47 @@
       border: 1px solid #e0c27b;
       padding: 2px 6px;
       border-radius: 999px;
+      user-select: none;
+    }
+
+    /* Videos: tarjetas más alargadas */
+    .video-card {
+      background: #222;
+      border-radius: 14px;
+      padding: 20px;
+      width: 300px;
+      height: 170px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+    .video-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(224, 194, 123, 0.5);
+    }
+    .video-card img {
+      width: 100%;
+      height: 100px;
+      border-radius: 10px;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+    .video-card h4 {
+      font-size: 16px;
+      text-align: center;
+      color: #fff;
+    }
+    .video-card .label {
+      font-size: 11px;
+      color: #e0c27b;
+      border: 1px solid #e0c27b;
+      padding: 2px 6px;
+      border-radius: 999px;
+      user-select: none;
     }
   </style>
 </head>
@@ -389,7 +419,7 @@
         <p>Mejor artista emergente.</p>
         <span class="label">AWARD</span>
       </div>
-      <div class="news-card">
+      <div class="news-card" onclick="location.href='gallery.html'">
         <div class="date">09 JUL 2025</div>
         <h4>Nuevo Wallpaper</h4>
         <p>Descarga el nuevo wallpaper oficial.</p>
@@ -398,42 +428,42 @@
     </div>
   </section>
 
-  <div class="section-banner">ディスコグラフィー</div>
+  <div class="section-banner">DISCOGRAPHY | ディスコグラフィー</div>
   <section class="discography" id="discography">
     <div class="media-grid">
       <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/ff8c00/000000?text=Track+1" />
+        <img src="https://via.placeholder.com/300x300/ff8c00/000000?text=Track+1" alt="Track 1"/>
         <h4>Shinkai no Melody</h4>
         <span class="label">Single</span>
       </div>
       <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/20b2aa/000000?text=Track+2" />
+        <img src="https://via.placeholder.com/300x300/20b2aa/000000?text=Track+2" alt="Track 2"/>
         <h4>Yoru no Uta</h4>
         <span class="label">Single</span>
       </div>
       <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/8a2be2/ffffff?text=Track+3" />
+        <img src="https://via.placeholder.com/300x300/8a2be2/ffffff?text=Track+3" alt="Track 3"/>
         <h4>Midnight Echo</h4>
         <span class="label">Single</span>
       </div>
     </div>
   </section>
 
-  <div class="section-banner">ビデオ</div>
+  <div class="section-banner">VIDEOS | ビデオ</div>
   <section class="videos" id="videos">
     <div class="media-grid">
-      <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/6495ed/000000?text=MV+1" />
+      <div class="video-card">
+        <img src="https://via.placeholder.com/300x170/6495ed/000000?text=MV+1" alt="MV 1"/>
         <h4>Shinkai Visualizer</h4>
         <span class="label">YouTube</span>
       </div>
-      <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/ff1493/000000?text=MV+2" />
+      <div class="video-card">
+        <img src="https://via.placeholder.com/300x170/ff1493/000000?text=MV+2" alt="MV 2"/>
         <h4>Intro Cinemática</h4>
         <span class="label">YouTube</span>
       </div>
-      <div class="media-card">
-        <img src="https://via.placeholder.com/300x300/2e8b57/ffffff?text=MV+3" />
+      <div class="video-card">
+        <img src="https://via.placeholder.com/300x170/2e8b57/ffffff?text=MV+3" alt="MV 3"/>
         <h4>Opening Project</h4>
         <span class="label">YouTube</span>
       </div>
