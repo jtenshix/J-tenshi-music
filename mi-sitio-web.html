@@ -727,87 +727,52 @@
         });
       });
 
-      // Clonar tarjetas para el carrusel infinito
-      function cloneCards() {
-        const carousel = document.getElementById('discographyCarousel');
-        const cards = carousel.querySelectorAll('.discography-card');
-        // Clonar las primeras dos tarjetas y agregarlas al final
-        for (let i = 0; i < 2; i++) {
-          const clone = cards[i].cloneNode(true);
-          clone.classList.add('cloned');
-          carousel.appendChild(clone);
-        }
-        // Clonar las últimas dos tarjetas y agregarlas al inicio
-        for (let i = cards.length - 2; i < cards.length; i++) {
-          const clone = cards[i].cloneNode(true);
-          clone.classList.add('cloned');
-          carousel.insertBefore(clone, cards[0]);
-        }
-      }
-
       // Inicializar el carrusel de discografía
       function initDiscographyCarousel() {
-        cloneCards();
         const carousel = document.getElementById('discographyCarousel');
-        const allCards = carousel.querySelectorAll('.discography-card');
-        // Posicionar las tarjetas originales al centro
-        allCards.forEach(card => card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2'));
-        allCards[2].classList.add('center');
-        allCards[1].classList.add('left-1');
-        allCards[0].classList.add('left-2');
-        allCards[3].classList.add('right-1');
-        allCards[4].classList.add('right-2');
+        const cards = carousel.querySelectorAll('.discography-card');
+        // Posicionar las tarjetas inicialmente
+        cards[0].classList.add('left-2');
+        cards[1].classList.add('left-1');
+        cards[2].classList.add('center');
+        cards[3].classList.add('right-1');
+        cards[4].classList.add('right-2');
       }
 
       // Mover el carrusel de discografía
       function moveDiscographyCarousel(direction) {
         const carousel = document.getElementById('discographyCarousel');
-        const cards = carousel.querySelectorAll('.discography-card:not(.cloned)');
-        const allCards = carousel.querySelectorAll('.discography-card');
+        const cards = carousel.querySelectorAll('.discography-card');
         let currentCenterIndex = -1;
 
-        // Encontrar la tarjeta central actual (ignorando clones)
-        allCards.forEach((card, index) => {
-          if (card.classList.contains('center') && !card.classList.contains('cloned')) {
-            currentCenterIndex = Array.from(cards).indexOf(card);
+        // Encontrar la tarjeta central actual
+        cards.forEach((card, index) => {
+          if (card.classList.contains('center')) {
+            currentCenterIndex = index;
           }
+        });
+
+        // Remover todas las clases de posición
+        cards.forEach(card => {
+          card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2');
         });
 
         // Calcular el nuevo índice central
         let newCenterIndex = currentCenterIndex + direction;
 
-        // Si llegamos a un extremo, restablecer la posición
+        // Manejar el bucle infinito
         if (newCenterIndex < 0) {
           newCenterIndex = cards.length - 1;
-          // Mover sin animación
-          setTimeout(() => {
-            allCards.forEach(card => card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2'));
-            allCards[newCenterIndex + 2].classList.add('center');
-            allCards[newCenterIndex + 1].classList.add('left-1');
-            allCards[newCenterIndex].classList.add('left-2');
-            allCards[newCenterIndex + 3].classList.add('right-1');
-            allCards[newCenterIndex + 4].classList.add('right-2');
-          }, 10);
         } else if (newCenterIndex >= cards.length) {
           newCenterIndex = 0;
-          // Mover sin animación
-          setTimeout(() => {
-            allCards.forEach(card => card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2'));
-            allCards[newCenterIndex + 2].classList.add('center');
-            allCards[newCenterIndex + 1].classList.add('left-1');
-            allCards[newCenterIndex].classList.add('left-2');
-            allCards[newCenterIndex + 3].classList.add('right-1');
-            allCards[newCenterIndex + 4].classList.add('right-2');
-          }, 10);
-        } else {
-          // Mover con animación
-          allCards.forEach(card => card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2'));
-          allCards[newCenterIndex + 2].classList.add('center');
-          allCards[newCenterIndex + 1].classList.add('left-1');
-          allCards[newCenterIndex].classList.add('left-2');
-          allCards[newCenterIndex + 3].classList.add('right-1');
-          allCards[newCenterIndex + 4].classList.add('right-2');
         }
+
+        // Asignar las nuevas clases de posición
+        cards[(newCenterIndex - 2 + cards.length) % cards.length].classList.add('left-2');
+        cards[(newCenterIndex - 1 + cards.length) % cards.length].classList.add('left-1');
+        cards[newCenterIndex].classList.add('center');
+        cards[(newCenterIndex + 1) % cards.length].classList.add('right-1');
+        cards[(newCenterIndex + 2) % cards.length].classList.add('right-2');
       }
 
       // Inicializar carrusel de videos
