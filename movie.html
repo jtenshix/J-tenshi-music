@@ -1,1 +1,157 @@
-HOLA
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Spinner</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap');
+
+    * {
+      --ang: 0;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .spinner {
+      transform-style: preserve-3d;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: rotateY(calc(var(--ang) * 1deg)) translateY(-12px);
+      transition: all .5s ease-in-out;
+    }
+
+    .holder {
+      width: 600px;
+      height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      perspective: 700px;
+      perspective-origin: center;
+    }
+
+    .panel {
+      border-radius: 5px;
+      width: 100px;
+      height: 100px;
+      position: absolute;
+      background-size: cover;
+      background-position: 50% 50%;	
+    }
+
+    /* Distribución de los paneles */
+    .panel.a { transform: rotateY(0deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjczNzB8&ixlib=rb-4.0.3&q=85); }
+    .panel.b { transform: rotateY(22.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1691389694412-266f872999c6?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjY5NTh8&ixlib=rb-4.0.3&q=85); }
+    .panel.c { transform: rotateY(45deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1606391901318-07003db08d63?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjY5OTJ8&ixlib=rb-4.0.3&q=85); }
+    .panel.d { transform: rotateY(67.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1610785396756-24bd1889ddae?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcwMjl8&ixlib=rb-4.0.3&q=85); }
+    .panel.e { transform: rotateY(90deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1505849871170-7f94cf84f4d2?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcwODJ8&ixlib=rb-4.0.3&q=85); }
+    .panel.f { transform: rotateY(112.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1518087456308-c3976320f908?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcxMTB8&ixlib=rb-4.0.3&q=85); }
+    .panel.g { transform: rotateY(135deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1558724040-9de64afade55?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcxNDV8&ixlib=rb-4.0.3&q=85); }
+    .panel.h { transform: rotateY(157.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1604877098440-b7b440241686?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcxOTR8&ixlib=rb-4.0.3&q=85); }
+    .panel.i { transform: rotateY(180deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1518573484273-eb277fe4b036?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcyMTl8&ixlib=rb-4.0.3&q=85); }
+    .panel.j { transform: rotateY(202.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcyMzZ8&ixlib=rb-4.0.3&q=85); }
+    .panel.k { transform: rotateY(225deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1546877625-cb8c71916608?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcyNTl8&ixlib=rb-4.0.3&q=85); }
+    .panel.l { transform: rotateY(247.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1551727974-8af20a3322f1?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcyNzR8&ixlib=rb-4.0.3&q=85); }
+    .panel.m { transform: rotateY(270deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1436759644647-e274ee931eaa?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5OTU1Mjl8&ixlib=rb-4.0.3&q=85); }
+    .panel.n { transform: rotateY(292.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1533779671378-06561cdaacb5?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjczMDd8&ixlib=rb-4.0.3&q=85); }
+    .panel.o { transform: rotateY(315deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1544377570-a774bea2355c?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjczMzN8&ixlib=rb-4.0.3&q=85); }
+    .panel.p { transform: rotateY(337.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1586693231040-e89840e7d805?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjczNDV8&ixlib=rb-4.0.3&q=85); }
+
+    .fade {
+      background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.4) 70%, rgba(0,0,0,0) 100%);
+      width: 860px;
+      height: 200px;
+      position: absolute;
+      transform: rotateY(calc(var(--ang) * -1deg)) translateZ(110px);
+      transition: all .5s ease-in-out;  
+    }
+
+    .pagination {
+      width: 600px;
+      height: 44px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .pagination button {
+      padding: 0;
+      border: none;
+      cursor: pointer;
+      width: 44px;
+      color: black;
+      background: #fffa;
+      height: 44px;
+      margin: 0 10px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 20px;
+      border-radius: 100%;
+      transition: all .2s ease-in-out;
+    }
+
+    .pagination button:hover {
+      background: #fffc;
+    }
+
+    .pagination button:active {
+      background: #ffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="holder">  
+    <div class="spinner">
+      <div class="panel a"></div>
+      <div class="panel b"></div>
+      <div class="panel c"></div>
+      <div class="panel d"></div>
+      <div class="panel e"></div>
+      <div class="panel f"></div>
+      <div class="panel g"></div>
+      <div class="panel h"></div>
+      <div class="panel i"></div>
+      <div class="panel j"></div>
+      <div class="panel k"></div>
+      <div class="panel l"></div>
+      <div class="panel m"></div>
+      <div class="panel n"></div>
+      <div class="panel o"></div>
+      <div class="panel p"></div>
+      <div class="fade"></div>
+    </div>
+  </div>
+
+  <div class="pagination">
+    <button type="button" id="prev">&#8592;</button>
+    <button type="button" id="next">&#8594;</button>
+  </div>
+
+  <script>
+    var ang = 0;
+
+    $("#prev").click(function(){
+      ang = ang + 22.5;
+      $("*").css("--ang", ang);
+    });
+
+    $("#next").click(function(){
+      ang = ang - 22.5;
+      $("*").css("--ang", ang);
+    });
+  </script>
+</body>
+</html>
