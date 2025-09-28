@@ -274,248 +274,39 @@
       text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
       user-select: none;
     }
-    /* === DISCOGRAFÍA - Inspirado en KAF MOVIE: Como selección de personaje en videojuego === */
+    /* === DISCOGRAFÍA - CARRUSEL NUEVO === */
     .discography-grid {
       display: flex;
       justify-content: center;
       align-items: center;
+      gap: 30px;
       max-width: 1200px;
       margin: 60px auto;
-      padding: 0 40px;
-      height: 400px;
-      overflow: hidden;
-      position: relative;
-      perspective: 1000px; /* Efecto 3D global como en un juego */
-    }
-    .discography-track {
-      display: flex;
-      transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Suave como en KAF */
-      will-change: transform;
-      position: relative;
-      transform-style: preserve-3d;
+      padding: 0 20px;
+      perspective: 1000px;
     }
     .discography-card {
-      position: relative;
       width: 200px;
-      aspect-ratio: 1/1;
+      height: 200px;
       background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
       border-radius: 16px;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      text-align: center;
+      align-items: center;
       color: #fff;
       font-weight: 600;
       cursor: pointer;
       border: 1px solid rgba(224, 194, 123, 0.2);
-      overflow: hidden;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-      margin: 0 15px;
-      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      will-change: transform, opacity, box-shadow;
+      margin: 0 10px;
+      transition: transform 0.5s ease;
       transform-style: preserve-3d;
     }
-    .discography-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: inherit;
-      border-radius: 16px;
-      opacity: 0.1;
-      z-index: 0;
-    }
-    .discography-card.center {
-      width: 280px;
-      transform: rotateY(0deg) scale(1.1) translateZ(80px);
-      z-index: 100;
-      opacity: 1;
-      box-shadow: 0 20px 40px rgba(224, 194, 123, 0.3);
-      border: 1px solid rgba(224, 194, 123, 0.5);
-    }
-    .discography-card.left-1 {
-      transform: translateX(-160px) rotateY(-15deg) scale(0.85) translateZ(20px);
-      z-index: 20;
-      opacity: 0.85;
-    }
-    .discography-card.left-2 {
-      transform: translateX(-380px) rotateY(-25deg) scale(0.6) translateZ(-20px);
-      z-index: 10;
-      opacity: 0.4;
-      pointer-events: none;
-    }
-    .discography-card.right-1 {
-      transform: translateX(160px) rotateY(15deg) scale(0.85) translateZ(20px);
-      z-index: 20;
-      opacity: 0.85;
-    }
-    .discography-card.right-2 {
-      transform: translateX(380px) rotateY(25deg) scale(0.6) translateZ(-20px);
-      z-index: 10;
-      opacity: 0.4;
-      pointer-events: none;
-    }
-    .discography-card.hidden {
-      opacity: 0;
-      transform: scale(0.5) translateZ(-100px);
-      pointer-events: none;
-      z-index: -1;
-    }
-    .discography-card:hover {
-      box-shadow: 0 15px 50px rgba(224, 194, 123, 0.4);
-      transform: rotateY(0deg) scale(1.05) translateZ(40px);
-    }
-    .discography-card.center:hover {
-      transform: rotateY(0deg) scale(1.2) translateZ(100px);
-    }
-    .discography-card .color-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      border-radius: 14px;
-      z-index: 1;
-      opacity: 0.8;
-      transition: opacity 0.3s ease;
-    }
-    .discography-card:hover .color-overlay {
-      opacity: 0.9;
-    }
-    .discography-card .content {
-      position: relative;
-      z-index: 2;
-      padding: 20px;
-      width: 100%;
-      height: 100%;
+    .discography-track {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.3s ease;
+      transform-style: preserve-3d;
+      transition: transform 0.5s ease;
     }
-    .discography-card:hover .content {
-      transform: scale(1.05);
-    }
-    .discography-card h4 {
-      font-size: 16px;
-      margin-bottom: 10px;
-      color: #fff;
-      font-weight: 700;
-      line-height: 1.2;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-      z-index: 3;
-    }
-    .discography-card.center h4 {
-      font-size: 20px;
-    }
-    .discography-card .label {
-      font-size: 11px;
-      color: #e0c27b;
-      border: 1px solid #e0c27b;
-      padding: 4px 8px;
-      border-radius: 20px;
-      background: rgba(0, 0, 0, 0.4);
-      z-index: 3;
-    }
-    .discography-card.center .label {
-      font-size: 13px;
-      padding: 6px 12px;
-    }
-    .discography-card .play-button {
-      margin-top: 10px;
-      background: rgba(224, 194, 123, 0.2);
-      border: 1px solid #e0c27b;
-      color: #e0c27b;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      z-index: 3;
-    }
-    .discography-card .play-button:hover {
-      background: #e0c27b;
-      color: #000;
-    }
-    .discography-card.center .play-button {
-      font-size: 14px;
-      padding: 10px 20px;
-    }
-    /* === VIDEOS === */
-    .videos-grid {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 30px;
-      max-width: 1800px;
-      margin: 100px auto;
-      padding: 0 80px;
-      height: 400px;
-      position: relative;
-    }
-    .video-card {
-      position: absolute;
-      width: 400px;
-      height: 225px;
-      background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-      border-radius: 12px;
-      overflow: hidden;
-      z-index: 1;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-      border: 2px solid rgba(224, 194, 123, 0.2);
-      transition: transform 0.5s ease, opacity 0.5s ease, box-shadow 0.3s ease;
-      will-change: transform;
-    }
-    .video-card.center {
-      width: 560px;
-      height: 315px;
-      transform: translateX(0) translateY(0) translateZ(50px) scale(1.05);
-      z-index: 100 !important;
-      opacity: 1;
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-      border: 2px solid rgba(224, 194, 123, 0.4);
-    }
-    .video-card.left {
-      transform: translateX(-200px) translateY(0) translateZ(-50px) rotateY(-15deg) scale(0.8);
-      z-index: 5;
-      opacity: 1 !important;
-    }
-    .video-card.right {
-      transform: translateX(200px) translateY(0) translateZ(-50px) rotateY(15deg) scale(0.8);
-      z-index: 5;
-      opacity: 1 !important;
-    }
-    .video-card:hover {
-      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-    }
-    .video-card.center:hover {
-      transform: translateX(0) translateY(0) translateZ(50px) scale(1.1);
-    }
-    .video-card iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-      transition: transform 0.35s ease;
-      transform-origin: center center;
-    }
-    .video-card:hover iframe {
-      transform: scale(1.02);
-    }
-    .video-card.center:hover iframe {
-      transform: scale(1.04);
-    }
-    /* === Flechas de navegación === */
     .carousel-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
       background: rgba(0, 0, 0, 0.6);
       color: #e0c27b;
       border: none;
@@ -527,82 +318,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 200;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
     .carousel-nav:hover {
       background: #e0c27b;
       color: #000;
-      transform: translateY(-50%) scale(1.1);
-    }
-    .carousel-nav.prev {
-      left: 20px;
-    }
-    .carousel-nav.next {
-      right: 20px;
-    }
-    @media (max-width: 1400px) {
-      .videos-grid {
-        padding: 0 60px;
-      }
-      .video-card {
-        width: 350px;
-        height: 197px;
-      }
-      .video-card.center {
-        width: 455px;
-        height: 256px;
-      }
-    }
-    @media (max-width: 1200px) {
-      .videos-grid {
-        padding: 0 40px;
-      }
-      .video-card {
-        width: 300px;
-        height: 169px;
-      }
-      .video-card.center {
-        width: 390px;
-        height: 219px;
-      }
-    }
-    @media (max-width: 900px) {
-      .videos-grid {
-        flex-direction: column;
-        align-items: center;
-        gap: 30px;
-        padding: 0 30px;
-        height: auto;
-      }
-      .video-card, .video-card.center {
-        position: relative;
-        width: 100%;
-        max-width: 320px;
-        height: 180px;
-        transform: none;
-        opacity: 1;
-      }
-      .video-card.center {
-        max-width: 360px;
-        height: 202px;
-      }
-    }
-    @media (max-width: 600px) {
-      .videos-grid {
-        padding: 0 10px;
-      }
-      .video-card, .video-card.center {
-        max-width: 360px;
-        height: 202px;
-      }
-    }
-    footer {
-      padding: 100px 0 50px;
-      text-align: center;
-      color: #ccc;
-      letter-spacing: 1px;
     }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -702,55 +423,20 @@
       </div>
     </div>
   </section>
+
   <div class="section-banner">ディスコグラフィー</div>
   <section class="discography" id="discography">
-    <div class="discography-grid" id="discographyCarousel">
-      <button class="carousel-nav prev" onclick="moveDiscographyCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
-      <div class="discography-track">
-        <div class="discography-card">
-          <div class="color-overlay" style="background: linear-gradient(135deg, #FF6B6B, #FF8E8E);"></div>
-          <div class="content">
-            <h4>Álbum Rojo</h4>
-            <span class="label">Single</span>
-            <button class="play-button">PLAY</button>
-          </div>
-        </div>
-        <div class="discography-card">
-          <div class="color-overlay" style="background: linear-gradient(135deg, #4ECDC4, #A1FFE6);"></div>
-          <div class="content">
-            <h4>Álbum Verde</h4>
-            <span class="label">EP</span>
-            <button class="play-button">PLAY</button>
-          </div>
-        </div>
-        <div class="discography-card">
-          <div class="color-overlay" style="background: linear-gradient(135deg, #45B7D1, #B3E5FC);"></div>
-          <div class="content">
-            <h4>Álbum Azul</h4>
-            <span class="label">Álbum</span>
-            <button class="play-button">PLAY</button>
-          </div>
-        </div>
-        <div class="discography-card">
-          <div class="color-overlay" style="background: linear-gradient(135deg, #FFA07A, #FFDAB9);"></div>
-          <div class="content">
-            <h4>Álbum Naranja</h4>
-            <span class="label">Single</span>
-            <button class="play-button">PLAY</button>
-          </div>
-        </div>
-        <div class="discography-card">
-          <div class="color-overlay" style="background: linear-gradient(135deg, #E91E63, #F8BBD9);"></div>
-          <div class="content">
-            <h4>Álbum Rosa</h4>
-            <span class="label">EP</span>
-            <button class="play-button">PLAY</button>
-          </div>
-        </div>
+    <div class="discography-grid">
+      <div class="discography-track" id="discographyTrack">
+        <div class="discography-card">Álbum Rojo</div>
+        <div class="discography-card">Álbum Verde</div>
+        <div class="discography-card">Álbum Azul</div>
+        <div class="discography-card">Álbum Naranja</div>
+        <div class="discography-card">Álbum Rosa</div>
       </div>
-      <button class="carousel-nav next" onclick="moveDiscographyCarousel(1)"><i class="fas fa-chevron-right"></i></button>
     </div>
   </section>
+
   <div class="section-banner">ビデオ</div>
   <section class="videos" id="videos">
     <div class="videos-grid" id="videosCarousel">
@@ -767,10 +453,12 @@
       <button class="carousel-nav next" onclick="moveVideosCarousel(1)"><i class="fas fa-chevron-right"></i></button>
     </div>
   </section>
+
   <footer>
     <div class="social-bar"></div>
     <p>j-tenshiwebcomingsoon</p>
   </footer>
+
   <script>
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
@@ -787,151 +475,21 @@
         });
       });
 
-    // === CÓDIGO CORREGIDO PARA EL CARRUSEL DE DISCOGRAFÍA ===
-    function initDiscographyCarousel() {
-      const carousel = document.getElementById('discographyCarousel');
-      const track = carousel.querySelector('.discography-track');
-      const originalCards = Array.from(track.querySelectorAll('.discography-card'));
-      const totalOriginalCards = originalCards.length;
-      
-      // Ancho total de la tarjeta más márgenes (200px + 30px)
-      const cardWidth = 230; 
-
-      // 1. CLONACIÓN ROBUSTA: Crea [Clones al inicio] [Originales] [Clones al final]
-      // Clonar al inicio (usamos slice().reverse() para mantener el orden de bucle)
-      originalCards.slice().reverse().forEach(card => {
-          const clone = card.cloneNode(true);
-          track.prepend(clone);
-      });
-      // Clonar al final
-      originalCards.forEach(card => {
-          const clone = card.cloneNode(true);
-          track.appendChild(clone);
-      });
-
-      const allCards = track.querySelectorAll('.discography-card');
-      const totalCards = allCards.length; 
-      
-      // 2. ÍNDICE INICIAL: Empieza en la primera tarjeta original (después de los clones iniciales)
-      let currentIndex = totalOriginalCards;
-
-      // Asignar el ancho total del track
-      track.style.width = `${totalCards * cardWidth}px`;
-
-      function updateCardClasses() {
-          allCards.forEach((card, index) => {
-              card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2', 'hidden');
-
-              const distance = index - currentIndex;
-
-              // Asignar clases de posición 3D
-              if (distance === 0) {
-                  card.classList.add('center');
-              } else if (distance === -1) {
-                  card.classList.add('left-1');
-              } else if (distance === -2) {
-                  card.classList.add('left-2');
-              } else if (distance === 1) {
-                  card.classList.add('right-1');
-              } else if (distance === 2) {
-                  card.classList.add('right-2');
-              } else {
-                  card.classList.add('hidden');
-              }
-          });
-      }
-
-      function updateCarousel(animate = true) {
-          if (!animate) track.style.transition = 'none';
-          else track.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-
-          // 3. CÁLCULO DE CENTRADO: (Centro del Contenedor) - (Posición central de la tarjeta)
-          const carouselCenter = carousel.offsetWidth / 2;
-          const currentCardCenter = currentIndex * cardWidth + (cardWidth / 2);
-          const offset = carouselCenter - currentCardCenter;
-          
-          track.style.transform = `translateX(${offset}px)`;
-
-          updateCardClasses();
-
-          // 4. BUCLÉ SILENCIOSO: Reposiciona si llega a un clon
-          if (currentIndex < totalOriginalCards || currentIndex >= totalOriginalCards * 2) {
-              setTimeout(() => {
-                  // Mapea el índice de vuelta al rango de tarjetas originales
-                  const relativeIndex = (currentIndex % totalOriginalCards + totalOriginalCards) % totalOriginalCards;
-                  currentIndex = totalOriginalCards + relativeIndex;
-
-                  // Aplica el reseteo de posición sin transición
-                  track.style.transition = 'none';
-                  const newOffset = carouselCenter - (currentIndex * cardWidth + (cardWidth / 2));
-                  track.style.transform = `translateX(${newOffset}px)`;
-                  
-                  track.offsetHeight; // Forzar repaint
-                  track.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-              }, 800);
-          }
-      }
-      
-      // Función de movimiento global (usada por los botones con onclick)
-      let isAnimating = false;
-      window.moveDiscographyCarousel = (direction) => {
-          if (isAnimating) return;
-
-          currentIndex += direction;
-          isAnimating = true;
-          updateCarousel(true);
-
-          setTimeout(() => isAnimating = false, 800);
-      };
-
-      // Inicialización (Carga inicial)
-      // Usamos setTimeout(0) para asegurar que el ancho del contenedor es correcto antes de centrar.
-      setTimeout(() => {
-          updateCarousel(false);
-      }, 0); 
-      
-      // Event listener para centrar tarjetas al hacer clic
-      track.addEventListener('click', (e) => {
-          const card = e.target.closest('.discography-card');
-          if (!card || card.classList.contains('center')) return;
-
-          // Centrar la tarjeta clicada si no es la central
-          const cards = Array.from(track.querySelectorAll('.discography-card'));
-          const targetIndex = cards.indexOf(card);
-          const direction = targetIndex > currentIndex ? 1 : -1;
-          window.moveDiscographyCarousel(direction);
-      });
-    }
-    // === FIN DEL CÓDIGO CORREGIDO PARA EL CARRUSEL DE DISCOGRAFÍA ===
-      // Inicializar carrusel de videos (sin cambios)
-      function initVideosCarousel() {
-        const carousel = document.getElementById('videosCarousel');
-        const cards = carousel.querySelectorAll('.video-card');
-        let currentCenterIndex = 1;
-
-        cards.forEach((card, index) => {
-          card.classList.remove('center', 'left', 'right');
-          if (index === currentCenterIndex) card.classList.add('center');
-          else if (index < currentCenterIndex) card.classList.add('left');
-          else card.classList.add('right');
+      // === CARRUSEL DISCOS NUEVO ===
+      const track = document.getElementById('discographyTrack');
+      let ang = 0;
+      function rotateDiscs(direction) {
+        ang += direction * 36; // 5 discos -> 360/5 = 72 grados por movimiento, reducimos para efecto más suave
+        const cards = track.querySelectorAll('.discography-card');
+        cards.forEach((card, i) => {
+          const angle = i * 72 + ang;
+          card.style.transform = `rotateY(${angle}deg) translateZ(300px)`;
         });
-
-        setInterval(() => {
-          currentCenterIndex = (currentCenterIndex + 1) % cards.length;
-          cards.forEach((card, index) => {
-            card.classList.remove('center', 'left', 'right');
-            if (index === currentCenterIndex) card.classList.add('center');
-            else if (index === (currentCenterIndex + 1) % cards.length) card.classList.add('right');
-            else card.classList.add('left');
-          });
-        }, 20000);
       }
-
-      initDiscographyCarousel();
-      initVideosCarousel();
+      rotateDiscs(0); // inicial
+      setInterval(() => rotateDiscs(1), 5000); // rotación automática
     });
 
-    // Mover videos (sin cambios)
     function moveVideosCarousel(direction) {
       const carousel = document.getElementById('videosCarousel');
       const cards = carousel.querySelectorAll('.video-card');
