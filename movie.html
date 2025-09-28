@@ -32,17 +32,6 @@
       overflow: hidden;
       position: relative;
     }
-    /* Muro central para ocultar los paneles de atrás */
-    .holder::before {
-      content: "";
-      position: absolute;
-      width: 120px;
-      height: 200px;
-      background: linear-gradient(90deg, black 0%, rgba(0,0,0,0.8) 50%, black 100%);
-      z-index: 10;
-      left: 50%;
-      transform: translateX(-50%);
-    }
     .spinner {
       transform-style: preserve-3d;
       position: relative;
@@ -61,7 +50,7 @@
       position: absolute;
       background-size: cover;
       background-position: 50% 50%;
-      transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+      transition: opacity 0.5s ease-in-out;
     }
     /* Distribución de los paneles */
     .panel.a { transform: rotateY(0deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjczNzB8&ixlib=rb-4.0.3&q=85); }
@@ -143,7 +132,7 @@
         const panelAngle = index * anglePerPanel;
         const relativeAngle = ((ang - panelAngle) % 360 + 360) % 360;
         const isVisible = relativeAngle <= 90 || relativeAngle >= 270;
-        panel.style.opacity = isVisible ? 1 : 0.1;
+        panel.style.opacity = isVisible ? 1 : 0;
       });
     }
 
