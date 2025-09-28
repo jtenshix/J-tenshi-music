@@ -10,9 +10,6 @@
       padding: 0;
       box-sizing: border-box;
     }
-    html, body {
-      height: 100%;
-    }
     body {
       font-family: 'Helvetica Neue', sans-serif;
       background: #0b0b0b;
@@ -93,7 +90,7 @@
       left: 0;
       width: 100%;
       height: 75vh;
-      background: url('banner-portada.png') center center no-repeat;
+      background: url('banner portada.png') center center no-repeat;
       background-size: cover;
       z-index: 0;
     }
@@ -264,7 +261,7 @@
       height: 300px;
       margin: 60px auto;
       border-radius: 12px;
-      background: url('banner-portada.png') center center no-repeat;
+      background: url('banner portada.png') center center no-repeat;
       background-size: cover;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
       display: flex;
@@ -277,7 +274,7 @@
       text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
       user-select: none;
     }
-    /* === DISCOGRAFÍA === */
+    /* === DISCOGRAFÍA - Inspirado en KAF MOVIE: Como selección de personaje en videojuego === */
     .discography-grid {
       display: flex;
       justify-content: center;
@@ -288,11 +285,11 @@
       height: 400px;
       overflow: hidden;
       position: relative;
-      perspective: 1000px;
+      perspective: 1000px; /* Efecto 3D global como en un juego */
     }
     .discography-track {
       display: flex;
-      transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Suave como en KAF */
       will-change: transform;
       position: relative;
       transform-style: preserve-3d;
@@ -627,6 +624,8 @@
   <div class="hero-wrapper">
     <div class="hero-bg"></div>
     <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
+  </div>
+  <div class="contenedor-centrado">
     <div class="social-bar music-platforms">
       <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" style="color: #1DB954;">
         <i class="fab fa-spotify"></i>
@@ -647,8 +646,6 @@
         <i class="fab fa-tidal"></i>
       </a>
     </div>
-  </div>
-  <div class="contenedor-centrado">
     <div class="social-bar social-networks">
       <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" style="color: #E1306C;">
         <i class="fab fa-instagram"></i>
@@ -759,13 +756,13 @@
     <div class="videos-grid" id="videosCarousel">
       <button class="carousel-nav prev" onclick="moveVideosCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
       <div class="video-card left">
-        <iframe src="https://www.youtube.com/embed/TU_ID_DE_VIDEO_1" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe>
       </div>
       <div class="video-card center">
-        <iframe src="https://www.youtube.com/embed/TU_ID_DE_VIDEO_2" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe>
       </div>
       <div class="video-card right">
-        <iframe src="https://www.youtube.com/embed/TU_ID_DE_VIDEO_3" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe>
       </div>
       <button class="carousel-nav next" onclick="moveVideosCarousel(1)"><i class="fas fa-chevron-right"></i></button>
     </div>
@@ -789,126 +786,101 @@
           button.classList.add('active');
         });
       });
-      // === CÓDIGO CORREGIDO PARA EL CARRUSEL DE DISCOGRAFÍA ===
+
+      // Inicializar carrusel de discografía - Infinito fluido como en KAF
       function initDiscographyCarousel() {
         const carousel = document.getElementById('discographyCarousel');
         const track = carousel.querySelector('.discography-track');
         const originalCards = Array.from(track.querySelectorAll('.discography-card'));
+        const cardWidth = 230; // Ancho + margen
         const totalOriginalCards = originalCards.length;
+        let currentIndex = Math.floor(totalOriginalCards / 2);
 
-        // Definimos el ancho total de una tarjeta más sus márgenes
-        const cardWidth = 230; // 200px (ancho de tarjeta) + 30px (margen total)
-        // 1. CLONACIÓN: Crear la estructura [Clones al inicio] [Originales] [Clones al final]
-        // Clonar al inicio (para bucle de la primera a la última)
-        originalCards.slice().reverse().forEach(card => {
-          const clone = card.cloneNode(true);
-          track.prepend(clone);
-        });
-        // Clonar al final (para bucle de la última a la primera)
-        originalCards.forEach(card => {
-          const clone = card.cloneNode(true);
-          track.appendChild(clone);
+        // Clonar tarjetas para infinito (como en videojuego, loop sin fin)
+        const numClones = totalOriginalCards * 3; // Suficiente para múltiples ciclos
+        originalCards.forEach(() => {
+          originalCards.forEach(card => {
+            const clone = card.cloneNode(true);
+            track.appendChild(clone);
+          });
         });
         const allCards = track.querySelectorAll('.discography-card');
-        const totalCards = allCards.length;
+        track.style.width = `${allCards.length * cardWidth}px`;
 
-        // 2. ÍNDICE INICIAL: El índice central debe ser el inicio del bloque de tarjetas originales.
-        let currentIndex = totalOriginalCards;
-        // Asignar el ancho total del track
-        track.style.width = `${totalCards * cardWidth}px`;
-        function updateCardClasses() {
-          allCards.forEach((card, index) => {
-            card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2', 'hidden');
-            const distance = index - currentIndex;
-            // Asignar clases de posición 3D
-            if (distance === 0) {
-              card.classList.add('center');
-            } else if (distance === -1) {
-              card.classList.add('left-1');
-            } else if (distance === -2) {
-              card.classList.add('left-2');
-            } else if (distance === 1) {
-              card.classList.add('right-1');
-            } else if (distance === 2) {
-              card.classList.add('right-2');
-            } else {
-              card.classList.add('hidden');
-            }
-          });
-        }
         function updateCarousel(animate = true) {
           if (!animate) track.style.transition = 'none';
           else track.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-          // 3. FÓRMULA DE CENTRADO: (Centro del Carrusel) - (Posición central de la tarjeta)
-          const carouselCenter = carousel.offsetWidth / 2;
-          const currentCardCenter = currentIndex * cardWidth + (cardWidth / 2);
-          const offset = carouselCenter - currentCardCenter;
 
+          const offset = -(currentIndex * cardWidth);
           track.style.transform = `translateX(${offset}px)`;
-          updateCardClasses();
-          // 4. BUCLÉ SILENCIOSO: Reposicionar el track si se mueve fuera del rango original.
-          if (currentIndex < totalOriginalCards || currentIndex >= totalOriginalCards * 2) {
+
+          // Asignar clases para efecto 3D (como selección de personaje)
+          allCards.forEach((card, index) => {
+            card.classList.remove('center', 'left-1', 'left-2', 'right-1', 'right-2', 'hidden');
+            const relativeIndex = (index - currentIndex + totalOriginalCards * 10) % totalOriginalCards; // Offset para clones
+            const distance = Math.abs(relativeIndex - 0);
+            if (distance === 0) card.classList.add('center');
+            else if (relativeIndex < 0) {
+              if (distance === 1) card.classList.add('left-1');
+              else if (distance === 2) card.classList.add('left-2');
+              else card.classList.add('hidden');
+            } else {
+              if (distance === 1) card.classList.add('right-1');
+              else if (distance === 2) card.classList.add('right-2');
+              else card.classList.add('hidden');
+            }
+          });
+
+          // Reposicionamiento silencioso para infinito
+          if (currentIndex >= totalOriginalCards * 2 || currentIndex < -totalOriginalCards) {
             setTimeout(() => {
-              // Calcular el índice relativo dentro del rango original (0 a N-1)
-              const relativeIndex = (currentIndex % totalOriginalCards + totalOriginalCards) % totalOriginalCards;
-              // Establecer el nuevo currentIndex dentro del bloque de tarjetas originales
-              currentIndex = totalOriginalCards + relativeIndex;
-              // Aplicar el nuevo offset sin transición
+              currentIndex = currentIndex % totalOriginalCards;
               track.style.transition = 'none';
-              const newOffset = carouselCenter - (currentIndex * cardWidth + (cardWidth / 2));
-              track.style.transform = `translateX(${newOffset}px)`;
-
-              // Forzar "repaint" y restaurar la transición
-              track.offsetHeight;
-              track.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-
-            }, 800); // Espera la duración de la animación
+              track.style.transform = `translateX(${-(currentIndex * cardWidth)}px)`;
+            }, 800);
           }
         }
 
-        // Función de movimiento global (maneja clics en las flechas)
-        let isAnimating = false;
-        window.moveDiscographyCarousel = (direction) => {
-          if (isAnimating) return;
-          currentIndex += direction;
-          isAnimating = true;
-          updateCarousel(true);
-          setTimeout(() => isAnimating = false, 800);
-        };
-        // Inicialización (Carga inicial)
-        // Se usa setTimeout(0) para asegurar que el DOM ha cargado completamente y offsetWidth es correcto.
-        setTimeout(() => {
-          updateCarousel(false);
-        }, 0);
+        updateCarousel(false);
 
-        // Event listener para manejar clics en las tarjetas adyacentes
+        window.moveDiscographyCarousel = (direction) => {
+          currentIndex += direction;
+          updateCarousel(true);
+        };
+
+        // Bloqueo de clics rápidos
+        let isAnimating = false;
+        carousel.querySelectorAll('.carousel-nav').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            if (isAnimating) e.preventDefault();
+            else {
+              isAnimating = true;
+              setTimeout(() => isAnimating = false, 800);
+            }
+          });
+        });
+
+        // Evento PLAY (simula reproducción, enlaza a video)
         track.addEventListener('click', (e) => {
-          const card = e.target.closest('.discography-card');
-          if (!card) return;
-          if (e.target.classList.contains('play-button') && card.classList.contains('center')) {
-            const title = card.querySelector('h4').textContent;
-            alert(`Reproduciendo: "${title}"`);
-          } else if (!card.classList.contains('center')) {
-            // Si hace clic en una tarjeta adyacente, la centra automáticamente
-            const cards = Array.from(track.querySelectorAll('.discography-card'));
-            const targetIndex = cards.indexOf(card);
-            const direction = targetIndex > currentIndex ? 1 : -1;
-            window.moveDiscographyCarousel(direction);
+          if (e.target.classList.contains('play-button')) {
+            alert('Reproduciendo álbum...'); // Reemplaza con modal/video real
           }
         });
       }
-      // === FIN DEL CÓDIGO CORREGIDO PARA EL CARRUSEL DE DISCOGRAFÍA ===
+
       // Inicializar carrusel de videos (sin cambios)
       function initVideosCarousel() {
         const carousel = document.getElementById('videosCarousel');
         const cards = carousel.querySelectorAll('.video-card');
         let currentCenterIndex = 1;
+
         cards.forEach((card, index) => {
           card.classList.remove('center', 'left', 'right');
           if (index === currentCenterIndex) card.classList.add('center');
           else if (index < currentCenterIndex) card.classList.add('left');
           else card.classList.add('right');
         });
+
         setInterval(() => {
           currentCenterIndex = (currentCenterIndex + 1) % cards.length;
           cards.forEach((card, index) => {
@@ -919,9 +891,11 @@
           });
         }, 20000);
       }
+
       initDiscographyCarousel();
       initVideosCarousel();
     });
+
     // Mover videos (sin cambios)
     function moveVideosCarousel(direction) {
       const carousel = document.getElementById('videosCarousel');
