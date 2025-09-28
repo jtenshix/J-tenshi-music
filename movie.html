@@ -131,7 +131,8 @@
       panels.forEach((panel, index) => {
         const panelAngle = index * anglePerPanel;
         const relativeAngle = ((ang - panelAngle) % 360 + 360) % 360;
-        const isVisible = relativeAngle <= 90 || relativeAngle >= 270;
+        // Solo los paneles en el rango frontal (aproximadamente 120 grados) son visibles
+        const isVisible = relativeAngle <= 120 && relativeAngle >= 60;
         panel.style.opacity = isVisible ? 1 : 0;
       });
     }
