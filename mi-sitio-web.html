@@ -274,15 +274,17 @@
       text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
       user-select: none;
     }
-    /* === DISCOGRAFÍA - CARRUSEL NUEVO === */
+    /* === Carrusel de Discografía === */
     .discography-grid {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 30px;
       max-width: 1200px;
       margin: 60px auto;
-      padding: 0 20px;
+      padding: 0 40px;
+      height: 400px;
+      overflow: hidden;
+      position: relative;
       perspective: 1000px;
     }
     .discography-card {
@@ -290,40 +292,54 @@
       height: 200px;
       background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
       border-radius: 16px;
+      margin: 0 15px;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       color: #fff;
       font-weight: 600;
       cursor: pointer;
-      border: 1px solid rgba(224, 194, 123, 0.2);
-      margin: 0 10px;
-      transition: transform 0.5s ease;
-      transform-style: preserve-3d;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
     }
-    .discography-track {
+    /* === Videos === */
+    .videos-grid {
       display: flex;
-      transform-style: preserve-3d;
-      transition: transform 0.5s ease;
-    }
-    .carousel-nav {
-      background: rgba(0, 0, 0, 0.6);
-      color: #e0c27b;
-      border: none;
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 18px;
-      display: flex;
-      align-items: center;
       justify-content: center;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      align-items: center;
+      gap: 30px;
+      max-width: 1800px;
+      margin: 100px auto;
+      padding: 0 80px;
+      height: 400px;
+      position: relative;
     }
-    .carousel-nav:hover {
-      background: #e0c27b;
-      color: #000;
+    .video-card {
+      position: absolute;
+      width: 400px;
+      height: 225px;
+      background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+      border-radius: 12px;
+      overflow: hidden;
+      z-index: 1;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(224, 194, 123, 0.2);
+      transition: transform 0.5s ease, opacity 0.5s ease, box-shadow 0.3s ease;
+      will-change: transform;
+    }
+    .video-card.center {
+      width: 560px;
+      height: 315px;
+      transform: translateX(0) translateY(0) translateZ(50px) scale(1.05);
+      z-index: 100 !important;
+      opacity: 1;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(224, 194, 123, 0.4);
+    }
+    footer {
+      padding: 100px 0 50px;
+      text-align: center;
+      color: #ccc;
+      letter-spacing: 1px;
     }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -334,177 +350,92 @@
     <nav>
       <ul>
         <li><a href="news.html">News</a></li>
-        <li><a href="Discography.html" id="link-discography">Discography</a></li>
-        <li><a href="movie.html">Videos</a></li>
-        <li><a href="wallpapers.html">Gallery</a></li>
-        <li><a href="My Studio.html">My Studio</a></li>
+        <li><a href="discography.html">Discography</a></li>
+        <li><a href="videos.html">Videos</a></li>
+        <li><a href="#">About</a></li>
+        <li><button class="theme-toggle">Light/Dark</button></li>
       </ul>
     </nav>
-    <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
   </header>
-  <div class="hero-wrapper">
+
+  <section class="hero-wrapper">
     <div class="hero-bg"></div>
-    <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
-  </div>
-  <div class="contenedor-centrado">
-    <div class="social-bar music-platforms">
-      <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" style="color: #1DB954;">
-        <i class="fab fa-spotify"></i>
-      </a>
-      <a href="https://music.apple.com" target="_blank" rel="noopener noreferrer" style="color: #FA57C1;">
-        <i class="fab fa-apple"></i>
-      </a>
-      <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" style="color: #FF0000;">
-        <i class="fab fa-youtube"></i>
-      </a>
-      <a href="https://www.deezer.com" target="_blank" rel="noopener noreferrer" style="color: #FF0000;">
-        <i class="fab fa-deezer"></i>
-      </a>
-      <a href="https://music.amazon.com" target="_blank" rel="noopener noreferrer" style="color: #FF9900;">
-        <i class="fab fa-amazon"></i>
-      </a>
-      <a href="https://tidal.com" target="_blank" rel="noopener noreferrer" style="color: #000000;">
-        <i class="fab fa-tidal"></i>
-      </a>
+    <div class="hero-text">
+      <h1>幻想の響き</h1>
     </div>
-    <div class="social-bar social-networks">
-      <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" style="color: #E1306C;">
-        <i class="fab fa-instagram"></i>
-      </a>
-      <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" style="color: #1877F2;">
-        <i class="fab fa-facebook"></i>
-      </a>
-      <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" style="color: #1DA1F2;">
-        <i class="fab fa-twitter"></i>
-      </a>
-      <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" style="color: #FE2C55;">
-        <i class="fab fa-tiktok"></i>
-      </a>
+  </section>
+
+  <section class="contenedor-centrado">
+    <div class="social-bar">
+      <a href="#"><i class="fa-brands fa-twitter"></i></a>
+      <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      <a href="#"><i class="fa-brands fa-spotify"></i></a>
+      <a href="#"><i class="fa-brands fa-youtube"></i></a>
     </div>
-  </div>
-  <section class="news" id="news">
-    <h2>NEWS <span>ニュース</span></h2>
-    <nav class="schedule-filters">
-      <button class="active">Todos</button>
-      <button>Conciertos</button>
-      <button>Lanzamientos</button>
-      <button>Eventos</button>
-    </nav>
+  </section>
+
+  <section class="news">
+    <h2>Latest News <span>2025</span></h2>
+    <div class="schedule-filters">
+      <button class="active">All</button>
+      <button>Tour</button>
+      <button>Releases</button>
+    </div>
     <div class="schedule-grid">
-      <article class="main-news">
-        <div class="date">08 JUL 2025</div>
-        <h3>Gran Concierto de Tenshi en Tokio</h3>
-        <p>El esperado concierto en el Nippon será el evento del año.</p>
-        <span class="label new">NEW</span>
-      </article>
-      <div class="news-card">
-        <div class="date">07 JUL 2025</div>
-        <h4>Nuevo sencillo</h4>
-        <p>"Shinkai no Melody" disponible ya.</p>
-        <span class="label">RELEASE</span>
+      <div class="main-news">
+        <h3>Biggest Hit!</h3>
+        <p>New album released in 2025</p>
       </div>
       <div class="news-card">
-        <div class="date">05 JUL 2025</div>
-        <h4>Evento online</h4>
-        <p>Streaming con sorpresas.</p>
-        <span class="label">EVENT</span>
+        <h4>Single 1</h4>
+        <p>Jan 20, 2025</p>
+        <span class="label">New</span>
       </div>
       <div class="news-card">
-        <div class="date">03 JUL 2025</div>
-        <h4>Premio ganado</h4>
-        <p>Mejor artista emergente.</p>
-        <span class="label">AWARD</span>
+        <h4>Single 2</h4>
+        <p>Feb 12, 2025</p>
+        <span class="label">Hot</span>
       </div>
       <div class="news-card">
-        <div class="date">09 JUL 2025</div>
-        <h4>Nuevo Wallpaper</h4>
-        <p>Descarga el nuevo wallpaper oficial.</p>
-        <span class="label new">NEW</span>
+        <h4>Single 3</h4>
+        <p>Mar 5, 2025</p>
+        <span class="label">Top</span>
+      </div>
+      <div class="news-card">
+        <h4>Single 4</h4>
+        <p>Apr 22, 2025</p>
+        <span class="label">New</span>
       </div>
     </div>
   </section>
 
-  <div class="section-banner">ディスコグラフィー</div>
-  <section class="discography" id="discography">
-    <div class="discography-grid">
-      <div class="discography-track" id="discographyTrack">
-        <div class="discography-card">Álbum Rojo</div>
-        <div class="discography-card">Álbum Verde</div>
-        <div class="discography-card">Álbum Azul</div>
-        <div class="discography-card">Álbum Naranja</div>
-        <div class="discography-card">Álbum Rosa</div>
-      </div>
-    </div>
+  <section class="section-banner">
+    <span>NEW RELEASE</span>
   </section>
 
-  <div class="section-banner">ビデオ</div>
-  <section class="videos" id="videos">
-    <div class="videos-grid" id="videosCarousel">
-      <button class="carousel-nav prev" onclick="moveVideosCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
-      <div class="video-card left">
-        <iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe>
-      </div>
-      <div class="video-card center">
-        <iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe>
-      </div>
-      <div class="video-card right">
-        <iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe>
-      </div>
-      <button class="carousel-nav next" onclick="moveVideosCarousel(1)"><i class="fas fa-chevron-right"></i></button>
-    </div>
+  <section class="discography-grid">
+    <div class="discography-card">Album 1</div>
+    <div class="discography-card">Album 2</div>
+    <div class="discography-card">Album 3</div>
+    <div class="discography-card">Album 4</div>
+    <div class="discography-card">Album 5</div>
+  </section>
+
+  <section class="videos-grid">
+    <div class="video-card" style="left: -400px;">Video 1</div>
+    <div class="video-card center">Video 2</div>
+    <div class="video-card" style="left: 400px;">Video 3</div>
   </section>
 
   <footer>
-    <div class="social-bar"></div>
-    <p>j-tenshiwebcomingsoon</p>
+    &copy; 2025 Tenshi. All Rights Reserved.
   </footer>
 
   <script>
-    function toggleTheme() {
-      document.body.classList.toggle('light-mode');
-      localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
-    }
-    if (localStorage.getItem('theme') === 'light') {
-      document.body.classList.add('light-mode');
-    }
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.schedule-filters button').forEach(button => {
-        button.addEventListener('click', () => {
-          document.querySelectorAll('.schedule-filters button').forEach(b => b.classList.remove('active'));
-          button.classList.add('active');
-        });
-      });
-
-      // === CARRUSEL DISCOS NUEVO ===
-      const track = document.getElementById('discographyTrack');
-      let ang = 0;
-      function rotateDiscs(direction) {
-        ang += direction * 36; // 5 discos -> 360/5 = 72 grados por movimiento, reducimos para efecto más suave
-        const cards = track.querySelectorAll('.discography-card');
-        cards.forEach((card, i) => {
-          const angle = i * 72 + ang;
-          card.style.transform = `rotateY(${angle}deg) translateZ(300px)`;
-        });
-      }
-      rotateDiscs(0); // inicial
-      setInterval(() => rotateDiscs(1), 5000); // rotación automática
+    const themeToggle = document.querySelector(".theme-toggle");
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("light-mode");
     });
-
-    function moveVideosCarousel(direction) {
-      const carousel = document.getElementById('videosCarousel');
-      const cards = carousel.querySelectorAll('.video-card');
-      let currentCenterIndex = 0;
-      cards.forEach((card, index) => {
-        if (card.classList.contains('center')) currentCenterIndex = index;
-      });
-      currentCenterIndex = (currentCenterIndex + direction + cards.length) % cards.length;
-      cards.forEach((card, index) => {
-        card.classList.remove('center', 'left', 'right');
-        if (index === currentCenterIndex) card.classList.add('center');
-        else if (index === (currentCenterIndex + 1) % cards.length) card.classList.add('right');
-        else card.classList.add('left');
-      });
-    }
   </script>
 </body>
 </html>
