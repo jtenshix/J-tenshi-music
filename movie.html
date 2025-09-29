@@ -52,6 +52,8 @@
       position: absolute;
       background-size: cover;
       background-position: 50% 50%;	
+      opacity: 1; 
+      transition: all .5s ease-in-out, opacity .2s ease-out;
     }
 
     /* Distribución de los paneles */
@@ -141,17 +143,56 @@
   </div>
 
   <script>
-    var ang = 0;
+  var ang = 0;
+  var panels = 16;
+  var ang_unit = 360 / panels; // 22.5 grados
 
-    $("#prev").click(function(){
-      ang = ang + 22.5;
-      $("*").css("--ang", ang);
-    });
+  function updateSpinner() {
+    // 1. Aplica la rotación al contenedor principal (spinner)
+    $("*").css("--ang", ang);
 
-    $("#next").click(function(){
-      ang = ang - 22.5;
-      $("*").css("--ang", ang);
+    // 2. Controla la opacidad de cada tarjeta individual
+    $(".panel").each(function(index) {
+      // Ángulo de la tarjeta si el spinner no hubiera girado (0, 22.5, 45, etc.)
+      var initial_ang = index * ang_unit; 
+      
+      // Posición real de la tarjeta después de la rotación
+      var total_ang = (initial_ang + ang) % 360; 
+
+      // Normalizar: mover el ángulo al rango -180 a 180 para simplificar la lógica
+      if (total_ang > 180) {
+        total_ang = total_ang - 360;
+      } else if (total_ang < -180) {
+        total_ang = total_ang + 360;
+      }
+
+      // LA REGLA DE VISIBILIDAD: Solo es visible si está entre -56° y 56°
+      if (total_ang > -56 && total_ang < 56) {
+        $(this).css("opacity", 1);
+        $(this).css("pointer-events", "auto"); 
+      } else {
+        $(this).css("opacity", 0);
+        $(this).css("pointer-events", "none"); 
+      }
     });
-  </script>
+  }
+
+  // Clic en el botón Anterior (gira en sentido horario)
+  $("#prev").click(function(){
+    ang = ang + ang_unit;
+    updateSpinner();
+  });
+
+  // Clic en el botón Siguiente (gira en sentido antihorario)
+  $("#next").click(function(){
+    ang = ang - ang_unit;
+    updateSpinner();
+  });
+
+  // Asegura que las tarjetas traseras estén ocultas al cargar la página
+  $(document).ready(function() {
+    updateSpinner();
+  });
+</script>
 </body>
 </html>
