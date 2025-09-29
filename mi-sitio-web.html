@@ -337,11 +337,17 @@
       pointer-events: none;
     }
     .discography .pagination {
-      width: 600px;
-      height: 44px;
-      margin-top: 10px;
-      text-align: center;
-    }
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transform: translateY(-50%);
+}
+#prev { margin-left: 20px; }
+#next { margin-right: 20px; }
+
     .discography .pagination button {
       padding: 0;
       border: none;
@@ -580,8 +586,9 @@
     </div>
   </section>
   <div class="section-banner">ディスコグラフィー</div>
-  <section class="discography" id="discography">
-    <div class="holder">
+ <section class="discography" id="discography">
+  <div class="container">
+    <div class="holder">  
       <div class="spinner">
         <div class="panel a"></div>
         <div class="panel b"></div>
@@ -606,7 +613,9 @@
       <button type="button" id="prev">&#8592;</button>
       <button type="button" id="next">&#8594;</button>
     </div>
-  </section>
+  </div>
+</section>
+
   <div class="section-banner">ビデオ</div>
   <section class="videos" id="videos">
     <div class="videos-grid">
@@ -645,18 +654,52 @@
   </script>
   <!-- Script: carrusel -->
   <script>
-    var ang = 0;
-    function setAng(v){
-      ang = v;
-      document.documentElement.style.setProperty('--ang', ang);
+var ang = 0;
+var panels = 16;
+var ang_unit = 360 / panels; // 22.5 grados
+
+function updateSpinner() {
+  $("*").css("--ang", ang);
+
+  $(".panel").each(function(index) {
+    var initial_ang = index * ang_unit; 
+    var total_ang = (initial_ang + ang) % 360; 
+
+    if (total_ang > 180) total_ang -= 360;
+    if (total_ang < -180) total_ang += 360;
+
+    // Solo visibles los que están adelante (±56°)
+    if (total_ang > -56 && total_ang < 56) {
+      $(this).css("opacity", 1);
+      $(this).css("pointer-events", "auto"); 
+    } else {
+      $(this).css("opacity", 0);
+      $(this).css("pointer-events", "none"); 
     }
-    document.getElementById('prev').addEventListener('click', function () {
-      setAng(ang + 22.5);
-    });
-    document.getElementById('next').addEventListener('click', function () {
-      setAng(ang - 22.5);
-    });
-    setAng(0);
+
+    // El del centro se agranda
+    if (Math.abs(total_ang) < ang_unit / 2) {
+      $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(400px) scale(1.5)`);
+    } else {
+      $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(400px) scale(1)`);
+    }
+  });
+}
+
+$("#prev").click(function(){
+  ang += ang_unit;
+  updateSpinner();
+});
+
+$("#next").click(function(){
+  ang -= ang_unit;
+  updateSpinner();
+});
+
+$(document).ready(function() {
+  updateSpinner();
+});
+
   </script>
 </body>
 </html>
