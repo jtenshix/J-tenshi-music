@@ -1,214 +1,198 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3D Spinner</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Spinner</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap');
 
-    * {
-      --ang: 0;
-    }
-
-    html, body {
-      height: 100%;
-      margin: 0;
-    }
-
-    body {
-      background: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-
-    .spinner {
-      transform-style: preserve-3d;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transform: rotateY(calc(var(--ang) * 1deg)) translateY(-12px);
-      transition: all .5s ease-in-out;
-    }
-
-    .holder {
-      width: 600px;
-      height: 200px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      perspective: 700px;
-      perspective-origin: center;
-    }
-
-    .panel {
-      border-radius: 5px;
-      width: 100px;
-      height: 100px;
-      position: absolute;
-      background-size: cover;
-      background-position: 50% 50%;	
-      opacity: 1; /* Para la visibilidad de las 5 frontales */
-      transition: all .5s ease-in-out, opacity .2s ease-out; /* Para las transiciones suaves */
-    }
-
-    /* Distribución de los paneles con la variable --panel-rotY (NUEVO) */
-    .panel.a { transform: rotateY(0deg) translateZ(400px); --panel-rotY: 0deg; background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjczNzB8&ixlib=rb-4.0.3&q=85); }
-    .panel.b { transform: rotateY(22.5deg) translateZ(400px); --panel-rotY: 22.5deg; background-image: url(https://images.unsplash.com/photo-1691389694412-266f872999c6?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhYW5kOm9tfHx8fHx8fHx8fDE2OTM5MjY5NTh8&ixlib=rb-4.0.3&q=85); }
-    .panel.c { transform: rotateY(45deg) translateZ(400px); --panel-rotY: 45deg; background-image: url(https://images.unsplash.com/photo-1606391901318-07003db08d63?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjY5OTJ8&ixlib=rb-4.0.3&q=85); }
-    .panel.d { transform: rotateY(67.5deg) translateZ(400px); --panel-rotY: 67.5deg; background-image: url(https://images.unsplash.com/photo-1610785396756-24bd1889ddae?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcwMjl8&ixlib=rb-4.0.3&q=85); }
-    .panel.e { transform: rotateY(90deg) translateZ(400px); --panel-rotY: 90deg; background-image: url(https://images.unsplash.com/photo-1505849871170-7f94cf84f4d2?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcwODJ8&ixlib=rb-4.0.3&q=85); }
-    .panel.f { transform: rotateY(112.5deg) translateZ(400px); --panel-rotY: 112.5deg; background-image: url(https://images.unsplash.com/photo-1518087456308-c3976320f908?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcxMTB8&ixlib=rb-4.0.3&q=85); }
-    .panel.g { transform: rotateY(135deg) translateZ(400px); --panel-rotY: 135deg; background-image: url(https://images.unsplash.com/photo-1558724040-9de64afade55?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcxNDV8&ixlib=rb-4.0.3&q=85); }
-    .panel.h { transform: rotateY(157.5deg) translateZ(400px); --panel-rotY: 157.5deg; background-image: url(https://images.unsplash.com/photo-1604877098440-b7b440241686?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcxOTR8&ixlib=rb-4.0.3&q=85); }
-    .panel.i { transform: rotateY(180deg) translateZ(400px); --panel-rotY: 180deg; background-image: url(https://images.unsplash.com/photo-1518573484273-eb277fe4b036?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcyMTl8&ixlib=rb-4.0.3&q=85); }
-    .panel.j { transform: rotateY(202.5deg) translateZ(400px); --panel-rotY: 202.5deg; background-image: url(https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcyMzZ8&ixlib=rb-4.0.3&q=85); }
-    .panel.k { transform: rotateY(225deg) translateZ(400px); --panel-rotY: 225deg; background-image: url(https://images.unsplash.com/photo-1546877625-cb8c71916608?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcyNTl8&ixlib=rb-4.0.3&q=85); }
-    .panel.l { transform: rotateY(247.5deg) translateZ(400px); --panel-rotY: 247.5deg; background-image: url(https://images.unsplash.com/photo-1551727974-8af20a3322f1?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcyNzR8&ixlib=rb-4.0.3&q=85); }
-    .panel.m { transform: rotateY(270deg) translateZ(400px); --panel-rotY: 270deg; background-image: url(https://images.unsplash.com/photo-1436759644647-e274ee931eaa?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5OTU1Mjl8&ixlib=rb-4.0.3&q=85); }
-    .panel.n { transform: rotateY(292.5deg) translateZ(400px); --panel-rotY: 292.5deg; background-image: url(https://images.unsplash.com/photo-1533779671378-06561cdaacb5?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjczMDd8&ixlib=rb-4.0.3&q=85); }
-    .panel.o { transform: rotateY(315deg) translateZ(400px); --panel-rotY: 315deg; background-image: url(https://images.unsplash.com/photo-1544377570-a774bea2355c?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjczMzN8&ixlib=rb-4.0.3&q=85); }
-    .panel.p { transform: rotateY(337.5deg) translateZ(400px); --panel-rotY: 337.5deg; background-image: url(https://images.unsplash.com/photo-1586693231040-e89840e7d805?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjczNDV8&ixlib=rb-4.0.3&q=85); }
-
-    /* CLASE PARA AGRANDAR LA TARJETA CENTRAL (NUEVO) */
-    .panel.active {
-        transform: scale(1.1) rotateY(var(--panel-rotY)) translateZ(400px); 
-        z-index: 10; 
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    * {
+      --ang: 0;
     }
 
-    .fade {
-      background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.4) 70%, rgba(0,0,0,0) 100%);
-      width: 860px;
-      height: 200px;
-      position: absolute;
-      transform: rotateY(calc(var(--ang) * -1deg)) translateZ(110px);
-      transition: all .5s ease-in-out;  
-    }
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
 
-    .pagination {
-      width: 600px;
-      height: 44px;
-      margin-top: 10px;
-      text-align: center;
-    }
+    body {
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
 
-    .pagination button {
-      padding: 0;
-      border: none;
-      cursor: pointer;
-      width: 44px;
-      color: black;
-      background: #fffa;
-      height: 44px;
-      margin: 0 10px;
-      font-family: 'Roboto', sans-serif;
-      font-size: 20px;
-      border-radius: 100%;
-      transition: all .2s ease-in-out;
-    }
+    .spinner {
+      transform-style: preserve-3d;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: rotateY(calc(var(--ang) * 1deg)) translateY(-12px);
+      transition: all .5s ease-in-out;
+    }
 
-    .pagination button:hover {
-      background: #fffc;
-    }
+    .holder {
+      width: 600px;
+      height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      perspective: 700px;
+      perspective-origin: center;
+    }
 
-    .pagination button:active {
-      background: #ffff;
-    }
-  </style>
+    .panel {
+      border-radius: 5px;
+      width: 100px;
+      height: 100px;
+      position: absolute;
+      background-size: cover;
+      background-position: 50% 50%;	
+      opacity: 1; 
+      transition: all .5s ease-in-out, opacity .2s ease-out;
+    }
+
+    /* Distribución de los paneles */
+    .panel.a { transform: rotateY(0deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjczNzB8&ixlib=rb-4.0.3&q=85); }
+    .panel.b { transform: rotateY(22.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1691389694412-266f872999c6?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjY5NTh8&ixlib=rb-4.0.3&q=85); }
+    .panel.c { transform: rotateY(45deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1606391901318-07003db08d63?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjY5OTJ8&ixlib=rb-4.0.3&q=85); }
+    .panel.d { transform: rotateY(67.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1610785396756-24bd1889ddae?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcwMjl8&ixlib=rb-4.0.3&q=85); }
+    .panel.e { transform: rotateY(90deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1505849871170-7f94cf84f4d2?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcwODJ8&ixlib=rb-4.0.3&q=85); }
+    .panel.f { transform: rotateY(112.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1518087456308-c3976320f908?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcxMTB8&ixlib=rb-4.0.3&q=85); }
+    .panel.g { transform: rotateY(135deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1558724040-9de64afade55?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcxNDV8&ixlib=rb-4.0.3&q=85); }
+    .panel.h { transform: rotateY(157.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1604877098440-b7b440241686?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcxOTR8&ixlib=rb-4.0.3&q=85); }
+    .panel.i { transform: rotateY(180deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1518573484273-eb277fe4b036?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcyMTl8&ixlib=rb-4.0.3&q=85); }
+    .panel.j { transform: rotateY(202.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcyMzZ8&ixlib=rb-4.0.3&q=85); }
+    .panel.k { transform: rotateY(225deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1546877625-cb8c71916608?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcyNTl8&ixlib=rb-4.0.3&q=85); }
+    .panel.l { transform: rotateY(247.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1551727974-8af20a3322f1?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjcyNzR8&ixlib=rb-4.0.3&q=85); }
+    .panel.m { transform: rotateY(270deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1436759644647-e274ee931eaa?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5OTU1Mjl8&ixlib=rb-4.0.3&q=85); }
+    .panel.n { transform: rotateY(292.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1533779671378-06561cdaacb5?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjczMDd8&ixlib=rb-4.0.3&q=85); }
+    .panel.o { transform: rotateY(315deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1544377570-a774bea2355c?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjczMzN8&ixlib=rb-4.0.3&q=85); }
+    .panel.p { transform: rotateY(337.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1586693231040-e89840e7d805?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTM5MjczNDV8&ixlib=rb-4.0.3&q=85); }
+
+    .fade {
+      background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.4) 70%, rgba(0,0,0,0) 100%);
+      width: 860px;
+      height: 200px;
+      position: absolute;
+      transform: rotateY(calc(var(--ang) * -1deg)) translateZ(110px);
+      transition: all .5s ease-in-out;  
+    }
+
+    .pagination {
+      width: 600px;
+      height: 44px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .pagination button {
+      padding: 0;
+      border: none;
+      cursor: pointer;
+      width: 44px;
+      color: black;
+      background: #fffa;
+      height: 44px;
+      margin: 0 10px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 20px;
+      border-radius: 100%;
+      transition: all .2s ease-in-out;
+    }
+
+    .pagination button:hover {
+      background: #fffc;
+    }
+
+    .pagination button:active {
+      background: #ffff;
+    }
+  </style>
 </head>
 <body>
-  <div class="holder">  
-    <div class="spinner">
-      <div class="panel a"></div>
-      <div class="panel b"></div>
-      <div class="panel c"></div>
-      <div class="panel d"></div>
-      <div class="panel e"></div>
-      <div class="panel f"></div>
-      <div class="panel g"></div>
-      <div class="panel h"></div>
-      <div class="panel i"></div>
-      <div class="panel j"></div>
-      <div class="panel k"></div>
-      <div class="panel l"></div>
-      <div class="panel m"></div>
-      <div class="panel n"></div>
-      <div class="panel o"></div>
-      <div class="panel p"></div>
-      <div class="fade"></div>
-    </div>
-  </div>
+  <div class="holder">  
+    <div class="spinner">
+      <div class="panel a"></div>
+      <div class="panel b"></div>
+      <div class="panel c"></div>
+      <div class="panel d"></div>
+      <div class="panel e"></div>
+      <div class="panel f"></div>
+      <div class="panel g"></div>
+      <div class="panel h"></div>
+      <div class="panel i"></div>
+      <div class="panel j"></div>
+      <div class="panel k"></div>
+      <div class="panel l"></div>
+      <div class="panel m"></div>
+      <div class="panel n"></div>
+      <div class="panel o"></div>
+      <div class="panel p"></div>
+      <div class="fade"></div>
+    </div>
+  </div>
 
-  <div class="pagination">
-    <button type="button" id="prev">&#8592;</button>
-    <button type="button" id="next">&#8594;</button>
-  </div>
+  <div class="pagination">
+    <button type="button" id="prev">&#8592;</button>
+    <button type="button" id="next">&#8594;</button>
+  </div>
 
-  <script>
-    var ang = 0;
-    var panels = 16;
-    var ang_unit = 360 / panels; // 22.5 grados
+  <script>
+  var ang = 0;
+  var panels = 16;
+  var ang_unit = 360 / panels; // 22.5 grados
 
-    function updateSpinner() {
-      // 1. Aplica la rotación al contenedor principal (spinner)
-      $("*").css("--ang", ang);
+  function updateSpinner() {
+    // 1. Aplica la rotación al contenedor principal (spinner)
+    $("*").css("--ang", ang);
 
-      // NUEVO: Quita la clase 'active' de todas las tarjetas antes de revisar
-      $(".panel").removeClass("active"); 
+    // 2. Controla la opacidad de cada tarjeta individual
+    $(".panel").each(function(index) {
+      // Ángulo de la tarjeta si el spinner no hubiera girado (0, 22.5, 45, etc.)
+      var initial_ang = index * ang_unit; 
+      
+      // Posición real de la tarjeta después de la rotación
+      var total_ang = (initial_ang + ang) % 360; 
 
-      // 2. Controla la opacidad y el tamaño de cada tarjeta individual
-      $(".panel").each(function(index) {
-        // Ángulo de la tarjeta si el spinner no hubiera girado (0, 22.5, 45, etc.)
-        var initial_ang = index * ang_unit; 
-        
-        // Posición real de la tarjeta después de la rotación
-        var total_ang = (initial_ang + ang) % 360; 
+      // Normalizar: mover el ángulo al rango -180 a 180 para simplificar la lógica
+      if (total_ang > 180) {
+        total_ang = total_ang - 360;
+      } else if (total_ang < -180) {
+        total_ang = total_ang + 360;
+      }
 
-        // Normalizar: mueve el ángulo al rango -180 a 180 para simplificar la lógica
-        if (total_ang > 180) {
-          total_ang = total_ang - 360;
-        } else if (total_ang < -180) {
-          total_ang = total_ang + 360;
-        }
+      // LA REGLA DE VISIBILIDAD: Solo es visible si está entre -56° y 56°
+      if (total_ang > -56 && total_ang < 56) {
+        $(this).css("opacity", 1);
+        $(this).css("pointer-events", "auto"); 
+      } else {
+        $(this).css("opacity", 0);
+        $(this).css("pointer-events", "none"); 
+      }
+    });
+  }
 
-        // Regla de Visibilidad (5 tarjetas al frente: entre -56° y 56°)
-        if (total_ang > -56 && total_ang < 56) {
-          $(this).css("opacity", 1);
-          $(this).css("pointer-events", "auto"); 
-          
-          // REGLA PARA AGRANDAR (Zoom): Si la tarjeta está MUY cerca del centro (-11.25° a 11.25°)
-          if (total_ang > -11.25 && total_ang < 11.25) { 
-            $(this).addClass("active"); // Le pone la clase para que se agrande
-          }
-        } else {
-          // Regla para Ocultar las tarjetas de atrás
-          $(this).css("opacity", 0);
-          $(this).css("pointer-events", "none"); 
-        }
-      });
-    }
+  // Clic en el botón Anterior (gira en sentido horario)
+  $("#prev").click(function(){
+    ang = ang + ang_unit;
+    updateSpinner();
+  });
 
-    // Clic en el botón Anterior (gira en sentido horario)
-    $("#prev").click(function(){
-      ang = ang + ang_unit;
-      updateSpinner();
-    });
+  // Clic en el botón Siguiente (gira en sentido antihorario)
+  $("#next").click(function(){
+    ang = ang - ang_unit;
+    updateSpinner();
+  });
 
-    // Clic en el botón Siguiente (gira en sentido antihorario)
-    $("#next").click(function(){
-      ang = ang - ang_unit;
-      updateSpinner();
-    });
-
-    // Asegura que las tarjetas traseras estén ocultas y que la central esté activa al cargar
-    $(document).ready(function() {
-      updateSpinner();
-    });
-  </script>
+  // Asegura que las tarjetas traseras estén ocultas al cargar la página
+  $(document).ready(function() {
+    updateSpinner();
+  });
+</script>
 </body>
 </html>
