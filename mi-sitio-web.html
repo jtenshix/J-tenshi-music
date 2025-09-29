@@ -4,25 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tenshi | 幻想の響き</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --ang: 0; } /* <-- inicializamos el ángulo */
+
     body {
       font-family: 'Helvetica Neue', sans-serif;
       background: #0b0b0b;
       color: #f5f5f5;
       overflow-x: hidden;
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       transition: background 0.3s, color 0.3s;
     }
-    body.light-mode {
-      background: #f5f5f5;
-      color: #111;
-    }
+    body.light-mode { background: #f5f5f5; color: #111; }
+
     @keyframes shake {
       0% { transform: translateX(0) scale(1.15); }
       2% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); }
@@ -30,287 +27,106 @@
       7% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); }
       100% { transform: translateX(0) rotate(0deg) scale(1.15); }
     }
+
     header {
-      position: fixed;
-      top: 0;
-      width: 100%;
+      position: fixed; top: 0; width: 100%;
       background: rgba(0, 0, 0, 0.8);
       padding: 20px 5%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 999;
-      backdrop-filter: blur(10px);
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 999; backdrop-filter: blur(10px);
     }
-    header .logo {
-      color: #fff;
-      font-size: 20px;
-      letter-spacing: 2px;
-    }
-    nav ul {
-      display: flex;
-      gap: 25px;
-      list-style: none;
-    }
-    nav a {
-      color: #ccc;
-      text-decoration: none;
-      font-size: 14px;
-      transition: all 0.3s ease;
-      display: inline-block;
-    }
-    nav a:hover {
-      color: #e0c27b;
-      animation: shake 0.2s ease-in-out infinite alternate;
-    }
+    header .logo { color: #fff; font-size: 20px; letter-spacing: 2px; }
+    nav ul { display: flex; gap: 25px; list-style: none; }
+    nav a { color: #ccc; text-decoration: none; font-size: 14px; transition: all 0.3s ease; display: inline-block; }
+    nav a:hover { color: #e0c27b; animation: shake 0.2s ease-in-out infinite alternate; }
+
     .theme-toggle {
-      background: none;
-      border: 1px solid #777;
-      color: #ccc;
-      padding: 6px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-size: 12px;
-      margin-left: 20px;
+      background: none; border: 1px solid #777; color: #ccc;
+      padding: 6px 12px; border-radius: 8px; cursor: pointer; transition: all 0.3s; font-size: 12px; margin-left: 20px;
     }
-    .theme-toggle:hover {
-      background: #e0c27b;
-      color: #000;
-    }
-    .hero-wrapper {
-      position: relative;
-      height: 70vh;
-      overflow: hidden;
-      margin-top: 70px;
-    }
-    .hero-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 75vh;
-      background: url('banner portada.png') center center no-repeat;
-      background-size: cover;
-      z-index: 0;
-    }
-    .hero-text {
-      position: relative;
-      z-index: 2;
-      color: white;
-      font-size: 2rem;
-      padding: 60px 5%;
-      height: 75vh;
-      display: flex;
-      align-items: center;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-    }
-    .contenedor-centrado {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px 0;
-      margin-top: 20px;
-    }
-    .social-bar {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      margin: 20px 0;
-      width: 100%;
-      max-width: 800px;
-    }
-    .social-bar a {
-      display: inline-block;
-      transition: transform 0.3s ease, fill 0.3s ease;
-    }
-    .social-bar svg {
-      width: 36px;
-      height: 36px;
-      fill: #888;
-    }
-    .social-bar a:hover svg {
-      fill: #e0c27b;
-      transform: scale(1.15);
-    }
-    .music-platforms {
-      gap: 20px;
-    }
-    .music-platforms a {
-      font-size: 40px;
-    }
-    .social-networks {
-      gap: 15px;
-      margin-top: 10px;
-    }
-    .social-networks a {
-      font-size: 32px;
-    }
+    .theme-toggle:hover { background: #e0c27b; color: #000; }
+
+    .hero-wrapper { position: relative; height: 70vh; overflow: hidden; margin-top: 70px; }
+    .hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 75vh; background: url('banner portada.png') center/cover no-repeat; z-index: 0; }
+    .hero-text { position: relative; z-index: 2; color: white; font-size: 2rem; padding: 60px 5%; height: 75vh; display: flex; align-items: center; text-shadow: 0 2px 10px rgba(0,0,0,.6); }
+
+    .contenedor-centrado { display: flex; flex-direction: column; align-items: center; padding: 20px 0; margin-top: 20px; }
+    .social-bar { display: flex; justify-content: center; gap: 30px; margin: 20px 0; width: 100%; max-width: 800px; }
+    .social-bar a { display: inline-block; transition: transform 0.3s ease, fill 0.3s ease; }
+    .social-bar svg { width: 36px; height: 36px; fill: #888; }
+    .social-bar a:hover svg { fill: #e0c27b; transform: scale(1.15); }
+    .music-platforms { gap: 20px; }
+    .music-platforms a { font-size: 40px; }
+    .social-networks { gap: 15px; margin-top: 10px; }
+    .social-networks a { font-size: 32px; }
+
     .news {
-      padding: 100px 5% 80px;
-      background-color: #1a1a1a;
-      max-width: 1200px;
-      margin: -50px auto 80px;
-      border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-      transition: background 0.3s ease;
+      padding: 100px 5% 80px; background-color: #1a1a1a;
+      max-width: 1200px; margin: -50px auto 80px; border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0,0,0,.3); transition: background 0.3s ease;
     }
-    .news h2 {
-      font-size: 32px;
-      color: #fff;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-    .news h2 span {
-      font-size: 14px;
-      color: #ccc;
-      margin-left: 10px;
-    }
-    .schedule-filters {
-      margin-bottom: 40px;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
+    .news h2 { font-size: 32px; color: #fff; margin-bottom: 30px; text-align: center; }
+    .news h2 span { font-size: 14px; color: #ccc; margin-left: 10px; }
+    .schedule-filters { margin-bottom: 40px; display: flex; justify-content: center; gap: 20px; }
     .schedule-filters button {
-      background: none;
-      border: 1px solid #555;
-      color: #ccc;
-      padding: 8px 18px;
-      font-size: 14px;
-      cursor: pointer;
-      border-radius: 20px;
-      transition: all 0.3s ease;
+      background: none; border: 1px solid #555; color: #ccc; padding: 8px 18px; font-size: 14px;
+      cursor: pointer; border-radius: 20px; transition: all 0.3s ease;
     }
-    .schedule-filters button.active,
-    .schedule-filters button:hover {
-      color: #e0c27b;
-      border-color: #e0c27b;
-    }
+    .schedule-filters button.active, .schedule-filters button:hover { color: #e0c27b; border-color: #e0c27b; }
+
     .schedule-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      gap: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 1fr 1fr;
+      gap: 20px; max-width: 1200px; margin: 0 auto;
     }
     .main-news {
-      grid-column: 1 / 2;
-      grid-row: 1 / 3;
-      background: linear-gradient(135deg, #4c51bf);
-      border-radius: 16px;
-      padding: 20px;
-      color: #fff;
-      box-shadow: 0 0 20px rgba(76, 81, 191, 0.8);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      overflow: hidden;
+      grid-column: 1 / 2; grid-row: 1 / 3;
+      background: linear-gradient(135deg, #4c51bf, #4c51bf);
+      border-radius: 16px; padding: 20px; color: #fff;
+      box-shadow: 0 0 20px rgba(76,81,191,.8);
+      display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;
     }
     .news-card {
-      background: #222;
-      border-radius: 14px;
-      padding: 20px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      cursor: pointer;
-      aspect-ratio: 1 / 1;
-      overflow: hidden;
-      transition: transform 0.3s ease;
-      width: 100%;
+      background: #222; border-radius: 14px; padding: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,.5); display: flex; flex-direction: column;
+      justify-content: center; cursor: pointer; aspect-ratio: 1 / 1; overflow: hidden; transition: transform 0.3s ease; width: 100%;
     }
-    .news-card:hover {
-      transform: scale(1.05);
-      animation: shake 0.2s ease-in-out infinite alternate;
-    }
-    .news-card h4 {
-      font-size: 16px;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 8px;
-      text-align: center;
-    }
-    .news-card .date {
-      font-weight: 700;
-      font-size: 14px;
-      color: #ccc;
-      text-align: center;
-      margin-bottom: 10px;
-    }
-    .news-card p {
-      color: #ccc;
-      font-size: 14px;
-      text-align: center;
-    }
-    .news-card .label {
-      font-size: 11px;
-      color: #e0c27b;
-      border: 1px solid #e0c27b;
-      padding: 2px 6px;
-      border-radius: 999px;
-      width: fit-content;
-      margin: 10px auto 0;
-      display: block;
-    }
+    .news-card:hover { transform: scale(1.05); animation: shake 0.2s ease-in-out infinite alternate; }
+    .news-card h4 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; text-align: center; }
+    .news-card .date { font-weight: 700; font-size: 14px; color: #ccc; text-align: center; margin-bottom: 10px; }
+    .news-card p { color: #ccc; font-size: 14px; text-align: center; }
+    .news-card .label { font-size: 11px; color: #e0c27b; border: 1px solid #e0c27b; padding: 2px 6px; border-radius: 999px; width: fit-content; margin: 10px auto 0; display: block; }
+
     .section-banner {
-      position: relative;
-      width: 100%;
-      height: 300px;
-      margin: 60px auto;
-      border-radius: 12px;
-      background: url('banner portada.png') center center no-repeat;
-      background-size: cover;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #e0c27b;
-      font-size: 3rem;
-      font-weight: 900;
+      position: relative; width: 100%; height: 300px; margin: 60px auto; border-radius: 12px;
+      background: url('banner portada.png') center/cover no-repeat;
+      box-shadow: 0 0 20px rgba(0,0,0,.5); display: flex; justify-content: center; align-items: center;
+      color: #e0c27b; font-size: 3rem; font-weight: 900;
       font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
-      text-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
-      user-select: none;
+      text-shadow: 0 0 15px rgba(224,194,123,.7); user-select: none;
     }
+
     /* === DISCOGRAFÍA (CARRUSEL 3D NUEVO) === */
-    .discography {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 80px 0;
-    }
+    .discography { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 0; }
+
+    /* Contenedor que posiciona los botones a los lados */
+    .container { display: flex; align-items: center; justify-content: center; position: relative; }
+
     .discography .holder {
-      width: 600px;
-      height: 200px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      perspective: 700px;
-      perspective-origin: center;
-      position: relative;
+      width: 600px; height: 200px; display: flex; justify-content: center; align-items: center;
+      perspective: 700px; perspective-origin: center; position: relative; z-index: 1;
     }
     .discography .spinner {
-      transform-style: preserve-3d;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      transform-style: preserve-3d; position: relative; display: flex; align-items: center; justify-content: center;
       transform: rotateY(calc(var(--ang) * 1deg)) translateY(-12px);
       transition: all .5s ease-in-out;
     }
     .discography .panel {
-      border-radius: 5px;
-      width: 100px;
-      height: 100px;
-      position: absolute;
-      background-size: cover;
-      background-position: 50% 50%;
-      box-shadow: 0 10px 30px rgba(0,0,0,.6);
+      border-radius: 5px; width: 100px; height: 100px; position: absolute;
+      background-size: cover; background-position: 50% 50%; box-shadow: 0 10px 30px rgba(0,0,0,.6);
+      opacity: 1; transition: all .5s ease-in-out, opacity .2s ease-out;
     }
-    /* 16 posiciones */
+
+    /* 16 posiciones alrededor */
     .discography .panel:nth-child(1)  { transform: rotateY(0deg) translateZ(400px); }
     .discography .panel:nth-child(2)  { transform: rotateY(22.5deg) translateZ(400px); }
     .discography .panel:nth-child(3)  { transform: rotateY(45deg) translateZ(400px); }
@@ -327,44 +143,29 @@
     .discography .panel:nth-child(14) { transform: rotateY(292.5deg) translateZ(400px); }
     .discography .panel:nth-child(15) { transform: rotateY(315deg) translateZ(400px); }
     .discography .panel:nth-child(16) { transform: rotateY(337.5deg) translateZ(400px); }
+
     .discography .fade {
       background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.4) 30%, rgba(0,0,0,.4) 70%, rgba(0,0,0,0) 100%);
-      width: 860px;
-      height: 200px;
-      position: absolute;
+      width: 860px; height: 200px; position: absolute;
       transform: rotateY(calc(var(--ang) * -1deg)) translateZ(110px);
-      transition: all .5s ease-in-out;
-      pointer-events: none;
+      transition: all .5s ease-in-out; pointer-events: none; z-index: 2;
     }
+
     .discography .pagination {
-  position: absolute;
-  top: 50%;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transform: translateY(-50%);
-}
-#prev { margin-left: 20px; }
-#next { margin-right: 20px; }
+      position: absolute; top: 50%; left: 0; right: 0; z-index: 3;
+      width: 100%; display: flex; justify-content: space-between; align-items: center; transform: translateY(-50%);
+    }
+    #prev { margin-left: 20px; }  #next { margin-right: 20px; }
 
     .discography .pagination button {
-      padding: 0;
-      border: none;
-      cursor: pointer;
-      width: 44px;
-      height: 44px;
-      margin: 0 10px;
-      font-family: 'Roboto', sans-serif;
-      font-size: 20px;
-      color: black;
-      background: #fffa;
-      border-radius: 100%;
+      padding: 0; border: none; cursor: pointer; width: 44px; height: 44px; margin: 0 10px;
+      font-family: 'Roboto', sans-serif; font-size: 20px; color: black; background: #fffa; border-radius: 100%;
       transition: all .2s ease-in-out;
     }
     .discography .pagination button:hover { background: #fffc; }
     .discography .pagination button:active { background: #ffff; }
-    /* Imágenes de ejemplo */
+
+    /* Imágenes de ejemplo (cámbialas por tus portadas) */
     .discography .a { background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c?auto=format&q=85); }
     .discography .b { background-image: url(https://images.unsplash.com/photo-1691389694412-266f872999c6?auto=format&q=85); }
     .discography .c { background-image: url(https://images.unsplash.com/photo-1606391901318-07003db08d63?auto=format&q=85); }
@@ -381,115 +182,46 @@
     .discography .n { background-image: url(https://images.unsplash.com/photo-1533779671378-06561cdaacb5?auto=format&q=85); }
     .discography .o { background-image: url(https://images.unsplash.com/photo-1544377570-a774bea2355c?auto=format&q=85); }
     .discography .p { background-image: url(https://images.unsplash.com/photo-1586693231040-e89840e7d805?auto=format&q=85); }
-    /* === VIDEOS === */
+
+    /* === VIDEOS === (sin cambios) */
     .videos-grid {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 30px;
-      max-width: 1800px;
-      margin: 100px auto;
-      padding: 0 80px;
-      height: 400px;
-      position: relative;
+      display: flex; justify-content: center; align-items: center; gap: 30px;
+      max-width: 1800px; margin: 100px auto; padding: 0 80px; height: 400px; position: relative;
     }
     .video-card {
-      width: 400px;
-      height: 225px;
-      background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-      border-radius: 12px;
-      overflow: hidden;
-      z-index: 1;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-      border: 2px solid rgba(224, 194, 123, 0.2);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      position: relative;
+      width: 400px; height: 225px; background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+      border-radius: 12px; overflow: hidden; z-index: 1; box-shadow: 0 15px 40px rgba(0,0,0,.4);
+      border: 2px solid rgba(224,194,123,.2); transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative;
     }
-    .video-card.center {
-      width: 560px;
-      height: 315px;
-      z-index: 3;
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-      border: 2px solid rgba(224, 194, 123, 0.4);
-    }
-    .video-card:hover {
-      transform: scale(1.07);
-      z-index: 2;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-    }
-    .video-card.center:hover {
-      transform: scale(1.1);
-    }
-    .video-card iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
+    .video-card.center { width: 560px; height: 315px; z-index: 3; box-shadow: 0 30px 80px rgba(0,0,0,.5); border: 2px solid rgba(224,194,123,.4); }
+    .video-card:hover { transform: scale(1.07); z-index: 2; box-shadow: 0 12px 40px rgba(0,0,0,.5); }
+    .video-card.center:hover { transform: scale(1.1); }
+    .video-card iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
     @media (max-width: 1400px) {
-      .videos-grid {
-        padding: 0 60px;
-      }
-      .video-card {
-        width: 350px;
-        height: 197px;
-      }
-      .video-card.center {
-        width: 455px;
-        height: 256px;
-      }
+      .videos-grid { padding: 0 60px; }
+      .video-card { width: 350px; height: 197px; }
+      .video-card.center { width: 455px; height: 256px; }
     }
     @media (max-width: 1200px) {
-      .videos-grid {
-        padding: 0 40px;
-      }
-      .video-card {
-        width: 300px;
-        height: 169px;
-      }
-      .video-card.center {
-        width: 390px;
-        height: 219px;
-      }
+      .videos-grid { padding: 0 40px; }
+      .video-card { width: 300px; height: 169px; }
+      .video-card.center { width: 390px; height: 219px; }
     }
     @media (max-width: 900px) {
-      .videos-grid {
-        flex-direction: column;
-        align-items: center;
-        gap: 30px;
-        padding: 0 30px;
-        height: auto;
-      }
-      .video-card, .video-card.center {
-        width: 100%;
-        max-width: 320px;
-        height: 180px;
-      }
-      .video-card.center {
-        max-width: 360px;
-        height: 202px;
-      }
+      .videos-grid { flex-direction: column; align-items: center; gap: 30px; padding: 0 30px; height: auto; }
+      .video-card, .video-card.center { width: 100%; max-width: 320px; height: 180px; }
+      .video-card.center { max-width: 360px; height: 202px; }
     }
     @media (max-width: 600px) {
-      .videos-grid {
-        padding: 0 10px;
-      }
-      .video-card, .video-card.center {
-        max-width: 360px;
-        height: 202px;
-      }
+      .videos-grid { padding: 0 10px; }
+      .video-card, .video-card.center { max-width: 360px; height: 202px; }
     }
-    footer {
-      padding: 100px 0 50px;
-      text-align: center;
-      color: #ccc;
-      letter-spacing: 1px;
-    }
+
+    footer { padding: 100px 0 50px; text-align: center; color: #ccc; letter-spacing: 1px; }
   </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
   <header>
     <div class="logo">Tenshi</div>
@@ -504,46 +236,29 @@
     </nav>
     <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
   </header>
+
   <div class="hero-wrapper">
     <div class="hero-bg"></div>
     <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
   </div>
+
   <div class="contenedor-centrado">
     <div class="social-bar music-platforms">
-      <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" style="color: #1DB954;">
-        <i class="fab fa-spotify"></i>
-      </a>
-      <a href="https://music.apple.com" target="_blank" rel="noopener noreferrer" style="color: #FA57C1;">
-        <i class="fab fa-apple"></i>
-      </a>
-      <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" style="color: #FF0000;">
-        <i class="fab fa-youtube"></i>
-      </a>
-      <a href="https://www.deezer.com" target="_blank" rel="noopener noreferrer" style="color: #FF0000;">
-        <i class="fab fa-deezer"></i>
-      </a>
-      <a href="https://music.amazon.com" target="_blank" rel="noopener noreferrer" style="color: #FF9900;">
-        <i class="fab fa-amazon"></i>
-      </a>
-      <a href="https://tidal.com" target="_blank" rel="noopener noreferrer" style="color: #000000;">
-        <i class="fab fa-tidal"></i>
-      </a>
+      <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" style="color: #1DB954;"><i class="fab fa-spotify"></i></a>
+      <a href="https://music.apple.com" target="_blank" rel="noopener noreferrer" style="color: #FA57C1;"><i class="fab fa-apple"></i></a>
+      <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" style="color: #FF0000;"><i class="fab fa-youtube"></i></a>
+      <a href="https://www.deezer.com" target="_blank" rel="noopener noreferrer" style="color: #FF0000;"><i class="fab fa-deezer"></i></a>
+      <a href="https://music.amazon.com" target="_blank" rel="noopener noreferrer" style="color: #FF9900;"><i class="fab fa-amazon"></i></a>
+      <a href="https://tidal.com" target="_blank" rel="noopener noreferrer" style="color: #000000;"><i class="fab fa-tidal"></i></a>
     </div>
     <div class="social-bar social-networks">
-      <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" style="color: #E1306C;">
-        <i class="fab fa-instagram"></i>
-      </a>
-      <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" style="color: #1877F2;">
-        <i class="fab fa-facebook"></i>
-      </a>
-      <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" style="color: #1DA1F2;">
-        <i class="fab fa-twitter"></i>
-      </a>
-      <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" style="color: #FE2C55;">
-        <i class="fab fa-tiktok"></i>
-      </a>
+      <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" style="color: #E1306C;"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" style="color: #1877F2;"><i class="fab fa-facebook"></i></a>
+      <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" style="color: #1DA1F2;"><i class="fab fa-twitter"></i></a>
+      <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" style="color: #FE2C55;"><i class="fab fa-tiktok"></i></a>
     </div>
   </div>
+
   <section class="news" id="news">
     <h2>NEWS <span>ニュース</span></h2>
     <nav class="schedule-filters">
@@ -585,55 +300,55 @@
       </div>
     </div>
   </section>
+
   <div class="section-banner">ディスコグラフィー</div>
- <section class="discography" id="discography">
-  <div class="container">
-    <div class="holder">  
-      <div class="spinner">
-        <div class="panel a"></div>
-        <div class="panel b"></div>
-        <div class="panel c"></div>
-        <div class="panel d"></div>
-        <div class="panel e"></div>
-        <div class="panel f"></div>
-        <div class="panel g"></div>
-        <div class="panel h"></div>
-        <div class="panel i"></div>
-        <div class="panel j"></div>
-        <div class="panel k"></div>
-        <div class="panel l"></div>
-        <div class="panel m"></div>
-        <div class="panel n"></div>
-        <div class="panel o"></div>
-        <div class="panel p"></div>
-        <div class="fade"></div>
+  <section class="discography" id="discography">
+    <div class="container">
+      <div class="holder">
+        <div class="spinner">
+          <div class="panel a"></div>
+          <div class="panel b"></div>
+          <div class="panel c"></div>
+          <div class="panel d"></div>
+          <div class="panel e"></div>
+          <div class="panel f"></div>
+          <div class="panel g"></div>
+          <div class="panel h"></div>
+          <div class="panel i"></div>
+          <div class="panel j"></div>
+          <div class="panel k"></div>
+          <div class="panel l"></div>
+          <div class="panel m"></div>
+          <div class="panel n"></div>
+          <div class="panel o"></div>
+          <div class="panel p"></div>
+          <div class="fade"></div>
+        </div>
+      </div>
+      <div class="pagination">
+        <button type="button" id="prev">&#8592;</button>
+        <button type="button" id="next">&#8594;</button>
       </div>
     </div>
-    <div class="pagination">
-      <button type="button" id="prev">&#8592;</button>
-      <button type="button" id="next">&#8594;</button>
-    </div>
-  </div>
-</section>
+  </section>
 
   <div class="section-banner">ビデオ</div>
   <section class="videos" id="videos">
     <div class="videos-grid">
-      <div class="video-card">
-        <iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe>
-      </div>
-      <div class="video-card center">
-        <iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe>
-      </div>
-      <div class="video-card">
-        <iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe>
-      </div>
+      <div class="video-card"><iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe></div>
+      <div class="video-card center"><iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe></div>
+      <div class="video-card"><iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe></div>
     </div>
   </section>
+
   <footer>
     <div class="social-bar"></div>
     <p>j-tenshiwebcomingsoon</p>
   </footer>
+
+  <!-- jQuery (NECESARIO para que el carrusel funcione) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   <!-- Script: tema y filtros -->
   <script>
     function toggleTheme() {
@@ -652,54 +367,45 @@
       });
     });
   </script>
-  <!-- Script: carrusel -->
+
+  <!-- Script: carrusel (5 visibles, central grande) -->
   <script>
-var ang = 0;
-var panels = 16;
-var ang_unit = 360 / panels; // 22.5 grados
+    var ang = 0;
+    var panels = 16;
+    var ang_unit = 360 / panels; // 22.5°
 
-function updateSpinner() {
-  $("*").css("--ang", ang);
+    function updateSpinner() {
+      $("*").css("--ang", ang);
 
-  $(".panel").each(function(index) {
-    var initial_ang = index * ang_unit; 
-    var total_ang = (initial_ang + ang) % 360; 
+      $(".panel").each(function(index) {
+        var initial_ang = index * ang_unit;
+        var total_ang = (initial_ang + ang) % 360;
 
-    if (total_ang > 180) total_ang -= 360;
-    if (total_ang < -180) total_ang += 360;
+        if (total_ang > 180) total_ang -= 360;
+        if (total_ang < -180) total_ang += 360;
 
-    // Solo visibles los que están adelante (±56°)
-    if (total_ang > -56 && total_ang < 56) {
-      $(this).css("opacity", 1);
-      $(this).css("pointer-events", "auto"); 
-    } else {
-      $(this).css("opacity", 0);
-      $(this).css("pointer-events", "none"); 
+        // visibles solo los paneles al frente (±56° aprox = 5 items)
+        if (total_ang > -56 && total_ang < 56) {
+          $(this).css("opacity", 1);
+          $(this).css("pointer-events", "auto");
+        } else {
+          $(this).css("opacity", 0);
+          $(this).css("pointer-events", "none");
+        }
+
+        // el del centro se agranda
+        if (Math.abs(total_ang) < ang_unit / 2) { // ±11.25°
+          $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(400px) scale(1.5)`);
+        } else {
+          $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(400px) scale(1)`);
+        }
+      });
     }
 
-    // El del centro se agranda
-    if (Math.abs(total_ang) < ang_unit / 2) {
-      $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(400px) scale(1.5)`);
-    } else {
-      $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(400px) scale(1)`);
-    }
-  });
-}
+    $("#prev").on("click", function() { ang += ang_unit; updateSpinner(); });
+    $("#next").on("click", function() { ang -= ang_unit; updateSpinner(); });
 
-$("#prev").click(function(){
-  ang += ang_unit;
-  updateSpinner();
-});
-
-$("#next").click(function(){
-  ang -= ang_unit;
-  updateSpinner();
-});
-
-$(document).ready(function() {
-  updateSpinner();
-});
-
+    $(document).ready(function(){ updateSpinner(); });
   </script>
 </body>
 </html>
