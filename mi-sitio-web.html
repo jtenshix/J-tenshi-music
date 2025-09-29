@@ -275,149 +275,105 @@
       user-select: none;
     }
     /* === DISCOGRAFÍA (NUEVO SPINNER) === */
-
-.discography-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    padding: 100px 0; /* Espacio para el carrusel */
+/* === DISCOGRAFÍA (CARRUSEL 3D NUEVO) === */
+.discography {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 0;
 }
 
-.holder {
-    width: 800px; /* Aumentado para mejor visualización */
-    height: 400px; /* Aumentado */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    perspective: 1400px; /* Aumentado */
-    perspective-origin: center;
-    position: relative;
-    z-index: 1;
+.discography .holder {
+  width: 600px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 700px;
+  perspective-origin: center;
+  position: relative;
 }
 
-.spinner {
-    transform-style: preserve-3d;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform: rotateY(calc(var(--ang) * 1deg)) translateY(0px);
-    transition: all .5s ease-in-out;
+.discography .spinner {
+  transform-style: preserve-3d;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotateY(calc(var(--ang) * 1deg)) translateY(-12px);
+  transition: all .5s ease-in-out;
 }
 
-.discography-panel {
-    width: 100px; /* Tamaño del panel de álbum */
-    height: 100px;
-    position: absolute;
-    border-radius: 12px;
-    background-size: cover;
-    background-position: 50% 50%;
-    opacity: 1;
-    transition: all .5s ease-in-out, opacity .2s ease-out;
-    cursor: pointer;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-    overflow: hidden;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    text-align: center;
+.discography .panel {
+  border-radius: 5px;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  background-size: cover;
+  background-position: 50% 50%;
+  box-shadow: 0 10px 30px rgba(0,0,0,.6);
 }
 
-.discography-panel .info {
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 10px 5px;
-    width: 100%;
-    transform: translateY(100%);
-    transition: transform 0.3s ease;
+/* 16 posiciones */
+.discography .panel:nth-child(1)  { transform: rotateY(0deg) translateZ(400px); }
+.discography .panel:nth-child(2)  { transform: rotateY(22.5deg) translateZ(400px); }
+.discography .panel:nth-child(3)  { transform: rotateY(45deg) translateZ(400px); }
+.discography .panel:nth-child(4)  { transform: rotateY(67.5deg) translateZ(400px); }
+.discography .panel:nth-child(5)  { transform: rotateY(90deg) translateZ(400px); }
+.discography .panel:nth-child(6)  { transform: rotateY(112.5deg) translateZ(400px); }
+.discography .panel:nth-child(7)  { transform: rotateY(135deg) translateZ(400px); }
+.discography .panel:nth-child(8)  { transform: rotateY(157.5deg) translateZ(400px); }
+.discography .panel:nth-child(9)  { transform: rotateY(180deg) translateZ(400px); }
+.discography .panel:nth-child(10) { transform: rotateY(202.5deg) translateZ(400px); }
+.discography .panel:nth-child(11) { transform: rotateY(225deg) translateZ(400px); }
+.discography .panel:nth-child(12) { transform: rotateY(247.5deg) translateZ(400px); }
+.discography .panel:nth-child(13) { transform: rotateY(270deg) translateZ(400px); }
+.discography .panel:nth-child(14) { transform: rotateY(292.5deg) translateZ(400px); }
+.discography .panel:nth-child(15) { transform: rotateY(315deg) translateZ(400px); }
+.discography .panel:nth-child(16) { transform: rotateY(337.5deg) translateZ(400px); }
+
+.discography .fade {
+  background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.4) 30%, rgba(0,0,0,.4) 70%, rgba(0,0,0,0) 100%);
+  width: 860px;
+  height: 200px;
+  position: absolute;
+  transform: rotateY(calc(var(--ang) * -1deg)) translateZ(110px);
+  transition: all .5s ease-in-out;
+  pointer-events: none;
 }
 
-.discography-panel:hover .info {
-    transform: translateY(0);
+.discography .pagination {
+  width: 600px;
+  height: 44px;
+  margin-top: 10px;
+  text-align: center;
 }
 
-.discography-panel h4 {
-    margin: 0;
-    font-size: 14px;
-    font-weight: 700;
+.discography .pagination button {
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  width: 44px;
+  height: 44px;
+  margin: 0 10px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  color: black;
+  background: #fffa;
+  border-radius: 100%;
+  transition: all .2s ease-in-out;
 }
-.discography-panel .label {
-    font-size: 10px;
-    color: #e0c27b;
-    border: 1px solid #e0c27b;
-    padding: 1px 4px;
-    border-radius: 8px;
-    display: inline-block;
-    margin-top: 5px;
-}
+.discography .pagination button:hover { background: #fffc; }
+.discography .pagination button:active { background: #ffff; }
 
-/* Posicionamiento de los 8 álbumes */
-/* NOTA: Las URL de imagen (url('...')) deben ser reemplazadas con las tuyas */
-.discography-panel:nth-child(1) { transform: rotateY(0deg) translateZ(250px); background-color: #FF6B6B; } 
-.discography-panel:nth-child(2) { transform: rotateY(45deg) translateZ(250px); background-color: #4ECDC4; } 
-.discography-panel:nth-child(3) { transform: rotateY(90deg) translateZ(250px); background-color: #45B7D1; } 
-.discography-panel:nth-child(4) { transform: rotateY(135deg) translateZ(250px); background-color: #FFA07A; } 
-.discography-panel:nth-child(5) { transform: rotateY(180deg) translateZ(250px); background-color: #E91E63; } 
-.discography-panel:nth-child(6) { transform: rotateY(225deg) translateZ(250px); background-color: #777; } 
-.discography-panel:nth-child(7) { transform: rotateY(270deg) translateZ(250px); background-color: #8C6AEC; } 
-.discography-panel:nth-child(8) { transform: rotateY(315deg) translateZ(250px); background-color: #FFD700; } 
+/* Imágenes de ejemplo */
+.discography .a { background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c?auto=format&q=85); }
+.discography .b { background-image: url(https://images.unsplash.com/photo-1691389694412-266f872999c6?auto=format&q=85); }
+.discography .c { background-image: url(https://images.unsplash.com/photo-1606391901318-07003db08d63?auto=format&q=85); }
+... (sigue hasta la .p)
 
 
-.fade {
-    background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 35%, rgba(0,0,0,0.5) 65%, rgba(0,0,0,0) 100%);
-    width: 100%;
-    max-width: 900px;
-    height: 400px;
-    position: absolute;
-    transform: rotateY(calc(var(--ang) * -1deg)) translateZ(110px);
-    transition: all .5s ease-in-out;
-    pointer-events: none;
-    z-index: 2;
-}
-
-.pagination {
-    position: absolute;
-    top: 50%;
-    width: 100%;
-    max-width: 900px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transform: translateY(-50%);
-    z-index: 3;
-}
-
-.pagination button {
-    padding: 0;
-    border: none;
-    cursor: pointer;
-    width: 50px;
-    height: 50px;
-    color: #000;
-    background: #e0c27b; /* Color dorado/ocre del tema */
-    font-family: 'Roboto', sans-serif;
-    font-size: 24px;
-    border-radius: 100%;
-    transition: all .2s ease-in-out;
-    box-shadow: 0 0 15px rgba(224, 194, 123, 0.7);
-}
-
-.pagination button:hover {
-    background: #fff;
-}
-
-.pagination button:active {
-    background: #ffd700;
-}
-
-#prev {
-    margin-left: -50px;
-}
-
-#next {
-    margin-right: -50px;
-}
     /* === VIDEOS === */
     .videos-grid {
       display: flex;
@@ -625,68 +581,35 @@
     </div>
   </section>
   <div class="section-banner">ディスコグラフィー</div>
- <section class="discography" id="discography">
-    <div class="discography-container">
-        <div class="holder">  
-            <div class="spinner">
-                <a class="discography-panel" href="#" style="background-image: url('URL_DE_TU_IMAGEN_ROJO');">
-                    <div class="info">
-                        <h4>Álbum Rojo</h4>
-                        <span class="label">Single</span>
-                    </div>
-                </a>
-                <a class="discography-panel" href="#" style="background-image: url('URL_DE_TU_IMAGEN_VERDE');">
-                    <div class="info">
-                        <h4>Álbum Verde</h4>
-                        <span class="label">EP</span>
-                    </div>
-                </a>
-                <a class="discography-panel" href="#" style="background-image: url('URL_DE_TU_IMAGEN_AZUL');">
-                    <div class="info">
-                        <h4>Álbum Azul</h4>
-                        <span class="label">Álbum</span>
-                    </div>
-                </a>
-                <a class="discography-panel" href="#" style="background-image: url('URL_DE_TU_IMAGEN_NARANJA');">
-                    <div class="info">
-                        <h4>Álbum Naranja</h4>
-                        <span class="label">Single</span>
-                    </div>
-                </a>
-                <a class="discography-panel" href="#" style="background-image: url('URL_DE_TU_IMAGEN_ROSA');">
-                    <div class="info">
-                        <h4>Álbum Rosa</h4>
-                        <span class="label">EP</span>
-                    </div>
-                </a>
-                <a class="discography-panel" href="#" style="background-image: url('relleno-1.png');">
-                    <div class="info">
-                        <h4>Próximamente 1</h4>
-                        <span class="label">NEW</span>
-                    </div>
-                </a>
-                <a class="discography-panel" href="#" style="background-image: url('relleno-2.png');">
-                    <div class="info">
-                        <h4>Próximamente 2</h4>
-                        <span class="label">NEW</span>
-                    </div>
-                </a>
-                <a class="discography-panel" href="#" style="background-image: url('relleno-3.png');">
-                    <div class="info">
-                        <h4>Próximamente 3</h4>
-                        <span class="label">NEW</span>
-                    </div>
-                </a>
-                
-                <div class="fade"></div>
-            </div>
-        </div>
-        <div class="pagination">
-            <button type="button" id="prev">←</button>
-            <button type="button" id="next">→</button>
-        </div>
+<section class="discography" id="discography">
+  <div class="holder">  
+    <div class="spinner">
+      <div class="panel a"></div>
+      <div class="panel b"></div>
+      <div class="panel c"></div>
+      <div class="panel d"></div>
+      <div class="panel e"></div>
+      <div class="panel f"></div>
+      <div class="panel g"></div>
+      <div class="panel h"></div>
+      <div class="panel i"></div>
+      <div class="panel j"></div>
+      <div class="panel k"></div>
+      <div class="panel l"></div>
+      <div class="panel m"></div>
+      <div class="panel n"></div>
+      <div class="panel o"></div>
+      <div class="panel p"></div>
+      <div class="fade"></div>
     </div>
+  </div>
+
+  <div class="pagination">
+    <button type="button" id="prev">&#8592;</button>
+    <button type="button" id="next">&#8594;</button>
+  </div>
 </section>
+
   <div class="section-banner">ビデオ</div>
   <section class="videos" id="videos">
     <div class="videos-grid">
@@ -721,40 +644,27 @@
         });
       });
     });
-    // === LÓGICA DEL SPINNER 3D (CÓDIGO 2 ADAPTADO) ===
-    var ang = 0;
-    var panels = 8; 
-    var ang_unit = 360 / panels; // 45 grados
 
-    function updateSpinner() {
-        $("*").css("--ang", ang);
+    <script>
+  var ang = 0;
 
-        $(".discography-panel").each(function(index) {
-            var initial_ang = index * ang_unit; 
-            var total_ang = (initial_ang + ang) % 360; 
+  function setAng(v){
+    ang = v;
+    document.documentElement.style.setProperty('--ang', ang);
+  }
 
-            if (total_ang > 180) total_ang -= 360;
-            if (total_ang < -180) total_ang += 360;
+  document.getElementById('prev').addEventListener('click', function () {
+    setAng(ang + 22.5);
+  });
 
-            // Visible si está dentro de ±90°
-            if (total_ang > -90 && total_ang < 90) {
-                $(this).css("opacity", 1);
-                $(this).css("pointer-events", "auto"); 
-            } else {
-                $(this).css("opacity", 0);
-                $(this).css("pointer-events", "none"); 
-            }
+  document.getElementById('next').addEventListener('click', function () {
+    setAng(ang - 22.5);
+  });
 
-            // Escala: el que está al frente se agranda
-            if (Math.abs(total_ang) < ang_unit / 2) { 
-                $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(350px) scale(1.2)`);
-                $(this).css("box-shadow", "0 15px 40px rgba(224, 194, 123, 0.5)"); 
-            } else {
-                $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(350px) scale(1)`);
-                $(this).css("box-shadow", "0 10px 30px rgba(0, 0, 0, 0.7)");
-            }
-        });
-    }
+  // Posición inicial
+  setAng(0);
+</script>
+
 
     $("#prev").click(function(){
         ang += ang_unit;
