@@ -157,7 +157,7 @@ function updateSpinner() {
     if (total_ang > 180) total_ang -= 360;
     if (total_ang < -180) total_ang += 360;
 
-    // Control de visibilidad
+    // Solo visible si está dentro de ±56°
     if (total_ang > -56 && total_ang < 56) {
       $(this).css("opacity", 1);
       $(this).css("pointer-events", "auto"); 
@@ -166,10 +166,12 @@ function updateSpinner() {
       $(this).css("pointer-events", "none"); 
     }
 
-    // Escalado dinámico: la más cerca del frente se agranda
-    // total_ang = 0 => escala máxima, total_ang = ±56 => escala mínima
-    var scale = 1 + (56 - Math.abs(total_ang)) / 56 * 0.5; // max 1.5x
-    $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(400px) scale(${scale})`);
+    // Solo el que está al frente (cerca de 0°) se agranda
+    if (Math.abs(total_ang) < ang_unit / 2) { // +/- 11.25°
+      $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(400px) scale(1.5)`);
+    } else {
+      $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(400px) scale(1)`);
+    }
   });
 }
 
