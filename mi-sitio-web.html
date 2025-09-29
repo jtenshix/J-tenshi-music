@@ -8,7 +8,7 @@
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root { --ang: 0; } /* <-- inicializamos el ángulo */
+    :root { --ang: 0; }
 
     body {
       font-family: 'Helvetica Neue', sans-serif;
@@ -105,10 +105,8 @@
       text-shadow: 0 0 15px rgba(224,194,123,.7); user-select: none;
     }
 
-    /* === DISCOGRAFÍA (CARRUSEL 3D NUEVO) === */
+    /* === DISCOGRAFÍA (CARRUSEL 3D SOLO 5) === */
     .discography { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 0; }
-
-    /* Contenedor que posiciona los botones a los lados */
     .container { display: flex; align-items: center; justify-content: center; position: relative; }
 
     .discography .holder {
@@ -126,23 +124,12 @@
       opacity: 1; transition: all .5s ease-in-out, opacity .2s ease-out;
     }
 
-    /* 16 posiciones alrededor */
-    .discography .panel:nth-child(1)  { transform: rotateY(0deg) translateZ(400px); }
-    .discography .panel:nth-child(2)  { transform: rotateY(22.5deg) translateZ(400px); }
-    .discography .panel:nth-child(3)  { transform: rotateY(45deg) translateZ(400px); }
-    .discography .panel:nth-child(4)  { transform: rotateY(67.5deg) translateZ(400px); }
-    .discography .panel:nth-child(5)  { transform: rotateY(90deg) translateZ(400px); }
-    .discography .panel:nth-child(6)  { transform: rotateY(112.5deg) translateZ(400px); }
-    .discography .panel:nth-child(7)  { transform: rotateY(135deg) translateZ(400px); }
-    .discography .panel:nth-child(8)  { transform: rotateY(157.5deg) translateZ(400px); }
-    .discography .panel:nth-child(9)  { transform: rotateY(180deg) translateZ(400px); }
-    .discography .panel:nth-child(10) { transform: rotateY(202.5deg) translateZ(400px); }
-    .discography .panel:nth-child(11) { transform: rotateY(225deg) translateZ(400px); }
-    .discography .panel:nth-child(12) { transform: rotateY(247.5deg) translateZ(400px); }
-    .discography .panel:nth-child(13) { transform: rotateY(270deg) translateZ(400px); }
-    .discography .panel:nth-child(14) { transform: rotateY(292.5deg) translateZ(400px); }
-    .discography .panel:nth-child(15) { transform: rotateY(315deg) translateZ(400px); }
-    .discography .panel:nth-child(16) { transform: rotateY(337.5deg) translateZ(400px); }
+    /* 5 posiciones (72° cada una) */
+    .discography .panel:nth-child(1) { transform: rotateY(0deg) translateZ(400px); }
+    .discography .panel:nth-child(2) { transform: rotateY(72deg) translateZ(400px); }
+    .discography .panel:nth-child(3) { transform: rotateY(144deg) translateZ(400px); }
+    .discography .panel:nth-child(4) { transform: rotateY(216deg) translateZ(400px); }
+    .discography .panel:nth-child(5) { transform: rotateY(288deg) translateZ(400px); }
 
     .discography .fade {
       background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.4) 30%, rgba(0,0,0,.4) 70%, rgba(0,0,0,0) 100%);
@@ -165,25 +152,14 @@
     .discography .pagination button:hover { background: #fffc; }
     .discography .pagination button:active { background: #ffff; }
 
-    /* Imágenes de ejemplo (cámbialas por tus portadas) */
+    /* Imágenes (solo 5 carátulas) */
     .discography .a { background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c?auto=format&q=85); }
     .discography .b { background-image: url(https://images.unsplash.com/photo-1691389694412-266f872999c6?auto=format&q=85); }
     .discography .c { background-image: url(https://images.unsplash.com/photo-1606391901318-07003db08d63?auto=format&q=85); }
     .discography .d { background-image: url(https://images.unsplash.com/photo-1610785396756-24bd1889ddae?auto=format&q=85); }
     .discography .e { background-image: url(https://images.unsplash.com/photo-1505849871170-7f94cf84f4d2?auto=format&q=85); }
-    .discography .f { background-image: url(https://images.unsplash.com/photo-1518087456308-c3976320f908?auto=format&q=85); }
-    .discography .g { background-image: url(https://images.unsplash.com/photo-1558724040-9de64afade55?auto=format&q=85); }
-    .discography .h { background-image: url(https://images.unsplash.com/photo-1604877098440-b7b440241686?auto=format&q=85); }
-    .discography .i { background-image: url(https://images.unsplash.com/photo-1518573484273-eb277fe4b036?auto=format&q=85); }
-    .discography .j { background-image: url(https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&q=85); }
-    .discography .k { background-image: url(https://images.unsplash.com/photo-1546877625-cb8c71916608?auto=format&q=85); }
-    .discography .l { background-image: url(https://images.unsplash.com/photo-1551727974-8af20a3322f1?auto=format&q=85); }
-    .discography .m { background-image: url(https://images.unsplash.com/photo-1436759644647-e274ee931eaa?auto=format&q=85); }
-    .discography .n { background-image: url(https://images.unsplash.com/photo-1533779671378-06561cdaacb5?auto=format&q=85); }
-    .discography .o { background-image: url(https://images.unsplash.com/photo-1544377570-a774bea2355c?auto=format&q=85); }
-    .discography .p { background-image: url(https://images.unsplash.com/photo-1586693231040-e89840e7d805?auto=format&q=85); }
 
-    /* === VIDEOS === (sin cambios) */
+    /* === VIDEOS === */
     .videos-grid {
       display: flex; justify-content: center; align-items: center; gap: 30px;
       max-width: 1800px; margin: 100px auto; padding: 0 80px; height: 400px; position: relative;
@@ -311,17 +287,6 @@
           <div class="panel c"></div>
           <div class="panel d"></div>
           <div class="panel e"></div>
-          <div class="panel f"></div>
-          <div class="panel g"></div>
-          <div class="panel h"></div>
-          <div class="panel i"></div>
-          <div class="panel j"></div>
-          <div class="panel k"></div>
-          <div class="panel l"></div>
-          <div class="panel m"></div>
-          <div class="panel n"></div>
-          <div class="panel o"></div>
-          <div class="panel p"></div>
           <div class="fade"></div>
         </div>
       </div>
@@ -346,7 +311,7 @@
     <p>j-tenshiwebcomingsoon</p>
   </footer>
 
-  <!-- jQuery (NECESARIO para que el carrusel funcione) -->
+  <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <!-- Script: tema y filtros -->
@@ -368,11 +333,11 @@
     });
   </script>
 
-  <!-- Script: carrusel (5 visibles, central grande) -->
+  <!-- Script: carrusel (5 paneles) -->
   <script>
     var ang = 0;
-    var panels = 16;
-    var ang_unit = 360 / panels; // 22.5°
+    var panels = 5;
+    var ang_unit = 360 / panels; // 72°
 
     function updateSpinner() {
       $("*").css("--ang", ang);
@@ -384,8 +349,8 @@
         if (total_ang > 180) total_ang -= 360;
         if (total_ang < -180) total_ang += 360;
 
-        // visibles solo los paneles al frente (±56° aprox = 5 items)
-        if (total_ang > -56 && total_ang < 56) {
+        // visibles solo los 5 al frente (±120° para cubrirlos todos)
+        if (total_ang > -120 && total_ang < 120) {
           $(this).css("opacity", 1);
           $(this).css("pointer-events", "auto");
         } else {
@@ -394,7 +359,7 @@
         }
 
         // el del centro se agranda
-        if (Math.abs(total_ang) < ang_unit / 2) { // ±11.25°
+        if (Math.abs(total_ang) < ang_unit / 2) {
           $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(400px) scale(1.5)`);
         } else {
           $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(400px) scale(1)`);
