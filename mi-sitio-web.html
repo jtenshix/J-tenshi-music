@@ -241,164 +241,76 @@
       <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" style="color: #E1306C;"><i class="fab fa-instagram"></i></a>
       <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" style="color: #1877F2;"><i class="fab fa-facebook"></i></a>
       <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" style="color: #1DA1F2;"><i class="fab fa-twitter"></i></a>
-      <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" style="color: #FE2C55;"><i class="fab fa-tiktok"></i></a>
+      <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" style="color: #000000;"><i class="fab fa-tiktok"></i></a>
     </div>
   </div>
 
-  <section class="news" id="news">
-    <h2>NEWS <span>ニュース</span></h2>
-    <nav class="schedule-filters">
-      <button class="active">Todos</button>
-      <button>Conciertos</button>
-      <button>Lanzamientos</button>
-      <button>Eventos</button>
-    </nav>
-    <div class="schedule-grid">
-      <article class="main-news">
-        <div class="date">08 JUL 2025</div>
-        <h3>Gran Concierto de Tenshi en Tokio</h3>
-        <p>El esperado concierto en el Nippon será el evento del año.</p>
-        <span class="label new">NEW</span>
-      </article>
-      <div class="news-card">
-        <div class="date">07 JUL 2025</div>
-        <h4>Nuevo sencillo</h4>
-        <p>"Shinkai no Melody" disponible ya.</p>
-        <span class="label">RELEASE</span>
-      </div>
-      <div class="news-card">
-        <div class="date">05 JUL 2025</div>
-        <h4>Evento online</h4>
-        <p>Streaming con sorpresas.</p>
-        <span class="label">EVENT</span>
-      </div>
-      <div class="news-card">
-        <div class="date">03 JUL 2025</div>
-        <h4>Premio ganado</h4>
-        <p>Mejor artista emergente.</p>
-        <span class="label">AWARD</span>
-      </div>
-      <div class="news-card">
-        <div class="date">09 JUL 2025</div>
-        <h4>Nuevo Wallpaper</h4>
-        <p>Descarga el nuevo wallpaper oficial.</p>
-        <span class="label new">NEW</span>
-      </div>
-    </div>
-  </section>
-
-  <div class="section-banner">ディスコグラフィー</div>
-  <section class="discography" id="discography">
+  <section class="discography">
     <div class="container">
       <div class="holder">
         <div class="spinner">
-          <!-- 5 originales -->
           <div class="panel a"></div>
           <div class="panel b"></div>
           <div class="panel c"></div>
           <div class="panel d"></div>
           <div class="panel e"></div>
-          <!-- 5 duplicados -->
-          <div class="panel a"></div>
-          <div class="panel b"></div>
-          <div class="panel c"></div>
-          <div class="panel d"></div>
-          <div class="panel e"></div>
-
-          <div class="fade"></div>
         </div>
+        <div class="fade"></div>
       </div>
       <div class="pagination">
-        <button type="button" id="prev">&#8592;</button>
-        <button type="button" id="next">&#8594;</button>
+        <button id="prev">←</button>
+        <button id="next">→</button>
       </div>
     </div>
   </section>
 
-  <div class="section-banner">ビデオ</div>
-  <section class="videos" id="videos">
-    <div class="videos-grid">
-      <div class="video-card"><iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe></div>
-      <div class="video-card center"><iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe></div>
-      <div class="video-card"><iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe></div>
-    </div>
+  <section class="videos-grid">
+    <div class="video-card"><iframe src="https://www.youtube.com/embed/ScMzIvxBSi4"></iframe></div>
+    <div class="video-card center"><iframe src="https://www.youtube.com/embed/tgbNymZ7vqY"></iframe></div>
+    <div class="video-card"><iframe src="https://www.youtube.com/embed/oHg5SJYRHA0"></iframe></div>
   </section>
 
   <footer>
-    <div class="social-bar"></div>
-    <p>j-tenshiwebcomingsoon</p>
+    © 2025 Tenshi. Todos los derechos reservados.
   </footer>
 
-  <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <!-- Script: tema y filtros -->
   <script>
-    function toggleTheme() {
-      document.body.classList.toggle('light-mode');
-      localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
-    }
-    if (localStorage.getItem('theme') === 'light') {
-      document.body.classList.add('light-mode');
-    }
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.schedule-filters button').forEach(button => {
-        button.addEventListener('click', () => {
-          document.querySelectorAll('.schedule-filters button').forEach(b => b.classList.remove('active'));
-          button.classList.add('active');
-        });
-      });
-    });
-  </script>
-
-  <!-- Script: carrusel -->
-  <script>
-    var ang = 0;
-    var panels = 10;              // 5 originales + 5 duplicados
-    var ang_unit = 360 / panels;  // 36°
+    let ang = 0;
+    const ang_unit = 360 / 5;
 
     function updateSpinner() {
-      // aplica la rotación al contenedor 3D
-      document.documentElement.style.setProperty('--ang', ang);
+      $(".spinner .panel").each(function (index) {
+        let total = (ang + index * ang_unit) % 360;
+        if (total < 0) total += 360;
 
-      $(".panel").each(function(index) {
-        const base = index * ang_unit;             // ángulo fijo del panel en el anillo
-        let total = (base + ang) % 360;            // ángulo relativo a cámara
-        if (total > 180) total -= 360;
-        if (total < -180) total += 360;
-
-        // visibilidad (mitad frontal del carrusel)
-        const visible = total > -90 && total < 90;
-        $(this).css("opacity", visible ? 1 : 0);
-        $(this).css("pointer-events", visible ? "auto" : "none");
-
-        // ajustes: central, laterales y ocultos
+        let visible = total < 90 || total > 270;
         let scale = 1, z = 300, comp = 0;
-        if (Math.abs(total) < ang_unit / 2) {
-          // Panel central: frontal
-          scale = 1.4;
-          comp = 0;
+
+        if (Math.abs(total) < ang_unit / 2 || Math.abs(total - 360) < ang_unit / 2) {
+          // panel central
+          scale = 1.4; z = 300; comp = 0;
         } else if (visible) {
-          // Laterales: contrarrotación parcial para que se vean más de frente
-          // (ej.: si total=72°, aplicamos ~ -32°)
-          scale = 1.12;
-          comp  = -total * 0.45;   // 45% de corrección
+          // laterales
+          scale = 1.2; z = 340; comp = -total * 0.35;
         } else {
-          // Ocultos
-          scale = 0.9;
+          // ocultos
+          scale = 0.9; z = 300; comp = 0;
         }
 
-        // Mantiene la posición en el anillo y ajusta sólo la inclinación visual
-        $(this).css("transform",
-          `rotateY(${base}deg) translateZ(${z}px) rotateY(${comp}deg) scale(${scale})`
-        );
+        $(this).css("transform", `rotateY(${ang + index * ang_unit + comp}deg) translateZ(${z}px) scale(${scale})`);
+        $(this).css("opacity", visible ? 1 : 0);
       });
     }
 
-    $("#prev").on("click", function() { ang += ang_unit; updateSpinner(); });
-    $("#next").on("click", function() { ang -= ang_unit; updateSpinner(); });
+    $("#prev").click(function(){ ang += ang_unit; updateSpinner(); });
+    $("#next").click(function(){ ang -= ang_unit; updateSpinner(); });
 
-    $(document).ready(function(){ updateSpinner(); });
+    updateSpinner();
+
+    function toggleTheme() {
+      document.body.classList.toggle("light-mode");
+    }
   </script>
 </body>
 </html>
