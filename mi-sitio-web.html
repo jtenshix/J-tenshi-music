@@ -133,6 +133,7 @@
       box-shadow: 0 10px 30px rgba(0,0,0,.6);
       opacity: 1;
       transition: all .5s ease-in-out, opacity .2s ease-out;
+      will-change: transform;
     }
 
     .discography .fade {
@@ -161,7 +162,7 @@
     .discography .pagination button:hover { background: #fffc; }
     .discography .pagination button:active { background: #ffff; }
 
-    /* Portadas ejemplo */
+    /* Portadas de ejemplo */
     .discography .a { background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c?auto=format&q=85); }
     .discography .b { background-image: url(https://images.unsplash.com/photo-1691389694412-266f872999c6?auto=format&q=85); }
     .discography .c { background-image: url(https://images.unsplash.com/photo-1606391901318-07003db08d63?auto=format&q=85); }
@@ -353,33 +354,44 @@
   <!-- Script: carrusel -->
   <script>
     var ang = 0;
-    var panels = 10; // ahora son 10
-    var ang_unit = 360 / panels; // 36°
+    var panels = 10;              // 5 originales + 5 duplicados
+    var ang_unit = 360 / panels;  // 36°
 
     function updateSpinner() {
-      $("*").css("--ang", ang);
+      // aplica la rotación al contenedor 3D
+      document.documentElement.style.setProperty('--ang', ang);
 
       $(".panel").each(function(index) {
-        var initial_ang = index * ang_unit;
-        var total_ang = (initial_ang + ang) % 360;
+        const base = index * ang_unit;             // ángulo fijo del panel en el anillo
+        let total = (base + ang) % 360;            // ángulo relativo a cámara
+        if (total > 180) total -= 360;
+        if (total < -180) total += 360;
 
-        if (total_ang > 180) total_ang -= 360;
-        if (total_ang < -180) total_ang += 360;
+        // visibilidad (mitad frontal del carrusel)
+        const visible = total > -90 && total < 90;
+        $(this).css("opacity", visible ? 1 : 0);
+        $(this).css("pointer-events", visible ? "auto" : "none");
 
-        if (Math.abs(total_ang) < ang_unit / 2) {
-          // panel central
-          $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(300px) scale(1.4)`);
-          $(this).css("opacity", 1);
-        } else if (Math.abs(total_ang) < 90) {
-          // paneles laterales visibles → menos inclinados y un poco más cerca
-          let ajustado = (index * ang_unit) * 0.7;
-          $(this).css("transform", `rotateY(${ajustado}deg) translateZ(280px) scale(1.1)`);
-          $(this).css("opacity", 1);
+        // ajustes: central, laterales y ocultos
+        let scale = 1, z = 300, comp = 0;
+        if (Math.abs(total) < ang_unit / 2) {
+          // Panel central: frontal
+          scale = 1.4;
+          comp = 0;
+        } else if (visible) {
+          // Laterales: contrarrotación parcial para que se vean más de frente
+          // (ej.: si total=72°, aplicamos ~ -32°)
+          scale = 1.12;
+          comp  = -total * 0.45;   // 45% de corrección
         } else {
-          // paneles ocultos
-          $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(300px) scale(0.9)`);
-          $(this).css("opacity", 0);
+          // Ocultos
+          scale = 0.9;
         }
+
+        // Mantiene la posición en el anillo y ajusta sólo la inclinación visual
+        $(this).css("transform",
+          `rotateY(${base}deg) translateZ(${z}px) rotateY(${comp}deg) scale(${scale})`
+        );
       });
     }
 
