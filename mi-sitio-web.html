@@ -241,11 +241,12 @@
       <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" style="color: #E1306C;"><i class="fab fa-instagram"></i></a>
       <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" style="color: #1877F2;"><i class="fab fa-facebook"></i></a>
       <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" style="color: #1DA1F2;"><i class="fab fa-twitter"></i></a>
-      <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" style="color: #000000;"><i class="fab fa-tiktok"></i></a>
+      <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" style="color: #FE2C55;"><i class="fab fa-tiktok"></i></a>
     </div>
   </div>
 
-  <section class="discography">
+  <div class="section-banner">ディスコグラフィー</div>
+  <section class="discography" id="discography">
     <div class="container">
       <div class="holder">
         <div class="spinner">
@@ -258,23 +259,41 @@
         <div class="fade"></div>
       </div>
       <div class="pagination">
-        <button id="prev">←</button>
-        <button id="next">→</button>
+        <button type="button" id="prev">&#8592;</button>
+        <button type="button" id="next">&#8594;</button>
       </div>
     </div>
   </section>
 
-  <section class="videos-grid">
-    <div class="video-card"><iframe src="https://www.youtube.com/embed/ScMzIvxBSi4"></iframe></div>
-    <div class="video-card center"><iframe src="https://www.youtube.com/embed/tgbNymZ7vqY"></iframe></div>
-    <div class="video-card"><iframe src="https://www.youtube.com/embed/oHg5SJYRHA0"></iframe></div>
+  <div class="section-banner">ビデオ</div>
+  <section class="videos" id="videos">
+    <div class="videos-grid">
+      <div class="video-card"><iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe></div>
+      <div class="video-card center"><iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe></div>
+      <div class="video-card"><iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe></div>
+    </div>
   </section>
 
   <footer>
-    © 2025 Tenshi. Todos los derechos reservados.
+    <div class="social-bar"></div>
+    <p>j-tenshiwebcomingsoon</p>
   </footer>
 
+  <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Script: tema -->
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+      localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+    }
+    if (localStorage.getItem('theme') === 'light') {
+      document.body.classList.add('light-mode');
+    }
+  </script>
+
+  <!-- Script: carrusel -->
   <script>
     let ang = 0;
     const ang_unit = 360 / 5;
@@ -285,20 +304,23 @@
         if (total < 0) total += 360;
 
         let visible = total < 90 || total > 270;
-        let scale = 1, z = 300, comp = 0;
+        let scale = 1, z = 300, tilt = 0;
 
         if (Math.abs(total) < ang_unit / 2 || Math.abs(total - 360) < ang_unit / 2) {
           // panel central
-          scale = 1.4; z = 300; comp = 0;
+          scale = 1.4; z = 320; tilt = 0;
         } else if (visible) {
-          // laterales
-          scale = 1.2; z = 340; comp = -total * 0.35;
+          // laterales inclinados
+          scale = 1.15; z = 340;
+          tilt = (total < 180) ? -25 : 25; 
         } else {
           // ocultos
-          scale = 0.9; z = 300; comp = 0;
+          scale = 0.9; z = 200; tilt = 0;
         }
 
-        $(this).css("transform", `rotateY(${ang + index * ang_unit + comp}deg) translateZ(${z}px) scale(${scale})`);
+        $(this).css("transform",
+          `rotateY(${ang + index * ang_unit + tilt}deg) translateZ(${z}px) scale(${scale})`
+        );
         $(this).css("opacity", visible ? 1 : 0);
       });
     }
@@ -306,11 +328,7 @@
     $("#prev").click(function(){ ang += ang_unit; updateSpinner(); });
     $("#next").click(function(){ ang -= ang_unit; updateSpinner(); });
 
-    updateSpinner();
-
-    function toggleTheme() {
-      document.body.classList.toggle("light-mode");
-    }
+    $(document).ready(function(){ updateSpinner(); });
   </script>
 </body>
 </html>
