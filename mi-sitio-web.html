@@ -105,7 +105,7 @@
       text-shadow: 0 0 15px rgba(224,194,123,.7); user-select: none;
     }
 
-    /* === DISCOGRAFÍA (10 paneles, 5 visibles + 5 ocultos duplicados) === */
+    /* === DISCOGRAFÍA === */
     .discography {
       display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 0;
     }
@@ -366,6 +366,9 @@
         if (total_ang > 180) total_ang -= 360;
         if (total_ang < -180) total_ang += 360;
 
+        // enderezar un poco las esquinas
+        let tilt = (Math.abs(total_ang) > 60 && Math.abs(total_ang) < 90) ? 0.7 : 1;
+
         if (total_ang > -90 && total_ang < 90) {
           $(this).css("opacity", 1);
           $(this).css("pointer-events", "auto");
@@ -375,9 +378,9 @@
         }
 
         if (Math.abs(total_ang) < ang_unit / 2) {
-          $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(450px) scale(1.4)`);
+          $(this).css("transform", `rotateY(${index * ang_unit * tilt}deg) translateZ(400px) scale(1.4)`);
         } else {
-          $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(450px) scale(1)`);
+          $(this).css("transform", `rotateY(${index * ang_unit * tilt}deg) translateZ(400px) scale(1)`);
         }
       });
     }
