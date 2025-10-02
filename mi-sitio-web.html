@@ -98,7 +98,7 @@
 
     .section-banner {
       position: relative; width: 100%; height: 300px; margin: 60px auto; border-radius: 12px;
-      background: url('banner portada.png') center/cover no-repeat;
+      background: url('banner portada.png') center/cover no-repeat; /* fallback */
       box-shadow: 0 0 20px rgba(0,0,0,.5); display: flex; justify-content: center; align-items: center;
       color: #e0c27b; font-size: 3rem; font-weight: 900;
       font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
@@ -178,7 +178,7 @@
     .discography .pagination button:hover { background: #fffc; }
     .discography .pagination button:active { background: #ffff; }
 
-    /* Portadas */
+    /* Portadas (fallback; serán sobrescritas por JSON) */
     .discography .a { background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c?auto=format&q=85); }
     .discography .b { background-image: url(https://images.unsplash.com/photo-1691389694412-266f872999c6?auto=format&q=85); }
     .discography .c { background-image: url(https://images.unsplash.com/photo-1606391901318-07003db08d63?auto=format&q=85); }
@@ -306,7 +306,9 @@
     </div>
   </section>
 
-  <div class="section-banner">ディスコグラフィー</div>
+  <!-- BANNER DISCOS -->
+  <div class="section-banner" id="banner-discography">ディスコグラフィー</div>
+
   <section class="discography" id="discography">
     <div class="container">
       <div class="holder">
@@ -340,7 +342,9 @@
     </div>
   </section>
 
-  <div class="section-banner">ビデオ</div>
+  <!-- BANNER VIDEOS -->
+  <div class="section-banner" id="banner-videos">ビデオ</div>
+
   <section class="videos" id="videos">
     <div class="container">
       <div class="videos-holder">
@@ -363,7 +367,7 @@
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Script: tema y filtros -->
+  <!-- Script: tema y filtros (intacto) -->
   <script>
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
@@ -420,7 +424,7 @@
     $(document).ready(function(){ updateSpinner(); });
   </script>
 
-  <!-- Script: carrusel VIDEOS (nuevo) -->
+  <!-- Script: carrusel VIDEOS (intacto) -->
   <script>
     var angVid = 0;
     var panelsVid = 9;
@@ -458,7 +462,7 @@
     $(document).ready(function(){ updateSpinnerVideos(); });
   </script>
 
-  <!-- Script: Carga catálogo (banner, NEWS y VIDEOS desde data/catalogo.json) -->
+  <!-- Script: Carga catálogo (banner principal, banners de sección, NEWS y VIDEOS; y portadas Discografía) -->
   <script>
     async function cargarCatalogoPrincipal() {
       try {
@@ -471,7 +475,17 @@
           heroBg.style.backgroundImage = `url('${data.banner_principal}')`;
         }
 
-        /* NEWS (tal cual tu código 2: solo imágenes, 1 main + resto cards) */
+        /* Banners de sección */
+        const bannerDisc = document.getElementById('banner-discography');
+        if (bannerDisc && data.banner_discografia) {
+          bannerDisc.style.backgroundImage = `url('${data.banner_discografia}')`;
+        }
+        const bannerVideos = document.getElementById('banner-videos');
+        if (bannerVideos && data.banner_videos) {
+          bannerVideos.style.backgroundImage = `url('${data.banner_videos}')`;
+        }
+
+        /* NEWS (igual a tu código 2: primer item main, resto cards; solo imagen) */
         const newsGrid = document.getElementById('news-grid');
         if (newsGrid && data.news) {
           newsGrid.innerHTML = '';
@@ -500,8 +514,20 @@
             spinner.appendChild(panel);
           });
 
-          // Recalcular estado visual del carrusel
           if (typeof updateSpinnerVideos === 'function') updateSpinnerVideos();
+        }
+
+        /* DISCOGRAFÍA (usar portadas desde JSON en las 5 clases a/b/c/d/e, sin tocar el carrusel) */
+        if (data.discografia && Array.isArray(data.discografia.portadas)) {
+          const covers = data.discografia.portadas.slice(0, 5); // esperamos 5
+          const clases = ['a','b','c','d','e'];
+          clases.forEach((cls, i) => {
+            const url = covers[i];
+            if (!url) return;
+            document.querySelectorAll('.discography .panel.' + cls).forEach(el => {
+              el.style.backgroundImage = `url('${url}')`;
+            });
+          });
         }
 
       } catch (e) {
