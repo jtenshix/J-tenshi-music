@@ -309,23 +309,27 @@
     <div class="container">
       <div class="holder">
         <div class="spinner">
-          <!-- 16 paneles distribuidos -->
+          <!-- 16 paneles sin repeticiones pegadas -->
           <div class="panel a"></div>
           <div class="panel b"></div>
           <div class="panel c"></div>
           <div class="panel d"></div>
           <div class="panel e"></div>
-          <div class="panel a"></div>
           <div class="panel b"></div>
           <div class="panel c"></div>
           <div class="panel d"></div>
           <div class="panel e"></div>
           <div class="panel a"></div>
-          <div class="panel b"></div>
           <div class="panel c"></div>
           <div class="panel d"></div>
           <div class="panel e"></div>
           <div class="panel a"></div>
+          <div class="panel b"></div>
+          <div class="panel d"></div>
+          <div class="panel e"></div>
+          <div class="panel a"></div>
+          <div class="panel b"></div>
+          <div class="panel c"></div>
           <div class="fade"></div>
         </div>
       </div>
@@ -375,8 +379,8 @@
   <!-- Script: carrusel -->
   <script>
     var ang = 0;
-    var panels = 16;
-    var ang_unit = 360 / panels; // 22.5°
+    var panels = 20; // actualizados según el total
+    var ang_unit = 360 / panels;
 
     function updateSpinner() {
       $("*").css("--ang", ang);
