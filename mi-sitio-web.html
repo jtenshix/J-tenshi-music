@@ -105,7 +105,7 @@
       text-shadow: 0 0 15px rgba(224,194,123,.7); user-select: none;
     }
 
-    /* === DISCOGRAFÍA === */
+    /* === DISCOGRAFÍA (16 paneles → 5 portadas en loop) === */
     .discography {
       display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 0;
     }
@@ -135,7 +135,7 @@
       transition: all .5s ease-in-out, opacity .2s ease-out;
     }
 
-    /* Posiciones 16 paneles */
+    /* 16 posiciones para bucle de 5 */
     .discography .panel:nth-child(1)  { transform: rotateY(0deg) translateZ(400px); }
     .discography .panel:nth-child(2)  { transform: rotateY(22.5deg) translateZ(400px); }
     .discography .panel:nth-child(3)  { transform: rotateY(45deg) translateZ(400px); }
@@ -179,7 +179,7 @@
     .discography .pagination button:hover { background: #fffc; }
     .discography .pagination button:active { background: #ffff; }
 
-    /* Portadas */
+    /* Portadas (loop de 5) */
     .discography .a { background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c?auto=format&q=85); }
     .discography .b { background-image: url(https://images.unsplash.com/photo-1691389694412-266f872999c6?auto=format&q=85); }
     .discography .c { background-image: url(https://images.unsplash.com/photo-1606391901318-07003db08d63?auto=format&q=85); }
@@ -309,27 +309,23 @@
     <div class="container">
       <div class="holder">
         <div class="spinner">
-          <!-- 16 paneles sin repeticiones pegadas -->
+          <!-- 16 paneles en loop de 5 -->
           <div class="panel a"></div>
           <div class="panel b"></div>
           <div class="panel c"></div>
           <div class="panel d"></div>
           <div class="panel e"></div>
+          <div class="panel a"></div>
           <div class="panel b"></div>
           <div class="panel c"></div>
           <div class="panel d"></div>
           <div class="panel e"></div>
           <div class="panel a"></div>
+          <div class="panel b"></div>
           <div class="panel c"></div>
           <div class="panel d"></div>
           <div class="panel e"></div>
           <div class="panel a"></div>
-          <div class="panel b"></div>
-          <div class="panel d"></div>
-          <div class="panel e"></div>
-          <div class="panel a"></div>
-          <div class="panel b"></div>
-          <div class="panel c"></div>
           <div class="fade"></div>
         </div>
       </div>
@@ -379,8 +375,8 @@
   <!-- Script: carrusel -->
   <script>
     var ang = 0;
-    var panels = 20; // actualizados según el total
-    var ang_unit = 360 / panels;
+    var panels = 16;
+    var ang_unit = 360 / panels; // 22.5°
 
     function updateSpinner() {
       $("*").css("--ang", ang);
