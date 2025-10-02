@@ -378,6 +378,7 @@
         if (total_ang > 180) total_ang -= 360;
         if (total_ang < -180) total_ang += 360;
 
+        // visibilidad como antes
         if (total_ang > -90 && total_ang < 90) {
           $(this).css("opacity", 1);
           $(this).css("pointer-events", "auto");
@@ -386,10 +387,23 @@
           $(this).css("pointer-events", "none");
         }
 
+        // === AJUSTE: suavizar ROTACIÓN de los laterales (solo esto)
+        // factor de suavizado (reduce rotación para laterales)
+        var SOFTEN_FACTOR = 0.7;
+
+        // si el panel está bastante lateral (más de 60° desde el frente), aplicamos suavizado
+        var applySoft = Math.abs(total_ang) > 60;
+
+        var transformAngle = initial_ang;
+        if (applySoft) {
+          transformAngle = initial_ang * SOFTEN_FACTOR;
+        }
+
+        // escala cuando está casi centrado (igual que antes)
         if (Math.abs(total_ang) < ang_unit / 2) {
-          $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(300px) scale(1.4)`);
+          $(this).css("transform", `rotateY(${transformAngle}deg) translateZ(300px) scale(1.4)`);
         } else {
-          $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(300px) scale(1)`);
+          $(this).css("transform", `rotateY(${transformAngle}deg) translateZ(300px) scale(1)`);
         }
       });
     }
