@@ -301,37 +301,8 @@
       <button>Lanzamientos</button>
       <button>Eventos</button>
     </nav>
-    <div class="schedule-grid">
-      <article class="main-news">
-        <div class="date">08 JUL 2025</div>
-        <h3>Gran Concierto de Tenshi en Tokio</h3>
-        <p>El esperado concierto en el Nippon será el evento del año.</p>
-        <span class="label new">NEW</span>
-      </article>
-      <div class="news-card">
-        <div class="date">07 JUL 2025</div>
-        <h4>Nuevo sencillo</h4>
-        <p>"Shinkai no Melody" disponible ya.</p>
-        <span class="label">RELEASE</span>
-      </div>
-      <div class="news-card">
-        <div class="date">05 JUL 2025</div>
-        <h4>Evento online</h4>
-        <p>Streaming con sorpresas.</p>
-        <span class="label">EVENT</span>
-      </div>
-      <div class="news-card">
-        <div class="date">03 JUL 2025</div>
-        <h4>Premio ganado</h4>
-        <p>Mejor artista emergente.</p>
-        <span class="label">AWARD</span>
-      </div>
-      <div class="news-card">
-        <div class="date">09 JUL 2025</div>
-        <h4>Nuevo Wallpaper</h4>
-        <p>Descarga el nuevo wallpaper oficial.</p>
-        <span class="label new">NEW</span>
-      </div>
+    <div class="schedule-grid" id="news-grid">
+      <!-- Será rellenado desde catalogo.json -->
     </div>
   </section>
 
@@ -373,19 +344,8 @@
   <section class="videos" id="videos">
     <div class="container">
       <div class="videos-holder">
-        <div class="spinner-videos">
-          <!-- 9 paneles (3 videos repetidos para loop) -->
-          <div class="video-panel"><iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe></div>
-          <div class="video-panel"><iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe></div>
-          <div class="video-panel"><iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe></div>
-
-          <div class="video-panel"><iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe></div>
-          <div class="video-panel"><iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe></div>
-          <div class="video-panel"><iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe></div>
-
-          <div class="video-panel"><iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe></div>
-          <div class="video-panel"><iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe></div>
-          <div class="video-panel"><iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe></div>
+        <div class="spinner-videos" id="spinner-videos">
+          <!-- Será rellenado desde catalogo.json (3 videos repetidos x3 = 9) -->
         </div>
         <div class="videos-pagination">
           <button type="button" id="prev-video">&#8592;</button>
@@ -496,6 +456,60 @@
     $("#next-video").on("click", function(){ angVid -= angVid_unit; updateSpinnerVideos(); });
 
     $(document).ready(function(){ updateSpinnerVideos(); });
+  </script>
+
+  <!-- Script: Carga catálogo (banner, NEWS y VIDEOS desde data/catalogo.json) -->
+  <script>
+    async function cargarCatalogoPrincipal() {
+      try {
+        const resp = await fetch('data/catalogo.json', { cache: 'no-store' });
+        const data = await resp.json();
+
+        /* Banner principal */
+        const heroBg = document.querySelector('.hero-bg');
+        if (heroBg && data.banner_principal) {
+          heroBg.style.backgroundImage = `url('${data.banner_principal}')`;
+        }
+
+        /* NEWS (tal cual tu código 2: solo imágenes, 1 main + resto cards) */
+        const newsGrid = document.getElementById('news-grid');
+        if (newsGrid && data.news) {
+          newsGrid.innerHTML = '';
+          const notas = Object.values(data.news);
+          notas.forEach((nota, idx) => {
+            const el = document.createElement(idx === 0 ? 'article' : 'div');
+            el.className = idx === 0 ? 'main-news' : 'news-card';
+            el.innerHTML = `<img src="${nota.imagen}" alt="Noticia">`;
+            newsGrid.appendChild(el);
+          });
+        }
+
+        /* VIDEOS (llenar carrusel 3D con primeros 3 videos, repetidos x3 = 9) */
+        const spinner = document.getElementById('spinner-videos');
+        if (spinner && Array.isArray(data.videos) && data.videos.length) {
+          spinner.innerHTML = '';
+          const base = data.videos.slice(0, 3);
+          const toEmbed = (url) =>
+            url.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/');
+
+          const lista9 = [...base, ...base, ...base];
+          lista9.forEach(v => {
+            const panel = document.createElement('div');
+            panel.className = 'video-panel';
+            panel.innerHTML = `<iframe src="${toEmbed(v.url)}" allowfullscreen></iframe>`;
+            spinner.appendChild(panel);
+          });
+
+          // Recalcular estado visual del carrusel
+          if (typeof updateSpinnerVideos === 'function') updateSpinnerVideos();
+        }
+
+      } catch (e) {
+        console.error('Error cargando catálogo:', e);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', cargarCatalogoPrincipal);
   </script>
 </body>
 </html>
