@@ -47,7 +47,7 @@
     .theme-toggle:hover { background: #e0c27b; color: #000; }
 
     .hero-wrapper { position: relative; height: 70vh; overflow: hidden; margin-top: 70px; }
-    .hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 75vh; background: url('banner portada.png') center/cover no-repeat; z-index: 0; }
+    .hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 75vh; background: #0b0b0b; z-index: 0; }
     .hero-text { position: relative; z-index: 2; color: white; font-size: 2rem; padding: 60px 5%; height: 75vh; display: flex; align-items: center; text-shadow: 0 2px 10px rgba(0,0,0,.6); }
 
     .contenedor-centrado { display: flex; flex-direction: column; align-items: center; padding: 20px 0; margin-top: 20px; }
@@ -98,7 +98,7 @@
 
     .section-banner {
       position: relative; width: 100%; height: 300px; margin: 60px auto; border-radius: 12px;
-      background: url('banner portada.png') center/cover no-repeat; /* fallback */
+      background: #111; /* sin archivo local */
       box-shadow: 0 0 20px rgba(0,0,0,.5); display: flex; justify-content: center; align-items: center;
       color: #e0c27b; font-size: 3rem; font-weight: 900;
       font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
@@ -462,7 +462,7 @@
     $(document).ready(function(){ updateSpinnerVideos(); });
   </script>
 
-  <!-- Script: Carga catálogo (banner principal, banners de sección, NEWS y VIDEOS; y portadas Discografía) -->
+  <!-- Script: Carga catálogo (banners + news + videos + portadas discografía) -->
   <script>
     async function cargarCatalogoPrincipal() {
       try {
@@ -475,7 +475,7 @@
           heroBg.style.backgroundImage = `url('${data.banner_principal}')`;
         }
 
-        /* Banners de sección */
+        /* Banners de sección (si no existen en JSON, no pasa nada) */
         const bannerDisc = document.getElementById('banner-discography');
         if (bannerDisc && data.banner_discografia) {
           bannerDisc.style.backgroundImage = `url('${data.banner_discografia}')`;
@@ -485,7 +485,7 @@
           bannerVideos.style.backgroundImage = `url('${data.banner_videos}')`;
         }
 
-        /* NEWS (igual a tu código 2: primer item main, resto cards; solo imagen) */
+        /* NEWS: primer item main, resto cards (solo imagen) */
         const newsGrid = document.getElementById('news-grid');
         if (newsGrid && data.news) {
           newsGrid.innerHTML = '';
@@ -498,7 +498,7 @@
           });
         }
 
-        /* VIDEOS (llenar carrusel 3D con primeros 3 videos, repetidos x3 = 9) */
+        /* VIDEOS: cargar 3 y repetir x3 = 9 para carrusel */
         const spinner = document.getElementById('spinner-videos');
         if (spinner && Array.isArray(data.videos) && data.videos.length) {
           spinner.innerHTML = '';
@@ -517,9 +517,9 @@
           if (typeof updateSpinnerVideos === 'function') updateSpinnerVideos();
         }
 
-        /* DISCOGRAFÍA (usar portadas desde JSON en las 5 clases a/b/c/d/e, sin tocar el carrusel) */
+        /* DISCOGRAFÍA: portadas desde JSON (5 clases a/b/c/d/e) */
         if (data.discografia && Array.isArray(data.discografia.portadas)) {
-          const covers = data.discografia.portadas.slice(0, 5); // esperamos 5
+          const covers = data.discografia.portadas.slice(0, 5);
           const clases = ['a','b','c','d','e'];
           clases.forEach((cls, i) => {
             const url = covers[i];
