@@ -105,52 +105,54 @@
       text-shadow: 0 0 15px rgba(224,194,123,.7); user-select: none;
     }
 
-    /* === DISCOGRAFÍA (coverflow) === */
+    /* === DISCOGRAFÍA (10 paneles, 5 visibles + 5 ocultos duplicados) === */
     .discography {
       display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 0;
     }
     .container { display: flex; align-items: center; justify-content: center; position: relative; }
 
     .discography .holder {
-      width: 100%; max-width: 1100px; height: 320px;
+      width: 600px; height: 200px;
       display: flex; justify-content: center; align-items: center;
-      perspective: 1400px; perspective-origin: center;
+      perspective: 700px; perspective-origin: center;
       position: relative; z-index: 1;
     }
-
-    /* coverflow track */
-    .discography .track {
-      width: 100%;
-      height: 100%;
-      position: relative;
+    .discography .spinner {
       transform-style: preserve-3d;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: relative; display: flex;
+      align-items: center; justify-content: center;
+      transform: rotateY(calc(var(--ang) * 1deg)) translateY(-12px);
+      transition: all .5s ease-in-out;
     }
-
     .discography .panel {
-      width: 260px;
-      height: 260px;
+      border-radius: 10px;
+      width: 120px; height: 120px;
       position: absolute;
-      border-radius: 18px;
       background-size: cover;
-      background-position: center;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-      transition: transform 0.6s cubic-bezier(.2,.9,.2,1), opacity 0.4s ease;
-      will-change: transform, opacity;
-      overflow: hidden;
+      background-position: 50% 50%;
+      box-shadow: 0 10px 30px rgba(0,0,0,.6);
+      opacity: 1;
+      transition: all .5s ease-in-out, opacity .2s ease-out;
     }
 
-    /* center highlight */
-    .discography .panel.center {
-      box-shadow: 0 50px 120px rgba(0,0,0,0.7);
-      border-radius: 26px;
-    }
+    /* 10 posiciones */
+    .discography .panel:nth-child(1)  { transform: rotateY(0deg) translateZ(400px); }
+    .discography .panel:nth-child(2)  { transform: rotateY(36deg) translateZ(400px); }
+    .discography .panel:nth-child(3)  { transform: rotateY(72deg) translateZ(400px); }
+    .discography .panel:nth-child(4)  { transform: rotateY(108deg) translateZ(400px); }
+    .discography .panel:nth-child(5)  { transform: rotateY(144deg) translateZ(400px); }
+    .discography .panel:nth-child(6)  { transform: rotateY(180deg) translateZ(400px); opacity: 0; }
+    .discography .panel:nth-child(7)  { transform: rotateY(216deg) translateZ(400px); opacity: 0; }
+    .discography .panel:nth-child(8)  { transform: rotateY(252deg) translateZ(400px); opacity: 0; }
+    .discography .panel:nth-child(9)  { transform: rotateY(288deg) translateZ(400px); opacity: 0; }
+    .discography .panel:nth-child(10) { transform: rotateY(324deg) translateZ(400px); opacity: 0; }
 
     .discography .fade {
-      background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.4) 20%, rgba(0,0,0,.4) 80%, rgba(0,0,0,0) 100%);
-      width: 100%; height: 320px; position: absolute; z-index: 2; pointer-events: none;
+      background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.4) 30%, rgba(0,0,0,.4) 70%, rgba(0,0,0,0) 100%);
+      width: 860px; height: 200px; position: absolute;
+      transform: rotateY(calc(var(--ang) * -1deg)) translateZ(110px);
+      transition: all .5s ease-in-out;
+      pointer-events: none; z-index: 2;
     }
 
     .discography .pagination {
@@ -171,7 +173,7 @@
     .discography .pagination button:hover { background: #fffc; }
     .discography .pagination button:active { background: #ffff; }
 
-    /* Portadas de ejemplo (clases heredadas para tus imágenes) */
+    /* Portadas de ejemplo */
     .discography .a { background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c?auto=format&q=85); }
     .discography .b { background-image: url(https://images.unsplash.com/photo-1691389694412-266f872999c6?auto=format&q=85); }
     .discography .c { background-image: url(https://images.unsplash.com/photo-1606391901318-07003db08d63?auto=format&q=85); }
@@ -300,24 +302,23 @@
   <section class="discography" id="discography">
     <div class="container">
       <div class="holder">
-        <div class="track">
+        <div class="spinner">
           <!-- 5 originales -->
-          <div class="panel a" data-index="0"></div>
-          <div class="panel b" data-index="1"></div>
-          <div class="panel c" data-index="2"></div>
-          <div class="panel d" data-index="3"></div>
-          <div class="panel e" data-index="4"></div>
-          <!-- duplicados opcionales (para sensación de loop visual) -->
-          <div class="panel a" data-index="5"></div>
-          <div class="panel b" data-index="6"></div>
-          <div class="panel c" data-index="7"></div>
-          <div class="panel d" data-index="8"></div>
-          <div class="panel e" data-index="9"></div>
+          <div class="panel a"></div>
+          <div class="panel b"></div>
+          <div class="panel c"></div>
+          <div class="panel d"></div>
+          <div class="panel e"></div>
+          <!-- 5 duplicados -->
+          <div class="panel a"></div>
+          <div class="panel b"></div>
+          <div class="panel c"></div>
+          <div class="panel d"></div>
+          <div class="panel e"></div>
+
+          <div class="fade"></div>
         </div>
-
-        <div class="fade"></div>
       </div>
-
       <div class="pagination">
         <button type="button" id="prev">&#8592;</button>
         <button type="button" id="next">&#8594;</button>
@@ -361,94 +362,42 @@
     });
   </script>
 
-  <!-- Script: carrusel COVERFLOW -->
+  <!-- Script: carrusel -->
   <script>
-    (function(){
-      // coverflow config
-      const TRACK = document.querySelector('.discography .track');
-      const PANELS = Array.from(document.querySelectorAll('.discography .panel'));
-      const N = PANELS.length;
-      let centerIndex = Math.floor(N/2); // inicial - centra el elemento medio
-      // Ajusta cómo rotan los extremos. Menor -> más planos; mayor -> más inclinados
-      const SIDE_ROTATE = 35; // grados por paso para extremos
-      const SPACING = 240;    // separación horizontal entre centros
-      const CENTER_SCALE = 1.45;
-      const FAR_SCALE = 0.72;
+    var ang = 0;
+    var panels = 10; // ahora son 10
+    var ang_unit = 360 / panels; // 36°
 
-      // normalize index into range around center (handles wrap)
-      function offsetFromCenter(i, center) {
-        // queremos offset en rango -floor(N/2) .. +floor(N/2)
-        let raw = i - center;
-        // wrap around
-        if (raw > N/2) raw -= N;
-        if (raw < -N/2) raw += N;
-        return raw;
-      }
+    function updateSpinner() {
+      $("*").css("--ang", ang);
 
-      function render() {
-        PANELS.forEach((panel, i) => {
-          const offset = offsetFromCenter(i, centerIndex);
-          // compute transform:
-          const translateX = offset * SPACING;
-          // rotate toward viewer: negative offset -> left item -> rotateY positive (face viewer)
-          const rotateY = -offset * SIDE_ROTATE;
-          // depth effect: center pops forward
-          let scale = 1;
-          let z = Math.max(-200, -Math.abs(offset) * 60); // move slightly back as offset increases
-          let opacity = 1;
-          let zIndex = 100 - Math.abs(offset);
+      $(".panel").each(function(index) {
+        var initial_ang = index * ang_unit;
+        var total_ang = (initial_ang + ang) % 360;
 
-          if (offset === 0) {
-            scale = CENTER_SCALE;
-            z = 120;
-            opacity = 1;
-            panel.classList.add('center');
-          } else {
-            panel.classList.remove('center');
-            if (Math.abs(offset) === 1) {
-              scale = 0.92;
-              opacity = 0.95;
-            } else {
-              scale = FAR_SCALE;
-              opacity = 0.55;
-            }
-          }
+        if (total_ang > 180) total_ang -= 360;
+        if (total_ang < -180) total_ang += 360;
 
-          // apply transform
-          panel.style.transform = `translateX(${translateX}px) translateZ(${z}px) rotateY(${rotateY}deg) scale(${scale})`;
-          panel.style.opacity = opacity;
-          panel.style.zIndex = zIndex;
-        });
-      }
+        if (total_ang > -90 && total_ang < 90) {
+          $(this).css("opacity", 1);
+          $(this).css("pointer-events", "auto");
+        } else {
+          $(this).css("opacity", 0);
+          $(this).css("pointer-events", "none");
+        }
 
-      // navigation (infinite loop feel)
-      function next() {
-        centerIndex = (centerIndex + 1) % N;
-        render();
-      }
-      function prev() {
-        centerIndex = (centerIndex - 1 + N) % N;
-        render();
-      }
-
-      // attach buttons
-      $('#next').on('click', next);
-      $('#prev').on('click', prev);
-
-      // keyboard control (optional)
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight') next();
-        if (e.key === 'ArrowLeft') prev();
+        if (Math.abs(total_ang) < ang_unit / 2) {
+          $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(300px) scale(1.4)`);
+        } else {
+          $(this).css("transform", `rotateY(${index * ang_unit}deg) translateZ(300px) scale(1)`);
+        }
       });
+    }
 
-      // initial render - choose center so that visually you get one of the original 5 centered
-      // If you prefer the true first original card to be center, set centerIndex = 0 etc.
-      // Here we pick middle so the effect looks balanced
-      render();
+    $("#prev").on("click", function() { ang += ang_unit; updateSpinner(); });
+    $("#next").on("click", function() { ang -= ang_unit; updateSpinner(); });
 
-      // If you want auto-play, uncomment:
-      // setInterval(next, 3000);
-    })();
+    $(document).ready(function(){ updateSpinner(); });
   </script>
 </body>
 </html>
