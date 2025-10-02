@@ -8,7 +8,7 @@
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root { --ang: 0; }
+    :root { --ang: 0; --angVid: 0; }
 
     body {
       font-family: 'Helvetica Neue', sans-serif;
@@ -185,68 +185,33 @@
     .discography .d { background-image: url(https://images.unsplash.com/photo-1610785396756-24bd1889ddae?auto=format&q=85); }
     .discography .e { background-image: url(https://images.unsplash.com/photo-1505849871170-7f94cf84f4d2?auto=format&q=85); }
 
-    /* === VIDEOS === (tus estilos originales se mantienen) */
-    .videos-grid {
-      display: flex; justify-content: center; align-items: center; gap: 30px;
-      max-width: 1800px; margin: 100px auto; padding: 0 80px; height: 400px; position: relative;
-    }
-    .video-card {
-      width: 400px; height: 225px; background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-      border-radius: 12px; overflow: hidden; z-index: 1; box-shadow: 0 15px 40px rgba(0,0,0,.4);
-      border: 2px solid rgba(224,194,123,.2); transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative;
-    }
-    .video-card.center { width: 560px; height: 315px; z-index: 3; box-shadow: 0 30px 80px rgba(0,0,0,.5); border: 2px solid rgba(224,194,123,.4); }
-    .video-card:hover { transform: scale(1.07); z-index: 2; box-shadow: 0 12px 40px rgba(0,0,0,.5); }
-    .video-card.center:hover { transform: scale(1.1); }
-    .video-card iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-
-    @media (max-width: 1400px) {
-      .videos-grid { padding: 0 60px; }
-      .video-card { width: 350px; height: 197px; }
-      .video-card.center { width: 455px; height: 256px; }
-    }
-    @media (max-width: 1200px) {
-      .videos-grid { padding: 0 40px; }
-      .video-card { width: 300px; height: 169px; }
-      .video-card.center { width: 390px; height: 219px; }
-    }
-    @media (max-width: 900px) {
-      .videos-grid { flex-direction: column; align-items: center; gap: 30px; padding: 0 30px; height: auto; }
-      .video-card, .video-card.center { width: 100%; max-width: 320px; height: 180px; }
-      .video-card.center { max-width: 360px; height: 202px; }
-    }
-    @media (max-width: 600px) {
-      .videos-grid { padding: 0 10px; }
-      .video-card, .video-card.center { max-width: 360px; height: 202px; }
-    }
-
-    footer { padding: 100px 0 50px; text-align: center; color: #ccc; letter-spacing: 1px; }
-
-    /* === VIDEOS – CARRUSEL 3D (nuevo, SOLO se usa en la sección de videos) === */
-    .videos { display: flex; flex-direction: column; align-items: center; }
+    /* === VIDEOS (carrusel 3D con 3 visibles) === */
+    .videos { display: flex; flex-direction: column; align-items: center; padding: 80px 0; }
     .videos-holder {
-      width: 900px; height: 350px;
+      width: 900px; height: 320px;
       display: flex; justify-content: center; align-items: center;
       perspective: 1000px; perspective-origin: center;
-      position: relative; z-index: 1; margin: 100px auto 0;
+      position: relative; z-index: 1;
     }
     .spinner-videos {
       transform-style: preserve-3d;
       position: relative; display: flex;
       align-items: center; justify-content: center;
-      transition: transform .6s ease-in-out;
+      transform: rotateY(calc(var(--angVid) * 1deg));
+      transition: all .6s ease-in-out;
     }
     .video-panel {
       position: absolute; background: #000;
-      width: 400px; height: 225px; /* laterales */
-      border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,.5);
-      overflow: hidden; transition: all .5s ease-in-out;
+      border-radius: 12px; overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0,0,0,.5);
+      transition: all .5s ease-in-out;
+      width: 360px; height: 202px; /* laterales */
       opacity: 0; pointer-events: none;
     }
-    .video-panel.center { width: 560px; height: 315px; z-index: 3; }
+    .video-panel.center { width: 480px; height: 270px; z-index: 3; }
     .video-panel iframe { width: 100%; height: 100%; border: 0; }
 
-    /* 9 posiciones fijas (40° cada una) para el loop */
+    /* 9 posiciones fijas (40° c/u) */
     .video-panel:nth-child(1) { transform: rotateY(0deg) translateZ(600px); }
     .video-panel:nth-child(2) { transform: rotateY(40deg) translateZ(600px); }
     .video-panel:nth-child(3) { transform: rotateY(80deg) translateZ(600px); }
@@ -258,15 +223,36 @@
     .video-panel:nth-child(9) { transform: rotateY(320deg) translateZ(600px); }
 
     .videos-pagination {
-      margin: 20px 0 80px; display: flex; gap: 20px; justify-content: center;
+      position: absolute; top: 50%; left: 0; right: 0;
+      display: flex; justify-content: space-between; transform: translateY(-50%);
+      pointer-events: none; z-index: 5; padding: 0 10px;
     }
     .videos-pagination button {
-      padding: 0; border: none; cursor: pointer;
-      width: 44px; height: 44px; font-size: 20px;
-      color: black; background: #fffa; border-radius: 100%;
-      transition: all .2s ease-in-out;
+      pointer-events: auto;
+      width: 44px; height: 44px; border-radius: 50%;
+      border: none; background: #fff8; color: #000; font-size: 20px;
+      cursor: pointer; transition: all .2s ease-in-out;
     }
-    .videos-pagination button:hover { background: #fffc; }
+    .videos-pagination button:hover { background: #fff; }
+
+    @media (max-width: 1400px) {
+      .videos-holder { width: 860px; }
+    }
+    @media (max-width: 1200px) {
+      .videos-holder { width: 760px; }
+    }
+    @media (max-width: 900px) {
+      .videos-holder { width: 100%; height: 280px; }
+      .video-panel { width: 320px; height: 180px; }
+      .video-panel.center { width: 420px; height: 236px; }
+    }
+    @media (max-width: 600px) {
+      .videos-holder { width: 100%; height: 240px; }
+      .video-panel { width: 280px; height: 157px; }
+      .video-panel.center { width: 360px; height: 202px; }
+    }
+
+    footer { padding: 100px 0 50px; text-align: center; color: #ccc; letter-spacing: 1px; }
   </style>
 </head>
 
@@ -385,26 +371,27 @@
 
   <div class="section-banner">ビデオ</div>
   <section class="videos" id="videos">
-    <!-- NUEVA ESTRUCTURA: carrusel 3D, 3 visibles -->
-    <div class="videos-holder">
-      <div class="spinner-videos">
-        <!-- 9 paneles → 3 videos en loop -->
-        <div class="video-panel"><iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe></div>
-        <div class="video-panel"><iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe></div>
-        <div class="video-panel"><iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe></div>
+    <div class="container">
+      <div class="videos-holder">
+        <div class="spinner-videos">
+          <!-- 9 paneles (3 videos repetidos para loop) -->
+          <div class="video-panel"><iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe></div>
+          <div class="video-panel"><iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe></div>
+          <div class="video-panel"><iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe></div>
 
-        <div class="video-panel"><iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe></div>
-        <div class="video-panel"><iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe></div>
-        <div class="video-panel"><iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe></div>
+          <div class="video-panel"><iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe></div>
+          <div class="video-panel"><iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe></div>
+          <div class="video-panel"><iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe></div>
 
-        <div class="video-panel"><iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe></div>
-        <div class="video-panel"><iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe></div>
-        <div class="video-panel"><iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe></div>
+          <div class="video-panel"><iframe src="https://www.youtube.com/embed/example1" allowfullscreen></iframe></div>
+          <div class="video-panel"><iframe src="https://www.youtube.com/embed/example2" allowfullscreen></iframe></div>
+          <div class="video-panel"><iframe src="https://www.youtube.com/embed/example3" allowfullscreen></iframe></div>
+        </div>
+        <div class="videos-pagination">
+          <button type="button" id="prev-video">&#8592;</button>
+          <button type="button" id="next-video">&#8594;</button>
+        </div>
       </div>
-    </div>
-    <div class="videos-pagination">
-      <button type="button" id="prev-video">&#8592;</button>
-      <button type="button" id="next-video">&#8594;</button>
     </div>
   </section>
 
@@ -416,7 +403,7 @@
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Script: tema y filtros (INTACTO) -->
+  <!-- Script: tema y filtros -->
   <script>
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
@@ -429,13 +416,13 @@
       document.querySelectorAll('.schedule-filters button').forEach(button => {
         button.addEventListener('click', () => {
           document.querySelectorAll('.schedule-filters button').forEach(b => b.classList.remove('active'));
-          button.classList.add('active');
+          button.classList.add('active'));
         });
       });
     });
   </script>
 
-  <!-- Script: carrusel discografía (INTACTO) -->
+  <!-- Script: carrusel DISCOS (intacto) -->
   <script>
     var ang = 0;
     var panels = 15;
@@ -473,46 +460,42 @@
     $(document).ready(function(){ updateSpinner(); });
   </script>
 
-  <!-- Script: carrusel de VIDEOS (NUEVO, único cambio solicitado) -->
+  <!-- Script: carrusel VIDEOS (nuevo) -->
   <script>
-    (function(){
-      var angVid = 0;
-      var panelsVid = 9;
-      var ang_unitVid = 360 / panelsVid; // 40°
+    var angVid = 0;
+    var panelsVid = 9;
+    var angVid_unit = 360 / panelsVid; // 40°
 
-      function updateSpinnerVideos() {
-        // Rotamos el contenedor
-        $(".spinner-videos").css("transform", "rotateY(" + angVid + "deg)");
+    function updateSpinnerVideos() {
+      $("*").css("--angVid", angVid);
 
-        // Mostrar solo 3 (centro y laterales) y marcar el centro
-        $(".spinner-videos .video-panel").each(function(index){
-          var initial_ang = index * ang_unitVid;
-          var total_ang = (initial_ang + angVid) % 360;
-          if (total_ang > 180) total_ang -= 360;
-          if (total_ang < -180) total_ang += 360;
+      $(".spinner-videos .video-panel").each(function(index) {
+        var initial_ang = index * angVid_unit;
+        var total_ang = (initial_ang + angVid) % 360;
 
-          // Ventana visible ~140° (70° a cada lado)
-          if (total_ang > -70 && total_ang < 70) {
-            $(this).css("opacity", 1).css("pointer-events","auto");
-          } else {
-            $(this).css("opacity", 0).css("pointer-events","none");
-          }
+        if (total_ang > 180) total_ang -= 360;
+        if (total_ang < -180) total_ang += 360;
 
-          // Centro (±20°) agrandado 560x315
-          if (Math.abs(total_ang) < ang_unitVid / 2) {
-            $(this).addClass("center");
-          } else {
-            $(this).removeClass("center");
-          }
-        });
-      }
+        // Mostrar solo 3 (ventana ±70°)
+        if (total_ang > -70 && total_ang < 70) {
+          $(this).css({opacity: 1, "pointer-events": "auto"});
+        } else {
+          $(this).css({opacity: 0, "pointer-events": "none"});
+        }
 
-      $("#prev-video").on("click", function(){ angVid += ang_unitVid; updateSpinnerVideos(); });
-      $("#next-video").on("click", function(){ angVid -= ang_unitVid; updateSpinnerVideos(); });
+        // Centro (±20°)
+        if (Math.abs(total_ang) < angVid_unit / 2) {
+          $(this).addClass("center");
+        } else {
+          $(this).removeClass("center");
+        }
+      });
+    }
 
-      $(document).ready(function(){ updateSpinnerVideos(); });
-    })();
+    $("#prev-video").on("click", function(){ angVid += angVid_unit; updateSpinnerVideos(); });
+    $("#next-video").on("click", function(){ angVid -= angVid_unit; updateSpinnerVideos(); });
+
+    $(document).ready(function(){ updateSpinnerVideos(); });
   </script>
 </body>
 </html>
-
