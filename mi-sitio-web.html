@@ -369,6 +369,7 @@
     var ang_unit = 360 / panels; // 36°
 
     function updateSpinner() {
+      // mantenemos la variable CSS para la rotación del contenedor
       $("*").css("--ang", ang);
 
       $(".panel").each(function(index) {
@@ -378,7 +379,7 @@
         if (total_ang > 180) total_ang -= 360;
         if (total_ang < -180) total_ang += 360;
 
-        // visibilidad como antes
+        // visibilidad (igual que antes)
         if (total_ang > -90 && total_ang < 90) {
           $(this).css("opacity", 1);
           $(this).css("pointer-events", "auto");
@@ -387,19 +388,19 @@
           $(this).css("pointer-events", "none");
         }
 
-        // === AJUSTE: suavizar ROTACIÓN de los laterales (solo esto)
-        // factor de suavizado (reduce rotación para laterales)
-        var SOFTEN_FACTOR = 0.7;
-
-        // si el panel está bastante lateral (más de 60° desde el frente), aplicamos suavizado
-        var applySoft = Math.abs(total_ang) > 60;
-
+        // === AJUSTE: nudear un poco los laterales hacia el frente
+        // No tocamos nada más: solo reducimos/compensamos la rotación
         var transformAngle = initial_ang;
-        if (applySoft) {
-          transformAngle = initial_ang * SOFTEN_FACTOR;
+        var SOFTEN_DEGREES = 18; // grados que acercan las esquinas al frente
+
+        // Aplicar suavizado solo cuando el panel está visible pero lateral (entre ~40° y 90°)
+        if (Math.abs(total_ang) > 40 && Math.abs(total_ang) < 90) {
+          // si está hacia la derecha (total_ang positivo) le restamos grados,
+          // si está hacia la izquierda (total_ang negativo) le sumamos grados
+          transformAngle = initial_ang - Math.sign(total_ang) * SOFTEN_DEGREES;
         }
 
-        // escala cuando está casi centrado (igual que antes)
+        // Mantener la escala del centro como antes
         if (Math.abs(total_ang) < ang_unit / 2) {
           $(this).css("transform", `rotateY(${transformAngle}deg) translateZ(300px) scale(1.4)`);
         } else {
