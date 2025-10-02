@@ -13,11 +13,21 @@
 
     body {
       font-family: 'Helvetica Neue', sans-serif;
-      background: #0b0b0b; color: #f5f5f5;
-      overflow-x: hidden; width: 100%; height: 100%;
+      background: #0b0b0b;
+      color: #f5f5f5;
+      overflow-x: hidden;
+      width: 100%; height: 100%;
       transition: background 0.3s, color 0.3s;
     }
     body.light-mode { background: #f5f5f5; color: #111; }
+
+    @keyframes shake {
+      0% { transform: translateX(0) scale(1.15); }
+      2% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); }
+      5% { transform: translateX(0.5px) rotate(0.5deg) scale(1.15); }
+      7% { transform: translateX(-0.5px) rotate(-0.5deg) scale(1.16); }
+      100% { transform: translateX(0) rotate(0deg) scale(1.15); }
+    }
 
     header {
       position: fixed; top: 0; width: 100%;
@@ -28,12 +38,12 @@
     }
     header .logo { color: #fff; font-size: 20px; letter-spacing: 2px; }
     nav ul { display: flex; gap: 25px; list-style: none; }
-    nav a { color: #ccc; text-decoration: none; font-size: 14px; transition: all 0.3s ease; }
-    nav a:hover { color: #e0c27b; }
+    nav a { color: #ccc; text-decoration: none; font-size: 14px; transition: all 0.3s ease; display: inline-block; }
+    nav a:hover { color: #e0c27b; animation: shake 0.2s ease-in-out infinite alternate; }
 
     .theme-toggle {
       background: none; border: 1px solid #777; color: #ccc;
-      padding: 6px 12px; border-radius: 8px; cursor: pointer; transition: 0.3s;
+      padding: 6px 12px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-size: 12px; margin-left: 20px;
     }
     .theme-toggle:hover { background: #e0c27b; color: #000; }
 
@@ -41,9 +51,15 @@
     .hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 75vh; background: url('banner portada.png') center/cover no-repeat; z-index: 0; }
     .hero-text { position: relative; z-index: 2; color: white; font-size: 2rem; padding: 60px 5%; height: 75vh; display: flex; align-items: center; text-shadow: 0 2px 10px rgba(0,0,0,.6); }
 
-    .social-bar { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
-    .social-bar a { font-size: 32px; transition: 0.3s; }
-    .social-bar a:hover { transform: scale(1.15); }
+    .contenedor-centrado { display: flex; flex-direction: column; align-items: center; padding: 20px 0; margin-top: 20px; }
+    .social-bar { display: flex; justify-content: center; gap: 30px; margin: 20px 0; width: 100%; max-width: 800px; }
+    .social-bar a { display: inline-block; transition: transform 0.3s ease, fill 0.3s ease; }
+    .social-bar svg { width: 36px; height: 36px; fill: #888; }
+    .social-bar a:hover svg { fill: #e0c27b; transform: scale(1.15); }
+    .music-platforms { gap: 20px; }
+    .music-platforms a { font-size: 40px; }
+    .social-networks { gap: 15px; margin-top: 10px; }
+    .social-networks a { font-size: 32px; }
 
     .news {
       padding: 100px 5% 80px; background-color: #1a1a1a;
@@ -51,54 +67,60 @@
       box-shadow: 0 0 30px rgba(0,0,0,.3);
     }
     .news h2 { font-size: 32px; color: #fff; margin-bottom: 30px; text-align: center; }
+    .news h2 span { font-size: 14px; color: #ccc; margin-left: 10px; }
 
-    .schedule-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 20px; }
-    .main-news { grid-column: 1 / 2; grid-row: 1 / 3; background: #4c51bf; color: #fff; padding: 20px; border-radius: 16px; }
-
-    .news-card { background: #222; border-radius: 14px; padding: 20px; text-align: center; }
+    .schedule-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 20px; }
+    .main-news {
+      grid-column: 1 / 2; grid-row: 1 / 3;
+      background: linear-gradient(135deg, #4c51bf, #4c51bf);
+      border-radius: 16px; padding: 20px; color: #fff;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .news-card {
+      background: #222; border-radius: 14px; padding: 20px; text-align: center;
+    }
+    .news-card h4 { color: #fff; margin-bottom: 8px; }
+    .news-card p { color: #ccc; }
 
     .section-banner {
-      width: 100%; height: 300px; margin: 60px auto;
-      border-radius: 12px;
+      position: relative; width: 100%; height: 300px; margin: 60px auto; border-radius: 12px;
       background: url('banner portada.png') center/cover no-repeat;
       display: flex; justify-content: center; align-items: center;
       color: #e0c27b; font-size: 3rem; font-weight: 900;
     }
 
-    /* === DISCOGRAFÍA === */
+    /* === DISCOGRAFÍA (16 paneles, 5 repetidos) === */
     .discography { display: flex; justify-content: center; padding: 80px 0; }
     .holder { width: 600px; height: 200px; perspective: 700px; }
     .spinner { transform-style: preserve-3d; transform: rotateY(calc(var(--ang) * 1deg)) translateY(-12px); transition: 0.5s; position: relative; }
-
     .panel {
-      border-radius: 10px; width: 120px; height: 120px; position: absolute;
-      background-size: cover; background-position: center; transition: 0.5s;
+      border-radius: 10px; width: 120px; height: 120px;
+      position: absolute; background-size: cover; background-position: center; transition: 0.5s;
     }
 
-    /* Ciclo de 5 portadas en 16 posiciones */
-    .panel:nth-child(1)  { transform: rotateY(0deg) translateZ(400px);  background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c); }
-    .panel:nth-child(2)  { transform: rotateY(22.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1691389694412-266f872999c6); }
-    .panel:nth-child(3)  { transform: rotateY(45deg) translateZ(400px);  background-image: url(https://images.unsplash.com/photo-1606391901318-07003db08d63); }
-    .panel:nth-child(4)  { transform: rotateY(67.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1610785396756-24bd1889ddae); }
-    .panel:nth-child(5)  { transform: rotateY(90deg) translateZ(400px);  background-image: url(https://images.unsplash.com/photo-1505849871170-7f94cf84f4d2); }
-
-    .panel:nth-child(6)  { transform: rotateY(112.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c); }
-    .panel:nth-child(7)  { transform: rotateY(135deg) translateZ(400px);  background-image: url(https://images.unsplash.com/photo-1691389694412-266f872999c6); }
-    .panel:nth-child(8)  { transform: rotateY(157.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1606391901318-07003db08d63); }
-    .panel:nth-child(9)  { transform: rotateY(180deg) translateZ(400px);  background-image: url(https://images.unsplash.com/photo-1610785396756-24bd1889ddae); }
-    .panel:nth-child(10) { transform: rotateY(202.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1505849871170-7f94cf84f4d2); }
-
-    .panel:nth-child(11) { transform: rotateY(225deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c); }
-    .panel:nth-child(12) { transform: rotateY(247.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1691389694412-266f872999c6); }
-    .panel:nth-child(13) { transform: rotateY(270deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1606391901318-07003db08d63); }
-    .panel:nth-child(14) { transform: rotateY(292.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1610785396756-24bd1889ddae); }
-    .panel:nth-child(15) { transform: rotateY(315deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1505849871170-7f94cf84f4d2); }
-    .panel:nth-child(16) { transform: rotateY(337.5deg) translateZ(400px); background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c); }
+    .panel:nth-child(1)  { transform: rotateY(0deg) translateZ(400px); }
+    .panel:nth-child(2)  { transform: rotateY(22.5deg) translateZ(400px); }
+    .panel:nth-child(3)  { transform: rotateY(45deg) translateZ(400px); }
+    .panel:nth-child(4)  { transform: rotateY(67.5deg) translateZ(400px); }
+    .panel:nth-child(5)  { transform: rotateY(90deg) translateZ(400px); }
+    .panel:nth-child(6)  { transform: rotateY(112.5deg) translateZ(400px); }
+    .panel:nth-child(7)  { transform: rotateY(135deg) translateZ(400px); }
+    .panel:nth-child(8)  { transform: rotateY(157.5deg) translateZ(400px); }
+    .panel:nth-child(9)  { transform: rotateY(180deg) translateZ(400px); }
+    .panel:nth-child(10) { transform: rotateY(202.5deg) translateZ(400px); }
+    .panel:nth-child(11) { transform: rotateY(225deg) translateZ(400px); }
+    .panel:nth-child(12) { transform: rotateY(247.5deg) translateZ(400px); }
+    .panel:nth-child(13) { transform: rotateY(270deg) translateZ(400px); }
+    .panel:nth-child(14) { transform: rotateY(292.5deg) translateZ(400px); }
+    .panel:nth-child(15) { transform: rotateY(315deg) translateZ(400px); }
+    .panel:nth-child(16) { transform: rotateY(337.5deg) translateZ(400px); }
 
     .pagination { position: absolute; top: 50%; width: 100%; display: flex; justify-content: space-between; }
     .pagination button { width: 44px; height: 44px; border-radius: 100%; border: none; background: #fffa; cursor: pointer; }
+    footer { padding: 100px 0 50px; text-align: center; color: #ccc; }
   </style>
 </head>
+
 <body>
   <header>
     <div class="logo">Tenshi</div>
@@ -120,7 +142,7 @@
   </div>
 
   <section class="news">
-    <h2>NEWS</h2>
+    <h2>NEWS <span>ニュース</span></h2>
     <div class="schedule-grid">
       <article class="main-news">
         <div class="date">08 JUL 2025</div>
@@ -134,15 +156,15 @@
   </section>
 
   <div class="section-banner">ディスコグラフィー</div>
-  <section class="discography">
+  <section class="discography" id="discography">
     <div class="container">
       <div class="holder">
         <div class="spinner">
-          <!-- 16 posiciones -->
-          <div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div>
-          <div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div>
-          <div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div>
-          <div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div>
+          <!-- 16 posiciones con 5 portadas repetidas -->
+          <div class="panel a"></div><div class="panel b"></div><div class="panel c"></div><div class="panel d"></div><div class="panel e"></div>
+          <div class="panel a"></div><div class="panel b"></div><div class="panel c"></div><div class="panel d"></div><div class="panel e"></div>
+          <div class="panel a"></div><div class="panel b"></div><div class="panel c"></div><div class="panel d"></div><div class="panel e"></div>
+          <div class="panel a"></div>
         </div>
       </div>
       <div class="pagination">
@@ -182,7 +204,7 @@
         if (total_ang > 180) total_ang -= 360;
         if (total_ang < -180) total_ang += 360;
 
-        if (total_ang > -56 && total_ang < 56) {
+        if (total_ang > -60 && total_ang < 60) {
           $(this).css("opacity", 1);
         } else {
           $(this).css("opacity", 0);
