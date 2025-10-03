@@ -51,9 +51,9 @@
       position: absolute; top: 0; left: 0;
       width: 100%; height: 75vh;
       background: #0b0b0b;
-      background-size: cover;       /* evita "doble" */
-      background-repeat: no-repeat; /* evita repetición */
-      background-position: center;  /* centrado */
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
       z-index: 0;
     }
     .hero-text {
@@ -118,9 +118,7 @@
     }
 
     /* === DISCOGRAFÍA (15 paneles → 5 portadas en loop) === */
-    .discography {
-      display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 0;
-    }
+    .discography { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 0; }
     .container { display: flex; align-items: center; justify-content: center; position: relative; }
 
     .discography .holder {
@@ -137,14 +135,10 @@
       transition: all .5s ease-in-out;
     }
     .discography .panel {
-      border-radius: 10px;
-      width: 120px; height: 120px;
-      position: absolute;
-      background-size: cover;
-      background-position: 50% 50%;
+      border-radius: 10px; width: 120px; height: 120px; position: absolute;
+      background-size: cover; background-position: 50% 50%;
       box-shadow: 0 10px 30px rgba(0,0,0,.6);
-      opacity: 1;
-      transition: all .5s ease-in-out, opacity .2s ease-out;
+      opacity: 1; transition: all .5s ease-in-out, opacity .2s ease-out;
     }
 
     /* 15 posiciones */
@@ -190,14 +184,14 @@
     .discography .pagination button:hover { background: #fffc; }
     .discography .pagination button:active { background: #ffff; }
 
-    /* Portadas (fallback; serán sobrescritas por JSON) */
+    /* Portadas (fallback) */
     .discography .a { background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c?auto=format&q=85); }
     .discography .b { background-image: url(https://images.unsplash.com/photo-1691389694412-266f872999c6?auto=format&q=85); }
     .discography .c { background-image: url(https://images.unsplash.com/photo-1606391901318-07003db08d63?auto=format&q=85); }
     .discography .d { background-image: url(https://images.unsplash.com/photo-1610785396756-24bd1889ddae?auto=format&q=85); }
     .discography .e { background-image: url(https://images.unsplash.com/photo-1505849871170-7f94cf84f4d2?auto=format&q=85); }
 
-    /* === VIDEOS (carrusel 3D con 3 visibles) — SOLO AJUSTES DE TAMAÑO + PLAY TRANSPARENTE === */
+    /* === VIDEOS (3D carrusel con lazy YouTube sin botón rojo) === */
     .videos { display: flex; flex-direction: column; align-items: center; padding: 80px 0; }
     .videos-holder {
       width: 900px; height: 280px;
@@ -207,8 +201,7 @@
     }
     .spinner-videos {
       transform-style: preserve-3d;
-      position: relative; display: flex;
-      align-items: center; justify-content: center;
+      position: relative; display: flex; align-items: center; justify-content: center;
       transform: rotateY(calc(var(--angVid) * 1deg));
       transition: all .6s ease-in-out;
     }
@@ -217,28 +210,37 @@
       border-radius: 12px; overflow: hidden;
       box-shadow: 0 15px 40px rgba(0,0,0,.5);
       transition: all .5s ease-in-out;
-      width: 240px; height: 135px; /* default */
+      width: 240px; height: 135px;
       opacity: 0; pointer-events: none;
       transform: scale(0.8);
     }
     .video-panel.center { width: 380px; height: 214px; z-index: 3; transform: scale(1); }
-    .video-panel iframe { width: 100%; height: 100%; border: 0; }
 
-    /* Overlay Play transparente (icono blanco, sin fondo) */
-    .video-panel::after {
-      content: "\f04b"; /* FontAwesome 'play' */
+    /* Contenido de cada panel en modo "thumbnail" hasta click */
+    .yt-lite {
+      position: relative; width: 100%; height: 100%;
+      background: #000; cursor: pointer;
+    }
+    .yt-lite__thumb {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      filter: saturate(1.05);
+    }
+    /* ícono play transparente (solo el símbolo) */
+    .yt-lite::after {
+      content: "\f04b";
       font-family: "Font Awesome 6 Free";
       font-weight: 900;
       font-size: 64px;
       color: #fff;
-      position: absolute;
-      top: 50%; left: 50%;
+      position: absolute; top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       opacity: .9;
-      cursor: pointer;
-      pointer-events: auto; /* clickable */
+      pointer-events: none;
     }
-    .video-panel.playing::after { display: none; }
+    .video-panel.playing .yt-lite::after { display: none; }
+
+    .video-iframe { width: 100%; height: 100%; border: 0; }
 
     .videos-pagination {
       position: absolute; top: 50%; left: 0; right: 0;
@@ -315,9 +317,7 @@
       <button>Lanzamientos</button>
       <button>Eventos</button>
     </nav>
-    <div class="schedule-grid" id="news-grid">
-      <!-- Será rellenado desde catalogo.json -->
-    </div>
+    <div class="schedule-grid" id="news-grid"></div>
   </section>
 
   <!-- BANNER DISCOS -->
@@ -328,24 +328,9 @@
       <div class="holder">
         <div class="spinner">
           <!-- 15 paneles en loop -->
-          <div class="panel a"></div>
-          <div class="panel b"></div>
-          <div class="panel c"></div>
-          <div class="panel d"></div>
-          <div class="panel e"></div>
-
-          <div class="panel a"></div>
-          <div class="panel b"></div>
-          <div class="panel c"></div>
-          <div class="panel d"></div>
-          <div class="panel e"></div>
-
-          <div class="panel a"></div>
-          <div class="panel b"></div>
-          <div class="panel c"></div>
-          <div class="panel d"></div>
-          <div class="panel e"></div>
-
+          <div class="panel a"></div><div class="panel b"></div><div class="panel c"></div><div class="panel d"></div><div class="panel e"></div>
+          <div class="panel a"></div><div class="panel b"></div><div class="panel c"></div><div class="panel d"></div><div class="panel e"></div>
+          <div class="panel a"></div><div class="panel b"></div><div class="panel c"></div><div class="panel d"></div><div class="panel e"></div>
           <div class="fade"></div>
         </div>
       </div>
@@ -362,9 +347,7 @@
   <section class="videos" id="videos">
     <div class="container">
       <div class="videos-holder">
-        <div class="spinner-videos" id="spinner-videos">
-          <!-- Será rellenado desde catalogo.json (3 videos repetidos x3 = 9) -->
-        </div>
+        <div class="spinner-videos" id="spinner-videos"></div>
         <div class="videos-pagination">
           <button type="button" id="prev-video">&#8592;</button>
           <button type="button" id="next-video">&#8594;</button>
@@ -378,10 +361,9 @@
     <p>j-tenshiwebcomingsoon</p>
   </footer>
 
-  <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Script: tema y filtros (FIX paréntesis) -->
+  <!-- Tema + Filtros (fix paréntesis) -->
   <script>
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
@@ -394,13 +376,13 @@
       document.querySelectorAll('.schedule-filters button').forEach(button => {
         button.addEventListener('click', () => {
           document.querySelectorAll('.schedule-filters button').forEach(b => b.classList.remove('active'));
-          button.classList.add('active'); /* <-- aquí había un ) extra que rompía todo */
+          button.classList.add('active'); /* ← aquí estaba el paréntesis extra en tu copia anterior */
         });
       });
     });
   </script>
 
-  <!-- Script: carrusel DISCOS (intacto) -->
+  <!-- Carrusel DISCOS (intacto) -->
   <script>
     var ang = 0;
     var panels = 15;
@@ -408,20 +390,16 @@
 
     function updateSpinner() {
       $("*").css("--ang", ang);
-
       $(".panel").each(function(index) {
         var initial_ang = index * ang_unit;
         var total_ang = (initial_ang + ang) % 360;
-
         if (total_ang > 180) total_ang -= 360;
         if (total_ang < -180) total_ang += 360;
 
         if (total_ang > -60 && total_ang < 60) {
-          $(this).css("opacity", 1);
-          $(this).css("pointer-events", "auto");
+          $(this).css("opacity", 1).css("pointer-events","auto");
         } else {
-          $(this).css("opacity", 0);
-          $(this).css("pointer-events", "none");
+          $(this).css("opacity", 0).css("pointer-events","none");
         }
 
         if (Math.abs(total_ang) < ang_unit / 2) {
@@ -431,14 +409,12 @@
         }
       });
     }
-
     $("#prev").on("click", function() { ang += ang_unit; updateSpinner(); });
     $("#next").on("click", function() { ang -= ang_unit; updateSpinner(); });
-
     $(document).ready(function(){ updateSpinner(); });
   </script>
 
-  <!-- Script: carrusel VIDEOS (lógica intacta; solo estilos + click para autoplay) -->
+  <!-- Carrusel VIDEOS (lógica intacta) -->
   <script>
     var angVid = 0;
     var panelsVid = 9;
@@ -446,11 +422,9 @@
 
     function updateSpinnerVideos() {
       $("*").css("--angVid", angVid);
-
       $(".spinner-videos .video-panel").each(function(index) {
         var initial_ang = index * angVid_unit;
         var total_ang = (initial_ang + angVid) % 360;
-
         if (total_ang > 180) total_ang -= 360;
         if (total_ang < -180) total_ang += 360;
 
@@ -469,15 +443,29 @@
         }
       });
     }
-
     $("#prev-video").on("click", function(){ angVid += angVid_unit; updateSpinnerVideos(); });
     $("#next-video").on("click", function(){ angVid -= angVid_unit; updateSpinnerVideos(); });
-
     $(document).ready(function(){ updateSpinnerVideos(); });
   </script>
 
-  <!-- Script: Carga catálogo (banners + news + videos + portadas discografía) -->
+  <!-- Carga catálogo (banners + news + videos con THUMBNAIL → sin botón rojo) -->
   <script>
+    function youtubeIdFromUrl(url){
+      try{
+        if(!url) return null;
+        // youtu.be/ID
+        let m = url.match(/youtu\.be\/([A-Za-z0-9_-]{6,})/);
+        if(m) return m[1];
+        // youtube.com/watch?v=ID
+        m = url.match(/[?&]v=([A-Za-z0-9_-]{6,})/);
+        if(m) return m[1];
+        // embed/ID
+        m = url.match(/embed\/([A-Za-z0-9_-]{6,})/);
+        if(m) return m[1];
+      }catch(e){}
+      return null;
+    }
+
     async function cargarCatalogoPrincipal() {
       try {
         const resp = await fetch('data/catalogo.json', { cache: 'no-store' });
@@ -499,7 +487,7 @@
           bannerVideos.style.backgroundImage = `url('${data.banner_videos}')`;
         }
 
-        /* NEWS: primer item main, resto cards (solo imagen) */
+        /* NEWS simple (solo imagen) */
         const newsGrid = document.getElementById('news-grid');
         if (newsGrid && data.news) {
           newsGrid.innerHTML = '';
@@ -512,29 +500,41 @@
           });
         }
 
-        /* VIDEOS: cargar 3 y repetir x3 = 9 para carrusel */
+        /* VIDEOS: 3 base x3 = 9, con THUMBNAIL (sin botón rojo) */
         const spinner = document.getElementById('spinner-videos');
         if (spinner && Array.isArray(data.videos) && data.videos.length) {
           spinner.innerHTML = '';
           const base = data.videos.slice(0, 3);
-          const toEmbed = (url) =>
-            url.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/');
-
           const lista9 = [...base, ...base, ...base];
+
           lista9.forEach(v => {
+            const vid = youtubeIdFromUrl(v.url);
+            if(!vid) return;
+            const thumb = `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`;
+
             const panel = document.createElement('div');
             panel.className = 'video-panel';
-            panel.innerHTML = `<iframe src="${toEmbed(v.url)}?enablejsapi=1&modestbranding=1&controls=0&rel=0" allowfullscreen></iframe>`;
-            spinner.appendChild(panel);
 
-            /* Click panel = autoplay y ocultar ícono (::after) */
-            panel.addEventListener('click', function() {
-              const iframe = this.querySelector('iframe');
-              if (iframe && !/autoplay=1/.test(iframe.src)) {
-                iframe.src += "&autoplay=1";
-              }
-              this.classList.add('playing');
+            // Contenido inicial: miniatura + icono ▶ (via CSS)
+            panel.innerHTML = `
+              <div class="yt-lite" data-id="${vid}">
+                <div class="yt-lite__thumb" style="background-image:url('${thumb}')"></div>
+              </div>
+            `;
+
+            // Click: reemplaza por iframe con autoplay=1 (sin botón grande)
+            panel.addEventListener('click', function(){
+              if(panel.classList.contains('playing')) return;
+              const iframe = document.createElement('iframe');
+              iframe.className = 'video-iframe';
+              iframe.allow = 'autoplay; encrypted-media';
+              iframe.src = `https://www.youtube.com/embed/${vid}?autoplay=1&controls=0&modestbranding=1&rel=0&playsinline=1`;
+              panel.innerHTML = '';
+              panel.appendChild(iframe);
+              panel.classList.add('playing');
             });
+
+            spinner.appendChild(panel);
           });
 
           if (typeof updateSpinnerVideos === 'function') updateSpinnerVideos();
