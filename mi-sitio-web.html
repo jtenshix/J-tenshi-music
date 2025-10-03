@@ -117,82 +117,10 @@
       text-shadow: 0 0 15px rgba(224,194,123,.7); user-select: none;
     }
 
-    /* === DISCOGRAFÍA === */
-    .discography {
-      display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 0;
-    }
-    .container { display: flex; align-items: center; justify-content: center; position: relative; }
-
-    .discography .holder {
-      width: 600px; height: 200px;
-      display: flex; justify-content: center; align-items: center;
-      perspective: 700px; perspective-origin: center;
-      position: relative; z-index: 1;
-    }
-    .discography .spinner {
-      transform-style: preserve-3d;
-      position: relative; display: flex;
-      align-items: center; justify-content: center;
-      transform: rotateY(calc(var(--ang) * 1deg)) translateY(-12px);
-      transition: all .5s ease-in-out;
-    }
-    .discography .panel {
-      border-radius: 10px;
-      width: 120px; height: 120px;
-      position: absolute;
-      background-size: cover;
-      background-position: 50% 50%;
-      box-shadow: 0 10px 30px rgba(0,0,0,.6);
-      opacity: 1;
-      transition: all .5s ease-in-out, opacity .2s ease-out;
-    }
-
-    .discography .panel:nth-child(1)  { transform: rotateY(0deg) translateZ(400px); }
-    .discography .panel:nth-child(2)  { transform: rotateY(24deg) translateZ(400px); }
-    .discography .panel:nth-child(3)  { transform: rotateY(48deg) translateZ(400px); }
-    .discography .panel:nth-child(4)  { transform: rotateY(72deg) translateZ(400px); }
-    .discography .panel:nth-child(5)  { transform: rotateY(96deg) translateZ(400px); }
-    .discography .panel:nth-child(6)  { transform: rotateY(120deg) translateZ(400px); }
-    .discography .panel:nth-child(7)  { transform: rotateY(144deg) translateZ(400px); }
-    .discography .panel:nth-child(8)  { transform: rotateY(168deg) translateZ(400px); }
-    .discography .panel:nth-child(9)  { transform: rotateY(192deg) translateZ(400px); }
-    .discography .panel:nth-child(10) { transform: rotateY(216deg) translateZ(400px); }
-    .discography .panel:nth-child(11) { transform: rotateY(240deg) translateZ(400px); }
-    .discography .panel:nth-child(12) { transform: rotateY(264deg) translateZ(400px); }
-    .discography .panel:nth-child(13) { transform: rotateY(288deg) translateZ(400px); }
-    .discography .panel:nth-child(14) { transform: rotateY(312deg) translateZ(400px); }
-    .discography .panel:nth-child(15) { transform: rotateY(336deg) translateZ(400px); }
-
-    .discography .fade {
-      background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.4) 30%, rgba(0,0,0,.4) 70%, rgba(0,0,0,0) 100%);
-      width: 860px; height: 200px; position: absolute;
-      transform: rotateY(calc(var(--ang) * -1deg)) translateZ(110px);
-      transition: all .5s ease-in-out;
-      pointer-events: none; z-index: 2;
-    }
-
-    .discography .pagination {
-      position: absolute; top: 50%; left: 0; right: 0; z-index: 3;
-      width: 100%; display: flex; justify-content: space-between;
-      align-items: center; transform: translateY(-50%);
-    }
-    #prev { margin-left: 20px; }
-    #next { margin-right: 20px; }
-
-    .discography .pagination button {
-      padding: 0; border: none; cursor: pointer;
-      width: 44px; height: 44px; margin: 0 10px;
-      font-family: 'Roboto', sans-serif; font-size: 20px;
-      color: black; background: #fffa; border-radius: 100%;
-      transition: all .2s ease-in-out;
-    }
-    .discography .pagination button:hover { background: #fffc; }
-    .discography .pagination button:active { background: #ffff; }
-
-    /* === VIDEOS === */
+    /* === VIDEOS (con overlay custom) === */
     .videos { display: flex; flex-direction: column; align-items: center; padding: 80px 0; }
     .videos-holder {
-      width: 900px; height: 300px;
+      width: 900px; height: 200px;
       display: flex; justify-content: center; align-items: center;
       perspective: 1000px; perspective-origin: center;
       position: relative; z-index: 1;
@@ -209,14 +137,15 @@
       border-radius: 12px; overflow: hidden;
       box-shadow: 0 15px 40px rgba(0,0,0,.5);
       transition: all .5s ease-in-out;
-      width: 200px; height: 120px;
+      width: 180px; height: 235px;
       opacity: 0; pointer-events: none;
+      transform: scale(0.8);
     }
-    .video-panel.center { width: 360px; height: 202px; z-index: 3; }
+    .video-panel.center { width: 340px; height: 190px; z-index: 3; transform: scale(1); }
+
     .video-wrapper { position: relative; width: 100%; height: 100%; }
     .video-wrapper iframe { width: 100%; height: 100%; border: 0; }
 
-    /* Botón minimalista */
     .video-overlay {
       position: absolute;
       top: 50%; left: 50%;
@@ -238,16 +167,6 @@
       border-top: 12px solid transparent;
       border-bottom: 12px solid transparent;
     }
-
-    .video-panel:nth-child(1) { transform: rotateY(0deg) translateZ(500px); }
-    .video-panel:nth-child(2) { transform: rotateY(40deg) translateZ(500px); }
-    .video-panel:nth-child(3) { transform: rotateY(80deg) translateZ(500px); }
-    .video-panel:nth-child(4) { transform: rotateY(120deg) translateZ(500px); }
-    .video-panel:nth-child(5) { transform: rotateY(160deg) translateZ(500px); }
-    .video-panel:nth-child(6) { transform: rotateY(200deg) translateZ(500px); }
-    .video-panel:nth-child(7) { transform: rotateY(240deg) translateZ(500px); }
-    .video-panel:nth-child(8) { transform: rotateY(280deg) translateZ(500px); }
-    .video-panel:nth-child(9) { transform: rotateY(320deg) translateZ(500px); }
 
     .videos-pagination {
       position: absolute; top: 50%; left: 0; right: 0;
@@ -272,102 +191,122 @@
     <nav>
       <ul>
         <li><a href="news.html">News</a></li>
-        <li><a href="Discography.html" id="link-discography">Discography</a></li>
+        <li><a href="Discography.html">Discography</a></li>
         <li><a href="movie.html">Videos</a></li>
-        <li><a href="#">Gallery</a></li>
-        <li><a href="#">My Studio</a></li>
+        <li><a href="wallpapers.html">Gallery</a></li>
+        <li><a href="My Studio.html">My Studio</a></li>
       </ul>
     </nav>
-    <button class="theme-toggle" id="theme-toggle">Modo Claro / Oscuro</button>
+    <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
   </header>
 
   <div class="hero-wrapper">
-    <div class="hero-bg" id="banner"></div>
-    <div class="hero-text">幻想の響き</div>
+    <div class="hero-bg"></div>
+    <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
   </div>
 
-  <!-- === DISCOS === -->
-  <section class="discography">
-    <div class="section-banner">ディスコグラフィー</div>
+  <section class="videos" id="videos">
     <div class="container">
-      <div class="holder">
-        <div class="spinner" id="spinner"></div>
-        <div class="fade"></div>
-      </div>
-      <div class="pagination">
-        <button id="prev">&#8592;</button>
-        <button id="next">&#8594;</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- === VIDEOS === -->
-  <section class="videos">
-    <div class="section-banner">ビデオ</div>
-    <div class="videos-holder">
-      <div class="spinner-videos" id="spinner-videos"></div>
-      <div class="videos-pagination">
-        <button id="prev-vid">&#8592;</button>
-        <button id="next-vid">&#8594;</button>
+      <div class="videos-holder">
+        <div class="spinner-videos" id="spinner-videos"></div>
+        <div class="videos-pagination">
+          <button type="button" id="prev-video">&#8592;</button>
+          <button type="button" id="next-video">&#8594;</button>
+        </div>
       </div>
     </div>
   </section>
 
   <footer>
-    j-tenshiwebcomingsoon
+    <p>j-tenshiwebcomingsoon</p>
   </footer>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   <script>
-    const themeToggle = document.getElementById('theme-toggle');
-    themeToggle.addEventListener('click', () => document.body.classList.toggle('light-mode'));
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+      localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+    }
+    if (localStorage.getItem('theme') === 'light') {
+      document.body.classList.add('light-mode');
+    }
+  </script>
 
-    function toEmbed(url) {
-      return url.replace("watch?v=", "embed/");
+  <script>
+    var angVid = 0;
+    var panelsVid = 9;
+    var angVid_unit = 360 / panelsVid;
+
+    function updateSpinnerVideos() {
+      $("*").css("--angVid", angVid);
+      $(".spinner-videos .video-panel").each(function(index) {
+        var initial_ang = index * angVid_unit;
+        var total_ang = (initial_ang + angVid) % 360;
+        if (total_ang > 180) total_ang -= 360;
+        if (total_ang < -180) total_ang += 360;
+
+        if (total_ang > -70 && total_ang < 70) {
+          $(this).css({opacity: 1, "pointer-events": "auto"});
+        } else {
+          $(this).css({opacity: 0, "pointer-events": "none"});
+        }
+
+        if (Math.abs(total_ang) < angVid_unit / 2) {
+          $(this).addClass("center");
+        } else {
+          $(this).removeClass("center");
+        }
+      });
     }
 
+    $("#prev-video").on("click", function(){ angVid += angVid_unit; updateSpinnerVideos(); });
+    $("#next-video").on("click", function(){ angVid -= angVid_unit; updateSpinnerVideos(); });
+
+    $(document).ready(function(){ updateSpinnerVideos(); });
+  </script>
+
+  <script>
     async function cargarCatalogoPrincipal() {
-      const resp = await fetch("catalogo.json");
-      const data = await resp.json();
+      try {
+        const resp = await fetch("data/catalogo.json", { cache: "no-store" });
+        const data = await resp.json();
 
-      const spinner = document.getElementById("spinner");
-      data.news.n1 && Object.values(data.news).forEach((n, i) => {
-        const panel = document.createElement("div");
-        panel.className = "panel";
-        panel.style.backgroundImage = `url(${n.imagen})`;
-        spinner.appendChild(panel);
-      });
+        const spinner = document.getElementById("spinner-videos");
+        if (spinner && Array.isArray(data.videos) && data.videos.length) {
+          spinner.innerHTML = '';
+          const base = data.videos.slice(0, 3);
+          const toEmbed = (url) => url.replace("watch?v=", "embed/").replace("youtu.be/", "www.youtube.com/embed/");
 
-      const spinnerVideos = document.getElementById("spinner-videos");
-      Object.values(data.videos).forEach((v, i) => {
-        const panel = document.createElement("div");
-        panel.className = "video-panel";
-        const embedUrl = toEmbed(v.url) + "?modestbranding=1&showinfo=0&rel=0&controls=0";
-        panel.innerHTML = `
-          <div class="video-wrapper">
-            <iframe src="${embedUrl}" allowfullscreen></iframe>
-            <div class="video-overlay"></div>
-          </div>`;
-        spinnerVideos.appendChild(panel);
-      });
+          const lista9 = [...base, ...base, ...base];
+          lista9.forEach(v => {
+            const panel = document.createElement("div");
+            panel.className = "video-panel";
+            const embedUrl = toEmbed(v.url) + "?modestbranding=1&showinfo=0&rel=0&controls=0";
+            panel.innerHTML = `
+              <div class="video-wrapper">
+                <iframe src="${embedUrl}" allowfullscreen></iframe>
+                <div class="video-overlay"></div>
+              </div>
+            `;
+            spinner.appendChild(panel);
+          });
 
-      document.querySelectorAll('.video-overlay').forEach((overlay) => {
-        overlay.addEventListener('click', () => {
-          const iframe = overlay.previousElementSibling;
-          iframe.src += "&autoplay=1";
-          overlay.style.display = "none";
-        });
-      });
+          document.querySelectorAll(".video-overlay").forEach((overlay) => {
+            overlay.addEventListener("click", () => {
+              const iframe = overlay.previousElementSibling;
+              iframe.src += "&autoplay=1";
+              overlay.style.display = "none";
+            });
+          });
+
+          if (typeof updateSpinnerVideos === "function") updateSpinnerVideos();
+        }
+      } catch (e) {
+        console.error("Error cargando catálogo:", e);
+      }
     }
-
-    cargarCatalogoPrincipal();
-
-    let ang = 0, angVid = 0;
-    document.getElementById("prev").onclick = () => { ang += 24; document.querySelector(".spinner").style.setProperty("--ang", ang); };
-    document.getElementById("next").onclick = () => { ang -= 24; document.querySelector(".spinner").style.setProperty("--ang", ang); };
-    document.getElementById("prev-vid").onclick = () => { angVid += 40; document.querySelector(".spinner-videos").style.setProperty("--angVid", angVid); };
-    document.getElementById("next-vid").onclick = () => { angVid -= 40; document.querySelector(".spinner-videos").style.setProperty("--angVid", angVid); };
-
-    document.getElementById("banner").style.backgroundImage = "url('banner portada.png')";
+    document.addEventListener("DOMContentLoaded", cargarCatalogoPrincipal);
   </script>
 </body>
 </html>
