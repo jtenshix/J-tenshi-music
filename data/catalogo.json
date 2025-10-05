@@ -4,7 +4,12 @@
   "banner_videos": "https://lh3.googleusercontent.com/d/1SzRAjjXyXywwqmuSsQQbwI0VY6mMoqmV",
 
   "news": {
-    "n1": { "imagen": "https://lh3.googleusercontent.com/d/1InezyX6mwvLtCIWFvhCFnyqNXyiUH6I0", "destino": "discografia", "titulo": "nueva cancion" },
+    "n1": {
+  "imagen": "https://lh3.googleusercontent.com/d/1dpGw6Dk06TCipaC0SvGbP1hzam8lDYjM",
+  "destino": "movie",
+  "titulo": "video nuevo"
+},
+    
     "n2": {
   "imagen": "https://lh3.googleusercontent.com/d/1kR-L16rAPgLFyQrA_o_7XU8YRWwuSJQm",
   "destino": "news",
