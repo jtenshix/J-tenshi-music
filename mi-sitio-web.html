@@ -51,9 +51,9 @@
       position: absolute; top: 0; left: 0;
       width: 100%; height: 75vh;
       background: #0b0b0b;
-      background-size: cover;       /* FIX: evitar "doble" */
-      background-repeat: no-repeat; /* FIX */
-      background-position: center;  /* FIX */
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
       z-index: 0;
     }
     .hero-text {
@@ -72,6 +72,7 @@
     .social-networks { gap: 15px; margin-top: 10px; }
     .social-networks a { font-size: 32px; }
 
+    /* === NEWS === */
     .news {
       padding: 100px 5% 80px; background-color: #1a1a1a;
       max-width: 1200px; margin: -50px auto 80px; border-radius: 12px;
@@ -90,19 +91,41 @@
       display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 1fr 1fr;
       gap: 20px; max-width: 1200px; margin: 0 auto;
     }
+
+    /* Tarjetas NEWS cliqueables y con tamaño fijo (cuadrados) */
+    .main-news, .news-card {
+      position: relative;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      overflow: hidden;
+      padding: 0;
+      border-radius: 16px;
+    }
+    /* grande ocupa dos filas, también cuadrado para evitar saltos */
     .main-news {
       grid-column: 1 / 2; grid-row: 1 / 3;
       background: linear-gradient(135deg, #4c51bf, #4c51bf);
-      border-radius: 16px; padding: 20px; color: #fff;
       box-shadow: 0 0 20px rgba(76,81,191,.8);
-      display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;
+      aspect-ratio: 1 / 1;
     }
     .news-card {
-      background: #222; border-radius: 14px; padding: 20px;
-      box-shadow: 0 0 15px rgba(0,0,0,.5); display: flex; flex-direction: column;
-      justify-content: center; cursor: pointer; aspect-ratio: 1 / 1; overflow: hidden; transition: transform 0.3s ease; width: 100%;
+      background: #222; box-shadow: 0 0 15px rgba(0,0,0,.5);
+      aspect-ratio: 1 / 1; cursor: pointer; transition: transform 0.3s ease;
     }
     .news-card:hover { transform: scale(1.05); animation: shake 0.2s ease-in-out infinite alternate; }
+
+    /* Las imágenes llenan el cuadro sin deformarse */
+    .main-news img, .news-card img {
+      position: absolute;
+      inset: 10px; /* margen visual interno */
+      width: calc(100% - 20px);
+      height: calc(100% - 20px);
+      object-fit: cover;
+      border-radius: 10px;
+      display: block;
+    }
+
     .news-card h4 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; text-align: center; }
     .news-card .date { font-weight: 700; font-size: 14px; color: #ccc; text-align: center; margin-bottom: 10px; }
     .news-card p { color: #ccc; font-size: 14px; text-align: center; }
@@ -110,17 +133,15 @@
 
     .section-banner {
       position: relative; width: 100%; height: 300px; margin: 60px auto; border-radius: 12px;
-      background: #111; /* sin archivo local */
+      background: #111;
       box-shadow: 0 0 20px rgba(0,0,0,.5); display: flex; justify-content: center; align-items: center;
       color: #e0c27b; font-size: 3rem; font-weight: 900;
       font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
       text-shadow: 0 0 15px rgba(224,194,123,.7); user-select: none;
     }
 
-    /* === DISCOGRAFÍA (15 paneles → 5 portadas en loop) === */
-    .discography {
-      display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 0;
-    }
+    /* === DISCOGRAFÍA (3D) === */
+    .discography { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 0; }
     .container { display: flex; align-items: center; justify-content: center; position: relative; }
 
     .discography .holder {
@@ -190,17 +211,17 @@
     .discography .pagination button:hover { background: #fffc; }
     .discography .pagination button:active { background: #ffff; }
 
-    /* Portadas (fallback; serán sobrescritas por JSON) */
+    /* Portadas (fallback) */
     .discography .a { background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c?auto=format&q=85); }
     .discography .b { background-image: url(https://images.unsplash.com/photo-1691389694412-266f872999c6?auto=format&q=85); }
     .discography .c { background-image: url(https://images.unsplash.com/photo-1606391901318-07003db08d63?auto=format&q=85); }
     .discography .d { background-image: url(https://images.unsplash.com/photo-1610785396756-24bd1889ddae?auto=format&q=85); }
     .discography .e { background-image: url(https://images.unsplash.com/photo-1505849871170-7f94cf84f4d2?auto=format&q=85); }
 
-    /* === VIDEOS (carrusel 3D con 3 visibles) === */
+    /* === VIDEOS (carrusel 3D) === */
     .videos { display: flex; flex-direction: column; align-items: center; padding: 80px 0; }
     .videos-holder {
-      width: 900px; height: 320px; /* ↑ más alto para el panel central grande */
+      width: 900px; height: 320px;
       display: flex; justify-content: center; align-items: center;
       perspective: 1000px; perspective-origin: center;
       position: relative; z-index: 1;
@@ -217,23 +238,22 @@
       border-radius: 12px; overflow: hidden;
       box-shadow: 0 15px 40px rgba(0,0,0,.5);
       transition: all .5s ease-in-out;
-      width: 260px; height: 146px; /* 16:9, un poco más grande que antes */
+      width: 260px; height: 146px; /* 16:9 */
       opacity: 0; pointer-events: none;
       transform: scale(0.8);
     }
-    .video-panel.center { width: 300px; height: 190px; z-index: 3; transform: scale(1); } /* 16:9 grande */
+    .video-panel.center { width: 300px; height: 190px; z-index: 3; transform: scale(1); }
     .video-panel iframe { width: 100%; height: 100%; border: 0; }
 
-    /* 9 posiciones fijas (40° c/u) con más profundidad */
     .video-panel:nth-child(1) { transform: rotateY(0deg) translateZ(400px); }
-.video-panel:nth-child(2) { transform: rotateY(40deg) translateZ(400px); }
-.video-panel:nth-child(3) { transform: rotateY(80deg) translateZ(400px); }
-.video-panel:nth-child(4) { transform: rotateY(120deg) translateZ(400px); }
-.video-panel:nth-child(5) { transform: rotateY(160deg) translateZ(400px); }
-.video-panel:nth-child(6) { transform: rotateY(200deg) translateZ(400px); }
-.video-panel:nth-child(7) { transform: rotateY(240deg) translateZ(400px); }
-.video-panel:nth-child(8) { transform: rotateY(280deg) translateZ(400px); }
-.video-panel:nth-child(9) { transform: rotateY(320deg) translateZ(400px); }
+    .video-panel:nth-child(2) { transform: rotateY(40deg) translateZ(400px); }
+    .video-panel:nth-child(3) { transform: rotateY(80deg) translateZ(400px); }
+    .video-panel:nth-child(4) { transform: rotateY(120deg) translateZ(400px); }
+    .video-panel:nth-child(5) { transform: rotateY(160deg) translateZ(400px); }
+    .video-panel:nth-child(6) { transform: rotateY(200deg) translateZ(400px); }
+    .video-panel:nth-child(7) { transform: rotateY(240deg) translateZ(400px); }
+    .video-panel:nth-child(8) { transform: rotateY(280deg) translateZ(400px); }
+    .video-panel:nth-child(9) { transform: rotateY(320deg) translateZ(400px); }
 
     .videos-pagination {
       position: absolute; top: 50%; left: 0; right: 0;
@@ -248,18 +268,14 @@
     }
     .videos-pagination button:hover { background: #fff; }
 
-    @media (max-width: 1400px) {
-      .videos-holder { width: 860px; }
-    }
-    @media (max-width: 1200px) {
-      .videos-holder { width: 760px; }
-    }
-    @media (max-width: 900px) {
+    @media (max-width: 1400px) { .videos-holder { width: 860px; } }
+    @media (max-width: 1200px) { .videos-holder { width: 760px; } }
+    @media (max-width: 900px)  {
       .videos-holder { width: 100%; height: 280px; }
       .video-panel { width: 200px; height: 112px; }
       .video-panel.center { width: 320px; height: 180px; }
     }
-    @media (max-width: 600px) {
+    @media (max-width: 600px)  {
       .videos-holder { width: 100%; height: 240px; }
       .video-panel { width: 160px; height: 90px; }
       .video-panel.center { width: 260px; height: 146px; }
@@ -314,9 +330,7 @@
       <button>Lanzamientos</button>
       <button>Eventos</button>
     </nav>
-    <div class="schedule-grid" id="news-grid">
-      <!-- Será rellenado desde catalogo.json -->
-    </div>
+    <div class="schedule-grid" id="news-grid"></div>
   </section>
 
   <!-- BANNER DISCOS -->
@@ -361,9 +375,7 @@
   <section class="videos" id="videos">
     <div class="container">
       <div class="videos-holder">
-        <div class="spinner-videos" id="spinner-videos">
-          <!-- Será rellenado desde catalogo.json (3 videos repetidos x3 = 9) -->
-        </div>
+        <div class="spinner-videos" id="spinner-videos"></div>
         <div class="videos-pagination">
           <button type="button" id="prev-video">&#8592;</button>
           <button type="button" id="next-video">&#8594;</button>
@@ -380,7 +392,7 @@
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Script: tema y filtros (intacto) -->
+  <!-- Script: tema y filtros -->
   <script>
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
@@ -393,13 +405,13 @@
       document.querySelectorAll('.schedule-filters button').forEach(button => {
         button.addEventListener('click', () => {
           document.querySelectorAll('.schedule-filters button').forEach(b => b.classList.remove('active'));
-          button.classList.add('active'));
+          button.classList.add('active');  // ← corregido (quitado paréntesis extra)
         });
       });
     });
   </script>
 
-  <!-- Script: carrusel DISCOS (intacto) -->
+  <!-- Script: carrusel DISCOS -->
   <script>
     var ang = 0;
     var panels = 15;
@@ -437,7 +449,7 @@
     $(document).ready(function(){ updateSpinner(); });
   </script>
 
-  <!-- Script: carrusel VIDEOS (intacto) -->
+  <!-- Script: carrusel VIDEOS -->
   <script>
     var angVid = 0;
     var panelsVid = 9;
@@ -453,14 +465,12 @@
         if (total_ang > 180) total_ang -= 360;
         if (total_ang < -180) total_ang += 360;
 
-        // Mostrar solo 3 (ventana ±70°)
         if (total_ang > -70 && total_ang < 70) {
           $(this).css({opacity: 1, "pointer-events": "auto"});
         } else {
           $(this).css({opacity: 0, "pointer-events": "none"});
         }
 
-        // Centro (±20°)
         if (Math.abs(total_ang) < angVid_unit / 2) {
           $(this).addClass("center");
         } else {
@@ -471,12 +481,30 @@
 
     $("#prev-video").on("click", function(){ angVid += angVid_unit; updateSpinnerVideos(); });
     $("#next-video").on("click", function(){ angVid -= angVid_unit; updateSpinnerVideos(); });
-
-    $(document).ready(function(){ updateSpinnerVideos(); });
   </script>
 
   <!-- Script: Carga catálogo (banners + news + videos + portadas discografía) -->
   <script>
+    // Mapa de alias → páginas/URLs de destino
+    const SECTION_MAP = {
+      discografia: 'Discography.html',
+      movie:       'movie.html',
+      news:        'https://jtenshix.github.io/J-tenshi-music/news.html',
+      gallery:     'https://jtenshix.github.io/J-tenshi-music/wallpapers.html'
+    };
+
+    function resolveDestino(nota) {
+      // 1) link directo
+      if (nota && typeof nota.link === 'string' && nota.link.trim()) return nota.link.trim();
+      // 2) alias reconocido o URL/hash válido
+      if (nota && typeof nota.destino === 'string' && nota.destino.trim()) {
+        const key = nota.destino.trim().toLowerCase();
+        if (SECTION_MAP[key]) return SECTION_MAP[key];
+        if (key.startsWith('#') || key.startsWith('/') || key.includes('.html') || key.startsWith('http')) return key;
+      }
+      return '#';
+    }
+
     async function cargarCatalogoPrincipal() {
       try {
         const resp = await fetch('data/catalogo.json', { cache: 'no-store' });
@@ -488,7 +516,7 @@
           heroBg.style.backgroundImage = `url('${data.banner_principal}')`;
         }
 
-        /* Banners de sección (si no existen en JSON, no pasa nada) */
+        /* Banners de sección */
         const bannerDisc = document.getElementById('banner-discography');
         if (bannerDisc && data.banner_discografia) {
           bannerDisc.style.backgroundImage = `url('${data.banner_discografia}')`;
@@ -498,16 +526,19 @@
           bannerVideos.style.backgroundImage = `url('${data.banner_videos}')`;
         }
 
-        /* NEWS: primer item main, resto cards (solo imagen) */
+        /* NEWS: N1 grande + N2..N5 cuadradas, con enlaces dinámicos */
         const newsGrid = document.getElementById('news-grid');
         if (newsGrid && data.news) {
           newsGrid.innerHTML = '';
           const notas = Object.values(data.news);
           notas.forEach((nota, idx) => {
-            const el = document.createElement(idx === 0 ? 'article' : 'div');
-            el.className = idx === 0 ? 'main-news' : 'news-card';
-            el.innerHTML = `<img src="${nota.imagen}" alt="Noticia">`;
-            newsGrid.appendChild(el);
+            const a = document.createElement('a');
+            a.href = resolveDestino(nota);
+            a.target = '_self';
+            a.className = idx === 0 ? 'main-news' : 'news-card';
+            a.setAttribute('aria-label', `Abrir: ${nota?.titulo || nota?.destino || 'noticia'}`);
+            a.innerHTML = `<img src="${nota.imagen}" alt="${nota?.titulo || 'Noticia'}">`;
+            newsGrid.appendChild(a);
           });
         }
 
@@ -527,7 +558,7 @@
             spinner.appendChild(panel);
           });
 
-          if (typeof updateSpinnerVideos === 'function') updateSpinnerVideos();
+          updateSpinnerVideos();
         }
 
         /* DISCOGRAFÍA: portadas desde JSON (5 clases a/b/c/d/e) */
@@ -548,7 +579,11 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', cargarCatalogoPrincipal);
+    document.addEventListener('DOMContentLoaded', () => {
+      cargarCatalogoPrincipal();
+      // arranca carrusel de videos sin esperar interacción
+      updateSpinnerVideos();
+    });
   </script>
 </body>
 </html>
