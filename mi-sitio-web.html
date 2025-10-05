@@ -92,10 +92,15 @@
       gap: 20px; max-width: 1200px; margin: 0 auto;
     }
 
-    /* Tarjetas NEWS (cuadrados) */
+    /* Tarjetas NEWS: cuadrados fijos */
     .main-news, .news-card {
-      position: relative; display: block; text-decoration: none; color: inherit;
-      overflow: hidden; padding: 0; border-radius: 16px;
+      position: relative;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      overflow: hidden;
+      padding: 0;
+      border-radius: 16px;
     }
     .main-news {
       grid-column: 1 / 2; grid-row: 1 / 3;
@@ -203,7 +208,7 @@
     .discography .pagination button:hover { background: #fffc; }
     .discography .pagination button:active { background: #ffff; }
 
-    /* Portadas fallback (se reemplazan por JSON) */
+    /* Portadas (fallback) */
     .discography .a { background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c?auto=format&q=85); }
     .discography .b { background-image: url(https://images.unsplash.com/photo-1691389694412-266f872999c6?auto=format&q=85); }
     .discography .c { background-image: url(https://images.unsplash.com/photo-1606391901318-07003db08d63?auto=format&q=85); }
@@ -333,9 +338,24 @@
       <div class="holder">
         <div class="spinner">
           <!-- 15 paneles en loop -->
-          <div class="panel a"></div><div class="panel b"></div><div class="panel c"></div><div class="panel d"></div><div class="panel e"></div>
-          <div class="panel a"></div><div class="panel b"></div><div class="panel c"></div><div class="panel d"></div><div class="panel e"></div>
-          <div class="panel a"></div><div class="panel b"></div><div class="panel c"></div><div class="panel d"></div><div class="panel e"></div>
+          <div class="panel a"></div>
+          <div class="panel b"></div>
+          <div class="panel c"></div>
+          <div class="panel d"></div>
+          <div class="panel e"></div>
+
+          <div class="panel a"></div>
+          <div class="panel b"></div>
+          <div class="panel c"></div>
+          <div class="panel d"></div>
+          <div class="panel e"></div>
+
+          <div class="panel a"></div>
+          <div class="panel b"></div>
+          <div class="panel c"></div>
+          <div class="panel d"></div>
+          <div class="panel e"></div>
+
           <div class="fade"></div>
         </div>
       </div>
@@ -429,7 +449,7 @@
   <!-- Script: carrusel VIDEOS -->
   <script>
     var angVid = 0;
-    var panelsVid = 9;                // posiciones fijas
+    var panelsVid = 9;
     var angVid_unit = 360 / panelsVid; // 40°
 
     function updateSpinnerVideos() {
@@ -462,6 +482,7 @@
 
   <!-- Script: Carga catálogo (banners + news + videos + portadas discografía) -->
   <script>
+    // Mapa de alias → páginas/URLs de destino
     const SECTION_MAP = {
       discografia: 'Discography.html',
       movie:       'movie.html',
@@ -477,12 +498,6 @@
         if (key.startsWith('#') || key.startsWith('/') || key.includes('.html') || key.startsWith('http')) return key;
       }
       return '#';
-    }
-
-    function toEmbed(url) {
-      return (typeof url === 'string')
-        ? url.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')
-        : '';
     }
 
     async function cargarCatalogoPrincipal() {
@@ -506,11 +521,15 @@
           bannerVideos.style.backgroundImage = `url('${data.banner_videos}')`;
         }
 
-        /* NEWS */
+        /* NEWS: forzar orden n1..n5 e ignorar separadores */
         const newsGrid = document.getElementById('news-grid');
-        if (newsGrid && data.news) {
+        if (newsGrid && data.news && typeof data.news === 'object') {
           newsGrid.innerHTML = '';
-          const notas = Object.values(data.news);
+          const orden = ['n1', 'n2', 'n3', 'n4', 'n5'];
+          const notas = orden
+            .map(k => data.news[k])
+            .filter(n => n && typeof n === 'object' && typeof n.imagen === 'string' && n.imagen.trim());
+
           notas.forEach((nota, idx) => {
             const a = document.createElement('a');
             a.href = resolveDestino(nota);
@@ -522,26 +541,26 @@
           });
         }
 
-        /* VIDEOS: EXACTAMENTE los que haya (hasta 9), sin repetir */
+        /* VIDEOS: cargar 3 y repetir x3 = 9 para carrusel */
         const spinner = document.getElementById('spinner-videos');
-        if (spinner && Array.isArray(data.videos)) {
+        if (spinner && Array.isArray(data.videos) && data.videos.length) {
           spinner.innerHTML = '';
-          const list = data.videos
-            .map(v => toEmbed(v.url))
-            .filter(u => u && u.trim() !== '')
-            .slice(0, 9); // si pones 6, verás 6, etc.
+          const base = data.videos.slice(0, 3);
+          const toEmbed = (url) =>
+            url.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/');
 
-          list.forEach(u => {
+          const lista9 = [...base, ...base, ...base];
+          lista9.forEach(v => {
             const panel = document.createElement('div');
             panel.className = 'video-panel';
-            panel.innerHTML = `<iframe src="${u}" allowfullscreen></iframe>`;
+            panel.innerHTML = `<iframe src="${toEmbed(v.url)}" allowfullscreen></iframe>`;
             spinner.appendChild(panel);
           });
 
-          requestAnimationFrame(() => updateSpinnerVideos());
+          updateSpinnerVideos();
         }
 
-        /* DISCOGRAFÍA: portadas desde JSON */
+        /* DISCOGRAFÍA: portadas desde JSON (5 clases a/b/c/d/e) */
         if (data.discografia && Array.isArray(data.discografia.portadas)) {
           const covers = data.discografia.portadas.slice(0, 5);
           const clases = ['a','b','c','d','e'];
@@ -563,7 +582,6 @@
       cargarCatalogoPrincipal();
       updateSpinnerVideos();
     });
-    window.addEventListener('resize', updateSpinnerVideos);
   </script>
 </body>
 </html>
