@@ -4,7 +4,7 @@
   "banner_videos": "https://lh3.googleusercontent.com/d/1SzRAjjXyXywwqmuSsQQbwI0VY6mMoqmV",
 
   "news": {
-    "n1": { "imagen": "https://lh3.googleusercontent.com/d/1InezyX6mwvLtCIWFvhCFnyqNXyiUH6I0","destino": "discografia","titulo": "nueva cancion"}
+    "n1": { "imagen": "https://lh3.googleusercontent.com/d/1InezyX6mwvLtCIWFvhCFnyqNXyiUH6I0", "destino": "discografia", "titulo": "nueva cancion" },
     "n2": { "imagen": "https://lh3.googleusercontent.com/d/120H84Gd9y5BeR_Pt6a2_Q13wkPy1tdHd", "destino": "movie" },
     "n3": { "imagen": "https://lh3.googleusercontent.com/d/1C4jTpxogAGK_wO6rPH9Te0cQmb11LXE3", "destino": "news" },
     "n4": { "imagen": "https://lh3.googleusercontent.com/d/15Rvhaj9oYcl44bAR3Tb6-7j2M-RQ8KJ5", "destino": "discografia" },
