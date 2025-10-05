@@ -53,7 +53,7 @@
     .news-card { aspect-ratio: 1 / 1; transition: transform .3s ease; }
     .news-card:hover { transform: scale(1.05); }
 
-    /* GRANDE: ahora TAMBIÉN CUADRADA */
+    /* Grande (N1): también cuadrada */
     .main-news { grid-column: 1 / 2; grid-row: 1 / 3; aspect-ratio: 1 / 1; }
 
     /* Imagen rellena sin deformar */
@@ -100,14 +100,19 @@
   </section>
 
   <script>
+    // Alias → rutas/URLs de secciones
     const SECTION_MAP = {
       discografia: 'Discography.html',
       movie:       'movie.html',
-      news:        'https://jtenshix.github.io/J-tenshi-music/news.html'
+      news:        'https://jtenshix.github.io/J-tenshi-music/news.html',
+      gallery:     'https://jtenshix.github.io/J-tenshi-music/wallpapers.html' // nuevo
     };
 
     function resolveDestino(nota) {
+      // 1) link directo (si viene "link" en el JSON)
       if (nota && typeof nota.link === 'string' && nota.link.trim()) return nota.link.trim();
+
+      // 2) alias mapeado o URL/hash válido
       if (nota && typeof nota.destino === 'string' && nota.destino.trim()) {
         const key = nota.destino.trim().toLowerCase();
         if (SECTION_MAP[key]) return SECTION_MAP[key];
@@ -121,9 +126,11 @@
         const response = await fetch("data/catalogo.json", { cache: "no-store" });
         const data = await response.json();
 
+        // Banner
         const banner = document.getElementById("banner");
         if (data.banner_principal) banner.style.backgroundImage = `url('${data.banner_principal}')`;
 
+        // NEWS (grilla 1 grande + 4 pequeñas)
         const grid = document.getElementById("news-grid");
         grid.innerHTML = "";
         const notas = Object.values(data.news || {});
@@ -136,6 +143,7 @@
           grid.appendChild(a);
         });
 
+        // VIDEOS (ya formateados como /embed/)
         const videoGrid = document.getElementById("video-grid");
         videoGrid.innerHTML = "";
         (data.videos || []).forEach(video => {
