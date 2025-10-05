@@ -5,8 +5,7 @@
 
   "news": {
     "n1": { "imagen": "https://lh3.googleusercontent.com/d/1InezyX6mwvLtCIWFvhCFnyqNXyiUH6I0", "destino": "discografia", "titulo": "nueva cancion" },
-    "n2": {
-  "imagen": "https://lh3.googleusercontent.com/d/1kR-L16rAPgLFyQrA_o_7XU8YRWwuSJQm",
+    "n2": {  "imagen": "https://lh3.googleusercontent.com/d/1kR-L16rAPgLFyQrA_o_7XU8YRWwuSJQm",
   "destino": "movie",
   "titulo": "nueva cancion"
 }
