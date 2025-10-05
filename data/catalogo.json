@@ -53,9 +53,12 @@
   "_----------------------- VIDEOS ----------------------": "",
 
   "videos": [
-    { "url": "https://www.youtube.com/embed/0_QHL7cDYno" },
-    { "url": "https://www.youtube.com/embed/Ulj3sX_jJ7g" },
-    { "url": "https://www.youtube.com/embed/yXtg79kJHr8" }
+  { "url": "https://www.youtube.com/watch?v=0_QHL7cDYno" },
+  { "url": "https://www.youtube.com/watch?v=Ulj3sX_jJ7g" },
+  { "url": "https://www.youtube.com/watch?v=yXtg79kJHr8" },
+  { "url": "https://www.youtube.com/watch?v=rIUBxbcd_I0" },
+  { "url": "https://www.youtube.com/watch?v=onfYQgU7PxU" },
+  { "url": "https://www.youtube.com/watch?v=rLBeFFrjKbU" }
   ],
 
   "_-------------------- DISCOGRAFIA --------------------": "",
