@@ -22,7 +22,11 @@
   "destino": "discografia"
 },
     
-    "n5": { "imagen": "https://lh3.googleusercontent.com/d/120H84Gd9y5BeR_Pt6a2_Q13wkPy1tdHd", "destino": "news" }
+    "n5": {
+  "imagen": "https://lh3.googleusercontent.com/d/1u4WjVPJ4070E25egyL3q6s4Bjq4LRiVj",
+  "destino": "gallery",
+  "titulo": "pruieba 5"
+}
   },
 
   "videos": [
