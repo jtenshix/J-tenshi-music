@@ -76,7 +76,7 @@
     .news {
       padding: 100px 5% 80px; background-color: #1a1a1a;
       max-width: 1200px; margin: -50px auto 80px; border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0,0,0,.3);
+      box-shadow: 0 0 30px rgba(0,0,0,.3); transition: background 0.3s ease;
     }
     .news h2 { font-size: 32px; color: #fff; margin-bottom: 30px; text-align: center; }
     .news h2 span { font-size: 14px; color: #ccc; margin-left: 10px; }
@@ -87,51 +87,35 @@
     }
     .schedule-filters button.active, .schedule-filters button:hover { color: #e0c27b; border-color: #e0c27b; }
 
-    /* GRID: 1 grande (dos filas) + 4 pequeñas */
-    .schedule-grid{
-      display:grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-      align-items: start;
+    .schedule-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 1fr 1fr;
+      gap: 20px; max-width: 1200px; margin: 0 auto;
     }
 
-    /* TARJETAS: cuadradas, nada empuja la altura */
-    .main-news,
-    .news-card{
+    /* Tarjetas NEWS: cuadrados fijos */
+    .main-news, .news-card {
       position: relative;
       display: block;
-      color: inherit;
       text-decoration: none;
+      color: inherit;
+      overflow: hidden;
       padding: 0;
       border-radius: 16px;
-      overflow: hidden;
-      aspect-ratio: 1 / 1;       /* siempre cuadrados */
-      background: #222;
-      box-shadow: 0 0 15px rgba(0,0,0,.5);
-      transition: transform .3s ease;
-      font-size: 0;              /* evita altura por nodos de texto sueltos */
-      line-height: 0;
     }
-
-    /* la grande ocupa dos filas y sigue siendo cuadrada */
-    .main-news{
-      grid-column: 1 / 2;
-      grid-row: 1 / 3;
+    .main-news {
+      grid-column: 1 / 2; grid-row: 1 / 3;
       background: linear-gradient(135deg, #4c51bf, #4c51bf);
       box-shadow: 0 0 20px rgba(76,81,191,.8);
+      aspect-ratio: 1 / 1;
     }
+    .news-card {
+      background: #222; box-shadow: 0 0 15px rgba(0,0,0,.5);
+      aspect-ratio: 1 / 1; cursor: pointer; transition: transform 0.3s ease;
+    }
+    .news-card:hover { transform: scale(1.05); animation: shake 0.2s ease-in-out infinite alternate; }
 
-    /* todo lo de adentro flota (no altera layout) */
-    .main-news > *,
-    .news-card > *{
+    .main-news img, .news-card img {
       position: absolute;
-    }
-
-    /* imagen con margen interno */
-    .main-news > img,
-    .news-card > img{
       inset: 10px;
       width: calc(100% - 20px);
       height: calc(100% - 20px);
@@ -140,18 +124,10 @@
       display: block;
     }
 
-    /* overlays opcionales */
-    .badge, .label{
-      position: absolute;
-      z-index: 2;
-      top: 10px; left: 10px;
-      font-size: 12px; line-height: 1;
-      pointer-events: none;
-      background:#0008; color:#fff;
-      padding:3px 8px; border-radius:999px; border:1px solid #fff2;
-    }
-
-    .news-card:hover { transform: scale(1.05); animation: shake .2s ease-in-out infinite alternate; }
+    .news-card h4 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; text-align: center; }
+    .news-card .date { font-weight: 700; font-size: 14px; color: #ccc; text-align: center; margin-bottom: 10px; }
+    .news-card p { color: #ccc; font-size: 14px; text-align: center; }
+    .news-card .label { font-size: 11px; color: #e0c27b; border: 1px solid #e0c27b; padding: 2px 6px; border-radius: 999px; width: fit-content; margin: 10px auto 0; display: block; }
 
     .section-banner {
       position: relative; width: 100%; height: 300px; margin: 60px auto; border-radius: 12px;
@@ -232,7 +208,7 @@
     .discography .pagination button:hover { background: #fffc; }
     .discography .pagination button:active { background: #ffff; }
 
-    /* Portadas fallback */
+    /* Portadas (fallback) */
     .discography .a { background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c?auto=format&q=85); }
     .discography .b { background-image: url(https://images.unsplash.com/photo-1691389694412-266f872999c6?auto=format&q=85); }
     .discography .c { background-image: url(https://images.unsplash.com/photo-1606391901318-07003db08d63?auto=format&q=85); }
@@ -506,7 +482,7 @@
 
   <!-- Script: Carga catálogo (banners + news + videos + portadas discografía) -->
   <script>
-    /* alias → páginas/URLs de destino */
+    // Mapa de alias → páginas/URLs de destino
     const SECTION_MAP = {
       discografia: 'Discography.html',
       movie:       'movie.html',
@@ -545,11 +521,15 @@
           bannerVideos.style.backgroundImage = `url('${data.banner_videos}')`;
         }
 
-        /* NEWS: N1 grande + N2..N5 cuadradas, con enlaces dinámicos */
+        /* NEWS: forzar orden n1..n5 e ignorar separadores */
         const newsGrid = document.getElementById('news-grid');
-        if (newsGrid && data.news) {
+        if (newsGrid && data.news && typeof data.news === 'object') {
           newsGrid.innerHTML = '';
-          const notas = Object.values(data.news);
+          const orden = ['n1', 'n2', 'n3', 'n4', 'n5'];
+          const notas = orden
+            .map(k => data.news[k])
+            .filter(n => n && typeof n === 'object' && typeof n.imagen === 'string' && n.imagen.trim());
+
           notas.forEach((nota, idx) => {
             const a = document.createElement('a');
             a.href = resolveDestino(nota);
@@ -561,7 +541,7 @@
           });
         }
 
-        /* VIDEOS: 3 base repetidos x3 = 9 */
+        /* VIDEOS: cargar 3 y repetir x3 = 9 para carrusel */
         const spinner = document.getElementById('spinner-videos');
         if (spinner && Array.isArray(data.videos) && data.videos.length) {
           spinner.innerHTML = '';
@@ -600,7 +580,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       cargarCatalogoPrincipal();
-      updateSpinnerVideos(); // arranca el carrusel
+      updateSpinnerVideos();
     });
   </script>
 </body>
