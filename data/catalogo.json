@@ -4,11 +4,11 @@
   "banner_videos": "https://lh3.googleusercontent.com/d/1SzRAjjXyXywwqmuSsQQbwI0VY6mMoqmV",
 
   "news": {
-    "n1": { "imagen": "https://lh3.googleusercontent.com/d/1_q5FfABiCmduY6kQBic3l6vjLBHgb5d4" },
-    "n2": { "imagen": "https://lh3.googleusercontent.com/d/120H84Gd9y5BeR_Pt6a2_Q13wkPy1tdHd" },
-    "n3": { "imagen": "https://lh3.googleusercontent.com/d/1C4jTpxogAGK_wO6rPH9Te0cQmb11LXE3" },
-    "n4": { "imagen": "https://lh3.googleusercontent.com/d/15Rvhaj9oYcl44bAR3Tb6-7j2M-RQ8KJ5" },
-    "n5": { "imagen": "https://lh3.googleusercontent.com/d/120H84Gd9y5BeR_Pt6a2_Q13wkPy1tdHd" }
+    "n1": { "imagen": "https://lh3.googleusercontent.com/d/1_q5FfABiCmduY6kQBic3l6vjLBHgb5d4", "destino": "discografia" },
+    "n2": { "imagen": "https://lh3.googleusercontent.com/d/120H84Gd9y5BeR_Pt6a2_Q13wkPy1tdHd", "destino": "movie" },
+    "n3": { "imagen": "https://lh3.googleusercontent.com/d/1C4jTpxogAGK_wO6rPH9Te0cQmb11LXE3", "destino": "news" },
+    "n4": { "imagen": "https://lh3.googleusercontent.com/d/15Rvhaj9oYcl44bAR3Tb6-7j2M-RQ8KJ5", "destino": "discografia" },
+    "n5": { "imagen": "https://lh3.googleusercontent.com/d/120H84Gd9y5BeR_Pt6a2_Q13wkPy1tdHd", "destino": "movie" }
   },
 
   "videos": [
