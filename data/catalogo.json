@@ -2,18 +2,22 @@
   "_---------------------- BANNERS ----------------------": "",
 
   "banner_principal": "https://lh3.googleusercontent.com/d/1_q5FfABiCmduY6kQBic3l6vjLBHgb5d4",
+  
   "banner_discografia": "https://lh3.googleusercontent.com/d/1SzRAjjXyXywwqmuSsQQbwI0VY6mMoqmV",
+  
   "banner_videos": "https://lh3.googleusercontent.com/d/1SzRAjjXyXywwqmuSsQQbwI0VY6mMoqmV",
 
   "_------------------------ NEWS -----------------------": "",
 
   "news": {
+    
     "_____ N1 __________________________________________": "",
     "n1": {
       "imagen": "https://lh3.googleusercontent.com/d/1InezyX6mwvLtCIWFvhCFnyqNXyiUH6I0",
       "destino": "news",
       "titulo": "video nuevo"
     },
+    
 
     "_____ N2 __________________________________________": "",
     "n2": {
@@ -21,18 +25,21 @@
       "destino": "news",
       "titulo": "nueva noticia"
     },
+    
 
     "_____ N3 __________________________________________": "",
     "n3": {
       "imagen": "https://lh3.googleusercontent.com/d/1C4jTpxogAGK_wO6rPH9Te0cQmb11LXE3",
       "destino": "news"
     },
+    
 
     "_____ N4 __________________________________________": "",
     "n4": {
       "imagen": "https://lh3.googleusercontent.com/d/1u4WjVPJ4070E25egyL3q6s4Bjq4LRiVj",
       "destino": "discografia"
     },
+    
 
     "_____ N5 __________________________________________": "",
     "n5": {
@@ -42,6 +49,7 @@
     }
   },
 
+  
   "_----------------------- VIDEOS ----------------------": "",
 
   "videos": [
@@ -54,7 +62,7 @@
 
   "discografia": {
     "portadas": [
-      "https://lh3.googleusercontent.com/d/1eDkiw4NlFx_FNxFphyfUss04FBWdS0np",
+      "https://lh3.googleusercontent.com/d/1kHa7_jlOKUm1HOvPbE1LENcNsWY8Nj6t",
       "https://lh3.googleusercontent.com/d/1eDkiw4NlFx_FNxFphyfUss04FBWdS0np",
       "https://lh3.googleusercontent.com/d/1eDkiw4NlFx_FNxFphyfUss04FBWdS0np",
       "https://lh3.googleusercontent.com/d/1eDkiw4NlFx_FNxFphyfUss04FBWdS0np",
