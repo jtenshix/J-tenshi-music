@@ -1,417 +1,204 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Studio - Tenshi</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-bg: #121212;
-            --secondary-bg: #1e1e1e;
-            --text-color: #ffffff;
-            --accent-color: #ff6b6b;
-            --card-bg: #2a2a3a;
-            --card-border: #ff6b6b;
-            --card-shadow: 0 8px 16px rgba(255, 107, 107, 0.3);
-            --transition: all 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            --banner-height: 35vh;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--primary-bg);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            transition: var(--transition);
-            perspective: 1500px;
-            overflow-x: hidden;
-        }
-        body.light-mode {
-            --primary-bg: #f5f5f5;
-            --secondary-bg: #e0e0e0;
-            --text-color: #333333;
-            --accent-color: #ff4757;
-            --card-bg: #ffffff;
-            --card-border: #ff4757;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            background-color: var(--secondary-bg);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--accent-color);
-            font-style: italic;
-        }
-        .nav a {
-            margin: 0 1rem;
-            text-decoration: none;
-            color: var(--text-color);
-            transition: var(--transition);
-            font-weight: 500;
-        }
-        .nav a:hover {
-            color: var(--accent-color);
-        }
-        .theme-toggle {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-size: 1.3rem;
-            cursor: pointer;
-        }
-        .banner {
-            height: var(--banner-height);
-            background: url('https://mistralaiblackforestprod.blob.core.windows.net/images/blackforest/5f62/1f17/-9b7/6-4f7d-bb56-3792f5d25fe3/image.jpg?se=2025-08-22T20%3A11%3A59Z&sp=r&sv=2025-07-05&sr=b&sig=DlOOxkzVAVuDQTjZ2tilVvtU2Hb9bAWo25V77Pfhwvk%3D') center/cover;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: var(--text-color);
-            width: 100%;
-            margin-top: 80px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-        }
-        .banner-content h1 {
-            font-size: 3.5rem;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
-            font-weight: 700;
-            letter-spacing: 2px;
-        }
-        .main-content {
-            padding: 2rem;
-            background-color: var(--primary-bg);
-            min-height: 70vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: calc(var(--banner-height) + 2rem);
-            padding-bottom: 5rem;
-        }
-        .section {
-            width: 100%;
-            max-width: 1200px;
-            margin-bottom: 4rem;
-            text-align: center;
-        }
-        .section-title {
-            font-size: 2.5rem;
-            color: var(--accent-color);
-            margin-bottom: 2rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        .carousel-container {
-            position: relative;
-            width: 700px;
-            height: 500px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            perspective: 1500px;
-            margin: 0 auto 3rem;
-        }
-        .card {
-            position: absolute;
-            width: 250px;
-            height: 400px;
-            background-color: var(--card-bg);
-            border: 3px solid var(--card-border);
-            border-radius: 15px;
-            box-shadow: var(--card-shadow);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: var(--transition);
-            backface-visibility: hidden;
-            transform-style: preserve-3d;
-            bottom: 0;
-        }
-        .card.center {
-            transform: translateX(0) translateY(0) translateZ(50px);
-            z-index: 10;
-            opacity: 1;
-        }
-        .card.left {
-            transform: translateX(-200px) translateY(0) translateZ(-50px) rotateY(-15deg);
-            z-index: 5;
-            opacity: 0.6;
-        }
-        .card.right {
-            transform: translateX(200px) translateY(0) translateZ(-50px) rotateY(15deg);
-            z-index: 5;
-            opacity: 0.6;
-        }
-        .card-image-container {
-            width: 100%;
-            height: 240px;
-            overflow: hidden;
-            border-radius: 10px;
-            margin-bottom: 0.5rem;
-            border: 2px solid var(--card-border);
-        }
-        .card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .card-info {
-            padding: 0.8rem;
-            text-align: center;
-            width: 100%;
-        }
-        .card h3 {
-            margin: 0.5rem 0;
-            color: var(--accent-color);
-            font-size: 1.6rem;
-            font-weight: 700;
-        }
-        .card .label {
-            display: inline-block;
-            background-color: var(--accent-color);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-top: 0.3rem;
-        }
-        .card-description {
-            font-size: 0.8rem;
-            margin-top: 0.5rem;
-            line-height: 1.4;
-            color: #cccccc;
-        }
-        .card-footer {
-            width: 100%;
-            padding: 0.5rem;
-            margin-top: auto;
-            background: linear-gradient(to bottom, transparent, var(--card-border));
-            text-align: center;
-            font-size: 0.7rem;
-            color: #aaaaaa;
-        }
-        .footer {
-            text-align: center;
-            padding: 2rem;
-            background-color: var(--secondary-bg);
-            margin-top: auto;
-        }
-        .social-links {
-            margin: 1rem 0;
-        }
-        .social-links a {
-            color: var(--text-color);
-            margin: 0 1rem;
-            font-size: 1.8rem;
-            transition: var(--transition);
-        }
-        .social-links a:hover {
-            color: var(--accent-color);
-            transform: scale(1.2);
-        }
-        @media (max-width: 768px) {
-            .carousel-container {
-                width: 100%;
-                height: 400px;
-            }
-            .card.left, .card.right {
-                transform: translateX(-150px) translateY(0) translateZ(-40px) rotateY(-10deg);
-                opacity: 0.5;
-            }
-            .banner-content h1 {
-                font-size: 2.5rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tenshi | Noticias</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', sans-serif;
+      background: #0b0b0b;
+      color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* === HERO / BANNER PRINCIPAL === */
+    .hero-wrapper {
+      position: relative;
+      height: 70vh;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      z-index: 0;
+    }
+    .hero-text {
+      position: relative;
+      z-index: 2;
+      color: white;
+      font-size: 2rem;
+      padding: 60px 5%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+    }
+
+    /* === SECCIÓN NOTICIAS (igual al código prueba) === */
+    .news {
+      padding: 100px 5% 80px;
+      background-color: #1a1a1a;
+      max-width: 1200px;
+      margin: -50px auto 80px;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+    }
+    .news h2 {
+      font-size: 32px;
+      color: #fff;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 20px;
+    }
+    .main-news {
+      grid-column: 1 / 2;
+      grid-row: 1 / 3;
+      background: #222;
+      border-radius: 16px;
+      padding: 20px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+    .news-card {
+      background: #222;
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      cursor: pointer;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+    .news-card:hover {
+      transform: scale(1.05);
+    }
+    .news-card img, .main-news img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    /* === SECCIÓN VIDEOS (integrada del código final) === */
+    .videos {
+      padding: 100px 5% 80px;
+      background-color: #1a1a1a;
+      max-width: 1200px;
+      margin: -50px auto 80px;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+    }
+    .videos h2 {
+      font-size: 32px;
+      color: #fff;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .video-card {
+      background: #222;
+      border-radius: 14px;
+      padding: 10px;
+      overflow: hidden;
+      aspect-ratio: 16/9;
+    }
+    .video-card iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 10px;
+    }
+  </style>
 </head>
-<body class="dark-mode">
-    <header class="header">
-        <div class="logo">Tenshi</div>
-        <nav class="nav">
-            <a href="#news">News</a>
-            <a href="#discography">Discography</a>
-            <a href="#videos">Videos</a>
-            <a href="#studio">My Studio</a>
-            <button id="theme-toggle" class="theme-toggle">🌙</button>
-        </nav>
-    </header>
-    <div class="banner">
-        <div class="banner-content">
-            <h1>Welcome to My Studio</h1>
-        </div>
+<body>
+  <!-- Banner dinámico -->
+  <div class="hero-wrapper">
+    <div class="hero-bg" id="banner"></div>
+    <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
+  </div>
+
+  <!-- Noticias -->
+  <section class="news">
+    <h2>NEWS</h2>
+    <div class="schedule-grid" id="news-grid">
+      <!-- Noticias dinámicas desde catalogo.json -->
     </div>
-    <main class="main-content">
-        <!-- Sección de Miembros del Equipo -->
-        <section class="section" id="studio">
-            <h2 class="section-title">My Studio</h2>
-            <div class="carousel-container" id="teamCarousel">
-                <!-- Las cartas se generan con JavaScript -->
-            </div>
-        </section>
+  </section>
 
-        <!-- Sección de Discografía -->
-        <section class="section" id="discography">
-            <h2 class="section-title">Discography</h2>
-            <div class="carousel-container" id="discographyCarousel">
-                <!-- Las cartas se generan con JavaScript -->
-            </div>
-        </section>
+  <!-- Videos -->
+  <section class="videos">
+    <h2>VIDEOS</h2>
+    <div class="video-grid" id="video-grid">
+      <!-- Videos dinámicos desde catalogo.json -->
+    </div>
+  </section>
 
-        <!-- Sección de Videos -->
-        <section class="section" id="videos">
-            <h2 class="section-title">Videos</h2>
-            <div class="carousel-container" id="videosCarousel">
-                <!-- Las cartas se generan con JavaScript -->
-            </div>
-        </section>
-    </main>
-    <footer class="footer">
-        <div class="social-links">
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-youtube"></i></a>
-            <a href="#"><i class="fab fa-tiktok"></i></a>
-        </div>
-        <p>&copy; 2025 My Studio. All rights reserved.</p>
-    </footer>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Toggle dark/light mode
-            const themeToggle = document.getElementById('theme-toggle');
-            themeToggle.addEventListener('click', () => {
-                document.body.classList.toggle('light-mode');
-                themeToggle.textContent = document.body.classList.contains('light-mode') ? '🌞' : '🌙';
-            });
+  <script>
+    async function cargarCatalogo() {
+      try {
+        const response = await fetch("data/catalogo.json");
+        const data = await response.json();
 
-            // Datos de las cartas de miembros del equipo
-            const teamCardsData = [
-                {
-                    name: "Luna",
-                    role: "Main Vocalist",
-                    description: "Luna es la voz principal del estudio. Su estilo único y versátil la destacan en cada canción.",
-                    image: "https://via.placeholder.com/300x400/ff6b6b/ffffff?text=Luna"
-                },
-                {
-                    name: "Kai",
-                    role: "Music Producer",
-                    description: "Kai es el productor musical del equipo. Su creatividad y técnica dan vida a cada proyecto.",
-                    image: "https://via.placeholder.com/300x400/4dabf7/ffffff?text=Kai"
-                },
-                {
-                    name: "Mira",
-                    role: "Character Designer",
-                    description: "Mira diseña los personajes y el arte visual del estudio. Su estilo es reconocible y lleno de vida.",
-                    image: "https://via.placeholder.com/300x400/7bed9f/ffffff?text=Mira"
-                }
-            ];
+        // Banner principal
+        const banner = document.getElementById("banner");
+        banner.style.backgroundImage = `url('${data.banner_principal}')`;
 
-            // Datos de las cartas de discografía
-            const discographyCardsData = [
-                {
-                    name: "Eclipse",
-                    role: "Album",
-                    description: "El primer álbum de estudio, con 12 canciones que mezclan pop y electrónica.",
-                    image: "https://via.placeholder.com/300x400/ff9ff3/ffffff?text=Eclipse"
-                },
-                {
-                    name: "Starlight",
-                    role: "Single",
-                    description: "El sencillo más exitoso del estudio, con más de 10 millones de reproducciones.",
-                    image: "https://via.placeholder.com/300x400/feca57/ffffff?text=Starlight"
-                },
-                {
-                    name: "Neon Dreams",
-                    role: "EP",
-                    description: "Un EP experimental con colaboraciones internacionales y sonidos futuristas.",
-                    image: "https://via.placeholder.com/300x400/54a0ff/ffffff?text=Neon+Dreams"
-                }
-            ];
-
-            // Datos de las cartas de videos
-            const videosCardsData = [
-                {
-                    name: "Eclipse Tour",
-                    role: "Live",
-                    description: "Grabación en vivo del concierto en Tokyo Dome, 2024.",
-                    image: "https://via.placeholder.com/300x400/ff6b6b/ffffff?text=Eclipse+Tour"
-                },
-                {
-                    name: "Starlight MV",
-                    role: "Music Video",
-                    description: "Video oficial de 'Starlight', dirigido por Akira Takahashi.",
-                    image: "https://via.placeholder.com/300x400/54a0ff/ffffff?text=Starlight+MV"
-                },
-                {
-                    name: "Behind the Scenes",
-                    role: "Documentary",
-                    description: "Documental sobre la creación del álbum 'Neon Dreams'.",
-                    image: "https://via.placeholder.com/300x400/feca57/ffffff?text=Behind+Scenes"
-                }
-            ];
-
-            // Función para crear carrusel
-            function createCarousel(containerId, cardsData) {
-                const carouselContainer = document.getElementById(containerId);
-                let currentCenterIndex = 0;
-
-                cardsData.forEach((card, index) => {
-                    const cardElement = document.createElement('div');
-                    cardElement.className = `card ${index === currentCenterIndex ? 'center' : 'hidden'}`;
-                    cardElement.innerHTML = `
-                        <div class="card-image-container">
-                            <img src="${card.image}" alt="${card.name}">
-                        </div>
-                        <div class="card-info">
-                            <h3>${card.name}</h3>
-                            <span class="label">${card.role}</span>
-                            <p class="card-description">${card.description}</p>
-                        </div>
-                        <div class="card-footer">© 2025 My Studio</div>
-                    `;
-                    carouselContainer.appendChild(cardElement);
-                });
-
-                const cards = document.querySelectorAll(`#${containerId} .card`);
-                if (cards.length > 1) {
-                    cards[1].classList.remove('hidden');
-                    cards[1].classList.add('right');
-                }
-                if (cards.length > 2) {
-                    cards[2].classList.remove('hidden');
-                    cards[2].classList.add('left');
-                }
-
-                setInterval(() => {
-                    const cards = document.querySelectorAll(`#${containerId} .card`);
-                    cards.forEach(card => card.classList.remove('center', 'left', 'right'));
-                    currentCenterIndex = (currentCenterIndex + 1) % cardsData.length;
-                    cards.forEach((card, index) => {
-                        if (index === currentCenterIndex) {
-                            card.classList.add('center');
-                        } else if (index === (currentCenterIndex + 1) % cardsData.length) {
-                            card.classList.add('right');
-                        } else {
-                            card.classList.add('left');
-                        }
-                    });
-                }, 20000);
-            }
-
-            // Inicializar carruseles
-            createCarousel('teamCarousel', teamCardsData);
-            createCarousel('discographyCarousel', discographyCardsData);
-            createCarousel('videosCarousel', videosCardsData);
+        // Noticias (SIN CAMBIOS)
+        const grid = document.getElementById("news-grid");
+        grid.innerHTML = "";
+        let i = 0;
+        Object.values(data.news).forEach(nota => {
+          const card = document.createElement("div");
+          card.className = i === 0 ? "main-news" : "news-card";
+          card.innerHTML = `<img src="${nota.imagen}" alt="Noticia">`;
+          grid.appendChild(card);
+          i++;
         });
-    </script>
+
+        // Videos (ADAPTADO)
+        const videoGrid = document.getElementById("video-grid");
+        videoGrid.innerHTML = "";
+        data.videos.forEach(video => {
+          const embedUrl = video.url
+            .replace("watch?v=", "embed/")
+            .replace("youtu.be/", "www.youtube.com/embed/");
+          const card = document.createElement("div");
+          card.className = "video-card";
+          card.innerHTML = `
+            <iframe src="${embedUrl}" frameborder="0" allowfullscreen></iframe>
+          `;
+          videoGrid.appendChild(card);
+        });
+
+      } catch (e) {
+        console.error("Error cargando catálogo:", e);
+      }
+    }
+
+    cargarCatalogo();
+  </script>
 </body>
 </html>
