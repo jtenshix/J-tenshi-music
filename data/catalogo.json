@@ -1,39 +1,56 @@
 {
+  "_---------------------- BANNERS ----------------------": "",
+
   "banner_principal": "https://lh3.googleusercontent.com/d/1_q5FfABiCmduY6kQBic3l6vjLBHgb5d4",
   "banner_discografia": "https://lh3.googleusercontent.com/d/1SzRAjjXyXywwqmuSsQQbwI0VY6mMoqmV",
   "banner_videos": "https://lh3.googleusercontent.com/d/1SzRAjjXyXywwqmuSsQQbwI0VY6mMoqmV",
 
+  "_------------------------ NEWS -----------------------": "",
+
   "news": {
-   "n1": {
-  "imagen": "https://lh3.googleusercontent.com/d/1InezyX6mwvLtCIWFvhCFnyqNXyiUH6I0",
-  "destino": "news",
-  "titulo": "video nuevo"
-},
-    
+    "_____ N1 __________________________________________": "",
+    "n1": {
+      "imagen": "https://lh3.googleusercontent.com/d/1InezyX6mwvLtCIWFvhCFnyqNXyiUH6I0",
+      "destino": "news",
+      "titulo": "video nuevo"
+    },
+
+    "_____ N2 __________________________________________": "",
     "n2": {
-  "imagen": "https://lh3.googleusercontent.com/d/1kR-L16rAPgLFyQrA_o_7XU8YRWwuSJQm",
-  "destino": "news",
-  "titulo": "nueva noticia"
-},
-    "n3": { "imagen": "https://lh3.googleusercontent.com/d/1C4jTpxogAGK_wO6rPH9Te0cQmb11LXE3", "destino": "news" },
-   
+      "imagen": "https://lh3.googleusercontent.com/d/1kR-L16rAPgLFyQrA_o_7XU8YRWwuSJQm",
+      "destino": "news",
+      "titulo": "nueva noticia"
+    },
+
+    "_____ N3 __________________________________________": "",
+    "n3": {
+      "imagen": "https://lh3.googleusercontent.com/d/1C4jTpxogAGK_wO6rPH9Te0cQmb11LXE3",
+      "destino": "news"
+    },
+
+    "_____ N4 __________________________________________": "",
     "n4": {
-  "imagen": "https://lh3.googleusercontent.com/d/1u4WjVPJ4070E25egyL3q6s4Bjq4LRiVj",
-  "destino": "discografia"
-},
-    
+      "imagen": "https://lh3.googleusercontent.com/d/1u4WjVPJ4070E25egyL3q6s4Bjq4LRiVj",
+      "destino": "discografia"
+    },
+
+    "_____ N5 __________________________________________": "",
     "n5": {
-  "imagen": "https://lh3.googleusercontent.com/d/1u4WjVPJ4070E25egyL3q6s4Bjq4LRiVj",
-  "destino": "gallery",
-  "titulo": "pruieba 5"
-}
+      "imagen": "https://lh3.googleusercontent.com/d/1u4WjVPJ4070E25egyL3q6s4Bjq4LRiVj",
+      "destino": "gallery",
+      "titulo": "pruieba 5"
+    }
   },
+
+  "_----------------------- VIDEOS ----------------------": "",
 
   "videos": [
     { "url": "https://www.youtube.com/embed/0_QHL7cDYno" },
     { "url": "https://www.youtube.com/embed/Ulj3sX_jJ7g" },
     { "url": "https://www.youtube.com/embed/yXtg79kJHr8" }
   ],
+
+  "_-------------------- DISCOGRAFIA --------------------": "",
 
   "discografia": {
     "portadas": [
