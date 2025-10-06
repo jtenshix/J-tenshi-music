@@ -541,36 +541,25 @@
           });
         }
 
-        /* VIDEOS: usar hasta 6 del JSON y repetir para llenar 9 paneles */
+        /* VIDEOS: (sin cambios aquí) – se llenan en tu JSON */
         const spinner = document.getElementById('spinner-videos');
         if (spinner && Array.isArray(data.videos) && data.videos.length) {
           spinner.innerHTML = '';
-
           const toEmbed = (url) =>
             typeof url === 'string'
               ? url.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')
               : '';
 
-          // Toma hasta 6 videos (si hay menos, usa los que haya)
-          const base = data.videos
-            .map(v => toEmbed(v.url))
-            .filter(u => u && u.trim() !== '')
-            .slice(0, 6);
-
-          // Repite para completar 9 paneles
+          // Usa los videos como vengan, repite si faltan para 9
+          const base = data.videos.map(v => ({ url: toEmbed(v.url) })).filter(v => v.url);
           const lista = [];
-          while (lista.length < 9 && base.length > 0) {
-            lista.push(...base);
-          }
-          const lista9 = lista.slice(0, 9);
-
-          lista9.forEach(u => {
+          while (lista.length < 9 && base.length) lista.push(...base);
+          lista.slice(0,9).forEach(v => {
             const panel = document.createElement('div');
             panel.className = 'video-panel';
-            panel.innerHTML = `<iframe src="${u}" allowfullscreen></iframe>`;
+            panel.innerHTML = `<iframe src="${v.url}" allowfullscreen></iframe>`;
             spinner.appendChild(panel);
           });
-
           updateSpinnerVideos();
         }
 
@@ -598,19 +587,17 @@
     });
   </script>
 
-  <!-- NUEVO: hacer clickeables las cartas del carrusel de Discografía -->
+  <!-- NUEVO: al hacer clic en cualquier carta del carrusel de Discografía,
+       ir a la PÁGINA de discografía (no scroll en esta misma página). -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      const discLink = document.getElementById('link-discography');
+      const discUrl = (discLink && discLink.href) ? discLink.href : 'Discography.html';
+
       document.querySelectorAll('.discography .panel').forEach(panel => {
         panel.style.cursor = 'pointer';
         panel.addEventListener('click', () => {
-          const destino = document.getElementById('discography');
-          if (destino) {
-            destino.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          } else {
-            // Fallback por si esta página no tiene la sección
-            window.location.href = 'Discography.html';
-          }
+          window.location.href = discUrl; // misma pestaña. Si la quieres nueva: window.open(discUrl, '_blank');
         });
       });
     });
