@@ -541,19 +541,33 @@
           });
         }
 
-        /* VIDEOS: cargar 3 y repetir x3 = 9 para carrusel */
+        /* VIDEOS: usar hasta 6 del JSON y repetir para llenar 9 paneles */
         const spinner = document.getElementById('spinner-videos');
         if (spinner && Array.isArray(data.videos) && data.videos.length) {
           spinner.innerHTML = '';
-          const base = data.videos.slice(0, 3);
-          const toEmbed = (url) =>
-            url.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/');
 
-          const lista9 = [...base, ...base, ...base];
-          lista9.forEach(v => {
+          const toEmbed = (url) =>
+            typeof url === 'string'
+              ? url.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')
+              : '';
+
+          // Toma hasta 6 videos (si hay menos, usa los que haya)
+          const base = data.videos
+            .map(v => toEmbed(v.url))
+            .filter(u => u && u.trim() !== '')
+            .slice(0, 6);
+
+          // Repite para completar 9 paneles
+          const lista = [];
+          while (lista.length < 9 && base.length > 0) {
+            lista.push(...base);
+          }
+          const lista9 = lista.slice(0, 9);
+
+          lista9.forEach(u => {
             const panel = document.createElement('div');
             panel.className = 'video-panel';
-            panel.innerHTML = `<iframe src="${toEmbed(v.url)}" allowfullscreen></iframe>`;
+            panel.innerHTML = `<iframe src="${u}" allowfullscreen></iframe>`;
             spinner.appendChild(panel);
           });
 
