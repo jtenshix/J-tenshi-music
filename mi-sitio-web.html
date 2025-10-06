@@ -55,29 +55,12 @@
       background-repeat: no-repeat;
       background-position: center;
       z-index: 0;
-      overflow: hidden; /* importante para video de fondo */
+      pointer-events: none; /* evita que tape clics */
     }
     .hero-text {
       position: relative; z-index: 2; color: white; font-size: 2rem;
       padding: 60px 5%; height: 75vh; display: flex; align-items: center;
       text-shadow: 0 2px 10px rgba(0,0,0,.6);
-    }
-
-    /* Contenedor de media para fondos (video/iframe) */
-    .bg-media, .yt-cover {
-      position: absolute; inset: 0; pointer-events: none;
-    }
-    .bg-media video {
-      width: 100%; height: 100%; object-fit: cover;
-    }
-    /* Truco para que el iframe de YouTube "cubra" como cover (16:9) */
-    .yt-cover {
-      top: 50%; left: 50%;
-      width: 177.78%; height: 100%;
-      transform: translate(-50%, -50%);
-    }
-    .yt-cover iframe {
-      width: 100%; height: 100%; border: 0;
     }
 
     .contenedor-centrado { display: flex; flex-direction: column; align-items: center; padding: 20px 0; margin-top: 20px; }
@@ -147,7 +130,6 @@
     .news-card p { color: #ccc; font-size: 14px; text-align: center; }
     .news-card .label { font-size: 11px; color: #e0c27b; border: 1px solid #e0c27b; padding: 2px 6px; border-radius: 999px; width: fit-content; margin: 10px auto 0; display: block; }
 
-    /* === BANNERS DE SECCIÓN === */
     .section-banner {
       position: relative; width: 100%; height: 300px; margin: 60px auto; border-radius: 12px;
       background: #111;
@@ -155,11 +137,19 @@
       color: #e0c27b; font-size: 3rem; font-weight: 900;
       font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
       text-shadow: 0 0 15px rgba(224,194,123,.7); user-select: none;
-      overflow: hidden; /* importante para video de fondo */
+      overflow: hidden; /* para que el video no se salga */
     }
-    /* Asegura que el texto quede sobre el video */
-    .section-banner .banner-label { position: relative; z-index: 1; }
-    .section-banner .bg-media, .section-banner .yt-cover { z-index: 0; }
+
+    /* Vídeo de fondo genérico */
+    .bg-video, .bg-iframe {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; border: 0;
+    }
+    /* capa oscura opcional para legibilidad (no usada, pero lista) */
+    .bg-overlay {
+      position:absolute; inset:0; background:linear-gradient(180deg,#0006,#0004 40%,#0006);
+      pointer-events:none;
+    }
 
     /* === DISCOGRAFÍA (3D) === */
     .discography { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 0; }
@@ -187,7 +177,6 @@
       box-shadow: 0 10px 30px rgba(0,0,0,.6);
       opacity: 1;
       transition: all .5s ease-in-out, opacity .2s ease-out;
-      cursor: pointer;
     }
 
     /* 15 posiciones */
@@ -323,7 +312,7 @@
   </header>
 
   <div class="hero-wrapper">
-    <div class="hero-bg" id="hero-bg"></div>
+    <div class="hero-bg"></div>
     <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
   </div>
 
@@ -414,7 +403,7 @@
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Script: tema y filtros -->
+  <!-- Tema y filtros -->
   <script>
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
@@ -433,7 +422,7 @@
     });
   </script>
 
-  <!-- Script: carrusel DISCOS -->
+  <!-- Carrusel DISCOS -->
   <script>
     var ang = 0;
     var panels = 15;
@@ -471,7 +460,7 @@
     $(document).ready(function(){ updateSpinner(); });
   </script>
 
-  <!-- Script: carrusel VIDEOS -->
+  <!-- Carrusel VIDEOS -->
   <script>
     var angVid = 0;
     var panelsVid = 9;
@@ -505,9 +494,9 @@
     $("#next-video").on("click", function(){ angVid -= angVid_unit; updateSpinnerVideos(); });
   </script>
 
-  <!-- Script: Carga catálogo + Banners con video -->
+  <!-- Catálogo + BANNERS con imagen/YouTube/Drive -->
   <script>
-    // Mapa de alias → páginas/URLs de destino
+    // Alias → páginas/URLs
     const SECTION_MAP = {
       discografia: 'Discography.html',
       movie:       'movie.html',
@@ -525,8 +514,8 @@
       return '#';
     }
 
-    /* === Helpers de video para banners === */
-    function isYouTube(u){ return /youtube\.com|youtu\.be/i.test(u); }
+    /* === NUEVO: Helpers para banners con video === */
+    function isYouTube(u){ return /(?:youtube\.com|youtu\.be)/i.test(u || ''); }
     function ytId(u){
       try{
         if(u.includes('youtu.be/')) return u.split('youtu.be/')[1].split(/[?&]/)[0];
@@ -538,65 +527,68 @@
     function ytLoopEmbed(u){
       const id = ytId(u);
       if(!id) return null;
-      // loop correcto en YT requiere playlist=ID
-      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&showinfo=0&modestbranding=1&loop=1&playlist=${id}`;
+      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&modestbranding=1&loop=1&playlist=${id}`;
     }
-    function isDirectVideo(u){ return /\.(mp4|webm|ogg)(\?.*)?$/i.test(u) || /googleusercontent\.com\/.*(mp4|webm|ogg)/i.test(u); }
+    function isDirectVideo(u){
+      if(!u) return false;
+      const hasExt = /\.(mp4|webm|ogg)(\?.*)?$/i.test(u);
+      const driveUc = /https:\/\/drive\.google\.com\/uc\?export=download&id=[A-Za-z0-9_-]+/i.test(u);
+      const gurl = /googleusercontent\.com\/.*\.(mp4|webm|ogg)(\?.*)?$/i.test(u);
+      return hasExt || driveUc || gurl;
+    }
 
-    // Inserta video/iframe como fondo; si no es video, usa background-image
-    function setBackgroundMedia(containerEl, mediaUrl){
-      if(!containerEl) return;
-      // limpia contenido previo
-      containerEl.style.backgroundImage = '';
-      Array.from(containerEl.querySelectorAll('.bg-media, .yt-cover')).forEach(n => n.remove());
+    /**
+     * Pone imagen o video (YT / directo) como fondo dentro de un contenedor.
+     * - Para imagen: usa background-image del propio contenedor.
+     * - Para video: inserta <video> o <iframe> ocupando todo el contenedor.
+     */
+    function setBackgroundMedia(container, url){
+      if(!container) return;
+      // limpiar contenido previo (videos/iframes) pero respetar textos hijos
+      Array.from(container.querySelectorAll('.bg-video, .bg-iframe, .bg-overlay')).forEach(n => n.remove());
+      container.style.backgroundImage = '';
+      container.style.backgroundColor = '#111';
 
-      if(typeof mediaUrl !== 'string' || !mediaUrl.trim()){
-        return;
+      if(!url || typeof url !== 'string'){
+        return; // nada
       }
 
-      // Caso YouTube
-      if(isYouTube(mediaUrl)){
-        const src = ytLoopEmbed(mediaUrl);
-        if(src){
-          const wrap = document.createElement('div');
-          wrap.className = 'yt-cover';
+      // YouTube
+      if(isYouTube(url)){
+        const embed = ytLoopEmbed(url);
+        if(embed){
           const ifr = document.createElement('iframe');
-          ifr.src = src;
-          ifr.allow = 'autoplay; fullscreen; picture-in-picture';
-          ifr.setAttribute('title', 'video banner');
-          wrap.appendChild(ifr);
-          containerEl.appendChild(wrap);
+          ifr.className = 'bg-iframe';
+          ifr.src = embed;
+          ifr.allow = 'autoplay; encrypted-media; fullscreen; picture-in-picture';
+          ifr.setAttribute('allowfullscreen','');
+          ifr.setAttribute('title','YouTube background');
+          container.appendChild(ifr);
+          // container.appendChild(Object.assign(document.createElement('div'),{className:'bg-overlay'})); // opcional overlay
           return;
         }
       }
 
-      // Caso video directo
-      if(isDirectVideo(mediaUrl)){
-        const wrap = document.createElement('div');
-        wrap.className = 'bg-media';
+      // Direct video (mp4/webm/ogg o drive uc=download)
+      if(isDirectVideo(url)){
         const vid = document.createElement('video');
-        vid.src = mediaUrl;
+        vid.className = 'bg-video';
+        vid.src = url;
         vid.autoplay = true;
         vid.muted = true;
         vid.loop = true;
         vid.playsInline = true;
-        vid.preload = 'auto';
-        wrap.appendChild(vid);
-        containerEl.appendChild(wrap);
+        vid.setAttribute('preload','metadata');
+        container.appendChild(vid);
+        // container.appendChild(Object.assign(document.createElement('div'),{className:'bg-overlay'})); // opcional overlay
         return;
       }
 
-      // Por defecto: imagen de fondo
-      containerEl.style.backgroundImage = `url('${mediaUrl}')`;
-    }
-
-    // Envuelve el texto del banner en un span para que quede sobre el video
-    function ensureBannerLabel(el){
-      if(!el) return;
-      if(!el.querySelector('.banner-label')){
-        const txt = el.innerHTML;
-        el.innerHTML = `<span class="banner-label">${txt}</span>`;
-      }
+      // Imagen por defecto
+      container.style.backgroundImage = `url('${url}')`;
+      container.style.backgroundSize = 'cover';
+      container.style.backgroundPosition = 'center';
+      container.style.backgroundRepeat = 'no-repeat';
     }
 
     async function cargarCatalogoPrincipal() {
@@ -604,20 +596,18 @@
         const resp = await fetch('data/catalogo.json', { cache: 'no-store' });
         const data = await resp.json();
 
-        /* Banner principal (imagen o video) */
-        const heroBg = document.getElementById('hero-bg');
+        /* BANNER PRINCIPAL (imagen / YT / Drive) */
+        const heroBg = document.querySelector('.hero-bg');
         if (heroBg && data.banner_principal) {
           setBackgroundMedia(heroBg, data.banner_principal);
         }
 
-        /* Banners de sección (imagen o video) */
+        /* BANNERS DE SECCIÓN (imagen / YT / Drive) */
         const bannerDisc = document.getElementById('banner-discography');
-        const bannerVideos = document.getElementById('banner-videos');
-        [bannerDisc, bannerVideos].forEach((el) => ensureBannerLabel(el));
-
         if (bannerDisc && data.banner_discografia) {
           setBackgroundMedia(bannerDisc, data.banner_discografia);
         }
+        const bannerVideos = document.getElementById('banner-videos');
         if (bannerVideos && data.banner_videos) {
           setBackgroundMedia(bannerVideos, data.banner_videos);
         }
@@ -633,11 +623,7 @@
 
           notas.forEach((nota, idx) => {
             const a = document.createElement('a');
-            a.href = (nota && (nota.link || nota.destino)) ? (function(n){ 
-              if (n.link) return n.link;
-              const key = (n.destino||'').toLowerCase();
-              return SECTION_MAP[key] || '#';
-            })(nota) : '#';
+            a.href = resolveDestino(nota);
             a.target = '_self';
             a.className = idx === 0 ? 'main-news' : 'news-card';
             a.setAttribute('aria-label', `Abrir: ${nota?.titulo || nota?.destino || 'noticia'}`);
@@ -646,24 +632,32 @@
           });
         }
 
-        /* VIDEOS: se llenan según tu JSON, repitiendo hasta 9 elementos */
+        /* VIDEOS: usa los del JSON y repite para completar 9 paneles */
         const spinner = document.getElementById('spinner-videos');
         if (spinner && Array.isArray(data.videos) && data.videos.length) {
           spinner.innerHTML = '';
+
           const toEmbed = (url) =>
             typeof url === 'string'
               ? url.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')
               : '';
 
-          const base = data.videos.map(v => ({ url: toEmbed(v.url) })).filter(v => v.url);
+          const base = data.videos
+            .map(v => toEmbed(v.url))
+            .filter(u => u && u.trim() !== '');
+
+          // Repetir para llegar a 9
           const lista = [];
-          while (lista.length < 9 && base.length) lista.push(...base);
-          lista.slice(0,9).forEach(v => {
+          while (lista.length < 9 && base.length > 0) lista.push(...base);
+          const lista9 = lista.slice(0, 9);
+
+          lista9.forEach(u => {
             const panel = document.createElement('div');
             panel.className = 'video-panel';
-            panel.innerHTML = `<iframe src="${v.url}" allowfullscreen></iframe>`;
+            panel.innerHTML = `<iframe src="${u}" allowfullscreen></iframe>`;
             spinner.appendChild(panel);
           });
+
           updateSpinnerVideos();
         }
 
@@ -688,20 +682,6 @@
     document.addEventListener('DOMContentLoaded', () => {
       cargarCatalogoPrincipal();
       updateSpinnerVideos();
-    });
-  </script>
-
-  <!-- Clic en cartas del carrusel → ir a página de Discography -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const discLink = document.getElementById('link-discography');
-      const discUrl = (discLink && discLink.href) ? discLink.href : 'Discography.html';
-
-      document.querySelectorAll('.discography .panel').forEach(panel => {
-        panel.addEventListener('click', () => {
-          window.location.href = discUrl;
-        });
-      });
     });
   </script>
 </body>
