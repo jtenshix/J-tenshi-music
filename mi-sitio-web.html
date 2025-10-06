@@ -597,5 +597,23 @@
       updateSpinnerVideos();
     });
   </script>
+
+  <!-- NUEVO: hacer clickeables las cartas del carrusel de Discografía -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.discography .panel').forEach(panel => {
+        panel.style.cursor = 'pointer';
+        panel.addEventListener('click', () => {
+          const destino = document.getElementById('discography');
+          if (destino) {
+            destino.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          } else {
+            // Fallback por si esta página no tiene la sección
+            window.location.href = 'Discography.html';
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>
