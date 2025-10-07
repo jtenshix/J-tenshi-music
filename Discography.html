@@ -20,7 +20,7 @@
   .title{ font-size:34px; font-weight:900; letter-spacing:.5px; margin:16px 0 4px; }
   .subtitle{ opacity:.7; font-size:12px; letter-spacing:.25em; }
 
-  /* Filtros (opcional) */
+  /* Filtros (si no los quieres, puedes borrar este bloque y lo del JS) */
   .filters{
     display:flex; gap:8px; justify-content:center; flex-wrap:wrap;
     margin:16px auto 26px;
@@ -100,7 +100,6 @@
     <div class="subtitle">ディスコグラフィー</div>
   </header>
 
-  <!-- filtros (si no los quieres, bórralos junto con el manejo en JS) -->
   <nav class="filters" id="filters">
     <button class="chip active" data-type="all">ALL</button>
     <button class="chip" data-type="single">SINGLE</button>
@@ -125,39 +124,47 @@
   </div>
 
 <script>
-/* ========= 1) PON AQUÍ TUS CANCIONES =========
-   - cover: URL de la carátula
-   - title: nombre de la canción
-   - date: (opcional) fecha
-   - type: 'single' | 'ep' | 'album' (para filtros)
-   - spotify: link a la PISTA (NO álbum ni playlist), ej:
-       https://open.spotify.com/track/7aq6YF7k8V...  */
+/* ========= ITEMS: tus 5 pistas de Spotify =========
+   Cambia "cover" por tu portada real si quieres  */
 const ITEMS = [
   {
-    cover: "https://i.scdn.co/image/ab67616d00001e028a9e9d6f0c3b2f0b4f7c0000",
-    title: "Canción 1",
-    date: "2025-04-01",
+    cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=800&auto=format&fit=crop",
+    title: "Track 1",
+    date: "2025-01-01",
     type: "single",
-    spotify: "https://open.spotify.com/track/XXXXXXXXXXXXXXX"
+    spotify: "https://open.spotify.com/intl-es/track/2ns57MfTr1lBbiZ7IBXDFL?si=0363d843b89f4219"
   },
   {
-    cover: "https://i.scdn.co/image/ab67616d00001e02c1c1c1c1c1c1c1c1c1c1c1c1",
-    title: "Canción 2",
-    date: "2025-04-15",
+    cover: "https://images.unsplash.com/photo-1513569771920-c9e1d31714af?q=80&w=800&auto=format&fit=crop",
+    title: "Track 2",
+    date: "2025-01-15",
     type: "single",
-    spotify: "https://open.spotify.com/track/YYYYYYYYYYYYYYY"
+    spotify: "https://open.spotify.com/intl-es/track/3yS5cDr0hdMIk9nFvVMUlV?si=b1de99a203ed409c"
   },
   {
-    cover: "https://i.scdn.co/image/ab67616d00001e02222222222222222222222222",
-    title: "Canción 3",
-    date: "2025-05-01",
+    cover: "https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=800&auto=format&fit=crop",
+    title: "Track 3",
+    date: "2025-02-01",
     type: "single",
-    spotify: "https://open.spotify.com/track/ZZZZZZZZZZZZZZZ"
+    spotify: "https://open.spotify.com/intl-es/track/5OzpWTySMn0qsKswFF8jQo?si=096c0f70db84414a"
   },
-  // Agrega más objetos como estos, uno por casilla…
+  {
+    cover: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?q=80&w=800&auto=format&fit=crop",
+    title: "Track 4",
+    date: "2025-02-15",
+    type: "single",
+    spotify: "https://open.spotify.com/intl-es/track/0gt5BKcHl70ZTWBclypMaB?si=5a320f27666d4184"
+  },
+  {
+    cover: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?q=80&w=800&auto=format&fit=crop",
+    title: "Track 5",
+    date: "2025-03-01",
+    type: "single",
+    spotify: "https://open.spotify.com/intl-es/track/4kt26B0dFUYfiCMC1LJd1j?si=3496030443fd44b4"
+  }
 ];
 
-/* ========= NO TOQUES DE AQUÍ ABAJO (lógica UI) ========= */
+/* ========= Lógica UI (no necesitas tocar) ========= */
 
 const grid    = document.getElementById('grid');
 const filters = document.getElementById('filters');
@@ -181,7 +188,7 @@ function formatDate(s){
 function render(){
   grid.innerHTML = '';
   ITEMS.filter(it => currentType==='all' ? true : it.type===currentType)
-       .forEach((it, i) => {
+       .forEach((it) => {
          const card = document.createElement('div');
          card.className = 'card';
          card.innerHTML = `
@@ -210,6 +217,7 @@ function closeModal(){
 }
 
 function trackIdFromUrl(url){
+  // Soporta urls con "intl-es" u otros locales
   const m = String(url).match(/^https?:\/\/open\.spotify\.com\/(?:intl-[^/]+\/)?track\/([A-Za-z0-9]+)(?:\?.*)?$/);
   return m ? m[1] : null;
 }
