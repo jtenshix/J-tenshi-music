@@ -132,12 +132,8 @@
     .section-banner {
       position: relative; width: 100%; height: 300px; margin: 60px auto; border-radius: 12px;
       background: #111;
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-      box-shadow: 0 0 20px rgba(0,0,0,.5);
-      display: flex; justify-content: center; align-items: center;
-      color: #e0c27b; font-size: 2.4rem; font-weight: 900;
+      box-shadow: 0 0 20px rgba(0,0,0,.5); display: flex; justify-content: center; align-items: center;
+      color: #e0c27b; font-size: 3rem; font-weight: 900;
       font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
       text-shadow: 0 0 15px rgba(224,194,123,.7); user-select: none;
     }
@@ -170,7 +166,6 @@
       transition: all .5s ease-in-out, opacity .2s ease-out;
     }
 
-    /* 15 posiciones */
     .discography .panel:nth-child(1)  { transform: rotateY(0deg) translateZ(400px); }
     .discography .panel:nth-child(2)  { transform: rotateY(24deg) translateZ(400px); }
     .discography .panel:nth-child(3)  { transform: rotateY(48deg) translateZ(400px); }
@@ -213,7 +208,7 @@
     .discography .pagination button:hover { background: #fffc; }
     .discography .pagination button:active { background: #ffff; }
 
-    /* Portadas (fallback) */
+    /* Portadas fallback (solo si Spotify falla) */
     .discography .a { background-image: url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c?auto=format&q=85); }
     .discography .b { background-image: url(https://images.unsplash.com/photo-1691389694412-266f872999c6?auto=format&q=85); }
     .discography .c { background-image: url(https://images.unsplash.com/photo-1606391901318-07003db08d63?auto=format&q=85); }
@@ -342,7 +337,7 @@
     <div class="container">
       <div class="holder">
         <div class="spinner">
-          <!-- 15 paneles en loop -->
+          <!-- 15 paneles en loop (a..e * 3) -->
           <div class="panel a"></div>
           <div class="panel b"></div>
           <div class="panel c"></div>
@@ -485,70 +480,49 @@
     $("#next-video").on("click", function(){ angVid -= angVid_unit; updateSpinnerVideos(); });
   </script>
 
-  <!-- Script: Carga catálogo + banners (con soporte YouTube thumbnail) + portadas Spotify -->
+  <!-- Script: JSONP + Carga catálogo (banners + news + videos + discografía con portadas de Spotify) -->
   <script>
-    // helpers
-    function toSpotifyTrackId(url){
-      const m = String(url).match(/^https?:\/\/open\.spotify\.com\/(?:intl-[^/]+\/)?track\/([A-Za-z0-9]+)(?:\?.*)?$/);
-      return m ? m[1] : null;
+    // ---- JSONP helper para Spotify oEmbed (evitar CORS) ----
+    function jsonp(url) {
+      return new Promise((resolve, reject) => {
+        const cb = 'sp_cb_' + Math.random().toString(36).slice(2);
+        window[cb] = (data) => {
+          try { resolve(data); } finally {
+            delete window[cb];
+            if (s && s.parentNode) s.parentNode.removeChild(s);
+          }
+        };
+        const s = document.createElement('script');
+        s.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cb;
+        s.onerror = () => {
+          try { reject(new Error('JSONP error')); } finally {
+            delete window[cb];
+            if (s && s.parentNode) s.parentNode.removeChild(s);
+          }
+        };
+        document.head.appendChild(s);
+      });
     }
+
     async function getSpotifyCover(spotifyUrl){
-      const o = `https://open.spotify.com/oembed?url=${encodeURIComponent(spotifyUrl)}&maxwidth=640`;
+      const oembed = 'https://open.spotify.com/oembed?url='
+        + encodeURIComponent(spotifyUrl)
+        + '&maxwidth=640';
       try{
-        const res = await fetch(o, { cache:'no-store' });
-        if(!res.ok) throw 0;
-        const data = await res.json();
-        return data.thumbnail_url || null;
+        const data = await jsonp(oembed);
+        return (data && data.thumbnail_url) ? data.thumbnail_url : null;
       }catch{
         return null;
       }
     }
-    async function getFirstNCoversFromSpotify(urls, n=5){
+
+    async function getFirstNCoversFromSpotify(urls, n = 5){
       const list = (urls || []).slice(0, n).map(u => getSpotifyCover(u));
-      const settled = await Promise.allSettled(list);
-      return settled.map(r => (r.status==='fulfilled' ? r.value : null)).filter(Boolean);
+      const results = await Promise.all(list);
+      return results.filter(Boolean);
     }
 
-    // convierte un link de YouTube (watch / youtu.be / embed) a thumbnail
-    function youtubeThumb(url){
-      if(!url) return null;
-      const s = String(url);
-      let id = null;
-      let m = s.match(/[?&]v=([^&]+)/);           // watch?v=ID
-      if(m) id = m[1];
-      if(!id){ m = s.match(/youtu\.be\/([^?&#]+)/); if(m) id = m[1];}
-      if(!id){ m = s.match(/\/embed\/([^?&#]+)/);  if(m) id = m[1];}
-      if(!id) return null;
-      return {
-        max: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,
-        hq:  `https://img.youtube.com/vi/${id}/hqdefault.jpg`
-      };
-    }
-
-    async function setBannerImage(elId, url){
-      const el = document.getElementById(elId);
-      if(!el) return;
-      if(!url || typeof url !== 'string'){ el.style.backgroundImage = ''; return; }
-
-      // Si es YouTube, usa miniatura (maxres -> fallback hq)
-      const y = youtubeThumb(url);
-      if(y){
-        try{
-          // probamos maxres
-          const r = await fetch(y.max, {method:'HEAD'});
-          const ok = r.ok;
-          el.style.backgroundImage = `url('${ok ? y.max : y.hq}')`;
-          return;
-        }catch{
-          el.style.backgroundImage = `url('${y.hq}')`;
-          return;
-        }
-      }
-      // si es imagen directa
-      el.style.backgroundImage = `url('${url}')`;
-    }
-
-    // rutas de navegación
+    // ---- Carga catálogo y aplica todo ----
     const SECTION_MAP = {
       discografia: 'Discography.html',
       movie:       'movie.html',
@@ -571,17 +545,23 @@
         const resp = await fetch('data/catalogo.json', { cache: 'no-store' });
         const data = await resp.json();
 
-        // Hero
+        // Banner principal
         const heroBg = document.querySelector('.hero-bg');
         if (heroBg && data.banner_principal) {
           heroBg.style.backgroundImage = `url('${data.banner_principal}')`;
         }
 
-        // Banners de sección (con soporte miniatura de YouTube)
-        await setBannerImage('banner-discography', data.banner_discografia);
-        await setBannerImage('banner-videos',      data.banner_videos);
+        // Banners sección
+        const bannerDisc = document.getElementById('banner-discography');
+        if (bannerDisc && data.banner_discografia) {
+          bannerDisc.style.backgroundImage = `url('${data.banner_discografia}')`;
+        }
+        const bannerVideos = document.getElementById('banner-videos');
+        if (bannerVideos && data.banner_videos) {
+          bannerVideos.style.backgroundImage = `url('${data.banner_videos}')`;
+        }
 
-        // NEWS
+        // NEWS (n1..n5)
         const newsGrid = document.getElementById('news-grid');
         if (newsGrid && data.news && typeof data.news === 'object') {
           newsGrid.innerHTML = '';
@@ -601,7 +581,7 @@
           });
         }
 
-        // VIDEOS (llenar 9)
+        // VIDEOS: usa los que tengas en json, repite para 9 paneles
         const spinner = document.getElementById('spinner-videos');
         if (spinner && Array.isArray(data.videos) && data.videos.length) {
           spinner.innerHTML = '';
@@ -609,36 +589,49 @@
             typeof url === 'string'
               ? url.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')
               : '';
-          const base = data.videos.map(v => toEmbed(v.url)).filter(Boolean).slice(0, 6);
-          const list = [];
-          while (list.length < 9 && base.length > 0) list.push(...base);
-          list.slice(0, 9).forEach(u => {
+
+          const base = data.videos
+            .map(v => toEmbed(v.url))
+            .filter(u => u && u.trim() !== '');
+
+          const lista = [];
+          while (lista.length < 9 && base.length > 0) {
+            lista.push(...base);
+          }
+          const lista9 = lista.slice(0, 9);
+
+          lista9.forEach(u => {
             const panel = document.createElement('div');
             panel.className = 'video-panel';
             panel.innerHTML = `<iframe src="${u}" allowfullscreen></iframe>`;
             spinner.appendChild(panel);
           });
-          if (typeof updateSpinnerVideos === 'function') updateSpinnerVideos();
+
+          updateSpinnerVideos();
         }
 
-        // DISCOGRAFÍA: portadas por Spotify si existen; si no, tus portadas
+        // DISCOGRAFÍA: portadas desde Spotify (o fallback)
         if (data.discografia) {
-          let covers = Array.isArray(data.discografia.portadas) ? data.discografia.portadas.slice(0,5) : [];
-
-          if ((!covers || covers.length === 0) && Array.isArray(data.discografia.tracks) && data.discografia.tracks.length) {
+          let covers = [];
+          if (Array.isArray(data.discografia.tracks) && data.discografia.tracks.length) {
+            // intenta sacarlas de Spotify
             covers = await getFirstNCoversFromSpotify(data.discografia.tracks, 5);
           }
-
-          if (covers && covers.length) {
-            const clases = ['a','b','c','d','e'];
-            clases.forEach((cls, i) => {
-              const url = covers[i];
-              if (!url) return;
-              document.querySelectorAll('.discography .panel.' + cls).forEach(el => {
-                el.style.backgroundImage = `url('${url}')`;
-              });
-            });
+          if ((!covers || covers.length < 5) && Array.isArray(data.discografia.portadas)) {
+            // completa con fallback local si faltan
+            const faltan = 5 - (covers ? covers.length : 0);
+            covers = (covers || []).concat(data.discografia.portadas.slice(0, faltan));
           }
+
+          // Aplica a a/b/c/d/e (se repiten en los 15 paneles)
+          const clases = ['a','b','c','d','e'];
+          clases.forEach((cls, i) => {
+            const url = covers[i];
+            if (!url) return;
+            document.querySelectorAll('.discography .panel.' + cls).forEach(el => {
+              el.style.backgroundImage = `url('${url}')`;
+            });
+          });
         }
 
       } catch (e) {
@@ -648,7 +641,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       cargarCatalogoPrincipal();
-      if (typeof updateSpinnerVideos === 'function') updateSpinnerVideos();
+      updateSpinnerVideos();
     });
   </script>
 </body>
