@@ -132,8 +132,12 @@
     .section-banner {
       position: relative; width: 100%; height: 300px; margin: 60px auto; border-radius: 12px;
       background: #111;
-      box-shadow: 0 0 20px rgba(0,0,0,.5); display: flex; justify-content: center; align-items: center;
-      color: #e0c27b; font-size: 3rem; font-weight: 900;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      box-shadow: 0 0 20px rgba(0,0,0,.5);
+      display: flex; justify-content: center; align-items: center;
+      color: #e0c27b; font-size: 2.4rem; font-weight: 900;
       font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
       text-shadow: 0 0 15px rgba(224,194,123,.7); user-select: none;
     }
@@ -481,16 +485,14 @@
     $("#next-video").on("click", function(){ angVid -= angVid_unit; updateSpinnerVideos(); });
   </script>
 
-  <!-- Script: Carga catálogo (banners + news + videos + portadas discografía con soporte Spotify) -->
+  <!-- Script: Carga catálogo + banners (con soporte YouTube thumbnail) + portadas Spotify -->
   <script>
-    // --- helpers Spotify oEmbed (solo para sacar carátula) ---
+    // helpers
     function toSpotifyTrackId(url){
       const m = String(url).match(/^https?:\/\/open\.spotify\.com\/(?:intl-[^/]+\/)?track\/([A-Za-z0-9]+)(?:\?.*)?$/);
       return m ? m[1] : null;
     }
     async function getSpotifyCover(spotifyUrl){
-      const id = toSpotifyTrackId(spotifyUrl);
-      if(!id) return null;
       const o = `https://open.spotify.com/oembed?url=${encodeURIComponent(spotifyUrl)}&maxwidth=640`;
       try{
         const res = await fetch(o, { cache:'no-store' });
@@ -507,7 +509,46 @@
       return settled.map(r => (r.status==='fulfilled' ? r.value : null)).filter(Boolean);
     }
 
-    // Mapa de alias → páginas/URLs de destino
+    // convierte un link de YouTube (watch / youtu.be / embed) a thumbnail
+    function youtubeThumb(url){
+      if(!url) return null;
+      const s = String(url);
+      let id = null;
+      let m = s.match(/[?&]v=([^&]+)/);           // watch?v=ID
+      if(m) id = m[1];
+      if(!id){ m = s.match(/youtu\.be\/([^?&#]+)/); if(m) id = m[1];}
+      if(!id){ m = s.match(/\/embed\/([^?&#]+)/);  if(m) id = m[1];}
+      if(!id) return null;
+      return {
+        max: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,
+        hq:  `https://img.youtube.com/vi/${id}/hqdefault.jpg`
+      };
+    }
+
+    async function setBannerImage(elId, url){
+      const el = document.getElementById(elId);
+      if(!el) return;
+      if(!url || typeof url !== 'string'){ el.style.backgroundImage = ''; return; }
+
+      // Si es YouTube, usa miniatura (maxres -> fallback hq)
+      const y = youtubeThumb(url);
+      if(y){
+        try{
+          // probamos maxres
+          const r = await fetch(y.max, {method:'HEAD'});
+          const ok = r.ok;
+          el.style.backgroundImage = `url('${ok ? y.max : y.hq}')`;
+          return;
+        }catch{
+          el.style.backgroundImage = `url('${y.hq}')`;
+          return;
+        }
+      }
+      // si es imagen directa
+      el.style.backgroundImage = `url('${url}')`;
+    }
+
+    // rutas de navegación
     const SECTION_MAP = {
       discografia: 'Discography.html',
       movie:       'movie.html',
@@ -530,23 +571,17 @@
         const resp = await fetch('data/catalogo.json', { cache: 'no-store' });
         const data = await resp.json();
 
-        /* Banner principal */
+        // Hero
         const heroBg = document.querySelector('.hero-bg');
         if (heroBg && data.banner_principal) {
           heroBg.style.backgroundImage = `url('${data.banner_principal}')`;
         }
 
-        /* Banners de sección */
-        const bannerDisc = document.getElementById('banner-discography');
-        if (bannerDisc && data.banner_discografia) {
-          bannerDisc.style.backgroundImage = `url('${data.banner_discografia}')`;
-        }
-        const bannerVideos = document.getElementById('banner-videos');
-        if (bannerVideos && data.banner_videos) {
-          bannerVideos.style.backgroundImage = `url('${data.banner_videos}')`;
-        }
+        // Banners de sección (con soporte miniatura de YouTube)
+        await setBannerImage('banner-discography', data.banner_discografia);
+        await setBannerImage('banner-videos',      data.banner_videos);
 
-        /* NEWS: forzar orden n1..n5 e ignorar separadores */
+        // NEWS
         const newsGrid = document.getElementById('news-grid');
         if (newsGrid && data.news && typeof data.news === 'object') {
           newsGrid.innerHTML = '';
@@ -566,7 +601,7 @@
           });
         }
 
-        /* VIDEOS: usar hasta 6 del JSON y repetir para llenar 9 paneles (sin cambios visuales) */
+        // VIDEOS (llenar 9)
         const spinner = document.getElementById('spinner-videos');
         if (spinner && Array.isArray(data.videos) && data.videos.length) {
           spinner.innerHTML = '';
@@ -586,17 +621,14 @@
           if (typeof updateSpinnerVideos === 'function') updateSpinnerVideos();
         }
 
-        /* DISCOGRAFÍA: portadas desde JSON o desde Spotify tracks */
+        // DISCOGRAFÍA: portadas por Spotify si existen; si no, tus portadas
         if (data.discografia) {
-          // Primero intenta portadas explícitas
           let covers = Array.isArray(data.discografia.portadas) ? data.discografia.portadas.slice(0,5) : [];
 
-          // Si no hay portadas, pero sí tracks de Spotify, trae carátulas via oEmbed
           if ((!covers || covers.length === 0) && Array.isArray(data.discografia.tracks) && data.discografia.tracks.length) {
             covers = await getFirstNCoversFromSpotify(data.discografia.tracks, 5);
           }
 
-          // Aplicar a las clases a/b/c/d/e del carrusel
           if (covers && covers.length) {
             const clases = ['a','b','c','d','e'];
             clases.forEach((cls, i) => {
