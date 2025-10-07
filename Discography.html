@@ -4,108 +4,152 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Tenshi | Discografía</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
   <style>
-    :root{
-      --bg:#0b0b0b; --ink:#f5f5f5; --muted:#b7b7b7;
-      --card:#161616; --bd:#242424; --gold:#e0c27b; --accent:#4c51bf;
+    * { margin:0; padding:0; box-sizing:border-box }
+    :root { --ang: 0 }
+
+    body {
+      font-family: 'Helvetica Neue', system-ui, sans-serif;
+      background:#0b0b0b; color:#f5f5f5;
+      overflow-x:hidden;
     }
-    *{box-sizing:border-box; margin:0; padding:0}
-    body{font-family:'Helvetica Neue', system-ui, Arial, sans-serif; background:var(--bg); color:var(--ink);}
 
     header{
-      position: sticky; top:0; z-index:50;
-      display:flex; align-items:center; justify-content:space-between;
-      padding:14px 20px; background:rgba(0,0,0,.8); backdrop-filter: blur(10px);
-      border-bottom:1px solid #111;
+      position:fixed; top:0; left:0; right:0; z-index:10;
+      display:flex; justify-content:space-between; align-items:center;
+      padding:16px 5%; background:rgba(0,0,0,.75); backdrop-filter:blur(10px);
     }
-    header .logo{font-weight:800; letter-spacing:.5px}
-    nav ul{list-style:none; display:flex; gap:18px}
-    nav a{color:#cfcfcf; text-decoration:none; font-size:14px}
-    nav a:hover{color:var(--gold)}
+    header .logo{ letter-spacing:2px }
+    header a{ color:#ddd; text-decoration:none; margin-left:18px; font-size:14px }
+    header a:hover{ color:#e0c27b }
 
-    .hero{
-      height:220px; display:flex; align-items:center; justify-content:center;
-      background: radial-gradient(60% 100% at 50% 0%, #1a1a1a 0%, #0b0b0b 70%);
-      border-bottom: 1px solid #111;
-    }
-    .hero h1{
-      font-size: clamp(28px, 4vw, 44px);
-      letter-spacing: .5px;
-      color:#fff; text-shadow: 0 0 18px rgba(0,0,0,.35);
-    }
-    .hero h1 .jp{font-size:.55em; color:#cfcfcf; font-weight:500; margin-left:10px;}
+    .hero { height:40vh; display:flex; align-items:center; justify-content:center;
+      margin-top:68px; background:#111; position:relative; overflow:hidden; }
+    .hero h1{ font-size:2.2rem; letter-spacing:2px }
 
-    .wrap{max-width:1200px; margin:28px auto 80px; padding:0 16px;}
+    /* === DISCOS (carrusel 3D) === */
+    .discography { display:flex; flex-direction:column; align-items:center; padding:60px 0 100px }
+    .container { display:flex; align-items:center; justify-content:center; position:relative }
+    .holder {
+      width: 600px; height: 220px;
+      display:flex; align-items:center; justify-content:center;
+      perspective:700px; perspective-origin:center; position:relative; z-index:1;
+    }
+    .spinner {
+      transform-style:preserve-3d; position:relative; display:flex;
+      align-items:center; justify-content:center;
+      transform: rotateY(calc(var(--ang) * 1deg)) translateY(-8px);
+      transition: all .5s ease-in-out;
+    }
+    .panel {
+      width:130px; height:130px; border-radius:12px; position:absolute;
+      background-size:cover; background-position:50% 50%;
+      box-shadow:0 10px 30px rgba(0,0,0,.6);
+      opacity:1; transition: all .5s ease-in-out, opacity .2s ease-out;
+      cursor:pointer; outline:none; border:0;
+    }
+    .panel:focus { box-shadow:0 0 0 3px #ffe1a255 }
+    /* posiciones (15 x 24°) */
+    .spinner .panel:nth-child(1)  { transform: rotateY(0deg) translateZ(400px) }
+    .spinner .panel:nth-child(2)  { transform: rotateY(24deg) translateZ(400px) }
+    .spinner .panel:nth-child(3)  { transform: rotateY(48deg) translateZ(400px) }
+    .spinner .panel:nth-child(4)  { transform: rotateY(72deg) translateZ(400px) }
+    .spinner .panel:nth-child(5)  { transform: rotateY(96deg) translateZ(400px) }
+    .spinner .panel:nth-child(6)  { transform: rotateY(120deg) translateZ(400px) }
+    .spinner .panel:nth-child(7)  { transform: rotateY(144deg) translateZ(400px) }
+    .spinner .panel:nth-child(8)  { transform: rotateY(168deg) translateZ(400px) }
+    .spinner .panel:nth-child(9)  { transform: rotateY(192deg) translateZ(400px) }
+    .spinner .panel:nth-child(10) { transform: rotateY(216deg) translateZ(400px) }
+    .spinner .panel:nth-child(11) { transform: rotateY(240deg) translateZ(400px) }
+    .spinner .panel:nth-child(12) { transform: rotateY(264deg) translateZ(400px) }
+    .spinner .panel:nth-child(13) { transform: rotateY(288deg) translateZ(400px) }
+    .spinner .panel:nth-child(14) { transform: rotateY(312deg) translateZ(400px) }
+    .spinner .panel:nth-child(15) { transform: rotateY(336deg) translateZ(400px) }
 
-    /* Grid de portadas */
-    .grid{display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap:18px;}
-    .card{
-      background:var(--card); border:1px solid var(--bd); border-radius:14px;
-      overflow:hidden; cursor:pointer; transition: transform .15s, box-shadow .2s, border-color .2s;
+    .fade {
+      background:linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.35) 30%, rgba(0,0,0,.35) 70%, rgba(0,0,0,0) 100%);
+      width:900px; height:220px; position:absolute; z-index:2; pointer-events:none;
+      transform: rotateY(calc(var(--ang) * -1deg)) translateZ(110px);
+      transition: all .5s ease-in-out;
     }
-    .card:hover{ transform: translateY(-2px); border-color:#2f2f2f; box-shadow: 0 10px 28px rgba(0,0,0,.45); }
-    .thumb{ width:100%; aspect-ratio:1/1; background:#0f0f0f center/cover no-repeat; }
-    .meta{ padding:12px 12px 14px; display:flex; flex-direction:column; gap:6px; }
-    .title{ font-size:14px; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .links{display:flex; gap:8px; align-items:center}
-    .tag{ font-size:11px; color:#ddd; background:#111; border:1px solid #202020; padding:3px 8px; border-radius:999px; display:inline-flex; gap:6px; align-items:center; }
-    .tag i{font-size:12px; opacity:.85}
 
-    /* Modal */
-    .modal{ position: fixed; inset:0; z-index:100; display:none; align-items:center; justify-content:center; padding:16px; }
-    .modal.open{ display:flex; }
-    .backdrop{ position:absolute; inset:0; background: rgba(0,0,0,.72); backdrop-filter: blur(6px); }
-    .dialog{
-      position: relative; z-index:2; width:min(960px, 96vw);
-      background: #0f0f0f; border:1px solid #1f1f1f; border-radius:16px; overflow:hidden;
-      box-shadow: 0 30px 80px rgba(0,0,0,.6);
-      display:grid; grid-template-columns: 1.2fr 1fr;
+    .pagination {
+      position:absolute; top:50%; left:0; right:0; transform:translateY(-50%);
+      display:flex; justify-content:space-between; z-index:3;
     }
-    @media (max-width: 860px){ .dialog{ grid-template-columns: 1fr; } }
-    .left{ background: #0a0a0a; padding:18px; display:flex; align-items:center; justify-content:center; }
-    .bigcover{ width:100%; max-width:560px; aspect-ratio:1/1; background:#0c0c0c center/cover no-repeat; border-radius:12px; border:1px solid #1e1e1e; box-shadow: inset 0 0 0 1px #0006; }
-    .right{ padding:20px 20px 16px; display:flex; flex-direction:column; gap:14px; }
-    .modal-title{ font-size:18px; font-weight:800; color:#fff; }
-    .byline{font-size:13px; color:#bdbdbd}
-    .audio-wrap{ background:#121212; border:1px solid #1f1f1f; padding:14px; border-radius:12px; }
-    audio{ width:100%; outline:none; }
-    .helper{ font-size:13px; color:#bbb; line-height:1.5; background:#101010; border:1px dashed #242424; padding:10px; border-radius:10px; }
-    .btns{ display:flex; gap:10px; flex-wrap:wrap; margin-top:4px; }
-    .btn{ border:none; cursor:pointer; background: #fff; color:#000; border-radius:10px; padding:9px 14px; font-weight:700; font-size:14px; transition: .16s; text-decoration:none; display:inline-flex; align-items:center; gap:8px; }
-    .btn:hover{ transform: translateY(-1px); }
-    .btn.gold{ background: var(--gold); color:#1a1a1a; }
-    .btn.ghost{ background:#161616; color:#ddd; border:1px solid #2a2a2a; }
-    .close{ position:absolute; top:10px; right:10px; background:#111; color:#ddd; border:1px solid #2b2b2b; border-radius:10px; padding:8px 10px; cursor:pointer; z-index:3; }
-    .close:hover{ background:#151515 }
+    .pagination button{
+      width:44px; height:44px; border-radius:999px; border:none; cursor:pointer;
+      background:#fff8; color:#000; font-size:20px;
+    }
+    .pagination button:hover{ background:#fff }
 
-    /* ====== Bloque YouTube con UI personalizada ====== */
-    .yt-block{ display:none; gap:10px; flex-direction:column; }
-    .yt-shell{
-      position:relative; border-radius:12px; overflow:hidden;
-      background:#000; border:1px solid #1f1f1f; /* Contiene el iframe visible */
-      aspect-ratio:16/9; width:100%;
+    /* Portadas (fallback; se sobreescriben con JSON si existe) */
+    .a{ background-image:url(https://images.unsplash.com/photo-1516727003284-a96541e51e9c?auto=format&q=85) }
+    .b{ background-image:url(https://images.unsplash.com/photo-1691389694412-266f872999c6?auto=format&q=85) }
+    .c{ background-image:url(https://images.unsplash.com/photo-1606391901318-07003db08d63?auto=format&q=85) }
+    .d{ background-image:url(https://images.unsplash.com/photo-1610785396756-24bd1889ddae?auto=format&q=85) }
+    .e{ background-image:url(https://images.unsplash.com/photo-1505849871170-7f94cf84f4d2?auto=format&q=85) }
+
+    /* === MODAL Reproductor === */
+    .overlay{
+      position:fixed; inset:0; background:#000a; display:none;
+      align-items:center; justify-content:center; z-index:20;
     }
-    .yt-shell iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
-    .yt-overlay{
-      position:absolute; inset:0; display:flex; align-items:flex-end; justify-content:center;
-      background: linear-gradient(180deg, rgba(0,0,0,.05) 0%, rgba(0,0,0,.55) 100%);
-      pointer-events:none; /* UI abajo sí recibe eventos */
+    .overlay.show{ display:flex }
+    .modal{
+      width:min(920px, 92vw); border:1px solid #222; background:#0b0b0b;
+      border-radius:16px; box-shadow:0 18px 60px #000a; position:relative; overflow:hidden;
     }
-    .yt-controls{
-      position:absolute; left:0; right:0; bottom:0; padding:10px 12px;
-      display:flex; align-items:center; gap:12px;
-      pointer-events:auto;
+    .modal-header{
+      display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid #1e1e1e;
+      background:linear-gradient(180deg,#121212,#0e0e0e);
     }
-    .ctrl-btn{
-      width:38px; height:38px; border-radius:999px; border:1px solid #2a2a2a;
-      background:#151515; color:#eee; display:inline-grid; place-items:center; cursor:pointer;
+    .modal-title{ font-weight:800; letter-spacing:.3px }
+    .modal-close{ width:36px; height:36px; border-radius:999px; border:1px solid #2a2a2a; background:#171717; color:#eee; cursor:pointer }
+
+    .modal-body{
+      display:grid; grid-template-columns: 1.1fr 1fr; gap:18px; padding:18px; position:relative;
     }
-    .ctrl-btn:hover{ background:#1b1b1b }
-    .bar{ flex:1; height:6px; background:#202020; border-radius:999px; position:relative; cursor:pointer; }
-    .bar > .fill{ position:absolute; left:0; top:0; bottom:0; width:0%; background:linear-gradient(90deg, #ffd783, #ffb347); border-radius:999px; }
-    .time{ font-size:12px; color:#ddd; width:72px; text-align:right; }
+    @media (max-width: 800px){
+      .modal-body{ grid-template-columns: 1fr }
+    }
+    .cover{
+      aspect-ratio:1/1; width:100%; border-radius:12px; overflow:hidden; border:1px solid #222;
+      background:#111 center/cover no-repeat;
+    }
+
+    .audio-ui{
+      display:flex; flex-direction:column; gap:12px; background:#0b0b0b; border:1px solid #222; border-radius:12px; padding:14px;
+    }
+    .row{ display:flex; align-items:center; gap:10px }
+    .au-btn{
+      width:46px; height:46px; border-radius:999px; border:1px solid #2a2a2a;
+      background:#171717; color:#eee; cursor:pointer; font-size:16px
+    }
+    .au-btn:hover{ background:#1d1d1d }
+    .au-bar{ position:relative; height:10px; background:#1e1e1e; border-radius:999px; cursor:pointer; overflow:hidden; flex:1 }
+    .au-fill{ position:absolute; inset:0 auto 0 0; width:0%; background:linear-gradient(90deg,#ffd783,#ffb347); border-radius:999px }
+    .au-time{ width:70px; text-align:right; font-size:12px; color:#ddd }
+    .au-vol{ width:140px; accent-color:#ffb347 }
+    .au-open{
+      align-self:flex-start; text-decoration:none; background:#ffe1a2; color:#111; border:1px solid #e7c07a;
+      border-radius:10px; padding:8px 12px; font-weight:700;
+    }
+
+    /* Pocket YouTube visible (cuenta como view) */
+    .pocket-yt{
+      position:absolute; right:12px; bottom:12px; width:160px; height:90px; z-index:5;
+      border:1px solid #2a2a2a; border-radius:10px; overflow:hidden; background:#111;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .pocket-yt__badge{
+      position:absolute; top:6px; left:6px; font-size:10px; color:#111; background:#ffe1a2;
+      border:1px solid #e7c07a; border-radius:6px; padding:2px 6px; font-weight:700; z-index:2
+    }
+    .pocket-yt iframe{ width:100%; height:100%; border:0 }
   </style>
 </head>
 <body>
@@ -113,293 +157,293 @@
   <header>
     <div class="logo">Tenshi</div>
     <nav>
-      <ul>
-        <li><a href="index.html">Inicio</a></li>
-        <li><a href="news.html">News</a></li>
-        <li><a href="movie.html">Videos</a></li>
-        <li><a href="wallpapers.html">Gallery</a></li>
-      </ul>
+      <a href="index.html">Home</a>
+      <a href="news.html">News</a>
+      <a href="Discography.html">Discography</a>
+      <a href="movie.html">Videos</a>
+      <a href="wallpapers.html">Gallery</a>
     </nav>
   </header>
 
   <section class="hero">
-    <h1>Discografía <span class="jp">ディスコグラフィー</span></h1>
+    <h1>ディスコグラフィー — Discography</h1>
   </section>
 
-  <main class="wrap">
-    <div id="grid" class="grid"></div>
-  </main>
+  <section class="discography" id="discography">
+    <div class="container">
+      <div class="holder">
+        <div class="spinner" id="spinner">
+          <!-- 15 paneles (5 portadas * 3 vueltas) -->
+          <button class="panel a" aria-label="Disco A"></button>
+          <button class="panel b" aria-label="Disco B"></button>
+          <button class="panel c" aria-label="Disco C"></button>
+          <button class="panel d" aria-label="Disco D"></button>
+          <button class="panel e" aria-label="Disco E"></button>
+
+          <button class="panel a" aria-label="Disco A"></button>
+          <button class="panel b" aria-label="Disco B"></button>
+          <button class="panel c" aria-label="Disco C"></button>
+          <button class="panel d" aria-label="Disco D"></button>
+          <button class="panel e" aria-label="Disco E"></button>
+
+          <button class="panel a" aria-label="Disco A"></button>
+          <button class="panel b" aria-label="Disco B"></button>
+          <button class="panel c" aria-label="Disco C"></button>
+          <button class="panel d" aria-label="Disco D"></button>
+          <button class="panel e" aria-label="Disco E"></button>
+
+          <div class="fade"></div>
+        </div>
+      </div>
+      <div class="pagination">
+        <button type="button" id="prev">&#8592;</button>
+        <button type="button" id="next">&#8594;</button>
+      </div>
+    </div>
+  </section>
 
   <!-- MODAL -->
-  <div id="modal" class="modal" aria-hidden="true" role="dialog">
-    <div class="backdrop" data-close></div>
-
-    <div class="dialog">
-      <button class="close" title="Cerrar (Esc)" data-close>&times;</button>
-
-      <div class="left">
-        <div id="bigcover" class="bigcover"></div>
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="modalTitle">Título</div>
+        <button class="modal-close" id="modalClose" aria-label="Cerrar">✕</button>
       </div>
 
-      <div class="right">
-        <div class="modal-title" id="mTitle">Título</div>
-        <div class="byline" id="mSub">Origen</div>
+      <div class="modal-body">
+        <div class="cover" id="modalCover"></div>
 
-        <!-- AUDIO DIRECTO -->
-        <div class="audio-wrap" id="audioBlock" style="display:none;">
-          <audio id="player" controls preload="none"></audio>
-        </div>
-
-        <!-- YOUTUBE (IFRAME + UI PROPIA) -->
-        <div class="yt-block" id="ytBlock">
-          <div class="yt-shell">
-            <div id="ytHolder"></div>
-            <div class="yt-overlay">
-              <div class="yt-controls">
-                <button class="ctrl-btn" id="ytPlay" title="Play/Pausa"><i class="fa fa-play"></i></button>
-                <div class="bar" id="ytSeek"><div class="fill" id="ytFill"></div></div>
-                <div class="time" id="ytTime">0:00</div>
-              </div>
-            </div>
+        <div class="audio-ui">
+          <div class="row">
+            <button class="au-btn" id="auPlay" aria-label="Reproducir/Pausa">▶</button>
+            <div class="au-bar" id="auBar"><div class="au-fill" id="auFill"></div></div>
+            <span class="au-time" id="auTime">0:00</span>
+            <input class="au-vol" id="auVol" type="range" min="0" max="100" value="100" aria-label="Volumen">
           </div>
+          <a class="au-open" id="auOpen" target="_blank" rel="noopener">Abrir en YouTube</a>
         </div>
 
-        <div class="helper" id="noAudio" style="display:none;">
-          Esta canción no tiene un <b>audio directo</b> configurado.
-          Puedes abrirla en YouTube para escucharla.
-        </div>
-
-        <div class="btns">
-          <a id="btnYT" class="btn gold" href="#" target="_blank" rel="noopener">
-            <i class="fab fa-youtube"></i> Abrir en YouTube
-          </a>
-          <a id="btnCover" class="btn ghost" href="#" target="_blank" rel="noopener">
-            <i class="fa fa-image"></i> Ver portada
-          </a>
+        <!-- Pocket player visible -->
+        <div class="pocket-yt">
+          <span class="pocket-yt__badge">YouTube</span>
+          <div id="pocket-yt-iframe"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <footer>j-tenshiwebcomingsoon</footer>
+  <!-- jQuery (solo para setear la variable CSS del carrusel) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- YouTube IFrame API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
 
   <script>
-    // ====== Carga de canciones ======
-    const grid = document.getElementById('grid');
-    const modal = document.getElementById('modal');
-    const bigcover = document.getElementById('bigcover');
-    const mTitle = document.getElementById('mTitle');
-    const mSub = document.getElementById('mSub');
-    const player = document.getElementById('player');
-    const audioBlock = document.getElementById('audioBlock');
-    const noAudio = document.getElementById('noAudio');
-    const btnYT = document.getElementById('btnYT');
-    const btnCover = document.getElementById('btnCover');
+    /* ==========================
+       1) Carrusel 3D (igual a tu estilo)
+    ===========================*/
+    let ang = 0;
+    const PANELS = 15;
+    const STEP = 360 / PANELS; // 24°
 
-    // YouTube UI
-    const ytBlock = document.getElementById('ytBlock');
-    const ytPlayBtn = document.getElementById('ytPlay');
-    const ytHolder = document.getElementById('ytHolder');
-    const ytSeek = document.getElementById('ytSeek');
-    const ytFill = document.getElementById('ytFill');
-    const ytTime = document.getElementById('ytTime');
+    function updateSpinnerAngle(){
+      $("*").css("--ang", ang);
+    }
+    $("#prev").on("click", () => { ang += STEP; updateSpinnerAngle(); });
+    $("#next").on("click", () => { ang -= STEP; updateSpinnerAngle(); });
+    $(document).ready(updateSpinnerAngle);
 
-    let SONGS = [];
+    /* =====================================================
+       2) Datos de canciones (asocia clases a/b/c/d/e → videoId)
+          👉 Cambia estos IDs por los tuyos
+    ======================================================*/
+    const TRACKS = {
+      a: { title: "Track A", videoId: "rIUBxbcd_I0" }, // ejemplo
+      b: { title: "Track B", videoId: "onfYQgU7PxU" }, // ejemplo
+      c: { title: "Track C", videoId: "rLBeFFrjKbU" }, // ejemplo
+      d: { title: "Track D", videoId: "0_QHL7cDYno" },// ejemplo
+      e: { title: "Track E", videoId: "Ulj3sX_jJ7g" } // ejemplo
+    };
+
+    /* Si existe data/catalogo.json, usamos sus portadas para a..e */
+    (async function tryLoadCovers(){
+      try{
+        const r = await fetch('data/catalogo.json', { cache:'no-store' });
+        if(!r.ok) return;
+        const data = await r.json();
+        const covers = (data.discografia && Array.isArray(data.discografia.portadas))
+          ? data.discografia.portadas.slice(0,5) : [];
+        const classes = ['a','b','c','d','e'];
+        classes.forEach((cls,i) => {
+          const url = covers[i];
+          if(!url) return;
+          document.querySelectorAll('.panel.'+cls).forEach(el => {
+            el.style.backgroundImage = `url('${url}')`;
+          });
+        });
+      }catch(e){ /* noop */ }
+    })();
+
+    /* =====================================================
+       3) Modal + Pocket-YouTube + Controles
+    ======================================================*/
+    const overlay  = document.getElementById('overlay');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalCover = document.getElementById('modalCover');
+    const modalClose = document.getElementById('modalClose');
+    const auPlay  = document.getElementById('auPlay');
+    const auBar   = document.getElementById('auBar');
+    const auFill  = document.getElementById('auFill');
+    const auTime  = document.getElementById('auTime');
+    const auVol   = document.getElementById('auVol');
+    const auOpen  = document.getElementById('auOpen');
+
     let ytPlayer = null;
-    let ytTimer = null;
-    let currentYTId = null;
+    let progressTimer = null;
+    let currentVideoId = null;
 
-    function makeCard(song, idx){
-      const card = document.createElement('article');
-      card.className = 'card';
-      card.setAttribute('tabindex', '0');
-      card.innerHTML = `
-        <div class="thumb" style="background-image:url('${song.cover || ''}')"></div>
-        <div class="meta">
-          <div class="title" title="${song.title || ''}">${song.title || 'Sin título'}</div>
-          <div class="links">
-            ${song.youtube ? `<span class="tag"><i class="fab fa-youtube"></i>YouTube</span>` : ''}
-            ${song.audio ? `<span class="tag"><i class="fa fa-music"></i>Audio</span>` : ''}
-          </div>
-        </div>
-      `;
-      card.addEventListener('click', () => openModal(idx));
-      card.addEventListener('keydown', (e) => { if(e.key === 'Enter') openModal(idx); });
-      return card;
-    }
-
-    async function loadSongs(){
-      try{
-        const resp = await fetch('data/songs.json', { cache: 'no-store' });
-        const json = await resp.json();
-        SONGS = Array.isArray(json.songs) ? json.songs : [];
-
-        grid.innerHTML = '';
-        SONGS.forEach((s, i) => grid.appendChild(makeCard(s, i)));
-      }catch(err){
-        console.error('No se pudo cargar data/songs.json', err);
-        grid.innerHTML = '<p style="opacity:.8">No pude cargar <code>data/songs.json</code>.</p>';
-      }
-    }
-
-    // ====== Modal open/close ======
-    function closeYT(){
-      if (ytTimer) { clearInterval(ytTimer); ytTimer = null; }
-      if (ytPlayer && ytPlayer.stopVideo) ytPlayer.stopVideo();
-      ytPlayBtn.innerHTML = '<i class="fa fa-play"></i>';
-      ytFill.style.width = '0%';
-      ytTime.textContent = '0:00';
-    }
-    function destroyYT(){
-      try{
-        if (ytPlayer && ytPlayer.destroy) ytPlayer.destroy();
-      }catch{}
-      ytPlayer = null;
-      currentYTId = null;
-      ytHolder.innerHTML = '';
-    }
-
-    function openModal(index){
-      const s = SONGS[index] || {};
-      mTitle.textContent = s.title || 'Sin título';
-      mSub.textContent = s.audio ? 'Reproductor integrado' : (s.youtube ? 'YouTube embed con controles personalizados' : 'Enlace externo');
-
-      bigcover.style.backgroundImage = `url('${s.cover || ''}')`;
-
-      // Estado base
-      player.pause(); player.removeAttribute('src');
-      audioBlock.style.display = 'none';
-      ytBlock.style.display = 'none';
-      noAudio.style.display = 'none';
-      closeYT(); destroyYT();
-
-      // Botones
-      btnYT.style.display = s.youtube ? 'inline-flex' : 'none';
-      if (s.youtube) btnYT.href = s.youtube;
-      btnCover.href = s.cover || '#';
-
-      // Decide modo
-      if (s.audio && typeof s.audio === 'string' && s.audio.trim() !== '') {
-        // AUDIO DIRECTO
-        audioBlock.style.display = 'block';
-        player.src = s.audio.trim();
-        setTimeout(()=>player.play().catch(()=>{}), 60);
-      } else if (s.youtube) {
-        // YOUTUBE API
-        const id = extractYTId(s.youtube);
-        if (id) {
-          setupYouTube(id);
-        } else {
-          noAudio.style.display = 'block';
-        }
-      } else {
-        noAudio.style.display = 'block';
-      }
-
-      modal.classList.add('open');
-      modal.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal(){
-      player.pause();
-      closeYT();
-      modal.classList.remove('open');
-      modal.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-    }
-
-    modal.addEventListener('click', (e) => { if (e.target.matches('[data-close]')) closeModal(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
-
-    // ====== YouTube helpers ======
-    function extractYTId(url){
-      const r = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))([A-Za-z0-9_-]{11})/;
-      const m = (url||'').match(r);
-      return m ? m[1] : null;
-    }
-
-    function setupYouTube(videoId){
-      currentYTId = videoId;
-      ytBlock.style.display = 'flex';
-
-      // Crea iframe con API
-      ytPlayer = new YT.Player('ytHolder', {
-        videoId: videoId,
-        width: '100%', height: '100%',
+    // YouTube API callback
+    window.onYouTubeIframeAPIReady = function(){
+      ytPlayer = new YT.Player('pocket-yt-iframe', {
+        width: 160, height: 90,
+        videoId: '', // se setea al abrir el modal
         playerVars: {
-          controls: 0, modestbranding: 1, rel: 0, iv_load_policy: 3,
-          playsinline: 1, enablejsapi: 1
+          controls: 1, modestbranding: 1, iv_load_policy: 3,
+          rel: 0, playsinline: 1
         },
         events: {
-          onReady: onYTReady,
+          onReady: () => { try { ytPlayer.setVolume(100); } catch(e){} },
           onStateChange: onYTState
         }
       });
+    };
 
-      // UI eventos
-      ytPlayBtn.onclick = togglePlay;
-      ytSeek.onclick = (e)=>{
-        if (!ytPlayer || !ytPlayer.getDuration) return;
-        const rect = ytSeek.getBoundingClientRect();
-        const ratio = Math.min(Math.max((e.clientX - rect.left)/rect.width, 0), 1);
-        const dur = ytPlayer.getDuration() || 0;
-        ytPlayer.seekTo(ratio*dur, true);
-      };
-    }
-
-    function onYTReady(){
-      // Autoplay sólo si el usuario abrió el modal (gesto previo)
-      ytPlayer.playVideo();
-      startTicker();
-    }
-    function onYTState(ev){
+    function onYTState(e){
       // 1 = playing, 2 = paused, 0 = ended
-      if (ev.data === YT.PlayerState.PLAYING){
-        ytPlayBtn.innerHTML = '<i class="fa fa-pause"></i>';
-      } else {
-        ytPlayBtn.innerHTML = '<i class="fa fa-play"></i>';
-      }
-      if (ev.data === YT.PlayerState.ENDED){
-        ytPlayBtn.innerHTML = '<i class="fa fa-rotate-right"></i>';
+      if(e.data === YT.PlayerState.PLAYING){
+        auPlay.textContent = '⏸';
+        startProgressTimer();
+      } else if(e.data === YT.PlayerState.PAUSED){
+        auPlay.textContent = '▶';
+        stopProgressTimer();
+      } else if(e.data === YT.PlayerState.ENDED){
+        auPlay.textContent = '▶';
+        stopProgressTimer();
+        setProgressUI(0, 0);
       }
     }
-    function togglePlay(){
-      if (!ytPlayer || !ytPlayer.getPlayerState) return;
-      const st = ytPlayer.getPlayerState();
-      if (st === YT.PlayerState.PLAYING){ ytPlayer.pauseVideo(); }
-      else { ytPlayer.playVideo(); }
+
+    function fmtTime(s){
+      s = Math.max(0, Math.floor(s || 0));
+      const m = Math.floor(s/60), sec = s%60;
+      return `${m}:${sec.toString().padStart(2,'0')}`;
     }
-    function startTicker(){
-      if (ytTimer) clearInterval(ytTimer);
-      ytTimer = setInterval(()=>{
-        if (!ytPlayer || !ytPlayer.getCurrentTime) return;
-        const t = ytPlayer.getCurrentTime() || 0;
+
+    function setProgressUI(cur, dur){
+      const pct = (dur>0)? (cur/dur)*100 : 0;
+      auFill.style.width = `${pct}%`;
+      auTime.textContent = `${fmtTime(cur)}`;
+    }
+
+    function startProgressTimer(){
+      stopProgressTimer();
+      progressTimer = setInterval(() => {
+        if(!ytPlayer || typeof ytPlayer.getDuration !== 'function') return;
         const d = ytPlayer.getDuration() || 0;
-        const pct = d ? (t/d)*100 : 0;
-        ytFill.style.width = pct.toFixed(2)+'%';
-        ytTime.textContent = formatTime(t);
+        const c = ytPlayer.getCurrentTime() || 0;
+        setProgressUI(c, d);
       }, 250);
     }
-    function formatTime(sec){
-      sec = Math.max(0, Math.floor(sec));
-      const m = Math.floor(sec/60), s = sec%60;
-      return `${m}:${s.toString().padStart(2,'0')}`;
+    function stopProgressTimer(){
+      if(progressTimer){ clearInterval(progressTimer); progressTimer = null; }
     }
 
-    // ====== Bootstrap ======
-    function loadYTApi(){
-      if (window.YT && window.YT.Player) return Promise.resolve();
-      return new Promise(res=>{
-        const tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        window.onYouTubeIframeAPIReady = () => res();
-        document.head.appendChild(tag);
+    // Controles UI → YouTube
+    auPlay.addEventListener('click', () => {
+      if(!ytPlayer) return;
+      const state = ytPlayer.getPlayerState();
+      if(state === YT.PlayerState.PLAYING){
+        ytPlayer.pauseVideo();
+      }else{
+        ytPlayer.playVideo();
+      }
+    });
+
+    auVol.addEventListener('input', () => {
+      if(!ytPlayer) return;
+      const v = parseInt(auVol.value, 10);
+      ytPlayer.setVolume(Math.max(0, Math.min(100, v)));
+    });
+
+    auBar.addEventListener('click', (ev) => {
+      if(!ytPlayer) return;
+      const rect = auBar.getBoundingClientRect();
+      const x = ev.clientX - rect.left;
+      const pct = x / rect.width;
+      const dur = ytPlayer.getDuration() || 0;
+      ytPlayer.seekTo(pct * dur, true);
+    });
+
+    function openModalFor(cls, coverUrl){
+      const track = TRACKS[cls] || null;
+      if(!track){ return; }
+
+      currentVideoId = track.videoId;
+      modalTitle.textContent = track.title || 'Track';
+      modalCover.style.backgroundImage = coverUrl ? `url('${coverUrl}')` : 'none';
+      auOpen.href = `https://www.youtube.com/watch?v=${currentVideoId}`;
+
+      overlay.classList.add('show');
+
+      // Cargar video en el pocket player
+      const ready = () => {
+        try{
+          ytPlayer.loadVideoById({ videoId: currentVideoId, startSeconds: 0 });
+          ytPlayer.playVideo();
+          auPlay.textContent = '⏸';
+          auVol.value = 100;
+        }catch(e){
+          // Si todavía no está listo, reintenta un poquito después
+          setTimeout(ready, 150);
+        }
+      };
+      ready();
+    }
+
+    function closeModal(){
+      overlay.classList.remove('show');
+      stopProgressTimer();
+      if(ytPlayer && typeof ytPlayer.stopVideo === 'function'){
+        ytPlayer.stopVideo();
+      }
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => {
+      if(e.target === overlay) closeModal();
+    });
+
+    // Click en una tarjeta del carrusel -> abrir modal
+    document.querySelectorAll('.panel').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Determinar clase base a/b/c/d/e del botón
+        const classes = ['a','b','c','d','e'];
+        const cls = classes.find(k => btn.classList.contains(k)) || 'a';
+
+        // Obtener la portada real (inline style si fue sobreescrita por JSON)
+        let bg = btn.style.backgroundImage;
+        if(!bg || bg === 'none'){
+          // intenta con getComputedStyle si viene de CSS
+          bg = getComputedStyle(btn).backgroundImage;
+        }
+        let url = '';
+        if(bg && bg.startsWith('url(')){
+          url = bg.slice(4, -1).replaceAll('"','').replaceAll("'","");
+        }
+
+        openModalFor(cls, url);
       });
-    }
-
-    loadSongs();
-    loadYTApi();
+    });
   </script>
 </body>
 </html>
