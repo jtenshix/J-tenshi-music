@@ -9,8 +9,7 @@
   <style>
     :root{
       --bg:#0b0b0b; --ink:#f5f5f5; --muted:#b7b7b7;
-      --card:#161616; --bd:#242424; --gold:#e0c27b;
-      --accent:#4c51bf;
+      --card:#161616; --bd:#242424; --gold:#e0c27b; --accent:#4c51bf;
     }
     *{box-sizing:border-box; margin:0; padding:0}
     body{font-family:'Helvetica Neue', system-ui, Arial, sans-serif; background:var(--bg); color:var(--ink);}
@@ -36,124 +35,77 @@
       letter-spacing: .5px;
       color:#fff; text-shadow: 0 0 18px rgba(0,0,0,.35);
     }
-    .hero h1 .jp{
-      font-size:.55em; color:#cfcfcf; font-weight:500; margin-left:10px;
-    }
+    .hero h1 .jp{font-size:.55em; color:#cfcfcf; font-weight:500; margin-left:10px;}
 
     .wrap{max-width:1200px; margin:28px auto 80px; padding:0 16px;}
 
     /* Grid de portadas */
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap:18px;
-    }
+    .grid{display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap:18px;}
     .card{
-      background:var(--card);
-      border:1px solid var(--bd);
-      border-radius:14px;
-      overflow:hidden;
-      cursor:pointer;
-      transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease;
+      background:var(--card); border:1px solid var(--bd); border-radius:14px;
+      overflow:hidden; cursor:pointer; transition: transform .15s, box-shadow .2s, border-color .2s;
     }
-    .card:hover{
-      transform: translateY(-2px);
-      border-color:#2f2f2f;
-      box-shadow: 0 10px 28px rgba(0,0,0,.45);
-    }
-    .thumb{
-      width:100%; aspect-ratio:1/1;
-      background:#0f0f0f center/cover no-repeat;
-    }
-    .meta{
-      padding:12px 12px 14px;
-      display:flex; flex-direction:column; gap:6px;
-    }
-    .title{
-      font-size:14px; font-weight:700; color:#fff;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    }
+    .card:hover{ transform: translateY(-2px); border-color:#2f2f2f; box-shadow: 0 10px 28px rgba(0,0,0,.45); }
+    .thumb{ width:100%; aspect-ratio:1/1; background:#0f0f0f center/cover no-repeat; }
+    .meta{ padding:12px 12px 14px; display:flex; flex-direction:column; gap:6px; }
+    .title{ font-size:14px; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .links{display:flex; gap:8px; align-items:center}
-    .tag{
-      font-size:11px; color:#ddd; background:#111; border:1px solid #202020;
-      padding:3px 8px; border-radius:999px; display:inline-flex; gap:6px; align-items:center;
-    }
+    .tag{ font-size:11px; color:#ddd; background:#111; border:1px solid #202020; padding:3px 8px; border-radius:999px; display:inline-flex; gap:6px; align-items:center; }
     .tag i{font-size:12px; opacity:.85}
 
-    /* Modal (ventana emergente) */
-    .modal{
-      position: fixed; inset:0; z-index:100;
-      display:none; align-items:center; justify-content:center;
-      padding:16px;
-    }
+    /* Modal */
+    .modal{ position: fixed; inset:0; z-index:100; display:none; align-items:center; justify-content:center; padding:16px; }
     .modal.open{ display:flex; }
-    .backdrop{
-      position:absolute; inset:0;
-      background: rgba(0,0,0,.72);
-      backdrop-filter: blur(6px);
-    }
+    .backdrop{ position:absolute; inset:0; background: rgba(0,0,0,.72); backdrop-filter: blur(6px); }
     .dialog{
-      position: relative; z-index:2;
-      width:min(960px, 96vw);
-      background: #0f0f0f;
-      border:1px solid #1f1f1f;
-      border-radius:16px;
-      overflow:hidden;
+      position: relative; z-index:2; width:min(960px, 96vw);
+      background: #0f0f0f; border:1px solid #1f1f1f; border-radius:16px; overflow:hidden;
       box-shadow: 0 30px 80px rgba(0,0,0,.6);
-      display:grid;
-      grid-template-columns: 1.2fr 1fr;
+      display:grid; grid-template-columns: 1.2fr 1fr;
     }
-    @media (max-width: 860px){
-      .dialog{ grid-template-columns: 1fr; }
-    }
-    .left{
-      background: #0a0a0a;
-      padding:18px;
-      display:flex; align-items:center; justify-content:center;
-    }
-    .bigcover{
-      width:100%; max-width:560px; aspect-ratio:1/1;
-      background:#0c0c0c center/cover no-repeat;
-      border-radius:12px; border:1px solid #1e1e1e;
-      box-shadow: inset 0 0 0 1px #0006;
-    }
-    .right{
-      padding:20px 20px 16px;
-      display:flex; flex-direction:column; gap:14px;
-    }
-    .modal-title{
-      font-size:18px; font-weight:800; color:#fff;
-    }
+    @media (max-width: 860px){ .dialog{ grid-template-columns: 1fr; } }
+    .left{ background: #0a0a0a; padding:18px; display:flex; align-items:center; justify-content:center; }
+    .bigcover{ width:100%; max-width:560px; aspect-ratio:1/1; background:#0c0c0c center/cover no-repeat; border-radius:12px; border:1px solid #1e1e1e; box-shadow: inset 0 0 0 1px #0006; }
+    .right{ padding:20px 20px 16px; display:flex; flex-direction:column; gap:14px; }
+    .modal-title{ font-size:18px; font-weight:800; color:#fff; }
     .byline{font-size:13px; color:#bdbdbd}
-    .audio-wrap{
-      background:#121212; border:1px solid #1f1f1f;
-      padding:14px; border-radius:12px;
-    }
+    .audio-wrap{ background:#121212; border:1px solid #1f1f1f; padding:14px; border-radius:12px; }
     audio{ width:100%; outline:none; }
-    .helper{
-      font-size:13px; color:#bbb; line-height:1.5;
-      background:#101010; border:1px dashed #242424; padding:10px; border-radius:10px;
-    }
-    .btns{
-      display:flex; gap:10px; flex-wrap:wrap; margin-top:4px;
-    }
-    .btn{
-      border:none; cursor:pointer;
-      background: #fff; color:#000;
-      border-radius:10px; padding:9px 14px; font-weight:700; font-size:14px;
-      transition: .16s ease; text-decoration:none; display:inline-flex; align-items:center; gap:8px;
-    }
+    .helper{ font-size:13px; color:#bbb; line-height:1.5; background:#101010; border:1px dashed #242424; padding:10px; border-radius:10px; }
+    .btns{ display:flex; gap:10px; flex-wrap:wrap; margin-top:4px; }
+    .btn{ border:none; cursor:pointer; background: #fff; color:#000; border-radius:10px; padding:9px 14px; font-weight:700; font-size:14px; transition: .16s; text-decoration:none; display:inline-flex; align-items:center; gap:8px; }
     .btn:hover{ transform: translateY(-1px); }
     .btn.gold{ background: var(--gold); color:#1a1a1a; }
     .btn.ghost{ background:#161616; color:#ddd; border:1px solid #2a2a2a; }
-    .close{
-      position:absolute; top:10px; right:10px;
-      background:#111; color:#ddd; border:1px solid #2b2b2b;
-      border-radius:10px; padding:8px 10px; cursor:pointer; z-index:3;
-    }
+    .close{ position:absolute; top:10px; right:10px; background:#111; color:#ddd; border:1px solid #2b2b2b; border-radius:10px; padding:8px 10px; cursor:pointer; z-index:3; }
     .close:hover{ background:#151515 }
 
-    footer{ padding:60px 0 40px; text-align:center; color:#aaa; }
+    /* ====== Bloque YouTube con UI personalizada ====== */
+    .yt-block{ display:none; gap:10px; flex-direction:column; }
+    .yt-shell{
+      position:relative; border-radius:12px; overflow:hidden;
+      background:#000; border:1px solid #1f1f1f; /* Contiene el iframe visible */
+      aspect-ratio:16/9; width:100%;
+    }
+    .yt-shell iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+    .yt-overlay{
+      position:absolute; inset:0; display:flex; align-items:flex-end; justify-content:center;
+      background: linear-gradient(180deg, rgba(0,0,0,.05) 0%, rgba(0,0,0,.55) 100%);
+      pointer-events:none; /* UI abajo sí recibe eventos */
+    }
+    .yt-controls{
+      position:absolute; left:0; right:0; bottom:0; padding:10px 12px;
+      display:flex; align-items:center; gap:12px;
+      pointer-events:auto;
+    }
+    .ctrl-btn{
+      width:38px; height:38px; border-radius:999px; border:1px solid #2a2a2a;
+      background:#151515; color:#eee; display:inline-grid; place-items:center; cursor:pointer;
+    }
+    .ctrl-btn:hover{ background:#1b1b1b }
+    .bar{ flex:1; height:6px; background:#202020; border-radius:999px; position:relative; cursor:pointer; }
+    .bar > .fill{ position:absolute; left:0; top:0; bottom:0; width:0%; background:linear-gradient(90deg, #ffd783, #ffb347); border-radius:999px; }
+    .time{ font-size:12px; color:#ddd; width:72px; text-align:right; }
   </style>
 </head>
 <body>
@@ -175,9 +127,7 @@
   </section>
 
   <main class="wrap">
-    <div id="grid" class="grid">
-      <!-- Tarjetas generadas desde data/songs.json -->
-    </div>
+    <div id="grid" class="grid"></div>
   </main>
 
   <!-- MODAL -->
@@ -192,11 +142,26 @@
       </div>
 
       <div class="right">
-        <div class="modal-title" id="mTitle">Título de la canción</div>
-        <div class="byline" id="mSub">Audio integrado o enlace a plataformas</div>
+        <div class="modal-title" id="mTitle">Título</div>
+        <div class="byline" id="mSub">Origen</div>
 
+        <!-- AUDIO DIRECTO -->
         <div class="audio-wrap" id="audioBlock" style="display:none;">
           <audio id="player" controls preload="none"></audio>
+        </div>
+
+        <!-- YOUTUBE (IFRAME + UI PROPIA) -->
+        <div class="yt-block" id="ytBlock">
+          <div class="yt-shell">
+            <div id="ytHolder"></div>
+            <div class="yt-overlay">
+              <div class="yt-controls">
+                <button class="ctrl-btn" id="ytPlay" title="Play/Pausa"><i class="fa fa-play"></i></button>
+                <div class="bar" id="ytSeek"><div class="fill" id="ytFill"></div></div>
+                <div class="time" id="ytTime">0:00</div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="helper" id="noAudio" style="display:none;">
@@ -216,12 +181,10 @@
     </div>
   </div>
 
-  <footer>
-    j-tenshiwebcomingsoon
-  </footer>
+  <footer>j-tenshiwebcomingsoon</footer>
 
   <script>
-    // Carga de canciones
+    // ====== Carga de canciones ======
     const grid = document.getElementById('grid');
     const modal = document.getElementById('modal');
     const bigcover = document.getElementById('bigcover');
@@ -233,7 +196,18 @@
     const btnYT = document.getElementById('btnYT');
     const btnCover = document.getElementById('btnCover');
 
+    // YouTube UI
+    const ytBlock = document.getElementById('ytBlock');
+    const ytPlayBtn = document.getElementById('ytPlay');
+    const ytHolder = document.getElementById('ytHolder');
+    const ytSeek = document.getElementById('ytSeek');
+    const ytFill = document.getElementById('ytFill');
+    const ytTime = document.getElementById('ytTime');
+
     let SONGS = [];
+    let ytPlayer = null;
+    let ytTimer = null;
+    let currentYTId = null;
 
     function makeCard(song, idx){
       const card = document.createElement('article');
@@ -268,38 +242,60 @@
       }
     }
 
+    // ====== Modal open/close ======
+    function closeYT(){
+      if (ytTimer) { clearInterval(ytTimer); ytTimer = null; }
+      if (ytPlayer && ytPlayer.stopVideo) ytPlayer.stopVideo();
+      ytPlayBtn.innerHTML = '<i class="fa fa-play"></i>';
+      ytFill.style.width = '0%';
+      ytTime.textContent = '0:00';
+    }
+    function destroyYT(){
+      try{
+        if (ytPlayer && ytPlayer.destroy) ytPlayer.destroy();
+      }catch{}
+      ytPlayer = null;
+      currentYTId = null;
+      ytHolder.innerHTML = '';
+    }
+
     function openModal(index){
       const s = SONGS[index] || {};
       mTitle.textContent = s.title || 'Sin título';
-      mSub.textContent = (s.audio ? 'Reproductor integrado' : 'Enlace externo');
+      mSub.textContent = s.audio ? 'Reproductor integrado' : (s.youtube ? 'YouTube embed con controles personalizados' : 'Enlace externo');
 
-      // Portada grande
       bigcover.style.backgroundImage = `url('${s.cover || ''}')`;
 
-      // Configurar reproductor de audio
-      player.pause();
-      player.removeAttribute('src');
+      // Estado base
+      player.pause(); player.removeAttribute('src');
       audioBlock.style.display = 'none';
+      ytBlock.style.display = 'none';
       noAudio.style.display = 'none';
-
-      if (s.audio && typeof s.audio === 'string' && s.audio.trim() !== '') {
-        audioBlock.style.display = 'block';
-        player.src = s.audio.trim();   // Debe ser un .mp3/.ogg directo con CORS
-        // autoplay tras el click del usuario que abrió el modal
-        setTimeout(() => {
-          player.play().catch(()=>{ /* si el navegador bloquea autoplay, el usuario deberá pulsar play */ });
-        }, 60);
-      } else {
-        noAudio.style.display = 'block';
-      }
+      closeYT(); destroyYT();
 
       // Botones
       btnYT.style.display = s.youtube ? 'inline-flex' : 'none';
       if (s.youtube) btnYT.href = s.youtube;
-
       btnCover.href = s.cover || '#';
 
-      // Abrir
+      // Decide modo
+      if (s.audio && typeof s.audio === 'string' && s.audio.trim() !== '') {
+        // AUDIO DIRECTO
+        audioBlock.style.display = 'block';
+        player.src = s.audio.trim();
+        setTimeout(()=>player.play().catch(()=>{}), 60);
+      } else if (s.youtube) {
+        // YOUTUBE API
+        const id = extractYTId(s.youtube);
+        if (id) {
+          setupYouTube(id);
+        } else {
+          noAudio.style.display = 'block';
+        }
+      } else {
+        noAudio.style.display = 'block';
+      }
+
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
@@ -307,21 +303,103 @@
 
     function closeModal(){
       player.pause();
+      closeYT();
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
     }
 
-    // Cerrar con backdrop o botón
-    modal.addEventListener('click', (e) => {
-      if (e.target.matches('[data-close]')) closeModal();
-    });
-    // Cerrar con ESC
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
-    });
+    modal.addEventListener('click', (e) => { if (e.target.matches('[data-close]')) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+
+    // ====== YouTube helpers ======
+    function extractYTId(url){
+      const r = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))([A-Za-z0-9_-]{11})/;
+      const m = (url||'').match(r);
+      return m ? m[1] : null;
+    }
+
+    function setupYouTube(videoId){
+      currentYTId = videoId;
+      ytBlock.style.display = 'flex';
+
+      // Crea iframe con API
+      ytPlayer = new YT.Player('ytHolder', {
+        videoId: videoId,
+        width: '100%', height: '100%',
+        playerVars: {
+          controls: 0, modestbranding: 1, rel: 0, iv_load_policy: 3,
+          playsinline: 1, enablejsapi: 1
+        },
+        events: {
+          onReady: onYTReady,
+          onStateChange: onYTState
+        }
+      });
+
+      // UI eventos
+      ytPlayBtn.onclick = togglePlay;
+      ytSeek.onclick = (e)=>{
+        if (!ytPlayer || !ytPlayer.getDuration) return;
+        const rect = ytSeek.getBoundingClientRect();
+        const ratio = Math.min(Math.max((e.clientX - rect.left)/rect.width, 0), 1);
+        const dur = ytPlayer.getDuration() || 0;
+        ytPlayer.seekTo(ratio*dur, true);
+      };
+    }
+
+    function onYTReady(){
+      // Autoplay sólo si el usuario abrió el modal (gesto previo)
+      ytPlayer.playVideo();
+      startTicker();
+    }
+    function onYTState(ev){
+      // 1 = playing, 2 = paused, 0 = ended
+      if (ev.data === YT.PlayerState.PLAYING){
+        ytPlayBtn.innerHTML = '<i class="fa fa-pause"></i>';
+      } else {
+        ytPlayBtn.innerHTML = '<i class="fa fa-play"></i>';
+      }
+      if (ev.data === YT.PlayerState.ENDED){
+        ytPlayBtn.innerHTML = '<i class="fa fa-rotate-right"></i>';
+      }
+    }
+    function togglePlay(){
+      if (!ytPlayer || !ytPlayer.getPlayerState) return;
+      const st = ytPlayer.getPlayerState();
+      if (st === YT.PlayerState.PLAYING){ ytPlayer.pauseVideo(); }
+      else { ytPlayer.playVideo(); }
+    }
+    function startTicker(){
+      if (ytTimer) clearInterval(ytTimer);
+      ytTimer = setInterval(()=>{
+        if (!ytPlayer || !ytPlayer.getCurrentTime) return;
+        const t = ytPlayer.getCurrentTime() || 0;
+        const d = ytPlayer.getDuration() || 0;
+        const pct = d ? (t/d)*100 : 0;
+        ytFill.style.width = pct.toFixed(2)+'%';
+        ytTime.textContent = formatTime(t);
+      }, 250);
+    }
+    function formatTime(sec){
+      sec = Math.max(0, Math.floor(sec));
+      const m = Math.floor(sec/60), s = sec%60;
+      return `${m}:${s.toString().padStart(2,'0')}`;
+    }
+
+    // ====== Bootstrap ======
+    function loadYTApi(){
+      if (window.YT && window.YT.Player) return Promise.resolve();
+      return new Promise(res=>{
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        window.onYouTubeIframeAPIReady = () => res();
+        document.head.appendChild(tag);
+      });
+    }
 
     loadSongs();
+    loadYTApi();
   </script>
 </body>
 </html>
