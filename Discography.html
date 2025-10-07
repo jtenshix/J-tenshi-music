@@ -1,331 +1,101 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Discography — “audio” YouTube oculto</title>
-
-<style>
-  :root{
-    --bg:#0b0b0b; --panel:#0f1115; --ink:#f5f5f5; --muted:#a9b1b8;
-    --acc:#ffcc70; --bd:#1e2430;
-    /* tamaño del “pocket player” (iframe de YouTube super chico) */
-    --pocket-w: 48px;
-    --pocket-h: 27px; /* 16:9 mini */
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,Segoe UI,Arial,sans-serif}
-
-  /* --- Lista de discos (placeholder) --- */
-  .wrap{max-width:1100px;margin:40px auto;padding:0 16px}
-  h1{font-size:28px;margin:10px 0 20px}
-  .grid{
-    display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px
-  }
-  .card{
-    background:#111;border:1px solid var(--bd);border-radius:12px;overflow:hidden;cursor:pointer;
-    transition:.2s; box-shadow:0 8px 30px #0006;
-  }
-  .card:hover{transform:translateY(-2px)}
-  .cover{
-    width:100%;aspect-ratio:1/1; background:#0d141c center/cover no-repeat;
-  }
-  .meta{padding:10px}
-  .title{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}
-  .hint{font-size:12px;color:var(--muted)}
-
-  /* --- Modal --- */
-  .overlay{
-    position:fixed;inset:0;background:#000a;display:none;place-items:center;z-index:9999;
-    padding:24px;
-  }
-  .overlay.show{display:grid}
-  .modal{
-    width:min(1100px,95vw); height:min(85vh,720px);
-    background:linear-gradient(180deg,#0f1115 20%,#0a0b0e 100%);
-    border:1px solid #212633; border-radius:16px; overflow:hidden; position:relative;
-    box-shadow:0 30px 100px #000c;
-    display:grid; grid-template-columns: 1.1fr 0.9fr;
-  }
-  .m-left{
-    border-right:1px solid #1b202b; display:flex; align-items:center; justify-content:center; padding:18px;
-  }
-  .m-cover{
-    width:100%; height:100%; max-width:560px; max-height:560px;
-    background:#0e141b center/cover no-repeat; border-radius:12px; box-shadow:0 10px 40px #0009;
-  }
-  .m-right{padding:22px 22px 28px; display:flex; flex-direction:column; gap:18px}
-  .m-head{display:flex; align-items:center; justify-content:space-between; gap:10px}
-  .m-title{font-size:20px;font-weight:800; letter-spacing:.3px}
-  .m-close{background:#fff1;border:none; width:34px;height:34px;border-radius:999px; color:#fff; cursor:pointer}
-  .m-close:hover{background:#fff2}
-
-  .player{
-    background:#10141c;border:1px solid #1d2330;border-radius:12px;padding:14px 14px;display:flex;align-items:center;gap:14px
-  }
-  .btn{
-    width:40px;height:40px;border-radius:999px;border:1px solid #2a3243;background:#0c1118;color:#fff;cursor:pointer;
-    font-size:18px;display:inline-grid;place-items:center
-  }
-  .btn:hover{background:#121a26}
-
-  .time{font-size:12px;color:var(--muted); width:42px; text-align:right}
-  .bar{flex:1}
-  input[type="range"]{width:100%}
-  .vol{display:flex; align-items:center; gap:10px}
-  .yt-btn{background:var(--acc);border:none;color:#111;font-weight:700;padding:10px 14px;border-radius:10px;cursor:pointer}
-  .yt-btn:hover{filter:brightness(1.05)}
-  .note{font-size:12px;color:#c7d2da;background:#0c1118;border:1px dashed #263042;padding:10px;border-radius:10px}
-
-  /* el “pocket” iframe (YouTube super pequeño) */
-  .pocket{
-    position:absolute; right:10px; bottom:10px; width:var(--pocket-w); height:var(--pocket-h);
-    border:0; opacity:0.01; pointer-events:auto; /* clic posible si lo necesitas, pero casi invisible */
-  }
-  .pocket::after{
-    content:"yt"; position:absolute; right:4px; bottom:4px; font-size:10px; color:#000; background:#ffcc70;
-    padding:2px 5px; border-radius:6px; opacity:.15;
-  }
-
-  @media (max-width:900px){
-    .modal{grid-template-columns:1fr}
-    .m-left{min-height:46vh}
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tenshi | Spotify Embed</title>
+  <style>
+    :root { color-scheme: dark; }
+    body{
+      margin:0; padding:24px;
+      background:#0b0b0b; color:#f5f5f5;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+    .wrap{max-width:1000px;margin:0 auto}
+    h1{font-size:22px;margin:0 0 16px}
+    p{opacity:.85;margin:0 0 18px}
+    .card{
+      background:#111; border:1px solid #222; border-radius:14px;
+      padding:16px; box-shadow:0 12px 32px rgba(0,0,0,.35);
+    }
+    .row{display:grid; gap:12px; grid-template-columns: 1fr; margin:0 0 16px}
+    input{
+      width:100%; padding:12px 14px; border-radius:10px; border:1px solid #2a2a2a;
+      background:#0e0e0e; color:#fff; outline:none; font-size:14px;
+    }
+    .btn{
+      border:none; border-radius:10px; background:#1DB954; color:#101;
+      padding:10px 14px; cursor:pointer; font-weight:700;
+    }
+    .btn:active{transform:translateY(1px)}
+    .hint{font-size:12px; opacity:.7}
+    .iframe-wrap{margin-top:12px}
+  </style>
 </head>
 <body>
+  <div class="wrap">
+    <h1>Spotify — Embed (artista / álbum / playlist / track)</h1>
+    <p>Pega cualquier URL de Spotify. Se renderiza la tarjeta/preview y reproduce si el usuario tiene sesión en Spotify.</p>
 
-<div class="wrap">
-  <h1>Discography</h1>
-
-  <div id="disc-grid" class="grid"></div>
-</div>
-
-<!-- ===== MODAL ===== -->
-<div id="overlay" class="overlay" aria-hidden="true">
-  <div class="modal" role="dialog" aria-modal="true">
-    <!-- Izquierda: portada -->
-    <div class="m-left">
-      <div id="mCover" class="m-cover"></div>
-    </div>
-
-    <!-- Derecha: controles -->
-    <div class="m-right">
-      <div class="m-head">
-        <div id="mTitle" class="m-title">Track</div>
-        <button id="mClose" class="m-close" aria-label="Cerrar">✕</button>
+    <div class="card">
+      <div class="row">
+        <label for="inUrl">URL de Spotify</label>
+        <input id="inUrl" placeholder="https://open.spotify.com/artist/... / album/... / playlist/... / track/..." />
+        <div class="hint">Ejemplo (artista): https://open.spotify.com/intl-es/artist/0ZkxChUDjvBph9f7TitfMR?si=pUSX6sy-TdKKtLrlgKmfHw</div>
       </div>
 
-      <div class="player">
-        <button id="auPlay" class="btn" aria-label="Play">▶</button>
-        <div class="bar">
-          <input id="auSeek" type="range" min="0" max="100" value="0" step="1" />
-        </div>
-        <div id="auTime" class="time">0:00</div>
+      <div class="row">
+        <button class="btn" id="btnRender">Renderizar</button>
       </div>
 
-      <div class="vol">
-        Volumen:
-        <input id="auVol" type="range" min="0" max="100" value="100"/>
-        <button id="btnYT" class="yt-btn">Abrir en YouTube</button>
-      </div>
-
-      <div class="note">
-        Reproductor “solo audio” usando un iframe de YouTube mini <em>(se reproduce con tu click, sin auto-play)</em>.
-      </div>
-
-      <!-- “Pocket” player: iframe diminuto de YouTube -->
-      <div style="position:relative; width:var(--pocket-w); height:var(--pocket-h);">
-        <div id="pocket-yt-iframe" class="pocket"></div>
-      </div>
+      <div id="spotify-embed" class="iframe-wrap"></div>
     </div>
   </div>
-</div>
 
-<!-- ========= YouTube Iframe API ========= -->
-<script src="https://www.youtube.com/iframe_api"></script>
-<script>
-/* ================================
-   1) Datos de tus canciones
-   ================================= */
-const TRACKS = [
-  {
-    title: 'Track 1',
-    cover: 'https://images.unsplash.com/photo-1606391901318-07003db08d63?q=80&w=800&auto=format',
-    videoId: 'rIUBxbcd_I0'
-  },
-  {
-    title: 'Track 2',
-    cover: 'https://images.unsplash.com/photo-1691389694412-266f872999c6?q=80&w=800&auto=format',
-    videoId: 'onfYQgU7PxU'
-  },
-  {
-    title: 'Track 3',
-    cover: 'https://images.unsplash.com/photo-1516727003284-a96541e51e9c?q=80&w=800&auto=format',
-    videoId: 'rLBeFFrjKbU'
-  },
-  {
-    title: 'Track 4',
-    cover: 'https://images.unsplash.com/photo-1610785396756-24bd1889ddae?q=80&w=800&auto=format',
-    videoId: '0_QHL7cDYno'
-  },
-];
-
-/* ================================
-   2) Render de tarjetas
-   ================================= */
-const grid = document.getElementById('disc-grid');
-grid.innerHTML = TRACKS.map((t, i)=>`
-  <div class="card" data-idx="${i}">
-    <div class="cover" style="background-image:url('${t.cover}')"></div>
-    <div class="meta">
-      <div class="title">${t.title}</div>
-      <div class="hint">Click para reproducir</div>
-    </div>
-  </div>
-`).join('');
-
-/* ================================
-   3) Modal + Player
-   ================================= */
-const overlay = document.getElementById('overlay');
-const mCover  = document.getElementById('mCover');
-const mTitle  = document.getElementById('mTitle');
-const mClose  = document.getElementById('mClose');
-const auPlay  = document.getElementById('auPlay');
-const auSeek  = document.getElementById('auSeek');
-const auTime  = document.getElementById('auTime');
-const auVol   = document.getElementById('auVol');
-const btnYT   = document.getElementById('btnYT');
-
-let ytPlayer = null;
-let seekTimer = null;
-let current = { idx: -1, videoId: '', dur: 0 };
-
-function getPocketSize(){
-  // Tamaño mínimo seguro para algunos móviles
-  const w = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--pocket-w')) || 48;
-  const h = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--pocket-h')) || 27;
-  return { w, h };
-}
-
-// YouTube API listo
-window.onYouTubeIframeAPIReady = function(){
-  const { w, h } = getPocketSize();
-  ytPlayer = new YT.Player('pocket-yt-iframe', {
-    width: w, height: h,
-    videoId: '',
-    playerVars:{
-      controls:1, modestbranding:1, iv_load_policy:3, rel:0, playsinline:1
-    },
-    events:{
-      onReady: () => {
-        try{ ytPlayer.unMute(); ytPlayer.setVolume(100); }catch{}
-      },
-      onStateChange: onYTState
+  <script>
+    // Convierte cualquier URL de Spotify en su URL de embed (artist/album/playlist/track)
+    function spotifyEmbedFromUrl(url, opts = { theme: 'dark', height: 152 }) {
+      const m = String(url).match(
+        /^https?:\/\/open\.spotify\.com\/(?:intl-[^/]+\/)?(track|album|artist|playlist)\/([A-Za-z0-9]+)(?:\?.*)?$/
+      );
+      if (!m) return null;
+      const type = m[1];
+      const id   = m[2];
+      const themeParam = (opts.theme === 'light') ? '1' : '0';
+      const height     = Number(opts.height) || 152; // 152 tarjeta, 352 grande; tracks pueden ir a 80
+      return {
+        src: `https://open.spotify.com/embed/${type}/${id}?utm_source=generator&theme=${themeParam}`,
+        height
+      };
     }
-  });
-};
 
-function onYTState(e){
-  // Actualiza botón play/pause
-  if (e.data === YT.PlayerState.PLAYING){
-    auPlay.textContent = '⏸';
-    // arranca loop de progreso
-    if (seekTimer) clearInterval(seekTimer);
-    seekTimer = setInterval(()=>{
-      try{
-        const t = ytPlayer.getCurrentTime();
-        const d = ytPlayer.getDuration() || current.dur || 0;
-        current.dur = d;
-        auSeek.max = d ? Math.floor(d) : 100;
-        auSeek.value = Math.floor(t);
-        auTime.textContent = formatTime(t);
-      }catch{}
-    }, 300);
-  }
-  if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED){
-    auPlay.textContent = '▶';
-    if (seekTimer){ clearInterval(seekTimer); seekTimer = null; }
-  }
-}
+    // Carga inicial con tu artista (puedes cambiar esta constante por cualquier recurso de Spotify)
+    const DEFAULT_URL = 'https://open.spotify.com/intl-es/artist/0ZkxChUDjvBph9f7TitfMR?si=pUSX6sy-TdKKtLrlgKmfHw';
 
-function formatTime(s){
-  s = Math.max(0, Math.floor(s));
-  const m = Math.floor(s/60), r = s%60;
-  return `${m}:${r.toString().padStart(2,'0')}`;
-}
+    function renderEmbed(url) {
+      const embed = spotifyEmbedFromUrl(url, { theme: 'dark', height: 152 });
+      const box = document.getElementById('spotify-embed');
+      if (!embed) {
+        box.innerHTML = '<p style="opacity:.8">URL de Spotify no válida.</p>';
+        return;
+      }
+      box.innerHTML =
+        `<iframe style="border-radius:12px"
+                 src="${embed.src}"
+                 width="100%" height="${embed.height}"
+                 frameborder="0"
+                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                 loading="lazy"></iframe>`;
+    }
 
-function openModal(idx){
-  const t = TRACKS[idx]; if (!t) return;
-  current = { idx, videoId:t.videoId, dur:0 };
-  mTitle.textContent = t.title;
-  mCover.style.backgroundImage = `url('${t.cover}')`;
-  btnYT.onclick = ()=> window.open(`https://www.youtube.com/watch?v=${t.videoId}`, '_blank');
+    document.getElementById('btnRender').addEventListener('click', () => {
+      const v = document.getElementById('inUrl').value.trim();
+      renderEmbed(v || DEFAULT_URL);
+    });
 
-  // Mostrar modal
-  overlay.classList.add('show');
-
-  // Cargar video (no auto-play)
-  const load = ()=>{
-    try{
-      ytPlayer.loadVideoById({ videoId: t.videoId, startSeconds: 0 });
-      ytPlayer.pauseVideo(); // NO reproducir automáticamente
-      auPlay.textContent = '▶';
-      auSeek.value = 0; auTime.textContent = '0:00';
-      auVol.value = 100;
-    }catch{ setTimeout(load, 120); }
-  };
-  load();
-}
-
-function closeModal(){
-  overlay.classList.remove('show');
-  try{ ytPlayer.pauseVideo(); }catch{}
-  if (seekTimer){ clearInterval(seekTimer); seekTimer = null; }
-}
-
-grid.addEventListener('click', (e)=>{
-  const card = e.target.closest('.card');
-  if (!card) return;
-  openModal(parseInt(card.dataset.idx,10));
-});
-mClose.addEventListener('click', closeModal);
-overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeModal(); });
-
-/* ---- Controles usuario ---- */
-
-// Play / Pause (gesto del usuario => se oye)
-auPlay.addEventListener('click', ()=>{
-  if (!ytPlayer) return;
-  const st = ytPlayer.getPlayerState?.() ?? -1;
-  if (st === YT.PlayerState.PLAYING){
-    ytPlayer.pauseVideo();
-    auPlay.textContent = '▶';
-  } else {
-    try { ytPlayer.unMute(); }catch{}
-    try { ytPlayer.setVolume(parseInt(auVol.value,10) || 100); }catch{}
-    ytPlayer.playVideo();
-    auPlay.textContent = '⏸';
-  }
-});
-
-// Seek
-auSeek.addEventListener('input', ()=>{
-  if (!ytPlayer) return;
-  try { ytPlayer.seekTo(parseFloat(auSeek.value) || 0, true); }catch{}
-});
-
-// Volumen
-auVol.addEventListener('input', ()=>{
-  if (!ytPlayer) return;
-  try { ytPlayer.setVolume(parseInt(auVol.value,10) || 100); }catch{}
-});
-
-// Ajusta tamaño del iframe mini si cambias las CSS vars dinámicamente
-window.addEventListener('resize', ()=>{
-  // opcional; normalmente no hace falta tocarlo
-});
-</script>
+    // Render inicial
+    document.getElementById('inUrl').value = DEFAULT_URL;
+    renderEmbed(DEFAULT_URL);
+  </script>
 </body>
 </html>
