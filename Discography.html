@@ -1,284 +1,331 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Discography | Tenshi</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Discography — “audio” YouTube oculto</title>
 
-  <style>
-    :root{
-      --bg:#0b0b0b; --ink:#f5f5f5; --acc:#ffcc70;
-      --panel:#101010; --bd:#1e1e1e;
-      /* 👉 Cambia aquí si quieres aún más chico (mantén proporción 16:9) */
-      --pocket-w: 48px;
-      --pocket-h: 27px;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,Segoe UI,Arial,sans-serif}
-    a{color:inherit}
+<style>
+  :root{
+    --bg:#0b0b0b; --panel:#0f1115; --ink:#f5f5f5; --muted:#a9b1b8;
+    --acc:#ffcc70; --bd:#1e2430;
+    /* tamaño del “pocket player” (iframe de YouTube super chico) */
+    --pocket-w: 48px;
+    --pocket-h: 27px; /* 16:9 mini */
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,Segoe UI,Arial,sans-serif}
 
-    header{
-      position:sticky;top:0;z-index:10;
-      display:flex;align-items:center;justify-content:space-between;
-      padding:14px 18px;background:#0f0f0f;border-bottom:1px solid #141414
-    }
-    .brand{font-weight:800;letter-spacing:.3px}
-    .brand b{color:var(--acc)}
-    nav ul{list-style:none;display:flex;gap:16px;margin:0;padding:0}
-    nav a{text-decoration:none;opacity:.8}
-    nav a:hover{opacity:1}
+  /* --- Lista de discos (placeholder) --- */
+  .wrap{max-width:1100px;margin:40px auto;padding:0 16px}
+  h1{font-size:28px;margin:10px 0 20px}
+  .grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px
+  }
+  .card{
+    background:#111;border:1px solid var(--bd);border-radius:12px;overflow:hidden;cursor:pointer;
+    transition:.2s; box-shadow:0 8px 30px #0006;
+  }
+  .card:hover{transform:translateY(-2px)}
+  .cover{
+    width:100%;aspect-ratio:1/1; background:#0d141c center/cover no-repeat;
+  }
+  .meta{padding:10px}
+  .title{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}
+  .hint{font-size:12px;color:var(--muted)}
 
-    .wrap{max-width:1100px;margin:22px auto;padding:0 16px}
+  /* --- Modal --- */
+  .overlay{
+    position:fixed;inset:0;background:#000a;display:none;place-items:center;z-index:9999;
+    padding:24px;
+  }
+  .overlay.show{display:grid}
+  .modal{
+    width:min(1100px,95vw); height:min(85vh,720px);
+    background:linear-gradient(180deg,#0f1115 20%,#0a0b0e 100%);
+    border:1px solid #212633; border-radius:16px; overflow:hidden; position:relative;
+    box-shadow:0 30px 100px #000c;
+    display:grid; grid-template-columns: 1.1fr 0.9fr;
+  }
+  .m-left{
+    border-right:1px solid #1b202b; display:flex; align-items:center; justify-content:center; padding:18px;
+  }
+  .m-cover{
+    width:100%; height:100%; max-width:560px; max-height:560px;
+    background:#0e141b center/cover no-repeat; border-radius:12px; box-shadow:0 10px 40px #0009;
+  }
+  .m-right{padding:22px 22px 28px; display:flex; flex-direction:column; gap:18px}
+  .m-head{display:flex; align-items:center; justify-content:space-between; gap:10px}
+  .m-title{font-size:20px;font-weight:800; letter-spacing:.3px}
+  .m-close{background:#fff1;border:none; width:34px;height:34px;border-radius:999px; color:#fff; cursor:pointer}
+  .m-close:hover{background:#fff2}
 
-    /* Grid de portadas */
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap:16px;
-    }
-    .card{
-      background:var(--panel);
-      border:1px solid var(--bd);
-      border-radius:12px;
-      overflow:hidden;
-      cursor:pointer;
-      transition:transform .2s ease, box-shadow .2s ease;
-    }
-    .card:hover{ transform:translateY(-2px); box-shadow:0 10px 30px #0008; }
-    .cover{
-      width:100%; aspect-ratio:1/1; background:#111 center/cover no-repeat;
-    }
-    .meta{padding:10px 12px;border-top:1px solid #151515}
-    .title{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.95}
-    .sub{font-size:12px;opacity:.65}
+  .player{
+    background:#10141c;border:1px solid #1d2330;border-radius:12px;padding:14px 14px;display:flex;align-items:center;gap:14px
+  }
+  .btn{
+    width:40px;height:40px;border-radius:999px;border:1px solid #2a3243;background:#0c1118;color:#fff;cursor:pointer;
+    font-size:18px;display:inline-grid;place-items:center
+  }
+  .btn:hover{background:#121a26}
 
-    /* Modal Reproductor */
-    .overlay{position:fixed;inset:0;background:#000a;display:none;align-items:center;justify-content:center;z-index:1000}
-    .overlay.show{display:flex}
-    .modal{
-      width:min(920px,92vw);
-      background:#0b0b0b;border:1px solid #222;border-radius:16px;
-      box-shadow:0 18px 60px #000a; overflow:hidden;
-    }
-    .modal-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid #1e1e1e;background:linear-gradient(180deg,#121212,#0e0e0e)}
-    .modal-title{font-weight:800}
-    .btn-x{width:36px;height:36px;border-radius:999px;border:1px solid #2a2a2a;background:#171717;color:#eee;cursor:pointer}
+  .time{font-size:12px;color:var(--muted); width:42px; text-align:right}
+  .bar{flex:1}
+  input[type="range"]{width:100%}
+  .vol{display:flex; align-items:center; gap:10px}
+  .yt-btn{background:var(--acc);border:none;color:#111;font-weight:700;padding:10px 14px;border-radius:10px;cursor:pointer}
+  .yt-btn:hover{filter:brightness(1.05)}
+  .note{font-size:12px;color:#c7d2da;background:#0c1118;border:1px dashed #263042;padding:10px;border-radius:10px}
 
-    .modal-bd{display:grid;grid-template-columns:1.15fr 1fr;gap:16px;padding:16px;position:relative}
-    @media(max-width:800px){.modal-bd{grid-template-columns:1fr}}
-    .modal-cover{aspect-ratio:1/1;width:100%;border-radius:12px;border:1px solid #222;background:#111 center/cover no-repeat}
+  /* el “pocket” iframe (YouTube super pequeño) */
+  .pocket{
+    position:absolute; right:10px; bottom:10px; width:var(--pocket-w); height:var(--pocket-h);
+    border:0; opacity:0.01; pointer-events:auto; /* clic posible si lo necesitas, pero casi invisible */
+  }
+  .pocket::after{
+    content:"yt"; position:absolute; right:4px; bottom:4px; font-size:10px; color:#000; background:#ffcc70;
+    padding:2px 5px; border-radius:6px; opacity:.15;
+  }
 
-    .audio-ui{display:flex;flex-direction:column;gap:12px;background:#0b0b0b;border:1px solid #222;border-radius:12px;padding:14px}
-    .au-row{display:flex;align-items:center;gap:10px}
-    .au-btn{width:46px;height:46px;border-radius:999px;border:1px solid #2a2a2a;background:#171717;color:#eee;cursor:pointer;font-size:16px}
-    .au-btn:hover{background:#1d1d1d}
-    .au-bar{position:relative;height:10px;background:#1e1e1e;border-radius:999px;cursor:pointer;overflow:hidden;flex:1}
-    .au-fill{position:absolute;inset:0 auto 0 0;width:0%;background:linear-gradient(90deg,#ffd783,#ffb347);border-radius:999px}
-    .au-time{width:70px;text-align:right;font-size:12px;color:#ddd}
-    .au-vol{width:140px;accent-color:#ffb347}
-    .au-open{align-self:flex-start;text-decoration:none;background:#ffe1a2;color:#111;border:1px solid #e7c07a;border-radius:10px;padding:8px 12px;font-weight:700}
-
-    /* Pocket YouTube (ahora súper pequeño) */
-    .pocket-yt{
-      position:absolute;right:12px;bottom:12px;
-      width:var(--pocket-w);height:var(--pocket-h);
-      z-index:5;border:1px solid #2a2a2a;border-radius:8px;overflow:hidden;background:#111;
-      display:flex;align-items:center;justify-content:center
-    }
-    .pocket-yt__badge{position:absolute;top:5px;left:5px;font-size:8px;color:#111;background:#ffe1a2;border:1px solid #e7c07a;border-radius:6px;padding:1px 4px;font-weight:700;z-index:2}
-    .pocket-yt iframe{width:100%;height:100%;border:0}
-
-    .muted{opacity:.6}
-  </style>
+  @media (max-width:900px){
+    .modal{grid-template-columns:1fr}
+    .m-left{min-height:46vh}
+  }
+</style>
 </head>
 <body>
-  <header>
-    <div class="brand"><b>Tenshi</b> — Discography</div>
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li class="muted">Discography</li>
-        <li><a href="movie.html">Videos</a></li>
-        <li><a href="wallpapers.html">Gallery</a></li>
-      </ul>
-    </nav>
-  </header>
 
-  <div class="wrap">
-    <h1 style="font-size:22px;margin:6px 0 16px;">Discography</h1>
-    <div id="grid" class="grid" aria-live="polite"></div>
-  </div>
+<div class="wrap">
+  <h1>Discography</h1>
 
-  <!-- Modal -->
-  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="mTitle">
-    <div class="modal">
-      <div class="modal-hd">
-        <div class="modal-title" id="mTitle">Track</div>
-        <button class="btn-x" id="btnClose" aria-label="Cerrar">✕</button>
+  <div id="disc-grid" class="grid"></div>
+</div>
+
+<!-- ===== MODAL ===== -->
+<div id="overlay" class="overlay" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true">
+    <!-- Izquierda: portada -->
+    <div class="m-left">
+      <div id="mCover" class="m-cover"></div>
+    </div>
+
+    <!-- Derecha: controles -->
+    <div class="m-right">
+      <div class="m-head">
+        <div id="mTitle" class="m-title">Track</div>
+        <button id="mClose" class="m-close" aria-label="Cerrar">✕</button>
       </div>
-      <div class="modal-bd">
-        <div class="modal-cover" id="mCover"></div>
 
-        <div class="audio-ui">
-          <div class="au-row">
-            <button class="au-btn" id="auPlay" aria-label="Reproducir/Pausa">▶</button>
-            <div class="au-bar" id="auBar"><div class="au-fill" id="auFill"></div></div>
-            <span class="au-time" id="auTime">0:00</span>
-            <input class="au-vol" id="auVol" type="range" min="0" max="100" value="100" aria-label="Volumen">
-          </div>
-          <a class="au-open" id="auOpen" target="_blank" rel="noopener">Abrir en YouTube</a>
+      <div class="player">
+        <button id="auPlay" class="btn" aria-label="Play">▶</button>
+        <div class="bar">
+          <input id="auSeek" type="range" min="0" max="100" value="0" step="1" />
         </div>
+        <div id="auTime" class="time">0:00</div>
+      </div>
 
-        <!-- Pocket player -->
-        <div class="pocket-yt">
-          <span class="pocket-yt__badge">YT</span>
-          <div id="pocket-yt-iframe"></div>
-        </div>
+      <div class="vol">
+        Volumen:
+        <input id="auVol" type="range" min="0" max="100" value="100"/>
+        <button id="btnYT" class="yt-btn">Abrir en YouTube</button>
+      </div>
+
+      <div class="note">
+        Reproductor “solo audio” usando un iframe de YouTube mini <em>(se reproduce con tu click, sin auto-play)</em>.
+      </div>
+
+      <!-- “Pocket” player: iframe diminuto de YouTube -->
+      <div style="position:relative; width:var(--pocket-w); height:var(--pocket-h);">
+        <div id="pocket-yt-iframe" class="pocket"></div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- jQuery (opcional) -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- YouTube IFrame API -->
-  <script src="https://www.youtube.com/iframe_api"></script>
+<!-- ========= YouTube Iframe API ========= -->
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+/* ================================
+   1) Datos de tus canciones
+   ================================= */
+const TRACKS = [
+  {
+    title: 'Track 1',
+    cover: 'https://images.unsplash.com/photo-1606391901318-07003db08d63?q=80&w=800&auto=format',
+    videoId: 'rIUBxbcd_I0'
+  },
+  {
+    title: 'Track 2',
+    cover: 'https://images.unsplash.com/photo-1691389694412-266f872999c6?q=80&w=800&auto=format',
+    videoId: 'onfYQgU7PxU'
+  },
+  {
+    title: 'Track 3',
+    cover: 'https://images.unsplash.com/photo-1516727003284-a96541e51e9c?q=80&w=800&auto=format',
+    videoId: 'rLBeFFrjKbU'
+  },
+  {
+    title: 'Track 4',
+    cover: 'https://images.unsplash.com/photo-1610785396756-24bd1889ddae?q=80&w=800&auto=format',
+    videoId: '0_QHL7cDYno'
+  },
+];
 
-  <script>
-    /* IDs de YouTube por portada (mismo orden que el JSON) */
-    const TRACKS = [
-      { title: "Track 1", videoId: "rIUBxbcd_I0" },
-      { title: "Track 2", videoId: "onfYQgU7PxU" },
-      { title: "Track 3", videoId: "rLBeFFrjKbU" },
-      { title: "Track 4", videoId: "0_QHL7cDYno" },
-      { title: "Track 5", videoId: "Ulj3sX_jJ7g" },
-    ];
+/* ================================
+   2) Render de tarjetas
+   ================================= */
+const grid = document.getElementById('disc-grid');
+grid.innerHTML = TRACKS.map((t, i)=>`
+  <div class="card" data-idx="${i}">
+    <div class="cover" style="background-image:url('${t.cover}')"></div>
+    <div class="meta">
+      <div class="title">${t.title}</div>
+      <div class="hint">Click para reproducir</div>
+    </div>
+  </div>
+`).join('');
 
-    async function cargarPortadas() {
-      try {
-        const resp = await fetch('data/catalogo.json', { cache:'no-store' });
-        const data = await resp.json();
-        const covers = (data.discografia && Array.isArray(data.discografia.portadas))
-          ? data.discografia.portadas
-          : [];
+/* ================================
+   3) Modal + Player
+   ================================= */
+const overlay = document.getElementById('overlay');
+const mCover  = document.getElementById('mCover');
+const mTitle  = document.getElementById('mTitle');
+const mClose  = document.getElementById('mClose');
+const auPlay  = document.getElementById('auPlay');
+const auSeek  = document.getElementById('auSeek');
+const auTime  = document.getElementById('auTime');
+const auVol   = document.getElementById('auVol');
+const btnYT   = document.getElementById('btnYT');
 
-        const grid = document.getElementById('grid');
-        grid.innerHTML = '';
+let ytPlayer = null;
+let seekTimer = null;
+let current = { idx: -1, videoId: '', dur: 0 };
 
-        covers.forEach((url, idx) => {
-          const card = document.createElement('article');
-          card.className = 'card';
-          card.setAttribute('role','button');
-          card.setAttribute('tabindex','0');
-          card.dataset.index = idx;
+function getPocketSize(){
+  // Tamaño mínimo seguro para algunos móviles
+  const w = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--pocket-w')) || 48;
+  const h = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--pocket-h')) || 27;
+  return { w, h };
+}
 
-          const cover = document.createElement('div');
-          cover.className = 'cover';
-          cover.style.backgroundImage = `url('${url}')`;
-
-          const meta = document.createElement('div'); meta.className = 'meta';
-          const t = document.createElement('div'); t.className = 'title'; t.textContent = TRACKS[idx]?.title || `Track ${idx+1}`;
-          const s = document.createElement('div'); s.className = 'sub'; s.textContent = 'Click para reproducir';
-
-          meta.appendChild(t); meta.appendChild(s);
-          card.appendChild(cover); card.appendChild(meta);
-          grid.appendChild(card);
-
-          card.addEventListener('click', ()=> openModal(idx, url));
-          card.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); openModal(idx, url); }});
-        });
-
-      } catch(err){
-        console.error('Error cargando portadas:', err);
-      }
+// YouTube API listo
+window.onYouTubeIframeAPIReady = function(){
+  const { w, h } = getPocketSize();
+  ytPlayer = new YT.Player('pocket-yt-iframe', {
+    width: w, height: h,
+    videoId: '',
+    playerVars:{
+      controls:1, modestbranding:1, iv_load_policy:3, rel:0, playsinline:1
+    },
+    events:{
+      onReady: () => {
+        try{ ytPlayer.unMute(); ytPlayer.setVolume(100); }catch{}
+      },
+      onStateChange: onYTState
     }
+  });
+};
 
-    const overlay = document.getElementById('overlay');
-    const mTitle  = document.getElementById('mTitle');
-    const mCover  = document.getElementById('mCover');
-    const btnClose= document.getElementById('btnClose');
-    const auPlay  = document.getElementById('auPlay');
-    const auBar   = document.getElementById('auBar');
-    const auFill  = document.getElementById('auFill');
-    const auTime  = document.getElementById('auTime');
-    const auVol   = document.getElementById('auVol');
-    const auOpen  = document.getElementById('auOpen');
+function onYTState(e){
+  // Actualiza botón play/pause
+  if (e.data === YT.PlayerState.PLAYING){
+    auPlay.textContent = '⏸';
+    // arranca loop de progreso
+    if (seekTimer) clearInterval(seekTimer);
+    seekTimer = setInterval(()=>{
+      try{
+        const t = ytPlayer.getCurrentTime();
+        const d = ytPlayer.getDuration() || current.dur || 0;
+        current.dur = d;
+        auSeek.max = d ? Math.floor(d) : 100;
+        auSeek.value = Math.floor(t);
+        auTime.textContent = formatTime(t);
+      }catch{}
+    }, 300);
+  }
+  if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED){
+    auPlay.textContent = '▶';
+    if (seekTimer){ clearInterval(seekTimer); seekTimer = null; }
+  }
+}
 
-    let ytPlayer = null;
-    let progressTimer = null;
+function formatTime(s){
+  s = Math.max(0, Math.floor(s));
+  const m = Math.floor(s/60), r = s%60;
+  return `${m}:${r.toString().padStart(2,'0')}`;
+}
 
-    /* lee los tamaños del CSS para sincronizar el iframe */
-    function getPocketSize(){
-      const cs = getComputedStyle(document.documentElement);
-      const w = parseInt(cs.getPropertyValue('--pocket-w'));
-      const h = parseInt(cs.getPropertyValue('--pocket-h'));
-      return {w, h};
-    }
+function openModal(idx){
+  const t = TRACKS[idx]; if (!t) return;
+  current = { idx, videoId:t.videoId, dur:0 };
+  mTitle.textContent = t.title;
+  mCover.style.backgroundImage = `url('${t.cover}')`;
+  btnYT.onclick = ()=> window.open(`https://www.youtube.com/watch?v=${t.videoId}`, '_blank');
 
-    window.onYouTubeIframeAPIReady = function(){
-      const {w, h} = getPocketSize();
-      ytPlayer = new YT.Player('pocket-yt-iframe', {
-        width: w, height: h,
-        videoId: '',
-        playerVars: { controls:1, modestbranding:1, iv_load_policy:3, rel:0, playsinline:1 },
-        events: { onReady: ()=>{try{ ytPlayer.setVolume(100);}catch{}}, onStateChange: onYTState }
-      });
-    };
+  // Mostrar modal
+  overlay.classList.add('show');
 
-    function onYTState(e){
-      if(e.data === YT.PlayerState.PLAYING){ auPlay.textContent = '⏸'; startProgressTimer(); }
-      else if(e.data === YT.PlayerState.PAUSED){ auPlay.textContent = '▶'; stopProgressTimer(); }
-      else if(e.data === YT.PlayerState.ENDED){ auPlay.textContent = '▶'; stopProgressTimer(); setProgressUI(0, ytPlayer.getDuration()||0); }
-    }
+  // Cargar video (no auto-play)
+  const load = ()=>{
+    try{
+      ytPlayer.loadVideoById({ videoId: t.videoId, startSeconds: 0 });
+      ytPlayer.pauseVideo(); // NO reproducir automáticamente
+      auPlay.textContent = '▶';
+      auSeek.value = 0; auTime.textContent = '0:00';
+      auVol.value = 100;
+    }catch{ setTimeout(load, 120); }
+  };
+  load();
+}
 
-    function fmtTime(s){ s=Math.max(0,Math.floor(s||0)); const m=Math.floor(s/60),sec=s%60; return `${m}:${sec.toString().padStart(2,'0')}`; }
-    function setProgressUI(cur,dur){ auFill.style.width = `${dur>0?(cur/dur)*100:0}%`; auTime.textContent = fmtTime(cur); }
-    function startProgressTimer(){ stopProgressTimer(); progressTimer = setInterval(()=>{ if(!ytPlayer) return; setProgressUI(ytPlayer.getCurrentTime()||0, ytPlayer.getDuration()||0); }, 250); }
-    function stopProgressTimer(){ if(progressTimer){ clearInterval(progressTimer); progressTimer=null; } }
+function closeModal(){
+  overlay.classList.remove('show');
+  try{ ytPlayer.pauseVideo(); }catch{}
+  if (seekTimer){ clearInterval(seekTimer); seekTimer = null; }
+}
 
-    function openModal(idx, coverUrl){
-      const track = TRACKS[idx] || { title:`Track ${idx+1}`, videoId:'' };
-      mTitle.textContent = track.title;
-      mCover.style.backgroundImage = `url('${coverUrl}')`;
-      auOpen.href = track.videoId ? `https://www.youtube.com/watch?v=${track.videoId}` : '#';
+grid.addEventListener('click', (e)=>{
+  const card = e.target.closest('.card');
+  if (!card) return;
+  openModal(parseInt(card.dataset.idx,10));
+});
+mClose.addEventListener('click', closeModal);
+overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeModal(); });
 
-      overlay.classList.add('show');
+/* ---- Controles usuario ---- */
 
-      const load = ()=> {
-        try{
-          if(track.videoId){
-            ytPlayer.loadVideoById({ videoId: track.videoId, startSeconds: 0 });
-            ytPlayer.playVideo();
-            auPlay.textContent = '⏸';
-            auVol.value = 100;
-          }
-        }catch{ setTimeout(load, 150); }
-      };
-      load();
-    }
+// Play / Pause (gesto del usuario => se oye)
+auPlay.addEventListener('click', ()=>{
+  if (!ytPlayer) return;
+  const st = ytPlayer.getPlayerState?.() ?? -1;
+  if (st === YT.PlayerState.PLAYING){
+    ytPlayer.pauseVideo();
+    auPlay.textContent = '▶';
+  } else {
+    try { ytPlayer.unMute(); }catch{}
+    try { ytPlayer.setVolume(parseInt(auVol.value,10) || 100); }catch{}
+    ytPlayer.playVideo();
+    auPlay.textContent = '⏸';
+  }
+});
 
-    function closeModal(){
-      overlay.classList.remove('show');
-      stopProgressTimer();
-      if(ytPlayer){ try{ ytPlayer.stopVideo(); }catch{} }
-    }
-    btnClose.addEventListener('click', closeModal);
-    overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeModal(); });
+// Seek
+auSeek.addEventListener('input', ()=>{
+  if (!ytPlayer) return;
+  try { ytPlayer.seekTo(parseFloat(auSeek.value) || 0, true); }catch{}
+});
 
-    auPlay.addEventListener('click', ()=>{
-      if(!ytPlayer) return;
-      const st = ytPlayer.getPlayerState();
-      (st===YT.PlayerState.PLAYING) ? ytPlayer.pauseVideo() : ytPlayer.playVideo();
-    });
-    auVol.addEventListener('input', ()=>{ if(ytPlayer) ytPlayer.setVolume(Math.max(0,Math.min(100,parseInt(auVol.value,10)))); });
-    auBar.addEventListener('click', ev=>{
-      if(!ytPlayer) return;
-      const rect = auBar.getBoundingClientRect();
-      const pct = (ev.clientX - rect.left) / rect.width;
-      ytPlayer.seekTo(pct * (ytPlayer.getDuration()||0), true);
-    });
+// Volumen
+auVol.addEventListener('input', ()=>{
+  if (!ytPlayer) return;
+  try { ytPlayer.setVolume(parseInt(auVol.value,10) || 100); }catch{}
+});
 
-    document.addEventListener('DOMContentLoaded', cargarPortadas);
-  </script>
+// Ajusta tamaño del iframe mini si cambias las CSS vars dinámicamente
+window.addEventListener('resize', ()=>{
+  // opcional; normalmente no hace falta tocarlo
+});
+</script>
 </body>
 </html>
