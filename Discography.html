@@ -10,6 +10,9 @@
     :root{
       --bg:#0b0b0b; --ink:#f5f5f5; --acc:#ffcc70;
       --panel:#101010; --bd:#1e1e1e;
+      /* 👉 Cambia aquí si quieres aún más chico (mantén proporción 16:9) */
+      --pocket-w: 48px;
+      --pocket-h: 27px;
     }
     *{box-sizing:border-box}
     body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,Segoe UI,Arial,sans-serif}
@@ -76,9 +79,14 @@
     .au-vol{width:140px;accent-color:#ffb347}
     .au-open{align-self:flex-start;text-decoration:none;background:#ffe1a2;color:#111;border:1px solid #e7c07a;border-radius:10px;padding:8px 12px;font-weight:700}
 
-    /* Pocket YouTube (muy pequeño, 96×54) */
-    .pocket-yt{position:absolute;right:12px;bottom:12px;width:96px;height:54px;z-index:5;border:1px solid #2a2a2a;border-radius:8px;overflow:hidden;background:#111;display:flex;align-items:center;justify-content:center}
-    .pocket-yt__badge{position:absolute;top:5px;left:5px;font-size:9px;color:#111;background:#ffe1a2;border:1px solid #e7c07a;border-radius:6px;padding:2px 5px;font-weight:700;z-index:2}
+    /* Pocket YouTube (ahora súper pequeño) */
+    .pocket-yt{
+      position:absolute;right:12px;bottom:12px;
+      width:var(--pocket-w);height:var(--pocket-h);
+      z-index:5;border:1px solid #2a2a2a;border-radius:8px;overflow:hidden;background:#111;
+      display:flex;align-items:center;justify-content:center
+    }
+    .pocket-yt__badge{position:absolute;top:5px;left:5px;font-size:8px;color:#111;background:#ffe1a2;border:1px solid #e7c07a;border-radius:6px;padding:1px 4px;font-weight:700;z-index:2}
     .pocket-yt iframe{width:100%;height:100%;border:0}
 
     .muted{opacity:.6}
@@ -124,31 +132,28 @@
 
         <!-- Pocket player -->
         <div class="pocket-yt">
-          <span class="pocket-yt__badge">YouTube</span>
+          <span class="pocket-yt__badge">YT</span>
           <div id="pocket-yt-iframe"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- jQuery (opcional, para comodidad) -->
+  <!-- jQuery (opcional) -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- YouTube IFrame API -->
   <script src="https://www.youtube.com/iframe_api"></script>
 
   <script>
-    /* 1) Configura aquí tus videoId para cada portada.
-       El orden debe coincidir con como aparecen en el JSON (discografia.portadas). */
+    /* IDs de YouTube por portada (mismo orden que el JSON) */
     const TRACKS = [
       { title: "Track 1", videoId: "rIUBxbcd_I0" },
       { title: "Track 2", videoId: "onfYQgU7PxU" },
       { title: "Track 3", videoId: "rLBeFFrjKbU" },
       { title: "Track 4", videoId: "0_QHL7cDYno" },
       { title: "Track 5", videoId: "Ulj3sX_jJ7g" },
-      // agrega más si tienes más portadas…
     ];
 
-    /* 2) Carga portadas desde data/catalogo.json (como en tu index) */
     async function cargarPortadas() {
       try {
         const resp = await fetch('data/catalogo.json', { cache:'no-store' });
@@ -188,7 +193,6 @@
       }
     }
 
-    /* 3) Modal + YouTube pocket */
     const overlay = document.getElementById('overlay');
     const mTitle  = document.getElementById('mTitle');
     const mCover  = document.getElementById('mCover');
@@ -203,9 +207,18 @@
     let ytPlayer = null;
     let progressTimer = null;
 
+    /* lee los tamaños del CSS para sincronizar el iframe */
+    function getPocketSize(){
+      const cs = getComputedStyle(document.documentElement);
+      const w = parseInt(cs.getPropertyValue('--pocket-w'));
+      const h = parseInt(cs.getPropertyValue('--pocket-h'));
+      return {w, h};
+    }
+
     window.onYouTubeIframeAPIReady = function(){
+      const {w, h} = getPocketSize();
       ytPlayer = new YT.Player('pocket-yt-iframe', {
-        width: 96, height: 54,
+        width: w, height: h,
         videoId: '',
         playerVars: { controls:1, modestbranding:1, iv_load_policy:3, rel:0, playsinline:1 },
         events: { onReady: ()=>{try{ ytPlayer.setVolume(100);}catch{}}, onStateChange: onYTState }
@@ -265,7 +278,6 @@
       ytPlayer.seekTo(pct * (ytPlayer.getDuration()||0), true);
     });
 
-    // Init
     document.addEventListener('DOMContentLoaded', cargarPortadas);
   </script>
 </body>
