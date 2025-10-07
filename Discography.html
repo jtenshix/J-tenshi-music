@@ -12,6 +12,7 @@
     margin:0; background:#0b0b0b; color:#eee;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   }
+  a{ color:inherit; }
 
   /* Cabecera */
   .hero{
@@ -22,7 +23,19 @@
   }
   .subtitle{ opacity:.7; font-size:12px; letter-spacing: .2em; }
 
-  /* Filtros */
+  /* Banner artista */
+  .artist-wrap{
+    max-width:980px; margin:16px auto 24px; padding:0 16px;
+  }
+  .artist-card{
+    background:linear-gradient(135deg,#151515,#0f0f0f); border:1px solid #222;
+    border-radius:14px; padding:14px; box-shadow:0 16px 40px rgba(0,0,0,.4);
+  }
+  .artist-head{ display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .artist-dot{ width:10px; height:10px; border-radius:999px; background:#ffcc70; }
+  .artist-title{ font-weight:800; letter-spacing:.5px; }
+
+  /* Filtros (opcionales) */
   .filters{
     display:flex; gap:8px; justify-content:center; flex-wrap:wrap;
     margin:16px auto 26px;
@@ -85,11 +98,6 @@
     background:#111; border:1px solid #222; border-radius:12px; padding:12px;
   }
   .player h4{ margin:0 0 12px; font-size:14px; opacity:.9 }
-  .btn-yt{
-    display:inline-block; background:#ffcc70; color:#111; border:none; border-radius:10px;
-    padding:9px 12px; font-weight:800; text-decoration:none;
-  }
-  .btn-yt:hover{ filter:brightness(1.05); }
   .note{ font-size:12px; opacity:.7; margin-top:10px }
 </style>
 </head>
@@ -99,15 +107,29 @@
   <div class="hero">
     <div class="title">DISCOGRAPHY</div>
     <div class="subtitle">ディスコグラフィー</div>
+  </div>
 
-    <!-- Filtros -->
-    <div class="filters" id="filters">
-      <button class="chip active" data-type="all">ALL</button>
-      <button class="chip" data-type="digital">DIGITAL</button>
-      <button class="chip" data-type="single">SINGLE</button>
-      <button class="chip" data-type="ep">EP</button>
-      <button class="chip" data-type="album">ALBUM</button>
+  <!-- Banner de artista (usa tu ID y muestra tus popular tracks) -->
+  <section class="artist-wrap">
+    <div class="artist-card">
+      <div class="artist-head">
+        <div class="artist-dot"></div>
+        <div class="artist-title">Tenshi — Spotify Artist</div>
+      </div>
+      <!-- Cambia el ARTIST_ID abajo en JS si lo necesitas -->
+      <iframe id="artistEmbed" style="border-radius:12px" src="" width="100%" height="200" frameborder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      <div class="note">Este módulo muestra tus temas populares del perfil de artista.</div>
     </div>
+  </section>
+
+  <!-- Filtros opcionales -->
+  <div class="filters" id="filters">
+    <button class="chip active" data-type="all">ALL</button>
+    <button class="chip" data-type="digital">DIGITAL</button>
+    <button class="chip" data-type="single">SINGLE</button>
+    <button class="chip" data-type="ep">EP</button>
+    <button class="chip" data-type="album">ALBUM</button>
   </div>
 
   <!-- Grilla -->
@@ -122,84 +144,62 @@
       </div>
       <div class="sheet-body">
         <div class="cover" id="mCover"></div>
-        <div class="player" id="mPlayer">
-          <!-- Se inyecta SOLO un reproductor (Spotify tiene prioridad; si no, YouTube) -->
-        </div>
+        <div class="player" id="mPlayer"></div>
       </div>
     </div>
   </div>
 
 <script>
-/* ========= 1) DATA (EDITA AQUÍ) =========
-   type: "digital" | "single" | "ep" | "album"
-   Solo UNA fuente por casilla:
-   - Spotify:  urlSpotify: "https://open.spotify.com/track/..."
-   - YouTube:  urlYouTube: "https://www.youtube.com/watch?v=..."
-   (Si pones ambos, se usará Spotify y se ignora YouTube) */
-const DISCO = [
-  {
-    type: "single",
-    title: "Answer",
-    date: "2024-03-21",
-    cover: "https://images.unsplash.com/photo-1535930749574-1399327ce78f?q=80&w=1000&auto=format",
-    urlSpotify: "https://open.spotify.com/track/2X5mC2tQbDPo3v7y1w5gMc"
-    // urlYouTube: "https://www.youtube.com/watch?v=XXXXXXXXXXX"
-  },
-  {
-    type: "digital",
-    title: "Kumo",
-    date: "2023-11-10",
-    cover: "https://images.unsplash.com/photo-1549887534-1541e9326642?q=80&w=1000&auto=format",
-    urlSpotify: "https://open.spotify.com/track/5f8bH58v5b1y1Jf3y2Kc6m"
-  },
-  {
-    type: "ep",
-    title: "Midnight Glow (EP)",
-    date: "2023-09-02",
-    cover: "https://images.unsplash.com/photo-1520975897072-1d8a2be4cfd5?q=80&w=1000&auto=format",
-    urlSpotify: "https://open.spotify.com/album/4bS8d8hJ7h8Ff2wq6aE9mN"
-  },
-  {
-    type: "single",
-    title: "Blue City",
-    date: "2023-06-10",
-    cover: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000&auto=format",
-    urlSpotify: "https://open.spotify.com/track/6rqhFgbbKwnb9MLmUQDhG6"
-  },
-  {
-    type: "album",
-    title: "Neon Diary",
-    date: "2022-12-01",
-    cover: "https://images.unsplash.com/photo-1520697222861-8c52fe3f0b9a?q=80&w=1000&auto=format",
-    urlSpotify: "https://open.spotify.com/album/6QPkyl04rXwTGlGlcYaRoW"
-  },
-  {
-    type: "digital",
-    title: "Hikari",
-    date: "2022-08-14",
-    cover: "https://images.unsplash.com/photo-1534338580013-382cf48bd435?q=80&w=1000&auto=format",
-    // Si prefieres YouTube SOLO en esta casilla, comenta urlSpotify y descomenta urlYouTube:
-    // urlSpotify: "",
-    urlYouTube: "https://www.youtube.com/watch?v=QH2-TGUlwu4"
-  }
+/* ========= CONFIG ========= */
+const ARTIST_ID = '0ZkxChUDjvBph9f7TitfMR'; // Tu ID de artista
+document.getElementById('artistEmbed').src =
+  `https://open.spotify.com/embed/artist/${ARTIST_ID}?utm_source=generator&theme=0`;
+
+/* Pega aquí tus links de Spotify (pista, álbum o playlist).
+   El código llamará al oEmbed público para sacar título/miniatura.
+   Ejemplos comentados: reemplázalos por tus URLs reales. */
+const SPOTIFY_URLS = [
+  // "https://open.spotify.com/track/xxxxxxxxxxxxxxxxxxxxxx",
+  // "https://open.spotify.com/album/xxxxxxxxxxxxxxxxxxxxxx",
+  // "https://open.spotify.com/track/yyyyyyyyyyyyyyyyyyyyyy",
 ];
 
-/* ========= 2) RENDER GRID ========= */
+/* Si quieres clasificar por tipo, puedes mutar aquí:
+   Por defecto, todas se marcarán "single". */
+const DEFAULT_TYPE = 'single';
+
+/* ========= Estado ========= */
 const grid = document.getElementById('grid');
 const filters = document.getElementById('filters');
+const modal = document.getElementById('modal');
+const mTitle = document.getElementById('mTitle');
+const mCover = document.getElementById('mCover');
+const mPlayer = document.getElementById('mPlayer');
+document.getElementById('btnClose').onclick = ()=> closeModal();
+modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
 
+let ITEMS = [];       // tarjetas construidas con oEmbed
 let currentType = 'all';
 
-function formatDate(s){
+/* ========= Utilidades ========= */
+function formatDateIsoToNice(s){
   if(!s) return '';
   try{
     const d = new Date(s);
     return d.toLocaleDateString('es-CL', { year: 'numeric', month: 'short', day: '2-digit' });
   }catch{ return s; }
 }
+function toSpotifyEmbed(url, theme='dark', height=152){
+  const m = String(url).match(/^https?:\/\/open\.spotify\.com\/(?:intl-[^/]+\/)?(track|album|artist|playlist)\/([A-Za-z0-9]+)(?:\?.*)?$/);
+  if(!m) return null;
+  const type = m[1], id = m[2];
+  const themeParam = (theme==='light') ? '1' : '0';
+  return `https://open.spotify.com/embed/${type}/${id}?utm_source=generator&theme=${themeParam}`;
+}
 
+/* ========= Render ========= */
 function renderGrid(){
-  const list = DISCO.filter(it => currentType==='all' ? true : it.type===currentType);
+  const list = ITEMS.filter(it => currentType==='all' ? true : (it.type===currentType));
   grid.innerHTML = '';
   list.forEach((it, i) => {
     const card = document.createElement('button');
@@ -209,7 +209,7 @@ function renderGrid(){
     card.innerHTML = `
       <div class="thumb" style="background-image:url('${it.cover}')"></div>
       <div class="meta">
-        <div class="date">${formatDate(it.date)}</div>
+        <div class="date">${formatDateIsoToNice(it.date)}</div>
         <div class="name" title="${it.title}">${it.title}</div>
       </div>
     `;
@@ -217,6 +217,34 @@ function renderGrid(){
     grid.appendChild(card);
   });
 }
+
+/* Modal */
+function closeModal(){
+  modal.classList.remove('open');
+  mPlayer.innerHTML = '';
+}
+function openModal(item){
+  mTitle.textContent = item.title || 'Track';
+  mCover.style.backgroundImage = `url('${item.cover}')`;
+  mPlayer.innerHTML = '';
+
+  const src = toSpotifyEmbed(item.urlSpotify || '');
+  if(src){
+    mPlayer.innerHTML = `
+      <h4>Reproducir</h4>
+      <iframe style="border-radius:12px" src="${src}" width="100%" height="152"
+        frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"></iframe>
+      <p class="note">Vista previa de Spotify (si la sesión está iniciada podrás escuchar completa según permisos/licencias).</p>
+    `;
+  }else{
+    mPlayer.innerHTML = `<p class="note">Este ítem no tiene URL de Spotify válida.</p>`;
+  }
+
+  modal.classList.add('open');
+}
+
+/* ========= Filtros ========= */
 filters.addEventListener('click', (e)=>{
   const btn = e.target.closest('.chip'); if(!btn) return;
   filters.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
@@ -224,75 +252,36 @@ filters.addEventListener('click', (e)=>{
   currentType = btn.dataset.type || 'all';
   renderGrid();
 });
-renderGrid();
 
-/* ========= 3) MODAL + PLAYER (solo uno) ========= */
-const modal = document.getElementById('modal');
-const mTitle = document.getElementById('mTitle');
-const mCover = document.getElementById('mCover');
-const mPlayer = document.getElementById('mPlayer');
-document.getElementById('btnClose').onclick = ()=> closeModal();
-modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
-
-function closeModal(){
-  modal.classList.remove('open');
-  mPlayer.innerHTML = '';
-}
-
-/* Spotify embed helper */
-function toSpotifyEmbed(url, theme='dark', height=152){
-  const m = String(url).match(/^https?:\/\/open\.spotify\.com\/(?:intl-[^/]+\/)?(track|album|artist|playlist)\/([A-Za-z0-9]+)(?:\?.*)?$/);
-  if(!m) return null;
-  const type = m[1], id = m[2];
-  const themeParam = (theme==='light') ? '1' : '0';
-  return `https://open.spotify.com/embed/${type}/${id}?utm_source=generator&theme=${themeParam}`;
-}
-
-/* YouTube embed helper */
-function toYoutubeEmbed(url){
-  // Soporta enlaces watch y youtu.be
-  const idMatch = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11})(?:\?|&|$)/);
-  if(!idMatch) return null;
-  return `https://www.youtube.com/embed/${idMatch[1]}?autoplay=1&modestbranding=1&rel=0`;
-}
-
-/* Reproductor modal: SOLO UNO por casilla */
-function openModal(item){
-  mTitle.textContent = item.title || 'Track';
-  mCover.style.backgroundImage = `url('${item.cover}')`;
-
-  mPlayer.innerHTML = ''; // limpio
-  // Prioridad Spotify, si no hay -> YouTube
-  if(item.urlSpotify){
-    const src = toSpotifyEmbed(item.urlSpotify, 'dark', 152);
-    if(src){
-      mPlayer.innerHTML = `
-        <h4>Reproducir</h4>
-        <iframe style="border-radius:12px" src="${src}" width="100%" height="152"
-          frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-          loading="lazy"></iframe>
-        <p class="note">Vista previa de Spotify (si la sesión está iniciada podrás escuchar completa según permisos/licencias).</p>
-      `;
+/* ========= Cargar desde oEmbed (sin API/token) =========
+   Para cada URL de Spotify traemos metadatos: título y thumbnail. */
+async function loadFromSpotifyOEmbed(urls) {
+  const out = [];
+  for (const url of urls) {
+    try{
+      const res = await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`);
+      if(!res.ok) continue;
+      const js = await res.json();
+      out.push({
+        type: DEFAULT_TYPE,                    // cámbialo si quieres clasificar distinto
+        title: js.title || 'Sin título',
+        date: '',                              // si quieres, puedes setear fechas manualmente
+        cover: js.thumbnail_url || '',         // miniatura desde oEmbed
+        urlSpotify: url
+      });
+    }catch(e){
+      console.warn('oEmbed falló para', url, e);
     }
-  } else if(item.urlYouTube){
-    const src = toYoutubeEmbed(item.urlYouTube);
-    if(src){
-      /* Mostramos el player YouTube, SIN controles de “más videos” pero visible (no lo escondemos) */
-      mPlayer.innerHTML = `
-        <h4>Reproducir</h4>
-        <div style="position:relative; padding-top:56.25%; border-radius:12px; overflow:hidden; border:1px solid #222">
-          <iframe src="${src}" style="position:absolute; inset:0; width:100%; height:100%; border:0;"
-           allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <p class="note">Reproducción desde YouTube.</p>
-      `;
-    }
-  } else {
-    mPlayer.innerHTML = `<p class="note">Esta entrada no tiene un enlace de reproducción configurado.</p>`;
   }
-
-  modal.classList.add('open');
+  return out;
 }
+
+/* ========= Init ========= */
+(async function init(){
+  // Construir tarjetas desde tus URLs
+  ITEMS = await loadFromSpotifyOEmbed(SPOTIFY_URLS);
+  renderGrid();
+})();
 </script>
 </body>
 </html>
