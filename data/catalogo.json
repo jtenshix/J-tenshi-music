@@ -1,23 +1,20 @@
 {
   "_---------------------- BANNERS ----------------------": "",
-
   "banner_principal": "https://lh3.googleusercontent.com/d/1_q5FfABiCmduY6kQBic3l6vjLBHgb5d4",
-  
   "banner_discografia": "https://lh3.googleusercontent.com/d/1SzRAjjXyXywwqmuSsQQbwI0VY6mMoqmV",
-  
-  "banner_videos": "https://www.youtube.com/watch?v=yXtg79kJHr8",
+
+  /* En tu HTML actual los banners usan background-image.
+     Si pones un link de YouTube acá no se verá. Usa una imagen. */
+  "banner_videos": "https://lh3.googleusercontent.com/d/1SzRAjjXyXywwqmuSsQQbwI0VY6mMoqmV",
 
   "_------------------------ NEWS -----------------------": "",
-
   "news": {
-    
     "_____ N1 __________________________________________": "",
     "n1": {
       "imagen": "https://lh3.googleusercontent.com/d/1InezyX6mwvLtCIWFvhCFnyqNXyiUH6I0",
       "destino": "news",
       "titulo": "video nuevo"
     },
-    
 
     "_____ N2 __________________________________________": "",
     "n2": {
@@ -25,21 +22,18 @@
       "destino": "news",
       "titulo": "nueva noticia"
     },
-    
 
     "_____ N3 __________________________________________": "",
     "n3": {
       "imagen": "https://lh3.googleusercontent.com/d/1C4jTpxogAGK_wO6rPH9Te0cQmb11LXE3",
       "destino": "news"
     },
-    
 
     "_____ N4 __________________________________________": "",
     "n4": {
       "imagen": "https://lh3.googleusercontent.com/d/1u4WjVPJ4070E25egyL3q6s4Bjq4LRiVj",
       "destino": "discografia"
     },
-    
 
     "_____ N5 __________________________________________": "",
     "n5": {
@@ -49,27 +43,34 @@
     }
   },
 
-  
   "_----------------------- VIDEOS ----------------------": "",
-
   "videos": [
-  { "url": "https://www.youtube.com/watch?v=0_QHL7cDYno" },
-  { "url": "https://www.youtube.com/watch?v=Ulj3sX_jJ7g" },
-  { "url": "https://www.youtube.com/watch?v=yXtg79kJHr8" },
-  { "url": "https://www.youtube.com/watch?v=rIUBxbcd_I0" },
-  { "url": "https://www.youtube.com/watch?v=onfYQgU7PxU" },
-  { "url": "https://www.youtube.com/watch?v=rLBeFFrjKbU" }
+    { "url": "https://www.youtube.com/watch?v=0_QHL7cDYno" },
+    { "url": "https://www.youtube.com/watch?v=Ulj3sX_jJ7g" },
+    { "url": "https://www.youtube.com/watch?v=yXtg79kJHr8" },
+    { "url": "https://www.youtube.com/watch?v=rIUBxbcd_I0" },
+    { "url": "https://www.youtube.com/watch?v=onfYQgU7PxU" },
+    { "url": "https://www.youtube.com/watch?v=rLBeFFrjKbU" }
   ],
 
   "_-------------------- DISCOGRAFIA --------------------": "",
-
   "discografia": {
+    /* Fallbacks por si Spotify no responde: */
     "portadas": [
       "https://lh3.googleusercontent.com/d/1kHa7_jlOKUm1HOvPbE1LENcNsWY8Nj6t",
       "https://lh3.googleusercontent.com/d/1eDkiw4NlFx_FNxFphyfUss04FBWdS0np",
       "https://lh3.googleusercontent.com/d/1eDkiw4NlFx_FNxFphyfUss04FBWdS0np",
       "https://lh3.googleusercontent.com/d/1eDkiw4NlFx_FNxFphyfUss04FBWdS0np",
       "https://lh3.googleusercontent.com/d/1eDkiw4NlFx_FNxFphyfUss04FBWdS0np"
+    ],
+
+    "_----- TRACKS (Spotify) -> para portadas ----------": "",
+    "tracks": [
+      "https://open.spotify.com/intl-es/track/2ns57MfTr1lBbiZ7IBXDFL?si=0363d843b89f4219",
+      "https://open.spotify.com/intl-es/track/3yS5cDr0hdMIk9nFvVMUlV?si=b1de99a203ed409c",
+      "https://open.spotify.com/intl-es/track/5OzpWTySMn0qsKswFF8jQo?si=096c0f70db84414a",
+      "https://open.spotify.com/intl-es/track/0gt5BKcHl70ZTWBclypMaB?si=5a320f27666d4184",
+      "https://open.spotify.com/intl-es/track/4kt26B0dFUYfiCMC1LJd1j?si=3496030443fd44b4"
     ]
   }
 }
