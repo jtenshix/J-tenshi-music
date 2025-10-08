@@ -482,7 +482,7 @@
 
   <!-- Script: JSONP + Carga catálogo (banners + news + videos + discografía con portadas de Spotify) -->
   <script>
-    // ---- JSONP helper para Spotify oEmbed (evitar CORS) ----
+    // ---------- JSONP helper para Spotify oEmbed (sin CORS) ----------
     function jsonp(url) {
       return new Promise((resolve, reject) => {
         const cb = 'sp_cb_' + Math.random().toString(36).slice(2);
@@ -522,7 +522,7 @@
       return results.filter(Boolean);
     }
 
-    // ---- Carga catálogo y aplica todo ----
+    // ---------- Catálogo ----------
     const SECTION_MAP = {
       discografia: 'Discography.html',
       movie:       'movie.html',
@@ -614,16 +614,13 @@
         if (data.discografia) {
           let covers = [];
           if (Array.isArray(data.discografia.tracks) && data.discografia.tracks.length) {
-            // intenta sacarlas de Spotify
             covers = await getFirstNCoversFromSpotify(data.discografia.tracks, 5);
           }
           if ((!covers || covers.length < 5) && Array.isArray(data.discografia.portadas)) {
-            // completa con fallback local si faltan
             const faltan = 5 - (covers ? covers.length : 0);
             covers = (covers || []).concat(data.discografia.portadas.slice(0, faltan));
           }
 
-          // Aplica a a/b/c/d/e (se repiten en los 15 paneles)
           const clases = ['a','b','c','d','e'];
           clases.forEach((cls, i) => {
             const url = covers[i];
