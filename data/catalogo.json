@@ -2,9 +2,6 @@
   "_---------------------- BANNERS ----------------------": "",
   "banner_principal": "https://lh3.googleusercontent.com/d/1_q5FfABiCmduY6kQBic3l6vjLBHgb5d4",
   "banner_discografia": "https://lh3.googleusercontent.com/d/1SzRAjjXyXywwqmuSsQQbwI0VY6mMoqmV",
-
-  /* En tu HTML actual los banners usan background-image.
-     Si pones un link de YouTube acá no se verá. Usa una imagen. */
   "banner_videos": "https://lh3.googleusercontent.com/d/1SzRAjjXyXywwqmuSsQQbwI0VY6mMoqmV",
 
   "_------------------------ NEWS -----------------------": "",
@@ -55,7 +52,6 @@
 
   "_-------------------- DISCOGRAFIA --------------------": "",
   "discografia": {
-    /* Fallbacks por si Spotify no responde: */
     "portadas": [
       "https://lh3.googleusercontent.com/d/1kHa7_jlOKUm1HOvPbE1LENcNsWY8Nj6t",
       "https://lh3.googleusercontent.com/d/1eDkiw4NlFx_FNxFphyfUss04FBWdS0np",
