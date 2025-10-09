@@ -50,9 +50,11 @@
   .date{ opacity:.6; font-size:10px; margin-bottom:6px; }
   .name{ font-size:13px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
+  /* ===== MODAL ===== */
   .modal{
     position:fixed; inset:0; display:none; place-items:center;
-    background:rgba(0,0,0,.65); z-index:9999; padding:20px;
+    background:#000;               /* negro total (antes era rgba) */
+    z-index:9999; padding:20px;
   }
   .modal.open{ display:grid; }
   .sheet{
@@ -87,6 +89,9 @@
     font-weight:700; width:max-content;
   }
   .note{ font-size:12px; opacity:.7; }
+
+  /* Bloqueo de scroll cuando el modal está abierto */
+  body.hardmodal-open{ overflow:hidden; }
 </style>
 </head>
 <body>
@@ -106,11 +111,11 @@
   <main class="grid" id="grid"></main>
 
   <!-- Modal -->
-  <div class="modal" id="modal">
-    <div class="sheet">
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mTitle">
       <div class="sheet-head">
         <div class="sheet-title" id="mTitle">Track</div>
-        <button class="close" id="btnClose">✕</button>
+        <button class="close" id="btnClose" aria-label="Cerrar">✕</button>
       </div>
       <div class="sheet-body">
         <div class="cover" id="mCover"></div>
@@ -142,8 +147,46 @@ const modal   = document.getElementById('modal');
 const mTitle  = document.getElementById('mTitle');
 const mCover  = document.getElementById('mCover');
 const mPlayer = document.getElementById('mPlayer');
-document.getElementById('btnClose').onclick = closeModal;
-modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal(); });
+const btnClose = document.getElementById('btnClose');
+
+/* HARD-LOCK: sin click-fuera, sin ESC, fondo negro total */
+const HARD_LOCK = {
+  onKeydown(e){
+    if(e.key === 'Escape'){
+      e.preventDefault();
+      e.stopPropagation(); // bloquea cierre por ESC
+    }
+  },
+  onDocClick(e){
+    // Si el click NO está dentro de .sheet, no dejamos que burbujee
+    const sheet = modal.querySelector('.sheet');
+    if (sheet && !sheet.contains(e.target)) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  },
+  enable(){
+    document.body.classList.add('hardmodal-open');
+    // Captura para bloquear eventos globales
+    document.addEventListener('keydown', HARD_LOCK.onKeydown, true);
+    document.addEventListener('click', HARD_LOCK.onDocClick, true);
+    // Evita que clicks dentro del modal cierren algo detrás
+    modal.addEventListener('click', e => e.stopPropagation(), true);
+    modal.setAttribute('aria-hidden','false');
+  },
+  disable(){
+    document.body.classList.remove('hardmodal-open');
+    document.removeEventListener('keydown', HARD_LOCK.onKeydown, true);
+    document.removeEventListener('click', HARD_LOCK.onDocClick, true);
+    modal.setAttribute('aria-hidden','true');
+  }
+};
+
+// IMPORTANTE: quitamos el cierre por clic en el backdrop
+// (eliminamos el handler que cerraba si se hacía click en modal)
+ // ——— NO hay handler de cierre por click-fuera ———
+
+btnClose.onclick = closeModal;
 
 let currentType = 'all';
 
@@ -173,7 +216,6 @@ async function hydrateFromOEmbed(item){
     if(!item.title && data.title) item.title = data.title;
   }catch(e){
     // si oEmbed falla, seguimos con lo que haya
-    // console.warn('oEmbed falló:', e);
   }
   return item;
 }
@@ -214,6 +256,7 @@ filters.addEventListener('click', (e)=>{
 function closeModal(){
   modal.classList.remove('open');
   mPlayer.innerHTML = '';
+  HARD_LOCK.disable();           // ← libera bloqueo
 }
 
 function openModal(item){
@@ -235,11 +278,10 @@ function openModal(item){
     `;
   }
   modal.classList.add('open');
+  HARD_LOCK.enable();            // ← activa bloqueo (fondo negro + sin ESC + sin click-fuera)
 }
 
-/* init:
-   1) completamos carátulas/títulos con oEmbed
-   2) renderizamos grid */
+/* init */
 (async ()=>{
   await hydrateAll(ITEMS);
   render();
