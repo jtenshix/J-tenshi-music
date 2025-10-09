@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Tenshi — Discography</title>
 
-<!-- Iconos para plataformas -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
 <style>
@@ -49,7 +48,6 @@
   .card:hover{ transform:translateY(-2px); box-shadow:0 22px 50px rgba(0,0,0,.6); }
   .thumb{ width:100%; aspect-ratio:1/1; background:#0e0e0e center/cover no-repeat; }
   .meta{ padding:10px 12px 12px; text-align:center; }
-  /* SIN FECHAS */
   .name{ font-size:13px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
   /* ===== MODAL grande + hard-lock ===== */
@@ -78,7 +76,7 @@
   .close{ border:none; border-radius:10px; background:#222; color:#eee; padding:8px 12px; cursor:pointer; font-weight:800; }
   .close:hover{ background:#333; }
 
-  /* Layout nuevo: portada chica a la izquierda; player a la derecha */
+  /* Layout: izquierda portada (más chica) + plataformas; derecha player */
   .sheet-body{
     display:grid; grid-template-columns: 0.9fr 1.1fr; gap:22px; padding:20px;
     overflow:auto; max-height:calc(96vh - 62px);
@@ -90,17 +88,18 @@
     background:#0d0d0d center/cover no-repeat;
   }
 
-  /* Iconos de plataformas debajo de la portada */
+  /* Plataformas: siempre visibles; apagadas si no hay link */
   .platforms{
     display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;
   }
-  .platforms a{
+  .platforms a, .platforms span{
     display:inline-flex; align-items:center; justify-content:center;
     width:42px; height:42px; border-radius:10px; background:#151515; border:1px solid #222;
-    transition:transform .15s ease, background .2s ease, border-color .2s ease;
   }
+  .platforms a{ transition:transform .15s ease, background .2s ease, border-color .2s ease; }
   .platforms a:hover{ transform:translateY(-1px); background:#1d1d1d; border-color:#333; }
   .platforms i{ font-size:20px; opacity:.95; }
+  .platforms .off{ opacity:.35; filter:grayscale(1); }
 
   .player{
     background:#111; border:1px solid #222; border-radius:14px; padding:16px;
@@ -125,7 +124,16 @@
 
   .p-note{ font-size:12px; opacity:.7; }
 
-  /* Bloqueo de scroll cuando el modal está abierto */
+  /* “Skin” genérico para el embed de Spotify: lo recortamos y oscurecemos */
+  .embed-wrap{
+    position:relative; width:100%; height:88px;
+    border:1px solid #222; border-radius:12px; overflow:hidden; background:#0f0f0f;
+  }
+  .embed-wrap iframe{
+    position:absolute; left:0; top:-50px;  /* subimos para ocultar branding */
+    width:100%; height:180px; border:0; filter:brightness(0.92) saturate(0.95);
+  }
+
   body.hardmodal-open{ overflow:hidden; }
 </style>
 </head>
@@ -169,6 +177,11 @@
 
           <div class="p-note" id="pNote">Sin preview. Usa los enlaces de plataformas para escuchar la canción completa.</div>
           <audio id="audio" preload="none"></audio>
+
+          <!-- fallback: Spotify embed “disfrazado” -->
+          <div class="embed-wrap" id="embedWrap" style="display:none;">
+            <iframe id="spotFrame" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+          </div>
         </div>
       </div>
     </div>
@@ -186,17 +199,17 @@ async function loadItems() {
     ITEMS = (Array.isArray(arr) ? arr : [])
       .map(x => ({
         spotify: x.spotify,
-        apple:   x.apple || "",
+        apple:   x.apple   || "",
         youtube: x.youtube || "",
-        deezer:  x.deezer || "",
-        amazon:  x.amazon || "",
-        tidal:   x.tidal || "",
-        preview: x.preview || "", // MP3/OGG opcional para el player
-        title:   x.title  || "",
-        cover:   x.cover  || "",
-        type:    x.type   || "single"
+        deezer:  x.deezer  || "",
+        amazon:  x.amazon  || "",
+        tidal:   x.tidal   || "",
+        preview: x.preview || "", // MP3/OGG opcional para el player propio
+        title:   x.title   || "",
+        cover:   x.cover   || "",
+        type:    x.type    || "single"
       }))
-      .filter(x => !!x.spotify); // al menos link principal
+      .filter(x => !!x.spotify);
   } catch (e) {
     console.error('Error cargando songs.json:', e);
     ITEMS = [];
@@ -219,6 +232,9 @@ const audioEl = document.getElementById('audio');
 const bar     = document.getElementById('bar');
 const barFill = bar.querySelector('span');
 const pTime   = document.getElementById('pTime');
+
+const embedWrap = document.getElementById('embedWrap');
+const spotFrame = document.getElementById('spotFrame');
 
 const btnClose = document.getElementById('btnClose');
 
@@ -273,11 +289,6 @@ document.addEventListener('keydown', function(e){
 
 let currentType = 'all';
 
-function trackIdFromUrl(url){
-  const m = String(url).match(/^https?:\/\/open\.spotify\.com\/(?:intl-[^/]+\/)?track\/([A-Za-z0-9]+)(?:\?.*)?$/);
-  return m ? m[1] : null;
-}
-
 /* === oEmbed para carátula y título (sin token) === */
 async function hydrateFromOEmbed(item){
   if(!item.spotify) return item;
@@ -328,39 +339,54 @@ filters.addEventListener('click', (e)=>{
   render();
 });
 
-/* === Plataformas: crea iconos solo para enlaces presentes === */
+/* === Plataformas: siempre mostramos los íconos; apagados si no hay link === */
 function renderPlatformsFor(item){
-  const icons = [];
-  if (item.spotify) icons.push({href:item.spotify, icon:'fa-brands fa-spotify',  title:'Spotify',  style:'color:#1DB954;'});
-  if (item.apple)   icons.push({href:item.apple,   icon:'fa-brands fa-apple',    title:'Apple Music', style:'color:#fff;'});
-  if (item.youtube) icons.push({href:item.youtube, icon:'fa-brands fa-youtube',  title:'YouTube', style:'color:#FF0000;'});
-  if (item.deezer)  icons.push({href:item.deezer,  icon:'fa-brands fa-deezer',   title:'Deezer',  style:'color:#ccc;'});
-  if (item.amazon)  icons.push({href:item.amazon,  icon:'fa-brands fa-amazon',   title:'Amazon Music', style:'color:#FF9900;'});
-  if (item.tidal)   icons.push({href:item.tidal,   icon:'fa-solid fa-music',     title:'Tidal',   style:'color:#00ffff;'});
+  const tpl = (href, icon, title, style) => href
+    ? `<a href="${href}" target="_blank" rel="noopener noreferrer" title="${title}"><i class="${icon}" style="${style}"></i></a>`
+    : `<span class="off" title="${title} (pronto)"><i class="${icon}" style="${style}"></i></span>`;
 
-  mPlatforms.innerHTML = icons.map(i =>
-    `<a href="${i.href}" target="_blank" rel="noopener noreferrer" title="${i.title}"><i class="${i.icon}" style="${i.style}"></i></a>`
-  ).join('');
+  mPlatforms.innerHTML = [
+    tpl(item.spotify, 'fa-brands fa-spotify', 'Spotify', 'color:#1DB954;'),
+    tpl(item.apple,   'fa-brands fa-apple',   'Apple Music', 'color:#fff;'),
+    tpl(item.youtube, 'fa-brands fa-youtube', 'YouTube', 'color:#FF0000;'),
+    tpl(item.deezer,  'fa-brands fa-deezer',  'Deezer', 'color:#ccc;'),
+    tpl(item.amazon,  'fa-brands fa-amazon',  'Amazon Music', 'color:#FF9900;'),
+    tpl(item.tidal,   'fa-solid fa-music',    'Tidal', 'color:#00ffff;')
+  ].join('');
 }
 
-/* === Player propio (usa item.preview si existe) === */
+/* === Player propio (preview) + fallback embed “disfrazado” === */
 let progressRAF = null;
 
 function initPlayerFor(item){
   pTitle.textContent = item.title || 'Track';
   pArtist.textContent = 'J-Tenshi';
+  renderPlatformsFor(item);
 
+  // reset UI
   audioEl.src = '';
   if (progressRAF) cancelAnimationFrame(progressRAF);
   barFill.style.width = '0%';
   pTime.textContent = '0:00';
   btnPlay.innerHTML = `<i class="fa-solid fa-play"></i>`;
+  embedWrap.style.display = 'none';
+  spotFrame.src = '';
 
   if (item.preview) {
+    // Player propio
     audioEl.src = item.preview;
     pNote.textContent = 'Preview local (demo). Para la versión completa, usa los enlaces de plataformas.';
   } else {
-    pNote.textContent = 'Sin preview. Usa los enlaces de plataformas para escuchar la canción completa.';
+    // Fallback: Spotify embed recortado/oscurecido (no muestra branding)
+    const trackId = (String(item.spotify).match(/track\/([A-Za-z0-9]+)/) || [])[1];
+    if (trackId){
+      const src = `https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0`;
+      spotFrame.src = src;
+      embedWrap.style.display = 'block';
+      pNote.textContent = 'Reproductor integrado.';
+    } else {
+      pNote.textContent = 'Sin preview. Usa los enlaces de plataformas para escuchar la canción completa.';
+    }
   }
 }
 
@@ -370,11 +396,13 @@ function secToMMSS(s){
 }
 
 btnPlay.addEventListener('click', () => {
-  if (!audioEl.src) return; // sin preview
-  if (audioEl.paused) {
-    audioEl.play().catch(()=>{});
-  } else {
-    audioEl.pause();
+  if (audioEl.src) {
+    if (audioEl.paused) audioEl.play().catch(()=>{}); else audioEl.pause();
+  } else if (embedWrap.style.display === 'block') {
+    // No podemos controlar el iframe por JS (cross-origin),
+    // pero el usuario puede dar play dentro del área del embed.
+    // Para indicar eso, enfocamos el iframe:
+    spotFrame.focus();
   }
 });
 
@@ -400,9 +428,7 @@ function closeModal(){
 function openModal(item){
   mTitle.textContent = item.title || 'Track';
   mCover.style.backgroundImage = `url('${item.cover || ''}')`;
-  renderPlatformsFor(item);
   initPlayerFor(item);
-
   modal.classList.add('open');
   HARD_LOCK.enable();
 }
