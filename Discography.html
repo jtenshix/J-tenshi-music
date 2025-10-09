@@ -4,6 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Tenshi — Discography</title>
+
+<!-- Iconos para plataformas -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
 <style>
   :root { color-scheme: dark; }
   *{box-sizing:border-box}
@@ -45,7 +49,7 @@
   .card:hover{ transform:translateY(-2px); box-shadow:0 22px 50px rgba(0,0,0,.6); }
   .thumb{ width:100%; aspect-ratio:1/1; background:#0e0e0e center/cover no-repeat; }
   .meta{ padding:10px 12px 12px; text-align:center; }
-  .date{ opacity:.6; font-size:10px; margin-bottom:6px; }
+  /* SIN FECHAS */
   .name{ font-size:13px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
   /* ===== MODAL grande + hard-lock ===== */
@@ -56,7 +60,7 @@
   .modal.open{ display:grid; }
 
   .sheet{
-    width:min(1400px, 98vw);
+    width:min(1500px, 98vw);
     max-height:96vh;
     background:#0f0f0f; border:1px solid #222; border-radius:16px;
     box-shadow:0 40px 120px rgba(0,0,0,.9);
@@ -74,8 +78,9 @@
   .close{ border:none; border-radius:10px; background:#222; color:#eee; padding:8px 12px; cursor:pointer; font-weight:800; }
   .close:hover{ background:#333; }
 
+  /* Layout nuevo: portada chica a la izquierda; player a la derecha */
   .sheet-body{
-    display:grid; grid-template-columns: 1.2fr 1fr; gap:20px; padding:20px;
+    display:grid; grid-template-columns: 0.9fr 1.1fr; gap:22px; padding:20px;
     overflow:auto; max-height:calc(96vh - 62px);
   }
   @media (max-width:1100px){ .sheet-body{ grid-template-columns: 1fr; } }
@@ -84,15 +89,41 @@
     width:100%; aspect-ratio:1/1; border-radius:12px; border:1px solid #222;
     background:#0d0d0d center/cover no-repeat;
   }
+
+  /* Iconos de plataformas debajo de la portada */
+  .platforms{
+    display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;
+  }
+  .platforms a{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:42px; height:42px; border-radius:10px; background:#151515; border:1px solid #222;
+    transition:transform .15s ease, background .2s ease, border-color .2s ease;
+  }
+  .platforms a:hover{ transform:translateY(-1px); background:#1d1d1d; border-color:#333; }
+  .platforms i{ font-size:20px; opacity:.95; }
+
   .player{
-    background:#111; border:1px solid #222; border-radius:14px; padding:14px;
-    display:flex; flex-direction:column; gap:12px;
+    background:#111; border:1px solid #222; border-radius:14px; padding:16px;
+    display:flex; flex-direction:column; gap:14px;
   }
-  .btn{
-    border:none; border-radius:12px; background:#ffcc70; color:#111; padding:10px 14px; cursor:pointer;
-    font-weight:800; width:max-content;
+  .p-title{ font-weight:900; font-size:18px; }
+  .p-artist{ opacity:.7; font-size:12px; margin-top:-8px; }
+
+  .p-controls{ display:flex; align-items:center; gap:14px; }
+  .p-btn{
+    width:44px; height:44px; border-radius:50%; border:1px solid #333; background:#222; color:#eee; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center; font-size:18px;
   }
-  .note{ font-size:12px; opacity:.7; }
+  .p-btn:hover{ background:#2b2b2b; }
+
+  .p-bar{
+    position:relative; flex:1; height:8px; background:#1a1a1a; border-radius:999px; overflow:hidden; border:1px solid #222;
+  }
+  .p-bar > span{ position:absolute; left:0; top:0; bottom:0; width:0%; background:#ffcc70; }
+
+  .p-time{ width:60px; text-align:right; font-variant-numeric: tabular-nums; opacity:.8; font-size:12px; }
+
+  .p-note{ font-size:12px; opacity:.7; }
 
   /* Bloqueo de scroll cuando el modal está abierto */
   body.hardmodal-open{ overflow:hidden; }
@@ -122,8 +153,23 @@
         <button class="close" id="btnClose" aria-label="Cerrar">✕</button>
       </div>
       <div class="sheet-body">
-        <div class="cover" id="mCover"></div>
-        <div class="player" id="mPlayer"></div>
+        <div>
+          <div class="cover" id="mCover"></div>
+          <div class="platforms" id="mPlatforms"></div>
+        </div>
+        <div class="player">
+          <div class="p-title" id="pTitle">—</div>
+          <div class="p-artist" id="pArtist">J-Tenshi</div>
+
+          <div class="p-controls">
+            <button class="p-btn" id="btnPlay"><i class="fa-solid fa-play"></i></button>
+            <div class="p-bar" id="bar"><span></span></div>
+            <div class="p-time" id="pTime">0:00</div>
+          </div>
+
+          <div class="p-note" id="pNote">Sin preview. Usa los enlaces de plataformas para escuchar la canción completa.</div>
+          <audio id="audio" preload="none"></audio>
+        </div>
       </div>
     </div>
   </div>
@@ -140,15 +186,20 @@ async function loadItems() {
     ITEMS = (Array.isArray(arr) ? arr : [])
       .map(x => ({
         spotify: x.spotify,
+        apple:   x.apple || "",
+        youtube: x.youtube || "",
+        deezer:  x.deezer || "",
+        amazon:  x.amazon || "",
+        tidal:   x.tidal || "",
+        preview: x.preview || "", // MP3/OGG opcional para el player
         title:   x.title  || "",
         cover:   x.cover  || "",
-        type:    x.type   || "single",
-        date:    x.date   || ""
+        type:    x.type   || "single"
       }))
-      .filter(x => !!x.spotify);
+      .filter(x => !!x.spotify); // al menos link principal
   } catch (e) {
     console.error('Error cargando songs.json:', e);
-    ITEMS = []; // sin fallback: si no hay archivo, queda vacío
+    ITEMS = [];
   }
 }
 
@@ -158,7 +209,17 @@ const filters = document.getElementById('filters');
 const modal   = document.getElementById('modal');
 const mTitle  = document.getElementById('mTitle');
 const mCover  = document.getElementById('mCover');
-const mPlayer = document.getElementById('mPlayer');
+const mPlatforms = document.getElementById('mPlatforms');
+
+const pTitle  = document.getElementById('pTitle');
+const pArtist = document.getElementById('pArtist');
+const pNote   = document.getElementById('pNote');
+const btnPlay = document.getElementById('btnPlay');
+const audioEl = document.getElementById('audio');
+const bar     = document.getElementById('bar');
+const barFill = bar.querySelector('span');
+const pTime   = document.getElementById('pTime');
+
 const btnClose = document.getElementById('btnClose');
 
 /* HARD-LOCK: sin click-fuera, sin ESC, body sin scroll */
@@ -212,13 +273,6 @@ document.addEventListener('keydown', function(e){
 
 let currentType = 'all';
 
-function formatDate(s){
-  if(!s) return '';
-  try{
-    const d = new Date(s);
-    return d.toLocaleDateString('es-CL', { year:'numeric', month:'short', day:'2-digit' });
-  }catch{ return s; }
-}
 function trackIdFromUrl(url){
   const m = String(url).match(/^https?:\/\/open\.spotify\.com\/(?:intl-[^/]+\/)?track\/([A-Za-z0-9]+)(?:\?.*)?$/);
   return m ? m[1] : null;
@@ -244,6 +298,7 @@ async function hydrateAll(items){
   await Promise.allSettled(jobs);
 }
 
+/* === Cards (sin fechas) === */
 function render(){
   grid.innerHTML = '';
   const list = ITEMS.filter(it => currentType==='all' ? true : it.type===currentType);
@@ -251,17 +306,14 @@ function render(){
     grid.innerHTML = `<div style="grid-column:1/-1; opacity:.7; text-align:center; padding:32px;">No hay canciones en esta vista.</div>`;
     return;
   }
-  list.forEach((it, idx) => {
+  list.forEach((it) => {
     const card = document.createElement('div');
     card.className = 'card';
     const cover = it.cover || 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=800&auto=format&fit=crop';
     const name  = it.title || 'Track';
     card.innerHTML = `
       <div class="thumb" style="background-image:url('${cover}')"></div>
-      <div class="meta">
-        <div class="date">${formatDate(it.date)}</div>
-        <div class="name" title="${name}">${name}</div>
-      </div>
+      <div class="meta"><div class="name" title="${name}">${name}</div></div>
     `;
     card.addEventListener('click', () => openModal(it));
     grid.appendChild(card);
@@ -276,30 +328,80 @@ filters.addEventListener('click', (e)=>{
   render();
 });
 
+/* === Plataformas: crea iconos solo para enlaces presentes === */
+function renderPlatformsFor(item){
+  const icons = [];
+  if (item.spotify) icons.push({href:item.spotify, icon:'fa-brands fa-spotify',  title:'Spotify',  style:'color:#1DB954;'});
+  if (item.apple)   icons.push({href:item.apple,   icon:'fa-brands fa-apple',    title:'Apple Music', style:'color:#fff;'});
+  if (item.youtube) icons.push({href:item.youtube, icon:'fa-brands fa-youtube',  title:'YouTube', style:'color:#FF0000;'});
+  if (item.deezer)  icons.push({href:item.deezer,  icon:'fa-brands fa-deezer',   title:'Deezer',  style:'color:#ccc;'});
+  if (item.amazon)  icons.push({href:item.amazon,  icon:'fa-brands fa-amazon',   title:'Amazon Music', style:'color:#FF9900;'});
+  if (item.tidal)   icons.push({href:item.tidal,   icon:'fa-solid fa-music',     title:'Tidal',   style:'color:#00ffff;'});
+
+  mPlatforms.innerHTML = icons.map(i =>
+    `<a href="${i.href}" target="_blank" rel="noopener noreferrer" title="${i.title}"><i class="${i.icon}" style="${i.style}"></i></a>`
+  ).join('');
+}
+
+/* === Player propio (usa item.preview si existe) === */
+let progressRAF = null;
+
+function initPlayerFor(item){
+  pTitle.textContent = item.title || 'Track';
+  pArtist.textContent = 'J-Tenshi';
+
+  audioEl.src = '';
+  if (progressRAF) cancelAnimationFrame(progressRAF);
+  barFill.style.width = '0%';
+  pTime.textContent = '0:00';
+  btnPlay.innerHTML = `<i class="fa-solid fa-play"></i>`;
+
+  if (item.preview) {
+    audioEl.src = item.preview;
+    pNote.textContent = 'Preview local (demo). Para la versión completa, usa los enlaces de plataformas.';
+  } else {
+    pNote.textContent = 'Sin preview. Usa los enlaces de plataformas para escuchar la canción completa.';
+  }
+}
+
+function secToMMSS(s){
+  const m = Math.floor(s/60) || 0, ss = Math.floor(s%60) || 0;
+  return `${m}:${String(ss).padStart(2,'0')}`;
+}
+
+btnPlay.addEventListener('click', () => {
+  if (!audioEl.src) return; // sin preview
+  if (audioEl.paused) {
+    audioEl.play().catch(()=>{});
+  } else {
+    audioEl.pause();
+  }
+});
+
+audioEl.addEventListener('play', () => { btnPlay.innerHTML = `<i class="fa-solid fa-pause"></i>`; loopProgress(); });
+audioEl.addEventListener('pause', () => { btnPlay.innerHTML = `<i class="fa-solid fa-play"></i>`; if(progressRAF) cancelAnimationFrame(progressRAF); });
+audioEl.addEventListener('ended', () => { btnPlay.innerHTML = `<i class="fa-solid fa-play"></i>`; });
+
+function loopProgress(){
+  const dur = audioEl.duration || 0;
+  const cur = audioEl.currentTime || 0;
+  if (dur > 0) barFill.style.width = `${(cur/dur)*100}%`;
+  pTime.textContent = `${secToMMSS(cur)}`;
+  progressRAF = requestAnimationFrame(loopProgress);
+}
+
+/* === Modal open/close === */
 function closeModal(){
   modal.classList.remove('open');
-  mPlayer.innerHTML = '';
+  audioEl.pause();
   HARD_LOCK.disable();
 }
 
 function openModal(item){
   mTitle.textContent = item.title || 'Track';
   mCover.style.backgroundImage = `url('${item.cover || ''}')`;
-  mPlayer.innerHTML = '';
-
-  const id = trackIdFromUrl(item.spotify || '');
-  if(!id){
-    mPlayer.innerHTML = `<div class="note">Esta tarjeta no tiene un link de <b>pista</b> de Spotify válido.</div>`;
-  }else{
-    const src = `https://open.spotify.com/embed/track/${id}?utm_source=generator&theme=0`;
-    mPlayer.innerHTML = `
-      <iframe style="border-radius:12px" src="${src}" width="100%" height="152"
-        frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-        loading="lazy"></iframe>
-      <button class="btn" onclick="window.open('${item.spotify}','_blank')">Abrir en Spotify</button>
-      <div class="note">Reproductor oficial de Spotify (una sola canción).</div>
-    `;
-  }
+  renderPlatformsFor(item);
+  initPlayerFor(item);
 
   modal.classList.add('open');
   HARD_LOCK.enable();
