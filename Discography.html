@@ -76,63 +76,53 @@
   .close{ border:none; border-radius:10px; background:#222; color:#eee; padding:8px 12px; cursor:pointer; font-weight:800; }
   .close:hover{ background:#333; }
 
-  /* Layout: izquierda portada (más chica) + plataformas; derecha player */
+  /* Layout: portada más chica a la izquierda, player amplio a la derecha */
   .sheet-body{
-    display:grid; grid-template-columns: 0.9fr 1.1fr; gap:22px; padding:20px;
+    display:grid; grid-template-columns: 0.65fr 1.35fr; gap:22px; padding:20px;
     overflow:auto; max-height:calc(96vh - 62px);
   }
   @media (max-width:1100px){ .sheet-body{ grid-template-columns: 1fr; } }
 
   .cover{
-    width:100%; aspect-ratio:1/1; border-radius:12px; border:1px solid #222;
-    background:#0d0d0d center/cover no-repeat;
+    width:100%; max-width:420px; aspect-ratio:1/1; border-radius:12px; border:1px solid #222;
+    background:#0d0d0d center/cover no-repeat; margin:0 auto;
   }
 
-  /* Plataformas: siempre visibles; apagadas si no hay link */
+  /* Plataformas: MÁS GRANDES (52px) — apagadas si no hay link */
   .platforms{
-    display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;
+    display:flex; flex-wrap:wrap; gap:12px; margin-top:14px; justify-content:center;
   }
   .platforms a, .platforms span{
     display:inline-flex; align-items:center; justify-content:center;
-    width:42px; height:42px; border-radius:10px; background:#151515; border:1px solid #222;
+    width:52px; height:52px; border-radius:12px; background:#151515; border:1px solid #222;
   }
   .platforms a{ transition:transform .15s ease, background .2s ease, border-color .2s ease; }
   .platforms a:hover{ transform:translateY(-1px); background:#1d1d1d; border-color:#333; }
-  .platforms i{ font-size:20px; opacity:.95; }
+  .platforms i{ font-size:24px; opacity:.95; }
   .platforms .off{ opacity:.35; filter:grayscale(1); }
 
   .player{
-    background:#111; border:1px solid #222; border-radius:14px; padding:16px;
-    display:flex; flex-direction:column; gap:14px;
+    background:#111; border:1px solid #222; border-radius:14px; padding:18px;
+    display:flex; flex-direction:column; gap:16px;
   }
-  .p-title{ font-weight:900; font-size:18px; }
+  .p-title{ font-weight:900; font-size:20px; }
   .p-artist{ opacity:.7; font-size:12px; margin-top:-8px; }
 
   .p-controls{ display:flex; align-items:center; gap:14px; }
   .p-btn{
-    width:44px; height:44px; border-radius:50%; border:1px solid #333; background:#222; color:#eee; cursor:pointer;
+    width:48px; height:48px; border-radius:50%; border:1px solid #333; background:#222; color:#eee; cursor:pointer;
     display:inline-flex; align-items:center; justify-content:center; font-size:18px;
   }
   .p-btn:hover{ background:#2b2b2b; }
 
   .p-bar{
-    position:relative; flex:1; height:8px; background:#1a1a1a; border-radius:999px; overflow:hidden; border:1px solid #222;
+    position:relative; flex:1; height:10px; background:#1a1a1a; border-radius:999px; overflow:hidden; border:1px solid #222;
   }
   .p-bar > span{ position:absolute; left:0; top:0; bottom:0; width:0%; background:#ffcc70; }
 
-  .p-time{ width:60px; text-align:right; font-variant-numeric: tabular-nums; opacity:.8; font-size:12px; }
+  .p-time{ width:64px; text-align:right; font-variant-numeric: tabular-nums; opacity:.85; font-size:12px; }
 
   .p-note{ font-size:12px; opacity:.7; }
-
-  /* “Skin” genérico para el embed de Spotify: lo recortamos y oscurecemos */
-  .embed-wrap{
-    position:relative; width:100%; height:88px;
-    border:1px solid #222; border-radius:12px; overflow:hidden; background:#0f0f0f;
-  }
-  .embed-wrap iframe{
-    position:absolute; left:0; top:-50px;  /* subimos para ocultar branding */
-    width:100%; height:180px; border:0; filter:brightness(0.92) saturate(0.95);
-  }
 
   body.hardmodal-open{ overflow:hidden; }
 </style>
@@ -175,13 +165,8 @@
             <div class="p-time" id="pTime">0:00</div>
           </div>
 
-          <div class="p-note" id="pNote">Sin preview. Usa los enlaces de plataformas para escuchar la canción completa.</div>
+          <div class="p-note" id="pNote">Sin preview. Agrega “preview” (mp3/ogg) en <code>data/songs.json</code> para usar el reproductor.</div>
           <audio id="audio" preload="none"></audio>
-
-          <!-- fallback: Spotify embed “disfrazado” -->
-          <div class="embed-wrap" id="embedWrap" style="display:none;">
-            <iframe id="spotFrame" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
-          </div>
         </div>
       </div>
     </div>
@@ -232,9 +217,6 @@ const audioEl = document.getElementById('audio');
 const bar     = document.getElementById('bar');
 const barFill = bar.querySelector('span');
 const pTime   = document.getElementById('pTime');
-
-const embedWrap = document.getElementById('embedWrap');
-const spotFrame = document.getElementById('spotFrame');
 
 const btnClose = document.getElementById('btnClose');
 
@@ -339,7 +321,7 @@ filters.addEventListener('click', (e)=>{
   render();
 });
 
-/* === Plataformas: siempre mostramos los íconos; apagados si no hay link === */
+/* === Plataformas (siempre visibles) === */
 function renderPlatformsFor(item){
   const tpl = (href, icon, title, style) => href
     ? `<a href="${href}" target="_blank" rel="noopener noreferrer" title="${title}"><i class="${icon}" style="${style}"></i></a>`
@@ -355,7 +337,7 @@ function renderPlatformsFor(item){
   ].join('');
 }
 
-/* === Player propio (preview) + fallback embed “disfrazado” === */
+/* === Player propio (solo con preview) === */
 let progressRAF = null;
 
 function initPlayerFor(item){
@@ -369,24 +351,12 @@ function initPlayerFor(item){
   barFill.style.width = '0%';
   pTime.textContent = '0:00';
   btnPlay.innerHTML = `<i class="fa-solid fa-play"></i>`;
-  embedWrap.style.display = 'none';
-  spotFrame.src = '';
 
   if (item.preview) {
-    // Player propio
     audioEl.src = item.preview;
-    pNote.textContent = 'Preview local (demo). Para la versión completa, usa los enlaces de plataformas.';
+    pNote.textContent = 'Preview local (demo).';
   } else {
-    // Fallback: Spotify embed recortado/oscurecido (no muestra branding)
-    const trackId = (String(item.spotify).match(/track\/([A-Za-z0-9]+)/) || [])[1];
-    if (trackId){
-      const src = `https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0`;
-      spotFrame.src = src;
-      embedWrap.style.display = 'block';
-      pNote.textContent = 'Reproductor integrado.';
-    } else {
-      pNote.textContent = 'Sin preview. Usa los enlaces de plataformas para escuchar la canción completa.';
-    }
+    pNote.textContent = 'Sin preview. Agrega “preview” (mp3/ogg) en data/songs.json para reproducir aquí.';
   }
 }
 
@@ -396,13 +366,11 @@ function secToMMSS(s){
 }
 
 btnPlay.addEventListener('click', () => {
-  if (audioEl.src) {
-    if (audioEl.paused) audioEl.play().catch(()=>{}); else audioEl.pause();
-  } else if (embedWrap.style.display === 'block') {
-    // No podemos controlar el iframe por JS (cross-origin),
-    // pero el usuario puede dar play dentro del área del embed.
-    // Para indicar eso, enfocamos el iframe:
-    spotFrame.focus();
+  if (!audioEl.src) return; // sin preview
+  if (audioEl.paused) {
+    audioEl.play().catch(()=>{});
+  } else {
+    audioEl.pause();
   }
 });
 
