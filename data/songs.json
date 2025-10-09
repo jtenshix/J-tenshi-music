@@ -1,52 +1,37 @@
-{
-  "songs": [
-    {
-      "title": "Canción 1",
-      "cover": "https://lh3.googleusercontent.com/d/1kHa7_jlOKUm1HOvPbE1LENcNsWY8Nj6t",
-      "youtube": "https://www.youtube.com/watch?v=0_QHL7cDYno",
-      "audio": "",
-      "spotify": "",
-      "apple": ""
-    },
-    {
-      "title": "Canción 2",
-      "cover": "https://lh3.googleusercontent.com/d/1eDkiw4NlFx_FNxFphyfUss04FBWdS0np",
-      "youtube": "https://www.youtube.com/watch?v=Ulj3sX_jJ7g",
-      "audio": "",
-      "spotify": "",
-      "apple": ""
-    },
-    {
-      "title": "Canción 3",
-      "cover": "https://lh3.googleusercontent.com/d/1kHa7_jlOKUm1HOvPbE1LENcNsWY8Nj6t",
-      "youtube": "https://www.youtube.com/watch?v=yXtg79kJHr8",
-      "audio": "",
-      "spotify": "",
-      "apple": ""
-    },
-    {
-      "title": "Canción 4",
-      "cover": "https://lh3.googleusercontent.com/d/1eDkiw4NlFx_FNxFphyfUss04FBWdS0np",
-      "youtube": "https://www.youtube.com/watch?v=rIUBxbcd_I0",
-      "audio": "",
-      "spotify": "",
-      "apple": ""
-    },
-    {
-      "title": "Canción 5",
-      "cover": "https://lh3.googleusercontent.com/d/1kHa7_jlOKUm1HOvPbE1LENcNsWY8Nj6t",
-      "youtube": "https://www.youtube.com/watch?v=onfYQgU7PxU",
-      "audio": "",
-      "spotify": "",
-      "apple": ""
-    },
-    {
-      "title": "Canción 6",
-      "cover": "https://lh3.googleusercontent.com/d/1eDkiw4NlFx_FNxFphyfUss04FBWdS0np",
-      "youtube": "https://www.youtube.com/watch?v=rLBeFFrjKbU",
-      "audio": "",
-      "spotify": "",
-      "apple": ""
-    }
-  ]
-}
+[
+  {
+    "spotify": "https://open.spotify.com/intl-es/track/2ns57MfTr1lBbiZ7IBXDFL?si=0363d843b89f4219",
+    "title": "",
+    "cover": "",
+    "type": "single",
+    "date": "2025-01-01"
+  },
+  {
+    "spotify": "https://open.spotify.com/intl-es/track/3yS5cDr0hdMIk9nFvVMUlV?si=b1de99a203ed409c",
+    "title": "",
+    "cover": "",
+    "type": "single",
+    "date": "2025-01-15"
+  },
+  {
+    "spotify": "https://open.spotify.com/intl-es/track/5OzpWTySMn0qsKswFF8jQo?si=096c0f70db84414a",
+    "title": "",
+    "cover": "",
+    "type": "single",
+    "date": "2025-02-01"
+  },
+  {
+    "spotify": "https://open.spotify.com/intl-es/track/0gt5BKcHl70ZTWBclypMaB?si=5a320f27666d4184",
+    "title": "",
+    "cover": "",
+    "type": "single",
+    "date": "2025-02-15"
+  },
+  {
+    "spotify": "https://open.spotify.com/intl-es/track/4kt26B0dFUYfiCMC1LJd1j?si=3496030443fd44b4",
+    "title": "",
+    "cover": "",
+    "type": "single",
+    "date": "2025-03-01"
+  }
+]
