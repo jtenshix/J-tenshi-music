@@ -48,15 +48,13 @@
   .date{ opacity:.6; font-size:10px; margin-bottom:6px; }
   .name{ font-size:13px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-  /* ===== MODAL (grande + hard-lock) ===== */
+  /* ===== MODAL grande + hard-lock ===== */
   .modal{
     position:fixed; inset:0; display:none; place-items:center;
-    background:#000;                 /* fondo negro total */
-    z-index:9999; padding:8px;       /* poco padding para aprovechar más pantalla */
+    background:#000; z-index:9999; padding:8px;
   }
   .modal.open{ display:grid; }
 
-  /* Sheet MUCHO más grande (casi full pantalla) */
   .sheet{
     width:min(1400px, 98vw);
     max-height:96vh;
@@ -76,7 +74,6 @@
   .close{ border:none; border-radius:10px; background:#222; color:#eee; padding:8px 12px; cursor:pointer; font-weight:800; }
   .close:hover{ background:#333; }
 
-  /* Más espacio dentro: columnas 1.2fr / 1fr y área scroll si se excede */
   .sheet-body{
     display:grid; grid-template-columns: 1.2fr 1fr; gap:20px; padding:20px;
     overflow:auto; max-height:calc(96vh - 62px);
@@ -132,19 +129,28 @@
   </div>
 
 <script>
-/* ========= ITEMS ========= */
-const ITEMS = [
-  { title: "", type:"single", date:"2025-01-01",
-    spotify:"https://open.spotify.com/intl-es/track/2ns57MfTr1lBbiZ7IBXDFL?si=0363d843b89f4219" },
-  { title: "", type:"single", date:"2025-01-15",
-    spotify:"https://open.spotify.com/intl-es/track/3yS5cDr0hdMIk9nFvVMUlV?si=b1de99a203ed409c" },
-  { title: "", type:"single", date:"2025-02-01",
-    spotify:"https://open.spotify.com/intl-es/track/5OzpWTySMn0qsKswFF8jQo?si=096c0f70db84414a" },
-  { title: "", type:"single", date:"2025-02-15",
-    spotify:"https://open.spotify.com/intl-es/track/0gt5BKcHl70ZTWBclypMaB?si=5a320f27666d4184" },
-  { title: "", type:"single", date:"2025-03-01",
-    spotify:"https://open.spotify.com/intl-es/track/4kt26B0dFUYfiCMC1LJd1j?si=3496030443fd44b4" }
-];
+/* ========= CARGA DESDE data/songs.json ========= */
+let ITEMS = [];
+
+async function loadItems() {
+  try {
+    const r = await fetch('data/songs.json', { cache: 'no-store' });
+    if (!r.ok) throw new Error('songs.json no disponible');
+    const arr = await r.json();
+    ITEMS = (Array.isArray(arr) ? arr : [])
+      .map(x => ({
+        spotify: x.spotify,
+        title:   x.title  || "",
+        cover:   x.cover  || "",
+        type:    x.type   || "single",
+        date:    x.date   || ""
+      }))
+      .filter(x => !!x.spotify);
+  } catch (e) {
+    console.error('Error cargando songs.json:', e);
+    ITEMS = []; // sin fallback: si no hay archivo, queda vacío
+  }
+}
 
 /* ========= Helpers ========= */
 const grid    = document.getElementById('grid');
@@ -160,11 +166,10 @@ const HARD_LOCK = {
   onKeydown(e){
     if(e.key === 'Escape'){
       e.preventDefault();
-      e.stopPropagation(); // bloquea cierre por ESC
+      e.stopPropagation();
     }
   },
   onDocClick(e){
-    // Si el click NO está dentro de .sheet, no permitimos que burbujee (evita cierres externos)
     const sheet = modal.querySelector('.sheet');
     if (sheet && !sheet.contains(e.target)) {
       e.stopPropagation();
@@ -241,22 +246,26 @@ async function hydrateAll(items){
 
 function render(){
   grid.innerHTML = '';
-  ITEMS.filter(it => currentType==='all' ? true : it.type===currentType)
-       .forEach((it) => {
-         const card = document.createElement('div');
-         card.className = 'card';
-         const cover = it.cover || 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=800&auto=format&fit=crop';
-         const name  = it.title || 'Track';
-         card.innerHTML = `
-           <div class="thumb" style="background-image:url('${cover}')"></div>
-           <div class="meta">
-             <div class="date">${formatDate(it.date)}</div>
-             <div class="name" title="${name}">${name}</div>
-           </div>
-         `;
-         card.addEventListener('click', () => openModal(it));
-         grid.appendChild(card);
-       });
+  const list = ITEMS.filter(it => currentType==='all' ? true : it.type===currentType);
+  if (!list.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1; opacity:.7; text-align:center; padding:32px;">No hay canciones en esta vista.</div>`;
+    return;
+  }
+  list.forEach((it, idx) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    const cover = it.cover || 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=800&auto=format&fit=crop';
+    const name  = it.title || 'Track';
+    card.innerHTML = `
+      <div class="thumb" style="background-image:url('${cover}')"></div>
+      <div class="meta">
+        <div class="date">${formatDate(it.date)}</div>
+        <div class="name" title="${name}">${name}</div>
+      </div>
+    `;
+    card.addEventListener('click', () => openModal(it));
+    grid.appendChild(card);
+  });
 }
 
 filters.addEventListener('click', (e)=>{
@@ -293,11 +302,12 @@ function openModal(item){
   }
 
   modal.classList.add('open');
-  HARD_LOCK.enable();  // sin ESC, sin click-fuera, body sin scroll
+  HARD_LOCK.enable();
 }
 
-/* init */
+/* ===== init: carga -> oEmbed -> render ===== */
 (async ()=>{
+  await loadItems();
   await hydrateAll(ITEMS);
   render();
 })();
