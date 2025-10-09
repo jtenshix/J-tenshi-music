@@ -33,11 +33,11 @@
   .meta{ padding:10px 12px 12px; text-align:center }
   .name{ font-size:13px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
 
-  /* ===== MODAL full screen & hard-lock ===== */
-  .modal{ position:fixed; inset:0; display:none; place-items:center; background:#000; z-index:9999; padding:12px }
+  /* ===== MODAL full-screen y hard-lock ===== */
+  .modal{ position:fixed; inset:0; display:none; place-items:center; background:#000; z-index:9999; padding:8px }
   .modal.open{ display:grid }
   .sheet{
-    width:min(1900px,99vw); max-height:97vh;
+    width:98vw; height:98vh;
     background:#0f0f0f; border:1px solid #222; border-radius:18px;
     box-shadow:0 60px 150px rgba(0,0,0,.95); overflow:hidden; animation:pop .12s ease-out
   }
@@ -47,41 +47,46 @@
   .close{ border:none; border-radius:10px; background:#222; color:#eee; padding:8px 12px; cursor:pointer; font-weight:800 }
   .close:hover{ background:#333 }
 
-  /* layout: portada chica izq / player grande der */
+  /* layout: portada chica izq / player MUY ancho der */
   .sheet-body{
-    display:grid; grid-template-columns:.55fr 1.45fr; gap:26px; padding:22px;
-    overflow:auto; max-height:calc(97vh - 66px)
+    display:grid; grid-template-columns:.45fr 1.55fr; gap:30px; padding:24px;
+    overflow:auto; height:calc(98vh - 66px)
   }
   @media (max-width:1100px){ .sheet-body{ grid-template-columns:1fr } }
 
   .cover{
-    width:100%; max-width:320px; aspect-ratio:1/1;
+    width:100%; max-width:300px; aspect-ratio:1/1;
     border-radius:14px; border:1px solid #222; background:#0d0d0d center/cover no-repeat;
-    margin:0 auto 14px
+    margin:0 auto 16px
   }
 
-  /* plataformas GRANDES */
-  .platforms{ display:flex; flex-wrap:wrap; gap:14px; justify-content:center }
+  /* plataformas GIGANTES */
+  .platforms{ display:flex; flex-wrap:wrap; gap:16px; justify-content:center }
   .platforms a, .platforms span{
     display:inline-flex; align-items:center; justify-content:center;
-    width:64px; height:64px; border-radius:14px; background:#151515; border:1px solid #222
+    width:70px; height:70px; border-radius:16px; background:#151515; border:1px solid #222
   }
   .platforms a{ transition:transform .15s ease, background .2s ease, border-color .2s ease }
   .platforms a:hover{ transform:translateY(-1px); background:#1d1d1d; border-color:#333 }
-  .platforms i{ font-size:28px; opacity:.95 }
+  .platforms i{ font-size:30px; opacity:.95 }
   .platforms .off{ opacity:.35; filter:grayscale(1) }
 
-  .player{ background:#111; border:1px solid #222; border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:16px }
+  .player{ background:#111; border:1px solid #222; border-radius:16px; padding:22px; display:flex; flex-direction:column; gap:16px; min-height:260px }
   .p-title{ font-weight:900; font-size:22px }
   .p-artist{ opacity:.75; font-size:12px; margin-top:-8px }
 
-  .p-controls{ display:flex; align-items:center; gap:16px }
-  .p-btn{ width:56px; height:56px; border-radius:50%; border:1px solid #333; background:#222; color:#eee; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; font-size:22px }
+  .p-controls{ display:flex; align-items:center; gap:18px }
+  .p-btn{ width:58px; height:58px; border-radius:50%; border:1px solid #333; background:#222; color:#eee; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; font-size:22px }
   .p-btn:hover{ background:#2b2b2b }
   .p-bar{ position:relative; flex:1; height:12px; background:#1a1a1a; border-radius:999px; overflow:hidden; border:1px solid #222 }
   .p-bar>span{ position:absolute; left:0; top:0; bottom:0; width:0%; background:#ffcc70 }
   .p-time{ width:72px; text-align:right; font-variant-numeric:tabular-nums; opacity:.85; font-size:12px }
-  .p-note{ font-size:12px; opacity:.75 }
+
+  .p-note{ font-size:12px; opacity:.85 }
+  .warn{
+    margin-top:8px; padding:12px 14px; border:1px dashed #444; border-radius:10px; background:#121212; color:#ffc66d;
+    font-size:12px; line-height:1.4
+  }
 
   body.hardmodal-open{ overflow:hidden }
 </style>
@@ -127,6 +132,11 @@
         </div>
 
         <div class="p-note" id="pNote">Cargando preview de Spotify…</div>
+        <div class="warn" id="warn" style="display:none">
+          No se pudo obtener el <b>preview</b> de Spotify.  
+          Asegúrate de tener el endpoint <code>/api/spotify-preview?id=TRACK_ID</code> activo (Netlify/Cloudflare).  
+          Si el track no tiene <code>preview_url</code>, Spotify no ofrece muestra.
+        </div>
         <audio id="audio" preload="none"></audio>
       </div>
     </div>
@@ -134,7 +144,7 @@
 </div>
 
 <script>
-/* ===== CARGA LISTA DESDE data/songs.json ===== */
+/* ====== CARGA DESDE data/songs.json ====== */
 let ITEMS = [];
 async function loadItems(){
   try{
@@ -147,16 +157,18 @@ async function loadItems(){
   }catch{ ITEMS=[]; }
 }
 
-/* ===== HELPERS ===== */
+/* ====== HELPERS ====== */
 const grid=document.getElementById('grid');
 const filters=document.getElementById('filters');
 const modal=document.getElementById('modal');
 const mTitle=document.getElementById('mTitle');
 const mCover=document.getElementById('mCover');
 const mPlatforms=document.getElementById('mPlatforms');
+
 const pTitle=document.getElementById('pTitle');
 const pArtist=document.getElementById('pArtist');
 const pNote=document.getElementById('pNote');
+const warn=document.getElementById('warn');
 const btnPlay=document.getElementById('btnPlay');
 const audioEl=document.getElementById('audio');
 const bar=document.getElementById('bar');
@@ -228,9 +240,9 @@ function trackId(url){ const m=String(url).match(/^https?:\/\/open\.spotify\.com
 async function getPreviewFromBackend(id){
   try{
     const r=await fetch(`/api/spotify-preview?id=${id}`,{cache:'no-store'});
-    if(!r.ok) return null;
+    if(!r.ok){ console.warn('Endpoint /api/spotify-preview no responde'); return null; }
     const j=await r.json(); return j && j.preview_url ? j.preview_url : null;
-  }catch{ return null; }
+  }catch(e){ console.warn('Error obteniendo preview:', e); return null; }
 }
 
 async function initPlayerFor(item){
@@ -240,14 +252,14 @@ async function initPlayerFor(item){
 
   audioEl.pause(); audioEl.src=''; if(RAF) cancelAnimationFrame(RAF);
   barFill.style.width='0%'; pTime.textContent='0:00'; btnPlay.innerHTML='<i class="fa-solid fa-play"></i>';
-  pNote.textContent='Cargando preview de Spotify…';
+  pNote.textContent='Cargando preview de Spotify…'; warn.style.display='none';
 
   const id=trackId(item.spotify||'');
   if(!id){ pNote.textContent='Link de pista inválido.'; return; }
 
   const preview=await getPreviewFromBackend(id);
   if(preview){ audioEl.src=preview; pNote.textContent='Preview de Spotify (30s).'; }
-  else{ pNote.textContent='Este track no tiene preview en Spotify o no se pudo obtener.'; }
+  else{ pNote.textContent='Este track no tiene preview en Spotify o no se pudo obtener.'; warn.style.display='block'; }
 }
 
 /* open/close */
