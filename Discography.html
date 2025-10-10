@@ -47,7 +47,7 @@
   .close{ border:none; border-radius:10px; background:#222; color:#eee; padding:8px 12px; cursor:pointer; font-weight:800 }
   .close:hover{ background:#333 }
 
-  /* layout: portada chica izq / player ancho der */
+  /* layout: portada izq / player der */
   .sheet-body{
     display:grid; grid-template-columns:.45fr 1.55fr; gap:30px; padding:24px;
     overflow:auto; height:calc(98vh - 66px)
@@ -55,7 +55,7 @@
   @media (max-width:1100px){ .sheet-body{ grid-template-columns:1fr } }
 
   .cover{
-    width:100%; max-width:300px; aspect-ratio:1/1;
+    width:100%; max-width:360px; aspect-ratio:1/1;
     border-radius:14px; border:1px solid #222; background:#0d0d0d center/cover no-repeat;
     margin:0 auto 16px
   }
@@ -71,16 +71,39 @@
   .platforms i{ font-size:30px; opacity:.95 }
   .platforms .off{ opacity:.35; filter:grayscale(1) }
 
-  .player{ background:#111; border:1px solid #222; border-radius:16px; padding:22px; display:flex; flex-direction:column; gap:16px; min-height:260px }
+  /* Player contenedor (derecha) */
+  .player{ display:flex; flex-direction:column; gap:16px; min-height:260px }
   .p-title{ font-weight:900; font-size:22px }
   .p-artist{ opacity:.75; font-size:12px; margin-top:-8px }
 
-  /* contenedor del embed (limpio) */
-  .embed-wrap{
-    border:1px solid #222; border-radius:14px; overflow:hidden; background:#0f0f0f;
+  /* ===== Estilo embed Spotify ===== */
+  .spotify-embed{
+    position: relative;
+    border: 1px solid #222;
+    border-radius: 16px;
+    background:#0f0f0f;
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+    overflow: hidden;                 /* recorte */
   }
-  .embed-wrap iframe{
-    display:block; width:100%; height:152px; border:0; /* tamaño compacto */
+  .spotify-embed iframe{
+    display:block;
+    width:100%;
+    height:152px;                     /* compacto (track) */
+    border:0;
+  }
+  /* === oculta visualmente la mini carátula === */
+  .spotify-embed.no-cover{
+    --coverW: 132px;                  /* ancho a ocultar (ajústalo si cambia) */
+  }
+  .spotify-embed.no-cover iframe{
+    width: calc(100% + var(--coverW));
+    transform: translateX(calc(var(--coverW) * -1));
+  }
+  @media (max-width: 520px){
+    .spotify-embed.no-cover iframe{
+      width:100%;
+      transform:none; /* en pantallas pequeñas volvemos al embed normal */
+    }
   }
 
   body.hardmodal-open{ overflow:hidden }
@@ -120,8 +143,11 @@
         <div class="p-title" id="pTitle">—</div>
         <div class="p-artist">J-Tenshi</div>
 
-        <div class="embed-wrap">
-          <iframe id="spotifyFrame" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        <!-- Embed de Spotify SIN carátula (recortada/oculta) -->
+        <div class="spotify-embed no-cover">
+          <iframe id="spotifyFrame"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"></iframe>
         </div>
       </div>
     </div>
@@ -163,6 +189,7 @@ document.addEventListener('click',(e)=>{ const b=e.target.closest('#btnClose,.cl
 
 let currentType='all';
 
+/* completa cover/title con oEmbed si faltan */
 async function hydrateFromOEmbed(item){
   try{
     const url=`https://open.spotify.com/oembed?url=${encodeURIComponent(item.spotify)}&maxwidth=640`;
@@ -172,6 +199,7 @@ async function hydrateFromOEmbed(item){
 }
 async function hydrateAll(items){ await Promise.allSettled(items.map(hydrateFromOEmbed)); }
 
+/* grid */
 function render(){
   grid.innerHTML='';
   const list=ITEMS.filter(it=>currentType==='all'?true:it.type===currentType);
@@ -187,6 +215,7 @@ function render(){
 }
 filters.addEventListener('click',(e)=>{ const b=e.target.closest('.chip'); if(!b)return; filters.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); b.classList.add('active'); currentType=b.dataset.type||'all'; render(); });
 
+/* plataformas */
 function renderPlatformsFor(item){
   const cell=(href,icon,title,style)=> href
     ? `<a href="${href}" target="_blank" rel="noopener" title="${title}"><i class="${icon}" style="${style}"></i></a>`
@@ -203,6 +232,7 @@ function renderPlatformsFor(item){
 
 function trackId(url){ const m=String(url).match(/^https?:\/\/open\.spotify\.com\/(?:intl-[^/]+\/)?track\/([A-Za-z0-9]+)(?:\?.*)?$/); return m?m[1]:null; }
 
+/* modal */
 function openModal(item){
   const id=trackId(item.spotify||'');
   mTitle.textContent=item.title||'Track';
@@ -210,14 +240,12 @@ function openModal(item){
   mCover.style.backgroundImage=`url('${item.cover||''}')`;
   renderPlatformsFor(item);
 
-  // iframe oficial minimal (theme=0, height compacta)
   iframe.src = id
     ? `https://open.spotify.com/embed/track/${id}?utm_source=generator&theme=0`
     : 'about:blank';
 
   modal.classList.add('open'); HARD_LOCK.enable();
 }
-
 function closeModal(){ modal.classList.remove('open'); HARD_LOCK.disable(); iframe.src='about:blank'; }
 
 /* init */
