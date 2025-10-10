@@ -26,7 +26,6 @@
     display:grid; gap:20px 18px;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
-  /* en pantallas grandes, fuerza aún más columnas */
   @media (min-width:1280px){ .grid{ grid-template-columns: repeat(4, 1fr); } }
   @media (min-width:1600px){ .grid{ grid-template-columns: repeat(5, 1fr); } }
 
@@ -155,20 +154,55 @@
 </div>
 
 <script>
-/* ====== CARGA DESDE data/songs.json ====== */
+/* =================== DATOS =================== */
 let ITEMS = [];
+let currentType = 'all';
+
+/* ====== LECTURA TXT (una URL por línea) o JSON ====== */
 async function loadItems(){
-  try{
-    const r = await fetch('data/songs.json', {cache:'no-store'});
-    const arr = await r.json();
-    ITEMS = (Array.isArray(arr)?arr:[]).map(x=>({
-      spotify:x.spotify, apple:x.apple||"", youtube:x.youtube||"", deezer:x.deezer||"", amazon:x.amazon||"", tidal:x.tidal||"",
-      title:x.title||"", cover:x.cover||"", type:x.type||"single"
-    })).filter(x=>!!x.spotify);
-  }catch{ ITEMS=[]; }
+  const dedupe = (list) => {
+    const seen = new Set();
+    return list.filter(it => {
+      const m = String(it.spotify).match(/track\/([A-Za-z0-9]+)/);
+      const id = m ? m[1] : it.spotify;
+      if (seen.has(id)) return false;
+      seen.add(id);
+      return true;
+    });
+  };
+
+  // 1) TXT simple
+  try {
+    const t = await fetch('data/songs.txt', { cache:'no-store' });
+    if (t.ok) {
+      const raw = await t.text();
+      const urls = raw.split(/\r?\n/).map(s => s.trim()).filter(s => s && !s.startsWith('#'));
+      ITEMS = dedupe(urls.map(u => ({ spotify:u, title:"", cover:"", type:"single",
+        apple:"", youtube:"", deezer:"", amazon:"", tidal:"" })));
+      return;
+    }
+  } catch {}
+
+  // 2) Fallback JSON (lista de strings u objetos)
+  try {
+    const r = await fetch('data/songs.json', { cache:'no-store' });
+    if (r.ok) {
+      const arr = await r.json();
+      ITEMS = dedupe(
+        (Array.isArray(arr)?arr:[]).map(x =>
+          typeof x === 'string'
+            ? ({ spotify:x, title:"", cover:"", type:"single", apple:"", youtube:"", deezer:"", amazon:"", tidal:"" })
+            : ({ spotify:x.spotify||"", title:x.title||"", cover:x.cover||"", type:x.type||"single",
+                 apple:x.apple||"", youtube:x.youtube||"", deezer:x.deezer||"", amazon:x.amazon||"", tidal:x.tidal||"" })
+        ).filter(x => !!x.spotify)
+      );
+    } else {
+      ITEMS = [];
+    }
+  } catch { ITEMS = []; }
 }
 
-/* ====== HELPERS ====== */
+/* ====== HELPERS UI ====== */
 const grid=document.getElementById('grid');
 const filters=document.getElementById('filters');
 const modal=document.getElementById('modal');
@@ -187,8 +221,6 @@ const HARD_LOCK={
 };
 document.addEventListener('click',(e)=>{ const b=e.target.closest('#btnClose,.close'); if(!b) return; e.preventDefault(); e.stopImmediatePropagation(); closeModal(); }, true);
 
-let currentType='all';
-
 /* completa cover/title con oEmbed si faltan */
 async function hydrateFromOEmbed(item){
   try{
@@ -198,25 +230,6 @@ async function hydrateFromOEmbed(item){
   }catch{}
 }
 async function hydrateAll(items){ await Promise.allSettled(items.map(hydrateFromOEmbed)); }
-
-/* grid */
-function render(){
-  grid.innerHTML='';
-  const list=ITEMS.filter(it=>currentType==='all'?true:it.type===currentType);
-  if(!list.length){ grid.innerHTML=`<div style="grid-column:1/-1;opacity:.7;text-align:center;padding:32px">No hay canciones.</div>`; return; }
-  list.forEach(it=>{
-    const card=document.createElement('div'); card.className='card';
-    const cover=it.cover||'https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=800&auto=format&fit=crop';
-    const name=it.title||'Track';
-    card.innerHTML=`<div class="thumb" style="background-image:url('${cover}')"></div><div class="meta"><div class="name" title="${name}">${name}</div></div>`;
-    card.addEventListener('click',()=>openModal(it));
-    grid.appendChild(card);
-  });
-}
-filters.addEventListener('click',(e)=>{ const b=e.target.closest('.chip'); if(!b)return;
-  filters.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-  b.classList.add('active'); currentType=b.dataset.type||'all'; render();
-});
 
 /* plataformas */
 function renderPlatformsFor(item){
@@ -234,6 +247,36 @@ function renderPlatformsFor(item){
 }
 
 function trackId(url){ const m=String(url).match(/^https?:\/\/open\.spotify\.com\/(?:intl-[^/]+\/)?track\/([A-Za-z0-9]+)(?:\?.*)?$/); return m?m[1]:null; }
+
+/* grid (últimos primero) */
+function render(){
+  grid.innerHTML='';
+  const list=ITEMS
+    .filter(it=>currentType==='all'?true:it.type===currentType)
+    .slice()
+    .reverse();
+
+  if(!list.length){
+    grid.innerHTML=`<div style="grid-column:1/-1;opacity:.7;text-align:center;padding:32px">No hay canciones.</div>`;
+    return;
+  }
+
+  list.forEach(it=>{
+    const card=document.createElement('div'); card.className='card';
+    const cover=it.cover||'https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=800&auto=format&fit=crop';
+    const name=it.title||'Track';
+    card.innerHTML=`<div class="thumb" style="background-image:url('${cover}')"></div>
+                    <div class="meta"><div class="name" title="${name}">${name}</div></div>`;
+    card.addEventListener('click',()=>openModal(it));
+    grid.appendChild(card);
+  });
+}
+
+/* filtros */
+filters.addEventListener('click',(e)=>{ const b=e.target.closest('.chip'); if(!b)return;
+  filters.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  b.classList.add('active'); currentType=b.dataset.type||'all'; render();
+});
 
 /* modal */
 function openModal(item){
