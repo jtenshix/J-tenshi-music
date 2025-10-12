@@ -279,7 +279,7 @@
 
     footer { padding: 100px 0 50px; text-align: center; color: #ccc; letter-spacing: 1px; }
 
-    /* === AJUSTE DE FLECHAS ABAJO (sin romper nada) === */
+    /* === CAMBIO 1: flechas abajo para que no tapen las imágenes === */
     .discography .pagination{
       top: 100%;
       transform: translateY(14px);
@@ -296,6 +296,7 @@
       .discography .pagination{ transform: translateY(18px); }
       .videos-pagination{ bottom: 16px; }
     }
+    /* === FIN CAMBIO 1 === */
   </style>
 </head>
 
@@ -654,7 +655,7 @@
     });
   </script>
 
-  <!-- Script: AUTOPLAY carruseles (cada 5s, pausa al interactuar/ocultar) -->
+  <!-- === CAMBIO 2: AUTOPLAY de ambos carruseles cada 5s (pausa al hover/ocultar) === -->
   <script>
     let autoDisc = null, autoVid = null;
 
@@ -675,11 +676,9 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      // iniciar autoplay
       startAutoDisc();
       startAutoVid();
 
-      // Pausar/Reanudar al pasar el mouse
       const discWrap = document.querySelector('.discography .container');
       const vidWrap  = document.querySelector('.videos-holder');
       if (discWrap){
@@ -692,15 +691,15 @@
       }
     });
 
-    // Pausar si la pestaña no está visible
     document.addEventListener('visibilitychange', () => {
       if (document.hidden){ stopAutoDisc(); stopAutoVid(); }
       else { startAutoDisc(); startAutoVid(); }
     });
 
-    // Al usar flechas, reiniciar timers para evitar saltos
+    // Reinicia el temporizador al usar flechas (evita “saltos” justo después)
     $("#prev, #next").on("click", () => { startAutoDisc(); });
     $("#prev-video, #next-video").on("click", () => { startAutoVid(); });
   </script>
+  <!-- === FIN CAMBIO 2 === -->
 </body>
 </html>
