@@ -278,6 +278,24 @@
     }
 
     footer { padding: 100px 0 50px; text-align: center; color: #ccc; letter-spacing: 1px; }
+
+    /* === AJUSTE DE FLECHAS ABAJO (sin romper nada) === */
+    .discography .pagination{
+      top: 100%;
+      transform: translateY(14px);
+    }
+    .discography .container{ padding-bottom: 48px; }
+
+    .videos-holder{ padding-bottom: 64px; }
+    .videos-pagination{
+      top: auto;
+      bottom: 12px;
+      transform: none;
+    }
+    @media (max-width: 600px){
+      .discography .pagination{ transform: translateY(18px); }
+      .videos-pagination{ bottom: 16px; }
+    }
   </style>
 </head>
 
@@ -634,6 +652,55 @@
       cargarCatalogoPrincipal();
       if (typeof updateSpinnerVideos === 'function') updateSpinnerVideos();
     });
+  </script>
+
+  <!-- Script: AUTOPLAY carruseles (cada 5s, pausa al interactuar/ocultar) -->
+  <script>
+    let autoDisc = null, autoVid = null;
+
+    function startAutoDisc(){
+      stopAutoDisc();
+      autoDisc = setInterval(() => { ang -= ang_unit; updateSpinner(); }, 5000);
+    }
+    function stopAutoDisc(){
+      if (autoDisc) { clearInterval(autoDisc); autoDisc = null; }
+    }
+
+    function startAutoVid(){
+      stopAutoVid();
+      autoVid = setInterval(() => { angVid -= angVid_unit; updateSpinnerVideos(); }, 5000);
+    }
+    function stopAutoVid(){
+      if (autoVid) { clearInterval(autoVid); autoVid = null; }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // iniciar autoplay
+      startAutoDisc();
+      startAutoVid();
+
+      // Pausar/Reanudar al pasar el mouse
+      const discWrap = document.querySelector('.discography .container');
+      const vidWrap  = document.querySelector('.videos-holder');
+      if (discWrap){
+        discWrap.addEventListener('mouseenter', stopAutoDisc);
+        discWrap.addEventListener('mouseleave', startAutoDisc);
+      }
+      if (vidWrap){
+        vidWrap.addEventListener('mouseenter', stopAutoVid);
+        vidWrap.addEventListener('mouseleave', startAutoVid);
+      }
+    });
+
+    // Pausar si la pestaña no está visible
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden){ stopAutoDisc(); stopAutoVid(); }
+      else { startAutoDisc(); startAutoVid(); }
+    });
+
+    // Al usar flechas, reiniciar timers para evitar saltos
+    $("#prev, #next").on("click", () => { startAutoDisc(); });
+    $("#prev-video, #next-video").on("click", () => { startAutoVid(); });
   </script>
 </body>
 </html>
