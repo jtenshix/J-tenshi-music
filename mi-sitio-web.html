@@ -297,6 +297,45 @@
       .videos-pagination{ bottom: 16px; }
     }
     /* === FIN CAMBIO 1 === */
+
+    /* === NEWS XL (agrandar sin tocar funciones) === */
+    :root{
+      --news-max: 1600px;   /* ajusta 1400–1800px según quieras */
+      --news-gap: 28px;
+      --news-padY: 120px;
+      --news-padB: 100px;
+    }
+    .news{
+      max-width: var(--news-max);
+      padding: var(--news-padY) 5% var(--news-padB);
+    }
+    .schedule-grid{
+      max-width: var(--news-max);
+      gap: var(--news-gap);
+      grid-template-columns: 2.2fr 1.2fr 1.2fr; /* main más grande */
+    }
+    .main-news img,
+    .news-card img{
+      inset: 6px; /* la imagen ocupa más área */
+    }
+    @media (min-width: 1800px){
+      :root{
+        --news-max: 1800px;
+        --news-gap: 32px;
+      }
+    }
+    @media (max-width: 1100px){
+      :root{
+        --news-max: 100%;
+        --news-gap: 20px;
+        --news-padY: 90px;
+        --news-padB: 80px;
+      }
+      .schedule-grid{
+        grid-template-columns: 1.6fr 1fr 1fr;
+      }
+    }
+    /* === FIN NEWS XL === */
   </style>
 </head>
 
