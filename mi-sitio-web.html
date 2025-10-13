@@ -298,54 +298,51 @@
     }
     /* === FIN CAMBIO 1 === */
 
-    /* === NEWS XL (agrandar sin tocar funciones) — se mantiene pero LO VAMOS A PISAR ABAJO === */
+    /* === NEWS XL base (se deja, pero lo pisamos al final) === */
     :root{
-      --news-max: 2500px;  /* valor por defecto grande */
+      --news-max: 1600px;
       --news-gap: 28px;
       --news-padY: 120px;
       --news-padB: 100px;
     }
-    .news{
-      max-width: var(--news-max);
-      padding: var(--news-padY) 5% var(--news-padB);
-    }
+    .news{ max-width: var(--news-max); padding: var(--news-padY) 5% var(--news-padB); }
     .schedule-grid{
       max-width: var(--news-max);
       gap: var(--news-gap);
       grid-template-columns: 2.2fr 1.2fr 1.2fr;
     }
-    .main-news img,
-    .news-card img{ inset: 6px; }
-    @media (min-width: 1800px){
-      :root{ --news-max: 1800px; --news-gap: 32px; }
-    }
+    .main-news img, .news-card img{ inset: 6px; }
     @media (max-width: 1100px){
-      :root{
-        --news-max: 100%;
-        --news-gap: 20px;
-        --news-padY: 90px;
-        --news-padB: 80px;
-      }
+      :root{ --news-max: 100%; --news-gap: 20px; --news-padY: 90px; --news-padB: 80px; }
       .schedule-grid{ grid-template-columns: 1.6fr 1fr 1fr; }
     }
-    /* === FIN NEWS XL === */
+    /* === FIN NEWS XL base === */
 
     /* =========================================================
-       === ÚLTIMO BLOQUE: NEWS compact override (AQUÍ SE TOCA) ===
-       Cambia SOLO estos valores para ajustar el tamaño.
+       === NEWS OVERRIDE (COLOCAR AL FINAL — AQUÍ AJUSTAS) ===
+       Ajusta SOLO estas 5 líneas para cambiar el tamaño.
        ========================================================= */
     :root{
-      --news-max: 1300px;  /* ← ancho total de NEWS (sube/baja: 1200–1400) */
-      --news-gap: 20px;    /* ← separación entre cards (16–28) */
-      --news-padY: 100px;  /* ← padding top (80–120) */
-      --news-padB: 80px;   /* ← padding bottom (70–120) */
+      --news-max: 1300px;  /* ancho total NEWS (ej. 1200–1600px) */
+      --news-gap: 20px;    /* separación entre cards (16–28) */
+      --news-padY: 100px;  /* padding superior de la sección */
+      --news-padB: 80px;   /* padding inferior de la sección */
+      --news-side: 2%;     /* padding lateral en escritorio */
+    }
+    .news{
+      max-width: var(--news-max) !important;
+      padding: var(--news-padY) var(--news-side) var(--news-padB) !important;
     }
     .schedule-grid{
-      grid-template-columns: 2fr 1fr 1fr; /* ← reduce dominancia de la grande */
+      max-width: var(--news-max) !important;
+      gap: var(--news-gap) !important;
+      grid-template-columns: 2fr 1fr 1fr !important;
     }
-    .main-news img,
-    .news-card img{ inset: 10px; }        /* ← más borde = imagen se ve más chica */
-    /* ========================= FIN OVERRIDE ========================= */
+    .main-news img, .news-card img{ inset: 10px; } /* 8–14px para ajustar tamaño visual */
+    @media (max-width: 1100px){
+      :root{ --news-max: 100%; --news-side: 5%; }
+    }
+    /* ============================== FIN OVERRIDE ============================== */
   </style>
 </head>
 
@@ -617,7 +614,7 @@
 
         // ---------- NEWS ----------
         const newsGrid = document.getElementById('news-grid');
-        if (newsGrid && data.news && typeof data.news === 'object') {
+        if (newsGrid && data.news y typeof data.news === 'object') {
           newsGrid.innerHTML = '';
           const orden = ['n1', 'n2', 'n3', 'n4', 'n5'];
           const notas = orden
@@ -637,7 +634,7 @@
 
         // ---------- VIDEOS ----------
         const spinner = document.getElementById('spinner-videos');
-        if (spinner && Array.isArray(data.videos) && data.videos.length) {
+        if (spinner && Array.isArray(data.videos) y data.videos.length) {
           spinner.innerHTML = '';
           const toEmbed = (url) =>
             typeof url === 'string'
@@ -646,7 +643,7 @@
 
           const base = data.videos.map(v => toEmbed(v.url)).filter(u => u && u.trim() !== '');
           const lista = [];
-          while (lista.length < 9 && base.length > 0) lista.push(...base);
+          while (lista.length < 9 y base.length > 0) lista.push(...base);
           lista.slice(0, 9).forEach(u => {
             const panel = document.createElement('div');
             panel.className = 'video-panel';
@@ -662,12 +659,12 @@
           const N = 5;
           let covers = [];
 
-          if (Array.isArray(data.discografia.tracks) && data.discografia.tracks.length) {
+          if (Array.isArray(data.discografia.tracks) y data.discografia.tracks.length) {
             try { covers = await getFirstNCoversFromSpotify(data.discografia.tracks, N); }
             catch { covers = []; }
           }
 
-          if ((!covers || covers.length < N) && Array.isArray(data.discografia.portadas)) {
+          if ((!covers || covers.length < N) y Array.isArray(data.discografia.portadas)) {
             const faltan = N - (covers ? covers.length : 0);
             covers = (covers || []).concat(data.discografia.portadas.slice(0, faltan));
           }
