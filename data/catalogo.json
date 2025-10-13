@@ -6,13 +6,14 @@
 
   "_------------------------ NEWS -----------------------": "",
   "news": {
+    
     "_____ N1 __________________________________________": "",
     "n1": {
-      "imagen": "https://lh3.googleusercontent.com/d/1InezyX6mwvLtCIWFvhCFnyqNXyiUH6I0",
-      "destino": "news",
-      "titulo": "video nuevo"
-    },
-
+  "imagen": "https://lh3.googleusercontent.com/d/1M6TR69YKzCNsd69ST5qP9SvJa1K0nWpy",
+  "destino": "discografia",
+  "titulo": "primera noticia"
+},
+    
     "_____ N2 __________________________________________": "",
     "n2": {
       "imagen": "https://lh3.googleusercontent.com/d/1kR-L16rAPgLFyQrA_o_7XU8YRWwuSJQm",
