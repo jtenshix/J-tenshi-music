@@ -17,6 +17,8 @@
       overflow-x: hidden;
       width: 100%; height: 100%;
       transition: background 0.3s, color 0.3s;
+      /* amortigua anclas/scrolls si hicieras #links */
+      scroll-padding-top: 84px;
     }
     body.light-mode { background: #f5f5f5; color: #111; }
 
@@ -72,11 +74,16 @@
     .social-networks { gap: 15px; margin-top: 10px; }
     .social-networks a { font-size: 32px; }
 
-    /* === NEWS === */
+    /* === NEWS (estructura base) === */
     .news {
-      padding: 100px 5% 80px; background-color: #1a1a1a;
-      max-width: 1200px; margin: -50px auto 80px; border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0,0,0,.3); transition: background 0.3s ease;
+      background-color: #1a1a1a;
+      box-shadow: 0 0 30px rgba(0,0,0,.3);
+      transition: background 0.3s ease;
+      /* Los valores finales se pisan con variables abajo */
+      max-width: 1200px;
+      margin: -50px auto 80px;
+      padding: 100px 5% 80px;
+      border-radius: 12px;
     }
     .news h2 { font-size: 32px; color: #fff; margin-bottom: 30px; text-align: center; }
     .news h2 span { font-size: 14px; color: #ccc; margin-left: 10px; }
@@ -96,7 +103,7 @@
       border-radius: 16px;
     }
     .main-news {
-      grid-column: 1 / 2; grid-row: 1 / 3;
+      grid-column: 1 / 2; grid-row: 1 / 2; /* 1 fila para evitar que “salte” el borde superior */
       background: linear-gradient(135deg, #4c51bf, #4c51bf);
       box-shadow: 0 0 20px rgba(76,81,191,.8);
       aspect-ratio: 1 / 1;
@@ -184,9 +191,9 @@
     }
 
     .discography .pagination {
-      position: absolute; top: 50%; left: 0; right: 0; z-index: 3;
+      position: absolute; top: 100%; left: 0; right: 0; z-index: 3;
       width: 100%; display: flex; justify-content: space-between;
-      align-items: center; transform: translateY(-50%);
+      align-items: center; transform: translateY(14px);
     }
     #prev { margin-left: 20px; }
     #next { margin-right: 20px; }
@@ -273,35 +280,27 @@
 
     footer { padding: 100px 0 50px; text-align: center; color: #ccc; letter-spacing: 1px; }
 
-    /* === CAMBIO 1: flechas abajo para que no tapen las imágenes === */
-    .discography .pagination{
-      top: 100%;
-      transform: translateY(14px);
-    }
-    .discography .container{ padding-bottom: 48px; }
-
+    /* === FLECHAS: abajo para no tapar === */
     .videos-holder{ padding-bottom: 64px; }
-    .videos-pagination{
-      top: auto;
-      bottom: 12px;
-      transform: none;
-    }
-    @media (max-width: 600px){
-      .discography .pagination{ transform: translateY(18px); }
-      .videos-pagination{ bottom: 16px; }
-    }
-    /* === FIN CAMBIO 1 === */
+    .videos-pagination{ top: auto; bottom: 12px; transform: none; }
+    @media (max-width: 600px){ .videos-pagination{ bottom: 16px; } }
 
-    /* === NEWS XL (base) — se pisa abajo con overrides === */
+    /* === BASE XL (se pisa más abajo) === */
     :root{
-      --news-max: 100px;  /* valor por defecto grande */
+      --news-max: 2500px;
       --news-gap: 28px;
-      --news-padY: 10px;
+      --news-padY: 120px;
       --news-padB: 100px;
+      --news-inset: 6px;
+      --news-radius: 12px;
+      --news-offset: -50px; /* margen-top “por defecto base” */
+      --news-mb: 80px;
     }
     .news{
       max-width: var(--news-max);
       padding: var(--news-padY) 5% var(--news-padB);
+      margin: var(--news-offset) auto var(--news-mb);
+      border-radius: var(--news-radius);
     }
     .schedule-grid{
       max-width: var(--news-max);
@@ -309,7 +308,8 @@
       grid-template-columns: 2.2fr 1.2fr 1.2fr;
     }
     .main-news img,
-    .news-card img{ inset: 6px; }
+    .news-card img{ inset: var(--news-inset); }
+
     @media (min-width: 1800px){
       :root{ --news-max: 1800px; --news-gap: 32px; }
     }
@@ -317,32 +317,30 @@
       :root{
         --news-max: 100%;
         --news-gap: 20px;
-        --news-padY: 10px;
+        --news-padY: 90px;
         --news-padB: 80px;
       }
       .schedule-grid{ grid-template-columns: 1.6fr 1fr 1fr; }
     }
-    /* === FIN NEWS XL === */
 
     /* =========================================================
-       === ÚLTIMO BLOQUE: NEWS ajustes finos (AQUÍ SE TOCA) ===
+       === ÚLTIMO BLOQUE: NEWS (AQUÍ SE TOCA) — PERILLAS CLARAS ===
+       Ajusta estos valores para que SIEMPRE se vea la orilla.
        ========================================================= */
     :root{
-      --news-max:  900px;  /* ancho total de NEWS -> cards más grandes */
-      --news-gap: 22px;    /* separación entre cards */
-      --news-padY: 5px;   /* menos padding arriba -> sube el título */
-      --news-padB: 80px;   /* padding inferior */
+      --news-max: 1700px;   /* ancho total -> cards más grandes */
+      --news-gap: 22px;     /* separación entre cards */
+      --news-padY: 56px;    /* padding interno arriba/abajo dentro del recuadro */
+      --news-padB: 72px;
+      --news-inset: 4px;    /* grosor del marco dentro de cada card */
+      --news-radius: 16px;  /* redondeo del recuadro gris */
+      --news-offset: -12px; /* <= SUBE/BAJA LA CAJA ENTERA
+                               -12px es seguro; si se corta la orilla, pon -8, -4 o 0 */
+      --news-mb: 72px;      /* margen inferior del recuadro */
     }
-    .schedule-grid{
-      grid-template-columns: 2fr 1fr 1fr; /* proporción de columnas */
-    }
-    /* marco delgado sin achicar notas */
-    .main-news img,
-    .news-card img{ inset: 4px; }
-
-    /* subir toda la sección un poco respecto al bloque anterior */
-    .news{ margin-top: -10px; }
-    /* ========================= FIN OVERRIDE ========================= */
+    .schedule-grid{ grid-template-columns: 2fr 1fr 1fr; }
+    .news h2{ margin: 10px 0 18px; } /* menos aire bajo el título */
+    /* ========================= FIN PERILLAS ========================= */
   </style>
 </head>
 
@@ -448,7 +446,7 @@
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Script: tema y filtros -->
+  <!-- Script: tema -->
   <script>
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
@@ -457,15 +455,6 @@
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-mode');
     }
-    // El código de filtros queda inofensivo si no hay botones (se removieron)
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.schedule-filters button').forEach(button => {
-        button.addEventListener('click', () => {
-          document.querySelectorAll('.schedule-filters button').forEach(b => b.classList.remove('active'));
-          button.classList.add('active');
-        });
-      });
-    });
   </script>
 
   <!-- Script: carrusel DISCOS -->
@@ -540,21 +529,17 @@
     $("#next-video").on("click", function(){ angVid -= angVid_unit; updateSpinnerVideos(); });
   </script>
 
-  <!-- Script: CARGA CATÁLOGO (banners + news + videos + DISCOS con portadas Spotify/fallback) -->
+  <!-- Script: CARGA CATÁLOGO -->
   <script>
-    // fetch con timeout
     async function fetchWithTimeout(url, ms = 6000) {
       const ctl = new AbortController();
       const t = setTimeout(() => ctl.abort(), ms);
       try {
         const res = await fetch(url, { signal: ctl.signal, cache: 'no-store' });
         return res;
-      } finally {
-        clearTimeout(t);
-      }
+      } finally { clearTimeout(t); }
     }
 
-    // oEmbed Spotify -> portada (sin JSONP)
     async function getSpotifyCover(spotifyUrl){
       const oembed = 'https://open.spotify.com/oembed?url='
         + encodeURIComponent(spotifyUrl)
@@ -564,9 +549,7 @@
         if (!res.ok) return null;
         const data = await res.json();
         return (data && data.thumbnail_url) ? data.thumbnail_url : null;
-      }catch{
-        return null;
-      }
+      }catch{ return null; }
     }
 
     async function getFirstNCoversFromSpotify(urls, n = 5){
@@ -575,7 +558,6 @@
       return results.filter(Boolean);
     }
 
-    // Mapa de destinos semánticos
     const SECTION_MAP = {
       discografia: 'Discography.html',
       movie:       'movie.html',
@@ -650,7 +632,7 @@
           updateSpinnerVideos();
         }
 
-        // ---------- DISCOGRAFÍA (PORTADAS DESDE SPOTIFY -> FALLBACK) ----------
+        // ---------- DISCOGRAFÍA ----------
         if (data.discografia) {
           const N = 5;
           let covers = [];
@@ -686,9 +668,7 @@
           });
         }
 
-      } catch (e) {
-        console.error('Error cargando catálogo:', e);
-      }
+      } catch (e) { console.error('Error cargando catálogo:', e); }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -697,40 +677,22 @@
     });
   </script>
 
-  <!-- === CAMBIO 2: AUTOPLAY de ambos carruseles cada 5s (pausa al hover/ocultar) === -->
+  <!-- === AUTOPLAY carruseles === -->
   <script>
     let autoDisc = null, autoVid = null;
 
-    function startAutoDisc(){
-      stopAutoDisc();
-      autoDisc = setInterval(() => { ang -= ang_unit; updateSpinner(); }, 5000);
-    }
-    function stopAutoDisc(){
-      if (autoDisc) { clearInterval(autoDisc); autoDisc = null; }
-    }
+    function startAutoDisc(){ stopAutoDisc(); autoDisc = setInterval(() => { ang -= ang_unit; updateSpinner(); }, 5000); }
+    function stopAutoDisc(){ if (autoDisc) { clearInterval(autoDisc); autoDisc = null; } }
 
-    function startAutoVid(){
-      stopAutoVid();
-      autoVid = setInterval(() => { angVid -= angVid_unit; updateSpinnerVideos(); }, 5000);
-    }
-    function stopAutoVid(){
-      if (autoVid) { clearInterval(autoVid); autoVid = null; }
-    }
+    function startAutoVid(){ stopAutoVid(); autoVid = setInterval(() => { angVid -= angVid_unit; updateSpinnerVideos(); }, 5000); }
+    function stopAutoVid(){ if (autoVid) { clearInterval(autoVid); autoVid = null; } }
 
     document.addEventListener('DOMContentLoaded', () => {
-      startAutoDisc();
-      startAutoVid();
-
+      startAutoDisc(); startAutoVid();
       const discWrap = document.querySelector('.discography .container');
       const vidWrap  = document.querySelector('.videos-holder');
-      if (discWrap){
-        discWrap.addEventListener('mouseenter', stopAutoDisc);
-        discWrap.addEventListener('mouseleave', startAutoDisc);
-      }
-      if (vidWrap){
-        vidWrap.addEventListener('mouseenter', stopAutoVid);
-        vidWrap.addEventListener('mouseleave', startAutoVid);
-      }
+      if (discWrap){ discWrap.addEventListener('mouseenter', stopAutoDisc); discWrap.addEventListener('mouseleave', startAutoDisc); }
+      if (vidWrap){  vidWrap.addEventListener('mouseenter', stopAutoVid);  vidWrap.addEventListener('mouseleave', startAutoVid); }
     });
 
     document.addEventListener('visibilitychange', () => {
@@ -738,10 +700,8 @@
       else { startAutoDisc(); startAutoVid(); }
     });
 
-    // Reinicia el temporizador al usar flechas (evita “saltos” justo después)
     $("#prev, #next").on("click", () => { startAutoDisc(); });
     $("#prev-video, #next-video").on("click", () => { startAutoVid(); });
   </script>
-  <!-- === FIN CAMBIO 2 === -->
 </body>
 </html>
