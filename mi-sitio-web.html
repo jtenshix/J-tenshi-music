@@ -311,6 +311,25 @@
     .schedule-grid{ grid-template-columns: 2fr 1fr 1fr; } /* proporción original */
     .news h2{ margin: 10px 0 18px; }                     /* menos aire bajo el título */
     /* ========================= FIN PERILLAS ========================= */
+
+    /* ========= NEWS COMPACT (OVERRIDE para que quepa completo) ========= */
+    :root{
+      --news-max: 1150px;   /* ANCHO total del rectángulo (ajusta aquí) */
+      --news-gap: 16px;
+      --news-padY: 36px;    /* padding arriba/abajo más pequeño */
+      --news-padB: 36px;
+      --news-radius: 14px;
+      --news-mb: 48px;
+    }
+    .schedule-grid{ grid-template-columns: 1.6fr 1fr 1fr; } /* 1ª columna un poco más angosta */
+    .main-news{ aspect-ratio: 4 / 5; }   /* “altura” menor para que entre */
+    .news-card{ aspect-ratio: 4 / 5; }
+    .news{ overflow: visible; }          /* evita que se corte el glow del borde */
+
+    @media (max-width: 1200px){
+      .main-news, .news-card{ aspect-ratio: 1 / 1; } /* en pantallas chicas vuelve a cuadrado */
+    }
+    /* ========================= FIN OVERRIDE ========================= */
   </style>
 </head>
 
