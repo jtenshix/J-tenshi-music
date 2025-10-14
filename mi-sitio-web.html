@@ -80,12 +80,6 @@
     }
     .news h2 { font-size: 32px; color: #fff; margin-bottom: 30px; text-align: center; }
     .news h2 span { font-size: 14px; color: #ccc; margin-left: 10px; }
-    .schedule-filters { margin-bottom: 40px; display: flex; justify-content: center; gap: 20px; }
-    .schedule-filters button {
-      background: none; border: 1px solid #555; color: #ccc; padding: 8px 18px; font-size: 14px;
-      cursor: pointer; border-radius: 20px; transition: all 0.3s ease;
-    }
-    .schedule-filters button.active, .schedule-filters button:hover { color: #e0c27b; border-color: #e0c27b; }
 
     .schedule-grid {
       display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 1fr 1fr;
@@ -298,7 +292,7 @@
     }
     /* === FIN CAMBIO 1 === */
 
-    /* === NEWS XL (agrandar sin tocar funciones) — se mantiene pero LO VAMOS A PISAR ABAJO === */
+    /* === NEWS XL (base) — se pisa abajo con overrides === */
     :root{
       --news-max: 2500px;  /* valor por defecto grande */
       --news-gap: 28px;
@@ -331,20 +325,23 @@
     /* === FIN NEWS XL === */
 
     /* =========================================================
-       === ÚLTIMO BLOQUE: NEWS compact override (AQUÍ SE TOCA) ===
-       Cambia SOLO estos valores para ajustar el tamaño.
+       === ÚLTIMO BLOQUE: NEWS ajustes finos (AQUÍ SE TOCA) ===
        ========================================================= */
     :root{
-      --news-max: 1200px;  /* ← ancho total de NEWS (sube/baja: 1200–1400) */
-      --news-gap: 20px;    /* ← separación entre cards (16–28) */
-      --news-padY: 30px;  /* ← padding top (80–120) */
-      --news-padB: 80px;   /* ← padding bottom (70–120) */
+      --news-max: 1700px;  /* ancho total de NEWS -> cards más grandes */
+      --news-gap: 22px;    /* separación entre cards */
+      --news-padY: 70px;   /* menos padding arriba -> sube el título */
+      --news-padB: 80px;   /* padding inferior */
     }
     .schedule-grid{
-      grid-template-columns: 2fr 1fr 1fr; /* ← reduce dominancia de la grande */
+      grid-template-columns: 2fr 1fr 1fr; /* proporción de columnas */
     }
+    /* marco delgado sin achicar notas */
     .main-news img,
-    .news-card img{ inset: 10px; }        /* ← más borde = imagen se ve más chica */
+    .news-card img{ inset: 4px; }
+
+    /* subir toda la sección un poco respecto al bloque anterior */
+    .news{ margin-top: -60px; }
     /* ========================= FIN OVERRIDE ========================= */
   </style>
 </head>
@@ -388,7 +385,7 @@
 
   <section class="news" id="news">
     <h2>NEWS <span>ニュース</span></h2>
-
+    <!-- Filtros eliminados a petición -->
     <div class="schedule-grid" id="news-grid"></div>
   </section>
 
@@ -460,6 +457,7 @@
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-mode');
     }
+    // El código de filtros queda inofensivo si no hay botones (se removieron)
     document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.schedule-filters button').forEach(button => {
         button.addEventListener('click', () => {
