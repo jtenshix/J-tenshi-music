@@ -73,7 +73,7 @@
     .social-networks { gap: 15px; margin-top: 10px; }
     .social-networks a { font-size: 32px; }
 
-    /* === NEWS (estructura base original) === */
+    /* === NEWS (base original) === */
     .news {
       background-color: #1a1a1a;
       max-width: 1200px;
@@ -265,47 +265,64 @@
     .videos-pagination{ top: auto; bottom: 12px; transform: none; }
     @media (max-width: 600px){ .videos-pagination{ bottom: 16px; } }
 
-    /* === Variables base (ya tenías) === */
+    /* ================== PANEL DE PERILLAS (EDITA SOLO ESTO) ================== */
     :root{
-      --news-max: 1700px;
-      --news-gap: 22px;
-      --news-padY: 56px;
-      --news-padB: 72px;
-      --news-inset: 4px;
-      --news-radius: 16px;
-      --news-mb: 72px;
+      /* 🔳 BLOQUE GRIS (NEWS) */
+      --news-max: clamp(1100px, 92vw, 1600px); /* ancho máx del bloque gris */
+      --news-padX: 2%;     /* aire lateral del bloque gris (0% = más ancho útil) */
+      --news-padY: 56px;   /* aire arriba */
+      --news-padB: 72px;   /* aire abajo */
+
+      /* 🧱 COLUMNAS (tamaño de las notas) */
+      --col1: 2.6;   /* ancho columna grande (N1) */
+      --col2: 1.3;   /* ancho N2 */
+      --col3: 1.3;   /* ancho N3 */
+      --gap: 24px;   /* separación entre tarjetas */
+
+      /* 🟪 FORMA Y BORDE INTERNO DE LAS TARJETAS */
+      --note-aspect-w: 1;  /* 1/1 = cuadrado; 5/4 = más altas */
+      --note-aspect-h: 1;
+      --img-inset: 10px;   /* borde interno de la imagen */
     }
+    /* ================== FIN PANEL DE PERILLAS ================== */
+
+    /* ====== IMPLEMENTACIÓN DEL PANEL (no tocar) ====== */
     .news{
       max-width: var(--news-max);
-      padding: var(--news-padY) 5% var(--news-padB);
-      margin: 0 auto var(--news-mb);
-      border-radius: var(--news-radius);
+      padding: var(--news-padY) var(--news-padX) var(--news-padB);
+      margin: 0 auto 72px;
+      border-radius: 16px;
       box-shadow: 0 0 30px rgba(0,0,0,.3);
+      overflow: visible;
     }
     .schedule-grid{
+      display: grid;
+      grid-template-columns: calc(var(--col1)*1fr) calc(var(--col2)*1fr) calc(var(--col3)*1fr);
+      grid-template-rows: 1fr 1fr;
+      gap: var(--gap);
       max-width: var(--news-max);
-      gap: var(--news-gap);
-      grid-template-columns: 2fr 1fr 1fr;
+      margin: 0 auto;
     }
-    .main-news img, .news-card img{ inset: var(--news-inset); }
-    .news h2{ margin: 10px 0 18px; }
-
-    /* ============ OVERRIDES ACTUALES: NOTAS DE NEWS MÁS GRANDES ============ */
-    /* 1) Usar más ancho útil reduciendo el padding lateral del recuadro */
-    .news { padding: var(--news-padY) 3% var(--news-padB); } /* antes 5% */
-
-    /* 2) Hacer más grande la columna principal y también las secundarias */
-    .schedule-grid{
-      grid-template-columns: 2.6fr 1.3fr 1.3fr; /* más grandes manteniendo proporciones */
-      gap: 24px;                                /* un poquito más de separación */
+    .main-news, .news-card{
+      aspect-ratio: var(--note-aspect-w) / var(--note-aspect-h);
+      border-radius: 16px;
+      overflow: hidden;
     }
-
-    /* 3) Mantener forma cuadrada siempre */
-    .main-news, .news-card{ aspect-ratio: 1 / 1; }
-
-    /* (opcional) si quieres que la imagen “llene” un poco más el marco, descomenta: */
-    /* .main-news img, .news-card img{ inset: 8px; }  */
-    /* =========================== FIN OVERRIDES ============================ */
+    .main-news{
+      grid-column: 1 / 2;
+      grid-row: 1 / 3;
+      background: linear-gradient(135deg, #4c51bf, #4c51bf);
+      box-shadow: 0 0 20px rgba(76,81,191,.8);
+    }
+    .main-news img, .news-card img{
+      position: absolute;
+      inset: var(--img-inset);
+      width: calc(100% - 2*var(--img-inset));
+      height: calc(100% - 2*var(--img-inset));
+      object-fit: cover;
+      border-radius: 10px;
+      display: block;
+    }
   </style>
 </head>
 
