@@ -312,18 +312,25 @@
     .news h2{ margin: 10px 0 18px; }
     /* ========================= FIN PERILLAS ========================= */
 
-    /* ========= NEWS COMPACT (OVERRIDE para que quepa completo y sea CUADRADO) ========= */
+    /* ========= NEWS EXPANDIDO (usa más ancho y algo más de alto) =========
+       PERILLAS PARA TI (ajusta solo estos valores):
+       1) --news-max: ancho del recuadro gris (usa clamp para ser responsivo)
+       2) --news-padY y --news-padB: aire arriba/abajo dentro del recuadro
+       3) grid-template-columns: cuánta “prota” tiene la grande (1ª columna)
+       Si prefieres que las tarjetas se vean un poquito más altas:
+       -> cambia aspect-ratio a 5 / 4. Por defecto se mantiene CUADRADO (1/1).
+    ---------------------------------------------------------------------- */
     :root{
-      --news-max: 980px;   /* << PERILLA 1: ANCHO del rectángulo gris */
-      --news-gap: 16px;
-      --news-padY: 28px;   /* << PERILLA 2: aire ARRIBA/ABAJO dentro del gris */
-      --news-padB: 28px;   /* << PERILLA 3: aire extra ABAJO */
-      --news-radius: 14px;
-      --news-mb: 40px;
+      --news-max: clamp(1100px, 92vw, 1500px); /* ← PERILLA 1 */
+      --news-gap: 22px;
+      --news-padY: 40px;  /* ← PERILLA 2 */
+      --news-padB: 40px;  /* ← PERILLA 2 */
+      --news-radius: 16px;
+      --news-mb: 56px;
     }
-    .schedule-grid{ grid-template-columns: 2fr 1fr 1fr; } /* mantiene layout original */
-    .main-news, .news-card{ aspect-ratio: 1 / 1; }       /* tarjetas cuadradas */
-    .news{ overflow: visible; }                           /* no cortar el glow del borde */
+    .schedule-grid{ grid-template-columns: 2.3fr 1fr 1fr; } /* ← PERILLA 3 */
+    .main-news, .news-card{ aspect-ratio: 1 / 1; } /* cambia a 5 / 4 si quieres más alto */
+    .news{ overflow: visible; } /* por si el glow del borde se corta */
     /* ========================= FIN OVERRIDE ========================= */
   </style>
 </head>
@@ -515,7 +522,7 @@
         if (bannerVideos && data.banner_videos) bannerVideos.style.backgroundImage = `url('${data.banner_videos}')`;
 
         const newsGrid = document.getElementById('news-grid');
-        if (newsGrid && data.news && typeof data.news === 'object') {
+        if (newsGrid && data.news y typeof data.news === 'object') {
           newsGrid.innerHTML = '';
           const orden = ['n1', 'n2', 'n3', 'n4', 'n5'];
           const notas = orden.map(k => data.news[k])
