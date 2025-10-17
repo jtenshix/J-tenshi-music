@@ -73,77 +73,81 @@
     .social-networks { gap: 15px; margin-top: 10px; }
     .social-networks a { font-size: 32px; }
 
-    /* ================== PANEL DE PERILLAS (EDITA SOLO ESTO) ================== */
+    /* ================== PANEL DE PERILLAS (valores = look original) ================== */
     :root{
-      /* 🔳 BLOQUE GRIS (NEWS) */
-      --news-max: clamp(1100px, 92vw, 1600px); /* ancho máx del bloque gris */
-      --news-padX: 2%;     /* aire lateral del bloque gris (0% = más ancho útil) */
-      --news-padY: 56px;   /* aire arriba */
-      --news-padB: 72px;   /* aire abajo */
+      /* 🔳 BLOQUE GRIS (NEWS) — valores por defecto = tu diseño original */
+      --news-max: 1200px;  /* antes 1200px */
+      --news-padX: 5%;     /* padding lateral original */
+      --news-padY: 100px;  /* padding-top original */
+      --news-padB: 80px;   /* padding-bottom original */
 
-      /* 🧱 COLUMNAS (tamaño de las notas) */
-      --col1: 2.6;   /* ancho columna grande (N1) */
-      --col2: 1.3;   /* ancho N2 */
-      --col3: 1.3;   /* ancho N3 */
-      --gap: 24px;   /* separación entre tarjetas */
+      /* 🧱 COLUMNAS (tamaño de las notas) — layout original */
+      --col1: 2;           /* columna grande */
+      --col2: 1;           /* columna derecha arriba */
+      --col3: 1;           /* columna derecha abajo */
+      --gap: 20px;         /* separación original */
 
-      /* 🟪 FORMA Y BORDE INTERNO DE LAS TARJETAS */
-      --note-aspect-w: 1;  /* 1/1 = cuadrado; 5/4 = más altas */
+      /* 🟪 FORMA Y BORDE INTERNO DE LAS TARJETAS — original */
+      --note-aspect-w: 1;  /* 1/1 cuadrado */
       --note-aspect-h: 1;
-      --img-inset: 10px;   /* borde interno de la imagen (menos = imagen más grande) */
+      --img-inset: 10px;   /* borde interno original */
     }
     /* ================== FIN PANEL DE PERILLAS ================== */
 
-    /* ====== NEWS (usa las perillas de arriba) ====== */
+    /* === NEWS (estructura igual a tu original) === */
     .news{
-      max-width: var(--news-max);
-      width: 100%;
-      padding: var(--news-padY) var(--news-padX) var(--news-padB);
-      margin: 0 auto 72px;
-      border-radius: 16px;
       background-color: #1a1a1a;
+      max-width: var(--news-max);
+      margin: 0 auto 80px;
+      padding: var(--news-padY) var(--news-padX) var(--news-padB);
+      border-radius: 12px;
       box-shadow: 0 0 30px rgba(0,0,0,.3);
-      overflow: visible;
+      transition: background 0.3s ease;
     }
-    .news h2 { font-size: 32px; color: #fff; margin: 10px 0 18px; text-align: center; }
+    .news h2 { font-size: 32px; color: #fff; margin-bottom: 30px; text-align: center; }
+    .news h2 span { font-size: 14px; color: #ccc; margin-left: 10px; }
 
-    .schedule-grid{
+    .schedule-grid {
       display: grid;
-      width: 100%;                /* <- evita que se achique y apile */
+      grid-template-columns: calc(var(--col1) * 1fr) calc(var(--col2) * 1fr) calc(var(--col3) * 1fr);
+      grid-template-rows: 1fr 1fr;         /* la grande ocupa dos filas */
+      gap: var(--gap);
       max-width: var(--news-max);
       margin: 0 auto;
-      grid-template-columns: calc(var(--col1)*1fr) calc(var(--col2)*1fr) calc(var(--col3)*1fr);
-      grid-template-rows: 1fr 1fr; /* layout original: la grande ocupa 2 filas */
-      gap: var(--gap);
     }
 
-    .main-news, .news-card{
+    .main-news, .news-card {
       position: relative; display: block; text-decoration: none; color: inherit;
-      border-radius: 16px; overflow: hidden; padding: 0;
-      aspect-ratio: var(--note-aspect-w) / var(--note-aspect-h); /* forma */
-      background: #222;
-      box-shadow: 0 0 15px rgba(0,0,0,.5);
-      transition: transform 0.3s ease;
+      overflow: hidden; padding: 0; border-radius: 16px;
     }
-    .main-news{
-      grid-column: 1 / 2;
-      grid-row: 1 / 3;
+    .main-news {
+      grid-column: 1 / 2; grid-row: 1 / 3;
       background: linear-gradient(135deg, #4c51bf, #4c51bf);
       box-shadow: 0 0 20px rgba(76,81,191,.8);
+      aspect-ratio: var(--note-aspect-w) / var(--note-aspect-h);
+    }
+    .news-card {
+      background: #222; box-shadow: 0 0 15px rgba(0,0,0,.5);
+      aspect-ratio: var(--note-aspect-w) / var(--note-aspect-h);
+      cursor: pointer; transition: transform 0.3s ease;
     }
     .news-card:hover { transform: scale(1.05); animation: shake 0.2s ease-in-out infinite alternate; }
 
-    .main-news img, .news-card img{
+    .main-news img, .news-card img {
       position: absolute;
       inset: var(--img-inset);
-      width: calc(100% - 2*var(--img-inset));
-      height: calc(100% - 2*var(--img-inset));
+      width: calc(100% - (var(--img-inset) * 2));   /* ✅ sintaxis correcta */
+      height: calc(100% - (var(--img-inset) * 2));  /* ✅ sintaxis correcta */
       object-fit: cover;
       border-radius: 10px;
       display: block;
     }
 
-    /* ====== Banners y resto (tus secciones intactas) ====== */
+    .news-card h4 { font-size: 16px; font-weight: 700; color: #fff; text-align: center; }
+    .news-card .date { font-weight: 700; font-size: 14px; color: #ccc; text-align: center; }
+    .news-card p { color: #ccc; font-size: 14px; text-align: center; }
+    .news-card .label { font-size: 11px; color: #e0c27b; border: 1px solid #e0c27b; padding: 2px 6px; border-radius: 999px; width: fit-content; margin: 10px auto 0; display: block; }
+
     .section-banner {
       position: relative; width: 100%; height: 300px; margin: 60px auto; border-radius: 12px;
       background: #111;
@@ -328,9 +332,7 @@
 
   <section class="news" id="news">
     <h2>NEWS <span>ニュース</span></h2>
-    <div class="schedule-grid" id="news-grid">
-      <!-- Tu grid lo rellenas por JS como antes -->
-    </div>
+    <div class="schedule-grid" id="news-grid"></div>
   </section>
 
   <!-- BANNER DISCOS -->
