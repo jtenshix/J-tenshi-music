@@ -73,33 +73,12 @@
     .social-networks { gap: 15px; margin-top: 10px; }
     .social-networks a { font-size: 32px; }
 
-    /* ================== PANEL DE PERILLAS (valores = look original) ================== */
-    :root{
-      /* 🔳 BLOQUE GRIS (NEWS) — valores por defecto = tu diseño original */
-      --news-max: 1200px;  /* antes 1200px */
-      --news-padX: 5%;     /* padding lateral original */
-      --news-padY: 100px;  /* padding-top original */
-      --news-padB: 80px;   /* padding-bottom original */
-
-      /* 🧱 COLUMNAS (tamaño de las notas) — layout original */
-      --col1: 2;           /* columna grande */
-      --col2: 1;           /* columna derecha arriba */
-      --col3: 1;           /* columna derecha abajo */
-      --gap: 20px;         /* separación original */
-
-      /* 🟪 FORMA Y BORDE INTERNO DE LAS TARJETAS — original */
-      --note-aspect-w: 1;  /* 1/1 cuadrado */
-      --note-aspect-h: 1;
-      --img-inset: 10px;   /* borde interno original */
-    }
-    /* ================== FIN PANEL DE PERILLAS ================== */
-
-    /* === NEWS (estructura igual a tu original) === */
-    .news{
+    /* === NEWS (estructura base original) === */
+    .news {
       background-color: #1a1a1a;
-      max-width: var(--news-max);
+      max-width: 1200px;
       margin: 0 auto 80px;
-      padding: var(--news-padY) var(--news-padX) var(--news-padB);
+      padding: 100px 5% 80px;
       border-radius: 12px;
       box-shadow: 0 0 30px rgba(0,0,0,.3);
       transition: background 0.3s ease;
@@ -108,12 +87,8 @@
     .news h2 span { font-size: 14px; color: #ccc; margin-left: 10px; }
 
     .schedule-grid {
-      display: grid;
-      grid-template-columns: calc(var(--col1) * 1fr) calc(var(--col2) * 1fr) calc(var(--col3) * 1fr);
-      grid-template-rows: 1fr 1fr;         /* la grande ocupa dos filas */
-      gap: var(--gap);
-      max-width: var(--news-max);
-      margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 1fr 1fr;
+      gap: 20px; max-width: 1200px; margin: 0 auto;
     }
 
     .main-news, .news-card {
@@ -124,20 +99,19 @@
       grid-column: 1 / 2; grid-row: 1 / 3;
       background: linear-gradient(135deg, #4c51bf, #4c51bf);
       box-shadow: 0 0 20px rgba(76,81,191,.8);
-      aspect-ratio: var(--note-aspect-w) / var(--note-aspect-h);
+      aspect-ratio: 1 / 1;
     }
     .news-card {
       background: #222; box-shadow: 0 0 15px rgba(0,0,0,.5);
-      aspect-ratio: var(--note-aspect-w) / var(--note-aspect-h);
-      cursor: pointer; transition: transform 0.3s ease;
+      aspect-ratio: 1 / 1; cursor: pointer; transition: transform 0.3s ease;
     }
     .news-card:hover { transform: scale(1.05); animation: shake 0.2s ease-in-out infinite alternate; }
 
     .main-news img, .news-card img {
       position: absolute;
-      inset: var(--img-inset);
-      width: calc(100% - (var(--img-inset) * 2));   /* ✅ sintaxis correcta */
-      height: calc(100% - (var(--img-inset) * 2));  /* ✅ sintaxis correcta */
+      inset: 10px;
+      width: calc(100% - 20px);
+      height: calc(100% - 20px);
       object-fit: cover;
       border-radius: 10px;
       display: block;
@@ -290,6 +264,48 @@
     .videos-holder{ padding-bottom: 64px; }
     .videos-pagination{ top: auto; bottom: 12px; transform: none; }
     @media (max-width: 600px){ .videos-pagination{ bottom: 16px; } }
+
+    /* === Variables base (ya tenías) === */
+    :root{
+      --news-max: 1700px;
+      --news-gap: 22px;
+      --news-padY: 56px;
+      --news-padB: 72px;
+      --news-inset: 4px;
+      --news-radius: 16px;
+      --news-mb: 72px;
+    }
+    .news{
+      max-width: var(--news-max);
+      padding: var(--news-padY) 5% var(--news-padB);
+      margin: 0 auto var(--news-mb);
+      border-radius: var(--news-radius);
+      box-shadow: 0 0 30px rgba(0,0,0,.3);
+    }
+    .schedule-grid{
+      max-width: var(--news-max);
+      gap: var(--news-gap);
+      grid-template-columns: 2fr 1fr 1fr;
+    }
+    .main-news img, .news-card img{ inset: var(--news-inset); }
+    .news h2{ margin: 10px 0 18px; }
+
+    /* ============ OVERRIDES ACTUALES: NOTAS DE NEWS MÁS GRANDES ============ */
+    /* 1) Usar más ancho útil reduciendo el padding lateral del recuadro */
+    .news { padding: var(--news-padY) 2% var(--news-padB); } /* antes 5% */
+
+    /* 2) Hacer más grande la columna principal y también las secundarias */
+    .schedule-grid{
+      grid-template-columns: 2.6fr 1.3fr 1.3fr; /* más grandes manteniendo proporciones */
+      gap: 24px;                                /* un poquito más de separación */
+    }
+
+    /* 3) Mantener forma cuadrada siempre */
+    .main-news, .news-card{ aspect-ratio: 1 / 1; }
+
+    /* (opcional) si quieres que la imagen “llene” un poco más el marco, descomenta: */
+    /* .main-news img, .news-card img{ inset: 8px; }  */
+    /* =========================== FIN OVERRIDES ============================ */
   </style>
 </head>
 
