@@ -301,21 +301,19 @@
     /* =========================== FIN OVERRIDES ============================ */
 
     /* ===== Ajustes RESPONSIVOS sin tocar tus valores base ===== */
-    /* En pantallas más pequeñas, solo adaptamos para que no se corte */
     @media (max-width: 1440px){
-      .main-news, .news-card{ aspect-ratio: 4 / 5; }         /* más bajitas */
+      .main-news, .news-card{ aspect-ratio: 4 / 5; }
       .schedule-grid{ grid-template-columns: 2.3fr 1.2fr 1.2fr; }
     }
     @media (max-width: 1200px){
-      .news{ padding: var(--news-padY) 3% var(--news-padB); } /* un poco más de aire lateral */
+      .news{ padding: var(--news-padY) 3% var(--news-padB); }
     }
     @media (max-width: 1100px){
-      /* Sin cambiar --news-max: solo limitamos el contenedor a viewport */
       .news, .schedule-grid{ max-width: min(var(--news-max), 94vw); }
     }
     @media (max-width: 900px){
       .schedule-grid{ grid-template-columns: 1fr; }
-      .main-news, .news-card{ aspect-ratio: 16 / 10; }       /* rectangulares y bajitas */
+      .main-news, .news-card{ aspect-ratio: 16 / 10; }
       .news, .schedule-grid{ max-width: min(var(--news-max), 96vw); }
     }
     /* ===== FIN responsivo ===== */
@@ -472,12 +470,17 @@
     }
     async function getSpotifyCover(spotifyUrl){
       const o = 'https://open.spotify.com/oembed?url='+encodeURIComponent(spotifyUrl)+'&maxwidth=640&format=json';
-      try{ const r = await fetchWithTimeout(o,7000); if(!r.ok) return null; const d=await r.json(); return d?.thumbnail_url || null; }
-      catch{ return null; }
+      try{
+        const r = await fetchWithTimeout(o,7000);
+        if(!r.ok) return null;
+        const d = await r.json();
+        return d?.thumbnail_url || null;
+      }catch{ return null; }
     }
     async function getFirstNCoversFromSpotify(urls, n = 5){
       const list = (urls || []).slice(0, n).map(u => getSpotifyCover(u));
-      const results = await Promise.all(list); return results.filter(Boolean);
+      const results = await Promise.all(list);
+      return results.filter(Boolean);
     }
     const SECTION_MAP = {
       discografia: 'Discography.html',
@@ -509,11 +512,11 @@
         if (bannerVideos && data.banner_videos) bannerVideos.style.backgroundImage = `url('${data.banner_videos}')`;
 
         const newsGrid = document.getElementById('news-grid');
-        if (newsGrid && data.news y typeof data.news === 'object') {
+        if (newsGrid && data.news && typeof data.news === 'object') {
           newsGrid.innerHTML = '';
           const orden = ['n1', 'n2', 'n3', 'n4', 'n5'];
           const notas = orden.map(k => data.news[k])
-            .filter(n => n y typeof n === 'object' y typeof n.imagen === 'string' y n.imagen.trim());
+            .filter(n => n && typeof n === 'object' && typeof n.imagen === 'string' && n.imagen.trim());
           notas.forEach((nota, idx) => {
             const a = document.createElement('a');
             a.href = resolveDestino(nota);
@@ -533,7 +536,7 @@
             : '';
           const base = data.videos.map(v => toEmbed(v.url)).filter(u => u && u.trim() !== '');
           const lista = [];
-          while (lista.length < 9 y base.length > 0) lista.push(...base);
+          while (lista.length < 9 && base.length > 0) lista.push(...base);
           lista.slice(0, 9).forEach(u => {
             const panel = document.createElement('div');
             panel.className = 'video-panel';
