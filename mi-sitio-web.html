@@ -291,21 +291,40 @@
     .news h2{ margin: 10px 0 18px; }
 
     /* ============ OVERRIDES ACTUALES: NOTAS DE NEWS MÁS GRANDES ============ */
-    /* 1) Usar más ancho útil reduciendo el padding lateral del recuadro */
     .news { padding: var(--news-padY) 2% var(--news-padB); } /* antes 5% */
-
-    /* 2) Hacer más grande la columna principal y también las secundarias */
     .schedule-grid{
-      grid-template-columns: 2.6fr 1.3fr 1.3fr; /* más grandes manteniendo proporciones */
-      gap: 24px;                                /* un poquito más de separación */
+      grid-template-columns: 2.6fr 1.3fr 1.3fr;
+      gap: 24px;
     }
-
-    /* 3) Mantener forma cuadrada siempre */
     .main-news, .news-card{ aspect-ratio: 1 / 1; }
-
-    /* (opcional) si quieres que la imagen “llene” un poco más el marco, descomenta: */
     /* .main-news img, .news-card img{ inset: 8px; }  */
     /* =========================== FIN OVERRIDES ============================ */
+
+    /* ===== NEWS: responsive fit across monitors (añadido) ===== */
+    :root{
+      /* ancho flexible que se adapta a 1366, 1080p y 1440p */
+      --news-max: clamp(760px, 80vw, 980px);
+      --news-gap: 18px;
+      --news-padY: 44px;
+      --news-padB: 56px;
+      --news-inset: 4px; /* un poco más de orilla interior */
+    }
+    @media (min-width: 1500px){
+      :root{ --news-max: 1080px; --news-gap: 22px; --news-padY: 56px; --news-padB: 72px; }
+    }
+    @media (max-width: 1440px){
+      .main-news, .news-card{ aspect-ratio: 4 / 5; } /* bajitas */
+      .schedule-grid{ grid-template-columns: 2.2fr 1.2fr 1.2fr; gap: 18px; }
+    }
+    @media (max-width: 1200px){
+      .news{ padding: var(--news-padY) 3% var(--news-padB); }
+      .schedule-grid{ grid-template-columns: 2fr 1fr 1fr; gap: 16px; }
+    }
+    @media (max-width: 900px){
+      .schedule-grid{ grid-template-columns: 1fr; }
+      .main-news, .news-card{ aspect-ratio: 16 / 10; } /* aún más bajitas en apilado */
+    }
+    /* ===== FIN responsive ===== */
   </style>
 </head>
 
