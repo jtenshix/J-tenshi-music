@@ -129,6 +129,24 @@
       color: #e0c27b; font-size: 3rem; font-weight: 900;
       font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
       text-shadow: 0 0 15px rgba(224,194,123,.7); user-select: none;
+      /* NUEVO: para que el video no se salga del banner redondeado */
+      overflow: hidden;
+    }
+    /* NUEVO: cualquier <video> o <iframe> que metas dentro del banner llena todo el fondo */
+    .section-banner video,
+    .section-banner iframe{
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none; /* decorativo, no clickeable */
+      z-index: 1;           /* por debajo del texto */
+    }
+    /* NUEVO: el texto y demás contenido encima del video */
+    .section-banner > *:not(video):not(iframe){
+      position: relative;
+      z-index: 2;
     }
 
     /* === DISCOGRAFÍA (3D) === */
