@@ -2,8 +2,7 @@
   "_---------------------- BANNERS ----------------------": "",
   "banner_principal": "https://lh3.googleusercontent.com/d/1_q5FfABiCmduY6kQBic3l6vjLBHgb5d4",
   "banner_discografia": "https://lh3.googleusercontent.com/d/1SzRAjjXyXywwqmuSsQQbwI0VY6mMoqmV",
-  "banner_videos":"https://drive.google.com/file/d/1ZtHBVumOW0If7ljzGZIX1WnGijRy0Vbv/view?usp=drive_link"
-},
+  "banner_videos": "https://lh3.googleusercontent.com/d/1SzRAjjXyXywwqmuSsQQbwI0VY6mMoqmV",
 
   "_------------------------ NEWS -----------------------": "",
   "news": {
@@ -69,6 +68,6 @@
       "https://open.spotify.com/intl-es/track/5OzpWTySMn0qsKswFF8jQo?si=096c0f70db84414a",
       "https://open.spotify.com/intl-es/track/0gt5BKcHl70ZTWBclypMaB?si=5a320f27666d4184",
       "https://open.spotify.com/intl-es/track/4kt26B0dFUYfiCMC1LJd1j?si=3496030443fd44b4"
-    
+    ]
   }
 }
