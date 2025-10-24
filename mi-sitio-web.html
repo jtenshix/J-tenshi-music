@@ -64,13 +64,13 @@
     }
 
     .contenedor-centrado { display: flex; flex-direction: column; align-items: center; padding: 10px 0; margin-top: 1px; }
-    .social-bar { display: flex; justify-content: center; gap: 30px; margin: 0; width: 100%; max-width: 800px; } /* MOD: margin 0 para no sumar hueco */
+    .social-bar { display: flex; justify-content: center; gap: 30px; margin: 0; width: 100%; max-width: 800px; }
     .social-bar a { display: inline-block; transition: transform 0.3s ease, fill 0.3s ease; }
     .social-bar svg { width: 36px; height: 36px; fill: #888; }
     .social-bar a:hover svg { fill: #e0c27b; transform: scale(1.15); }
     .music-platforms { gap: 20px; }
     .music-platforms a { font-size: 60px; }
-    .social-networks { gap: 10px; margin-top: -10px; } /* MOD: este NÚMERO controla el hueco del medio (bájalo para acercar) */
+    .social-networks { gap: 10px; margin-top: -10px; }
     .social-networks a { font-size: 50px; }
 
     /* === NEWS (estructura base original) === */
@@ -129,11 +129,9 @@
       color: #e0c27b; font-size: 3rem; font-weight: 900;
       font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
       text-shadow: 0 0 15px rgba(224,194,123,.7); user-select: none;
-
-      /* NUEVO: para recortar el video dentro del borde redondeado */
       overflow: hidden;
     }
-    /* NUEVO: asegura que el texto se vea sobre el video */
+    /* Asegura que el texto se vea sobre el video */
     .section-banner > * { position: relative; z-index: 1; }
 
     /* === DISCOGRAFÍA (3D) === */
@@ -263,7 +261,7 @@
     .videos-pagination{ top: auto; bottom: 12px; transform: none; }
     @media (max-width: 600px){ .videos-pagination{ bottom: 16px; } }
 
-    /* === Variables base (YA TUS VALORES) === */
+    /* === Variables base === */
     :root{
       --news-max: 1500px;
       --news-gap: 22px;
@@ -288,17 +286,16 @@
     .main-news img, .news-card img{ inset: var(--news-inset); }
     .news h2{ margin: 10px 0 18px; }
 
-    /* ============ OVERRIDES ACTUALES (TUS MEDIDAS) ============ */
+    /* ============ OVERRIDES ACTUALES ============ */
     .news { padding: var(--news-padY) 2% var(--news-padB); } /* antes 5% */
     .schedule-grid{
       grid-template-columns: 2.6fr 1.3fr 1.3fr;
       gap: 24px;
     }
     .main-news, .news-card{ aspect-ratio: 1 / 1; }
-    /* .main-news img, .news-card img{ inset: 8px; }  */
     /* =========================== FIN OVERRIDES ============================ */
 
-    /* ===== Ajustes RESPONSIVOS sin tocar tus valores base ===== */
+    /* ===== Responsivo ===== */
     @media (max-width: 1440px){
       .main-news, .news-card{ aspect-ratio: 4 / 5; }
       .schedule-grid{ grid-template-columns: 2.3fr 1.2fr 1.2fr; }
@@ -335,6 +332,7 @@
 
   <div class="hero-wrapper">
     <div class="hero-bg"></div>
+    <!-- El video del hero se inyecta dinámicamente si existe banner_principal_video -->
     <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
   </div>
 
@@ -362,10 +360,10 @@
 
   <!-- BANNER DISCOS -->
   <div class="section-banner" id="banner-discography">
-    <!-- NUEVO: video de Drive (loop) sobre la imagen de fondo que setea tu JS -->
-    <video autoplay muted loop playsinline preload="metadata"
-           style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:inherit; z-index:0;">
-      <source src="https://drive.google.com/uc?export=download&id=DRIVE_FILE_ID_DISCO" type="video/mp4">
+    <!-- Video de Drive opcional (se configurará por JS y se oculta si no hay video) -->
+    <video id="banner-discography-video" autoplay muted loop playsinline preload="metadata"
+           style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:inherit; z-index:0; display:none;">
+      <source id="banner-discography-src" src="" type="video/mp4">
     </video>
     ディスコグラフィー
   </div>
@@ -390,10 +388,10 @@
 
   <!-- BANNER VIDEOS -->
   <div class="section-banner" id="banner-videos">
-    <!-- NUEVO: video de Drive (loop) sobre la imagen de fondo que setea tu JS -->
-    <video autoplay muted loop playsinline preload="metadata"
-           style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:inherit; z-index:0;">
-      <source src="https://drive.google.com/uc?export=download&id=DRIVE_FILE_ID_VIDEO" type="video/mp4">
+    <!-- Video de Drive opcional (se configurará por JS y se oculta si no hay video) -->
+    <video id="banner-videos-video" autoplay muted loop playsinline preload="metadata"
+           style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:inherit; z-index:0; display:none;">
+      <source id="banner-videos-src" src="" type="video/mp4">
     </video>
     ビデオ
   </div>
@@ -473,7 +471,7 @@
     $("#next-video").on("click", function(){ angVid -= angVid_unit; updateSpinnerVideos(); });
   </script>
 
-  <!-- CARGA CATÁLOGO -->
+  <!-- CARGA CATÁLOGO (con soporte imagen/video de Drive) -->
   <script>
     async function fetchWithTimeout(url, ms = 6000) {
       const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), ms);
@@ -494,6 +492,49 @@
       const results = await Promise.all(list);
       return results.filter(Boolean);
     }
+
+    /* ====== NUEVO: utilidades para aceptar ID o URL de Drive ====== */
+    function extractDriveId(input){
+      if(!input || typeof input !== 'string') return null;
+      const trimmed = input.trim();
+      if (/^[a-zA-Z0-9_-]{20,}$/.test(trimmed)) return trimmed; // parece ID
+      // URL -> intenta extraer /d/ID/
+      const m = trimmed.match(/\/d\/([a-zA-Z0-9_-]{20,})/);
+      if (m && m[1]) return m[1];
+      // ?id=ID
+      const p = trimmed.match(/[?&]id=([a-zA-Z0-9_-]{20,})/);
+      if (p && p[1]) return p[1];
+      return null;
+    }
+    function driveDirectMp4(input){
+      const id = extractDriveId(input) || input; // si ya es ID
+      if(!id) return null;
+      return `https://drive.google.com/uc?export=download&id=${id}`;
+    }
+    function setBannerMedia({wrapperEl, bgUrl, videoCandidate}){
+      // Imagen de fondo (si existe)
+      if (wrapperEl && bgUrl){
+        wrapperEl.style.backgroundImage = `url('${bgUrl}')`;
+      }
+      // Video (si existe): muestra el <video> hijo y setea src
+      const videoEl = wrapperEl ? wrapperEl.querySelector('video') : null;
+      const sourceEl = videoEl ? videoEl.querySelector('source') : null;
+      if (videoEl && sourceEl){
+        const direct = videoCandidate ? driveDirectMp4(videoCandidate) : null;
+        if (direct){
+          sourceEl.src = direct;
+          videoEl.style.display = '';
+          try { videoEl.load(); videoEl.play().catch(()=>{}); } catch {}
+        } else {
+          // si no hay video válido, ocúltalo
+          videoEl.pause && videoEl.pause();
+          videoEl.style.display = 'none';
+          sourceEl.src = '';
+        }
+      }
+    }
+    /* ====== FIN utilidades ====== */
+
     const SECTION_MAP = {
       discografia: 'Discography.html',
       movie: 'movie.html',
@@ -509,20 +550,59 @@
       }
       return '#';
     }
+
     async function cargarCatalogoPrincipal() {
       try {
         const resp = await fetchWithTimeout('data/catalogo.json', 7000);
         const data = await resp.json();
 
+        /* ===== HERO (imagen + video opcional) ===== */
         const heroBg = document.querySelector('.hero-bg');
         if (heroBg && data.banner_principal) heroBg.style.backgroundImage = `url('${data.banner_principal}')`;
 
+        // Inyecta video en hero si existe banner_principal_video (sin tocar tu HTML base)
+        if (data.banner_principal_video){
+          const existing = document.getElementById('hero-video');
+          if (!existing){
+            const direct = driveDirectMp4(data.banner_principal_video);
+            if (direct){
+              const hw = document.querySelector('.hero-wrapper');
+              const v = document.createElement('video');
+              v.id = 'hero-video';
+              v.autoplay = true; v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'metadata';
+              Object.assign(v.style, {
+                position:'absolute', inset:'0', width:'100%', height:'100%',
+                objectFit:'cover', zIndex:'0'
+              });
+              const s = document.createElement('source');
+              s.src = direct; s.type = 'video/mp4';
+              v.appendChild(s);
+              hw.insertBefore(v, hw.firstChild); // debajo del texto, sobre .hero-bg
+              try { v.play().catch(()=>{}); } catch {}
+            }
+          }
+        }
+
+        /* ===== BANNERS ===== */
         const bannerDisc = document.getElementById('banner-discography');
-        if (bannerDisc && data.banner_discografia) bannerDisc.style.backgroundImage = `url('${data.banner_discografia}')`;
+        if (bannerDisc){
+          setBannerMedia({
+            wrapperEl: bannerDisc,
+            bgUrl: data.banner_discografia || null,
+            videoCandidate: data.banner_discografia_video || null
+          });
+        }
 
         const bannerVideos = document.getElementById('banner-videos');
-        if (bannerVideos && data.banner_videos) bannerVideos.style.backgroundImage = `url('${data.banner_videos}')`;
+        if (bannerVideos){
+          setBannerMedia({
+            wrapperEl: bannerVideos,
+            bgUrl: data.banner_videos || null,
+            videoCandidate: data.banner_videos_video || null
+          });
+        }
 
+        /* ===== NEWS ===== */
         const newsGrid = document.getElementById('news-grid');
         if (newsGrid && data.news && typeof data.news === 'object') {
           newsGrid.innerHTML = '';
@@ -540,6 +620,7 @@
           });
         }
 
+        /* ===== VIDEOS carrusel ===== */
         const spinner = document.getElementById('spinner-videos');
         if (spinner && Array.isArray(data.videos) && data.videos.length) {
           spinner.innerHTML = '';
@@ -551,7 +632,7 @@
           while (lista.length < 9 && base.length > 0) lista.push(...base);
           lista.slice(0, 9).forEach(u => {
             const panel = document.createElement('div');
-            const src = u; /* YouTube embed si quisieras dentro del carrusel 3D */
+            const src = u;
             panel.className = 'video-panel';
             panel.innerHTML = `<iframe src="${src}" allowfullscreen></iframe>`;
             spinner.appendChild(panel);
@@ -559,6 +640,7 @@
           updateSpinnerVideos();
         }
 
+        /* ===== DISCOGRAFÍA portadas ===== */
         if (data.discografia) {
           const N = 5; let covers = [];
           if (Array.isArray(data.discografia.tracks) && data.discografia.tracks.length) {
