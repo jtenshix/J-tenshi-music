@@ -7,19 +7,43 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
+    /* ================== PALETA: VERDE + GRIS (inspiración póster) ================== */
+    :root{
+      --green: #39ff14;          /* verde neón */
+      --green-600:#1fe000;       /* verde fuerte para hovers/acentos */
+      --black: #0b0b0b;
+      --gray-900:#0f1010;
+      --gray-850:#131414;
+      --gray-800:#171818;
+      --gray-750:#1a1b1b;
+      --text:#f2f2f2;
+      --muted:#a8adb3;
+
+      /* News sizing vars (se mantienen) */
+      --news-max: 1500px;
+      --news-gap: 22px;
+      --news-padY: 1px;
+      --news-padB: 10px;
+      --news-inset: 1px;
+      --news-radius: 16px;
+      --news-mb: 72px;
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
     :root { --ang: 0; --angVid: 0; }
 
     body {
       font-family: 'Helvetica Neue', sans-serif;
-      background: #0b0b0b;
-      color: #f5f5f5;
+      background: var(--black);
+      color: var(--text);
       overflow-x: hidden;
       width: 100%; height: 100%;
       transition: background 0.3s, color 0.3s;
       scroll-padding-top: 84px;
     }
-    body.light-mode { background: #F6D43B ; color: #111; }
+    /* Light mode estilo afiche: fondo verde, tipografía negra */
+    body.light-mode { background: var(--green); color: #0a0a0a; }
 
     @keyframes shake {
       0% { transform: translateX(0) scale(1.15); }
@@ -31,60 +55,80 @@
 
     header {
       position: fixed; top: 0; width: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(15,16,16,0.9);
       padding: 20px 5%;
       display: flex; justify-content: space-between; align-items: center;
       z-index: 999; backdrop-filter: blur(10px);
+      border-bottom: 2px solid rgba(57,255,20,.25);
     }
-    header .logo { color: #fff; font-size: 20px; letter-spacing: 2px; }
+    body.light-mode header{
+      background: rgba(0,0,0,.1);
+      border-bottom: 2px solid #0a0a0a;
+    }
+    header .logo { color: var(--green); font-size: 20px; letter-spacing: 2px; }
     nav ul { display: flex; gap: 25px; list-style: none; }
-    nav a { color: #ccc; text-decoration: none; font-size: 14px; transition: all 0.3s ease; display: inline-block; }
-    nav a:hover { color: #e0c27b; animation: shake 0.2s ease-in-out infinite alternate; }
+    nav a {
+      color: var(--muted);
+      text-decoration: none; font-size: 14px;
+      transition: all 0.25s ease; display: inline-block;
+    }
+    nav a:hover {
+      color: var(--green);
+      text-shadow: 0 0 10px rgba(57,255,20,.65);
+      animation: shake 0.2s ease-in-out infinite alternate;
+    }
+    body.light-mode nav a{ color:#0a0a0a; }
+    body.light-mode nav a:hover{ color:#0a0a0a; text-shadow:none; background:rgba(0,0,0,.06); }
 
     .theme-toggle {
-      background: none; border: 1px solid #777; color: #ccc;
-      padding: 6px 12px; border-radius: 8px; cursor: pointer; transition: all 0.3s; font-size: 12px; margin-left: 20px;
+      background: transparent; border: 1px solid #3b3b3b; color: var(--muted);
+      padding: 6px 12px; border-radius: 8px; cursor: pointer; transition: all 0.25s; font-size: 12px; margin-left: 20px;
     }
-    .theme-toggle:hover { background: #e0c27b; color: #000; }
+    .theme-toggle:hover { background: var(--green); color: #000; border-color: var(--green); }
 
     .hero-wrapper { position: relative; height: 70vh; overflow: hidden; margin-top: 70px; }
     .hero-bg {
       position: absolute; top: 0; left: 0;
       width: 100%; height: 75vh;
-      background: #0b0b0b;
+      background: var(--gray-900);
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
       z-index: 0;
+      outline: 3px solid rgba(57,255,20,.25);
     }
     .hero-text {
-      position: relative; z-index: 2; color: white; font-size: 2rem;
+      position: relative; z-index: 2; color: var(--text); font-size: 2rem;
       padding: 60px 5%; height: 75vh; display: flex; align-items: center;
       text-shadow: 0 2px 10px rgba(0,0,0,.6);
     }
+    body.light-mode .hero-text{ color:#0a0a0a; text-shadow:none; }
 
     .contenedor-centrado { display: flex; flex-direction: column; align-items: center; padding: 10px 0; margin-top: 1px; }
     .social-bar { display: flex; justify-content: center; gap: 30px; margin: 0; width: 100%; max-width: 800px; }
-    .social-bar a { display: inline-block; transition: transform 0.3s ease, fill 0.3s ease; }
-    .social-bar svg { width: 36px; height: 36px; fill: #888; }
-    .social-bar a:hover svg { fill: #e0c27b; transform: scale(1.15); }
+    .social-bar a { display: inline-block; transition: transform 0.3s ease, fill 0.3s ease, color .3s ease; }
+    .social-bar svg { width: 36px; height: 36px; fill: var(--muted); }
+    .social-bar a:hover svg { fill: var(--green); transform: scale(1.15); }
     .music-platforms { gap: 20px; }
-    .music-platforms a { font-size: 60px; }
+    .music-platforms a { font-size: 60px; color: var(--muted) !important; }
+    .music-platforms a:hover{ color: var(--green) !important; text-shadow: 0 0 12px rgba(57,255,20,.6); }
     .social-networks { gap: 10px; margin-top: -10px; }
-    .social-networks a { font-size: 50px; }
+    .social-networks a { font-size: 50px; color: var(--muted) !important; }
+    .social-networks a:hover{ color: var(--green) !important; }
 
-    /* === NEWS (estructura base original) === */
+    /* === NEWS === */
     .news {
-      background-color: #1a1a1a;
+      background-color: var(--gray-800);
       max-width: 1200px;
       margin: 0 auto 80px;
       padding: 100px 5% 80px;
       border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0,0,0,.3);
-      transition: background 0.3s ease;
+      box-shadow: 0 0 30px rgba(0,0,0,.35);
+      transition: background 0.3s ease, color .3s ease;
+      border: 2px solid rgba(57,255,20,.18);
     }
-    .news h2 { font-size: 32px; color: #fff; margin-bottom: 30px; text-align: center; }
-    .news h2 span { font-size: 14px; color: #ccc; margin-left: 10px; }
+    .news h2 { font-size: 32px; color: var(--green); margin-bottom: 30px; text-align: center; letter-spacing: 2px; }
+    .news h2 span { font-size: 14px; color: var(--muted); margin-left: 10px; }
 
     .schedule-grid {
       display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 1fr 1fr;
@@ -94,18 +138,24 @@
     .main-news, .news-card {
       position: relative; display: block; text-decoration: none; color: inherit;
       overflow: hidden; padding: 0; border-radius: 16px;
+      background: var(--gray-850);
+      border: 2px solid rgba(57,255,20,.18);
     }
     .main-news {
       grid-column: 1 / 2; grid-row: 1 / 3;
-      background: linear-gradient(135deg, #4c51bf, #4c51bf);
-      box-shadow: 0 0 20px rgba(76,81,191,.8);
+      box-shadow: 0 0 24px rgba(57,255,20,.35);
       aspect-ratio: 1 / 1;
     }
     .news-card {
-      background: #222; box-shadow: 0 0 15px rgba(0,0,0,.5);
-      aspect-ratio: 1 / 1; cursor: pointer; transition: transform 0.3s ease;
+      box-shadow: 0 0 15px rgba(0,0,0,.45);
+      aspect-ratio: 1 / 1; cursor: pointer; transition: transform 0.3s ease, box-shadow .3s ease, border-color .25s ease;
     }
-    .news-card:hover { transform: scale(1.05); animation: shake 0.2s ease-in-out infinite alternate; }
+    .news-card:hover {
+      transform: scale(1.04);
+      border-color: var(--green);
+      box-shadow: 0 0 26px rgba(57,255,20,.45);
+      animation: shake 0.2s ease-in-out infinite alternate;
+    }
 
     .main-news img, .news-card img {
       position: absolute;
@@ -115,23 +165,29 @@
       object-fit: cover;
       border-radius: 5px;
       display: block;
+      margin: 10px; /* deja marco verde/gris alrededor */
+      background: #000;
     }
 
-    .news-card h4 { font-size: 16px; font-weight: 700; color: #fff; text-align: center; }
-    .news-card .date { font-weight: 700; font-size: 14px; color: #ccc; text-align: center; }
-    .news-card p { color: #ccc; font-size: 14px; text-align: center; }
-    .news-card .label { font-size: 11px; color: #e0c27b; border: 1px solid #e0c27b; padding: 2px 6px; border-radius: 999px; width: fit-content; margin: 10px auto 0; display: block; }
+    .news-card h4 { font-size: 16px; font-weight: 700; color: var(--text); text-align: center; }
+    .news-card .date { font-weight: 700; font-size: 14px; color: var(--muted); text-align: center; }
+    .news-card p { color: var(--muted); font-size: 14px; text-align: center; }
+    .news-card .label {
+      font-size: 11px; color: #000;
+      background: var(--green);
+      border: 1px solid var(--green);
+      padding: 2px 8px; border-radius: 999px; width: fit-content; margin: 10px auto 0; display: block;
+    }
 
     .section-banner {
       position: relative; width: 50%; height: 300px; margin: 90px auto; border-radius: 999px;
-      background: #111;
-      box-shadow: 0 0 20px rgba(0,0,0,.5); display: flex; justify-content: center; align-items: center;
-      color: #e0c27b; font-size: 3rem; font-weight: 900;
+      background: var(--green);
+      box-shadow: 0 0 20px rgba(57,255,20,.45), inset 0 0 0 6px #000;
+      display: flex; justify-content: center; align-items: center;
+      color: #000; font-size: 3rem; font-weight: 900;
       font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
-      text-shadow: 0 0 15px rgba(224,194,123,.7); user-select: none;
-      overflow: hidden;
+      user-select: none; overflow: hidden;
     }
-    /* Asegura que el texto se vea sobre el video */
     .section-banner > * { position: relative; z-index: 1; }
 
     /* === DISCOGRAFÍA (3D) === */
@@ -156,6 +212,8 @@
       background-size: cover; background-position: 50% 50%;
       box-shadow: 0 10px 30px rgba(0,0,0,.6);
       opacity: 1; transition: all .5s ease-in-out, opacity .2s ease-out;
+      outline: 3px solid rgba(57,255,20,.3);
+      background-color:#000;
     }
 
     .discography .panel:nth-child(1)  { transform: rotateY(0deg) translateZ(400px); }
@@ -190,14 +248,15 @@
     #next { margin-right: 20px; }
 
     .discography .pagination button {
-      padding: 0; border: none; cursor: pointer;
+      padding: 0; border: 1px solid rgba(57,255,20,.35); cursor: pointer;
       width: 44px; height: 44px; margin: 0 10px;
       font-family: 'Roboto', sans-serif; font-size: 20px;
-      color: black; background: #fffa; border-radius: 100%;
+      color: #000; background: var(--green); border-radius: 100%;
       transition: all .2s ease-in-out;
+      box-shadow: 0 0 12px rgba(57,255,20,.45);
     }
-    .discography .pagination button:hover { background: #fffc; }
-    .discography .pagination button:active { background: #ffff; }
+    .discography .pagination button:hover { background: var(--green-600); }
+    .discography .pagination button:active { filter: brightness(1.05); }
 
     /* === VIDEOS (3D) === */
     .videos { display: flex; flex-direction: column; align-items: center; padding: 80px 0; }
@@ -205,6 +264,9 @@
       width: 900px; height: 320px;
       display: flex; justify-content: center; align-items: center;
       perspective: 1000px; perspective-origin: center; position: relative; z-index: 1;
+      border: 2px solid rgba(57,255,20,.18);
+      border-radius: 14px;
+      background: var(--gray-850);
     }
     .spinner-videos {
       transform-style: preserve-3d; position: relative; display: flex;
@@ -215,6 +277,7 @@
       position: absolute; background: #000; border-radius: 12px; overflow: hidden;
       box-shadow: 0 15px 40px rgba(0,0,0,.5); transition: all .5s ease-in-out;
       width: 260px; height: 146px; opacity: 0; pointer-events: none; transform: scale(0.8);
+      outline: 3px solid rgba(57,255,20,.25);
     }
     .video-panel.center { width: 300px; height: 190px; z-index: 3; transform: scale(1); }
     .video-panel iframe { width: 100%; height: 100%; border: 0; }
@@ -236,10 +299,10 @@
     }
     .videos-pagination button {
       pointer-events: auto; width: 44px; height: 44px; border-radius: 50%;
-      border: none; background: #fff8; color: #000; font-size: 20px;
-      cursor: pointer; transition: all .2s ease-in-out;
+      border: 1px solid rgba(57,255,20,.35); background: var(--green); color: #000; font-size: 20px;
+      cursor: pointer; transition: all .2s ease-in-out; box-shadow: 0 0 12px rgba(57,255,20,.45);
     }
-    .videos-pagination button:hover { background: #fff; }
+    .videos-pagination button:hover { background: var(--green-600); }
 
     @media (max-width: 1400px) { .videos-holder { width: 860px; } }
     @media (max-width: 1200px) { .videos-holder { width: 760px; } }
@@ -254,23 +317,16 @@
       .video-panel.center { width: 260px; height: 146px; }
     }
 
-    footer { padding: 100px 0 50px; text-align: center; color: #ccc; letter-spacing: 1px; }
+    footer { padding: 100px 0 50px; text-align: center; color: var(--muted); letter-spacing: 1px; }
+    footer p{ color: var(--muted); }
+    body.light-mode footer p{ color:#0a0a0a; }
 
     /* === FLECHAS abajo (no tapan) === */
     .videos-holder{ padding-bottom: 64px; }
     .videos-pagination{ top: auto; bottom: 12px; transform: none; }
     @media (max-width: 600px){ .videos-pagination{ bottom: 16px; } }
 
-    /* === Variables base === */
-    :root{
-      --news-max: 1500px;
-      --news-gap: 22px;
-      --news-padY: 1px;
-      --news-padB: 10px;
-      --news-inset: 1px;
-      --news-radius: 16px;
-      --news-mb: 72px;
-    }
+    /* === Variables base (ya definidas arriba) y ajustes === */
     .news{
       max-width: var(--news-max);
       padding: var(--news-padY) 5% var(--news-padB);
@@ -286,14 +342,13 @@
     .main-news img, .news-card img{ inset: var(--news-inset); }
     .news h2{ margin: 10px 0 18px; }
 
-    /* ============ OVERRIDES ACTUALES ============ */
+    /* OVERRIDES ACTUALES (respetados) */
     .news { padding: var(--news-padY) 2% var(--news-padB); } /* antes 5% */
     .schedule-grid{
       grid-template-columns: 2.6fr 1.3fr 1.3fr;
       gap: 24px;
     }
     .main-news, .news-card{ aspect-ratio: 1 / 1; }
-    /* =========================== FIN OVERRIDES ============================ */
 
     /* ===== Responsivo ===== */
     @media (max-width: 1440px){
@@ -311,7 +366,6 @@
       .main-news, .news-card{ aspect-ratio: 16 / 10; }
       .news, .schedule-grid{ max-width: min(var(--news-max), 96vw); }
     }
-    /* ===== FIN responsivo ===== */
   </style>
 </head>
 
@@ -338,18 +392,18 @@
 
   <div class="contenedor-centrado">
     <div class="social-bar music-platforms">
-      <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" style="color: #1DB954;"><i class="fab fa-spotify"></i></a>
-      <a href="https://music.apple.com" target="_blank" rel="noopener noreferrer" style="color: #FA57C1;"><i class="fab fa-apple"></i></a>
-      <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" style="color: #FF0000;"><i class="fab fa-youtube"></i></a>
-      <a href="https://www.deezer.com" target="_blank" rel="noopener noreferrer" style="color: #FF0000;"><i class="fab fa-deezer"></i></a>
-      <a href="https://music.amazon.com" target="_blank" rel="noopener noreferrer" style="color: #FF9900;"><i class="fab fa-amazon"></i></a>
-      <a href="https://tidal.com" target="_blank" rel="noopener noreferrer" style="color: #000000;"><i class="fab fa-tidal"></i></a>
+      <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+      <a href="https://music.apple.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-apple"></i></a>
+      <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+      <a href="https://www.deezer.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-deezer"></i></a>
+      <a href="https://music.amazon.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-amazon"></i></a>
+      <a href="https://tidal.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-tidal"></i></a>
     </div>
     <div class="social-bar social-networks">
-      <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" style="color: #E1306C;"><i class="fab fa-instagram"></i></a>
-      <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" style="color: #1877F2;"><i class="fab fa-facebook"></i></a>
-      <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" style="color: #1DA1F2;"><i class="fab fa-twitter"></i></a>
-      <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" style="color: #FE2C55;"><i class="fab fa-tiktok"></i></a>
+      <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
+      <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a>
+      <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
     </div>
   </div>
 
@@ -360,7 +414,6 @@
 
   <!-- BANNER DISCOS -->
   <div class="section-banner" id="banner-discography">
-    <!-- Video de Drive opcional (se configurará por JS y se oculta si no hay video) -->
     <video id="banner-discography-video" autoplay muted loop playsinline preload="metadata"
            style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:inherit; z-index:0; display:none;">
       <source id="banner-discography-src" src="" type="video/mp4">
@@ -388,7 +441,6 @@
 
   <!-- BANNER VIDEOS -->
   <div class="section-banner" id="banner-videos">
-    <!-- Video de Drive opcional (se configurará por JS y se oculta si no hay video) -->
     <video id="banner-videos-video" autoplay muted loop playsinline preload="metadata"
            style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:inherit; z-index:0; display:none;">
       <source id="banner-videos-src" src="" type="video/mp4">
