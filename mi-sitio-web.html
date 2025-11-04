@@ -7,40 +7,19 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    /* ================== PALETA ================== */
-    :root{
-      --green: #39ff14;          /* fondo verde afiche */
-      --green-600:#2fe10e;
-      --black: #0a0a0a;          /* texto negro */
-      --muted:#111;              /* gris muy oscuro para secundarios */
-      --outline:#0a0a0a33;
-
-      /* vars existentes news */
-      --news-max: 1500px;
-      --news-gap: 22px;
-      --news-padY: 1px;
-      --news-padB: 10px;
-      --news-inset: 1px;
-      --news-radius: 16px;
-      --news-mb: 72px;
-
-      --ang: 0; --angVid: 0;
-    }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --ang: 0; --angVid: 0; }
 
-    /* === MODO POR DEFECTO: VERDE + TEXTO NEGRO === */
     body {
       font-family: 'Helvetica Neue', sans-serif;
-      background: var(--green);
-      color: var(--black);
+      background: #0b0b0b;
+      color: #f5f5f5;
       overflow-x: hidden;
       width: 100%; height: 100%;
       transition: background 0.3s, color 0.3s;
       scroll-padding-top: 84px;
     }
-    /* === Toggle invierte a oscuro (negro con texto claro) === */
-    body.light-mode { background: #0b0b0b; color: #f5f5f5; }
+    body.light-mode { background: #F6D43B ; color: #111; }
 
     @keyframes shake {
       0% { transform: translateX(0) scale(1.15); }
@@ -52,68 +31,60 @@
 
     header {
       position: fixed; top: 0; width: 100%;
-      background: rgba(0,0,0,.06);
+      background: rgba(0, 0, 0, 0.8);
       padding: 20px 5%;
       display: flex; justify-content: space-between; align-items: center;
-      z-index: 999; backdrop-filter: blur(6px);
-      border-bottom: 2px solid var(--outline);
+      z-index: 999; backdrop-filter: blur(10px);
     }
-    body.light-mode header{ background: rgba(0,0,0,.8); border-bottom-color:#222; }
-    header .logo { color: var(--black); font-size: 20px; letter-spacing: 2px; font-weight: 800; }
-    body.light-mode header .logo{ color:#fff; }
-
+    header .logo { color: #fff; font-size: 20px; letter-spacing: 2px; }
     nav ul { display: flex; gap: 25px; list-style: none; }
-    nav a {
-      color: var(--black);
-      text-decoration: none; font-size: 14px;
-      transition: all .2s ease; display: inline-block; font-weight:700;
-      border-bottom:2px solid transparent;
-    }
-    nav a:hover { border-bottom-color: var(--black); animation: shake .2s ease-in-out infinite alternate; }
-    body.light-mode nav a{ color:#ddd; }
-    body.light-mode nav a:hover{ border-bottom-color:#ddd; }
+    nav a { color: #ccc; text-decoration: none; font-size: 14px; transition: all 0.3s ease; display: inline-block; }
+    nav a:hover { color: #e0c27b; animation: shake 0.2s ease-in-out infinite alternate; }
 
     .theme-toggle {
-      background: transparent; border: 1px solid var(--black); color: var(--black);
-      padding: 6px 12px; border-radius: 8px; cursor: pointer; transition: all .2s; font-size: 12px; margin-left: 20px;
+      background: none; border: 1px solid #777; color: #ccc;
+      padding: 6px 12px; border-radius: 8px; cursor: pointer; transition: all 0.3s; font-size: 12px; margin-left: 20px;
     }
-    .theme-toggle:hover { background: var(--black); color: var(--green); }
-    body.light-mode .theme-toggle{ border-color:#ddd; color:#ddd; }
-    body.light-mode .theme-toggle:hover{ background:#ddd; color:#000; }
+    .theme-toggle:hover { background: #e0c27b; color: #000; }
 
     .hero-wrapper { position: relative; height: 70vh; overflow: hidden; margin-top: 70px; }
     .hero-bg {
       position: absolute; top: 0; left: 0;
       width: 100%; height: 75vh;
-      background: var(--green);
-      background-size: cover; background-repeat: no-repeat; background-position: center;
+      background: #0b0b0b;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
       z-index: 0;
-      outline: 3px solid var(--outline);
     }
     .hero-text {
-      position: relative; z-index: 2; color: var(--black); font-size: 2rem;
+      position: relative; z-index: 2; color: white; font-size: 2rem;
       padding: 60px 5%; height: 75vh; display: flex; align-items: center;
-      text-shadow: none;
+      text-shadow: 0 2px 10px rgba(0,0,0,.6);
     }
-    body.light-mode .hero-text{ color:#f5f5f5; text-shadow:0 2px 10px rgba(0,0,0,.6); }
 
     .contenedor-centrado { display: flex; flex-direction: column; align-items: center; padding: 10px 0; margin-top: 1px; }
     .social-bar { display: flex; justify-content: center; gap: 30px; margin: 0; width: 100%; max-width: 800px; }
-    .social-bar a { display: inline-block; transition: transform .3s ease, color .3s ease; color: var(--black) !important; opacity:.85; }
-    .social-bar a:hover { transform: scale(1.15); opacity:1; }
+    .social-bar a { display: inline-block; transition: transform 0.3s ease, fill 0.3s ease; }
+    .social-bar svg { width: 36px; height: 36px; fill: #888; }
+    .social-bar a:hover svg { fill: #e0c27b; transform: scale(1.15); }
+    .music-platforms { gap: 20px; }
+    .music-platforms a { font-size: 60px; }
+    .social-networks { gap: 10px; margin-top: -10px; }
+    .social-networks a { font-size: 50px; }
 
-    /* === NEWS === */
+    /* === NEWS (estructura base original) === */
     .news {
-      background-color: var(--green);
+      background-color: #1a1a1a;
       max-width: 1200px;
       margin: 0 auto 80px;
       padding: 100px 5% 80px;
       border-radius: 12px;
-      box-shadow: 0 0 0 3px var(--outline), 0 0 30px rgba(0,0,0,.15) inset;
-      transition: background .3s ease, color .3s ease;
+      box-shadow: 0 0 30px rgba(0,0,0,.3);
+      transition: background 0.3s ease;
     }
-    .news h2 { font-size: 32px; color: var(--black); margin-bottom: 30px; text-align: center; letter-spacing: 2px; }
-    .news h2 span { font-size: 14px; color: var(--black); opacity:.8; margin-left: 10px; }
+    .news h2 { font-size: 32px; color: #fff; margin-bottom: 30px; text-align: center; }
+    .news h2 span { font-size: 14px; color: #ccc; margin-left: 10px; }
 
     .schedule-grid {
       display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 1fr 1fr;
@@ -121,37 +92,46 @@
     }
 
     .main-news, .news-card {
-      position: relative; display: block; text-decoration: none; color: var(--black);
+      position: relative; display: block; text-decoration: none; color: inherit;
       overflow: hidden; padding: 0; border-radius: 16px;
-      background: var(--green);
-      border: 2px solid var(--black);
     }
-    .main-news { grid-column: 1 / 2; grid-row: 1 / 3; aspect-ratio: 1 / 1; }
+    .main-news {
+      grid-column: 1 / 2; grid-row: 1 / 3;
+      background: linear-gradient(135deg, #4c51bf, #4c51bf);
+      box-shadow: 0 0 20px rgba(76,81,191,.8);
+      aspect-ratio: 1 / 1;
+    }
     .news-card {
-      aspect-ratio: 1 / 1; cursor: pointer; transition: transform .3s ease, box-shadow .3s ease;
+      background: #222; box-shadow: 0 0 15px rgba(0,0,0,.5);
+      aspect-ratio: 1 / 1; cursor: pointer; transition: transform 0.3s ease;
     }
-    .news-card:hover { transform: scale(1.04); box-shadow: 0 0 0 3px var(--black); animation: shake .2s ease-in-out infinite alternate; }
+    .news-card:hover { transform: scale(1.05); animation: shake 0.2s ease-in-out infinite alternate; }
 
     .main-news img, .news-card img {
-      position: absolute; inset: 0; width: calc(100% - 20px); height: calc(100% - 20px);
-      object-fit: cover; border-radius: 5px; display: block; margin: 10px; background:#000;
+      position: absolute;
+      inset: 0px;
+      width: calc(100% - 20px);
+      height: calc(100% - 20px);
+      object-fit: cover;
+      border-radius: 5px;
+      display: block;
     }
 
-    .news-card h4, .news-card .date, .news-card p { color: var(--black); text-align:center; }
-    .news-card .label {
-      font-size: 11px; color: var(--green); background: var(--black);
-      border: 1px solid var(--black); padding: 2px 8px; border-radius: 999px; width: fit-content; margin: 10px auto 0; display: block;
-    }
+    .news-card h4 { font-size: 16px; font-weight: 700; color: #fff; text-align: center; }
+    .news-card .date { font-weight: 700; font-size: 14px; color: #ccc; text-align: center; }
+    .news-card p { color: #ccc; font-size: 14px; text-align: center; }
+    .news-card .label { font-size: 11px; color: #e0c27b; border: 1px solid #e0c27b; padding: 2px 6px; border-radius: 999px; width: fit-content; margin: 10px auto 0; display: block; }
 
     .section-banner {
       position: relative; width: 50%; height: 300px; margin: 90px auto; border-radius: 999px;
-      background: var(--green);
-      box-shadow: 0 0 0 6px var(--black) inset, 0 0 20px rgba(0,0,0,.25);
-      display: flex; justify-content: center; align-items: center;
-      color: var(--black); font-size: 3rem; font-weight: 900;
+      background: #111;
+      box-shadow: 0 0 20px rgba(0,0,0,.5); display: flex; justify-content: center; align-items: center;
+      color: #e0c27b; font-size: 3rem; font-weight: 900;
       font-family: 'Yu Gothic UI', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
-      user-select: none; overflow: hidden;
+      text-shadow: 0 0 15px rgba(224,194,123,.7); user-select: none;
+      overflow: hidden;
     }
+    /* Asegura que el texto se vea sobre el video */
     .section-banner > * { position: relative; z-index: 1; }
 
     /* === DISCOGRAFÍA (3D) === */
@@ -165,36 +145,37 @@
       position: relative; z-index: 1;
     }
     .discography .spinner {
-      transform-style: preserve-3d; position: relative; display: flex; align-items: center; justify-content: center;
-      transform: rotateY(calc(var(--ang) * 1deg)) translateY(-12px); transition: all .5s ease-in-out;
+      transform-style: preserve-3d;
+      position: relative; display: flex;
+      align-items: center; justify-content: center;
+      transform: rotateY(calc(var(--ang) * 1deg)) translateY(-12px);
+      transition: all .5s ease-in-out;
     }
     .discography .panel {
       border-radius: 10px; width: 120px; height: 120px; position: absolute;
       background-size: cover; background-position: 50% 50%;
       box-shadow: 0 10px 30px rgba(0,0,0,.6);
       opacity: 1; transition: all .5s ease-in-out, opacity .2s ease-out;
-      outline: 3px solid var(--black);
-      background-color:#000;
     }
 
-    .discography .panel:nth-child(1){ transform: rotateY(0deg) translateZ(400px); }
-    .discography .panel:nth-child(2){ transform: rotateY(24deg) translateZ(400px); }
-    .discography .panel:nth-child(3){ transform: rotateY(48deg) translateZ(400px); }
-    .discography .panel:nth-child(4){ transform: rotateY(72deg) translateZ(400px); }
-    .discography .panel:nth-child(5){ transform: rotateY(96deg) translateZ(400px); }
-    .discography .panel:nth-child(6){ transform: rotateY(120deg) translateZ(400px); }
-    .discography .panel:nth-child(7){ transform: rotateY(144deg) translateZ(400px); }
-    .discography .panel:nth-child(8){ transform: rotateY(168deg) translateZ(400px); }
-    .discography .panel:nth-child(9){ transform: rotateY(192deg) translateZ(400px); }
-    .discography .panel:nth-child(10){ transform: rotateY(216deg) translateZ(400px); }
-    .discography .panel:nth-child(11){ transform: rotateY(240deg) translateZ(400px); }
-    .discography .panel:nth-child(12){ transform: rotateY(264deg) translateZ(400px); }
-    .discography .panel:nth-child(13){ transform: rotateY(288deg) translateZ(400px); }
-    .discography .panel:nth-child(14){ transform: rotateY(312deg) translateZ(400px); }
-    .discography .panel:nth-child(15){ transform: rotateY(336deg) translateZ(400px); }
+    .discography .panel:nth-child(1)  { transform: rotateY(0deg) translateZ(400px); }
+    .discography .panel:nth-child(2)  { transform: rotateY(24deg) translateZ(400px); }
+    .discography .panel:nth-child(3)  { transform: rotateY(48deg) translateZ(400px); }
+    .discography .panel:nth-child(4)  { transform: rotateY(72deg) translateZ(400px); }
+    .discography .panel:nth-child(5)  { transform: rotateY(96deg) translateZ(400px); }
+    .discography .panel:nth-child(6)  { transform: rotateY(120deg) translateZ(400px); }
+    .discography .panel:nth-child(7)  { transform: rotateY(144deg) translateZ(400px); }
+    .discography .panel:nth-child(8)  { transform: rotateY(168deg) translateZ(400px); }
+    .discography .panel:nth-child(9)  { transform: rotateY(192deg) translateZ(400px); }
+    .discography .panel:nth-child(10) { transform: rotateY(216deg) translateZ(400px); }
+    .discography .panel:nth-child(11) { transform: rotateY(240deg) translateZ(400px); }
+    .discography .panel:nth-child(12) { transform: rotateY(264deg) translateZ(400px); }
+    .discography .panel:nth-child(13) { transform: rotateY(288deg) translateZ(400px); }
+    .discography .panel:nth-child(14) { transform: rotateY(312deg) translateZ(400px); }
+    .discography .panel:nth-child(15) { transform: rotateY(336deg) translateZ(400px); }
 
     .discography .fade {
-      background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.35) 30%, rgba(0,0,0,.35) 70%, rgba(0,0,0,0) 100%);
+      background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.4) 30%, rgba(0,0,0,.4) 70%, rgba(0,0,0,0) 100%);
       width: 860px; height: 200px; position: absolute;
       transform: rotateY(calc(var(--ang) * -1deg)) translateZ(110px);
       transition: all .5s ease-in-out; pointer-events: none; z-index: 2;
@@ -202,16 +183,21 @@
 
     .discography .pagination {
       position: absolute; top: 100%; left: 0; right: 0; z-index: 3;
-      width: 100%; display: flex; justify-content: space-between; align-items: center; transform: translateY(14px);
+      width: 100%; display: flex; justify-content: space-between;
+      align-items: center; transform: translateY(14px);
     }
-    #prev { margin-left: 20px; } #next { margin-right: 20px; }
+    #prev { margin-left: 20px; }
+    #next { margin-right: 20px; }
 
     .discography .pagination button {
-      padding: 0; border: 2px solid var(--black); cursor: pointer;
-      width: 44px; height: 44px; margin: 0 10px; font-family: 'Roboto', sans-serif; font-size: 20px;
-      color: var(--green); background: var(--black); border-radius: 100%; transition: all .2s ease-in-out;
+      padding: 0; border: none; cursor: pointer;
+      width: 44px; height: 44px; margin: 0 10px;
+      font-family: 'Roboto', sans-serif; font-size: 20px;
+      color: black; background: #fffa; border-radius: 100%;
+      transition: all .2s ease-in-out;
     }
-    .discography .pagination button:hover { filter: brightness(1.15); }
+    .discography .pagination button:hover { background: #fffc; }
+    .discography .pagination button:active { background: #ffff; }
 
     /* === VIDEOS (3D) === */
     .videos { display: flex; flex-direction: column; align-items: center; padding: 80px 0; }
@@ -219,27 +205,29 @@
       width: 900px; height: 320px;
       display: flex; justify-content: center; align-items: center;
       perspective: 1000px; perspective-origin: center; position: relative; z-index: 1;
-      border: 2px solid var(--black); border-radius: 14px; background: var(--green);
     }
-    .spinner-videos { transform-style: preserve-3d; position: relative; display: flex; align-items: center; justify-content: center; transform: rotateY(calc(var(--angVid) * 1deg)); transition: all .6s ease-in-out; }
+    .spinner-videos {
+      transform-style: preserve-3d; position: relative; display: flex;
+      align-items: center; justify-content: center; transform: rotateY(calc(var(--angVid) * 1deg));
+      transition: all .6s ease-in-out;
+    }
     .video-panel {
       position: absolute; background: #000; border-radius: 12px; overflow: hidden;
       box-shadow: 0 15px 40px rgba(0,0,0,.5); transition: all .5s ease-in-out;
       width: 260px; height: 146px; opacity: 0; pointer-events: none; transform: scale(0.8);
-      outline: 3px solid var(--black);
     }
     .video-panel.center { width: 300px; height: 190px; z-index: 3; transform: scale(1); }
     .video-panel iframe { width: 100%; height: 100%; border: 0; }
 
-    .video-panel:nth-child(1){ transform: rotateY(0deg) translateZ(400px); }
-    .video-panel:nth-child(2){ transform: rotateY(40deg) translateZ(400px); }
-    .video-panel:nth-child(3){ transform: rotateY(80deg) translateZ(400px); }
-    .video-panel:nth-child(4){ transform: rotateY(120deg) translateZ(400px); }
-    .video-panel:nth-child(5){ transform: rotateY(160deg) translateZ(400px); }
-    .video-panel:nth-child(6){ transform: rotateY(200deg) translateZ(400px); }
-    .video-panel:nth-child(7){ transform: rotateY(240deg) translateZ(400px); }
-    .video-panel:nth-child(8){ transform: rotateY(280deg) translateZ(400px); }
-    .video-panel:nth-child(9){ transform: rotateY(320deg) translateZ(400px); }
+    .video-panel:nth-child(1) { transform: rotateY(0deg) translateZ(400px); }
+    .video-panel:nth-child(2) { transform: rotateY(40deg) translateZ(400px); }
+    .video-panel:nth-child(3) { transform: rotateY(80deg) translateZ(400px); }
+    .video-panel:nth-child(4) { transform: rotateY(120deg) translateZ(400px); }
+    .video-panel:nth-child(5) { transform: rotateY(160deg) translateZ(400px); }
+    .video-panel:nth-child(6) { transform: rotateY(200deg) translateZ(400px); }
+    .video-panel:nth-child(7) { transform: rotateY(240deg) translateZ(400px); }
+    .video-panel:nth-child(8) { transform: rotateY(280deg) translateZ(400px); }
+    .video-panel:nth-child(9) { transform: rotateY(320deg) translateZ(400px); }
 
     .videos-pagination {
       position: absolute; top: 50%; left: 0; right: 0;
@@ -248,10 +236,10 @@
     }
     .videos-pagination button {
       pointer-events: auto; width: 44px; height: 44px; border-radius: 50%;
-      border: 2px solid var(--black); background: var(--black); color: var(--green); font-size: 20px;
+      border: none; background: #fff8; color: #000; font-size: 20px;
       cursor: pointer; transition: all .2s ease-in-out;
     }
-    .videos-pagination button:hover { filter: brightness(1.15); }
+    .videos-pagination button:hover { background: #fff; }
 
     @media (max-width: 1400px) { .videos-holder { width: 860px; } }
     @media (max-width: 1200px) { .videos-holder { width: 760px; } }
@@ -266,35 +254,64 @@
       .video-panel.center { width: 260px; height: 146px; }
     }
 
-    footer { padding: 100px 0 50px; text-align: center; color: var(--black); letter-spacing: 1px; }
-    footer p{ color: var(--black); }
+    footer { padding: 100px 0 50px; text-align: center; color: #ccc; letter-spacing: 1px; }
 
-    /* === FLECHAS abajo === */
+    /* === FLECHAS abajo (no tapan) === */
     .videos-holder{ padding-bottom: 64px; }
     .videos-pagination{ top: auto; bottom: 12px; transform: none; }
     @media (max-width: 600px){ .videos-pagination{ bottom: 16px; } }
 
-    /* === Overrides y responsivo (tus reglas) === */
-    .news{ max-width: var(--news-max); padding: var(--news-padY) 5% var(--news-padB); margin: 140px auto var(--news-mb); border-radius: var(--news-radius); }
-    .schedule-grid{ max-width: var(--news-max); gap: var(--news-gap); grid-template-columns: 2fr 1fr 1fr; }
+    /* === Variables base === */
+    :root{
+      --news-max: 1500px;
+      --news-gap: 22px;
+      --news-padY: 1px;
+      --news-padB: 10px;
+      --news-inset: 1px;
+      --news-radius: 16px;
+      --news-mb: 72px;
+    }
+    .news{
+      max-width: var(--news-max);
+      padding: var(--news-padY) 5% var(--news-padB);
+      margin: 140px auto var(--news-mb);
+      border-radius: var(--news-radius);
+      box-shadow: 0 0 30px rgba(0,0,0,.3);
+    }
+    .schedule-grid{
+      max-width: var(--news-max);
+      gap: var(--news-gap);
+      grid-template-columns: 2fr 1fr 1fr;
+    }
     .main-news img, .news-card img{ inset: var(--news-inset); }
     .news h2{ margin: 10px 0 18px; }
 
-    .news { padding: var(--news-padY) 2% var(--news-padB); }
-    .schedule-grid{ grid-template-columns: 2.6fr 1.3fr 1.3fr; gap: 24px; }
+    /* ============ OVERRIDES ACTUALES ============ */
+    .news { padding: var(--news-padY) 2% var(--news-padB); } /* antes 5% */
+    .schedule-grid{
+      grid-template-columns: 2.6fr 1.3fr 1.3fr;
+      gap: 24px;
+    }
     .main-news, .news-card{ aspect-ratio: 1 / 1; }
+    /* =========================== FIN OVERRIDES ============================ */
 
+    /* ===== Responsivo ===== */
     @media (max-width: 1440px){
       .main-news, .news-card{ aspect-ratio: 4 / 5; }
       .schedule-grid{ grid-template-columns: 2.3fr 1.2fr 1.2fr; }
     }
-    @media (max-width: 1200px){ .news{ padding: var(--news-padY) 3% var(--news-padB); } }
-    @media (max-width: 1100px){ .news, .schedule-grid{ max-width: min(var(--news-max), 94vw); } }
+    @media (max-width: 1200px){
+      .news{ padding: var(--news-padY) 3% var(--news-padB); }
+    }
+    @media (max-width: 1100px){
+      .news, .schedule-grid{ max-width: min(var(--news-max), 94vw); }
+    }
     @media (max-width: 900px){
       .schedule-grid{ grid-template-columns: 1fr; }
       .main-news, .news-card{ aspect-ratio: 16 / 10; }
       .news, .schedule-grid{ max-width: min(var(--news-max), 96vw); }
     }
+    /* ===== FIN responsivo ===== */
   </style>
 </head>
 
@@ -315,23 +332,24 @@
 
   <div class="hero-wrapper">
     <div class="hero-bg"></div>
+    <!-- El video del hero se inyecta dinámicamente si existe banner_principal_video -->
     <div class="hero-text">Bienvenido a Tenshi | 幻想の響き</div>
   </div>
 
   <div class="contenedor-centrado">
     <div class="social-bar music-platforms">
-      <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
-      <a href="https://music.apple.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-apple"></i></a>
-      <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
-      <a href="https://www.deezer.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-deezer"></i></a>
-      <a href="https://music.amazon.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-amazon"></i></a>
-      <a href="https://tidal.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-tidal"></i></a>
+      <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" style="color: #1DB954;"><i class="fab fa-spotify"></i></a>
+      <a href="https://music.apple.com" target="_blank" rel="noopener noreferrer" style="color: #FA57C1;"><i class="fab fa-apple"></i></a>
+      <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" style="color: #FF0000;"><i class="fab fa-youtube"></i></a>
+      <a href="https://www.deezer.com" target="_blank" rel="noopener noreferrer" style="color: #FF0000;"><i class="fab fa-deezer"></i></a>
+      <a href="https://music.amazon.com" target="_blank" rel="noopener noreferrer" style="color: #FF9900;"><i class="fab fa-amazon"></i></a>
+      <a href="https://tidal.com" target="_blank" rel="noopener noreferrer" style="color: #000000;"><i class="fab fa-tidal"></i></a>
     </div>
     <div class="social-bar social-networks">
-      <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
-      <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
-      <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a>
-      <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
+      <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" style="color: #E1306C;"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" style="color: #1877F2;"><i class="fab fa-facebook"></i></a>
+      <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" style="color: #1DA1F2;"><i class="fab fa-twitter"></i></a>
+      <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" style="color: #FE2C55;"><i class="fab fa-tiktok"></i></a>
     </div>
   </div>
 
@@ -342,6 +360,7 @@
 
   <!-- BANNER DISCOS -->
   <div class="section-banner" id="banner-discography">
+    <!-- Video de Drive opcional (se configurará por JS y se oculta si no hay video) -->
     <video id="banner-discography-video" autoplay muted loop playsinline preload="metadata"
            style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:inherit; z-index:0; display:none;">
       <source id="banner-discography-src" src="" type="video/mp4">
@@ -353,6 +372,7 @@
     <div class="container">
       <div class="holder">
         <div class="spinner">
+          <!-- 15 paneles en loop (a..e * 3) -->
           <div class="panel a"></div><div class="panel b"></div><div class="panel c"></div><div class="panel d"></div><div class="panel e"></div>
           <div class="panel a"></div><div class="panel b"></div><div class="panel c"></div><div class="panel d"></div><div class="panel e"></div>
           <div class="panel a"></div><div class="panel b"></div><div class="panel c"></div><div class="panel d"></div><div class="panel e"></div>
@@ -368,6 +388,7 @@
 
   <!-- BANNER VIDEOS -->
   <div class="section-banner" id="banner-videos">
+    <!-- Video de Drive opcional (se configurará por JS y se oculta si no hay video) -->
     <video id="banner-videos-video" autoplay muted loop playsinline preload="metadata"
            style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:inherit; z-index:0; display:none;">
       <source id="banner-videos-src" src="" type="video/mp4">
@@ -395,13 +416,13 @@
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Tema (sin cambios de lógica) -->
+  <!-- Tema -->
   <script>
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
-      localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'dark' : 'light');
+      localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
     }
-    if (localStorage.getItem('theme') === 'dark') {
+    if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-mode');
     }
   </script>
@@ -450,7 +471,7 @@
     $("#next-video").on("click", function(){ angVid -= angVid_unit; updateSpinnerVideos(); });
   </script>
 
-  <!-- CARGA CATÁLOGO (igual) -->
+  <!-- CARGA CATÁLOGO (con soporte imagen/video de Drive) -->
   <script>
     async function fetchWithTimeout(url, ms = 6000) {
       const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), ms);
@@ -472,23 +493,30 @@
       return results.filter(Boolean);
     }
 
+    /* ====== NUEVO: utilidades para aceptar ID o URL de Drive ====== */
     function extractDriveId(input){
       if(!input || typeof input !== 'string') return null;
       const trimmed = input.trim();
-      if (/^[a-zA-Z0-9_-]{20,}$/.test(trimmed)) return trimmed;
+      if (/^[a-zA-Z0-9_-]{20,}$/.test(trimmed)) return trimmed; // parece ID
+      // URL -> intenta extraer /d/ID/
       const m = trimmed.match(/\/d\/([a-zA-Z0-9_-]{20,})/);
       if (m && m[1]) return m[1];
+      // ?id=ID
       const p = trimmed.match(/[?&]id=([a-zA-Z0-9_-]{20,})/);
       if (p && p[1]) return p[1];
       return null;
     }
     function driveDirectMp4(input){
-      const id = extractDriveId(input) || input;
+      const id = extractDriveId(input) || input; // si ya es ID
       if(!id) return null;
       return `https://drive.google.com/uc?export=download&id=${id}`;
     }
     function setBannerMedia({wrapperEl, bgUrl, videoCandidate}){
-      if (wrapperEl && bgUrl){ wrapperEl.style.backgroundImage = `url('${bgUrl}')`; }
+      // Imagen de fondo (si existe)
+      if (wrapperEl && bgUrl){
+        wrapperEl.style.backgroundImage = `url('${bgUrl}')`;
+      }
+      // Video (si existe): muestra el <video> hijo y setea src
       const videoEl = wrapperEl ? wrapperEl.querySelector('video') : null;
       const sourceEl = videoEl ? videoEl.querySelector('source') : null;
       if (videoEl && sourceEl){
@@ -498,12 +526,14 @@
           videoEl.style.display = '';
           try { videoEl.load(); videoEl.play().catch(()=>{}); } catch {}
         } else {
+          // si no hay video válido, ocúltalo
           videoEl.pause && videoEl.pause();
           videoEl.style.display = 'none';
           sourceEl.src = '';
         }
       }
     }
+    /* ====== FIN utilidades ====== */
 
     const SECTION_MAP = {
       discografia: 'Discography.html',
@@ -526,9 +556,11 @@
         const resp = await fetchWithTimeout('data/catalogo.json', 7000);
         const data = await resp.json();
 
+        /* ===== HERO (imagen + video opcional) ===== */
         const heroBg = document.querySelector('.hero-bg');
         if (heroBg && data.banner_principal) heroBg.style.backgroundImage = `url('${data.banner_principal}')`;
 
+        // Inyecta video en hero si existe banner_principal_video (sin tocar tu HTML base)
         if (data.banner_principal_video){
           const existing = document.getElementById('hero-video');
           if (!existing){
@@ -538,28 +570,45 @@
               const v = document.createElement('video');
               v.id = 'hero-video';
               v.autoplay = true; v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'metadata';
-              Object.assign(v.style, { position:'absolute', inset:'0', width:'100%', height:'100%', objectFit:'cover', zIndex:'0' });
-              const s = document.createElement('source'); s.src = direct; s.type = 'video/mp4';
-              v.appendChild(s); hw.insertBefore(v, hw.firstChild);
+              Object.assign(v.style, {
+                position:'absolute', inset:'0', width:'100%', height:'100%',
+                objectFit:'cover', zIndex:'0'
+              });
+              const s = document.createElement('source');
+              s.src = direct; s.type = 'video/mp4';
+              v.appendChild(s);
+              hw.insertBefore(v, hw.firstChild); // debajo del texto, sobre .hero-bg
               try { v.play().catch(()=>{}); } catch {}
             }
           }
         }
 
+        /* ===== BANNERS ===== */
         const bannerDisc = document.getElementById('banner-discography');
         if (bannerDisc){
-          setBannerMedia({ wrapperEl: bannerDisc, bgUrl: data.banner_discografia || null, videoCandidate: data.banner_discografia_video || null });
-        }
-        const bannerVideos = document.getElementById('banner-videos');
-        if (bannerVideos){
-          setBannerMedia({ wrapperEl: bannerVideos, bgUrl: data.banner_videos || null, videoCandidate: data.banner_videos_video || null });
+          setBannerMedia({
+            wrapperEl: bannerDisc,
+            bgUrl: data.banner_discografia || null,
+            videoCandidate: data.banner_discografia_video || null
+          });
         }
 
+        const bannerVideos = document.getElementById('banner-videos');
+        if (bannerVideos){
+          setBannerMedia({
+            wrapperEl: bannerVideos,
+            bgUrl: data.banner_videos || null,
+            videoCandidate: data.banner_videos_video || null
+          });
+        }
+
+        /* ===== NEWS ===== */
         const newsGrid = document.getElementById('news-grid');
         if (newsGrid && data.news && typeof data.news === 'object') {
           newsGrid.innerHTML = '';
           const orden = ['n1', 'n2', 'n3', 'n4', 'n5'];
-          const notas = orden.map(k => data.news[k]).filter(n => n && typeof n === 'object' && typeof n.imagen === 'string' && n.imagen.trim());
+          const notas = orden.map(k => data.news[k])
+            .filter(n => n && typeof n === 'object' && typeof n.imagen === 'string' && n.imagen.trim());
           notas.forEach((nota, idx) => {
             const a = document.createElement('a');
             a.href = resolveDestino(nota);
@@ -571,6 +620,7 @@
           });
         }
 
+        /* ===== VIDEOS carrusel ===== */
         const spinner = document.getElementById('spinner-videos');
         if (spinner && Array.isArray(data.videos) && data.videos.length) {
           spinner.innerHTML = '';
@@ -582,13 +632,15 @@
           while (lista.length < 9 && base.length > 0) lista.push(...base);
           lista.slice(0, 9).forEach(u => {
             const panel = document.createElement('div');
+            const src = u;
             panel.className = 'video-panel';
-            panel.innerHTML = `<iframe src="${u}" allowfullscreen></iframe>`;
+            panel.innerHTML = `<iframe src="${src}" allowfullscreen></iframe>`;
             spinner.appendChild(panel);
           });
           updateSpinnerVideos();
         }
 
+        /* ===== DISCOGRAFÍA portadas ===== */
         if (data.discografia) {
           const N = 5; let covers = [];
           if (Array.isArray(data.discografia.tracks) && data.discografia.tracks.length) {
