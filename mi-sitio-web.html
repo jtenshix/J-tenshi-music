@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tenshi | 幻想の響き</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Fuentes estilo Anime Expo -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <!-- Fuentes estilo Anime Expo + SCHEDULE -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Press+Start+2P&family=Hiragino+Kaku+Gothic+Pro:wght@600&display=swap" rel="stylesheet">
   <style>
     /* === RESETEO === */
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -43,9 +43,9 @@
       100% { transform: translateX(0) rotate(0deg) scale(1.15); }
     }
 
-    /* === TIPOGRAFÍA EXPO === */
-    h1, h2, h3, .logo, .section-banner, nav a {
-      font-family: 'Orbitron', 'Press Start 2P', sans-serif !important;
+    /* === TIPOGRAFÍA EXPO + SCHEDULE === */
+    h1, h2, h3, .logo, nav a, .banner-title {
+      font-family: 'Orbitron', 'Arial Black', sans-serif !important;
       text-transform: uppercase;
       letter-spacing: 2px;
       text-shadow: 0 0 10px rgba(246,212,59,.6);
@@ -124,26 +124,48 @@
       position: absolute; inset: 1px; width: calc(100% - 20px); height: calc(100% - 20px);
       object-fit: cover; border-radius: 5px; display: block;
     }
-    .news-card h4 { font-size: 16px; font-weight: 700; color: #fff; text-align: center; }
-    .news-card .date { font-weight: 700; font-size: 14px; color: #ccc; text-align: center; }
-    .news-card p { color: #ccc; font-size: 14px; text-align: center; }
-    .news-card .label { font-size: 11px; color: var(--yellow); border: 1px solid var(--yellow); padding: 2px 6px; border-radius: 999px; width: fit-content; margin: 10px auto 0; display: block; }
 
-    /* === BANNERS === */
+    /* === BANNERS – RECTANGULARES, ESTILO SCHEDULE === */
     .section-banner {
-      position: relative; width: 60%; height: 260px; margin: 100px auto;
+      position: relative;
+      width: 70%;
+      max-width: 900px;
+      height: 180px;
+      margin: 100px auto;
       background: var(--black);
-      border: 6px solid var(--yellow);
-      display: flex; justify-content: center; align-items: center;
-      color: var(--yellow); font-size: 4rem; font-weight: 900;
-      font-family: 'Orbitron', sans-serif;
-      text-shadow: 0 0 20px var(--yellow);
-      user-select: none; overflow: hidden;
-      clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%);
-      box-shadow: 0 0 40px rgba(246,212,59,.4);
+      border: 8px solid var(--yellow);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: var(--yellow);
+      font-weight: 900;
+      text-align: center;
+      user-select: none;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(246,212,59,.5);
+      clip-path: none !important;
     }
-    .section-banner > * { position: relative; z-index: 1; }
-    .section-banner video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:inherit; z-index:0; display:none; filter: brightness(.8) contrast(1.2); }
+    .section-banner .banner-title {
+      font-family: 'Orbitron', 'Arial Black', sans-serif;
+      font-size: 4.5rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-shadow: 0 0 20px var(--yellow);
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+    .section-banner .banner-subtitle {
+      font-family: 'Hiragino Kaku Gothic Pro', 'Meiryo', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #ccc;
+      letter-spacing: 2px;
+    }
+    .section-banner video {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; display: none;
+      filter: brightness(.8) contrast(1.2);
+    }
 
     /* === DISCOGRAFÍA (3D) === */
     .discography { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px 0; }
@@ -258,7 +280,9 @@
       .video-panel { width: 200px; height: 112px; }
       .video-panel.center { width: 320px; height: 180px; }
       .hero-text { font-size: 2.8rem; }
-      .section-banner { width: 80%; font-size: 2.5rem; height: 200px; }
+      .section-banner { width: 85%; height: 160px; }
+      .section-banner .banner-title { font-size: 3.2rem; }
+      .section-banner .banner-subtitle { font-size: 1.1rem; }
       nav ul { gap: 15px; }
       nav a { font-size: 11px; }
     }
@@ -267,12 +291,15 @@
       .video-panel { width: 160px; height: 90px; }
       .video-panel.center { width: 260px; height: 146px; }
       .videos-pagination { bottom: 16px; }
+      .section-banner { width: 90%; height: 140px; }
+      .section-banner .banner-title { font-size: 2.5rem; }
+      .section-banner .banner-subtitle { font-size: 1rem; }
     }
 
     /* === FOOTER === */
     footer { padding: 100px 0 50px; text-align: center; color: #ccc; letter-spacing: 1px; }
 
-    /* === VARIABLES ORIGINALES (mantengo compatibilidad) === */
+    /* === VARIABLES ORIGINALES === */
     :root{
       --news-max: 1500px;
       --news-gap: 22px;
@@ -344,12 +371,13 @@
     <div class="schedule-grid" id="news-grid"></div>
   </section>
 
+  <!-- BANNER DISCOGRAFÍA -->
   <div class="section-banner" id="banner-discography">
-    <video id="banner-discography-video" autoplay muted loop playsinline preload="metadata"
-           style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:inherit; z-index:0; display:none;">
+    <video id="banner-discography-video" autoplay muted loop playsinline preload="metadata">
       <source id="banner-discography-src" src="" type="video/mp4">
     </video>
-    ディスコグラフィー
+    <div class="banner-title">DISCOGRAPHY</div>
+    <div class="banner-subtitle">ディスコグラフィー</div>
   </div>
 
   <section class="discography" id="discography">
@@ -363,18 +391,19 @@
         </div>
       </div>
       <div class="pagination">
-        <button type="button" id="prev">&#8592;</button>
-        <button type="button" id="next">&#8594;</button>
+        <button type="button" id="prev">←</button>
+        <button type="button" id="next">→</button>
       </div>
     </div>
   </section>
 
+  <!-- BANNER VIDEOS -->
   <div class="section-banner" id="banner-videos">
-    <video id="banner-videos-video" autoplay muted loop playsinline preload="metadata"
-           style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:inherit; z-index:0; display:none;">
+    <video id="banner-videos-video" autoplay muted loop playsinline preload="metadata">
       <source id="banner-videos-src" src="" type="video/mp4">
     </video>
-    ビデオ
+    <div class="banner-title">VIDEOS</div>
+    <div class="banner-subtitle">ビデオ</div>
   </div>
 
   <section class="videos" id="videos">
@@ -382,8 +411,8 @@
       <div class="videos-holder">
         <div class="spinner-videos" id="spinner-videos"></div>
         <div class="videos-pagination">
-          <button type="button" id="prev-video">&#8592;</button>
-          <button type="button" id="next-video">&#8594;</button>
+          <button type="button" id="prev-video">←</button>
+          <button type="button" id="next-video">→</button>
         </div>
       </div>
     </div>
