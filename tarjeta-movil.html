@@ -1,430 +1,455 @@
 <!DOCTYPE html>
-<html lang="es"> 
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única v44</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer" />
+<title>Carta Única v44</title>
 
-    <style>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
 
-        body {
-            margin: 0;
-            padding: 0;
+<style>
 
-            background:
-            radial-gradient(circle at center,
-            #1b1b1f 0%,
-            #0d0d12 35%,
-            #050507 70%,
-            #000000 100%);
+body{
+    margin:0;
+    padding:0;
 
-            min-height: 100vh;
-            overflow: hidden;
+    background:
+    radial-gradient(circle at center,
+    #1b1b1f 0%,
+    #0d0d12 35%,
+    #050507 70%,
+    #000000 100%);
 
-            display: flex;
-            justify-content: center;
-            align-items: center;
+    min-height:100vh;
 
-            user-select: none;
-            -webkit-user-select: none;
+    overflow:hidden;
 
-            touch-action: manipulation;
-        }
+    display:flex;
+    justify-content:center;
+    align-items:center;
 
-        @keyframes compactUnfoldPop {
+    user-select:none;
+    -webkit-user-select:none;
 
-            0% {
-                opacity: 0;
-                transform: scale(0.1) rotateY(-70deg);
-                filter: brightness(1.5);
-            }
+    touch-action:manipulation;
+}
 
-            60% {
-                opacity: 1;
-                transform: scale(1.1) rotateY(10deg);
-            }
+/* ENTRADA */
 
-            100% {
-                opacity: 1;
-                transform: scale(1) rotateY(0deg);
-            }
-        }
+@keyframes compactUnfoldPop{
 
-        .card-container {
+    0%{
+        opacity:0;
+        transform:
+        scale(0.1)
+        rotateY(-70deg);
 
-            width: 85vw;
-            aspect-ratio: 300 / 420;
-            max-width: 300px;
+        filter:brightness(1.5);
+    }
 
-            position: relative;
+    60%{
+        opacity:1;
 
-            perspective: 1200px;
+        transform:
+        scale(1.1)
+        rotateY(10deg);
+    }
 
-            cursor: grab;
+    100%{
+        opacity:1;
 
-            animation:
-            compactUnfoldPop 0.7s cubic-bezier(0.175,0.885,0.320,1.275) forwards;
-        }
+        transform:
+        scale(1)
+        rotateY(0deg);
+    }
+}
 
-        .card {
+.card-container{
 
-            width: 100%;
-            height: 100%;
+    width:85vw;
 
-            position: relative;
+    aspect-ratio:300 / 420;
 
-            transform-style: preserve-3d;
+    max-width:300px;
 
-            transform: rotateX(0deg) rotateY(0deg);
+    position:relative;
 
-            transition: none;
-        }
+    perspective:1200px;
 
-        /* PARTICULAS */
+    cursor:grab;
 
-        .card-particles {
+    animation:
+    compactUnfoldPop .7s cubic-bezier(0.175,0.885,0.320,1.275) forwards;
+}
 
-            position: absolute;
+/* PARTICULAS */
 
-            inset: -40px;
+.card-particles{
 
-            pointer-events: none;
+    position:absolute;
 
-            z-index: 4;
+    inset:-50px;
 
-            transform-style: preserve-3d;
+    pointer-events:none;
 
-            overflow: visible;
-        }
+    z-index:1;
 
-        .card-particles span {
-
-            position: absolute;
-
-            width: 6px;
-            height: 6px;
-
-            border-radius: 50%;
-
-            background:
-            radial-gradient(circle,
-            rgba(120,210,255,0.95) 0%,
-            rgba(120,210,255,0.35) 45%,
-            rgba(120,210,255,0) 100%);
-
-            box-shadow:
-            0 0 12px rgba(120,210,255,0.8),
-            0 0 25px rgba(120,210,255,0.35);
-
-            opacity: 0.65;
-
-            mix-blend-mode: screen;
-
-            animation:
-            particleFloat 7s infinite ease-in-out;
-        }
+    overflow:visible;
 
-        .card-particles span:nth-child(1) {
-            top: 4%;
-            left: 8%;
-            animation-delay: 0s;
-        }
+    transition:
+    transform .15s ease-out;
+}
 
-        .card-particles span:nth-child(2) {
-            top: 16%;
-            right: 6%;
-            animation-delay: 1.2s;
-        }
+.card-particles span{
+
+    position:absolute;
 
-        .card-particles span:nth-child(3) {
-            top: 42%;
-            left: -3%;
-            animation-delay: 2.4s;
-        }
+    width:6px;
+    height:6px;
+
+    border-radius:50%;
+
+    background:
+    radial-gradient(circle,
+    rgba(120,210,255,.95) 0%,
+    rgba(120,210,255,.35) 45%,
+    rgba(120,210,255,0) 100%);
+
+    box-shadow:
+    0 0 12px rgba(120,210,255,.8),
+    0 0 25px rgba(120,210,255,.35);
+
+    opacity:.65;
+
+    mix-blend-mode:screen;
 
-        .card-particles span:nth-child(4) {
-            bottom: 14%;
-            right: -2%;
-            animation-delay: 0.7s;
-        }
+    animation:
+    particleFloat 7s infinite ease-in-out;
+}
 
-        .card-particles span:nth-child(5) {
-            bottom: 4%;
-            left: 14%;
-            animation-delay: 3.4s;
-        }
+/* POSICIONES */
 
-        .card-particles span:nth-child(6) {
-            top: 68%;
-            right: 12%;
-            animation-delay: 4.1s;
-        }
+.card-particles span:nth-child(1){
+    top:4%;
+    left:8%;
+    animation-delay:0s;
+}
 
-        .card-particles span:nth-child(7) {
-            top: 28%;
-            left: 18%;
-            animation-delay: 1.8s;
-        }
+.card-particles span:nth-child(2){
+    top:16%;
+    right:6%;
+    animation-delay:1.2s;
+}
 
-        .card-particles span:nth-child(8) {
-            bottom: 26%;
-            left: 2%;
-            animation-delay: 2.9s;
-        }
+.card-particles span:nth-child(3){
+    top:42%;
+    left:-3%;
+    animation-delay:2.4s;
+}
 
-        @keyframes particleFloat {
+.card-particles span:nth-child(4){
+    bottom:14%;
+    right:-2%;
+    animation-delay:.7s;
+}
 
-            0% {
-                transform:
-                translate3d(0px,0px,25px)
-                scale(0.6);
+.card-particles span:nth-child(5){
+    bottom:4%;
+    left:14%;
+    animation-delay:3.4s;
+}
 
-                opacity: 0.15;
-            }
+.card-particles span:nth-child(6){
+    top:68%;
+    right:12%;
+    animation-delay:4.1s;
+}
 
-            25% {
-                transform:
-                translate3d(6px,-10px,40px)
-                scale(1);
-            }
+.card-particles span:nth-child(7){
+    top:28%;
+    left:18%;
+    animation-delay:1.8s;
+}
 
-            50% {
-                transform:
-                translate3d(-4px,-18px,32px)
-                scale(1.15);
+.card-particles span:nth-child(8){
+    bottom:26%;
+    left:2%;
+    animation-delay:2.9s;
+}
 
-                opacity: 0.85;
-            }
+/* MOVIMIENTO */
 
-            75% {
-                transform:
-                translate3d(5px,-6px,40px)
-                scale(0.95);
-            }
+@keyframes particleFloat{
 
-            100% {
-                transform:
-                translate3d(-3px,4px,25px)
-                scale(0.6);
+    0%{
+        transform:
+        translate3d(0px,0px,25px)
+        scale(.6);
 
-                opacity: 0.15;
-            }
-        }
+        opacity:.15;
+    }
 
-        /* CARAS */
+    25%{
+        transform:
+        translate3d(6px,-10px,40px)
+        scale(1);
+    }
 
-        .card-face {
+    50%{
+        transform:
+        translate3d(-4px,-18px,32px)
+        scale(1.15);
 
-            position: absolute;
+        opacity:.85;
+    }
 
-            width: 100%;
-            height: 100%;
+    75%{
+        transform:
+        translate3d(5px,-6px,40px)
+        scale(.95);
+    }
 
-            border-radius: 8px;
+    100%{
+        transform:
+        translate3d(-3px,4px,25px)
+        scale(.6);
 
-            overflow: hidden;
+        opacity:.15;
+    }
+}
 
-            backface-visibility: hidden;
-        }
+/* CARTA */
 
-        .card-face img.face-background {
+.card{
 
-            position: absolute;
+    width:100%;
+    height:100%;
 
-            top: 0;
-            left: 0;
+    position:relative;
 
-            width: 100%;
-            height: 100%;
+    transform-style:preserve-3d;
 
-            object-fit: cover;
-        }
+    transform:
+    rotateX(0deg)
+    rotateY(0deg);
 
-        .card-face.back {
+    transition:none;
 
-            transform: rotateY(180deg);
+    z-index:2;
+}
 
-            display: flex;
-            justify-content: center;
-            align-items: center;
+.card-face{
 
-            padding: 25px 20px;
+    position:absolute;
 
-            box-sizing: border-box;
-        }
+    width:100%;
+    height:100%;
 
-        /* BOTONES */
+    border-radius:8px;
 
-        .link-buttons {
+    overflow:hidden;
 
-            position: relative;
+    backface-visibility:hidden;
+}
 
-            z-index: 3;
+.card-face img.face-background{
 
-            width: 90%;
+    position:absolute;
 
-            display: flex;
-            flex-direction: column;
+    top:0;
+    left:0;
 
-            gap: 15px;
-        }
+    width:100%;
+    height:100%;
 
-        .link-button {
+    object-fit:cover;
+}
 
-            display: flex;
-            align-items: center;
+.card-face.back{
 
-            padding: 12px 18px;
+    transform:rotateY(180deg);
 
-            border-radius: 25px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 
-            background-color: rgba(25,25,25,0.70);
+    padding:25px 20px;
 
-            border: 1px solid rgba(255,255,255,0.15);
+    box-sizing:border-box;
+}
 
-            color: white;
+/* BOTONES */
 
-            text-decoration: none;
+.link-buttons{
 
-            font-family: Arial;
+    position:relative;
 
-            backdrop-filter: blur(4px);
+    z-index:3;
 
-            transition:
-            transform .2s ease,
-            background .2s ease;
-        }
+    width:90%;
 
-        .link-button:hover {
+    display:flex;
+    flex-direction:column;
 
-            transform: scale(1.04);
+    gap:15px;
+}
 
-            background-color:
-            rgba(45,45,45,0.82);
-        }
+.link-button{
 
-        .link-button i {
+    display:flex;
+    align-items:center;
 
-            margin-right: 12px;
+    padding:12px 18px;
 
-            font-size: 18px;
+    border-radius:25px;
 
-            width: 20px;
-        }
+    background-color:
+    rgba(25,25,25,.70);
 
-        .link-button span {
+    border:
+    1px solid rgba(255,255,255,.15);
 
-            flex-grow: 1;
+    color:white;
 
-            text-align: center;
+    text-decoration:none;
 
-            padding-right: 25px;
-        }
+    font-family:Arial;
 
-        /* BOTON FLIP */
+    backdrop-filter:blur(4px);
 
-        .flip-button {
+    transition:
+    transform .2s ease,
+    background .2s ease;
+}
 
-            position: fixed;
+.link-button:hover{
 
-            bottom: 25px;
-            right: 25px;
+    transform:scale(1.04);
 
-            width: 45px;
-            height: 45px;
+    background-color:
+    rgba(45,45,45,.82);
+}
 
-            border-radius: 50%;
+.link-button i{
 
-            border: none;
+    margin-right:12px;
 
-            background: rgba(255,255,255,0.85);
+    font-size:18px;
 
-            cursor: pointer;
+    width:20px;
+}
 
-            z-index: 100;
+.link-button span{
 
-            box-shadow:
-            0 2px 10px rgba(0,0,0,0.4);
-        }
+    flex-grow:1;
 
-    </style>
+    text-align:center;
+
+    padding-right:25px;
+}
+
+/* BOTON FLIP */
+
+.flip-button{
+
+    position:fixed;
+
+    bottom:25px;
+    right:25px;
+
+    width:45px;
+    height:45px;
+
+    border-radius:50%;
+
+    border:none;
+
+    background:
+    rgba(255,255,255,.85);
+
+    cursor:pointer;
+
+    z-index:100;
+
+    box-shadow:
+    0 2px 10px rgba(0,0,0,.4);
+}
+
+</style>
 </head>
 
 <body>
 
-    <div class="card-container" id="cardContainer">
+<div class="card-container" id="cardContainer">
 
-        <div class="card" id="interactiveCard">
+    <!-- PARTICULAS -->
 
-            <!-- PARTICULAS -->
+    <div class="card-particles" id="cardParticles">
 
-            <div class="card-particles">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
 
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
+    </div>
 
-            </div>
+    <!-- CARTA -->
 
-            <!-- FRENTE -->
+    <div class="card" id="interactiveCard">
 
-            <div class="card-face front">
+        <!-- FRENTE -->
 
-                <img src="carta_frente.png.jpg.png"
-                     class="face-background">
+        <div class="card-face front">
 
-            </div>
+            <img src="carta_frente.png.jpg.png"
+            class="face-background">
 
-            <!-- DORSO -->
+        </div>
 
-            <div class="card-face back">
+        <!-- DORSO -->
 
-                <img src="carta_dorso.png.png"
-                     class="face-background">
+        <div class="card-face back">
 
-                <div class="link-buttons">
+            <img src="carta_dorso.png.png"
+            class="face-background">
 
-                    <a href="https://www.instagram.com/jtenshi_/"
-                       target="_blank"
-                       class="link-button">
+            <div class="link-buttons">
 
-                        <i class="fab fa-instagram"></i>
+                <a href="https://www.instagram.com/jtenshi_/"
+                target="_blank"
+                class="link-button">
 
-                        <span>Instagram</span>
+                    <i class="fab fa-instagram"></i>
 
-                    </a>
+                    <span>Instagram</span>
 
-                    <a href="https://youtube.com/@j-tenshimus1c"
-                       target="_blank"
-                       class="link-button">
+                </a>
 
-                        <i class="fab fa-youtube"></i>
+                <a href="https://youtube.com/@j-tenshimus1c"
+                target="_blank"
+                class="link-button">
 
-                        <span>Canal de YouTube</span>
+                    <i class="fab fa-youtube"></i>
 
-                    </a>
+                    <span>Canal de YouTube</span>
 
-                    <a href="https://youtu.be/0_QHL7cDYno"
-                       target="_blank"
-                       class="link-button">
+                </a>
 
-                        <i class="fas fa-play"></i>
+                <a href="https://youtu.be/0_QHL7cDYno"
+                target="_blank"
+                class="link-button">
 
-                        <span>Ultimo Video Musical</span>
+                    <i class="fas fa-play"></i>
 
-                    </a>
+                    <span>Ultimo Video Musical</span>
 
-                </div>
+                </a>
 
             </div>
 
@@ -432,160 +457,182 @@
 
     </div>
 
-    <button class="flip-button" id="flipButton">
+</div>
 
-        <i class="fas fa-sync-alt"></i>
+<button class="flip-button" id="flipButton">
 
-    </button>
+<i class="fas fa-sync-alt"></i>
 
-    <script>
+</button>
 
-        const cardContainer =
-            document.getElementById('cardContainer');
+<script>
 
-        const cardElement =
-            document.getElementById('interactiveCard');
+const cardContainer =
+document.getElementById('cardContainer');
 
-        const flipButton =
-            document.getElementById('flipButton');
+const cardElement =
+document.getElementById('interactiveCard');
 
-        let isDragging = false;
-        let isFlipping = false;
+const cardParticles =
+document.getElementById('cardParticles');
 
-        let currentFlipRotation = 0;
+const flipButton =
+document.getElementById('flipButton');
 
-        let dragRotationX = 0;
-        let dragRotationY = 0;
+let isDragging = false;
+let isFlipping = false;
 
-        let startX, startY;
+let currentFlipRotation = 0;
 
-        function applyRotation() {
+let dragRotationX = 0;
+let dragRotationY = 0;
 
-            cardElement.style.transform =
-            `
-            rotateY(${currentFlipRotation + dragRotationY}deg)
-            rotateX(${dragRotationX}deg)
-            `;
-        }
+let startX, startY;
 
-        function triggerFlip() {
+function applyRotation(){
 
-            if (isFlipping) return;
+    /* CARTA */
 
-            isFlipping = true;
+    cardElement.style.transform =
+    `
+    rotateY(${currentFlipRotation + dragRotationY}deg)
+    rotateX(${dragRotationX}deg)
+    `;
 
-            currentFlipRotation += 180;
+    /* PARTICULAS */
 
-            cardElement.style.transition =
-            "transform 0.6s ease";
+    cardParticles.style.transform =
+    `
+    translateX(${dragRotationY * 0.35}px)
+    translateY(${dragRotationX * 0.35}px)
+    `;
+}
 
-            applyRotation();
+function triggerFlip(){
 
-            setTimeout(() => {
+    if(isFlipping) return;
 
-                isFlipping = false;
+    isFlipping = true;
 
-                cardElement.style.transition = "none";
+    currentFlipRotation += 180;
 
-            }, 600);
-        }
+    cardElement.style.transition =
+    "transform .6s ease";
 
-        flipButton.addEventListener(
-            "click",
-            triggerFlip
-        );
+    applyRotation();
 
-        function handleDragStart(e) {
+    setTimeout(()=>{
 
-            if (isFlipping) return;
+        isFlipping = false;
 
-            isDragging = true;
+        cardElement.style.transition = "none";
 
-            const point =
-            e.touches ? e.touches[0] : e;
+    },600);
+}
 
-            startX = point.clientX;
-            startY = point.clientY;
-        }
+flipButton.addEventListener(
+"click",
+triggerFlip
+);
 
-        function handleDragMove(e) {
+function handleDragStart(e){
 
-            if (!isDragging) return;
+    if(isFlipping) return;
 
-            const point =
-            e.touches ? e.touches[0] : e;
+    isDragging = true;
 
-            const deltaX =
-            point.clientX - startX;
+    const point =
+    e.touches ? e.touches[0] : e;
 
-            const deltaY =
-            point.clientY - startY;
+    startX = point.clientX;
+    startY = point.clientY;
+}
 
-            dragRotationY = deltaX * 0.15;
-            dragRotationX = -deltaY * 0.15;
+function handleDragMove(e){
 
-            applyRotation();
-        }
+    if(!isDragging) return;
 
-        function handleDragEnd() {
+    const point =
+    e.touches ? e.touches[0] : e;
 
-            isDragging = false;
+    const deltaX =
+    point.clientX - startX;
 
-            cardElement.style.transition =
-            "transform 0.5s ease";
+    const deltaY =
+    point.clientY - startY;
 
-            dragRotationX = 0;
-            dragRotationY = 0;
+    dragRotationY = deltaX * 0.15;
 
-            applyRotation();
+    dragRotationX = -deltaY * 0.15;
 
-            setTimeout(() => {
+    applyRotation();
+}
 
-                cardElement.style.transition =
-                "none";
+function handleDragEnd(){
 
-            }, 500);
-        }
+    isDragging = false;
 
-        cardContainer.addEventListener(
-            "mousedown",
-            handleDragStart
-        );
+    cardElement.style.transition =
+    "transform .5s ease";
 
-        window.addEventListener(
-            "mousemove",
-            handleDragMove
-        );
+    cardParticles.style.transition =
+    "transform .6s ease-out";
 
-        window.addEventListener(
-            "mouseup",
-            handleDragEnd
-        );
+    dragRotationX = 0;
+    dragRotationY = 0;
 
-        cardContainer.addEventListener(
-            "touchstart",
-            handleDragStart,
-            { passive:false }
-        );
+    applyRotation();
 
-        window.addEventListener(
-            "touchmove",
-            handleDragMove,
-            { passive:false }
-        );
+    setTimeout(()=>{
 
-        window.addEventListener(
-            "touchend",
-            handleDragEnd
-        );
+        cardElement.style.transition =
+        "none";
 
-        setTimeout(() => {
+        cardParticles.style.transition =
+        "transform .15s ease-out";
 
-            triggerFlip();
+    },500);
+}
 
-        }, 1300);
+cardContainer.addEventListener(
+"mousedown",
+handleDragStart
+);
 
-    </script>
+window.addEventListener(
+"mousemove",
+handleDragMove
+);
+
+window.addEventListener(
+"mouseup",
+handleDragEnd
+);
+
+cardContainer.addEventListener(
+"touchstart",
+handleDragStart,
+{ passive:false }
+);
+
+window.addEventListener(
+"touchmove",
+handleDragMove,
+{ passive:false }
+);
+
+window.addEventListener(
+"touchend",
+handleDragEnd
+);
+
+setTimeout(()=>{
+
+    triggerFlip();
+
+},1300);
+
+</script>
 
 </body>
 </html>
