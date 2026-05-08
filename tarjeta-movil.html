@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única v44 (Imagen Dorso + Botones Linktree) - 2025-04-15</title>
+    <title>Carta Única v44</title>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-          integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
           crossorigin="anonymous"
           referrerpolicy="no-referrer" />
 
@@ -25,23 +24,20 @@
             #000000 100%);
 
             min-height: 100vh;
-            min-height: 100svh;
-
             overflow: hidden;
 
             display: flex;
             justify-content: center;
             align-items: center;
 
-            position: relative;
-
             user-select: none;
             -webkit-user-select: none;
 
             touch-action: manipulation;
         }
-        
+
         @keyframes compactUnfoldPop {
+
             0% {
                 opacity: 0;
                 transform: scale(0.1) rotateY(-70deg);
@@ -51,305 +47,312 @@
             60% {
                 opacity: 1;
                 transform: scale(1.1) rotateY(10deg);
-                filter: brightness(1.2);
-            }
-
-            80% {
-                transform: scale(0.97) rotateY(-5deg);
-                filter: brightness(1);
             }
 
             100% {
                 opacity: 1;
                 transform: scale(1) rotateY(0deg);
-                filter: brightness(1);
             }
         }
 
-        .card-container { 
-            width: 85vw;
-            height: auto;
-            aspect-ratio: 300 / 420;
-            max-width: 300px; 
-            position: relative;
-            perspective: 1000px;
-            cursor: grab; 
-            user-select: none;
-            -webkit-user-drag: none;
-            z-index: 10; 
-            opacity: 0;
-            pointer-events: auto;
-            backface-visibility: hidden; 
-            animation:
-            compactUnfoldPop 0.7s cubic-bezier(0.175, 0.885, 0.320, 1.275) forwards; 
-        }
+        .card-container {
 
-        .card-container:active {
-            cursor: grabbing;
+            width: 85vw;
+            aspect-ratio: 300 / 420;
+            max-width: 300px;
+
+            position: relative;
+
+            perspective: 1200px;
+
+            cursor: grab;
+
+            animation:
+            compactUnfoldPop 0.7s cubic-bezier(0.175,0.885,0.320,1.275) forwards;
         }
 
         .card {
+
             width: 100%;
             height: 100%;
+
             position: relative;
+
             transform-style: preserve-3d;
-            transition: none;
+
             transform: rotateX(0deg) rotateY(0deg);
-            user-select: none;
-            -webkit-user-drag: none;
+
+            transition: none;
         }
 
         /* PARTICULAS */
 
         .card-particles {
+
             position: absolute;
-            inset: -25px;
+
+            inset: -40px;
+
             pointer-events: none;
-            z-index: 3;
+
+            z-index: 4;
+
             transform-style: preserve-3d;
+
+            overflow: visible;
         }
 
         .card-particles span {
+
             position: absolute;
-            width: 3px;
-            height: 3px;
+
+            width: 6px;
+            height: 6px;
+
             border-radius: 50%;
 
-            background: rgba(80, 180, 255, 0.28);
+            background:
+            radial-gradient(circle,
+            rgba(120,210,255,0.95) 0%,
+            rgba(120,210,255,0.35) 45%,
+            rgba(120,210,255,0) 100%);
 
             box-shadow:
-            0 0 8px rgba(80, 180, 255, 0.35);
+            0 0 12px rgba(120,210,255,0.8),
+            0 0 25px rgba(120,210,255,0.35);
 
-            opacity: 0.35;
+            opacity: 0.65;
+
+            mix-blend-mode: screen;
 
             animation:
-            particleFloat 6s infinite ease-in-out;
+            particleFloat 7s infinite ease-in-out;
         }
 
         .card-particles span:nth-child(1) {
-            top: 8%;
-            left: 12%;
+            top: 4%;
+            left: 8%;
             animation-delay: 0s;
         }
 
         .card-particles span:nth-child(2) {
-            top: 22%;
-            right: 8%;
-            animation-delay: 1.3s;
+            top: 16%;
+            right: 6%;
+            animation-delay: 1.2s;
         }
 
         .card-particles span:nth-child(3) {
-            top: 48%;
-            left: -2%;
-            animation-delay: 2.1s;
+            top: 42%;
+            left: -3%;
+            animation-delay: 2.4s;
         }
 
         .card-particles span:nth-child(4) {
-            bottom: 18%;
-            right: 4%;
-            animation-delay: 0.8s;
+            bottom: 14%;
+            right: -2%;
+            animation-delay: 0.7s;
         }
 
         .card-particles span:nth-child(5) {
-            bottom: 6%;
-            left: 18%;
-            animation-delay: 3s;
+            bottom: 4%;
+            left: 14%;
+            animation-delay: 3.4s;
         }
 
         .card-particles span:nth-child(6) {
-            top: 64%;
-            right: 16%;
-            animation-delay: 4.2s;
+            top: 68%;
+            right: 12%;
+            animation-delay: 4.1s;
         }
 
         .card-particles span:nth-child(7) {
-            top: 36%;
-            left: 24%;
-            animation-delay: 2.8s;
+            top: 28%;
+            left: 18%;
+            animation-delay: 1.8s;
         }
 
         .card-particles span:nth-child(8) {
-            bottom: 30%;
-            left: 6%;
-            animation-delay: 1.7s;
+            bottom: 26%;
+            left: 2%;
+            animation-delay: 2.9s;
         }
 
         @keyframes particleFloat {
 
             0% {
-                transform: translate3d(0, 0, 18px) scale(0.7);
-                opacity: 0.10;
+                transform:
+                translate3d(0px,0px,25px)
+                scale(0.6);
+
+                opacity: 0.15;
+            }
+
+            25% {
+                transform:
+                translate3d(6px,-10px,40px)
+                scale(1);
             }
 
             50% {
-                transform: translate3d(4px, -8px, 26px) scale(1);
-                opacity: 0.38;
+                transform:
+                translate3d(-4px,-18px,32px)
+                scale(1.15);
+
+                opacity: 0.85;
+            }
+
+            75% {
+                transform:
+                translate3d(5px,-6px,40px)
+                scale(0.95);
             }
 
             100% {
-                transform: translate3d(-3px, 4px, 18px) scale(0.7);
-                opacity: 0.10;
+                transform:
+                translate3d(-3px,4px,25px)
+                scale(0.6);
+
+                opacity: 0.15;
             }
         }
-        
-        .card-face { 
+
+        /* CARAS */
+
+        .card-face {
+
             position: absolute;
+
             width: 100%;
-            height: 100%; 
+            height: 100%;
+
+            border-radius: 8px;
+
+            overflow: hidden;
+
             backface-visibility: hidden;
-            border-radius: 8px; 
-            overflow: hidden; 
-            background-color: #555;
-            display: block;
-            user-select: none;
-            -webkit-user-drag: none; 
         }
-         
-        .card-face img.face-background { 
+
+        .card-face img.face-background {
+
             position: absolute;
+
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%; 
-            object-fit: cover;
-            display: block; 
-            pointer-events: none;
-            user-select: none;
-            -webkit-user-drag: none; 
-            z-index: 0;
-        }
-        
-        .card-face.front {}
 
-        .card-face.back { 
-            transform: rotateY(180deg); 
-            position: relative;
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+        .card-face.back {
+
+            transform: rotateY(180deg);
+
             display: flex;
-            flex-direction: column; 
             justify-content: center;
             align-items: center;
-            padding: 25px 20px; 
-            box-sizing: border-box; 
-            background-color: #333;
+
+            padding: 25px 20px;
+
+            box-sizing: border-box;
         }
-        
+
+        /* BOTONES */
+
         .link-buttons {
+
             position: relative;
-            z-index: 1;
-            width: 90%; 
+
+            z-index: 3;
+
+            width: 90%;
+
             display: flex;
             flex-direction: column;
-            gap: 15px; 
-            max-height: 90%; 
-            overflow-y: auto; 
+
+            gap: 15px;
         }
 
         .link-button {
+
             display: flex;
             align-items: center;
-            justify-content: flex-start; 
+
             padding: 12px 18px;
+
             border-radius: 25px;
-            background-color: rgba(40, 40, 40, 0.75);
+
+            background-color: rgba(25,25,25,0.70);
+
+            border: 1px solid rgba(255,255,255,0.15);
+
             color: white;
+
             text-decoration: none;
-            font-family: Arial, sans-serif;
-            font-size: 15px;
-            font-weight: 500;
-            text-align: left; 
+
+            font-family: Arial;
+
+            backdrop-filter: blur(4px);
+
             transition:
-            background-color 0.3s,
-            transform 0.2s ease-out;
-            border: 1px solid rgba(255, 255, 255, 0.3); 
-            backdrop-filter: blur(2px);
-            -webkit-backdrop-filter: blur(2px);
+            transform .2s ease,
+            background .2s ease;
         }
-        
+
         .link-button:hover {
-            background-color: rgba(60, 60, 60, 0.85);
-            transform: scale(1.04); 
+
+            transform: scale(1.04);
+
+            background-color:
+            rgba(45,45,45,0.82);
         }
 
         .link-button i {
-            margin-right: 12px; 
-            font-size: 20px; 
-            width: 22px; 
-            text-align: center;
-            flex-shrink: 0; 
+
+            margin-right: 12px;
+
+            font-size: 18px;
+
+            width: 20px;
         }
 
         .link-button span {
-             flex-grow: 1;
-             text-align: center;
-             padding-right: 34px;
+
+            flex-grow: 1;
+
+            text-align: center;
+
+            padding-right: 25px;
         }
+
+        /* BOTON FLIP */
 
         .flip-button {
-            background-color: rgba(255, 255, 255, 0.8);
-            border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition:
-            background 0.3s,
-            transform 0.3s;
+
             position: fixed;
-            z-index: 100;
+
             bottom: 25px;
             right: 25px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+
+            width: 45px;
+            height: 45px;
+
+            border-radius: 50%;
+
+            border: none;
+
+            background: rgba(255,255,255,0.85);
+
+            cursor: pointer;
+
+            z-index: 100;
+
+            box-shadow:
+            0 2px 10px rgba(0,0,0,0.4);
         }
 
-        .flip-button:hover {
-            background-color: white;
-            transform: scale(1.1);
-        }
-        
-        @media (max-width: 600px) { 
-
-            .card-container {
-                max-width: 90vw;
-            } 
-
-            .flip-button {
-                width: 40px;
-                height: 40px;
-                bottom: 20px;
-                right: 20px;
-            } 
-
-            .card-face.back {
-                padding: 20px 15px;
-            }
-
-            .link-buttons {
-                width: 100%;
-                gap: 12px;
-            }
-
-            .link-button {
-                padding: 10px 15px;
-                font-size: 14px;
-                border-radius: 20px;
-            }
-
-            .link-button i {
-                font-size: 18px;
-                margin-right: 10px;
-                width: 20px;
-            }
-
-            .link-button span {
-                padding-right: 30px;
-            }
-        }
-
-    </style> 
-    
+    </style>
 </head>
 
 <body>
@@ -361,6 +364,7 @@
             <!-- PARTICULAS -->
 
             <div class="card-particles">
+
                 <span></span>
                 <span></span>
                 <span></span>
@@ -369,56 +373,58 @@
                 <span></span>
                 <span></span>
                 <span></span>
+
             </div>
+
+            <!-- FRENTE -->
 
             <div class="card-face front">
 
                 <img src="carta_frente.png.jpg.png"
-                     alt="Frente de la Carta"
-                     id="cardFrontImage"
-                     class="face-background"> 
+                     class="face-background">
 
             </div>
 
+            <!-- DORSO -->
+
             <div class="card-face back">
 
-                 <img src="carta_dorso.png.png"
-                      alt="Dorso de la Carta"
-                      class="face-background">
+                <img src="carta_dorso.png.png"
+                     class="face-background">
 
-                 <div class="link-buttons">
+                <div class="link-buttons">
 
-                     <a href="https://www.instagram.com/jtenshi_/"
-                        target="_blank"
-                        class="link-button instagram">
+                    <a href="https://www.instagram.com/jtenshi_/"
+                       target="_blank"
+                       class="link-button">
 
-                         <i class="fab fa-instagram"></i> 
+                        <i class="fab fa-instagram"></i>
 
-                         <span>Instagram</span> 
+                        <span>Instagram</span>
 
-                     </a> 
+                    </a>
 
-                     <a href="https://youtube.com/@j-tenshimus1c?si=3MX3w9MmR-XNXWmx"
-                        target="_blank"
-                        class="link-button youtube">
+                    <a href="https://youtube.com/@j-tenshimus1c"
+                       target="_blank"
+                       class="link-button">
 
-                         <i class="fab fa-youtube"></i> 
+                        <i class="fab fa-youtube"></i>
 
-                         <span>Canal de YouTube</span>
+                        <span>Canal de YouTube</span>
 
-                     </a> 
+                    </a>
 
-                      <a href="https://youtu.be/0_QHL7cDYno?si=-gfNkI5mHWKMHbKW"
-                         target="_blank"
-                         class="link-button youtube-video">
+                    <a href="https://youtu.be/0_QHL7cDYno"
+                       target="_blank"
+                       class="link-button">
 
-                         <i class="fas fa-play"></i> 
+                        <i class="fas fa-play"></i>
 
-                         <span>Ultimo Video Musical</span>
+                        <span>Ultimo Video Musical</span>
 
-                      </a> 
+                    </a>
 
-                 </div>
+                </div>
 
             </div>
 
@@ -428,8 +434,7 @@
 
     <button class="flip-button" id="flipButton">
 
-        <i class="fas fa-sync-alt"
-           style="color: #333; font-size: 18px;"></i>
+        <i class="fas fa-sync-alt"></i>
 
     </button>
 
@@ -443,129 +448,52 @@
 
         const flipButton =
             document.getElementById('flipButton');
-        
+
         let isDragging = false;
         let isFlipping = false;
+
         let currentFlipRotation = 0;
+
         let dragRotationX = 0;
         let dragRotationY = 0;
-        let maxDragDistance = 0;
-        let flipCount = 0;
 
-        let startX, startY, currentX, currentY;
+        let startX, startY;
 
-        const rotationFactor = 0.15;
-        const maxDragRotationX = 60;
-        const maxDragRotationY = 60;
-
-        let velocityX = 0;
-        let velocityY = 0;
-
-        const baseSpringForce = 0.01;
-        const springScaleFactor = 0.001;
-
-        const reboundThreshold = 0.5;
-
-        const frictionForOneBounce = 0.9;
-        const frictionForTwoBounces = 0.2;
-
-        const maxPossibleDragMagnitude = Math.sqrt(
-            (maxDragRotationX * maxDragRotationX) +
-            (maxDragRotationY * maxDragRotationY)
-        );
-
-        let animationFrameId_Rebound = null;
-
-        const entranceAnimationDurationMs = 700;
-        const autoFlipDelayMs = 600;
-        const flipTransitionDurationMs = 600;
-
-        function lerp(start, end, amt) {
-            return (1 - amt) * start + amt * end;
-        }
-
-        function easeOutCubic(t) {
-            return (--t) * t * t + 1;
-        }
-
-        function applyRotation(
-            flipRot = currentFlipRotation,
-            dragX = dragRotationX,
-            dragY = dragRotationY
-        ) {
-
-            if (
-                !isFlipping &&
-                parseFloat(window.getComputedStyle(cardContainer).opacity) < 1
-            ) return;
+        function applyRotation() {
 
             cardElement.style.transform =
-                `rotateY(${flipRot + dragY}deg) rotateX(${dragX}deg)`;
-        }
-
-        function onFlipEndCommon() {
-
-            isFlipping = false;
-
-            cardElement.style.transition = 'none';
-
-            dragRotationX = 0;
-            dragRotationY = 0;
-
-            velocityX = 0;
-            velocityY = 0;
-
-            applyRotation();
-
-            enableDrag();
+            `
+            rotateY(${currentFlipRotation + dragRotationY}deg)
+            rotateX(${dragRotationX}deg)
+            `;
         }
 
         function triggerFlip() {
 
-            if (isFlipping || isDragging) return;
+            if (isFlipping) return;
 
             isFlipping = true;
-
-            disableDrag();
-
-            cancelAnimationFrame(animationFrameId_Rebound);
-
-            animationFrameId_Rebound = null;
-
-            dragRotationX = 0;
-            dragRotationY = 0;
-
-            velocityX = 0;
-            velocityY = 0;
-
-            applyRotation();
 
             currentFlipRotation += 180;
 
             cardElement.style.transition =
-                `transform ${flipTransitionDurationMs / 1000}s ease-in-out`;
+            "transform 0.6s ease";
 
             applyRotation();
 
             setTimeout(() => {
 
-                if (isFlipping) {
-                    onFlipEndCommon();
-                }
+                isFlipping = false;
 
-            }, flipTransitionDurationMs);
+                cardElement.style.transition = "none";
+
+            }, 600);
         }
 
-        flipButton.addEventListener('click', () => {
-
-            if (isFlipping || isDragging) return;
-
-            flipCount++;
-
-            if (flipCount < 10) {
-                triggerFlip();
-            }
-        });
+        flipButton.addEventListener(
+            "click",
+            triggerFlip
+        );
 
         function handleDragStart(e) {
 
@@ -573,256 +501,89 @@
 
             isDragging = true;
 
-            cardContainer.style.cursor = 'grabbing';
+            const point =
+            e.touches ? e.touches[0] : e;
 
-            cardElement.style.transition = 'none';
-
-            cancelAnimationFrame(animationFrameId_Rebound);
-
-            animationFrameId_Rebound = null;
-
-            const clientX =
-                e.touches ? e.touches[0].clientX : e.clientX;
-
-            const clientY =
-                e.touches ? e.touches[0].clientY : e.clientY;
-
-            const rect =
-                cardContainer.getBoundingClientRect();
-
-            startX =
-                clientX - (rect.left + rect.width / 2);
-
-            startY =
-                clientY - (rect.top + rect.height / 2);
-
-            velocityX = 0;
-            velocityY = 0;
-
-            document.addEventListener('mousemove', handleDragMove);
-
-            document.addEventListener(
-                'touchmove',
-                handleDragMove,
-                { passive: false }
-            );
-
-            document.addEventListener('mouseup', handleDragEnd);
-
-            document.addEventListener('touchend', handleDragEnd);
-
-            document.addEventListener('mouseleave', handleDragEnd);
+            startX = point.clientX;
+            startY = point.clientY;
         }
 
         function handleDragMove(e) {
 
             if (!isDragging) return;
 
-            if (e.touches) e.preventDefault();
+            const point =
+            e.touches ? e.touches[0] : e;
 
-            const clientX =
-                e.touches ? e.touches[0].clientX : e.clientX;
+            const deltaX =
+            point.clientX - startX;
 
-            const clientY =
-                e.touches ? e.touches[0].clientY : e.clientY;
+            const deltaY =
+            point.clientY - startY;
 
-            const rect =
-                cardContainer.getBoundingClientRect();
-
-            currentX =
-                clientX - (rect.left + rect.width / 2);
-
-            currentY =
-                clientY - (rect.top + rect.height / 2);
-
-            const deltaX = currentX - startX;
-            const deltaY = currentY - startY;
-
-            const isBackFacing =
-                Math.round(currentFlipRotation / 180) % 2 !== 0;
-
-            dragRotationY += deltaX * rotationFactor;
-
-            if (isBackFacing) {
-                dragRotationX += deltaY * rotationFactor;
-            } else {
-                dragRotationX -= deltaY * rotationFactor;
-            }
-
-            dragRotationX = Math.max(
-                -maxDragRotationX,
-                Math.min(maxDragRotationX, dragRotationX)
-            );
-
-            dragRotationY = Math.max(
-                -maxDragRotationY,
-                Math.min(maxDragRotationY, dragRotationY)
-            );
-
-            const currentDragMagnitude = Math.sqrt(
-                (dragRotationX * dragRotationX) +
-                (dragRotationY * dragRotationY)
-            );
-
-            maxDragDistance = Math.max(
-                maxDragDistance,
-                currentDragMagnitude
-            );
-
-            velocityX = -deltaY * 0.5;
-            velocityY = deltaX * 0.5;
+            dragRotationY = deltaX * 0.15;
+            dragRotationX = -deltaY * 0.15;
 
             applyRotation();
-
-            startX = currentX;
-            startY = currentY;
         }
 
         function handleDragEnd() {
 
-            if (!isDragging) return;
-
             isDragging = false;
 
-            cardContainer.style.cursor = 'grab';
+            cardElement.style.transition =
+            "transform 0.5s ease";
 
-            document.removeEventListener('mousemove', handleDragMove);
-
-            document.removeEventListener('touchmove', handleDragMove);
-
-            document.removeEventListener('mouseup', handleDragEnd);
-
-            document.removeEventListener('touchend', handleDragEnd);
-
-            document.removeEventListener('mouseleave', handleDragEnd);
-
-            animateRebound();
-        }
-
-        function animateRebound() {
-
-            if (isDragging || isFlipping) {
-
-                cancelAnimationFrame(animationFrameId_Rebound);
-
-                animationFrameId_Rebound = null;
-
-                return;
-            }
-
-            dragRotationY += velocityY;
-            dragRotationX += velocityX;
-
-            const totalRotationMagnitude = Math.sqrt(
-                (dragRotationX * dragRotationX) +
-                (dragRotationY * dragRotationY)
-            );
-
-            const effectiveSpringForce =
-                baseSpringForce +
-                (totalRotationMagnitude * springScaleFactor);
-
-            let dynamicFriction;
-
-            const dragPercentage =
-                maxDragDistance / maxPossibleDragMagnitude;
-
-            if (dragPercentage < reboundThreshold) {
-                dynamicFriction = frictionForOneBounce;
-            } else {
-                dynamicFriction = frictionForTwoBounces;
-            }
-
-            dynamicFriction = Math.max(
-                0.7,
-                Math.min(0.99, dynamicFriction)
-            );
-
-            velocityY *= dynamicFriction;
-            velocityX *= dynamicFriction;
-
-            const forceY =
-                -dragRotationY * effectiveSpringForce;
-
-            const forceX =
-                -dragRotationX * effectiveSpringForce;
-
-            velocityY += forceY;
-            velocityX += forceX;
-
-            cardElement.style.transition = 'none';
+            dragRotationX = 0;
+            dragRotationY = 0;
 
             applyRotation();
 
-            if (
-                Math.abs(velocityY) > 0.01 ||
-                Math.abs(velocityX) > 0.01 ||
-                Math.abs(dragRotationY) > 0.01 ||
-                Math.abs(dragRotationX) > 0.01
-            ) {
+            setTimeout(() => {
 
-                animationFrameId_Rebound =
-                    requestAnimationFrame(animateRebound);
+                cardElement.style.transition =
+                "none";
 
-            } else {
-
-                dragRotationX = 0;
-                dragRotationY = 0;
-
-                velocityY = 0;
-                velocityX = 0;
-
-                applyRotation();
-
-                animationFrameId_Rebound = null;
-
-                maxDragDistance = 0;
-            }
+            }, 500);
         }
 
-        function enableDrag() {
+        cardContainer.addEventListener(
+            "mousedown",
+            handleDragStart
+        );
 
-            cardContainer.addEventListener(
-                'mousedown',
-                handleDragStart
-            );
+        window.addEventListener(
+            "mousemove",
+            handleDragMove
+        );
 
-            cardContainer.addEventListener(
-                'touchstart',
-                handleDragStart,
-                { passive: false }
-            );
-        }
+        window.addEventListener(
+            "mouseup",
+            handleDragEnd
+        );
 
-        function disableDrag() {
+        cardContainer.addEventListener(
+            "touchstart",
+            handleDragStart,
+            { passive:false }
+        );
 
-            if (isDragging) {
-                handleDragEnd();
-            }
+        window.addEventListener(
+            "touchmove",
+            handleDragMove,
+            { passive:false }
+        );
 
-            cardContainer.removeEventListener(
-                'mousedown',
-                handleDragStart
-            );
-
-            cardContainer.removeEventListener(
-                'touchstart',
-                handleDragStart
-            );
-        }
-
-        window.addEventListener('resize', () => {});
-
-        enableDrag();
-
-        const totalDelayForAutoFlip =
-            entranceAnimationDurationMs + autoFlipDelayMs;
+        window.addEventListener(
+            "touchend",
+            handleDragEnd
+        );
 
         setTimeout(() => {
 
             triggerFlip();
 
-        }, totalDelayForAutoFlip);
+        }, 1300);
 
     </script>
 
