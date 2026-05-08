@@ -5,9 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Carta Única v44 (Imagen Dorso + Botones Linktree) - 2025-04-15</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
+
     <style>
-        body { margin: 0; padding: 0; background: linear-gradient(135deg, #1a0033, #4a148c, #3f51b5); min-height: 100vh; min-height: 100svh; overflow: hidden; display: flex; justify-content: center; align-items: center; position: relative; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a0033, #4a148c, #3f51b5);
+            min-height: 100vh;
+            min-height: 100svh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
         
         @keyframes compactUnfoldPop {
             0% { opacity: 0; transform: scale(0.1) rotateY(-70deg); filter: brightness(1.5); }
@@ -17,14 +31,25 @@
         }
 
         .card-container { 
-            width: 85vw; height: auto; aspect-ratio: 300 / 420; max-width: 300px; 
-            position: relative; perspective: 1000px; cursor: grab; 
-            user-select: none; -webkit-user-drag: none; z-index: 10; 
-            opacity: 0; pointer-events: auto; backface-visibility: hidden; 
+            width: 85vw;
+            height: auto;
+            aspect-ratio: 300 / 420;
+            max-width: 300px; 
+            position: relative;
+            perspective: 1000px;
+            cursor: grab; 
+            user-select: none;
+            -webkit-user-drag: none;
+            z-index: 10; 
+            opacity: 0;
+            pointer-events: auto;
+            backface-visibility: hidden; 
             animation: compactUnfoldPop 0.7s cubic-bezier(0.175, 0.885, 0.320, 1.275) forwards; 
         }
 
-        .card-container:active { cursor: grabbing; }
+        .card-container:active {
+            cursor: grabbing;
+        }
 
         .card {
             width: 100%;
@@ -35,46 +60,42 @@
             transform: rotateX(0deg) rotateY(0deg);
             user-select: none;
             -webkit-user-drag: none;
-
-            box-shadow:
-                0 18px 35px rgba(0,0,0,0.45),
-                8px 8px 0 rgba(0,0,0,0.22),
-                -3px -3px 0 rgba(255,255,255,0.10);
-        }
-
-        .card::before {
-            content: "";
-            position: absolute;
-            top: 6px;
-            left: 6px;
-            width: 100%;
-            height: 100%;
-            border-radius: 8px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.20), rgba(0,0,0,0.45));
-            z-index: -1;
-            transform: translateZ(-8px);
+            filter: drop-shadow(0 18px 25px rgba(0,0,0,0.45));
         }
         
         .card-face { 
-            position: absolute; width: 100%; height: 100%; 
-            backface-visibility: hidden; border-radius: 8px; 
+            position: absolute;
+            width: 100%;
+            height: 100%; 
+            backface-visibility: hidden;
+            border-radius: 8px; 
             overflow: hidden; 
             background-color: #555;
-            display: block; user-select: none; -webkit-user-drag: none; 
+            display: block;
+            user-select: none;
+            -webkit-user-drag: none;
         }
          
         .card-face img.face-background { 
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%; 
-            object-fit: cover; display: block; 
-            pointer-events: none; user-select: none; -webkit-user-drag: none; 
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%; 
+            object-fit: cover;
+            display: block; 
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none; 
             z-index: 0;
         }
         
-        .card-face.front {}
+        .card-face.front {
+            transform: translateZ(6px);
+        }
         
         .card-face.back { 
-            transform: rotateY(180deg); 
+            transform: rotateY(180deg) translateZ(6px); 
             position: relative;
             display: flex;
             flex-direction: column; 
@@ -83,6 +104,63 @@
             padding: 25px 20px; 
             box-sizing: border-box; 
             background-color: #333;
+        }
+
+        /* GROSOR REAL 3D DE LA CARTA */
+
+        .card-edge {
+            position: absolute;
+            background: linear-gradient(
+                90deg,
+                #111,
+                #3a3a3a,
+                #666,
+                #2a2a2a,
+                #111
+            );
+            transform-style: preserve-3d;
+            pointer-events: none;
+            backface-visibility: hidden;
+        }
+
+        .edge-right {
+            width: 12px;
+            height: 100%;
+            right: -6px;
+            top: 0;
+            transform: rotateY(90deg);
+            transform-origin: left center;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .edge-left {
+            width: 12px;
+            height: 100%;
+            left: -6px;
+            top: 0;
+            transform: rotateY(-90deg);
+            transform-origin: right center;
+            border-radius: 8px 0 0 8px;
+        }
+
+        .edge-top {
+            width: 100%;
+            height: 12px;
+            left: 0;
+            top: -6px;
+            transform: rotateX(90deg);
+            transform-origin: center bottom;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .edge-bottom {
+            width: 100%;
+            height: 12px;
+            left: 0;
+            bottom: -6px;
+            transform: rotateX(-90deg);
+            transform-origin: center top;
+            border-radius: 0 0 8px 8px;
         }
         
         .link-buttons {
@@ -129,9 +207,9 @@
         }
 
         .link-button span {
-             flex-grow: 1;
-             text-align: center;
-             padding-right: 34px;
+            flex-grow: 1;
+            text-align: center;
+            padding-right: 34px;
         }
 
         .flip-button {
@@ -158,13 +236,41 @@
         }
         
         @media (max-width: 600px) { 
-            .card-container { max-width: 90vw; } 
-            .flip-button { width: 40px; height: 40px; bottom: 20px; right: 20px; } 
-            .card-face.back { padding: 20px 15px; }
-            .link-buttons { width: 100%; gap: 12px; }
-            .link-button { padding: 10px 15px; font-size: 14px; border-radius: 20px;}
-            .link-button i { font-size: 18px; margin-right: 10px; width: 20px;}
-            .link-button span { padding-right: 30px; }
+            .card-container {
+                max-width: 90vw;
+            } 
+
+            .flip-button {
+                width: 40px;
+                height: 40px;
+                bottom: 20px;
+                right: 20px;
+            } 
+
+            .card-face.back {
+                padding: 20px 15px;
+            }
+
+            .link-buttons {
+                width: 100%;
+                gap: 12px;
+            }
+
+            .link-button {
+                padding: 10px 15px;
+                font-size: 14px;
+                border-radius: 20px;
+            }
+
+            .link-button i {
+                font-size: 18px;
+                margin-right: 10px;
+                width: 20px;
+            }
+
+            .link-button span {
+                padding-right: 30px;
+            }
         }
     </style> 
 </head>
@@ -198,6 +304,11 @@
                     </a> 
                 </div>
             </div>
+
+            <div class="card-edge edge-right"></div>
+            <div class="card-edge edge-left"></div>
+            <div class="card-edge edge-top"></div>
+            <div class="card-edge edge-bottom"></div>
 
         </div>
     </div>
