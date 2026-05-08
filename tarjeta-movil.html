@@ -12,7 +12,6 @@
           referrerpolicy="no-referrer" />
 
     <style>
-
         body {
             margin: 0;
             padding: 0;
@@ -447,9 +446,6 @@
         let velocityX = 0;
         let velocityY = 0;
 
-        const friction = 0.70;
-        const springForce = 0.06;
-
         const baseSpringForce = 0.01;
 
         const springScaleFactor = 0.001;
@@ -464,10 +460,6 @@
             (maxDragRotationX * maxDragRotationX) +
             (maxDragRotationY * maxDragRotationY)
         );
-
-        const baseFriction = 0.93;
-
-        const frictionScaleFactor = 0.003;
 
         let animationFrameId_Rebound = null;
 
@@ -562,6 +554,89 @@
             }, flipTransitionDurationMs);
         }
 
+        function startTorbellinoAnimation() { 
+
+            if (isFlipping || isDragging) return; 
+
+            isFlipping = true;
+
+            disableDrag();
+
+            cancelAnimationFrame(animationFrameId_Rebound);
+
+            animationFrameId_Rebound = null;
+
+            dragRotationX = 0;
+            dragRotationY = 0;
+
+            velocityX = 0;
+            velocityY = 0;
+
+            applyRotation(currentFlipRotation, 0, 0);
+
+            const startRot = currentFlipRotation;
+
+            const totalSpins = 10;
+
+            const targetRotation =
+                startRot + 180 + (totalSpins * 360);
+
+            const duration = 2500;
+
+            let startTime = null;
+
+            cardElement.style.transition = 'none';
+
+            function trompoStep(timestamp) {
+
+                if (!isFlipping) {
+
+                    cancelAnimationFrame(animationFrameId_Trompo);
+
+                    animationFrameId_Trompo = null;
+
+                    return;
+                }
+
+                if (!startTime) startTime = timestamp;
+
+                const elapsed = timestamp - startTime;
+
+                let progress = Math.min(1, elapsed / duration);
+
+                const easedProgress = easeOutCubic(progress);
+
+                const currentAnimRotation =
+                    lerp(startRot, targetRotation, easedProgress);
+
+                cardElement.style.transform =
+                    `rotateY(${currentAnimRotation}deg) rotateX(0deg)`;
+
+                if (progress < 1) {
+
+                    animationFrameId_Trompo =
+                        requestAnimationFrame(trompoStep);
+
+                } else {
+
+                    currentFlipRotation = 180;
+
+                    flipCount = 0;
+
+                    console.log("Torbellino terminado.");
+
+                    onFlipEndCommon();
+
+                    animationFrameId_Trompo = null;
+                }
+            }
+
+            cancelAnimationFrame(animationFrameId_Trompo);
+
+            animationFrameId_Trompo =
+                requestAnimationFrame(trompoStep); 
+        }
+
         flipButton.addEventListener('click', () => {
 
             if (isFlipping || isDragging) return;
@@ -572,6 +647,9 @@
 
             if (flipCount < 10) {
                 triggerFlip();
+            } else {
+                console.log("Activando Torbellino!");
+                startTorbellinoAnimation();
             }
         });
 
