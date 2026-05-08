@@ -15,12 +15,10 @@ body{
     margin:0;
     padding:0;
 
-    /* OSCURIDAD GENERAL */
-
     background:
     radial-gradient(circle at center,
-    rgba(35,38,48,0.45) 0%,
-    rgba(10,10,14,0.95) 38%,
+    #16171d 0%,
+    #0c0d11 45%,
     #020203 100%);
 
     min-height:100vh;
@@ -35,32 +33,9 @@ body{
     -webkit-user-select:none;
 
     touch-action:manipulation;
-
-    position:relative;
 }
 
-/* LUZ SUTIL DESDE LA CARTA */
-
-body::before{
-
-    content:"";
-
-    position:fixed;
-
-    inset:0;
-
-    background:
-    radial-gradient(circle at center,
-    rgba(120,150,255,0.10) 0%,
-    rgba(90,120,200,0.045) 18%,
-    rgba(0,0,0,0) 42%);
-
-    pointer-events:none;
-
-    z-index:0;
-}
-
-/* ANIMACION ENTRADA */
+/* ENTRADA */
 
 @keyframes compactUnfoldPop{
 
@@ -145,7 +120,7 @@ body::before{
     backface-visibility:hidden;
 
     box-shadow:
-    0 10px 40px rgba(0,0,0,0.65);
+    0 10px 40px rgba(0,0,0,0.55);
 }
 
 .card-face img.face-background{
@@ -213,7 +188,7 @@ body::before{
 
     font-family:Arial;
 
-    backdrop-filter:blur(5px);
+    backdrop-filter:blur(3px);
 
     transition:
     transform .2s ease,
