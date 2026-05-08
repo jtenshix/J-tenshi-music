@@ -15,13 +15,12 @@ body{
     margin:0;
     padding:0;
 
-    /* FONDO TIPO CUEVA OSCURA */
+    /* OSCURIDAD GENERAL */
 
     background:
-    radial-gradient(circle at top,
-    rgba(120,120,140,0.10) 0%,
-    rgba(40,40,50,0.08) 15%,
-    rgba(10,10,15,0.95) 55%,
+    radial-gradient(circle at center,
+    rgba(35,38,48,0.45) 0%,
+    rgba(10,10,14,0.95) 38%,
     #020203 100%);
 
     min-height:100vh;
@@ -36,9 +35,11 @@ body{
     -webkit-user-select:none;
 
     touch-action:manipulation;
+
+    position:relative;
 }
 
-/* LUZ SUAVE */
+/* LUZ SUTIL DESDE LA CARTA */
 
 body::before{
 
@@ -49,15 +50,17 @@ body::before{
     inset:0;
 
     background:
-    radial-gradient(circle at 50% 18%,
-    rgba(180,190,255,0.08) 0%,
-    rgba(120,130,180,0.03) 20%,
-    transparent 45%);
+    radial-gradient(circle at center,
+    rgba(120,150,255,0.10) 0%,
+    rgba(90,120,200,0.045) 18%,
+    rgba(0,0,0,0) 42%);
 
     pointer-events:none;
+
+    z-index:0;
 }
 
-/* ENTRADA */
+/* ANIMACION ENTRADA */
 
 @keyframes compactUnfoldPop{
 
@@ -87,6 +90,8 @@ body::before{
         rotateY(0deg);
     }
 }
+
+/* CONTENEDOR */
 
 .card-container{
 
@@ -155,6 +160,8 @@ body::before{
 
     object-fit:cover;
 }
+
+/* DORSO */
 
 .card-face.back{
 
