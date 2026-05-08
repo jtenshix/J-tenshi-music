@@ -69,28 +69,17 @@
         .card-container { 
             width: 85vw;
             height: auto;
-
             aspect-ratio: 300 / 420;
-
             max-width: 300px; 
-
             position: relative;
-
             perspective: 1000px;
-
             cursor: grab; 
-
             user-select: none;
             -webkit-user-drag: none;
-
             z-index: 10; 
-
             opacity: 0;
-
             pointer-events: auto;
-
             backface-visibility: hidden; 
-
             animation:
             compactUnfoldPop 0.7s cubic-bezier(0.175, 0.885, 0.320, 1.275) forwards; 
         }
@@ -102,57 +91,131 @@
         .card {
             width: 100%;
             height: 100%;
-
             position: relative;
-
             transform-style: preserve-3d;
-
             transition: none;
-
             transform: rotateX(0deg) rotateY(0deg);
-
             user-select: none;
             -webkit-user-drag: none;
+        }
+
+        /* PARTICULAS */
+
+        .card-particles {
+            position: absolute;
+            inset: -25px;
+            pointer-events: none;
+            z-index: 3;
+            transform-style: preserve-3d;
+        }
+
+        .card-particles span {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+
+            background: rgba(80, 180, 255, 0.28);
+
+            box-shadow:
+            0 0 8px rgba(80, 180, 255, 0.35);
+
+            opacity: 0.35;
+
+            animation:
+            particleFloat 6s infinite ease-in-out;
+        }
+
+        .card-particles span:nth-child(1) {
+            top: 8%;
+            left: 12%;
+            animation-delay: 0s;
+        }
+
+        .card-particles span:nth-child(2) {
+            top: 22%;
+            right: 8%;
+            animation-delay: 1.3s;
+        }
+
+        .card-particles span:nth-child(3) {
+            top: 48%;
+            left: -2%;
+            animation-delay: 2.1s;
+        }
+
+        .card-particles span:nth-child(4) {
+            bottom: 18%;
+            right: 4%;
+            animation-delay: 0.8s;
+        }
+
+        .card-particles span:nth-child(5) {
+            bottom: 6%;
+            left: 18%;
+            animation-delay: 3s;
+        }
+
+        .card-particles span:nth-child(6) {
+            top: 64%;
+            right: 16%;
+            animation-delay: 4.2s;
+        }
+
+        .card-particles span:nth-child(7) {
+            top: 36%;
+            left: 24%;
+            animation-delay: 2.8s;
+        }
+
+        .card-particles span:nth-child(8) {
+            bottom: 30%;
+            left: 6%;
+            animation-delay: 1.7s;
+        }
+
+        @keyframes particleFloat {
+
+            0% {
+                transform: translate3d(0, 0, 18px) scale(0.7);
+                opacity: 0.10;
+            }
+
+            50% {
+                transform: translate3d(4px, -8px, 26px) scale(1);
+                opacity: 0.38;
+            }
+
+            100% {
+                transform: translate3d(-3px, 4px, 18px) scale(0.7);
+                opacity: 0.10;
+            }
         }
         
         .card-face { 
             position: absolute;
-
             width: 100%;
             height: 100%; 
-
             backface-visibility: hidden;
-
             border-radius: 8px; 
-
             overflow: hidden; 
-
             background-color: #555;
-
             display: block;
-
             user-select: none;
             -webkit-user-drag: none; 
         }
          
         .card-face img.face-background { 
             position: absolute;
-
             top: 0;
             left: 0;
-
             width: 100%;
             height: 100%; 
-
             object-fit: cover;
-
             display: block; 
-
             pointer-events: none;
-
             user-select: none;
             -webkit-user-drag: none; 
-
             z-index: 0;
         }
         
@@ -160,139 +223,89 @@
 
         .card-face.back { 
             transform: rotateY(180deg); 
-
             position: relative;
-
             display: flex;
-
             flex-direction: column; 
-
             justify-content: center;
-
             align-items: center;
-
             padding: 25px 20px; 
-
             box-sizing: border-box; 
-
             background-color: #333;
         }
         
         .link-buttons {
             position: relative;
-
             z-index: 1;
-
             width: 90%; 
-
             display: flex;
-
             flex-direction: column;
-
             gap: 15px; 
-
             max-height: 90%; 
-
             overflow-y: auto; 
         }
 
         .link-button {
             display: flex;
-
             align-items: center;
-
             justify-content: flex-start; 
-
             padding: 12px 18px;
-
             border-radius: 25px;
-
             background-color: rgba(40, 40, 40, 0.75);
-
             color: white;
-
             text-decoration: none;
-
             font-family: Arial, sans-serif;
-
             font-size: 15px;
-
             font-weight: 500;
-
             text-align: left; 
-
             transition:
             background-color 0.3s,
             transform 0.2s ease-out;
-
             border: 1px solid rgba(255, 255, 255, 0.3); 
-
             backdrop-filter: blur(2px);
-
             -webkit-backdrop-filter: blur(2px);
         }
         
         .link-button:hover {
             background-color: rgba(60, 60, 60, 0.85);
-
             transform: scale(1.04); 
         }
 
         .link-button i {
             margin-right: 12px; 
-
             font-size: 20px; 
-
             width: 22px; 
-
             text-align: center;
-
             flex-shrink: 0; 
         }
 
         .link-button span {
              flex-grow: 1;
-
              text-align: center;
-
              padding-right: 34px;
         }
 
         .flip-button {
             background-color: rgba(255, 255, 255, 0.8);
-
             border: none;
-
             width: 45px;
             height: 45px;
-
             border-radius: 50%;
-
             cursor: pointer;
-
             display: flex;
-
             justify-content: center;
-
             align-items: center;
-
             transition:
             background 0.3s,
             transform 0.3s;
-
             position: fixed;
-
             z-index: 100;
-
             bottom: 25px;
             right: 25px;
-
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
         .flip-button:hover {
             background-color: white;
-
             transform: scale(1.1);
         }
         
@@ -305,7 +318,6 @@
             .flip-button {
                 width: 40px;
                 height: 40px;
-
                 bottom: 20px;
                 right: 20px;
             } 
@@ -316,23 +328,18 @@
 
             .link-buttons {
                 width: 100%;
-
                 gap: 12px;
             }
 
             .link-button {
                 padding: 10px 15px;
-
                 font-size: 14px;
-
                 border-radius: 20px;
             }
 
             .link-button i {
                 font-size: 18px;
-
                 margin-right: 10px;
-
                 width: 20px;
             }
 
@@ -350,6 +357,19 @@
     <div class="card-container" id="cardContainer">
 
         <div class="card" id="interactiveCard">
+
+            <!-- PARTICULAS -->
+
+            <div class="card-particles">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
 
             <div class="card-face front">
 
@@ -412,7 +432,7 @@
            style="color: #333; font-size: 18px;"></i>
 
     </button>
-    
+
     <script>
 
         const cardContainer =
@@ -425,39 +445,28 @@
             document.getElementById('flipButton');
         
         let isDragging = false;
-
         let isFlipping = false;
-
         let currentFlipRotation = 0;
-
         let dragRotationX = 0;
         let dragRotationY = 0;
-
         let maxDragDistance = 0;
-
-        let flipCount = 0; 
+        let flipCount = 0;
 
         let startX, startY, currentX, currentY;
 
         const rotationFactor = 0.15;
-
         const maxDragRotationX = 60;
         const maxDragRotationY = 60;
 
         let velocityX = 0;
         let velocityY = 0;
 
-        const friction = 0.70;
-        const springForce = 0.06;
-
         const baseSpringForce = 0.01;
-
         const springScaleFactor = 0.001;
 
         const reboundThreshold = 0.5;
 
         const frictionForOneBounce = 0.9;
-
         const frictionForTwoBounces = 0.2;
 
         const maxPossibleDragMagnitude = Math.sqrt(
@@ -465,18 +474,10 @@
             (maxDragRotationY * maxDragRotationY)
         );
 
-        const baseFriction = 0.93;
-
-        const frictionScaleFactor = 0.003;
-
         let animationFrameId_Rebound = null;
 
-        let animationFrameId_Trompo = null; 
-        
         const entranceAnimationDurationMs = 700;
-
         const autoFlipDelayMs = 600;
-
         const flipTransitionDurationMs = 600;
 
         function lerp(start, end, amt) {
@@ -517,18 +518,11 @@
             applyRotation();
 
             enableDrag();
-
-            console.log("Flip terminado, drag habilitado.");
         }
 
         function triggerFlip() {
 
-            if (isFlipping || isDragging) {
-                console.log("Intento de flip bloqueado (ocupado)");
-                return;
-            }
-
-            console.log("Iniciando flip...");
+            if (isFlipping || isDragging) return;
 
             isFlipping = true;
 
@@ -567,8 +561,6 @@
             if (isFlipping || isDragging) return;
 
             flipCount++;
-
-            console.log(`Flip count: ${flipCount}`);
 
             if (flipCount < 10) {
                 triggerFlip();
@@ -678,7 +670,6 @@
             );
 
             velocityX = -deltaY * 0.5;
-
             velocityY = deltaX * 0.5;
 
             applyRotation();
@@ -695,30 +686,15 @@
 
             cardContainer.style.cursor = 'grab';
 
-            document.removeEventListener(
-                'mousemove',
-                handleDragMove
-            );
+            document.removeEventListener('mousemove', handleDragMove);
 
-            document.removeEventListener(
-                'touchmove',
-                handleDragMove
-            );
+            document.removeEventListener('touchmove', handleDragMove);
 
-            document.removeEventListener(
-                'mouseup',
-                handleDragEnd
-            );
+            document.removeEventListener('mouseup', handleDragEnd);
 
-            document.removeEventListener(
-                'touchend',
-                handleDragEnd
-            );
+            document.removeEventListener('touchend', handleDragEnd);
 
-            document.removeEventListener(
-                'mouseleave',
-                handleDragEnd
-            );
+            document.removeEventListener('mouseleave', handleDragEnd);
 
             animateRebound();
         }
@@ -735,7 +711,6 @@
             }
 
             dragRotationY += velocityY;
-
             dragRotationX += velocityX;
 
             const totalRotationMagnitude = Math.sqrt(
@@ -764,7 +739,6 @@
             );
 
             velocityY *= dynamicFriction;
-
             velocityX *= dynamicFriction;
 
             const forceY =
@@ -774,7 +748,6 @@
                 -dragRotationX * effectiveSpringForce;
 
             velocityY += forceY;
-
             velocityX += forceX;
 
             cardElement.style.transition = 'none';
@@ -809,8 +782,6 @@
 
         function enableDrag() {
 
-            console.log("Habilitando drag");
-
             cardContainer.addEventListener(
                 'mousedown',
                 handleDragStart
@@ -824,8 +795,6 @@
         }
 
         function disableDrag() {
-
-            console.log("Deshabilitando drag");
 
             if (isDragging) {
                 handleDragEnd();
@@ -842,24 +811,14 @@
             );
         }
 
-        function resizeCanvas() {
-            console.log("Window resized - No actions needed.");
-        }
-
-        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('resize', () => {});
 
         enableDrag();
 
         const totalDelayForAutoFlip =
             entranceAnimationDurationMs + autoFlipDelayMs;
 
-        console.log(
-            `Programando auto-giro en ${totalDelayForAutoFlip / 1000} segundos...`
-        );
-
         setTimeout(() => {
-
-            console.log("Ejecutando auto-giro programado.");
 
             triggerFlip();
 
