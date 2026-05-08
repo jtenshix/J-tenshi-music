@@ -15,12 +15,14 @@ body{
     margin:0;
     padding:0;
 
+    /* FONDO TIPO CUEVA OSCURA */
+
     background:
-    radial-gradient(circle at center,
-    #1b1b1f 0%,
-    #0d0d12 35%,
-    #050507 70%,
-    #000000 100%);
+    radial-gradient(circle at top,
+    rgba(120,120,140,0.10) 0%,
+    rgba(40,40,50,0.08) 15%,
+    rgba(10,10,15,0.95) 55%,
+    #020203 100%);
 
     min-height:100vh;
 
@@ -36,12 +38,32 @@ body{
     touch-action:manipulation;
 }
 
+/* LUZ SUAVE */
+
+body::before{
+
+    content:"";
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+    radial-gradient(circle at 50% 18%,
+    rgba(180,190,255,0.08) 0%,
+    rgba(120,130,180,0.03) 20%,
+    transparent 45%);
+
+    pointer-events:none;
+}
+
 /* ENTRADA */
 
 @keyframes compactUnfoldPop{
 
     0%{
         opacity:0;
+
         transform:
         scale(0.1)
         rotateY(-70deg);
@@ -80,144 +102,10 @@ body{
 
     cursor:grab;
 
+    z-index:2;
+
     animation:
     compactUnfoldPop .7s cubic-bezier(0.175,0.885,0.320,1.275) forwards;
-}
-
-/* PARTICULAS */
-
-.card-particles{
-
-    position:absolute;
-
-    inset:-50px;
-
-    pointer-events:none;
-
-    z-index:1;
-
-    overflow:visible;
-
-    transition:
-    transform .15s ease-out;
-}
-
-.card-particles span{
-
-    position:absolute;
-
-    width:6px;
-    height:6px;
-
-    border-radius:50%;
-
-    background:
-    radial-gradient(circle,
-    rgba(120,210,255,.95) 0%,
-    rgba(120,210,255,.35) 45%,
-    rgba(120,210,255,0) 100%);
-
-    box-shadow:
-    0 0 12px rgba(120,210,255,.8),
-    0 0 25px rgba(120,210,255,.35);
-
-    opacity:.65;
-
-    mix-blend-mode:screen;
-
-    animation:
-    particleFloat 7s infinite ease-in-out;
-}
-
-/* POSICIONES */
-
-.card-particles span:nth-child(1){
-    top:4%;
-    left:8%;
-    animation-delay:0s;
-}
-
-.card-particles span:nth-child(2){
-    top:16%;
-    right:6%;
-    animation-delay:1.2s;
-}
-
-.card-particles span:nth-child(3){
-    top:42%;
-    left:-3%;
-    animation-delay:2.4s;
-}
-
-.card-particles span:nth-child(4){
-    bottom:14%;
-    right:-2%;
-    animation-delay:.7s;
-}
-
-.card-particles span:nth-child(5){
-    bottom:4%;
-    left:14%;
-    animation-delay:3.4s;
-}
-
-.card-particles span:nth-child(6){
-    top:68%;
-    right:12%;
-    animation-delay:4.1s;
-}
-
-.card-particles span:nth-child(7){
-    top:28%;
-    left:18%;
-    animation-delay:1.8s;
-}
-
-.card-particles span:nth-child(8){
-    bottom:26%;
-    left:2%;
-    animation-delay:2.9s;
-}
-
-/* MOVIMIENTO */
-
-@keyframes particleFloat{
-
-    0%{
-        transform:
-        translate3d(0px,0px,25px)
-        scale(.6);
-
-        opacity:.15;
-    }
-
-    25%{
-        transform:
-        translate3d(6px,-10px,40px)
-        scale(1);
-    }
-
-    50%{
-        transform:
-        translate3d(-4px,-18px,32px)
-        scale(1.15);
-
-        opacity:.85;
-    }
-
-    75%{
-        transform:
-        translate3d(5px,-6px,40px)
-        scale(.95);
-    }
-
-    100%{
-        transform:
-        translate3d(-3px,4px,25px)
-        scale(.6);
-
-        opacity:.15;
-    }
 }
 
 /* CARTA */
@@ -236,8 +124,6 @@ body{
     rotateY(0deg);
 
     transition:none;
-
-    z-index:2;
 }
 
 .card-face{
@@ -247,11 +133,14 @@ body{
     width:100%;
     height:100%;
 
-    border-radius:8px;
+    border-radius:10px;
 
     overflow:hidden;
 
     backface-visibility:hidden;
+
+    box-shadow:
+    0 10px 40px rgba(0,0,0,0.65);
 }
 
 .card-face img.face-background{
@@ -306,10 +195,10 @@ body{
     border-radius:25px;
 
     background-color:
-    rgba(25,25,25,.70);
+    rgba(18,18,22,.68);
 
     border:
-    1px solid rgba(255,255,255,.15);
+    1px solid rgba(255,255,255,.12);
 
     color:white;
 
@@ -317,7 +206,7 @@ body{
 
     font-family:Arial;
 
-    backdrop-filter:blur(4px);
+    backdrop-filter:blur(5px);
 
     transition:
     transform .2s ease,
@@ -329,7 +218,7 @@ body{
     transform:scale(1.04);
 
     background-color:
-    rgba(45,45,45,.82);
+    rgba(40,40,45,.80);
 }
 
 .link-button i{
@@ -377,29 +266,35 @@ body{
     0 2px 10px rgba(0,0,0,.4);
 }
 
+.flip-button:hover{
+
+    transform:scale(1.08);
+}
+
+/* MOBILE */
+
+@media (max-width:600px){
+
+    .card-container{
+        max-width:90vw;
+    }
+
+    .flip-button{
+
+        width:40px;
+        height:40px;
+
+        bottom:20px;
+        right:20px;
+    }
+}
+
 </style>
 </head>
 
 <body>
 
 <div class="card-container" id="cardContainer">
-
-    <!-- PARTICULAS -->
-
-    <div class="card-particles" id="cardParticles">
-
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-
-    </div>
-
-    <!-- CARTA -->
 
     <div class="card" id="interactiveCard">
 
@@ -473,9 +368,6 @@ document.getElementById('cardContainer');
 const cardElement =
 document.getElementById('interactiveCard');
 
-const cardParticles =
-document.getElementById('cardParticles');
-
 const flipButton =
 document.getElementById('flipButton');
 
@@ -489,24 +381,18 @@ let dragRotationY = 0;
 
 let startX, startY;
 
-function applyRotation(){
+/* ROTACION */
 
-    /* CARTA */
+function applyRotation(){
 
     cardElement.style.transform =
     `
     rotateY(${currentFlipRotation + dragRotationY}deg)
     rotateX(${dragRotationX}deg)
     `;
-
-    /* PARTICULAS */
-
-    cardParticles.style.transform =
-    `
-    translateX(${dragRotationY * 0.35}px)
-    translateY(${dragRotationX * 0.35}px)
-    `;
 }
+
+/* FLIP */
 
 function triggerFlip(){
 
@@ -525,7 +411,8 @@ function triggerFlip(){
 
         isFlipping = false;
 
-        cardElement.style.transition = "none";
+        cardElement.style.transition =
+        "none";
 
     },600);
 }
@@ -534,6 +421,8 @@ flipButton.addEventListener(
 "click",
 triggerFlip
 );
+
+/* DRAG */
 
 function handleDragStart(e){
 
@@ -575,9 +464,6 @@ function handleDragEnd(){
     cardElement.style.transition =
     "transform .5s ease";
 
-    cardParticles.style.transition =
-    "transform .6s ease-out";
-
     dragRotationX = 0;
     dragRotationY = 0;
 
@@ -588,11 +474,10 @@ function handleDragEnd(){
         cardElement.style.transition =
         "none";
 
-        cardParticles.style.transition =
-        "transform .15s ease-out";
-
     },500);
 }
+
+/* EVENTOS */
 
 cardContainer.addEventListener(
 "mousedown",
@@ -625,6 +510,8 @@ window.addEventListener(
 "touchend",
 handleDragEnd
 );
+
+/* AUTO FLIP */
 
 setTimeout(()=>{
 
