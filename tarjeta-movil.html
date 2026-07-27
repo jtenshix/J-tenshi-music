@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Bloque con Stickers v59 (Fondo Limpio) - 2026-07-27</title>
+    <title>Carta Bloque con Stickers v60 (Fondo Contrastado) - 2026-07-27</title>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -15,9 +15,9 @@
         body {
             margin: 0;
             padding: 0;
-            /* Fondo cambiado para que contraste fuerte y no se solape con los bordes de la carta */
+            /* Fondo azul oscuro profundo y contrastado para que la carta se note al tiro */
             background: 
-            radial-gradient(circle at center, #181824 0%, #0a0a0f 60%, #020204 100%);
+            radial-gradient(circle at center, #232336 0%, #0c0c14 55%, #020205 100%);
             min-height: 100vh;
             min-height: 100svh;
             overflow: hidden;
@@ -66,8 +66,8 @@
             opacity: 0;
             pointer-events: auto;
             animation: compactUnfoldPop 0.7s cubic-bezier(0.175, 0.885, 0.320, 1.275) forwards; 
-            /* Sombra exterior para separar la carta del fondo de la página */
-            filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.7));
+            /* Sombra ultra pesada para despegar la carta del fondo */
+            filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.85));
         }
 
         .card-container:active {
@@ -85,22 +85,22 @@
             -webkit-user-drag: none;
         }
         
-        /* El bloque sólido de plástico con buen grosor */
+        /* Bloque sólido de plástico central */
         .card-edge {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #141418;
-            border: 1px solid rgba(255,255,255,0.3);
+            background: #111116;
+            border: 1px solid rgba(255,255,255,0.35);
             border-radius: 8px;
             transform: translateZ(0px);
             pointer-events: none;
             box-shadow: inset 0 0 15px rgba(0,0,0,0.95);
         }
          
-        /* Las caras de la carta (stickers exteriores) */
+        /* Stickers exteriores */
         .card-face { 
             position: absolute;
             top: 0;
@@ -144,7 +144,7 @@
             background-color: transparent;
         }
         
-        /* Contenedor de botones flotando sobre el sticker trasero */
+        /* Botones flotando en la parte trasera */
         .link-buttons {
             position: relative;
             z-index: 5;
@@ -236,17 +236,14 @@
 
     <div class="card-container" id="cardContainer">
         <div class="card" id="interactiveCard">
-            <!-- Bloque de plástico central -->
             <div class="card-edge"></div>
 
-            <!-- Sticker frontal -->
             <div class="card-face front">
-                <img src="carta_frente.png.jpg.png?v=59" alt="Sticker Frente" id="cardFrontImage" class="face-background"> 
+                <img src="carta_frente.png.jpg.png?v=60" alt="Sticker Frente" id="cardFrontImage" class="face-background"> 
             </div>
             
-            <!-- Sticker trasero con botones -->
             <div class="card-face back">
-                 <img src="carta_dorso.png.png?v=59" alt="Sticker Dorso" class="face-background">
+                 <img src="carta_dorso.png.png?v=60" alt="Sticker Dorso" class="face-background">
                  
                  <div class="link-buttons">
                      <a href="https://www.instagram.com/jtenshi_/" target="_blank" class="link-button instagram">
