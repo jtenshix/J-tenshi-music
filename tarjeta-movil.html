@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única v49 (Grosor Real y Dorso Visible) - 2026-07-27</title>
+    <title>Carta Única v50 (Dorso Visible Arreglado) - 2026-07-27</title>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -68,7 +68,7 @@
             z-index: 10; 
             opacity: 0;
             pointer-events: auto;
-            backface-visibility: hidden; 
+            /* SE QUITÓ 'backface-visibility: hidden;' de aquí para que no oculte el dorso */
             animation: compactUnfoldPop 0.7s cubic-bezier(0.175, 0.885, 0.320, 1.275) forwards; 
         }
 
@@ -92,6 +92,7 @@
             width: 100%;
             height: 100%; 
             backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
             border-radius: 8px; 
             overflow: hidden; 
             background-color: transparent;
@@ -100,7 +101,7 @@
             -webkit-user-drag: none; 
         }
 
-        /* Grosor 3D intermedio más notable */
+        /* Grosor 3D intermedio */
         .card-edge {
             position: absolute;
             top: 0;
@@ -128,7 +129,9 @@
             z-index: 0;
         }
         
-        .card-face.front {}
+        .card-face.front {
+            transform: rotateY(0deg);
+        }
 
         .card-face.back { 
             transform: rotateY(180deg); 
