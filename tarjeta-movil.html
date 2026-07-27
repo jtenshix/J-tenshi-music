@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única v46 (Peso y Resorte Orgánico) - 2026-07-27</title>
+    <title>Carta Única v47 (Grosor 3D y Peso) - 2026-07-27</title>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -98,6 +98,19 @@
             display: block;
             user-select: none;
             -webkit-user-drag: none; 
+        }
+
+        /* Grosor lateral simulado tridimensional para la carta */
+        .card-edge {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #2a2a2e;
+            border-radius: 8px;
+            transform: translateZ(-2px);
+            pointer-events: none;
         }
          
         .card-face img.face-background { 
@@ -238,6 +251,9 @@
 
     <div class="card-container" id="cardContainer">
         <div class="card" id="interactiveCard">
+            <!-- Grosor 3D interno -->
+            <div class="card-edge"></div>
+
             <div class="card-face front">
                 <img src="carta_frente.png.jpg.png" alt="Frente de la Carta" id="cardFrontImage" class="face-background"> 
             </div>
@@ -278,7 +294,7 @@
         let dragRotationY = 0;
 
         let startX, startY, currentX, currentY;
-        const rotationFactor = 0.28; // Sensibilidad reducida para que se sienta más pesada y robusta
+        const rotationFactor = 0.28;
 
         let velocityX = 0;
         let velocityY = 0;
@@ -286,7 +302,7 @@
         let animationFrameId_Rebound = null;
         let animationFrameId_Trompo = null; 
         
-        const flipTransitionDurationMs = 550; // Un poquito más pausado para dar sensación de peso
+        const flipTransitionDurationMs = 550;
 
         function lerp(start, end, amt) {
             return (1 - amt) * start + amt * end;
@@ -445,14 +461,12 @@
             document.removeEventListener('touchend', handleDragEnd);
             document.removeEventListener('mouseleave', handleDragEnd);
 
-            // Umbral de tensión más alto (requiere más intención o velocidad para cruzar)
             if (Math.abs(dragRotationY) > 85 || Math.abs(velocityX) > 14) {
                 let direction = dragRotationY > 0 ? 180 : -180;
                 dragRotationY = 0;
                 dragRotationX = 0;
                 triggerFlip(direction);
             } else {
-                // Rebote elástico súper suave y orgánico (factor de interpolación bajito 0.12)
                 animateRebound();
             }
         }
@@ -460,7 +474,6 @@
         function animateRebound() {
             if (isDragging || isFlipping) return;
 
-            // Retorno tipo resorte sutil y amortiguado
             dragRotationY = lerp(dragRotationY, 0, 0.12);
             dragRotationX = lerp(dragRotationX, 0, 0.12);
 
