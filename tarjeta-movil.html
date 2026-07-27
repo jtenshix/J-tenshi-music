@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Bloque con Stickers v61 (Limpio) - 2026-07-27</title>
+    <title>Carta Bloque con Stickers v63 (Bloqueo en Movimiento) - 2026-07-27</title>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -15,7 +15,6 @@
         body {
             margin: 0;
             padding: 0;
-            /* Fondo contrastado para que la carta resalte clarito */
             background: radial-gradient(circle at center, #3a3a55 0%, #161622 60%, #08080c 100%);
             min-height: 100vh;
             min-height: 100svh;
@@ -234,11 +233,11 @@
             <div class="card-edge"></div>
 
             <div class="card-face front">
-                <img src="carta_frente.png.jpg.png?v=61" alt="Sticker Frente" id="cardFrontImage" class="face-background"> 
+                <img src="carta_frente.png.jpg.png?v=63" alt="Sticker Frente" id="cardFrontImage" class="face-background"> 
             </div>
             
             <div class="card-face back">
-                 <img src="carta_dorso.png.png?v=61" alt="Sticker Dorso" class="face-background">
+                 <img src="carta_dorso.png.png?v=63" alt="Sticker Dorso" class="face-background">
                  
                  <div class="link-buttons">
                      <a href="https://www.instagram.com/jtenshi_/" target="_blank" class="link-button instagram">
@@ -421,6 +420,24 @@
             dragRotationX -= deltaY * rotationFactor;
 
             dragRotationX = Math.max(-35, Math.min(35, dragRotationX));
+
+            // BLOQUEO EN TIEMPO REAL: Evitar que el ángulo total caiga exactamente en la zona invisible (90° o 270°)
+            let absoluteRot = (currentFlipRotation + dragRotationY) % 360;
+            if (absoluteRot < 0) absoluteRot += 360;
+
+            // Zonas prohibidas exactas al arrastrar (entre 82° y 98°, o entre 262° y 278°)
+            if ((absoluteRot > 82 && absoluteRot < 98) || (absoluteRot > 262 && absoluteRot < 278)) {
+                // Empujamos sutilmente el dragRotationY para que brinque fuera de la zona ciega de inmediato
+                if (absoluteRot >= 90 && absoluteRot < 98) {
+                    dragRotationY = 98 - currentFlipRotation;
+                } else if (absoluteRot > 82 && absoluteRot < 90) {
+                    dragRotationY = 82 - currentFlipRotation;
+                } else if (absoluteRot >= 270 && absoluteRot < 278) {
+                    dragRotationY = 278 - currentFlipRotation;
+                } else if (absoluteRot > 262 && absoluteRot < 270) {
+                    dragRotationY = 262 - currentFlipRotation;
+                }
+            }
 
             velocityX = deltaX * rotationFactor;
             velocityY = -deltaY * rotationFactor;
