@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única v45 (Giro Táctil Real) - 2026-07-27</title>
+    <title>Carta Única v46 (Peso y Resorte Orgánico) - 2026-07-27</title>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -272,13 +272,13 @@
         
         let isDragging = false;
         let isFlipping = false;
-        let currentFlipRotation = 0; // Acumulador base de los giros de 180°
+        let currentFlipRotation = 0; 
 
         let dragRotationX = 0;
         let dragRotationY = 0;
 
         let startX, startY, currentX, currentY;
-        const rotationFactor = 0.4; // Sensibilidad al arrastrar
+        const rotationFactor = 0.28; // Sensibilidad reducida para que se sienta más pesada y robusta
 
         let velocityX = 0;
         let velocityY = 0;
@@ -286,7 +286,7 @@
         let animationFrameId_Rebound = null;
         let animationFrameId_Trompo = null; 
         
-        const flipTransitionDurationMs = 500;
+        const flipTransitionDurationMs = 550; // Un poquito más pausado para dar sensación de peso
 
         function lerp(start, end, amt) {
             return (1 - amt) * start + amt * end;
@@ -296,7 +296,6 @@
             return (--t) * t * t + 1;
         }
 
-        // Aplica la rotación combinando el estado fijo actual y el movimiento del dedo en tiempo real
         function applyRotation(flipRot = currentFlipRotation, dragX = dragRotationX, dragY = dragRotationY) {
             cardElement.style.transform = `rotateY(${flipRot + dragY}deg) rotateX(${dragX}deg)`;
         }
@@ -315,7 +314,7 @@
 
             currentFlipRotation += targetSideIncrement;
 
-            cardElement.style.transition = `transform ${flipTransitionDurationMs / 1000}s cubic-bezier(0.25, 1, 0.5, 1)`;
+            cardElement.style.transition = `transform ${flipTransitionDurationMs / 1000}s cubic-bezier(0.2, 0.8, 0.2, 1)`;
             applyRotation();
 
             setTimeout(() => {
@@ -424,8 +423,7 @@
             dragRotationY += deltaX * rotationFactor;
             dragRotationX -= deltaY * rotationFactor;
 
-            // Limitar levemente la inclinación vertical para que no se dé vuelta de cabeza
-            dragRotationX = Math.max(-45, Math.min(45, dragRotationX));
+            dragRotationX = Math.max(-35, Math.min(35, dragRotationX));
 
             velocityX = deltaX * rotationFactor;
             velocityY = -deltaY * rotationFactor;
@@ -447,17 +445,14 @@
             document.removeEventListener('touchend', handleDragEnd);
             document.removeEventListener('mouseleave', handleDragEnd);
 
-            // AQUÍ ESTÁ LA MAGIA: Romper la tensión
-            // Si el arrastre acumulado de Y supera los 75 grados o lleva buena velocidad, se rompe y gira al otro lado
-            if (Math.abs(dragRotationY) > 75 || Math.abs(velocityX) > 12) {
+            // Umbral de tensión más alto (requiere más intención o velocidad para cruzar)
+            if (Math.abs(dragRotationY) > 85 || Math.abs(velocityX) > 14) {
                 let direction = dragRotationY > 0 ? 180 : -180;
-                
-                // Normalizamos el giro completo para que avance o retroceda limpiamente de 180 en 180
                 dragRotationY = 0;
                 dragRotationX = 0;
                 triggerFlip(direction);
             } else {
-                // Si no alcanzó a pasar el umbral, hace un rebote elástico de vuelta a la posición original
+                // Rebote elástico súper suave y orgánico (factor de interpolación bajito 0.12)
                 animateRebound();
             }
         }
@@ -465,13 +460,14 @@
         function animateRebound() {
             if (isDragging || isFlipping) return;
 
-            dragRotationY = lerp(dragRotationY, 0, 0.2);
-            dragRotationX = lerp(dragRotationX, 0, 0.2);
+            // Retorno tipo resorte sutil y amortiguado
+            dragRotationY = lerp(dragRotationY, 0, 0.12);
+            dragRotationX = lerp(dragRotationX, 0, 0.12);
 
             cardElement.style.transition = 'none';
             applyRotation();
 
-            if (Math.abs(dragRotationY) > 0.5 || Math.abs(dragRotationX) > 0.5) {
+            if (Math.abs(dragRotationY) > 0.4 || Math.abs(dragRotationX) > 0.4) {
                 animationFrameId_Rebound = requestAnimationFrame(animateRebound);
             } else {
                 dragRotationY = 0;
