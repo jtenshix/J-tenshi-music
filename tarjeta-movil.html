@@ -1,5 +1,5 @@
-<!DOCTYPE html> 
-<html lang="es"> 
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -68,7 +68,6 @@
             z-index: 10; 
             opacity: 0;
             pointer-events: auto;
-            /* SE QUITÓ 'backface-visibility: hidden;' de aquí para que no oculte el dorso */
             animation: compactUnfoldPop 0.7s cubic-bezier(0.175, 0.885, 0.320, 1.275) forwards; 
         }
 
@@ -101,7 +100,6 @@
             -webkit-user-drag: none; 
         }
 
-        /* Grosor 3D intermedio */
         .card-edge {
             position: absolute;
             top: 0;
@@ -255,7 +253,6 @@
 
     <div class="card-container" id="cardContainer">
         <div class="card" id="interactiveCard">
-            <!-- Grosor 3D -->
             <div class="card-edge"></div>
 
             <div class="card-face front">
@@ -273,10 +270,10 @@
                           <i class="fab fa-youtube"></i> 
                           <span>Canal de YouTube</span>
                      </a> 
-                      <a href="https://youtu.be/0_QHL7cDYno?si=-gfNkI5mHWKMHbKW" target="_blank" class="link-button youtube-video">
+                     <a href="https://youtu.be/0_QHL7cDYno?si=-gfNkI5mHWKMHbKW" target="_blank" class="link-button youtube-video">
                           <i class="fas fa-play"></i> 
                           <span>Ultimo Video Musical</span>
-                      </a> 
+                     </a> 
                  </div>
             </div>
         </div>
