@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única v54 (Dorso Visible Real) - 2026-07-27</title>
+    <title>Carta Única v56 (Bloque con 2 Imágenes Totales) - 2026-07-27</title>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -86,20 +86,23 @@
             -webkit-user-drag: none;
         }
         
+        /* Caras de la carta ocupando el 100% exacto */
         .card-face { 
             position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%; 
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             border-radius: 8px; 
             overflow: hidden; 
-            background-color: transparent;
-            display: block;
+            background-color: #111;
             user-select: none;
             -webkit-user-drag: none; 
         }
 
+        /* El grosor físico de la carta que separa ambas caras */
         .card-edge {
             position: absolute;
             top: 0;
@@ -109,10 +112,11 @@
             background: #25252b;
             border: 1px solid rgba(255,255,255,0.15);
             border-radius: 8px;
-            transform: translateZ(-6px);
+            transform: translateZ(-3px); /* Grosor centrado */
             pointer-events: none;
         }
          
+        /* Las imágenes ocupan todo su espacio respectivo sin recortes extraños */
         .card-face img.face-background { 
             position: absolute;
             top: 0;
@@ -128,62 +132,61 @@
         }
         
         .card-face.front {
-            transform: rotateY(0deg);
+            transform: rotateY(0deg) translateZ(1px);
         }
 
         .card-face.back { 
-            transform: rotateY(180deg); 
-            position: absolute;
+            transform: rotateY(180deg) translateZ(1px); 
             display: flex;
             flex-direction: column; 
-            justify-content: flex-end; /* Manda los botones abajo para dejar libre el centro de la carta */
+            justify-content: flex-end; 
             align-items: center;
-            padding: 10px; 
+            padding: 12px; 
             box-sizing: border-box; 
-            background-color: transparent;
+            background-color: #0b0b0e;
         }
         
-        /* Contenedor flotante inferior para los botones sin tapar el dorso */
+        /* Contenedor de botones flotando encima de la imagen trasera */
         .link-buttons {
             position: relative;
-            z-index: 2;
+            z-index: 5;
             width: 100%; 
             display: flex;
             flex-direction: column;
-            gap: 6px; 
-            background: rgba(0, 0, 0, 0.45); /* Fondo sombreado sutil para legibilidad */
-            padding: 8px;
+            gap: 5px; 
+            background: rgba(10, 10, 15, 0.85); 
+            padding: 6px;
             border-radius: 6px;
-            backdrop-filter: blur(3px);
-            -webkit-backdrop-filter: blur(3px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
         .link-button {
             display: flex;
             align-items: center;
             justify-content: flex-start; 
-            padding: 6px 10px;
-            border-radius: 12px;
-            background-color: rgba(20, 20, 25, 0.6);
+            padding: 5px 8px;
+            border-radius: 8px;
+            background-color: rgba(25, 25, 35, 0.8);
             color: #ffffff;
             text-decoration: none;
             font-family: Arial, sans-serif;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
             text-align: left; 
             transition: background-color 0.3s, transform 0.2s ease-out;
-            border: 1px solid rgba(255, 255, 255, 0.2); 
+            border: 1px solid rgba(255, 255, 255, 0.15); 
         }
         
         .link-button:hover {
-            background-color: rgba(40, 40, 50, 0.8);
+            background-color: rgba(45, 45, 60, 1);
             transform: scale(1.02); 
         }
 
         .link-button i {
             margin-right: 6px; 
-            font-size: 14px; 
-            width: 16px; 
+            font-size: 13px; 
+            width: 14px; 
             text-align: center;
             flex-shrink: 0; 
         }
@@ -191,7 +194,7 @@
         .link-button span {
              flex-grow: 1;
              text-align: center;
-             padding-right: 16px;
+             padding-right: 14px;
         }
 
         .flip-button {
@@ -235,17 +238,18 @@
 
     <div class="card-container" id="cardContainer">
         <div class="card" id="interactiveCard">
+            <!-- Grosor físico de la carta en el medio -->
             <div class="card-edge"></div>
 
+            <!-- Cara delantera con su imagen al 100% -->
             <div class="card-face front">
-                <img src="carta_frente.png.jpg.png?v=54" alt="Frente de la Carta" id="cardFrontImage" class="face-background"> 
+                <img src="carta_frente.png.jpg.png?v=56" alt="Frente de la Carta" id="cardFrontImage" class="face-background"> 
             </div>
             
+            <!-- Cara trasera con su imagen completa de fondo y los botones flotando abajo -->
             <div class="card-face back">
-                 <!-- Dorso completo libre arriba -->
-                 <img src="carta_dorso.png.png?v=54" alt="Dorso de la Carta" class="face-background">
+                 <img src="carta_dorso.png.png?v=56" alt="Dorso de la Carta" class="face-background">
                  
-                 <!-- Botones abajo flotando sin estorbar el arte principal -->
                  <div class="link-buttons">
                      <a href="https://www.instagram.com/jtenshi_/" target="_blank" class="link-button instagram">
                           <i class="fab fa-instagram"></i> 
