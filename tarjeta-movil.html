@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única v47 (Grosor 3D y Peso) - 2026-07-27</title>
+    <title>Carta Única v48 (Grosor Visible y Dorso Original) - 2026-07-27</title>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -94,22 +94,23 @@
             backface-visibility: hidden;
             border-radius: 8px; 
             overflow: hidden; 
-            background-color: #555;
+            background-color: transparent;
             display: block;
             user-select: none;
             -webkit-user-drag: none; 
         }
 
-        /* Grosor lateral simulado tridimensional para la carta */
+        /* Grosor 3D más pronunciado */
         .card-edge {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #2a2a2e;
+            background: #1f1f23;
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 8px;
-            transform: translateZ(-2px);
+            transform: translateZ(-4px);
             pointer-events: none;
         }
          
@@ -138,7 +139,7 @@
             align-items: center;
             padding: 25px 20px; 
             box-sizing: border-box; 
-            background-color: #333;
+            background-color: transparent;
         }
         
         .link-buttons {
@@ -251,7 +252,7 @@
 
     <div class="card-container" id="cardContainer">
         <div class="card" id="interactiveCard">
-            <!-- Grosor 3D interno -->
+            <!-- Grosor 3D más visible -->
             <div class="card-edge"></div>
 
             <div class="card-face front">
