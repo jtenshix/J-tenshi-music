@@ -233,11 +233,11 @@
             <div class="card-edge"></div>
 
             <div class="card-face front">
-                <img src="carta_frente.png.jpg.png?v=63" alt="Sticker Frente" id="cardFrontImage" class="face-background"> 
+                <img src="carta_frente.png" alt="Sticker Frente" id="cardFrontImage" class="face-background"> 
             </div>
             
             <div class="card-face back">
-                 <img src="carta_dorso.png.png?v=63" alt="Sticker Dorso" class="face-background">
+                 <img src="carta_dorso.png" alt="Sticker Dorso" class="face-background">
                  
                  <div class="link-buttons">
                      <a href="https://www.instagram.com/jtenshi_/" target="_blank" class="link-button instagram">
@@ -421,13 +421,10 @@
 
             dragRotationX = Math.max(-35, Math.min(35, dragRotationX));
 
-            // BLOQUEO EN TIEMPO REAL: Evitar que el ángulo total caiga exactamente en la zona invisible (90° o 270°)
             let absoluteRot = (currentFlipRotation + dragRotationY) % 360;
             if (absoluteRot < 0) absoluteRot += 360;
 
-            // Zonas prohibidas exactas al arrastrar (entre 82° y 98°, o entre 262° y 278°)
             if ((absoluteRot > 82 && absoluteRot < 98) || (absoluteRot > 262 && absoluteRot < 278)) {
-                // Empujamos sutilmente el dragRotationY para que brinque fuera de la zona ciega de inmediato
                 if (absoluteRot >= 90 && absoluteRot < 98) {
                     dragRotationY = 98 - currentFlipRotation;
                 } else if (absoluteRot > 82 && absoluteRot < 90) {
