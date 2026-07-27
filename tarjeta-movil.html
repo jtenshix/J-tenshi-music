@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única v53 (Dorso Visible Sin Tapar) - 2026-07-27</title>
+    <title>Carta Única v54 (Dorso Visible Real) - 2026-07-27</title>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -136,52 +136,54 @@
             position: absolute;
             display: flex;
             flex-direction: column; 
-            justify-content: flex-end; /* Los tira abajo para que no tapen el centro de la imagen */
+            justify-content: flex-end; /* Manda los botones abajo para dejar libre el centro de la carta */
             align-items: center;
-            padding: 15px 12px; 
+            padding: 10px; 
             box-sizing: border-box; 
             background-color: transparent;
         }
         
+        /* Contenedor flotante inferior para los botones sin tapar el dorso */
         .link-buttons {
             position: relative;
-            z-index: 1;
+            z-index: 2;
             width: 100%; 
             display: flex;
             flex-direction: column;
-            gap: 8px; 
-            max-height: 50%; /* Ocupa solo la mitad inferior para dejar ver el arte */
-            overflow-y: auto; 
+            gap: 6px; 
+            background: rgba(0, 0, 0, 0.45); /* Fondo sombreado sutil para legibilidad */
+            padding: 8px;
+            border-radius: 6px;
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
         }
 
         .link-button {
             display: flex;
             align-items: center;
             justify-content: flex-start; 
-            padding: 8px 12px;
-            border-radius: 16px;
-            background-color: rgba(10, 10, 15, 0.6);
+            padding: 6px 10px;
+            border-radius: 12px;
+            background-color: rgba(20, 20, 25, 0.6);
             color: #ffffff;
             text-decoration: none;
             font-family: Arial, sans-serif;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
             text-align: left; 
             transition: background-color 0.3s, transform 0.2s ease-out;
-            border: 1px solid rgba(255, 255, 255, 0.25); 
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2); 
         }
         
         .link-button:hover {
-            background-color: rgba(30, 30, 40, 0.8);
+            background-color: rgba(40, 40, 50, 0.8);
             transform: scale(1.02); 
         }
 
         .link-button i {
-            margin-right: 8px; 
-            font-size: 15px; 
-            width: 18px; 
+            margin-right: 6px; 
+            font-size: 14px; 
+            width: 16px; 
             text-align: center;
             flex-shrink: 0; 
         }
@@ -189,7 +191,7 @@
         .link-button span {
              flex-grow: 1;
              text-align: center;
-             padding-right: 20px;
+             padding-right: 16px;
         }
 
         .flip-button {
@@ -225,17 +227,6 @@
                 bottom: 20px;
                 right: 20px;
             } 
-            .card-face.back {
-                padding: 12px 10px;
-            }
-            .link-buttons {
-                gap: 6px;
-            }
-            .link-button {
-                padding: 7px 10px;
-                font-size: 12px;
-                border-radius: 14px;
-            }
         }
     </style> 
 </head>
@@ -247,11 +238,14 @@
             <div class="card-edge"></div>
 
             <div class="card-face front">
-                <img src="carta_frente.png.jpg.png?v=53" alt="Frente de la Carta" id="cardFrontImage" class="face-background"> 
+                <img src="carta_frente.png.jpg.png?v=54" alt="Frente de la Carta" id="cardFrontImage" class="face-background"> 
             </div>
             
             <div class="card-face back">
-                 <img src="carta_dorso.png.png?v=53" alt="Dorso de la Carta" class="face-background">
+                 <!-- Dorso completo libre arriba -->
+                 <img src="carta_dorso.png.png?v=54" alt="Dorso de la Carta" class="face-background">
+                 
+                 <!-- Botones abajo flotando sin estorbar el arte principal -->
                  <div class="link-buttons">
                      <a href="https://www.instagram.com/jtenshi_/" target="_blank" class="link-button instagram">
                           <i class="fab fa-instagram"></i> 
