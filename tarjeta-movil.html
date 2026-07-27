@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Única v56 (Bloque con 2 Imágenes Totales) - 2026-07-27</title>
+    <title>Carta Bloque con Stickers v57 - 2026-07-27</title>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -86,7 +86,22 @@
             -webkit-user-drag: none;
         }
         
-        /* Caras de la carta ocupando el 100% exacto */
+        /* El bloque sólido de plástico al medio */
+        .card-edge {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1e1e24;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            transform: translateZ(0px);
+            pointer-events: none;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+        }
+         
+        /* Las caras que actúan como stickers pegados a las superficies externas del bloque */
         .card-face { 
             position: absolute;
             top: 0;
@@ -97,26 +112,10 @@
             -webkit-backface-visibility: hidden;
             border-radius: 8px; 
             overflow: hidden; 
-            background-color: #111;
             user-select: none;
             -webkit-user-drag: none; 
         }
 
-        /* El grosor físico de la carta que separa ambas caras */
-        .card-edge {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #25252b;
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 8px;
-            transform: translateZ(-3px); /* Grosor centrado */
-            pointer-events: none;
-        }
-         
-        /* Las imágenes ocupan todo su espacio respectivo sin recortes extraños */
         .card-face img.face-background { 
             position: absolute;
             top: 0;
@@ -131,22 +130,24 @@
             z-index: 0;
         }
         
+        /* Sticker delantero pegado ligeramente hacia afuera en el eje Z */
         .card-face.front {
-            transform: rotateY(0deg) translateZ(1px);
+            transform: rotateY(0deg) translateZ(2px);
         }
 
+        /* Sticker trasero pegado hacia el otro lado del bloque con sus botones flotando encima */
         .card-face.back { 
-            transform: rotateY(180deg) translateZ(1px); 
+            transform: rotateY(180deg) translateZ(2px); 
             display: flex;
             flex-direction: column; 
             justify-content: flex-end; 
             align-items: center;
             padding: 12px; 
             box-sizing: border-box; 
-            background-color: #0b0b0e;
+            background-color: transparent;
         }
         
-        /* Contenedor de botones flotando encima de la imagen trasera */
+        /* Contenedor de botones flotando sobre el sticker trasero */
         .link-buttons {
             position: relative;
             z-index: 5;
@@ -238,17 +239,17 @@
 
     <div class="card-container" id="cardContainer">
         <div class="card" id="interactiveCard">
-            <!-- Grosor físico de la carta en el medio -->
+            <!-- El bloque sólido de plástico al medio -->
             <div class="card-edge"></div>
 
-            <!-- Cara delantera con su imagen al 100% -->
+            <!-- Sticker delantero pegado en la cara exterior 1 -->
             <div class="card-face front">
-                <img src="carta_frente.png.jpg.png?v=56" alt="Frente de la Carta" id="cardFrontImage" class="face-background"> 
+                <img src="carta_frente.png.jpg.png?v=57" alt="Sticker Frente" id="cardFrontImage" class="face-background"> 
             </div>
             
-            <!-- Cara trasera con su imagen completa de fondo y los botones flotando abajo -->
+            <!-- Sticker trasero pegado en la cara exterior 2 con los botones flotando -->
             <div class="card-face back">
-                 <img src="carta_dorso.png.png?v=56" alt="Dorso de la Carta" class="face-background">
+                 <img src="carta_dorso.png.png?v=57" alt="Sticker Dorso" class="face-background">
                  
                  <div class="link-buttons">
                      <a href="https://www.instagram.com/jtenshi_/" target="_blank" class="link-button instagram">
