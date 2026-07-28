@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Bloque con Stickers v70 (Clean GitHub Build) - 2026-07-28</title>
+    <title>Carta Bloque con Stickers v71 (JS Native Entrance) - 2026-07-28</title>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -32,17 +32,6 @@
             -webkit-user-select: none;
             touch-action: manipulation;
         }
-        
-        @keyframes cleanEntrance {
-            0% {
-                opacity: 0;
-                transform: scale(0.6) rotateY(-90deg);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) rotateY(0deg);
-            }
-        }
 
         .card-container { 
             width: 85vw;
@@ -55,9 +44,16 @@
             user-select: none;
             -webkit-user-drag: none;
             z-index: 10; 
+            /* Estado inicial invisible para la entrada por JS */
             opacity: 0;
+            transform: scale(0.5);
+            transition: opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             pointer-events: auto;
-            animation: cleanEntrance 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; 
+        }
+
+        .card-container.loaded {
+            opacity: 1;
+            transform: scale(1);
         }
 
         .card-container:active {
@@ -212,12 +208,11 @@
             <div class="card-edge"></div>
 
             <div class="card-face front">
-                <!-- Se añade ?v=70 para evitar que GitHub Pages o Safari cacheen la imagen vieja -->
-                <img src="carta_frente.png.jpg.png?v=70" alt="Sticker Frente" id="cardFrontImage" class="face-background"> 
+                <img src="carta_frente.png.jpg.png?v=71" alt="Sticker Frente" id="cardFrontImage" class="face-background"> 
             </div>
             
             <div class="card-face back">
-                 <img src="carta_dorso.png.png?v=70" alt="Sticker Dorso" class="face-background">
+                 <img src="carta_dorso.png.png?v=71" alt="Sticker Dorso" class="face-background">
                  
                  <div class="link-buttons">
                      <a href="https://www.instagram.com/jtenshi_/" target="_blank" class="link-button instagram">
@@ -242,6 +237,13 @@
     </button>
     
     <script>
+        // Disparar la entrada mediante JS puro para asegurar que Safari la ejecute sí o sí
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('cardContainer').classList.add('loaded');
+            }, 50);
+        });
+
         const cardContainer = document.getElementById('cardContainer');
         const cardElement = document.getElementById('interactiveCard');
         const flipButton = document.getElementById('flipButton');
