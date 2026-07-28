@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Bloque con Stickers v58 (Más Grueso) - 2026-07-27</title>
+    <title>Carta Bloque con Stickers v60 (Nombres Reales) - 2026-07-27</title>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -86,7 +86,6 @@
             -webkit-user-drag: none;
         }
         
-        /* El bloque sólido de plástico al medio con mayor grosor visual */
         .card-edge {
             position: absolute;
             top: 0;
@@ -101,7 +100,6 @@
             box-shadow: inset 0 0 14px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.5);
         }
          
-        /* Las caras que actúan como stickers pegados a las superficies externas del bloque */
         .card-face { 
             position: absolute;
             top: 0;
@@ -130,12 +128,10 @@
             z-index: 0;
         }
         
-        /* Sticker delantero despegado más hacia adelante para dar grosor real */
         .card-face.front {
             transform: rotateY(0deg) translateZ(5px);
         }
 
-        /* Sticker trasero despegado hacia atrás con sus botones flotando */
         .card-face.back { 
             transform: rotateY(180deg) translateZ(5px); 
             display: flex;
@@ -147,7 +143,6 @@
             background-color: transparent;
         }
         
-        /* Contenedor de botones flotando sobre el sticker trasero */
         .link-buttons {
             position: relative;
             z-index: 5;
@@ -239,17 +234,15 @@
 
     <div class="card-container" id="cardContainer">
         <div class="card" id="interactiveCard">
-            <!-- El bloque sólido de plástico más grueso al medio -->
             <div class="card-edge"></div>
 
-            <!-- Sticker delantero pegado en la superficie exterior frontal -->
             <div class="card-face front">
-                <img src="carta_frente.png" alt="Sticker Frente" id="cardFrontImage" class="face-background"> 
+                <!-- Nombres exactos sacados de tu captura -->
+                <img src="carta_frente.png.jpg.png" alt="Sticker Frente" id="cardFrontImage" class="face-background"> 
             </div>
             
-            <!-- Sticker trasero pegado en la superficie exterior posterior -->
             <div class="card-face back">
-                 <img src="carta_dorso.png" alt="Sticker Dorso" class="face-background">
+                 <img src="carta_dorso.png.png" alt="Sticker Dorso" class="face-background">
                  
                  <div class="link-buttons">
                      <a href="https://www.instagram.com/jtenshi_/" target="_blank" class="link-button instagram">
