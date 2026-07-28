@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Bloque con Stickers v64 (Giro de Presentación Inicial) - 2026-07-28</title>
+    <title>Carta Bloque con Stickers v65 (Giro Ágil Inicial) - 2026-07-28</title>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -33,25 +33,21 @@
             touch-action: manipulation;
         }
         
-        /* Animación de apertura con el giro completo de presentación inicial estilo Dexpixel */
-        @keyframes presentationSpinPop {
+        /* Giro de entrada rápido, limpio y centrado */
+        @keyframes swiftIntroSpin {
             0% {
                 opacity: 0;
-                transform: scale(0.1) rotateY(-720deg) rotateX(45deg);
-                filter: brightness(2);
+                transform: scale(0.2) rotateY(-360deg);
+                filter: brightness(1.8);
             }
-            70% {
+            80% {
                 opacity: 1;
-                transform: scale(1.08) rotateY(25deg) rotateX(-5deg);
-                filter: brightness(1.2);
-            }
-            85% {
-                transform: scale(0.96) rotateY(-10deg) rotateX(2deg);
-                filter: brightness(1);
+                transform: scale(1.04) rotateY(15deg);
+                filter: brightness(1.1);
             }
             100% {
                 opacity: 1;
-                transform: scale(1) rotateY(0deg) rotateX(0deg);
+                transform: scale(1) rotateY(0deg);
                 filter: brightness(1);
             }
         }
@@ -69,8 +65,7 @@
             z-index: 10; 
             opacity: 0;
             pointer-events: auto;
-            /* Aplicamos la nueva animación de presentación con doble giro inicial que termina en el frente */
-            animation: presentationSpinPop 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; 
+            animation: swiftIntroSpin 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
         }
 
         .card-container:active {
@@ -289,7 +284,6 @@
         let animationFrameId_Trompo = null; 
         
         const flipTransitionDurationMs = 550;
-        
         const maxDragAngle = 87; 
 
         function lerp(start, end, amt) {
@@ -500,10 +494,3 @@
 
 </body>
 </html>
-"""
-
-output_path = "/mnt/data/carta_bloque_v64.html"
-with open(output_path, "w", encoding="utf-8") as f:
-    f.write(html_content)
-
-print(f"Archivo guardado en {output_path}")
