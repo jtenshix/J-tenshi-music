@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Bloque con Stickers v61 (Rebote Inteligente) - 2026-07-28</title>
+    <title>Carta Bloque con Stickers v63 (Juego Libre + Giro Ágil) - 2026-07-28</title>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -278,7 +278,7 @@
         let dragRotationY = 0;
 
         let startX, startY, currentX, currentY;
-        const rotationFactor = 0.28;
+        const rotationFactor = 0.32; 
 
         let velocityX = 0;
         let velocityY = 0;
@@ -288,8 +288,8 @@
         
         const flipTransitionDurationMs = 550;
         
-        // Límite estricto de giro manual para evitar que llegue a los 90 grados y desaparezca de canto
-        const maxDragAngle = 30; 
+        // Tope máximo para que al jugar libremente con la carta nunca se ponga invisible de perfil (90°)
+        const maxDragAngle = 78; 
 
         function lerp(start, end, amt) {
             return (1 - amt) * start + amt * end;
@@ -428,7 +428,7 @@
 
             dragRotationX = Math.max(-35, Math.min(35, dragRotationX));
             
-            // Freno automático antes de llegar a los 90 grados para que la carta nunca se oculte de perfil
+            // Permite jugar libremente hasta el tope seguro sin desaparecer
             if (dragRotationY > maxDragAngle) {
                 dragRotationY = maxDragAngle;
             } else if (dragRotationY < -maxDragAngle) {
@@ -455,14 +455,17 @@
             document.removeEventListener('touchend', handleDragEnd);
             document.removeEventListener('mouseleave', handleDragEnd);
 
-            // Si se acercaron lo suficiente al umbral o tiraron con fuerza, completamos el giro automáticamente
-            if (Math.abs(dragRotationY) >= maxDragAngle - 2 || Math.abs(velocityX) > 12) {
+            // AQUÍ ESTÁN LAS DOS CONDICIONES SEPARADAS:
+            // 1. Si la arrastraste superando el 75% del recorrido manual (>= 60 grados).
+            // 2. O si le diste un deslizamiento rápido (flick) con velocidad limpia (velocityX > 5).
+            // Cualquiera de las dos gatilla el giro completo automático de forma fluida.
+            if (Math.abs(dragRotationY) >= 60 || Math.abs(velocityX) > 5) {
                 let direction = dragRotationY > 0 ? 180 : -180;
                 dragRotationY = 0;
                 dragRotationX = 0;
                 triggerFlip(direction);
             } else {
-                animateRebound();
+                animateRebound(); // Si la moviste lento y la soltaste antes, vuelve a su lugar jugando con el rebote
             }
         }
 
