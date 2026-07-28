@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Bloque con Stickers v60 (Nombres Reales) - 2026-07-27</title>
+    <title>Carta Bloque con Stickers v61 (Rebote Inteligente) - 2026-07-28</title>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -237,7 +237,6 @@
             <div class="card-edge"></div>
 
             <div class="card-face front">
-                <!-- Nombres exactos sacados de tu captura -->
                 <img src="carta_frente.png.jpg.png" alt="Sticker Frente" id="cardFrontImage" class="face-background"> 
             </div>
             
@@ -288,6 +287,9 @@
         let animationFrameId_Trompo = null; 
         
         const flipTransitionDurationMs = 550;
+        
+        // Límite estricto de giro manual para evitar que llegue a los 90 grados y desaparezca de canto
+        const maxDragAngle = 72; 
 
         function lerp(start, end, amt) {
             return (1 - amt) * start + amt * end;
@@ -425,6 +427,13 @@
             dragRotationX -= deltaY * rotationFactor;
 
             dragRotationX = Math.max(-35, Math.min(35, dragRotationX));
+            
+            // Freno automático antes de llegar a los 90 grados para que la carta nunca se oculte de perfil
+            if (dragRotationY > maxDragAngle) {
+                dragRotationY = maxDragAngle;
+            } else if (dragRotationY < -maxDragAngle) {
+                dragRotationY = -maxDragAngle;
+            }
 
             velocityX = deltaX * rotationFactor;
             velocityY = -deltaY * rotationFactor;
@@ -446,7 +455,8 @@
             document.removeEventListener('touchend', handleDragEnd);
             document.removeEventListener('mouseleave', handleDragEnd);
 
-            if (Math.abs(dragRotationY) > 85 || Math.abs(velocityX) > 14) {
+            // Si se acercaron lo suficiente al umbral o tiraron con fuerza, completamos el giro automáticamente
+            if (Math.abs(dragRotationY) >= maxDragAngle - 2 || Math.abs(velocityX) > 12) {
                 let direction = dragRotationY > 0 ? 180 : -180;
                 dragRotationY = 0;
                 dragRotationX = 0;
