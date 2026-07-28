@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Bloque con Stickers v63 (Juego Libre + Giro Ágil) - 2026-07-28</title>
+    <title>Carta Bloque con Stickers v64 (Giro de Presentación Inicial) - 2026-07-28</title>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -33,24 +33,25 @@
             touch-action: manipulation;
         }
         
-        @keyframes compactUnfoldPop {
+        /* Animación de apertura con el giro completo de presentación inicial estilo Dexpixel */
+        @keyframes presentationSpinPop {
             0% {
                 opacity: 0;
-                transform: scale(0.1) rotateY(-70deg);
-                filter: brightness(1.5);
+                transform: scale(0.1) rotateY(-720deg) rotateX(45deg);
+                filter: brightness(2);
             }
-            60% {
+            70% {
                 opacity: 1;
-                transform: scale(1.1) rotateY(10deg);
+                transform: scale(1.08) rotateY(25deg) rotateX(-5deg);
                 filter: brightness(1.2);
             }
-            80% {
-                transform: scale(0.97) rotateY(-5deg);
+            85% {
+                transform: scale(0.96) rotateY(-10deg) rotateX(2deg);
                 filter: brightness(1);
             }
             100% {
                 opacity: 1;
-                transform: scale(1) rotateY(0deg);
+                transform: scale(1) rotateY(0deg) rotateX(0deg);
                 filter: brightness(1);
             }
         }
@@ -68,7 +69,8 @@
             z-index: 10; 
             opacity: 0;
             pointer-events: auto;
-            animation: compactUnfoldPop 0.7s cubic-bezier(0.175, 0.885, 0.320, 1.275) forwards; 
+            /* Aplicamos la nueva animación de presentación con doble giro inicial que termina en el frente */
+            animation: presentationSpinPop 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; 
         }
 
         .card-container:active {
@@ -288,7 +290,6 @@
         
         const flipTransitionDurationMs = 550;
         
-        // Tope máximo para que al jugar libremente con la carta nunca se ponga invisible de perfil (90°)
         const maxDragAngle = 87; 
 
         function lerp(start, end, amt) {
@@ -428,7 +429,6 @@
 
             dragRotationX = Math.max(-35, Math.min(35, dragRotationX));
             
-            // Permite jugar libremente hasta el tope seguro sin desaparecer
             if (dragRotationY > maxDragAngle) {
                 dragRotationY = maxDragAngle;
             } else if (dragRotationY < -maxDragAngle) {
@@ -455,17 +455,13 @@
             document.removeEventListener('touchend', handleDragEnd);
             document.removeEventListener('mouseleave', handleDragEnd);
 
-            // AQUÍ ESTÁN LAS DOS CONDICIONES SEPARADAS:
-            // 1. Si la arrastraste superando el 75% del recorrido manual (>= 60 grados).
-            // 2. O si le diste un deslizamiento rápido (flick) con velocidad limpia (velocityX > 5).
-            // Cualquiera de las dos gatilla el giro completo automático de forma fluida.
             if (Math.abs(dragRotationY) >= 60 || Math.abs(velocityX) > 5) {
                 let direction = dragRotationY > 0 ? 180 : -180;
                 dragRotationY = 0;
                 dragRotationX = 0;
                 triggerFlip(direction);
             } else {
-                animateRebound(); // Si la moviste lento y la soltaste antes, vuelve a su lugar jugando con el rebote
+                animateRebound();
             }
         }
 
@@ -504,3 +500,10 @@
 
 </body>
 </html>
+"""
+
+output_path = "/mnt/data/carta_bloque_v64.html"
+with open(output_path, "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print(f"Archivo guardado en {output_path}")
