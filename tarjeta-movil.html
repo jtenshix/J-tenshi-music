@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Carta Bloque con Stickers v67 (Fluido Sin Tirones) - 2026-07-28</title>
+    <title>Carta Bloque con Stickers v70 (Clean GitHub Build) - 2026-07-28</title>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -33,10 +33,10 @@
             touch-action: manipulation;
         }
         
-        @keyframes ultraSmoothSpin {
+        @keyframes cleanEntrance {
             0% {
                 opacity: 0;
-                transform: scale(0.4) rotateY(-360deg);
+                transform: scale(0.6) rotateY(-90deg);
             }
             100% {
                 opacity: 1;
@@ -57,9 +57,7 @@
             z-index: 10; 
             opacity: 0;
             pointer-events: auto;
-            /* Forzamos aceleración por hardware con will-change */
-            will-change: transform, opacity;
-            animation: ultraSmoothSpin 0.4s cubic-bezier(0.15, 0.85, 0.35, 1) forwards; 
+            animation: cleanEntrance 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; 
         }
 
         .card-container:active {
@@ -75,7 +73,6 @@
             transform: rotateX(0deg) rotateY(0deg);
             user-select: none;
             -webkit-user-drag: none;
-            will-change: transform;
         }
         
         .card-edge {
@@ -215,11 +212,12 @@
             <div class="card-edge"></div>
 
             <div class="card-face front">
-                <img src="carta_frente.png.jpg.png" alt="Sticker Frente" id="cardFrontImage" class="face-background"> 
+                <!-- Se añade ?v=70 para evitar que GitHub Pages o Safari cacheen la imagen vieja -->
+                <img src="carta_frente.png.jpg.png?v=70" alt="Sticker Frente" id="cardFrontImage" class="face-background"> 
             </div>
             
             <div class="card-face back">
-                 <img src="carta_dorso.png.png" alt="Sticker Dorso" class="face-background">
+                 <img src="carta_dorso.png.png?v=70" alt="Sticker Dorso" class="face-background">
                  
                  <div class="link-buttons">
                      <a href="https://www.instagram.com/jtenshi_/" target="_blank" class="link-button instagram">
