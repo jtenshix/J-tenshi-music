@@ -47,6 +47,20 @@
     }
     .theme-toggle:hover { background: #e0c27b; color: #000; }
 
+    .media-console-button {
+      display: inline-block;
+      margin-left: 10px;
+      padding: 7px 12px;
+      border: 1px solid #777;
+      border-radius: 8px;
+      background: transparent;
+      color: #ccc;
+      text-decoration: none;
+      font-size: 12px;
+      transition: all 0.3s;
+    }
+    .media-console-button:hover { background: #e0c27b; color: #000; }
+
     .mi-sitio-link {
       color: #ccc;
       text-decoration: none;
@@ -338,7 +352,10 @@
       </ul>
     </nav>
 
-    <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <a class="media-console-button" href="mi-sitio-web.html">Mi sitio web</a>
+      <button class="theme-toggle" onclick="toggleTheme()">Modo Claro / Oscuro</button>
+    </div>
   </header>
 
   <div class="hero-wrapper">
